@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: cafe-today-coffee
+    env: python
+    region: singapore
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app
+    healthCheckPath: /
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.0
+      - key: NOTION_TOKEN
+        sync: false
+      - key: DATABASE_ID
+        sync: false
