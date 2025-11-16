@@ -113,42 +113,15 @@
             margin-top: 5px;
         }
 
-        .badge-washed {
-            background: #E3F2FD;
-            color: #1976D2;
-        }
+        .badge-washed { background: #E3F2FD; color: #1976D2; }
+        .badge-natural { background: #FFF3E0; color: #E65100; }
+        .badge-anaerobic { background: #F3E5F5; color: #7B1FA2; }
+        .badge-sugarcane { background: #FFF9C4; color: #F57F17; }
+        .badge-진행중 { background: #E8F5E9; color: #2E7D32; }
+        .badge-완료 { background: #E0E0E0; color: #616161; }
+        .badge-시작전 { background: #FFF3E0; color: #EF6C00; }
 
-        .badge-natural {
-            background: #FFF3E0;
-            color: #E65100;
-        }
-
-        .badge-anaerobic {
-            background: #F3E5F5;
-            color: #7B1FA2;
-        }
-
-        .badge-sugarcane {
-            background: #FFF9C4;
-            color: #F57F17;
-        }
-
-        .badge-진행중 {
-            background: #E8F5E9;
-            color: #2E7D32;
-        }
-
-        .badge-완료 {
-            background: #E0E0E0;
-            color: #616161;
-        }
-
-        .badge-사작전 {
-            background: #FFF3E0;
-            color: #EF6C00;
-        }
-
-        /* 히스토리 테이블 */
+        /* 히스토리 섹션 */
         .history-section {
             background: white;
             border-radius: 15px;
@@ -164,13 +137,24 @@
             border-left: 5px solid #D2691E;
         }
 
+        /* 데스크톱용 테이블 */
+        .desktop-table {
+            display: block;
+        }
+
+        .mobile-cards {
+            display: none;
+        }
+
         .table-container {
             overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
+            min-width: 600px;
         }
 
         thead {
@@ -183,6 +167,7 @@
             text-align: left;
             font-weight: 600;
             font-size: 0.95rem;
+            white-space: nowrap;
         }
 
         td {
@@ -201,6 +186,39 @@
         .table-coffee-name {
             font-weight: 600;
             color: #6F4E37;
+        }
+
+        /* 모바일용 카드 레이아웃 */
+        .history-card {
+            background: #f9f9f9;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-left: 4px solid #D2691E;
+        }
+
+        .history-card-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #6F4E37;
+            margin-bottom: 10px;
+        }
+
+        .history-card-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 6px 0;
+            font-size: 0.9rem;
+        }
+
+        .history-card-label {
+            font-weight: 600;
+            color: #8B7355;
+        }
+
+        .history-card-value {
+            color: #333;
+            text-align: right;
         }
 
         .empty-message {
@@ -226,40 +244,6 @@
             text-align: center;
         }
 
-        .error-title {
-            font-size: 1.3rem;
-            font-weight: 600;
-            margin-bottom: 15px;
-        }
-
-        .error-details {
-            background: white;
-            padding: 15px;
-            border-radius: 8px;
-            margin-top: 15px;
-            text-align: left;
-            color: #333;
-            font-size: 0.95rem;
-            line-height: 1.6;
-        }
-
-        .error-details ol {
-            margin: 10px 0 10px 20px;
-        }
-
-        .error-details li {
-            margin: 8px 0;
-        }
-
-        .error-details code {
-            background: #f5f5f5;
-            padding: 2px 6px;
-            border-radius: 3px;
-            font-family: 'Courier New', monospace;
-            color: #d32f2f;
-        }
-
-        /* 날짜 표시 */
         .date-display {
             font-size: 0.9rem;
             color: #666;
@@ -267,20 +251,107 @@
 
         /* 반응형 */
         @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+
+            .header {
+                padding: 20px 15px;
+                margin-bottom: 25px;
+            }
+
             .header h1 {
                 font-size: 2rem;
             }
 
-            .coffee-cards {
-                grid-template-columns: 1fr;
+            .header .subtitle {
+                font-size: 0.95rem;
             }
 
-            table {
+            .today-section {
+                margin-bottom: 30px;
+            }
+
+            .today-section h2,
+            .history-section h2 {
+                font-size: 1.5rem;
+                margin-bottom: 15px;
+            }
+
+            .coffee-cards {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+
+            .coffee-card {
+                padding: 20px;
+            }
+
+            .coffee-card-title {
+                font-size: 1.3rem;
+            }
+
+            .history-section {
+                padding: 20px 15px;
+            }
+
+            /* 모바일에서 테이블 숨기고 카드 표시 */
+            .desktop-table {
+                display: none;
+            }
+
+            .mobile-cards {
+                display: block;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 8px;
+            }
+
+            .header h1 {
+                font-size: 1.7rem;
+            }
+
+            .header .subtitle {
                 font-size: 0.85rem;
             }
 
-            th, td {
-                padding: 10px 5px;
+            .today-section h2,
+            .history-section h2 {
+                font-size: 1.3rem;
+                padding-left: 8px;
+                border-left: 4px solid #D2691E;
+            }
+
+            .coffee-card {
+                padding: 15px;
+            }
+
+            .coffee-card-title {
+                font-size: 1.1rem;
+            }
+
+            .coffee-detail-label {
+                min-width: 70px;
+                font-size: 0.9rem;
+            }
+
+            .history-section {
+                padding: 15px 12px;
+            }
+
+            .history-card {
+                padding: 12px;
+            }
+
+            .history-card-title {
+                font-size: 1rem;
+            }
+
+            .history-card-row {
+                font-size: 0.85rem;
             }
         }
     </style>
@@ -298,7 +369,6 @@
     </div>
 
     <script>
-        // API에서 데이터 가져오기
         async function loadCoffeeData() {
             try {
                 const response = await fetch('/api/coffee');
@@ -317,31 +387,10 @@
             } catch (error) {
                 console.error('Error:', error);
                 
-                let errorMessage = `
+                document.getElementById('content').innerHTML = `
                     <div class="error">
                         <div class="error-title">⚠️ 서버 연결 오류</div>
-                        <p style="margin: 15px 0;">Flask 서버가 실행되지 않았거나 연결할 수 없습니다.</p>
-                        
-                        <div class="error-details">
-                            <strong>🔧 해결 방법:</strong>
-                            <ol>
-                                <li>터미널/명령 프롬프트를 열어주세요</li>
-                                <li>프로젝트 폴더로 이동하세요</li>
-                                <li>다음 명령어로 서버를 실행하세요:
-                                    <br><code>python app.py</code>
-                                    <br>또는
-                                    <br><code>./start.sh</code> (Linux/Mac)
-                                    <br><code>start.bat</code> (Windows)
-                                </li>
-                                <li>서버가 시작되면 이 페이지를 새로고침하세요</li>
-                            </ol>
-                            
-                            <p style="margin-top: 15px; color: #666;">
-                                <strong>참고:</strong> 이 HTML 파일을 직접 열면 작동하지 않습니다. 
-                                반드시 <code>http://localhost:5000</code> 으로 접속해야 합니다.
-                            </p>
-                        </div>
-                        
+                        <p style="margin: 15px 0;">서버에 연결할 수 없습니다.</p>
                         <button onclick="location.reload()" style="
                             margin-top: 20px;
                             padding: 12px 30px;
@@ -351,19 +400,12 @@
                             border-radius: 8px;
                             font-size: 1rem;
                             cursor: pointer;
-                            transition: background 0.3s;
-                        " onmouseover="this.style.background='#8B6342'" 
-                           onmouseout="this.style.background='#6F4E37'">
-                            🔄 다시 시도
-                        </button>
+                        ">🔄 다시 시도</button>
                     </div>
                 `;
-                
-                document.getElementById('content').innerHTML = errorMessage;
             }
         }
 
-        // 날짜 포맷팅
         function formatDate(dateObj) {
             if (!dateObj) return '-';
             
@@ -384,7 +426,14 @@
             return startStr;
         }
 
-        // 프로세싱 뱃지 클래스 결정
+        function formatDateShort(dateObj) {
+            if (!dateObj) return '-';
+            const start = dateObj.start;
+            if (!start) return '-';
+            const date = new Date(start);
+            return `${date.getMonth() + 1}/${date.getDate()}`;
+        }
+
         function getProcessBadgeClass(process) {
             if (!process) return '';
             const processLower = process.toLowerCase();
@@ -395,16 +444,14 @@
             return 'badge-washed';
         }
 
-        // 상태 뱃지 클래스
         function getStatusBadgeClass(status) {
             if (!status) return '';
             if (status === '진행 중') return 'badge-진행중';
             if (status === '완료') return 'badge-완료';
-            if (status === '사작 전') return 'badge-사작전';
+            if (status === '시작 전') return 'badge-시작전';
             return '';
         }
 
-        // 컨텐츠 렌더링
         function renderContent(data) {
             const { today, history } = data;
             
@@ -429,18 +476,17 @@
                 `;
             }
 
-            // 히스토리 테이블
+            // 히스토리 섹션
             html += `
                 <div class="history-section">
                     <h2>📋 커피 히스토리</h2>
-                    ${renderHistoryTable(history)}
+                    ${renderHistory(history)}
                 </div>
             `;
 
             document.getElementById('content').innerHTML = html;
         }
 
-        // 커피 카드 렌더링
         function renderCoffeeCard(coffee) {
             return `
                 <div class="coffee-card">
@@ -453,7 +499,14 @@
                                 ${coffee.프로세싱}
                             </span>
                         </div>
-                    ` : ''}                
+                    ` : ''}
+                    
+                    ${coffee.로스터리 ? `
+                        <div class="coffee-detail">
+                            <span class="coffee-detail-label">로스터리</span>
+                            <span class="coffee-detail-value">${coffee.로스터리}</span>
+                        </div>
+                    ` : ''}
                     
                     ${coffee.로스팅 ? `
                         <div class="coffee-detail">
@@ -486,50 +539,101 @@
             `;
         }
 
-        // 히스토리 테이블 렌더링
-        function renderHistoryTable(history) {
+        function renderHistory(history) {
             if (!history || history.length === 0) {
                 return '<div class="empty-message">아직 커피 히스토리가 없습니다.</div>';
             }
 
-            return `
-                <div class="table-container">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>커피</th>
-                                <th>프로세싱</th>
-                                <th>상태</th>  
-                                <th>로스팅</th>
-                                <th>제공일</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            ${history.map(coffee => `
+            // 데스크톱 테이블
+            const desktopTable = `
+                <div class="desktop-table">
+                    <div class="table-container">
+                        <table>
+                            <thead>
                                 <tr>
-                                    <td class="table-coffee-name">${coffee.커피 || '-'}</td>
-                                    <td>
-                                        ${coffee.프로세싱 ? `
-                                            <span class="process-badge ${getProcessBadgeClass(coffee.프로세싱)}">
-                                                ${coffee.프로세싱}
-                                            </span>
-                                        ` : '-'}
-                                    </td>
-                                    <td>
-                                        ${coffee.상태 ? `
-                                            <span class="process-badge ${getStatusBadgeClass(coffee.상태)}">
-                                                ${coffee.상태}
-                                            </span>
-                                        ` : '-'}
-                                    </td>        
-                                    <td class="date-display">${formatDate(coffee.로스팅)}</td>
-                                    <td class="date-display">${formatDate(coffee.제공일)}</td>
+                                    <th>커피</th>
+                                    <th>프로세싱</th>
+                                    <th>상태</th>
+                                    <th>로스터리</th>
+                                    <th>로스팅</th>
+                                    <th>제공일</th>
                                 </tr>
-                            `).join('')}
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                ${history.map(coffee => `
+                                    <tr>
+                                        <td class="table-coffee-name">${coffee.커피 || '-'}</td>
+                                        <td>
+                                            ${coffee.프로세싱 ? `
+                                                <span class="process-badge ${getProcessBadgeClass(coffee.프로세싱)}">
+                                                    ${coffee.프로세싱}
+                                                </span>
+                                            ` : '-'}
+                                        </td>
+                                        <td>
+                                            ${coffee.상태 ? `
+                                                <span class="process-badge ${getStatusBadgeClass(coffee.상태)}">
+                                                    ${coffee.상태}
+                                                </span>
+                                            ` : '-'}
+                                        </td>
+                                        <td>${coffee.로스터리 || '-'}</td>
+                                        <td class="date-display">${formatDateShort(coffee.로스팅)}</td>
+                                        <td class="date-display">${formatDateShort(coffee.제공일)}</td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             `;
+
+            // 모바일 카드
+            const mobileCards = `
+                <div class="mobile-cards">
+                    ${history.map(coffee => `
+                        <div class="history-card">
+                            <div class="history-card-title">${coffee.커피 || '제목 없음'}</div>
+                            ${coffee.프로세싱 ? `
+                                <div class="history-card-row">
+                                    <span class="history-card-label">프로세싱</span>
+                                    <span class="process-badge ${getProcessBadgeClass(coffee.프로세싱)}">
+                                        ${coffee.프로세싱}
+                                    </span>
+                                </div>
+                            ` : ''}
+                            ${coffee.상태 ? `
+                                <div class="history-card-row">
+                                    <span class="history-card-label">상태</span>
+                                    <span class="process-badge ${getStatusBadgeClass(coffee.상태)}">
+                                        ${coffee.상태}
+                                    </span>
+                                </div>
+                            ` : ''}
+                            ${coffee.로스터리 ? `
+                                <div class="history-card-row">
+                                    <span class="history-card-label">로스터리</span>
+                                    <span class="history-card-value">${coffee.로스터리}</span>
+                                </div>
+                            ` : ''}
+                            ${coffee.로스팅 ? `
+                                <div class="history-card-row">
+                                    <span class="history-card-label">로스팅</span>
+                                    <span class="history-card-value date-display">${formatDate(coffee.로스팅)}</span>
+                                </div>
+                            ` : ''}
+                            ${coffee.제공일 ? `
+                                <div class="history-card-row">
+                                    <span class="history-card-label">제공일</span>
+                                    <span class="history-card-value date-display">${formatDate(coffee.제공일)}</span>
+                                </div>
+                            ` : ''}
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+
+            return desktopTable + mobileCards;
         }
 
         // 페이지 로드 시 데이터 가져오기
