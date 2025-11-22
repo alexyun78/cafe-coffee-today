@@ -565,7 +565,7 @@
                                     <th>커피</th>
                                     <th>프로세싱</th>
                                     <th>상태</th>
-                                    <th>로스터리</th>
+                                    <th>컵노트</th>
                                     <th>로스팅</th>
                                     <th>제공일</th>
                                 </tr>
@@ -588,7 +588,7 @@
                                                 </span>
                                             ` : '-'}
                                         </td>
-                                        <td>${coffee.로스터리 || '-'}</td>
+                                        <td>${coffee.컵노트 || '-'}</td>
                                         <td class="date-display">${formatDateShort(coffee.로스팅)}</td>
                                         <td class="date-display">${formatDateShort(coffee.제공일)}</td>
                                     </tr>
@@ -621,10 +621,10 @@
                                     </span>
                                 </div>
                             ` : ''}
-                            ${coffee.로스터리 ? `
+                            ${coffee.컵노트 ? `
                                 <div class="history-card-row">
-                                    <span class="history-card-label">로스터리</span>
-                                    <span class="history-card-value">${coffee.로스터리}</span>
+                                    <span class="history-card-label">컵노트</span>
+                                    <span class="history-card-value">${coffee.컵노트}</span>
                                 </div>
                             ` : ''}
                             ${coffee.로스팅 ? `
