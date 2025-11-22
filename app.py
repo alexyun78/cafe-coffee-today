@@ -149,8 +149,12 @@ def get_coffee_data():
         print(f"진행 중인 커피: {len(today_coffee)}개")  # 디버깅용 로그
         print(f"히스토리 커피 (한 달 이내): {len(all_coffee)}개")  # 디버깅용 로그
         
-        # 정렬: 로스팅일 최신순 (중복 데이터는 개별적으로 표시)
+        # 정렬: 상태 "예정" 최우선 -> 로스팅일 최신순
         def sort_key(item):
+            # 상태가 "예정"인 경우 최우선 (0)
+            status = item.get("상태")
+            status_priority = 0 if status == "예정" else 1
+            
             # 로스팅일
             roast_obj = item.get("로스팅")
             roast_date = parse_date(roast_obj)
@@ -158,7 +162,7 @@ def get_coffee_data():
             # None은 가장 작은 값으로 처리 (오래된 것)
             roast_time = roast_date.timestamp() if roast_date else 0
             
-            return -roast_time
+            return (status_priority, -roast_time)
         
         all_coffee.sort(key=sort_key)
         

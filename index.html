@@ -120,6 +120,7 @@
         .badge-진행중 { background: #E8F5E9; color: #2E7D32; }
         .badge-완료 { background: #E0E0E0; color: #616161; }
         .badge-시작전 { background: #FFF3E0; color: #EF6C00; }
+        .badge-예정 { background: #E1F5FE; color: #0277BD; }
 
         /* 히스토리 섹션 */
         .history-section {
@@ -226,6 +227,132 @@
             padding: 40px;
             color: #999;
             font-size: 1.1rem;
+        }
+
+        /* 모달 팝업 스타일 */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.5);
+            animation: fadeIn 0.3s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 0;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 600px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            animation: slideDown 0.3s;
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, #6F4E37 0%, #8B6F47 100%);
+            color: white;
+            padding: 25px 30px;
+            border-radius: 15px 15px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h2 {
+            margin: 0;
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .close-button {
+            color: white;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 0;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: background 0.3s;
+        }
+
+        .close-button:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .modal-body {
+            padding: 30px;
+        }
+
+        .modal-detail {
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .modal-detail:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .modal-detail-label {
+            font-weight: 600;
+            color: #6F4E37;
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .modal-detail-value {
+            color: #333;
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+
+        tbody tr {
+            cursor: pointer;
+        }
+
+        tbody tr:hover {
+            background: #f0f0f0;
+        }
+
+        .history-card {
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .history-card:hover {
+            background: #e8e8e8;
+            transform: translateX(5px);
         }
 
         .loading {
@@ -368,6 +495,18 @@
         </div>
     </div>
 
+    <!-- 커피 상세 모달 -->
+    <div id="coffeeModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle"></h2>
+                <button class="close-button" onclick="closeCoffeeModal()">&times;</button>
+            </div>
+            <div class="modal-body" id="modalBody">
+            </div>
+        </div>
+    </div>
+
     <script>
         async function loadCoffeeData() {
             try {
@@ -460,7 +599,99 @@
             if (status === '진행 중') return 'badge-진행중';
             if (status === '완료') return 'badge-완료';
             if (status === '시작 전') return 'badge-시작전';
+            if (status === '예정') return 'badge-예정';
             return '';
+        }
+
+        // 모달 팝업 관련 함수
+        function openCoffeeModal(coffee) {
+            const modal = document.getElementById('coffeeModal');
+            const modalTitle = document.getElementById('modalTitle');
+            const modalBody = document.getElementById('modalBody');
+
+            // 모달 제목
+            modalTitle.textContent = coffee.커피 || '제목 없음';
+
+            // 모달 내용
+            let bodyHtml = '';
+
+            if (coffee.프로세싱) {
+                bodyHtml += `
+                    <div class="modal-detail">
+                        <span class="modal-detail-label">프로세싱</span>
+                        <div class="modal-detail-value">
+                            <span class="process-badge ${getProcessBadgeClass(coffee.프로세싱)}">
+                                ${coffee.프로세싱}
+                            </span>
+                        </div>
+                    </div>
+                `;
+            }
+
+            if (coffee.상태) {
+                bodyHtml += `
+                    <div class="modal-detail">
+                        <span class="modal-detail-label">상태</span>
+                        <div class="modal-detail-value">
+                            <span class="process-badge ${getStatusBadgeClass(coffee.상태)}">
+                                ${coffee.상태}
+                            </span>
+                        </div>
+                    </div>
+                `;
+            }
+
+            if (coffee.로스팅) {
+                bodyHtml += `
+                    <div class="modal-detail">
+                        <span class="modal-detail-label">로스팅</span>
+                        <div class="modal-detail-value date-display">${formatDate(coffee.로스팅)}</div>
+                    </div>
+                `;
+            }
+
+            if (coffee.제공일) {
+                bodyHtml += `
+                    <div class="modal-detail">
+                        <span class="modal-detail-label">제공일</span>
+                        <div class="modal-detail-value date-display">${formatDate(coffee.제공일)}</div>
+                    </div>
+                `;
+            }
+
+            if (coffee.컵노트) {
+                bodyHtml += `
+                    <div class="modal-detail">
+                        <span class="modal-detail-label">컵노트</span>
+                        <div class="modal-detail-value">${coffee.컵노트}</div>
+                    </div>
+                `;
+            }
+
+            if (coffee.감상) {
+                bodyHtml += `
+                    <div class="modal-detail">
+                        <span class="modal-detail-label">감상</span>
+                        <div class="modal-detail-value">${coffee.감상}</div>
+                    </div>
+                `;
+            }
+
+            modalBody.innerHTML = bodyHtml;
+            modal.style.display = 'block';
+        }
+
+        function closeCoffeeModal() {
+            const modal = document.getElementById('coffeeModal');
+            modal.style.display = 'none';
+        }
+
+        // 모달 외부 클릭 시 닫기
+        window.onclick = function(event) {
+            const modal = document.getElementById('coffeeModal');
+            if (event.target === modal) {
+                closeCoffeeModal();
+            }
         }
 
         function renderContent(data) {
@@ -555,6 +786,9 @@
                 return '<div class="empty-message">아직 커피 히스토리가 없습니다.</div>';
             }
 
+            // 히스토리 데이터를 전역으로 저장
+            window.coffeeHistory = history;
+
             // 데스크톱 테이블
             const desktopTable = `
                 <div class="desktop-table">
@@ -571,8 +805,8 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                ${history.map(coffee => `
-                                    <tr>
+                                ${history.map((coffee, index) => `
+                                    <tr onclick="openCoffeeModal(window.coffeeHistory[${index}])">
                                         <td class="table-coffee-name">${coffee.커피 || '-'}</td>
                                         <td>
                                             ${coffee.프로세싱 ? `
@@ -602,8 +836,8 @@
             // 모바일 카드
             const mobileCards = `
                 <div class="mobile-cards">
-                    ${history.map(coffee => `
-                        <div class="history-card">
+                    ${history.map((coffee, index) => `
+                        <div class="history-card" onclick="openCoffeeModal(window.coffeeHistory[${index}])">
                             <div class="history-card-title">${coffee.커피 || '제목 없음'}</div>
                             ${coffee.프로세싱 ? `
                                 <div class="history-card-row">
