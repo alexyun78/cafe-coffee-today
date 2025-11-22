@@ -429,9 +429,20 @@
         function formatDateShort(dateObj) {
             if (!dateObj) return '-';
             const start = dateObj.start;
+            const end = dateObj.end;
+            
             if (!start) return '-';
-            const date = new Date(start);
-            return `${date.getMonth() + 1}/${date.getDate()}`;
+            
+            const startDate = new Date(start);
+            const startStr = `${startDate.getMonth() + 1}/${startDate.getDate()}`;
+            
+            if (end) {
+                const endDate = new Date(end);
+                const endStr = `${endDate.getMonth() + 1}/${endDate.getDate()}`;
+                return `${startStr} ~ ${endStr}`;
+            }
+            
+            return startStr;
         }
 
         function getProcessBadgeClass(process) {

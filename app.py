@@ -114,6 +114,11 @@ def get_coffee_data():
         all_coffee = []
         today_coffee = []
         
+        # 오늘 날짜 기준 한 달 전 계산
+        from datetime import timedelta
+        now = datetime.now()
+        one_month_ago = now - timedelta(days=30)
+        
         for pg in pages:
             row = flatten_row(pg)
             coffee_data = {
@@ -123,32 +128,37 @@ def get_coffee_data():
                 "상태": row.get("상태"),
                 "컵노트": row.get("컵노트"),
                 "감상": row.get("감상"),
-                "제공일": row.get("제공일")
+                "제공일": row.get("제공일"),
+                "로스터리": row.get("로스터리")
             }
             
-            all_coffee.append(coffee_data)
+            # 로스팅 날짜 확인
+            roast_date = parse_date(coffee_data.get("로스팅"))
+            
+            # 히스토리는 로스팅 한 달 이내 데이터만 포함
+            if roast_date and roast_date >= one_month_ago:
+                all_coffee.append(coffee_data)
+            elif not roast_date:
+                # 로스팅 날짜가 없는 경우도 포함
+                all_coffee.append(coffee_data)
             
             # 진행 중인 커피 찾기
             if coffee_data["상태"] == "진행 중":
                 today_coffee.append(coffee_data)
         
         print(f"진행 중인 커피: {len(today_coffee)}개")  # 디버깅용 로그
+        print(f"히스토리 커피 (한 달 이내): {len(all_coffee)}개")  # 디버깅용 로그
         
-        # 정렬: 제공일 최신순 -> 로스팅일 최신순
+        # 정렬: 로스팅일 최신순 (중복 데이터는 개별적으로 표시)
         def sort_key(item):
-            # 제공일 우선
-            date_obj = item.get("제공일")
-            provide_date = parse_date(date_obj)
-            
             # 로스팅일
             roast_obj = item.get("로스팅")
             roast_date = parse_date(roast_obj)
             
             # None은 가장 작은 값으로 처리 (오래된 것)
-            provide_time = provide_date.timestamp() if provide_date else 0
             roast_time = roast_date.timestamp() if roast_date else 0
             
-            return (-provide_time, -roast_time)
+            return -roast_time
         
         all_coffee.sort(key=sort_key)
         
