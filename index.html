@@ -489,7 +489,7 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>☕ 오늘의 커피</h1>
+            <h1>오늘의 커피</h1>
             <p class="subtitle">매일 다른 92도씨 로스터리 커피를 만나보세요</p>
         </div>
 
@@ -713,7 +713,7 @@
             if (today && today.length > 0) {
                 html += `
                     <div class="today-section">
-                        <h2>🌟 지금 제공 중인 커피</h2>
+                        <h2>지금 제공 중인 커피</h2>
                         <div class="coffee-cards">
                             ${today.map(coffee => renderCoffeeCard(coffee)).join('')}
                         </div>
@@ -735,7 +735,7 @@
             // 히스토리 섹션
             html += `
                 <div class="history-section">
-                    <h2>📋 커피 히스토리</h2>
+                    <h2>커피 히스토리</h2>
                     ${renderHistory(history)}
                 </div>
             `;
