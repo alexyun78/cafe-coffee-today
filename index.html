@@ -435,6 +435,27 @@
             }
         }
 
+        @media (prefers-reduced-motion: reduce) {
+            .coffee-card {
+                transition: none;
+            }
+            .coffee-card:hover {
+                transform: none;
+            }
+            .modal {
+                animation: none;
+            }
+            .modal-content {
+                animation: none;
+            }
+            .history-card {
+                transition: none;
+            }
+            .history-card:hover {
+                transform: none;
+            }
+        }
+
         @media (max-width: 480px) {
             body {
                 padding: 8px;
