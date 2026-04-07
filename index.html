@@ -722,8 +722,12 @@
             } else {
                 html += `
                     <div class="today-section">
-                        <h2>🌟 지금 제공 중인 커피</h2>
-                        <div class="empty-message">현재 제공 중인 커피가 없습니다.</div>
+                        <h2>지금 제공 중인 커피</h2>
+                        <div class="empty-message">
+                            <div style="font-size: 2.5rem; margin-bottom: 12px;">☕</div>
+                            <div style="color: #6F4E37; font-weight: 500;">준비 중입니다</div>
+                            <div style="color: #8B7355; font-size: 0.95rem; margin-top: 6px;">곧 새로운 커피가 제공될 예정이에요</div>
+                        </div>
                     </div>
                 `;
             }
