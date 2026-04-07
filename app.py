@@ -132,6 +132,10 @@ def get_coffee_data():
                 "로스터리": row.get("로스터리")
             }
             
+            # 커피 이름이 없는 행은 건너뛰기
+            if not coffee_data["커피"]:
+                continue
+
             # 로스팅 날짜 확인
             roast_date = parse_date(coffee_data.get("로스팅"))
             
