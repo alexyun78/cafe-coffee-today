@@ -697,6 +697,13 @@
             }
         }
 
+        // ESC 키로 모달 닫기
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closeCoffeeModal();
+            }
+        });
+
         function renderContent(data) {
             const { today, history } = data;
             
