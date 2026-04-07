@@ -365,6 +365,21 @@
             color: #8B7355;
         }
 
+        .loading-spinner {
+            display: inline-block;
+            width: 32px;
+            height: 32px;
+            border: 3px solid #e0d5c8;
+            border-top-color: #6F4E37;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin-bottom: 12px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
         .error {
             background: #FFEBEE;
             color: #C62828;
@@ -515,7 +530,10 @@
         </div>
 
         <div id="content">
-            <div class="loading">커피 정보를 불러오는 중...</div>
+            <div class="loading">
+                <div class="loading-spinner"></div>
+                <div>커피 정보를 불러오는 중…</div>
+            </div>
         </div>
     </div>
 
