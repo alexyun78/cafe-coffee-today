@@ -96,34 +96,44 @@ def list_all() -> list:
 
 
 def list_today_and_history():
-    """현재 '진행 중' 항목과 최근 30일 히스토리를 한글 키로 반환."""
-    from datetime import timedelta
+    """현재 '진행 중' 항목과 히스토리(예정·완료만)를 한글 키로 반환.
 
+    히스토리 정렬:
+      1) 예정 → 완료 순
+      2) 예정: 로스팅 오래된 순(오름차순), 같은 날이면 가나다순
+      3) 완료: 로스팅 최신순(내림차순), 같은 날이면 가나다순
+    진행 중은 이미 '지금 제공 중'에 표시되므로 히스토리에서 제외.
+    """
     today = []
     history = []
-    one_month_ago = (datetime.now() - timedelta(days=30)).strftime("%Y-%m-%d")
 
     with connect() as conn:
         rows = conn.execute("SELECT * FROM coffees").fetchall()
 
     items = [_row_to_api(r) for r in rows]
 
+    for item in items:
+        if not item.get("커피"):
+            continue
+        status = item.get("상태")
+        if status == "진행 중":
+            today.append(item)
+        elif status in ("예정", "완료"):
+            history.append(item)
+
     def sort_key(item):
         status = item.get("상태")
         status_priority = 0 if status == "예정" else 1
         roast = item.get("로스팅") or {}
         start = roast.get("start") or ""
-        return (status_priority, -_date_to_ts(start))
-
-    for item in items:
-        if not item.get("커피"):
-            continue
-        roast = item.get("로스팅") or {}
-        roast_start = roast.get("start")
-        if roast_start is None or roast_start >= one_month_ago:
-            history.append(item)
-        if item.get("상태") == "진행 중":
-            today.append(item)
+        ts = _date_to_ts(start)
+        name = item.get("커피") or ""
+        if status == "예정":
+            # 오래된 순 (오름차순)
+            return (status_priority, ts, name)
+        else:
+            # 최신순 (내림차순)
+            return (status_priority, -ts, name)
 
     history.sort(key=sort_key)
     return today, history
