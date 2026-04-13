@@ -251,9 +251,20 @@ def suggestions() -> dict:
             ).fetchall()
         return [r["v"] for r in rows]
 
+    # cup_notes는 쉼표 구분 문자열 → 개별 맛으로 분리·중복 제거
+    raw_notes = distinct("cup_notes", limit=200)
+    seen = set()
+    individual_notes = []
+    for entry in raw_notes:
+        for note in entry.split(","):
+            note = note.strip()
+            if note and note not in seen:
+                seen.add(note)
+                individual_notes.append(note)
+
     return {
         "name": distinct("name"),
         "roastery": distinct("roastery"),
         "process": distinct("process"),
-        "cup_notes": distinct("cup_notes"),
+        "cup_notes": individual_notes,
     }
