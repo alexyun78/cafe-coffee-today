@@ -1128,14 +1128,18 @@
           let tapTimer = null;
 
           title.style.cursor = 'default';
-          title.addEventListener('click', () => {
+          title.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const modal = document.getElementById('pin-modal');
+            // 모달이 이미 열려있으면 무시
+            if (!modal.classList.contains('hidden')) return;
+
             tapCount++;
             clearTimeout(tapTimer);
             tapTimer = setTimeout(() => { tapCount = 0; }, 2000);
 
             if (tapCount >= 5) {
               tapCount = 0;
-              const modal = document.getElementById('pin-modal');
               modal.classList.remove('hidden');
               document.getElementById('admin-pin-input').value = '';
               document.getElementById('admin-pin-error').style.display = 'none';
