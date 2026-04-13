@@ -47,7 +47,7 @@
             color: #6F5B3E;
         }
 
-        /* 오늘의 커피 섹션 */
+        /* 오늘의 커피 섹션 — 히어로 */
         .today-section {
             margin-bottom: 50px;
         }
@@ -68,35 +68,111 @@
         }
 
         .coffee-card {
-            background: white;
-            border-radius: 15px;
-            padding: 25px;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            background: linear-gradient(145deg, #6F4E37 0%, #8B6F47 40%, #A0845C 100%);
+            border-radius: 20px;
+            padding: 32px 28px;
+            color: white;
+            box-shadow: 0 8px 32px rgba(111, 78, 55, 0.35);
+            position: relative;
+            overflow: hidden;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
+        .coffee-card::before {
+            content: '';
+            position: absolute;
+            top: -60px; right: -60px;
+            width: 180px; height: 180px;
+            background: radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .coffee-card::after {
+            content: '';
+            position: absolute;
+            bottom: -40px; left: -40px;
+            width: 120px; height: 120px;
+            background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
         .coffee-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(111, 78, 55, 0.45);
+        }
+
+        .coffee-card .serving-label {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(4px);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            margin-bottom: 12px;
         }
 
         .coffee-card-title {
-            font-size: 1.5rem;
-            color: #6F4E37;
-            margin-bottom: 15px;
-            font-weight: 600;
+            font-size: 1.7rem;
+            color: white;
+            margin-bottom: 20px;
+            font-weight: 700;
+            line-height: 1.3;
+            position: relative;
         }
 
         .coffee-detail {
-            margin-bottom: 10px;
+            margin-bottom: 8px;
             padding: 8px 0;
-            border-bottom: 1px solid #f0f0f0;
+            border-bottom: 1px solid rgba(255,255,255,0.12);
+            position: relative;
         }
 
         .coffee-detail:last-child {
             border-bottom: none;
         }
 
+        .coffee-card .coffee-detail-label {
+            font-weight: 600;
+            color: rgba(255,255,255,0.7);
+            display: inline-block;
+            min-width: 80px;
+            font-size: 0.85rem;
+        }
+
+        .coffee-card .coffee-detail-value {
+            color: rgba(255,255,255,0.95);
+        }
+
+        .coffee-card .cup-notes-highlight {
+            margin-top: 16px;
+            padding: 14px 16px;
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(4px);
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.12);
+        }
+
+        .coffee-card .cup-notes-highlight .coffee-detail-label {
+            display: block;
+            margin-bottom: 6px;
+        }
+
+        .coffee-card .cup-notes-highlight .coffee-detail-value {
+            color: white;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .coffee-card .process-badge {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        /* 히스토리용 디테일 (기본값) */
         .coffee-detail-label {
             font-weight: 600;
             color: #8B7355;
@@ -430,11 +506,11 @@
             }
 
             .coffee-card {
-                padding: 20px;
+                padding: 24px 20px;
             }
 
             .coffee-card-title {
-                font-size: 1.3rem;
+                font-size: 1.4rem;
             }
 
             .history-section {
@@ -763,10 +839,12 @@
                 html += `
                     <div class="today-section">
                         <h2>지금 제공 중인 커피</h2>
-                        <div class="empty-message">
-                            <div style="font-size: 2.5rem; margin-bottom: 12px;">☕</div>
-                            <div style="color: #6F4E37; font-weight: 500;">준비 중입니다</div>
-                            <div style="color: #8B7355; font-size: 0.95rem; margin-top: 6px;">곧 새로운 커피가 제공될 예정이에요</div>
+                        <div class="coffee-cards">
+                            <div class="coffee-card" style="text-align:center; padding: 40px 28px;">
+                                <div style="font-size: 3rem; margin-bottom: 16px; opacity: 0.7;">☕</div>
+                                <div class="coffee-card-title" style="font-size: 1.3rem; margin-bottom: 8px;">준비 중입니다</div>
+                                <div style="opacity: 0.7; font-size: 0.95rem;">곧 새로운 커피가 제공될 예정이에요</div>
+                            </div>
                         </div>
                     </div>
                 `;
@@ -786,49 +864,43 @@
         function renderCoffeeCard(coffee) {
             return `
                 <div class="coffee-card">
+                    <span class="serving-label">NOW SERVING</span>
                     <div class="coffee-card-title">${coffee.커피 || '제목 없음'}</div>
-                    
+
                     ${coffee.프로세싱 ? `
                         <div class="coffee-detail">
                             <span class="coffee-detail-label">프로세싱</span>
-                            <span class="process-badge ${getProcessBadgeClass(coffee.프로세싱)}">
+                            <span class="process-badge">
                                 ${coffee.프로세싱}
                             </span>
                         </div>
                     ` : ''}
-                    
+
                     ${coffee.로스터리 ? `
                         <div class="coffee-detail">
                             <span class="coffee-detail-label">로스터리</span>
                             <span class="coffee-detail-value">${coffee.로스터리}</span>
                         </div>
                     ` : ''}
-                    
+
                     ${coffee.로스팅 ? `
                         <div class="coffee-detail">
                             <span class="coffee-detail-label">로스팅</span>
                             <span class="coffee-detail-value date-display">${formatDate(coffee.로스팅)}</span>
                         </div>
                     ` : ''}
-                    
-                    ${coffee.제공일 ? `
-                        <div class="coffee-detail">
-                            <span class="coffee-detail-label">제공일</span>
-                            <span class="coffee-detail-value date-display">${formatDate(coffee.제공일)}</span>
-                        </div>
-                    ` : ''}
-                    
+
                     ${coffee.컵노트 ? `
-                        <div class="coffee-detail">
+                        <div class="cup-notes-highlight">
                             <span class="coffee-detail-label">컵노트</span>
-                            <div class="coffee-detail-value" style="margin-top: 5px;">${coffee.컵노트}</div>
+                            <div class="coffee-detail-value">${coffee.컵노트}</div>
                         </div>
                     ` : ''}
-                    
+
                     ${coffee.감상 ? `
-                        <div class="coffee-detail">
+                        <div class="coffee-detail" style="border-bottom:none; padding-top:12px;">
                             <span class="coffee-detail-label">감상</span>
-                            <div class="coffee-detail-value" style="margin-top: 5px;">${coffee.감상}</div>
+                            <div class="coffee-detail-value" style="margin-top: 4px; font-style: italic; opacity: 0.9;">${coffee.감상}</div>
                         </div>
                     ` : ''}
                 </div>
