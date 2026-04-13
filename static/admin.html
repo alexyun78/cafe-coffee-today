@@ -145,6 +145,22 @@
   }
   .chip.selected:hover { background: var(--coffee-mid); }
 
+  /* 커스텀 드롭다운 */
+  .autocomplete-wrap { position: relative; }
+  .autocomplete-list {
+    position: absolute; left: 0; right: 0; top: 100%; z-index: 50;
+    background: white; border: 1.5px solid var(--border); border-top: none;
+    border-radius: 0 0 8px 8px; max-height: 200px; overflow-y: auto;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.1); display: none;
+  }
+  .autocomplete-list.open { display: block; }
+  .autocomplete-item {
+    padding: 10px 14px; cursor: pointer; font-size: 0.95rem;
+  }
+  .autocomplete-item:hover, .autocomplete-item.highlight {
+    background: #f3efe8; color: var(--coffee-dark);
+  }
+
   /* 제공일 토글 */
   .toggle-row {
     display: flex; align-items: center; gap: 8px; margin-bottom: 8px;
@@ -265,18 +281,22 @@
 
       <div class="field">
         <label for="field-name" class="req">원두 이름</label>
-        <input type="text" id="field-name" name="name" list="dl-name"
-               placeholder="예: 에티오피아 예가체프" autocomplete="off"
-               aria-required="true" required>
-        <datalist id="dl-name"></datalist>
+        <div class="autocomplete-wrap">
+          <input type="text" id="field-name" name="name"
+                 placeholder="예: 에티오피아 예가체프" autocomplete="off"
+                 aria-required="true" required>
+          <div class="autocomplete-list" id="ac-name"></div>
+        </div>
         <div class="field-error">원두 이름을 입력하세요.</div>
       </div>
 
       <div class="field">
         <label for="field-roastery">로스터리</label>
-        <input type="text" id="field-roastery" name="roastery" list="dl-roastery"
-               placeholder="예: 모모스 커피" autocomplete="off">
-        <datalist id="dl-roastery"></datalist>
+        <div class="autocomplete-wrap">
+          <input type="text" id="field-roastery" name="roastery"
+                 placeholder="예: 92도씨 로스터리" autocomplete="off">
+          <div class="autocomplete-list" id="ac-roastery"></div>
+        </div>
       </div>
 
       <div class="field">
@@ -287,9 +307,11 @@
 
       <div class="field">
         <label for="field-process">프로세싱</label>
-        <input type="text" id="field-process" name="process" list="dl-process"
-               placeholder="예: Washed, Natural, Anaerobic" autocomplete="off">
-        <datalist id="dl-process"></datalist>
+        <div class="autocomplete-wrap">
+          <input type="text" id="field-process" name="process"
+                 placeholder="예: 내추럴, 워시드" autocomplete="off">
+          <div class="autocomplete-list" id="ac-process"></div>
+        </div>
       </div>
 
       <div class="field">
@@ -444,9 +466,9 @@ async function loadSuggestions() {
   try {
     const s = await api("GET", "/api/suggestions");
     suggestionsCache = s;
-    fillDatalist("dl-name", s.name || []);
-    fillDatalist("dl-roastery", s.roastery || []);
-    fillDatalist("dl-process", s.process || []);
+    setupAutocomplete("field-name", "ac-name", s.name || []);
+    setupAutocomplete("field-roastery", "ac-roastery", s.roastery || []);
+    setupAutocomplete("field-process", "ac-process", s.process || []);
     // 새 항목이면서 컵노트가 비어있으면 마지막 기록값 불러오기
     if (!editingId && !$("#field-cup-notes").value.trim() && s.last_cup_notes) {
       $("#field-cup-notes").value = s.last_cup_notes;
@@ -457,9 +479,59 @@ async function loadSuggestions() {
   }
 }
 
-function fillDatalist(id, values) {
-  const dl = document.getElementById(id);
-  dl.innerHTML = values.map((v) => `<option value="${escapeAttr(v)}"></option>`).join("");
+function setupAutocomplete(inputId, listId, items) {
+  const input = document.getElementById(inputId);
+  const list = document.getElementById(listId);
+  if (!input || !list) return;
+
+  // 이전 리스너 제거를 위해 clone
+  const newInput = input.cloneNode(true);
+  input.parentNode.replaceChild(newInput, input);
+
+  let highlighted = -1;
+
+  function render(filter) {
+    const q = (filter || "").toLowerCase();
+    const filtered = q
+      ? items.filter(v => v.toLowerCase().includes(q))
+      : items;
+    if (!filtered.length) { list.classList.remove("open"); return; }
+    list.innerHTML = filtered.map((v, i) =>
+      `<div class="autocomplete-item" data-idx="${i}">${escapeHtml(v)}</div>`
+    ).join("");
+    list.classList.add("open");
+    highlighted = -1;
+    list.querySelectorAll(".autocomplete-item").forEach(el => {
+      el.addEventListener("mousedown", (e) => {
+        e.preventDefault();
+        newInput.value = el.textContent;
+        list.classList.remove("open");
+      });
+    });
+  }
+
+  newInput.addEventListener("focus", () => render(newInput.value));
+  newInput.addEventListener("input", () => render(newInput.value));
+  newInput.addEventListener("blur", () => {
+    setTimeout(() => list.classList.remove("open"), 150);
+  });
+  newInput.addEventListener("keydown", (e) => {
+    const visible = list.querySelectorAll(".autocomplete-item");
+    if (!visible.length) return;
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+      highlighted = Math.min(highlighted + 1, visible.length - 1);
+      visible.forEach((el, i) => el.classList.toggle("highlight", i === highlighted));
+    } else if (e.key === "ArrowUp") {
+      e.preventDefault();
+      highlighted = Math.max(highlighted - 1, 0);
+      visible.forEach((el, i) => el.classList.toggle("highlight", i === highlighted));
+    } else if (e.key === "Enter" && highlighted >= 0) {
+      e.preventDefault();
+      newInput.value = visible[highlighted].textContent;
+      list.classList.remove("open");
+    }
+  });
 }
 
 function renderChips(notes) {
