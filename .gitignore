@@ -69,6 +69,7 @@ cafe-coffee-apk/android/.gradle/
 cafe-coffee-apk/android/build/
 cafe-coffee-apk/android/local.properties
 cafe-coffee-apk/www/
+!cafe-coffee-apk/www/version.json
 *.apk
 
 # 다운로드 산출물 (서버에 SCP로 배포됨)
