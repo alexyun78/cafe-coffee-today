@@ -1,0 +1,10 @@
+[Unit]
+Description=Cafe Today Coffee — auto deploy (git pull + restart)
+After=network.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=/root/92cafe/cafe-today-coffee
+ExecStart=/bin/bash /root/92cafe/cafe-today-coffee/deploy.sh
+StandardOutput=journal
+StandardError=journal

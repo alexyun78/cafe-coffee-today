@@ -54,3 +54,22 @@ htmlcov/
 *.bak
 *.swp
 .cache/
+.gstack/
+
+# 자체 호스팅 DB / 상태
+data/
+*.db
+*.sqlite
+*.sqlite3
+
+# Capacitor / Android 빌드 산출물
+cafe-coffee-apk/node_modules/
+cafe-coffee-apk/android/app/build/
+cafe-coffee-apk/android/.gradle/
+cafe-coffee-apk/android/build/
+cafe-coffee-apk/android/local.properties
+cafe-coffee-apk/www/
+*.apk
+
+# 다운로드 산출물 (서버에 SCP로 배포됨)
+static/downloads/

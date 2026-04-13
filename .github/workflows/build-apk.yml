@@ -1,0 +1,103 @@
+name: Build APK
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'cafe-coffee-apk/**'
+      - '.github/workflows/build-apk.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: cafe-coffee-apk
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Setup JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Read version
+        id: version
+        run: |
+          VERSION=$(node -p "require('./www/version.json').version")
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "Building cafe-coffee-apk v$VERSION"
+
+      - name: Install npm deps
+        run: npm install
+
+      - name: Add Android platform
+        run: npx cap add android
+
+      - name: Sync Capacitor
+        run: npx cap sync android
+
+      - name: Build debug APK
+        working-directory: cafe-coffee-apk/android
+        run: ./gradlew assembleDebug --no-daemon
+
+      - name: Rename APK
+        run: |
+          mkdir -p dist
+          cp android/app/build/outputs/apk/debug/app-debug.apk dist/cafe-coffee-${{ steps.version.outputs.version }}.apk
+          cp android/app/build/outputs/apk/debug/app-debug.apk dist/cafe-coffee-latest.apk
+          cat > dist/cafe-coffee-version.json <<EOF
+          {
+            "version": "${{ steps.version.outputs.version }}",
+            "downloadUrl": "/static/downloads/cafe-coffee-latest.apk",
+            "publishedAt": "$(date -Is)",
+            "buildRun": "${{ github.run_id }}",
+            "commit": "${{ github.sha }}"
+          }
+          EOF
+          ls -la dist/
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: cafe-coffee-apk-v${{ steps.version.outputs.version }}
+          path: cafe-coffee-apk/dist/
+
+      - name: Deploy APK to server
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SERVER_SSH_KEY }}
+          SSH_HOST: 49.247.207.115
+          SSH_USER: root
+          SSH_KNOWN_HOST: ${{ secrets.SERVER_SSH_KNOWN_HOST }}
+          REMOTE_DIR: /root/92cafe/cafe-today-coffee/static/downloads
+        run: |
+          mkdir -p ~/.ssh
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          echo "$SSH_KNOWN_HOST" > ~/.ssh/known_hosts
+          chmod 644 ~/.ssh/known_hosts
+
+          ssh -i ~/.ssh/deploy_key -o UserKnownHostsFile=~/.ssh/known_hosts \
+            $SSH_USER@$SSH_HOST "mkdir -p $REMOTE_DIR"
+
+          scp -i ~/.ssh/deploy_key -o UserKnownHostsFile=~/.ssh/known_hosts \
+            dist/cafe-coffee-latest.apk \
+            dist/cafe-coffee-version.json \
+            $SSH_USER@$SSH_HOST:$REMOTE_DIR/
+
+          echo "Deployed cafe-coffee-latest.apk v${{ steps.version.outputs.version }} to $SSH_HOST:$REMOTE_DIR"

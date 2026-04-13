@@ -1,0 +1,19 @@
+[Unit]
+Description=Cafe Today Coffee (Flask + SQLite)
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/root/92cafe/cafe-today-coffee
+EnvironmentFile=/root/92cafe/cafe-today-coffee/.env
+ExecStart=/root/92cafe/cafe-today-coffee/.venv/bin/gunicorn \
+    -w 2 -b 127.0.0.1:3002 \
+    --access-logfile - --error-logfile - \
+    app:app
+Restart=always
+RestartSec=3
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

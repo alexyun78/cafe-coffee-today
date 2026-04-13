@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>오늘의 커피 — 관리</title>
+<style>
+  :root {
+    --coffee-dark: #6F4E37;
+    --coffee-mid: #8B6F47;
+    --coffee-light: #8B7355;
+    --accent: #D2691E;
+    --bg: #f5f7fa;
+    --card: #ffffff;
+    --border: #e5ddd3;
+    --text: #2a2320;
+    --muted: #8a7f78;
+    --danger: #c62828;
+    --success: #2e7d32;
+    --radius: 12px;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { height: 100%; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    background: linear-gradient(135deg, #f5f7fa 0%, #e8e0d5 100%);
+    color: var(--text);
+    line-height: 1.5;
+    min-height: 100vh;
+    padding: 16px;
+  }
+  .container { max-width: 560px; margin: 0 auto; }
+  header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 20px; padding: 16px 4px;
+  }
+  header h1 {
+    font-size: 1.4rem; color: var(--coffee-dark); font-weight: 700;
+  }
+  .back-link {
+    color: var(--coffee-mid); text-decoration: none; font-size: 0.95rem;
+    padding: 8px 0; min-height: 44px; display: inline-flex; align-items: center;
+  }
+  .back-link:hover { color: var(--coffee-dark); }
+
+  .card {
+    background: var(--card); border-radius: var(--radius);
+    box-shadow: 0 4px 20px rgba(111,78,55,0.08);
+    padding: 24px; margin-bottom: 16px;
+  }
+
+  /* 기존 항목 리스트 */
+  .list-header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 12px;
+  }
+  .list-header h2 { font-size: 1.1rem; color: var(--coffee-dark); }
+  .btn-new {
+    background: var(--coffee-dark); color: white; border: none;
+    padding: 10px 16px; border-radius: 8px; font-size: 0.9rem;
+    cursor: pointer; min-height: 44px; font-weight: 600;
+  }
+  .btn-new:hover { background: var(--coffee-mid); }
+  .list-items { display: flex; flex-direction: column; gap: 8px; }
+  .list-item {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 12px 14px; background: #faf8f5; border-radius: 8px;
+    border-left: 3px solid var(--accent); cursor: pointer;
+    transition: background 0.15s;
+  }
+  .list-item:hover { background: #f3efe8; }
+  .list-item-main { flex: 1; min-width: 0; }
+  .list-item-name {
+    font-weight: 600; color: var(--coffee-dark);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .list-item-meta { font-size: 0.8rem; color: var(--muted); margin-top: 2px; }
+  .status-chip {
+    display: inline-block; padding: 2px 8px; border-radius: 10px;
+    font-size: 0.75rem; font-weight: 600;
+    margin-left: 8px; flex-shrink: 0;
+  }
+  .status-예정 { background: #e1f5fe; color: #0277bd; }
+  .status-진행중 { background: #e8f5e9; color: #2e7d32; }
+  .status-완료 { background: #eeeeee; color: #616161; }
+
+  /* 폼 */
+  form { display: none; }
+  form.active { display: block; }
+  .field { margin-bottom: 18px; }
+  label {
+    display: block; font-weight: 600; font-size: 0.9rem;
+    color: var(--coffee-dark); margin-bottom: 6px;
+  }
+  .req::after { content: " *"; color: var(--accent); }
+  input[type="text"], input[type="date"], textarea, select {
+    width: 100%; padding: 12px 14px; border: 1.5px solid var(--border);
+    border-radius: 8px; font-size: 1rem; font-family: inherit;
+    background: white; color: var(--text);
+    min-height: 48px;
+  }
+  input:focus, textarea:focus, select:focus {
+    outline: none; border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(210,105,30,0.15);
+  }
+  textarea { min-height: 88px; resize: vertical; }
+  .field.error input, .field.error textarea, .field.error select {
+    border-color: var(--danger);
+  }
+  .field-error {
+    color: var(--danger); font-size: 0.85rem; margin-top: 4px;
+    display: none;
+  }
+  .field.error .field-error { display: block; }
+
+  /* 세그먼트 (상태) */
+  .segmented {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    border: 1.5px solid var(--border); border-radius: 8px; overflow: hidden;
+  }
+  .segmented button {
+    padding: 12px 8px; border: none; background: white;
+    font-size: 0.95rem; font-family: inherit; cursor: pointer;
+    color: var(--muted); font-weight: 500; min-height: 48px;
+    border-right: 1px solid var(--border);
+  }
+  .segmented button:last-child { border-right: none; }
+  .segmented button.active {
+    background: var(--coffee-dark); color: white; font-weight: 600;
+  }
+
+  /* 컵노트 칩 */
+  .chips {
+    display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px;
+  }
+  .chip {
+    padding: 6px 10px; background: #faf8f5; border: 1px solid var(--border);
+    border-radius: 14px; font-size: 0.8rem; cursor: pointer;
+    color: var(--coffee-mid);
+  }
+  .chip:hover { background: #f0e6d9; }
+
+  /* 제공일 토글 */
+  .toggle-row {
+    display: flex; align-items: center; gap: 8px; margin-bottom: 8px;
+    font-size: 0.85rem; color: var(--muted);
+  }
+  .toggle-row input[type="checkbox"] { width: 18px; height: 18px; }
+
+  /* 버튼 바 */
+  .button-bar {
+    display: flex; gap: 12px; padding-top: 12px;
+    position: sticky; bottom: 0; background: var(--card);
+    margin: 0 -24px -24px; padding: 16px 24px 20px;
+    border-top: 1px solid var(--border);
+  }
+  .btn {
+    flex: 1; padding: 14px; border-radius: 10px; border: none;
+    font-size: 1rem; font-weight: 600; cursor: pointer;
+    min-height: 52px; font-family: inherit;
+  }
+  .btn-primary { background: var(--coffee-dark); color: white; }
+  .btn-primary:hover:not(:disabled) { background: var(--coffee-mid); }
+  .btn-primary:disabled { background: #a89d93; cursor: not-allowed; }
+  .btn-secondary { background: #f0ebe4; color: var(--coffee-dark); }
+  .btn-secondary:hover { background: #e6ddd0; }
+  .btn-danger {
+    flex: 0 0 auto; background: transparent; color: var(--danger);
+    border: 1.5px solid #f3c5c5;
+  }
+  .btn-danger:hover { background: #fff0f0; }
+
+  /* 배너 */
+  .banner {
+    padding: 12px 16px; border-radius: 8px; margin-bottom: 16px;
+    font-size: 0.9rem; display: none;
+  }
+  .banner.error { background: #ffebee; color: var(--danger); display: block; }
+  .banner.success { background: #e8f5e9; color: var(--success); display: block; }
+
+  /* 토스트 */
+  .toast {
+    position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+    background: var(--coffee-dark); color: white;
+    padding: 12px 20px; border-radius: 22px; font-size: 0.9rem;
+    box-shadow: 0 6px 24px rgba(0,0,0,0.2);
+    opacity: 0; transition: opacity 0.25s;
+    pointer-events: none; z-index: 100;
+  }
+  .toast.show { opacity: 1; }
+
+  /* PIN 모달 */
+  .modal-backdrop {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.5);
+    display: flex; align-items: center; justify-content: center;
+    padding: 16px; z-index: 200;
+  }
+  .modal-backdrop.hidden { display: none; }
+  .modal {
+    background: white; border-radius: var(--radius);
+    padding: 28px 24px; max-width: 340px; width: 100%;
+  }
+  .modal h2 {
+    color: var(--coffee-dark); font-size: 1.2rem; margin-bottom: 8px;
+  }
+  .modal p { color: var(--muted); font-size: 0.9rem; margin-bottom: 16px; }
+  .modal input {
+    text-align: center; letter-spacing: 4px; font-size: 1.3rem;
+    font-weight: 600;
+  }
+  .modal .button-bar {
+    position: static; margin: 16px 0 0; padding: 0; border: none;
+  }
+
+  /* 스피너 */
+  .spinner {
+    display: inline-block; width: 16px; height: 16px;
+    border: 2px solid rgba(255,255,255,0.3); border-top-color: white;
+    border-radius: 50%; animation: spin 0.8s linear infinite;
+    margin-right: 8px; vertical-align: -2px;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .empty {
+    text-align: center; padding: 32px 16px; color: var(--muted);
+    font-size: 0.9rem;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .spinner { animation: none; }
+    .toast { transition: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <header>
+    <a href="/" class="back-link">← 목록으로</a>
+    <h1>☕ 오늘의 커피 관리</h1>
+  </header>
+
+  <div id="banner" class="banner" role="alert" aria-live="polite"></div>
+
+  <!-- 기존 항목 리스트 -->
+  <section id="list-view" class="card">
+    <div class="list-header">
+      <h2>기록된 커피</h2>
+      <button class="btn-new" type="button" id="btn-new">+ 새로 추가</button>
+    </div>
+    <div id="list-items" class="list-items">
+      <div class="empty">불러오는 중...</div>
+    </div>
+  </section>
+
+  <!-- 추가/편집 폼 -->
+  <section id="form-view" class="card" style="display:none;">
+    <form id="coffee-form" novalidate>
+      <input type="hidden" name="id" id="field-id">
+
+      <div class="field">
+        <label for="field-name" class="req">원두 이름</label>
+        <input type="text" id="field-name" name="name" list="dl-name"
+               placeholder="예: 에티오피아 예가체프" autocomplete="off"
+               aria-required="true" required>
+        <datalist id="dl-name"></datalist>
+        <div class="field-error">원두 이름을 입력하세요.</div>
+      </div>
+
+      <div class="field">
+        <label for="field-roastery">로스터리</label>
+        <input type="text" id="field-roastery" name="roastery" list="dl-roastery"
+               placeholder="예: 모모스 커피" autocomplete="off">
+        <datalist id="dl-roastery"></datalist>
+      </div>
+
+      <div class="field">
+        <label for="field-roast-date" class="req">로스팅 일자</label>
+        <input type="date" id="field-roast-date" name="roast_date" aria-required="true" required>
+        <div class="field-error">로스팅 일자를 선택하세요.</div>
+      </div>
+
+      <div class="field">
+        <label for="field-process">프로세싱</label>
+        <input type="text" id="field-process" name="process" list="dl-process"
+               placeholder="예: Washed, Natural, Anaerobic" autocomplete="off">
+        <datalist id="dl-process"></datalist>
+      </div>
+
+      <div class="field">
+        <label>상태</label>
+        <div class="segmented" role="radiogroup" aria-label="상태">
+          <button type="button" data-status="예정">예정</button>
+          <button type="button" data-status="진행 중">진행 중</button>
+          <button type="button" data-status="완료">완료</button>
+        </div>
+        <input type="hidden" name="status" id="field-status" value="예정">
+      </div>
+
+      <div class="field">
+        <label for="field-cup-notes">컵노트</label>
+        <textarea id="field-cup-notes" name="cup_notes"
+                  placeholder="예: 자몽, 블랙베리, 다크초콜릿"></textarea>
+        <div class="chips" id="cup-notes-chips"></div>
+      </div>
+
+      <div class="field">
+        <label for="field-comment">감상</label>
+        <textarea id="field-comment" name="comment"
+                  placeholder="개인적인 느낌, 추출 메모 등"></textarea>
+      </div>
+
+      <div class="field">
+        <div class="toggle-row">
+          <input type="checkbox" id="same-as-roast" checked>
+          <label for="same-as-roast" style="margin:0; font-weight:400;">제공일은 로스팅일과 동일</label>
+        </div>
+        <input type="date" id="field-serve-date" name="serve_date" style="display:none;">
+      </div>
+
+      <div class="button-bar">
+        <button type="button" class="btn btn-secondary" id="btn-cancel">취소</button>
+        <button type="button" class="btn btn-danger" id="btn-delete" style="display:none;">삭제</button>
+        <button type="submit" class="btn btn-primary" id="btn-save">저장</button>
+      </div>
+    </form>
+  </section>
+</div>
+
+<!-- PIN 모달 -->
+<div class="modal-backdrop" id="pin-modal">
+  <div class="modal">
+    <h2>관리자 인증</h2>
+    <p>PIN을 입력하세요.</p>
+    <input type="password" inputmode="numeric" pattern="[0-9]*"
+           id="pin-input" maxlength="8" autocomplete="off">
+    <div id="pin-error" style="color:var(--danger); font-size:0.85rem; margin-top:8px; display:none;">
+      PIN이 올바르지 않습니다.
+    </div>
+    <div class="button-bar">
+      <button type="button" class="btn btn-primary" id="pin-submit">확인</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+const $ = (sel) => document.querySelector(sel);
+const $$ = (sel) => document.querySelectorAll(sel);
+
+const banner = $("#banner");
+const toast = $("#toast");
+const listView = $("#list-view");
+const formView = $("#form-view");
+const form = $("#coffee-form");
+const pinModal = $("#pin-modal");
+
+let editingId = null;
+let suggestionsCache = null;
+
+// ---------- API helpers ----------
+async function api(method, path, body) {
+  const opts = {
+    method,
+    credentials: "include",
+    headers: { "Content-Type": "application/json" },
+  };
+  if (body !== undefined) opts.body = JSON.stringify(body);
+  const res = await fetch(path, opts);
+  if (res.status === 401) {
+    showPinModal();
+    throw new Error("unauthorized");
+  }
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || ("HTTP " + res.status));
+  return data;
+}
+
+// ---------- PIN ----------
+function showPinModal() { pinModal.classList.remove("hidden"); $("#pin-input").focus(); }
+function hidePinModal() { pinModal.classList.add("hidden"); }
+
+$("#pin-submit").addEventListener("click", async () => {
+  const pin = $("#pin-input").value.trim();
+  try {
+    await api("POST", "/api/admin/verify", { pin });
+    hidePinModal();
+    $("#pin-error").style.display = "none";
+    $("#pin-input").value = "";
+    init();
+  } catch (e) {
+    $("#pin-error").style.display = "block";
+  }
+});
+$("#pin-input").addEventListener("keydown", (e) => {
+  if (e.key === "Enter") $("#pin-submit").click();
+});
+
+// ---------- 리스트 ----------
+async function loadList() {
+  try {
+    const data = await api("GET", "/api/coffee/all");
+    renderList(data.items || []);
+  } catch (e) {
+    if (e.message !== "unauthorized") showBanner("목록을 불러오지 못했습니다: " + e.message, "error");
+  }
+}
+
+function renderList(items) {
+  const el = $("#list-items");
+  if (!items.length) {
+    el.innerHTML = '<div class="empty">기록된 커피가 없습니다. "새로 추가"를 눌러 시작하세요.</div>';
+    return;
+  }
+  el.innerHTML = items.map((it) => {
+    const roast = it["로스팅"]?.start || "";
+    const status = it["상태"] || "";
+    const statusCls = status.replace(/\s/g, "");
+    return `
+      <div class="list-item" data-id="${it.id}">
+        <div class="list-item-main">
+          <div class="list-item-name">${escapeHtml(it["커피"] || "(이름 없음)")}</div>
+          <div class="list-item-meta">
+            ${escapeHtml(it["로스터리"] || "")}${it["로스터리"] && roast ? " · " : ""}${roast}
+          </div>
+        </div>
+        ${status ? `<span class="status-chip status-${statusCls}">${status}</span>` : ""}
+      </div>
+    `;
+  }).join("");
+  $$(".list-item").forEach((row) => {
+    row.addEventListener("click", () => openEdit(parseInt(row.dataset.id, 10)));
+  });
+}
+
+// ---------- 제안(datalist) ----------
+async function loadSuggestions() {
+  try {
+    const s = await api("GET", "/api/suggestions");
+    suggestionsCache = s;
+    fillDatalist("dl-name", s.name || []);
+    fillDatalist("dl-roastery", s.roastery || []);
+    fillDatalist("dl-process", s.process || []);
+    renderChips((s.cup_notes || []).slice(0, 10));
+  } catch (e) {
+    if (e.message !== "unauthorized") console.warn("제안 로드 실패:", e);
+  }
+}
+
+function fillDatalist(id, values) {
+  const dl = document.getElementById(id);
+  dl.innerHTML = values.map((v) => `<option value="${escapeAttr(v)}"></option>`).join("");
+}
+
+function renderChips(notes) {
+  const container = $("#cup-notes-chips");
+  if (!notes.length) { container.innerHTML = ""; return; }
+  container.innerHTML = notes.map((n) =>
+    `<span class="chip" data-note="${escapeAttr(n)}">${escapeHtml(n)}</span>`
+  ).join("");
+  container.querySelectorAll(".chip").forEach((el) => {
+    el.addEventListener("click", () => {
+      const cur = $("#field-cup-notes").value.trim();
+      $("#field-cup-notes").value = cur ? cur + ", " + el.dataset.note : el.dataset.note;
+      $("#field-cup-notes").focus();
+    });
+  });
+}
+
+// ---------- 폼 ----------
+function showList() {
+  listView.style.display = "";
+  formView.style.display = "none";
+  form.classList.remove("active");
+  editingId = null;
+}
+
+function openNew() {
+  editingId = null;
+  form.reset();
+  $("#field-id").value = "";
+  $("#field-status").value = "예정";
+  syncSegmented("예정");
+  $("#btn-delete").style.display = "none";
+  $("#same-as-roast").checked = true;
+  $("#field-serve-date").style.display = "none";
+  clearErrors();
+  listView.style.display = "none";
+  formView.style.display = "";
+  form.classList.add("active");
+  $("#field-name").focus();
+  loadSuggestions();
+}
+
+async function openEdit(id) {
+  try {
+    const data = await api("GET", "/api/coffee/" + id);
+    const it = data.item;
+    editingId = id;
+    form.reset();
+    $("#field-id").value = id;
+    $("#field-name").value = it["커피"] || "";
+    $("#field-roastery").value = it["로스터리"] || "";
+    $("#field-roast-date").value = (it["로스팅"] && it["로스팅"].start) || "";
+    $("#field-process").value = it["프로세싱"] || "";
+    $("#field-cup-notes").value = it["컵노트"] || "";
+    $("#field-comment").value = it["감상"] || "";
+    const status = it["상태"] || "예정";
+    $("#field-status").value = status;
+    syncSegmented(status);
+    const serve = (it["제공일"] && it["제공일"].start) || "";
+    const roast = (it["로스팅"] && it["로스팅"].start) || "";
+    if (serve && serve !== roast) {
+      $("#same-as-roast").checked = false;
+      $("#field-serve-date").style.display = "";
+      $("#field-serve-date").value = serve;
+    } else {
+      $("#same-as-roast").checked = true;
+      $("#field-serve-date").style.display = "none";
+      $("#field-serve-date").value = "";
+    }
+    $("#btn-delete").style.display = "";
+    clearErrors();
+    listView.style.display = "none";
+    formView.style.display = "";
+    form.classList.add("active");
+    loadSuggestions();
+  } catch (e) {
+    if (e.message !== "unauthorized") showBanner("불러오기 실패: " + e.message, "error");
+  }
+}
+
+function syncSegmented(status) {
+  $$(".segmented button").forEach((b) => {
+    b.classList.toggle("active", b.dataset.status === status);
+    b.setAttribute("aria-pressed", b.dataset.status === status ? "true" : "false");
+  });
+}
+
+$$(".segmented button").forEach((b) => {
+  b.addEventListener("click", () => {
+    $("#field-status").value = b.dataset.status;
+    syncSegmented(b.dataset.status);
+  });
+});
+
+$("#same-as-roast").addEventListener("change", (e) => {
+  $("#field-serve-date").style.display = e.target.checked ? "none" : "";
+});
+
+function clearErrors() {
+  $$(".field.error").forEach((f) => f.classList.remove("error"));
+  banner.className = "banner";
+  banner.textContent = "";
+}
+
+function validate() {
+  clearErrors();
+  let ok = true;
+  if (!$("#field-name").value.trim()) {
+    $("#field-name").closest(".field").classList.add("error");
+    ok = false;
+  }
+  if (!$("#field-roast-date").value) {
+    $("#field-roast-date").closest(".field").classList.add("error");
+    ok = false;
+  }
+  return ok;
+}
+
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  if (!validate()) return;
+
+  const btn = $("#btn-save");
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span>저장 중...';
+
+  const roastDate = $("#field-roast-date").value;
+  const serveDate = $("#same-as-roast").checked ? roastDate : $("#field-serve-date").value;
+
+  const payload = {
+    name: $("#field-name").value.trim(),
+    roastery: $("#field-roastery").value.trim() || null,
+    roast_date: roastDate,
+    process: $("#field-process").value.trim() || null,
+    status: $("#field-status").value,
+    cup_notes: $("#field-cup-notes").value.trim() || null,
+    comment: $("#field-comment").value.trim() || null,
+    serve_date: serveDate || null,
+  };
+
+  try {
+    if (editingId) {
+      await api("PUT", "/api/coffee/" + editingId, payload);
+    } else {
+      await api("POST", "/api/coffee", payload);
+    }
+    showToast(editingId ? "수정되었습니다" : "저장되었습니다");
+    await loadList();
+    showList();
+  } catch (err) {
+    if (err.message !== "unauthorized") showBanner("저장 실패: " + err.message, "error");
+  } finally {
+    btn.disabled = false;
+    btn.textContent = "저장";
+  }
+});
+
+$("#btn-cancel").addEventListener("click", showList);
+$("#btn-new").addEventListener("click", openNew);
+
+$("#btn-delete").addEventListener("click", async () => {
+  if (!editingId) return;
+  if (!confirm("정말 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.")) return;
+  try {
+    await api("DELETE", "/api/coffee/" + editingId);
+    showToast("삭제되었습니다");
+    await loadList();
+    showList();
+  } catch (err) {
+    if (err.message !== "unauthorized") showBanner("삭제 실패: " + err.message, "error");
+  }
+});
+
+// ---------- utils ----------
+function showBanner(msg, type) {
+  banner.className = "banner " + type;
+  banner.textContent = msg;
+  if (type === "success") setTimeout(() => { banner.className = "banner"; }, 3000);
+}
+function showToast(msg) {
+  toast.textContent = msg;
+  toast.classList.add("show");
+  setTimeout(() => toast.classList.remove("show"), 2000);
+}
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, (c) => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+}
+function escapeAttr(s) { return escapeHtml(s); }
+
+// ---------- init ----------
+async function init() {
+  try {
+    const st = await api("GET", "/api/admin/status");
+    if (!st.authenticated) { showPinModal(); return; }
+    hidePinModal();
+    await loadList();
+  } catch (e) {
+    showPinModal();
+  }
+}
+
+init();
+</script>
+
+</body>
+</html>

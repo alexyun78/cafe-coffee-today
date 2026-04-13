@@ -1,0 +1,11 @@
+[Unit]
+Description=Cafe Today Coffee — auto deploy timer (every 60s)
+
+[Timer]
+OnBootSec=60
+OnUnitActiveSec=60
+Unit=cafe-coffee-deploy.service
+AccuracySec=5s
+
+[Install]
+WantedBy=timers.target

@@ -1,0 +1,16 @@
+{
+  "appId": "com.cafe92.todaycoffee",
+  "appName": "오늘의 커피",
+  "webDir": "www",
+  "backgroundColor": "#6F4E37",
+  "server": {
+    "url": "http://49.247.207.115:3002",
+    "cleartext": true,
+    "androidScheme": "https"
+  },
+  "android": {
+    "backgroundColor": "#6F4E37",
+    "allowMixedContent": true,
+    "webContentsDebuggingEnabled": true
+  }
+}
