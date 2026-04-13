@@ -955,9 +955,65 @@
 
         // 페이지 로드 시 데이터 가져오기
         loadCoffeeData();
-        
+
         // 5분마다 자동 새로고침
         setInterval(loadCoffeeData, 5 * 60 * 1000);
+
+        // ---------- APK 자동 업데이트 체크 ----------
+        (function checkAppUpdate() {
+          // Android WebView 안에서만 실행
+          const ua = navigator.userAgent;
+          if (!/Android.*wv\)|; wv\)/.test(ua)) return;
+
+          fetch('/static/downloads/cafe-coffee-version.json')
+            .then(r => r.ok ? r.json() : null)
+            .catch(() => null)
+            .then(info => {
+              if (!info || !info.version) return;
+              const serverVer = info.version;
+              const installedVer = localStorage.getItem('cafe-coffee-apk-version');
+              const dismissedVer = localStorage.getItem('cafe-coffee-apk-dismissed');
+
+              // 최초 방문이면 현재 버전 저장
+              if (!installedVer) {
+                localStorage.setItem('cafe-coffee-apk-version', serverVer);
+                return;
+              }
+              // 이미 이 버전 무시했으면 표시 안 함
+              if (serverVer === installedVer || serverVer === dismissedVer) return;
+
+              // 업데이트 배너 표시
+              const banner = document.createElement('div');
+              banner.id = 'update-banner';
+              banner.innerHTML = `
+                <div style="
+                  position:fixed; bottom:0; left:0; right:0; z-index:500;
+                  background:linear-gradient(135deg,#6F4E37,#8B6F47);
+                  color:white; padding:16px 20px;
+                  display:flex; align-items:center; justify-content:space-between;
+                  gap:12px; box-shadow:0 -4px 20px rgba(0,0,0,0.2);
+                ">
+                  <div style="flex:1; font-size:0.9rem;">
+                    <strong>새 버전(v${serverVer})이 있습니다</strong><br>
+                    <span style="opacity:0.85; font-size:0.8rem;">업데이트하면 더 나은 경험을 할 수 있어요</span>
+                  </div>
+                  <a href="/apk" style="
+                    background:white; color:#6F4E37; padding:10px 18px;
+                    border-radius:8px; text-decoration:none; font-weight:600;
+                    font-size:0.85rem; white-space:nowrap;
+                  ">업데이트</a>
+                  <button onclick="
+                    localStorage.setItem('cafe-coffee-apk-dismissed','${serverVer}');
+                    this.closest('#update-banner').remove();
+                  " style="
+                    background:none; border:none; color:rgba(255,255,255,0.7);
+                    font-size:1.3rem; cursor:pointer; padding:4px 8px;
+                  ">&times;</button>
+                </div>
+              `;
+              document.body.appendChild(banner);
+            });
+        })();
     </script>
 </body>
 </html>

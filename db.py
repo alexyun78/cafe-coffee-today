@@ -262,9 +262,19 @@ def suggestions() -> dict:
                 seen.add(note)
                 individual_notes.append(note)
 
+    # 가장 최근 기록의 컵노트
+    with connect() as conn:
+        last_row = conn.execute(
+            "SELECT cup_notes FROM coffees "
+            "WHERE cup_notes IS NOT NULL AND cup_notes != '' "
+            "ORDER BY id DESC LIMIT 1"
+        ).fetchone()
+    last_cup_notes = last_row["cup_notes"] if last_row else ""
+
     return {
         "name": distinct("name"),
         "roastery": distinct("roastery"),
         "process": distinct("process"),
         "cup_notes": individual_notes,
+        "last_cup_notes": last_cup_notes,
     }

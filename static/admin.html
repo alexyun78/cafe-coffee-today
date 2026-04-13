@@ -139,6 +139,11 @@
     color: var(--coffee-mid);
   }
   .chip:hover { background: #f0e6d9; }
+  .chip.selected {
+    background: var(--coffee-dark); color: white;
+    border-color: var(--coffee-dark);
+  }
+  .chip.selected:hover { background: var(--coffee-mid); }
 
   /* 제공일 토글 */
   .toggle-row {
@@ -442,7 +447,11 @@ async function loadSuggestions() {
     fillDatalist("dl-name", s.name || []);
     fillDatalist("dl-roastery", s.roastery || []);
     fillDatalist("dl-process", s.process || []);
-    renderChips((s.cup_notes || []).slice(0, 10));
+    // 새 항목이면서 컵노트가 비어있으면 마지막 기록값 불러오기
+    if (!editingId && !$("#field-cup-notes").value.trim() && s.last_cup_notes) {
+      $("#field-cup-notes").value = s.last_cup_notes;
+    }
+    renderChips((s.cup_notes || []).slice(0, 20));
   } catch (e) {
     if (e.message !== "unauthorized") console.warn("제안 로드 실패:", e);
   }
@@ -459,12 +468,29 @@ function renderChips(notes) {
   container.innerHTML = notes.map((n) =>
     `<span class="chip" data-note="${escapeAttr(n)}">${escapeHtml(n)}</span>`
   ).join("");
+  syncChipSelection();
   container.querySelectorAll(".chip").forEach((el) => {
     el.addEventListener("click", () => {
-      const cur = $("#field-cup-notes").value.trim();
-      $("#field-cup-notes").value = cur ? cur + ", " + el.dataset.note : el.dataset.note;
-      $("#field-cup-notes").focus();
+      const note = el.dataset.note;
+      const parts = $("#field-cup-notes").value.split(",").map(s => s.trim()).filter(Boolean);
+      const idx = parts.indexOf(note);
+      if (idx >= 0) {
+        parts.splice(idx, 1);
+      } else {
+        parts.push(note);
+      }
+      $("#field-cup-notes").value = parts.join(", ");
+      syncChipSelection();
     });
+  });
+}
+
+function syncChipSelection() {
+  const selected = new Set(
+    $("#field-cup-notes").value.split(",").map(s => s.trim()).filter(Boolean)
+  );
+  $$("#cup-notes-chips .chip").forEach((el) => {
+    el.classList.toggle("selected", selected.has(el.dataset.note));
   });
 }
 
