@@ -136,7 +136,7 @@ def api_create():
     parsed = _parse_payload(data)
     if not parsed.get("name"):
         return jsonify({"success": False, "error": "원두 이름(name)은 필수"}), 400
-    if parsed.get("status") == "진행 중":
+    if parsed.get("status") == "진행 중" and not parsed.get("serve_date"):
         parsed["serve_date"] = date.today().isoformat()
     new_id = db.create(parsed)
     if parsed.get("status") == "진행 중":
@@ -149,7 +149,7 @@ def api_create():
 def api_update(coffee_id):
     data = request.get_json(silent=True) or {}
     parsed = {k: v for k, v in _parse_payload(data).items() if v is not None or k in data}
-    if parsed.get("status") == "진행 중":
+    if parsed.get("status") == "진행 중" and not parsed.get("serve_date"):
         parsed["serve_date"] = date.today().isoformat()
     if not db.update(coffee_id, parsed):
         return jsonify({"success": False, "error": "not found or no changes"}), 404
@@ -187,6 +187,14 @@ def admin_page():
 @app.get("/apk")
 def apk_page():
     return send_from_directory("static", "apk.html")
+
+
+@app.get("/api/app-version")
+def api_app_version():
+    try:
+        return send_file("cafe-coffee-apk/www/version.json")
+    except Exception:
+        return jsonify({"version": None}), 404
 
 
 @app.get("/downloads/<path:name>")

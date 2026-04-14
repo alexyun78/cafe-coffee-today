@@ -42,6 +42,12 @@
     padding: 8px 0; min-height: 44px; display: inline-flex; align-items: center;
   }
   .back-link:hover { color: var(--coffee-dark); }
+  .app-version {
+    font-size: 0.75rem; color: var(--muted); font-weight: 500;
+    padding: 4px 10px; background: rgba(111,78,55,0.08);
+    border-radius: 10px; display: none;
+  }
+  .app-version.show { display: inline-block; }
 
   .card {
     background: var(--card); border-radius: var(--radius);
@@ -266,6 +272,7 @@
   <header>
     <a href="/" class="back-link">← 목록으로</a>
     <h1>☕ 오늘의 커피 관리</h1>
+    <span id="app-version" class="app-version"></span>
   </header>
 
   <div id="banner" class="banner" role="alert" aria-live="polite"></div>
@@ -345,11 +352,8 @@
       </div>
 
       <div class="field">
-        <div class="toggle-row">
-          <input type="checkbox" id="same-as-roast" checked>
-          <label for="same-as-roast" style="margin:0; font-weight:400;">제공일은 로스팅일과 동일</label>
-        </div>
-        <input type="date" id="field-serve-date" name="serve_date" style="display:none;">
+        <label for="field-serve-date">제공일</label>
+        <input type="date" id="field-serve-date" name="serve_date">
       </div>
 
       <div class="button-bar">
@@ -604,8 +608,7 @@ function openNew() {
   $("#field-status").value = "예정";
   syncSegmented("예정");
   $("#btn-delete").style.display = "none";
-  $("#same-as-roast").checked = true;
-  $("#field-serve-date").style.display = "none";
+  $("#field-serve-date").value = "";
   clearErrors();
   listView.style.display = "none";
   formView.style.display = "";
@@ -629,8 +632,6 @@ async function openDuplicate(id) {
     $("#field-comment").value = "";
     $("#field-status").value = "예정";
     syncSegmented("예정");
-    $("#same-as-roast").checked = true;
-    $("#field-serve-date").style.display = "none";
     $("#field-serve-date").value = "";
     $("#btn-delete").style.display = "none";
     clearErrors();
@@ -661,17 +662,7 @@ async function openEdit(id) {
     const status = it["상태"] || "예정";
     $("#field-status").value = status;
     syncSegmented(status);
-    const serve = (it["제공일"] && it["제공일"].start) || "";
-    const roast = (it["로스팅"] && it["로스팅"].start) || "";
-    if (serve && serve !== roast) {
-      $("#same-as-roast").checked = false;
-      $("#field-serve-date").style.display = "";
-      $("#field-serve-date").value = serve;
-    } else {
-      $("#same-as-roast").checked = true;
-      $("#field-serve-date").style.display = "none";
-      $("#field-serve-date").value = "";
-    }
+    $("#field-serve-date").value = (it["제공일"] && it["제공일"].start) || "";
     $("#btn-delete").style.display = "";
     clearErrors();
     listView.style.display = "none";
@@ -694,11 +685,10 @@ $$(".segmented button").forEach((b) => {
   b.addEventListener("click", () => {
     $("#field-status").value = b.dataset.status;
     syncSegmented(b.dataset.status);
+    if (b.dataset.status === "진행 중" && !$("#field-serve-date").value) {
+      $("#field-serve-date").value = new Date().toISOString().slice(0, 10);
+    }
   });
-});
-
-$("#same-as-roast").addEventListener("change", (e) => {
-  $("#field-serve-date").style.display = e.target.checked ? "none" : "";
 });
 
 function clearErrors() {
@@ -730,7 +720,7 @@ form.addEventListener("submit", async (e) => {
   btn.innerHTML = '<span class="spinner"></span>저장 중...';
 
   const roastDate = $("#field-roast-date").value;
-  const serveDate = $("#same-as-roast").checked ? roastDate : $("#field-serve-date").value;
+  const serveDate = $("#field-serve-date").value;
 
   const payload = {
     name: $("#field-name").value.trim(),
@@ -791,6 +781,22 @@ function escapeHtml(s) {
   return String(s).replace(/[&<>"']/g, (c) => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 }
 function escapeAttr(s) { return escapeHtml(s); }
+
+// ---------- 앱 버전 (APK 전용 표시) ----------
+(async function showAppVersion() {
+  const ua = navigator.userAgent;
+  if (!/Android.*wv\)|; wv\)/.test(ua)) return;
+  try {
+    const res = await fetch("/api/app-version", { cache: "no-store" });
+    if (!res.ok) return;
+    const v = await res.json();
+    if (v && v.version) {
+      const el = document.getElementById("app-version");
+      el.textContent = "v" + v.version;
+      el.classList.add("show");
+    }
+  } catch (e) {}
+})();
 
 // ---------- init ----------
 async function init() {
