@@ -786,16 +786,18 @@ function escapeAttr(s) { return escapeHtml(s); }
 (async function showAppVersion() {
   const ua = navigator.userAgent;
   if (!/Android.*wv\)|; wv\)/.test(ua)) return;
-  try {
-    const res = await fetch("/api/app-version", { cache: "no-store" });
-    if (!res.ok) return;
-    const v = await res.json();
-    if (v && v.version) {
-      const el = document.getElementById("app-version");
-      el.textContent = "v" + v.version;
-      el.classList.add("show");
-    }
-  } catch (e) {}
+  // 설치된 APK 버전 (User-Agent에 빌드 시 주입)
+  const m = ua.match(/CafeCoffeeApp\/([\d.]+)/);
+  const installed = m ? m[1] : null;
+  const el = document.getElementById("app-version");
+  if (installed) {
+    el.textContent = "v" + installed;
+    el.classList.add("show");
+  } else {
+    // 구버전 APK (User-Agent 미주입)
+    el.textContent = "v?";
+    el.classList.add("show");
+  }
 })();
 
 // ---------- init ----------

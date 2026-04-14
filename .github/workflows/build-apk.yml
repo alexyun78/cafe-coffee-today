@@ -46,6 +46,17 @@ jobs:
       - name: Install npm deps
         run: npm install
 
+      - name: Stamp version into User-Agent
+        run: |
+          node -e "
+            const fs = require('fs');
+            const cfg = JSON.parse(fs.readFileSync('./capacitor.config.json', 'utf8'));
+            cfg.android = cfg.android || {};
+            cfg.android.appendUserAgent = 'CafeCoffeeApp/${{ steps.version.outputs.version }}';
+            fs.writeFileSync('./capacitor.config.json', JSON.stringify(cfg, null, 2));
+          "
+          cat capacitor.config.json
+
       - name: Add Android platform
         run: npx cap add android
 

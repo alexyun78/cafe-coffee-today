@@ -1094,22 +1094,24 @@
           const ua = navigator.userAgent;
           if (!/Android.*wv\)|; wv\)/.test(ua)) return;
 
+          // 실제 설치된 APK 버전은 User-Agent에 'CafeCoffeeApp/x.y.z' 로 찍혀 있음
+          // (CI 빌드가 capacitor.config.json의 appendUserAgent를 version.json 값으로 주입)
+          const m = ua.match(/CafeCoffeeApp\/([\d.]+)/);
+          const installedVer = m ? m[1] : null;
+          // User-Agent에 버전이 없으면(구버전 APK) 비교 불가능하므로 조용히 종료
+          if (!installedVer) return;
+
           fetch('/static/downloads/cafe-coffee-version.json')
             .then(r => r.ok ? r.json() : null)
             .catch(() => null)
             .then(info => {
               if (!info || !info.version) return;
               const serverVer = info.version;
-              const installedVer = localStorage.getItem('cafe-coffee-apk-version');
               const dismissedVer = localStorage.getItem('cafe-coffee-apk-dismissed');
 
-              // 최초 방문이면 현재 버전 저장
-              if (!installedVer) {
-                localStorage.setItem('cafe-coffee-apk-version', serverVer);
-                return;
-              }
-              // 이미 이 버전 무시했으면 표시 안 함
+              // 설치본이 서버 최신과 같거나 이미 이 버전을 무시했으면 표시 안 함
               if (serverVer === installedVer || serverVer === dismissedVer) return;
+              if (compareVersion(installedVer, serverVer) >= 0) return;
 
               // 업데이트 배너 표시
               const banner = document.createElement('div');
@@ -1142,6 +1144,16 @@
               `;
               document.body.appendChild(banner);
             });
+
+          function compareVersion(a, b) {
+            const pa = a.split('.').map(n => parseInt(n, 10) || 0);
+            const pb = b.split('.').map(n => parseInt(n, 10) || 0);
+            for (let i = 0; i < Math.max(pa.length, pb.length); i++) {
+              const x = pa[i] || 0, y = pb[i] || 0;
+              if (x !== y) return x - y;
+            }
+            return 0;
+          }
         })();
 
         // ---------- APK 히든 관리자 진입 (제목 5회 탭) ----------
