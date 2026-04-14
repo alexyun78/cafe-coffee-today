@@ -166,6 +166,27 @@
             line-height: 1.6;
         }
 
+        .coffee-card .comment-highlight {
+            margin-top: 12px;
+            padding: 14px 16px;
+            background: rgba(255,255,255,0.08);
+            backdrop-filter: blur(4px);
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .coffee-card .comment-highlight .coffee-detail-label {
+            display: block;
+            margin-bottom: 6px;
+        }
+
+        .coffee-card .comment-highlight .coffee-detail-value {
+            color: rgba(255,255,255,0.95);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            font-style: italic;
+        }
+
         .coffee-card .process-badge {
             background: rgba(255,255,255,0.2);
             color: white;
@@ -952,9 +973,9 @@
                     ` : ''}
 
                     ${coffee.감상 ? `
-                        <div class="coffee-detail" style="border-bottom:none; padding-top:12px;">
+                        <div class="comment-highlight">
                             <span class="coffee-detail-label">감상</span>
-                            <div class="coffee-detail-value" style="margin-top: 4px; font-style: italic; opacity: 0.9;">${coffee.감상}</div>
+                            <div class="coffee-detail-value">${coffee.감상}</div>
                         </div>
                     ` : ''}
                 </div>
