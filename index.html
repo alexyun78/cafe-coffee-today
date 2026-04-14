@@ -343,6 +343,10 @@
             cursor: pointer; font-family: inherit;
         }
         .pin-modal-btn:hover { background: #8B6F47; }
+        .pin-modal-actions { display: flex; gap: 10px; margin-top: 16px; }
+        .pin-modal-actions .pin-modal-btn { margin-top: 0; flex: 1; }
+        .pin-modal-btn.secondary { background: #f0ebe4; color: #6F4E37; }
+        .pin-modal-btn.secondary:hover { background: #e6ddd0; }
 
         /* 모달 팝업 스타일 */
         .modal {
@@ -657,7 +661,10 @@
         <input type="password" inputmode="numeric" pattern="[0-9]*"
                id="admin-pin-input" maxlength="8" autocomplete="off">
         <div class="pin-modal-error" id="admin-pin-error">PIN이 올바르지 않습니다.</div>
-        <button class="pin-modal-btn" id="admin-pin-submit">확인</button>
+        <div class="pin-modal-actions">
+          <button class="pin-modal-btn secondary" id="admin-pin-cancel" type="button">취소</button>
+          <button class="pin-modal-btn" id="admin-pin-submit" type="button">확인</button>
+        </div>
       </div>
     </div>
 
@@ -1170,13 +1177,23 @@
 
           document.getElementById('admin-pin-input').addEventListener('keydown', (e) => {
             if (e.key === 'Enter') document.getElementById('admin-pin-submit').click();
+            if (e.key === 'Escape') closePinModal();
           });
 
-          // 모달 바깥 클릭 시 닫기
+          function closePinModal() {
+            const modal = document.getElementById('pin-modal');
+            modal.classList.add('hidden');
+            document.getElementById('admin-pin-input').value = '';
+            document.getElementById('admin-pin-error').style.display = 'none';
+            tapCount = 0;
+            clearTimeout(tapTimer);
+          }
+
+          document.getElementById('admin-pin-cancel').addEventListener('click', closePinModal);
+
+          // 모달 backdrop 클릭은 내부 클릭 전파를 막되, 모달 자체는 닫지 않음
           document.getElementById('pin-modal').addEventListener('click', (e) => {
-            if (e.target.id === 'pin-modal') {
-              document.getElementById('pin-modal').classList.add('hidden');
-            }
+            e.stopPropagation();
           });
         })();
     </script>

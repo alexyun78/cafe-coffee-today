@@ -196,6 +196,25 @@ def update(coffee_id: int, data: dict) -> bool:
         return cur.rowcount > 0
 
 
+def complete_other_in_progress(except_id: Optional[int]) -> int:
+    """'진행 중' 상태인 다른 커피를 '완료'로 변경. 변경된 행 수 반환."""
+    with connect() as conn:
+        if except_id is None:
+            cur = conn.execute(
+                "UPDATE coffees SET status='완료', "
+                "updated_at=strftime('%Y-%m-%dT%H:%M:%SZ','now') "
+                "WHERE status='진행 중'"
+            )
+        else:
+            cur = conn.execute(
+                "UPDATE coffees SET status='완료', "
+                "updated_at=strftime('%Y-%m-%dT%H:%M:%SZ','now') "
+                "WHERE status='진행 중' AND id<>?",
+                (except_id,),
+            )
+        return cur.rowcount
+
+
 def delete(coffee_id: int) -> bool:
     with connect() as conn:
         cur = conn.execute("DELETE FROM coffees WHERE id=?", (coffee_id,))

@@ -4,6 +4,7 @@
 관리 엔드포인트는 세션 기반 PIN 인증 필요.
 """
 import os
+from datetime import date
 from functools import wraps
 
 from flask import (
@@ -135,7 +136,11 @@ def api_create():
     parsed = _parse_payload(data)
     if not parsed.get("name"):
         return jsonify({"success": False, "error": "원두 이름(name)은 필수"}), 400
+    if parsed.get("status") == "진행 중":
+        parsed["serve_date"] = date.today().isoformat()
     new_id = db.create(parsed)
+    if parsed.get("status") == "진행 중":
+        db.complete_other_in_progress(new_id)
     return jsonify({"success": True, "id": new_id, "item": db.get_by_id(new_id)})
 
 
@@ -144,8 +149,12 @@ def api_create():
 def api_update(coffee_id):
     data = request.get_json(silent=True) or {}
     parsed = {k: v for k, v in _parse_payload(data).items() if v is not None or k in data}
+    if parsed.get("status") == "진행 중":
+        parsed["serve_date"] = date.today().isoformat()
     if not db.update(coffee_id, parsed):
         return jsonify({"success": False, "error": "not found or no changes"}), 404
+    if parsed.get("status") == "진행 중":
+        db.complete_other_in_progress(coffee_id)
     return jsonify({"success": True, "item": db.get_by_id(coffee_id)})
 
 

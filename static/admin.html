@@ -83,6 +83,13 @@
   .status-예정 { background: #e1f5fe; color: #0277bd; }
   .status-진행중 { background: #e8f5e9; color: #2e7d32; }
   .status-완료 { background: #eeeeee; color: #616161; }
+  .list-item-actions { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+  .btn-duplicate {
+    background: #f0ebe4; color: var(--coffee-dark); border: none;
+    padding: 6px 10px; border-radius: 14px; font-size: 0.75rem;
+    font-weight: 600; cursor: pointer; font-family: inherit;
+  }
+  .btn-duplicate:hover { background: #e6ddd0; }
 
   /* 폼 */
   form { display: none; }
@@ -444,6 +451,9 @@ function renderList(items) {
     const roast = it["로스팅"]?.start || "";
     const status = it["상태"] || "";
     const statusCls = status.replace(/\s/g, "");
+    const dupBtn = status === "완료"
+      ? `<button type="button" class="btn-duplicate" data-id="${it.id}">복제</button>`
+      : "";
     return `
       <div class="list-item" data-id="${it.id}">
         <div class="list-item-main">
@@ -452,12 +462,24 @@ function renderList(items) {
             ${escapeHtml(it["로스터리"] || "")}${it["로스터리"] && roast ? " · " : ""}${roast}
           </div>
         </div>
-        ${status ? `<span class="status-chip status-${statusCls}">${status}</span>` : ""}
+        <div class="list-item-actions">
+          ${status ? `<span class="status-chip status-${statusCls}">${status}</span>` : ""}
+          ${dupBtn}
+        </div>
       </div>
     `;
   }).join("");
   $$(".list-item").forEach((row) => {
-    row.addEventListener("click", () => openEdit(parseInt(row.dataset.id, 10)));
+    row.addEventListener("click", (e) => {
+      if (e.target.closest(".btn-duplicate")) return;
+      openEdit(parseInt(row.dataset.id, 10));
+    });
+  });
+  $$(".btn-duplicate").forEach((btn) => {
+    btn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      openDuplicate(parseInt(btn.dataset.id, 10));
+    });
   });
 }
 
@@ -590,6 +612,37 @@ function openNew() {
   form.classList.add("active");
   $("#field-name").focus();
   loadSuggestions();
+}
+
+async function openDuplicate(id) {
+  try {
+    const data = await api("GET", "/api/coffee/" + id);
+    const it = data.item;
+    editingId = null;
+    form.reset();
+    $("#field-id").value = "";
+    $("#field-name").value = it["커피"] || "";
+    $("#field-roastery").value = it["로스터리"] || "";
+    $("#field-roast-date").value = "";
+    $("#field-process").value = it["프로세싱"] || "";
+    $("#field-cup-notes").value = it["컵노트"] || "";
+    $("#field-comment").value = "";
+    $("#field-status").value = "예정";
+    syncSegmented("예정");
+    $("#same-as-roast").checked = true;
+    $("#field-serve-date").style.display = "none";
+    $("#field-serve-date").value = "";
+    $("#btn-delete").style.display = "none";
+    clearErrors();
+    listView.style.display = "none";
+    formView.style.display = "";
+    form.classList.add("active");
+    $("#field-roast-date").focus();
+    loadSuggestions();
+    showToast("복제 — 로스팅 일자를 입력하세요");
+  } catch (e) {
+    if (e.message !== "unauthorized") showBanner("복제 실패: " + e.message, "error");
+  }
 }
 
 async function openEdit(id) {
