@@ -531,6 +531,326 @@
             color: #666;
         }
 
+        /* ========== 탭 네비게이션 ========== */
+        .tab-bar {
+            display: flex;
+            margin-bottom: 20px;
+            background: white;
+            border-radius: 14px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            overflow: hidden;
+        }
+        .tab-btn {
+            flex: 1;
+            padding: 16px 20px;
+            border: none;
+            background: transparent;
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: #999;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: inherit;
+            position: relative;
+        }
+        .tab-btn.active {
+            color: #6F4E37;
+            background: rgba(111,78,55,0.08);
+        }
+        .tab-btn.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 20%; right: 20%;
+            height: 3px;
+            background: #D2691E;
+            border-radius: 3px 3px 0 0;
+        }
+        .tab-panel { display: none; }
+        .tab-panel.active { display: block; }
+
+        /* ========== 누가쏠까 — 모드 선택 ========== */
+        .game-select {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            align-items: center;
+            min-height: 60vh;
+            padding: 20px;
+        }
+        .game-card {
+            flex: 1;
+            max-width: 220px;
+            aspect-ratio: 1;
+            background: linear-gradient(145deg, #6F4E37 0%, #8B6F47 40%, #A0845C 100%);
+            border-radius: 24px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            color: white;
+            cursor: pointer;
+            box-shadow: 0 8px 32px rgba(111,78,55,0.35);
+            transition: transform 0.3s, box-shadow 0.3s;
+            text-decoration: none;
+        }
+        .game-card:hover { transform: translateY(-6px); box-shadow: 0 14px 40px rgba(111,78,55,0.45); }
+        .game-card:active { transform: scale(0.96); }
+        .game-card-icon { font-size: 3.5rem; }
+        .game-card-label { font-size: 1.15rem; font-weight: 700; letter-spacing: 1px; }
+
+        /* ========== 손가락 게임 ========== */
+        .finger-game {
+            position: fixed; inset: 0; z-index: 3000;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            display: none; flex-direction: column;
+            touch-action: none; user-select: none;
+            -webkit-user-select: none;
+        }
+        .finger-game.active { display: flex; }
+        .finger-game-header {
+            padding: 16px 20px;
+            display: flex; justify-content: space-between; align-items: center;
+            color: white;
+        }
+        .finger-game-title { font-size: 1.1rem; font-weight: 600; }
+        .finger-game-close {
+            width: 36px; height: 36px;
+            border-radius: 50%; border: none;
+            background: rgba(255,255,255,0.15); color: white;
+            font-size: 1.3rem; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .finger-game-area {
+            flex: 1; position: relative; overflow: hidden;
+        }
+        .finger-guide {
+            position: absolute; top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center; color: rgba(255,255,255,0.5);
+            pointer-events: none;
+            transition: opacity 0.5s;
+        }
+        .finger-guide-icon { font-size: 4rem; animation: fingerBlink 1.2s ease-in-out infinite; }
+        .finger-guide-text { font-size: 1rem; margin-top: 12px; }
+        @keyframes fingerBlink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+        .touch-circle {
+            position: absolute; width: 80px; height: 80px;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            animation: touchPulse 1.5s ease-in-out infinite;
+            transition: opacity 0.5s, transform 0.5s;
+            pointer-events: none;
+        }
+        .touch-circle.loser {
+            opacity: 0 !important;
+            transform: translate(-50%, -50%) scale(0.3) !important;
+        }
+        .touch-circle.winner {
+            animation: winnerGlow 0.6s ease-in-out infinite alternate !important;
+            width: 120px !important; height: 120px !important;
+            z-index: 10;
+        }
+        @keyframes touchPulse {
+            0%, 100% { box-shadow: 0 0 0 0 currentColor; }
+            50% { box-shadow: 0 0 20px 8px currentColor; }
+        }
+        @keyframes winnerGlow {
+            from { box-shadow: 0 0 30px 10px currentColor; transform: translate(-50%,-50%) scale(1); }
+            to { box-shadow: 0 0 50px 20px currentColor; transform: translate(-50%,-50%) scale(1.15); }
+        }
+        .countdown-display {
+            position: absolute; top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 10rem; font-weight: 900;
+            color: rgba(255,255,255,0.15);
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+
+        /* ========== 룰렛 게임 ========== */
+        .roulette-game {
+            position: fixed; inset: 0; z-index: 3000;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            display: none; flex-direction: column; align-items: center;
+            overflow-y: auto;
+        }
+        .roulette-game.active { display: flex; }
+        .roulette-game-header {
+            width: 100%; padding: 16px 20px;
+            display: flex; justify-content: space-between; align-items: center;
+            color: white;
+        }
+        .roulette-game-title { font-size: 1.1rem; font-weight: 600; }
+        .roulette-game-close {
+            width: 36px; height: 36px; border-radius: 50%; border: none;
+            background: rgba(255,255,255,0.15); color: white;
+            font-size: 1.3rem; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+        }
+        /* Phase 1: 인원 설정 */
+        .roulette-setup {
+            flex: 1; display: flex; flex-direction: column;
+            align-items: center; justify-content: center; gap: 30px;
+            color: white;
+        }
+        .roulette-count-row {
+            display: flex; align-items: center; gap: 24px;
+        }
+        .roulette-count-btn {
+            width: 56px; height: 56px; border-radius: 50%;
+            border: 2px solid rgba(255,255,255,0.3); background: rgba(255,255,255,0.1);
+            color: white; font-size: 1.8rem; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            transition: background 0.2s;
+        }
+        .roulette-count-btn:hover { background: rgba(255,255,255,0.2); }
+        .roulette-count-btn:active { transform: scale(0.9); }
+        .roulette-count-num {
+            font-size: 5rem; font-weight: 900; min-width: 80px; text-align: center;
+        }
+        .roulette-start-btn {
+            padding: 18px 60px; border: none; border-radius: 16px;
+            background: linear-gradient(135deg, #FF8C00, #FF6B00);
+            color: white; font-size: 1.3rem; font-weight: 700;
+            cursor: pointer; letter-spacing: 2px;
+            box-shadow: 0 6px 25px rgba(255,140,0,0.4);
+            transition: transform 0.2s, box-shadow 0.2s;
+            font-family: inherit;
+        }
+        .roulette-start-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(255,140,0,0.5); }
+        .roulette-start-btn:active { transform: scale(0.96); }
+        /* Phase 2: 카드 선택 */
+        .roulette-cards-phase {
+            flex: 1; display: none; flex-direction: column;
+            align-items: center; padding: 20px; width: 100%;
+        }
+        .roulette-cards-phase.active { display: flex; }
+        .roulette-instruction {
+            color: rgba(255,255,255,0.8); font-size: 1rem;
+            margin-bottom: 24px; text-align: center;
+        }
+        .roulette-cards-grid {
+            display: flex; flex-wrap: wrap; gap: 16px;
+            justify-content: center; max-width: 500px;
+        }
+        .roulette-card {
+            width: 90px; height: 120px;
+            border-radius: 12px; cursor: pointer;
+            perspective: 600px; position: relative;
+        }
+        .roulette-card-inner {
+            width: 100%; height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.6s;
+        }
+        .roulette-card.flipped .roulette-card-inner {
+            transform: rotateY(180deg);
+        }
+        .roulette-card-front, .roulette-card-back {
+            position: absolute; inset: 0;
+            border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+        }
+        .roulette-card-front {
+            background: linear-gradient(145deg, #6F4E37, #A0845C);
+            color: rgba(255,255,255,0.4); font-size: 2rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+        .roulette-card-back {
+            background: white;
+            color: #6F4E37;
+            font-size: 2.5rem; font-weight: 900;
+            transform: rotateY(180deg);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+        /* Phase 3: 룰렛 */
+        .roulette-spin-phase {
+            flex: 1; display: none; flex-direction: column;
+            align-items: center; justify-content: center;
+            padding: 20px; width: 100%;
+        }
+        .roulette-spin-phase.active { display: flex; }
+        .roulette-wheel-container {
+            position: relative;
+            width: 280px; height: 280px;
+            margin: 20px 0;
+        }
+        .roulette-wheel {
+            width: 100%; height: 100%;
+            border-radius: 50%;
+            border: 4px solid rgba(255,255,255,0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        .roulette-segment {
+            position: absolute;
+            width: 0; height: 0;
+            left: 50%; top: 50%;
+            transform-origin: 0 0;
+        }
+        .roulette-segment-label {
+            position: absolute;
+            color: white; font-weight: 800; font-size: 1.3rem;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.4);
+        }
+        .roulette-pointer {
+            position: absolute; top: -18px; left: 50%;
+            transform: translateX(-50%);
+            width: 0; height: 0;
+            border-left: 14px solid transparent;
+            border-right: 14px solid transparent;
+            border-top: 24px solid #FF6B00;
+            z-index: 5;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+        }
+
+        /* ========== 공통 당첨 오버레이 ========== */
+        .winner-overlay {
+            position: fixed; inset: 0; z-index: 4000;
+            background: rgba(0,0,0,0.85);
+            display: none; flex-direction: column;
+            align-items: center; justify-content: center;
+            color: white;
+        }
+        .winner-overlay.active { display: flex; }
+        .winner-message {
+            font-size: 2rem; font-weight: 800;
+            text-align: center;
+            animation: winnerAppear 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+            line-height: 1.4;
+        }
+        .winner-sub {
+            font-size: 1.1rem; color: rgba(255,255,255,0.7);
+            margin-top: 16px;
+            animation: winnerAppear 0.8s 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+        }
+        .winner-emoji {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            animation: winnerAppear 0.8s 0.1s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+        }
+        @keyframes winnerAppear {
+            from { opacity: 0; transform: scale(0.5) translateY(30px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+        .confetti-piece {
+            position: fixed;
+            width: 10px; height: 10px;
+            top: -10px;
+            z-index: 4001;
+            animation: confettiFall linear forwards;
+        }
+        @keyframes confettiFall {
+            to { top: 110vh; transform: rotate(720deg); }
+        }
+
         /* 반응형 */
         @media (max-width: 768px) {
             body {
@@ -576,6 +896,12 @@
             .history-section {
                 padding: 20px 15px;
             }
+
+            .game-select { flex-direction: column; gap: 16px; min-height: 50vh; }
+            .game-card { max-width: 180px; width: 80%; }
+            .roulette-count-num { font-size: 4rem; }
+            .roulette-card { width: 80px; height: 110px; }
+            .roulette-wheel-container { width: 240px; height: 240px; }
 
             /* 모바일에서 테이블 숨기고 카드 표시 */
             .desktop-table {
@@ -666,12 +992,86 @@
             <p class="subtitle">매일 다른 92도씨 로스터리 커피를 만나보세요</p>
         </div>
 
-        <div id="content">
-            <div class="loading">
-                <div class="loading-spinner"></div>
-                <div>커피 정보를 불러오는 중…</div>
+        <!-- 탭 네비게이션 -->
+        <div class="tab-bar">
+            <button class="tab-btn active" data-tab="coffee" onclick="switchTab('coffee')">☕ 오늘의커피</button>
+            <button class="tab-btn" data-tab="game" onclick="switchTab('game')">🎲 누가쏠까?</button>
+        </div>
+
+        <!-- 탭 1: 오늘의커피 -->
+        <div id="tab-coffee" class="tab-panel active">
+            <div id="content">
+                <div class="loading">
+                    <div class="loading-spinner"></div>
+                    <div>커피 정보를 불러오는 중…</div>
+                </div>
             </div>
         </div>
+
+        <!-- 탭 2: 누가쏠까? -->
+        <div id="tab-game" class="tab-panel">
+            <div class="game-select">
+                <div class="game-card" onclick="startFingerGame()">
+                    <div class="game-card-icon">👆</div>
+                    <div class="game-card-label">손가락</div>
+                </div>
+                <div class="game-card" onclick="startRouletteGame()">
+                    <div class="game-card-icon">🎡</div>
+                    <div class="game-card-label">룰렛</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 손가락 게임 풀스크린 -->
+    <div class="finger-game" id="finger-game">
+        <div class="finger-game-header">
+            <span class="finger-game-title">👆 손가락 게임</span>
+            <button class="finger-game-close" onclick="closeFingerGame()">&times;</button>
+        </div>
+        <div class="finger-game-area" id="finger-area">
+            <div class="finger-guide" id="finger-guide">
+                <div class="finger-guide-icon">👆</div>
+                <div class="finger-guide-text">화면을 터치하세요</div>
+            </div>
+            <div class="countdown-display" id="finger-countdown"></div>
+        </div>
+    </div>
+
+    <!-- 룰렛 게임 풀스크린 -->
+    <div class="roulette-game" id="roulette-game">
+        <div class="roulette-game-header">
+            <span class="roulette-game-title">🎡 룰렛</span>
+            <button class="roulette-game-close" onclick="closeRouletteGame()">&times;</button>
+        </div>
+        <!-- Phase 1: 인원 설정 -->
+        <div class="roulette-setup" id="roulette-setup">
+            <div class="roulette-count-row">
+                <button class="roulette-count-btn" onclick="changeRouletteCount(-1)">−</button>
+                <div class="roulette-count-num" id="roulette-count">2</div>
+                <button class="roulette-count-btn" onclick="changeRouletteCount(1)">+</button>
+            </div>
+            <button class="roulette-start-btn" onclick="startRouletteCards()">START</button>
+        </div>
+        <!-- Phase 2: 카드 선택 -->
+        <div class="roulette-cards-phase" id="roulette-cards-phase">
+            <div class="roulette-instruction" id="roulette-instruction">한 명씩 카드를 누르세요</div>
+            <div class="roulette-cards-grid" id="roulette-cards-grid"></div>
+        </div>
+        <!-- Phase 3: 룰렛 회전 -->
+        <div class="roulette-spin-phase" id="roulette-spin-phase">
+            <div class="roulette-wheel-container">
+                <div class="roulette-pointer"></div>
+                <div class="roulette-wheel" id="roulette-wheel"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 공통 당첨 오버레이 -->
+    <div class="winner-overlay" id="winner-overlay">
+        <div class="winner-emoji" id="winner-emoji">🎉</div>
+        <div class="winner-message" id="winner-message"></div>
+        <div class="winner-sub">덕분에 잘 먹겠습니다</div>
     </div>
 
     <!-- PIN 모달 (APK 히든 진입) -->
@@ -1155,6 +1555,411 @@
             return 0;
           }
         })();
+
+        // ========== 탭 전환 ==========
+        function switchTab(tabId) {
+          document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === tabId));
+          document.querySelectorAll('.tab-panel').forEach(p => p.classList.toggle('active', p.id === 'tab-' + tabId));
+        }
+
+        // ========== 공통: 색상 풀 ==========
+        const COLORS = [
+          '#FF6B6B','#4ECDC4','#45B7D1','#FFA07A','#98D8C8',
+          '#F7DC6F','#BB8FCE','#85C1E9','#F1948A','#82E0AA'
+        ];
+
+        // ========== 공통: 당첨 표시 ==========
+        function showWinner(message, callback) {
+          const overlay = document.getElementById('winner-overlay');
+          const msgEl = document.getElementById('winner-message');
+          msgEl.textContent = message;
+          overlay.classList.add('active');
+          spawnConfetti();
+          setTimeout(() => {
+            overlay.classList.remove('active');
+            document.querySelectorAll('.confetti-piece').forEach(c => c.remove());
+            if (callback) callback();
+            // 오늘의커피 탭으로 자동 전환
+            switchTab('coffee');
+          }, 3000);
+        }
+
+        function spawnConfetti() {
+          for (let i = 0; i < 40; i++) {
+            const c = document.createElement('div');
+            c.className = 'confetti-piece';
+            c.style.left = Math.random() * 100 + 'vw';
+            c.style.background = COLORS[Math.floor(Math.random() * COLORS.length)];
+            c.style.animationDuration = (1.5 + Math.random() * 2) + 's';
+            c.style.animationDelay = Math.random() * 0.5 + 's';
+            c.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+            c.style.width = (6 + Math.random() * 8) + 'px';
+            c.style.height = (6 + Math.random() * 8) + 'px';
+            document.body.appendChild(c);
+          }
+        }
+
+        // ========== 손가락 게임 ==========
+        let fingerTouches = {};      // id -> {x, y, color}
+        let fingerTimer = null;      // 3초 대기 타이머
+        let countdownInterval = null;
+        let countdownValue = 3;
+        let fingerGameActive = false;
+
+        function startFingerGame() {
+          const game = document.getElementById('finger-game');
+          game.classList.add('active');
+          fingerGameActive = true;
+          fingerTouches = {};
+          clearFingerTimers();
+          document.getElementById('finger-guide').style.opacity = '1';
+          document.getElementById('finger-countdown').textContent = '';
+          // 기존 원 제거
+          document.querySelectorAll('.touch-circle').forEach(c => c.remove());
+
+          const area = document.getElementById('finger-area');
+          area.addEventListener('touchstart', onFingerTouch, { passive: false });
+          area.addEventListener('touchmove', onFingerMove, { passive: false });
+          area.addEventListener('touchend', onFingerEnd, { passive: false });
+          area.addEventListener('touchcancel', onFingerEnd, { passive: false });
+          // 마우스 폴백 (데스크톱 테스트용)
+          area.addEventListener('mousedown', onMouseDown);
+        }
+
+        function closeFingerGame() {
+          const game = document.getElementById('finger-game');
+          game.classList.remove('active');
+          fingerGameActive = false;
+          clearFingerTimers();
+          fingerTouches = {};
+          document.querySelectorAll('.touch-circle').forEach(c => c.remove());
+          const area = document.getElementById('finger-area');
+          area.removeEventListener('touchstart', onFingerTouch);
+          area.removeEventListener('touchmove', onFingerMove);
+          area.removeEventListener('touchend', onFingerEnd);
+          area.removeEventListener('touchcancel', onFingerEnd);
+          area.removeEventListener('mousedown', onMouseDown);
+        }
+
+        function clearFingerTimers() {
+          clearTimeout(fingerTimer);
+          clearInterval(countdownInterval);
+          fingerTimer = null;
+          countdownInterval = null;
+        }
+
+        function onFingerTouch(e) {
+          e.preventDefault();
+          const area = document.getElementById('finger-area');
+          const rect = area.getBoundingClientRect();
+          for (const touch of e.changedTouches) {
+            const id = touch.identifier;
+            if (!fingerTouches[id]) {
+              const colorIdx = Object.keys(fingerTouches).length % COLORS.length;
+              fingerTouches[id] = { x: touch.clientX - rect.left, y: touch.clientY - rect.top, color: COLORS[colorIdx] };
+              createTouchCircle(id, fingerTouches[id], area);
+            }
+          }
+          document.getElementById('finger-guide').style.opacity = '0';
+          resetFingerWait();
+        }
+
+        function onFingerMove(e) {
+          e.preventDefault();
+          const area = document.getElementById('finger-area');
+          const rect = area.getBoundingClientRect();
+          for (const touch of e.changedTouches) {
+            const id = touch.identifier;
+            if (fingerTouches[id]) {
+              fingerTouches[id].x = touch.clientX - rect.left;
+              fingerTouches[id].y = touch.clientY - rect.top;
+              const el = document.getElementById('touch-' + id);
+              if (el) {
+                el.style.left = fingerTouches[id].x + 'px';
+                el.style.top = fingerTouches[id].y + 'px';
+              }
+            }
+          }
+        }
+
+        function onFingerEnd(e) {
+          e.preventDefault();
+          // 손가락을 떼도 원은 유지 (터치 포인트는 남겨둠)
+          // 새 터치가 없으면 카운트다운 시작
+          resetFingerWait();
+        }
+
+        // 마우스 폴백 (데스크톱 테스트)
+        let mouseClickId = 100;
+        function onMouseDown(e) {
+          const area = document.getElementById('finger-area');
+          const rect = area.getBoundingClientRect();
+          const id = 'mouse-' + (mouseClickId++);
+          fingerTouches[id] = { x: e.clientX - rect.left, y: e.clientY - rect.top, color: COLORS[Object.keys(fingerTouches).length % COLORS.length] };
+          createTouchCircle(id, fingerTouches[id], area);
+          document.getElementById('finger-guide').style.opacity = '0';
+          resetFingerWait();
+        }
+
+        function createTouchCircle(id, data, area) {
+          const el = document.createElement('div');
+          el.className = 'touch-circle';
+          el.id = 'touch-' + id;
+          el.style.left = data.x + 'px';
+          el.style.top = data.y + 'px';
+          el.style.background = data.color;
+          el.style.color = data.color;
+          area.appendChild(el);
+        }
+
+        function resetFingerWait() {
+          clearFingerTimers();
+          document.getElementById('finger-countdown').textContent = '';
+          countdownValue = 3;
+
+          const touchCount = Object.keys(fingerTouches).length;
+          if (touchCount < 2) return; // 최소 2명 필요
+
+          fingerTimer = setTimeout(() => {
+            startFingerCountdown();
+          }, 3000);
+        }
+
+        function startFingerCountdown() {
+          countdownValue = 3;
+          const cdEl = document.getElementById('finger-countdown');
+          cdEl.textContent = countdownValue;
+
+          countdownInterval = setInterval(() => {
+            countdownValue--;
+            if (countdownValue <= 0) {
+              clearInterval(countdownInterval);
+              countdownInterval = null;
+              cdEl.textContent = '';
+              pickFingerWinner();
+            } else {
+              cdEl.textContent = countdownValue;
+            }
+          }, 1000);
+        }
+
+        function pickFingerWinner() {
+          if (!fingerGameActive) return;
+          const ids = Object.keys(fingerTouches);
+          if (ids.length < 2) return;
+
+          const winnerId = ids[Math.floor(Math.random() * ids.length)];
+
+          // 패자 fade out
+          ids.forEach(id => {
+            const el = document.getElementById('touch-' + id);
+            if (!el) return;
+            if (id === winnerId) {
+              el.classList.add('winner');
+            } else {
+              el.classList.add('loser');
+            }
+          });
+
+          // 1초 후 당첨 오버레이
+          setTimeout(() => {
+            const winnerColor = fingerTouches[winnerId].color;
+            document.getElementById('winner-emoji').textContent = '☕';
+            showWinner('당첨!', () => {
+              closeFingerGame();
+            });
+          }, 1000);
+        }
+
+        // ========== 룰렛 게임 ==========
+        let rouletteCount = 2;
+        let rouletteNumbers = [];   // 셔플된 번호 배열
+        let rouletteFlipped = 0;
+        let rouletteAudioCtx = null;
+
+        function startRouletteGame() {
+          const game = document.getElementById('roulette-game');
+          game.classList.add('active');
+          rouletteCount = 2;
+          document.getElementById('roulette-count').textContent = '2';
+          document.getElementById('roulette-setup').style.display = 'flex';
+          document.getElementById('roulette-cards-phase').classList.remove('active');
+          document.getElementById('roulette-spin-phase').classList.remove('active');
+        }
+
+        function closeRouletteGame() {
+          document.getElementById('roulette-game').classList.remove('active');
+        }
+
+        function changeRouletteCount(delta) {
+          rouletteCount = Math.max(2, rouletteCount + delta);
+          document.getElementById('roulette-count').textContent = rouletteCount;
+        }
+
+        function startRouletteCards() {
+          document.getElementById('roulette-setup').style.display = 'none';
+          const phase = document.getElementById('roulette-cards-phase');
+          phase.classList.add('active');
+          document.getElementById('roulette-instruction').textContent = '한 명씩 카드를 누르세요';
+
+          // 1~N 셔플
+          rouletteNumbers = Array.from({ length: rouletteCount }, (_, i) => i + 1);
+          for (let i = rouletteNumbers.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [rouletteNumbers[i], rouletteNumbers[j]] = [rouletteNumbers[j], rouletteNumbers[i]];
+          }
+          rouletteFlipped = 0;
+
+          // 카드 생성
+          const grid = document.getElementById('roulette-cards-grid');
+          grid.innerHTML = '';
+          for (let i = 0; i < rouletteCount; i++) {
+            const card = document.createElement('div');
+            card.className = 'roulette-card';
+            card.dataset.index = i;
+            card.innerHTML = `
+              <div class="roulette-card-inner">
+                <div class="roulette-card-front">?</div>
+                <div class="roulette-card-back">${rouletteNumbers[i]}</div>
+              </div>
+            `;
+            card.addEventListener('click', () => flipRouletteCard(card, i));
+            grid.appendChild(card);
+          }
+        }
+
+        function flipRouletteCard(card, index) {
+          if (card.classList.contains('flipped')) return;
+          card.classList.add('flipped');
+          playTickSound();
+          rouletteFlipped++;
+
+          if (rouletteFlipped >= rouletteCount) {
+            document.getElementById('roulette-instruction').textContent = '룰렛 시작!';
+            setTimeout(() => {
+              startRouletteWheel();
+            }, 1000);
+          }
+        }
+
+        function startRouletteWheel() {
+          document.getElementById('roulette-cards-phase').classList.remove('active');
+          const spinPhase = document.getElementById('roulette-spin-phase');
+          spinPhase.classList.add('active');
+
+          buildRouletteWheel();
+
+          // 당첨 번호 결정
+          const winnerNum = Math.floor(Math.random() * rouletteCount) + 1;
+          const segAngle = 360 / rouletteCount;
+          // 해당 세그먼트 중앙으로 멈추도록 각도 계산
+          const targetAngle = 360 - ((winnerNum - 1) * segAngle + segAngle / 2);
+          const totalRotation = 360 * 8 + targetAngle; // 8바퀴 + 목표
+
+          const wheel = document.getElementById('roulette-wheel');
+          wheel.style.transition = 'none';
+          wheel.style.transform = 'rotate(0deg)';
+
+          // 틱 사운드 시작
+          let tickCount = 0;
+          const tickInterval = setInterval(() => {
+            playTickSound();
+            tickCount++;
+            if (tickCount > 30) clearInterval(tickInterval);
+          }, 150);
+
+          requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+              wheel.style.transition = 'transform 5s cubic-bezier(0.17, 0.67, 0.12, 0.99)';
+              wheel.style.transform = `rotate(${totalRotation}deg)`;
+            });
+          });
+
+          // 5초 후 당첨
+          setTimeout(() => {
+            clearInterval(tickInterval);
+            document.getElementById('winner-emoji').textContent = '🎉';
+            showWinner(winnerNum + '번 당첨!', () => {
+              closeRouletteGame();
+            });
+          }, 5200);
+        }
+
+        function buildRouletteWheel() {
+          const wheel = document.getElementById('roulette-wheel');
+          wheel.innerHTML = '';
+          wheel.style.transform = 'rotate(0deg)';
+          wheel.style.transition = 'none';
+
+          const segAngle = 360 / rouletteCount;
+          const radius = 140;
+
+          for (let i = 0; i < rouletteCount; i++) {
+            // SVG 세그먼트
+            const startAngle = i * segAngle;
+            const endAngle = startAngle + segAngle;
+            const startRad = (startAngle - 90) * Math.PI / 180;
+            const endRad = (endAngle - 90) * Math.PI / 180;
+
+            const x1 = radius + radius * Math.cos(startRad);
+            const y1 = radius + radius * Math.sin(startRad);
+            const x2 = radius + radius * Math.cos(endRad);
+            const y2 = radius + radius * Math.sin(endRad);
+
+            const largeArc = segAngle > 180 ? 1 : 0;
+            const pathData = `M${radius},${radius} L${x1},${y1} A${radius},${radius} 0 ${largeArc},1 ${x2},${y2} Z`;
+
+            const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+            svg.setAttribute('width', radius * 2);
+            svg.setAttribute('height', radius * 2);
+            svg.style.position = 'absolute';
+            svg.style.left = '0';
+            svg.style.top = '0';
+
+            const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+            path.setAttribute('d', pathData);
+            path.setAttribute('fill', COLORS[i % COLORS.length]);
+            path.setAttribute('stroke', 'rgba(255,255,255,0.3)');
+            path.setAttribute('stroke-width', '2');
+            svg.appendChild(path);
+
+            // 라벨
+            const midAngle = (startAngle + segAngle / 2 - 90) * Math.PI / 180;
+            const labelR = radius * 0.65;
+            const lx = radius + labelR * Math.cos(midAngle);
+            const ly = radius + labelR * Math.sin(midAngle);
+
+            const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+            text.setAttribute('x', lx);
+            text.setAttribute('y', ly);
+            text.setAttribute('text-anchor', 'middle');
+            text.setAttribute('dominant-baseline', 'central');
+            text.setAttribute('fill', 'white');
+            text.setAttribute('font-size', '24');
+            text.setAttribute('font-weight', '800');
+            text.textContent = i + 1;
+            svg.appendChild(text);
+
+            wheel.appendChild(svg);
+          }
+        }
+
+        // Web Audio API 틱 사운드
+        function playTickSound() {
+          try {
+            if (!rouletteAudioCtx) rouletteAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            const osc = rouletteAudioCtx.createOscillator();
+            const gain = rouletteAudioCtx.createGain();
+            osc.connect(gain);
+            gain.connect(rouletteAudioCtx.destination);
+            osc.frequency.value = 800 + Math.random() * 400;
+            osc.type = 'sine';
+            gain.gain.value = 0.08;
+            gain.gain.exponentialRampToValueAtTime(0.001, rouletteAudioCtx.currentTime + 0.08);
+            osc.start();
+            osc.stop(rouletteAudioCtx.currentTime + 0.08);
+          } catch(e) { /* 오디오 미지원 무시 */ }
+        }
 
         // ---------- APK 히든 관리자 진입 (제목 5회 탭) ----------
         (function setupHiddenAdmin() {

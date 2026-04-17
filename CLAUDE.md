@@ -10,7 +10,7 @@
 오늘 매장에서 내리는 커피를 기록·공개하는 앱. 2026-04 이전에는 Notion DB를 읽기 전용으로 조회했으나, 현재는 **자체 서버(49.247.207.115) + SQLite**로 이전되었다.
 
 - **백엔드**: Flask + SQLite (`data/coffee.db`)
-- **프런트(웹)**: [index.html](index.html) — 읽기 전용 공개 페이지, [static/admin.html](static/admin.html) — PIN 게이트 관리 폼
+- **프런트(웹)**: [index.html](index.html) — 탭 기반 공개 페이지 (오늘의커피 + 누가쏠까?), [static/admin.html](static/admin.html) — PIN 게이트 관리 폼
 - **APK**: [cafe-coffee-apk/](cafe-coffee-apk/) — Capacitor WebView 래퍼
 - **배포**: 49.247.207.115 `/root/92cafe/cafe-today-coffee/`, systemd + 60s auto-pull 타이머
 - **참고 프로젝트**: `D:/python/92cafe_pick` — systemd/배포/APK 패턴의 원본
@@ -198,7 +198,7 @@ ssh-keyscan 49.247.207.115 2>/dev/null | grep -v '^#'  # 호스트키 복사
 | [app.py](app.py) | Flask 앱, 라우트, PIN 미들웨어 |
 | [db.py](db.py) | SQLite 래퍼, 스키마 초기화, CRUD |
 | [migrate_notion.py](migrate_notion.py) | Notion → SQLite 일회성 이전 |
-| [index.html](index.html) | 공개 읽기 뷰 |
+| [index.html](index.html) | 탭 기반 공개 뷰 (오늘의커피 + 누가쏠까?: 손가락 게임, 룰렛) |
 | [static/admin.html](static/admin.html) | 관리 추가/편집 폼 |
 | [requirements.txt](requirements.txt) | 파이썬 의존성 |
 | [deploy.sh](deploy.sh) | 서버 자동 배포 스크립트 |
