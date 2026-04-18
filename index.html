@@ -535,37 +535,73 @@
         /* ========== 탭 네비게이션 ========== */
         .tab-bar {
             display: flex;
+            gap: 6px;
             margin-bottom: 20px;
-            background: white;
-            border-radius: 14px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-            overflow: hidden;
+            padding: 6px;
+            background: linear-gradient(135deg, #2c1810 0%, #3d2518 100%);
+            border-radius: 18px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.18), inset 0 1px 2px rgba(0,0,0,0.3);
         }
         .tab-btn {
             flex: 1;
-            padding: 16px 20px;
+            padding: 14px 18px;
             border: none;
             background: transparent;
             font-size: 1.05rem;
-            font-weight: 600;
-            color: #999;
+            font-weight: 700;
+            color: rgba(255,255,255,0.55);
             cursor: pointer;
-            transition: all 0.3s;
+            transition: color 0.3s, background 0.3s, box-shadow 0.3s, transform 0.2s;
             font-family: inherit;
             position: relative;
+            border-radius: 13px;
+            overflow: hidden;
+            letter-spacing: 0.3px;
         }
-        .tab-btn.active {
-            color: #6F4E37;
-            background: rgba(111,78,55,0.08);
+        .tab-btn:not(.active):hover {
+            color: rgba(255,255,255,0.9);
+            background: rgba(255,255,255,0.05);
         }
-        .tab-btn.active::after {
+        .tab-btn:active { transform: scale(0.97); }
+
+        /* 오늘의 커피 탭 (활성) — 따뜻한 에스프레소 → 캐러멜 그라디언트 */
+        .tab-btn[data-tab="coffee"].active {
+            color: #fff;
+            background: linear-gradient(135deg, #6F4E37 0%, #C9732B 45%, #F4A460 100%);
+            box-shadow:
+              0 6px 20px rgba(201,115,43,0.55),
+              inset 0 1px 0 rgba(255,255,255,0.35),
+              inset 0 -2px 4px rgba(78,48,28,0.35);
+            text-shadow: 0 1px 3px rgba(60,30,10,0.5);
+        }
+        .tab-btn[data-tab="coffee"].active::before {
             content: '';
             position: absolute;
-            bottom: 0; left: 20%; right: 20%;
-            height: 3px;
-            background: #D2691E;
-            border-radius: 3px 3px 0 0;
+            inset: 0;
+            background: radial-gradient(circle at 30% 0%, rgba(255,255,255,0.35) 0%, transparent 50%);
+            pointer-events: none;
         }
+
+        /* 누가쏠까 탭 (활성) — 브라스(황동) 금속 질감 + shimmer */
+        .tab-btn[data-tab="game"].active {
+            color: #3d2518;
+            background: linear-gradient(100deg,
+              #8B6914 0%, #B8860B 18%, #DAA520 32%,
+              #FFD700 45%, #FFF4B0 50%, #FFD700 55%,
+              #DAA520 68%, #B8860B 82%, #8B6914 100%);
+            background-size: 250% 100%;
+            animation: brassShimmer 3.2s linear infinite;
+            box-shadow:
+              0 6px 22px rgba(218,165,32,0.6),
+              inset 0 1px 0 rgba(255,255,255,0.55),
+              inset 0 -2px 4px rgba(139,105,20,0.5);
+            text-shadow: 0 1px 1px rgba(255,248,180,0.7), 0 -1px 0 rgba(139,105,20,0.25);
+        }
+        @keyframes brassShimmer {
+            0%   { background-position: 0%   50%; }
+            100% { background-position: 250% 50%; }
+        }
+
         .tab-panel { display: none; }
         .tab-panel.active { display: block; }
 
