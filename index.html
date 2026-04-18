@@ -1621,9 +1621,25 @@
         })();
 
         // ========== 탭 전환 ==========
+        let gameTabAutoSwitchTimer = null;
+        function scheduleGameTabAutoSwitch() {
+          clearTimeout(gameTabAutoSwitchTimer);
+          gameTabAutoSwitchTimer = setTimeout(() => {
+            const tabBtn = document.querySelector('.tab-btn[data-tab="game"]');
+            if (tabBtn && tabBtn.classList.contains('active')) {
+              switchTab('coffee');
+            }
+          }, 3000);
+        }
+        function cancelGameTabAutoSwitch() {
+          clearTimeout(gameTabAutoSwitchTimer);
+          gameTabAutoSwitchTimer = null;
+        }
         function switchTab(tabId) {
           document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === tabId));
           document.querySelectorAll('.tab-panel').forEach(p => p.classList.toggle('active', p.id === 'tab-' + tabId));
+          if (tabId === 'game') scheduleGameTabAutoSwitch();
+          else cancelGameTabAutoSwitch();
         }
 
         // ========== 공통: 색상 풀 ==========
@@ -1680,6 +1696,7 @@
         let fingerAudioCtx = null;
 
         function startFingerGame() {
+          cancelGameTabAutoSwitch();
           const game = document.getElementById('finger-game');
           game.classList.add('active');
           fingerGameActive = true;
@@ -1712,6 +1729,8 @@
           area.removeEventListener('touchend', onFingerEnd);
           area.removeEventListener('touchcancel', onFingerEnd);
           area.removeEventListener('mousedown', onMouseDown);
+          const tabBtn = document.querySelector('.tab-btn[data-tab="game"]');
+          if (tabBtn && tabBtn.classList.contains('active')) scheduleGameTabAutoSwitch();
         }
 
         function clearFingerTimers() {
@@ -1923,6 +1942,7 @@
         let rouletteAudioCtx = null;
 
         function startRouletteGame() {
+          cancelGameTabAutoSwitch();
           const game = document.getElementById('roulette-game');
           game.classList.add('active');
           rouletteCount = 2;
@@ -1934,6 +1954,8 @@
 
         function closeRouletteGame() {
           document.getElementById('roulette-game').classList.remove('active');
+          const tabBtn = document.querySelector('.tab-btn[data-tab="game"]');
+          if (tabBtn && tabBtn.classList.contains('active')) scheduleGameTabAutoSwitch();
         }
 
         function changeRouletteCount(delta) {
