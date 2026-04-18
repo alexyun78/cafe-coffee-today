@@ -609,12 +609,35 @@
         }
         .finger-game.active { display: flex; }
         .finger-game-header {
-            padding: 16px 20px;
-            display: flex; justify-content: space-between; align-items: center;
+            position: relative;
+            padding: 28px 64px 22px;
             color: white;
         }
-        .finger-game-title { font-size: 1.1rem; font-weight: 600; }
+        .finger-game-status {
+            font-size: 2.4rem;
+            font-weight: 900;
+            color: white;
+            text-align: center;
+            letter-spacing: -0.02em;
+            line-height: 1.1;
+            text-shadow: 0 2px 16px rgba(0,0,0,0.35);
+            transition: color 0.2s;
+        }
+        .finger-game-status.countdown {
+            font-size: 6.5rem;
+            color: #FFD700;
+            animation: countdownPulse 0.5s ease-out;
+        }
+        .finger-game-status.winner {
+            font-size: 2.8rem;
+            color: #FFD700;
+        }
+        @keyframes countdownPulse {
+            0% { transform: scale(1.6); opacity: 0.3; }
+            100% { transform: scale(1); opacity: 1; }
+        }
         .finger-game-close {
+            position: absolute; top: 16px; right: 16px;
             width: 36px; height: 36px;
             border-radius: 50%; border: none;
             background: rgba(255,255,255,0.15); color: white;
@@ -624,26 +647,23 @@
         .finger-game-area {
             flex: 1; position: relative; overflow: hidden;
         }
-        .finger-guide {
-            position: absolute; top: 50%; left: 50%;
-            transform: translate(-50%, -50%);
-            text-align: center; color: rgba(255,255,255,0.5);
-            pointer-events: none;
-            transition: opacity 0.5s;
-        }
-        .finger-guide-icon { font-size: 4rem; animation: fingerBlink 1.2s ease-in-out infinite; }
-        .finger-guide-text { font-size: 1rem; margin-top: 12px; }
-        @keyframes fingerBlink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.3; }
-        }
         .touch-circle {
-            position: absolute; width: 80px; height: 80px;
+            position: absolute; width: 110px; height: 110px;
             border-radius: 50%;
             transform: translate(-50%, -50%);
             animation: touchPulse 1.5s ease-in-out infinite;
-            transition: opacity 0.5s, transform 0.5s;
+            transition: width 0.4s, height 0.4s, opacity 0.4s;
             pointer-events: none;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .touch-label {
+            color: white;
+            font-weight: 900;
+            font-size: 1.15rem;
+            text-shadow: 0 2px 6px rgba(0,0,0,0.7);
+            pointer-events: none;
+            white-space: nowrap;
+            transition: font-size 0.4s;
         }
         .touch-circle.loser {
             opacity: 0 !important;
@@ -651,8 +671,11 @@
         }
         .touch-circle.winner {
             animation: winnerGlow 0.6s ease-in-out infinite alternate !important;
-            width: 120px !important; height: 120px !important;
+            width: 280px !important; height: 280px !important;
             z-index: 10;
+        }
+        .touch-circle.winner .touch-label {
+            font-size: 2.6rem;
         }
         @keyframes touchPulse {
             0%, 100% { box-shadow: 0 0 0 0 currentColor; }
@@ -660,15 +683,7 @@
         }
         @keyframes winnerGlow {
             from { box-shadow: 0 0 30px 10px currentColor; transform: translate(-50%,-50%) scale(1); }
-            to { box-shadow: 0 0 50px 20px currentColor; transform: translate(-50%,-50%) scale(1.15); }
-        }
-        .countdown-display {
-            position: absolute; top: 50%; left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 10rem; font-weight: 900;
-            color: rgba(255,255,255,0.15);
-            pointer-events: none;
-            transition: opacity 0.3s;
+            to { box-shadow: 0 0 60px 24px currentColor; transform: translate(-50%,-50%) scale(1.08); }
         }
 
         /* ========== 룰렛 게임 ========== */
@@ -738,8 +753,8 @@
             justify-content: center; max-width: 500px;
         }
         .roulette-card {
-            width: 90px; height: 120px;
-            border-radius: 12px; cursor: pointer;
+            width: 64px; height: 88px;
+            border-radius: 10px; cursor: pointer;
             perspective: 600px; position: relative;
         }
         .roulette-card-inner {
@@ -760,13 +775,13 @@
         }
         .roulette-card-front {
             background: linear-gradient(145deg, #6F4E37, #A0845C);
-            color: rgba(255,255,255,0.4); font-size: 2rem;
+            color: rgba(255,255,255,0.4); font-size: 1.5rem;
             box-shadow: 0 4px 15px rgba(0,0,0,0.3);
         }
         .roulette-card-back {
             background: white;
             color: #6F4E37;
-            font-size: 2.5rem; font-weight: 900;
+            font-size: 1.7rem; font-weight: 900;
             transform: rotateY(180deg);
             box-shadow: 0 4px 15px rgba(0,0,0,0.3);
         }
@@ -900,7 +915,7 @@
             .game-select { flex-direction: column; gap: 16px; min-height: 50vh; }
             .game-card { max-width: 180px; width: 80%; }
             .roulette-count-num { font-size: 4rem; }
-            .roulette-card { width: 80px; height: 110px; }
+            .roulette-card { width: 58px; height: 80px; }
             .roulette-wheel-container { width: 240px; height: 240px; }
 
             /* 모바일에서 테이블 숨기고 카드 표시 */
@@ -1026,16 +1041,10 @@
     <!-- 손가락 게임 풀스크린 -->
     <div class="finger-game" id="finger-game">
         <div class="finger-game-header">
-            <span class="finger-game-title">👆 손가락 게임</span>
             <button class="finger-game-close" onclick="closeFingerGame()">&times;</button>
+            <div class="finger-game-status" id="finger-status">손가락을 대세요</div>
         </div>
-        <div class="finger-game-area" id="finger-area">
-            <div class="finger-guide" id="finger-guide">
-                <div class="finger-guide-icon">👆</div>
-                <div class="finger-guide-text">화면을 터치하세요</div>
-            </div>
-            <div class="countdown-display" id="finger-countdown"></div>
-        </div>
+        <div class="finger-game-area" id="finger-area"></div>
     </div>
 
     <!-- 룰렛 게임 풀스크린 -->
@@ -1600,11 +1609,19 @@
         }
 
         // ========== 손가락 게임 ==========
-        let fingerTouches = {};      // id -> {x, y, color}
-        let fingerTimer = null;      // 3초 대기 타이머
+        const ANIMALS = ['사자','호랑이','양','고양이','강아지','얼룩말','기린','낙타','사슴','악어','코끼리','공작새','고래'];
+        const FINGER_COLORS = [
+          '#FF6B6B','#4ECDC4','#45B7D1','#FFA07A','#98D8C8',
+          '#F7DC6F','#BB8FCE','#85C1E9','#F1948A','#82E0AA',
+          '#F39C12','#E74C3C','#9B59B6'
+        ];
+
+        let fingerTouches = {};      // id -> {x, y, color, animal}
+        let fingerTimer = null;      // 2초 대기 타이머
         let countdownInterval = null;
         let countdownValue = 3;
         let fingerGameActive = false;
+        let fingerAudioCtx = null;
 
         function startFingerGame() {
           const game = document.getElementById('finger-game');
@@ -1612,10 +1629,8 @@
           fingerGameActive = true;
           fingerTouches = {};
           clearFingerTimers();
-          document.getElementById('finger-guide').style.opacity = '1';
-          document.getElementById('finger-countdown').textContent = '';
-          // 기존 원 제거
           document.querySelectorAll('.touch-circle').forEach(c => c.remove());
+          updateFingerStatus();
 
           const area = document.getElementById('finger-area');
           area.addEventListener('touchstart', onFingerTouch, { passive: false });
@@ -1648,6 +1663,20 @@
           countdownInterval = null;
         }
 
+        function pickUniqueFingerColor() {
+          const used = new Set(Object.values(fingerTouches).map(t => t.color));
+          const available = FINGER_COLORS.filter(c => !used.has(c));
+          const pool = available.length ? available : FINGER_COLORS;
+          return pool[Math.floor(Math.random() * pool.length)];
+        }
+
+        function pickUniqueFingerAnimal() {
+          const used = new Set(Object.values(fingerTouches).map(t => t.animal));
+          const available = ANIMALS.filter(a => !used.has(a));
+          const pool = available.length ? available : ANIMALS;
+          return pool[Math.floor(Math.random() * pool.length)];
+        }
+
         function onFingerTouch(e) {
           e.preventDefault();
           const area = document.getElementById('finger-area');
@@ -1655,13 +1684,18 @@
           for (const touch of e.changedTouches) {
             const id = touch.identifier;
             if (!fingerTouches[id]) {
-              const colorIdx = Object.keys(fingerTouches).length % COLORS.length;
-              fingerTouches[id] = { x: touch.clientX - rect.left, y: touch.clientY - rect.top, color: COLORS[colorIdx] };
+              const color = pickUniqueFingerColor();
+              const animal = pickUniqueFingerAnimal();
+              fingerTouches[id] = {
+                x: touch.clientX - rect.left,
+                y: touch.clientY - rect.top,
+                color, animal
+              };
               createTouchCircle(id, fingerTouches[id], area);
             }
           }
-          document.getElementById('finger-guide').style.opacity = '0';
           resetFingerWait();
+          updateFingerStatus();
         }
 
         function onFingerMove(e) {
@@ -1684,9 +1718,17 @@
 
         function onFingerEnd(e) {
           e.preventDefault();
-          // 손가락을 떼도 원은 유지 (터치 포인트는 남겨둠)
-          // 새 터치가 없으면 카운트다운 시작
+          for (const touch of e.changedTouches) {
+            removeFingerTouch(touch.identifier);
+          }
           resetFingerWait();
+          updateFingerStatus();
+        }
+
+        function removeFingerTouch(id) {
+          delete fingerTouches[id];
+          const el = document.getElementById('touch-' + id);
+          if (el) el.remove();
         }
 
         // 마우스 폴백 (데스크톱 테스트)
@@ -1695,10 +1737,12 @@
           const area = document.getElementById('finger-area');
           const rect = area.getBoundingClientRect();
           const id = 'mouse-' + (mouseClickId++);
-          fingerTouches[id] = { x: e.clientX - rect.left, y: e.clientY - rect.top, color: COLORS[Object.keys(fingerTouches).length % COLORS.length] };
+          const color = pickUniqueFingerColor();
+          const animal = pickUniqueFingerAnimal();
+          fingerTouches[id] = { x: e.clientX - rect.left, y: e.clientY - rect.top, color, animal };
           createTouchCircle(id, fingerTouches[id], area);
-          document.getElementById('finger-guide').style.opacity = '0';
           resetFingerWait();
+          updateFingerStatus();
         }
 
         function createTouchCircle(id, data, area) {
@@ -1709,66 +1753,103 @@
           el.style.top = data.y + 'px';
           el.style.background = data.color;
           el.style.color = data.color;
+          const label = document.createElement('span');
+          label.className = 'touch-label';
+          label.textContent = data.animal;
+          el.appendChild(label);
           area.appendChild(el);
+        }
+
+        function updateFingerStatus() {
+          const el = document.getElementById('finger-status');
+          if (!el) return;
+          el.classList.remove('countdown', 'winner');
+          const count = Object.keys(fingerTouches).length;
+          if (count === 0) el.textContent = '손가락을 대세요';
+          else if (count === 1) el.textContent = '2명 이상 필요해요';
+          else el.textContent = '그대로 유지하세요';
         }
 
         function resetFingerWait() {
           clearFingerTimers();
-          document.getElementById('finger-countdown').textContent = '';
           countdownValue = 3;
-
           const touchCount = Object.keys(fingerTouches).length;
-          if (touchCount < 2) return; // 최소 2명 필요
-
-          fingerTimer = setTimeout(() => {
-            startFingerCountdown();
-          }, 3000);
+          if (touchCount < 2) return;
+          fingerTimer = setTimeout(() => startFingerCountdown(), 2000);
         }
 
         function startFingerCountdown() {
+          if (!fingerGameActive) return;
+          if (Object.keys(fingerTouches).length < 2) return;
           countdownValue = 3;
-          const cdEl = document.getElementById('finger-countdown');
-          cdEl.textContent = countdownValue;
-
+          showFingerCountdownTick();
           countdownInterval = setInterval(() => {
             countdownValue--;
             if (countdownValue <= 0) {
               clearInterval(countdownInterval);
               countdownInterval = null;
-              cdEl.textContent = '';
               pickFingerWinner();
             } else {
-              cdEl.textContent = countdownValue;
+              showFingerCountdownTick();
             }
           }, 1000);
+        }
+
+        function showFingerCountdownTick() {
+          const el = document.getElementById('finger-status');
+          el.classList.remove('countdown', 'winner');
+          void el.offsetWidth;
+          el.classList.add('countdown');
+          el.textContent = countdownValue;
+          playFingerBeep(700, 0.18);
         }
 
         function pickFingerWinner() {
           if (!fingerGameActive) return;
           const ids = Object.keys(fingerTouches);
-          if (ids.length < 2) return;
-
+          if (ids.length < 2) {
+            updateFingerStatus();
+            resetFingerWait();
+            return;
+          }
+          playFingerBeep(1200, 0.5);
           const winnerId = ids[Math.floor(Math.random() * ids.length)];
+          const winnerData = fingerTouches[winnerId];
 
-          // 패자 fade out
           ids.forEach(id => {
             const el = document.getElementById('touch-' + id);
             if (!el) return;
-            if (id === winnerId) {
-              el.classList.add('winner');
-            } else {
-              el.classList.add('loser');
-            }
+            if (id === winnerId) el.classList.add('winner');
+            else el.classList.add('loser');
           });
 
-          // 1초 후 당첨 오버레이
+          const statusEl = document.getElementById('finger-status');
+          statusEl.classList.remove('countdown');
+          statusEl.classList.add('winner');
+          statusEl.textContent = '🎉 ' + winnerData.animal + ' 당첨!';
+
+          spawnConfetti();
           setTimeout(() => {
-            const winnerColor = fingerTouches[winnerId].color;
-            document.getElementById('winner-emoji').textContent = '☕';
-            showWinner('당첨!', () => {
-              closeFingerGame();
-            });
-          }, 1000);
+            document.querySelectorAll('.confetti-piece').forEach(c => c.remove());
+            closeFingerGame();
+            switchTab('coffee');
+          }, 3500);
+        }
+
+        function playFingerBeep(freq, duration) {
+          try {
+            if (!fingerAudioCtx) fingerAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            const osc = fingerAudioCtx.createOscillator();
+            const gain = fingerAudioCtx.createGain();
+            osc.connect(gain);
+            gain.connect(fingerAudioCtx.destination);
+            osc.frequency.value = freq;
+            osc.type = 'sine';
+            gain.gain.setValueAtTime(0.3, fingerAudioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, fingerAudioCtx.currentTime + duration);
+            osc.start();
+            osc.stop(fingerAudioCtx.currentTime + duration);
+          } catch (e) {}
         }
 
         // ========== 룰렛 게임 ==========
@@ -1802,12 +1883,14 @@
           phase.classList.add('active');
           document.getElementById('roulette-instruction').textContent = '한 명씩 카드를 누르세요';
 
-          // 1~N 셔플
-          rouletteNumbers = Array.from({ length: rouletteCount }, (_, i) => i + 1);
-          for (let i = rouletteNumbers.length - 1; i > 0; i--) {
+          // 1~99 중 중복 없는 랜덤 번호 rouletteCount개 뽑기
+          const pool = [];
+          for (let n = 1; n <= 99; n++) pool.push(n);
+          for (let i = pool.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
-            [rouletteNumbers[i], rouletteNumbers[j]] = [rouletteNumbers[j], rouletteNumbers[i]];
+            [pool[i], pool[j]] = [pool[j], pool[i]];
           }
+          rouletteNumbers = pool.slice(0, rouletteCount);
           rouletteFlipped = 0;
 
           // 카드 생성
@@ -1849,11 +1932,12 @@
 
           buildRouletteWheel();
 
-          // 당첨 번호 결정
-          const winnerNum = Math.floor(Math.random() * rouletteCount) + 1;
+          // 뒤집힌 카드 중 랜덤으로 당첨 인덱스 결정
+          const winnerIdx = Math.floor(Math.random() * rouletteCount);
+          const winnerNum = rouletteNumbers[winnerIdx];
           const segAngle = 360 / rouletteCount;
           // 해당 세그먼트 중앙으로 멈추도록 각도 계산
-          const targetAngle = 360 - ((winnerNum - 1) * segAngle + segAngle / 2);
+          const targetAngle = 360 - (winnerIdx * segAngle + segAngle / 2);
           const totalRotation = 360 * 8 + targetAngle; // 8바퀴 + 목표
 
           const wheel = document.getElementById('roulette-wheel');
@@ -1935,9 +2019,9 @@
             text.setAttribute('text-anchor', 'middle');
             text.setAttribute('dominant-baseline', 'central');
             text.setAttribute('fill', 'white');
-            text.setAttribute('font-size', '24');
+            text.setAttribute('font-size', '22');
             text.setAttribute('font-weight', '800');
-            text.textContent = i + 1;
+            text.textContent = rouletteNumbers[i];
             svg.appendChild(text);
 
             wheel.appendChild(svg);
