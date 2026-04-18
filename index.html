@@ -869,6 +869,25 @@
             color: white; font-weight: 800; font-size: 1.3rem;
             text-shadow: 0 1px 3px rgba(0,0,0,0.4);
         }
+        .close-hint {
+            position: absolute;
+            top: 64px; left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255,107,0,0.95);
+            color: white;
+            font-size: 1.2rem; font-weight: 800;
+            padding: 10px 22px;
+            border-radius: 22px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.35);
+            letter-spacing: 0.3px;
+            z-index: 20;
+            white-space: nowrap;
+            animation: closeHintPulse 0.4s ease-out;
+        }
+        @keyframes closeHintPulse {
+            0% { transform: translate(-50%, -8px) scale(1.15); opacity: 0.4; }
+            100% { transform: translate(-50%, 0) scale(1); opacity: 1; }
+        }
         .roulette-pointer {
             position: absolute; top: -28px; left: 50%;
             transform: translateX(-50%);
@@ -1109,6 +1128,7 @@
             <span class="roulette-game-title">🎡 룰렛</span>
             <button class="roulette-game-close" onclick="closeRouletteGame()">&times;</button>
         </div>
+        <div class="close-hint" id="roulette-close-hint" style="display:none;"></div>
         <!-- Phase 1: 인원 설정 -->
         <div class="roulette-setup" id="roulette-setup">
             <div class="roulette-count-row">
@@ -1692,6 +1712,9 @@
         let fingerTimer = null;      // 2초 대기 타이머
         let countdownInterval = null;
         let countdownValue = 3;
+        let fingerIdleTimer = null;      // 5초 idle → 종료 카운트
+        let fingerCloseInterval = null;  // 종료 카운트(3초) 인터벌
+        let fingerCloseValue = 3;
         let fingerGameActive = false;
         let fingerWinnerShown = false;
         let fingerAudioCtx = null;
@@ -1714,6 +1737,9 @@
           area.addEventListener('touchcancel', onFingerEnd, { passive: false });
           // 마우스 폴백 (데스크톱 테스트용)
           area.addEventListener('mousedown', onMouseDown);
+
+          // idle 타이머 무장 (5초 무반응 시 종료 카운트)
+          resetFingerWait();
         }
 
         function closeFingerGame() {
@@ -1735,10 +1761,36 @@
         }
 
         function clearFingerTimers() {
-          clearTimeout(fingerTimer);
-          clearInterval(countdownInterval);
-          fingerTimer = null;
-          countdownInterval = null;
+          clearTimeout(fingerTimer); fingerTimer = null;
+          clearInterval(countdownInterval); countdownInterval = null;
+          clearTimeout(fingerIdleTimer); fingerIdleTimer = null;
+          clearInterval(fingerCloseInterval); fingerCloseInterval = null;
+        }
+
+        function startFingerCloseCountdown() {
+          if (!fingerGameActive || fingerWinnerShown) return;
+          fingerCloseValue = 3;
+          showFingerCloseTick();
+          fingerCloseInterval = setInterval(() => {
+            fingerCloseValue--;
+            if (fingerCloseValue <= 0) {
+              clearInterval(fingerCloseInterval);
+              fingerCloseInterval = null;
+              closeFingerGame();
+              switchTab('coffee');
+            } else {
+              showFingerCloseTick();
+            }
+          }, 1000);
+        }
+
+        function showFingerCloseTick() {
+          const el = document.getElementById('finger-status');
+          el.classList.remove('countdown', 'winner');
+          void el.offsetWidth;
+          el.classList.add('countdown');
+          el.textContent = fingerCloseValue + '초 뒤 종료';
+          playFingerBeep(480, 0.15);
         }
 
         function pickUniqueFingerColor() {
@@ -1855,7 +1907,13 @@
         function resetFingerWait() {
           clearFingerTimers();
           countdownValue = 3;
+          if (fingerWinnerShown) return;
           const touchCount = Object.keys(fingerTouches).length;
+          if (touchCount === 0) {
+            // "손가락을 대세요" 상태에서 5초간 무반응 → 종료 카운트다운
+            fingerIdleTimer = setTimeout(() => startFingerCloseCountdown(), 5000);
+            return;
+          }
           if (touchCount < 2) return;
           fingerTimer = setTimeout(() => startFingerCountdown(), 2000);
         }
@@ -1941,6 +1999,46 @@
         let lastRouletteNumbers = []; // 직전 라운드 숫자 (재사용 방지)
         let rouletteFlipped = 0;
         let rouletteAudioCtx = null;
+        let rouletteIdleTimer = null;
+        let rouletteCloseInterval = null;
+        let rouletteCloseValue = 3;
+
+        function armRouletteIdle(ms = 5000) {
+          clearRouletteIdle();
+          rouletteIdleTimer = setTimeout(() => startRouletteCloseCountdown(), ms);
+        }
+        function clearRouletteIdle() {
+          clearTimeout(rouletteIdleTimer); rouletteIdleTimer = null;
+          clearInterval(rouletteCloseInterval); rouletteCloseInterval = null;
+          const el = document.getElementById('roulette-close-hint');
+          if (el) el.style.display = 'none';
+        }
+        function startRouletteCloseCountdown() {
+          rouletteCloseValue = 3;
+          showRouletteCloseTick();
+          rouletteCloseInterval = setInterval(() => {
+            rouletteCloseValue--;
+            if (rouletteCloseValue <= 0) {
+              clearInterval(rouletteCloseInterval);
+              rouletteCloseInterval = null;
+              closeRouletteGame();
+              switchTab('coffee');
+            } else {
+              showRouletteCloseTick();
+            }
+          }, 1000);
+        }
+        function showRouletteCloseTick() {
+          const el = document.getElementById('roulette-close-hint');
+          if (el) {
+            el.style.display = 'block';
+            el.style.animation = 'none';
+            void el.offsetWidth;
+            el.style.animation = '';
+            el.textContent = rouletteCloseValue + '초 뒤 종료';
+          }
+          try { playTickSound(); } catch (e) {}
+        }
 
         function startRouletteGame() {
           cancelGameTabAutoSwitch();
@@ -1951,9 +2049,11 @@
           document.getElementById('roulette-setup').style.display = 'flex';
           document.getElementById('roulette-cards-phase').classList.remove('active');
           document.getElementById('roulette-spin-phase').classList.remove('active');
+          armRouletteIdle();
         }
 
         function closeRouletteGame() {
+          clearRouletteIdle();
           document.getElementById('roulette-game').classList.remove('active');
           const tabBtn = document.querySelector('.tab-btn[data-tab="game"]');
           if (tabBtn && tabBtn.classList.contains('active')) scheduleGameTabAutoSwitch();
@@ -1962,6 +2062,7 @@
         function changeRouletteCount(delta) {
           rouletteCount = Math.max(2, rouletteCount + delta);
           document.getElementById('roulette-count').textContent = rouletteCount;
+          armRouletteIdle();
         }
 
         function startRouletteCards() {
@@ -2008,6 +2109,9 @@
             card.addEventListener('pointerup', handler);
             grid.appendChild(card);
           }
+
+          // 첫 카드 뒤집기까지 5초 대기
+          armRouletteIdle();
         }
 
         function flipRouletteCard(card, index) {
@@ -2017,10 +2121,14 @@
           rouletteFlipped++;
 
           if (rouletteFlipped >= rouletteCount) {
+            clearRouletteIdle();
             document.getElementById('roulette-instruction').textContent = '룰렛 시작!';
             setTimeout(() => {
               startRouletteWheel();
             }, 1000);
+          } else {
+            // 다음 카드 뒤집기까지 5초 대기
+            armRouletteIdle();
           }
         }
 
