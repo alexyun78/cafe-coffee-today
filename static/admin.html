@@ -453,17 +453,22 @@ function renderList(items) {
   }
   el.innerHTML = items.map((it) => {
     const roast = it["로스팅"]?.start || "";
+    const serve = it["제공일"]?.start || "";
     const status = it["상태"] || "";
     const statusCls = status.replace(/\s/g, "");
     const dupBtn = status === "완료"
       ? `<button type="button" class="btn-duplicate" data-id="${it.id}">복제</button>`
       : "";
+    const dateParts = [];
+    if (roast) dateParts.push("🫘 " + roast);
+    if (serve) dateParts.push("☕ " + serve);
+    const dateStr = dateParts.join(" · ");
     return `
       <div class="list-item" data-id="${it.id}">
         <div class="list-item-main">
           <div class="list-item-name">${escapeHtml(it["커피"] || "(이름 없음)")}</div>
           <div class="list-item-meta">
-            ${escapeHtml(it["로스터리"] || "")}${it["로스터리"] && roast ? " · " : ""}${roast}
+            ${escapeHtml(it["로스터리"] || "")}${it["로스터리"] && dateStr ? " · " : ""}${dateStr}
           </div>
         </div>
         <div class="list-item-actions">
