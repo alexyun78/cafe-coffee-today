@@ -654,16 +654,20 @@
             animation: touchPulse 1.5s ease-in-out infinite;
             transition: width 0.4s, height 0.4s, opacity 0.4s;
             pointer-events: none;
-            display: flex; align-items: center; justify-content: center;
         }
         .touch-label {
+            position: absolute;
+            left: 50%;
+            bottom: 100%;
+            transform: translateX(-50%);
+            margin-bottom: 10px;
             color: white;
             font-weight: 900;
-            font-size: 1.15rem;
-            text-shadow: 0 2px 6px rgba(0,0,0,0.7);
+            font-size: 1.35rem;
+            text-shadow: 0 2px 6px rgba(0,0,0,0.85), 0 0 12px rgba(0,0,0,0.5);
             pointer-events: none;
             white-space: nowrap;
-            transition: font-size 0.4s;
+            transition: font-size 0.4s, margin-bottom 0.4s;
         }
         .touch-circle.loser {
             opacity: 0 !important;
@@ -675,7 +679,8 @@
             z-index: 10;
         }
         .touch-circle.winner .touch-label {
-            font-size: 2.6rem;
+            font-size: 2.8rem;
+            margin-bottom: 18px;
         }
         @keyframes touchPulse {
             0%, 100% { box-shadow: 0 0 0 0 currentColor; }
@@ -1621,12 +1626,14 @@
         let countdownInterval = null;
         let countdownValue = 3;
         let fingerGameActive = false;
+        let fingerWinnerShown = false;
         let fingerAudioCtx = null;
 
         function startFingerGame() {
           const game = document.getElementById('finger-game');
           game.classList.add('active');
           fingerGameActive = true;
+          fingerWinnerShown = false;
           fingerTouches = {};
           clearFingerTimers();
           document.querySelectorAll('.touch-circle').forEach(c => c.remove());
@@ -1645,6 +1652,7 @@
           const game = document.getElementById('finger-game');
           game.classList.remove('active');
           fingerGameActive = false;
+          fingerWinnerShown = false;
           clearFingerTimers();
           fingerTouches = {};
           document.querySelectorAll('.touch-circle').forEach(c => c.remove());
@@ -1679,6 +1687,7 @@
 
         function onFingerTouch(e) {
           e.preventDefault();
+          if (fingerWinnerShown) return;
           const area = document.getElementById('finger-area');
           const rect = area.getBoundingClientRect();
           for (const touch of e.changedTouches) {
@@ -1700,6 +1709,7 @@
 
         function onFingerMove(e) {
           e.preventDefault();
+          if (fingerWinnerShown) return;
           const area = document.getElementById('finger-area');
           const rect = area.getBoundingClientRect();
           for (const touch of e.changedTouches) {
@@ -1718,6 +1728,7 @@
 
         function onFingerEnd(e) {
           e.preventDefault();
+          if (fingerWinnerShown) return; // 당첨 후에는 원/라벨 유지
           for (const touch of e.changedTouches) {
             removeFingerTouch(touch.identifier);
           }
@@ -1734,6 +1745,7 @@
         // 마우스 폴백 (데스크톱 테스트)
         let mouseClickId = 100;
         function onMouseDown(e) {
+          if (fingerWinnerShown) return;
           const area = document.getElementById('finger-area');
           const rect = area.getBoundingClientRect();
           const id = 'mouse-' + (mouseClickId++);
@@ -1813,6 +1825,7 @@
             return;
           }
           playFingerBeep(1200, 0.5);
+          fingerWinnerShown = true;
           const winnerId = ids[Math.floor(Math.random() * ids.length)];
           const winnerData = fingerTouches[winnerId];
 
@@ -1855,6 +1868,7 @@
         // ========== 룰렛 게임 ==========
         let rouletteCount = 2;
         let rouletteNumbers = [];   // 셔플된 번호 배열
+        let lastRouletteNumbers = []; // 직전 라운드 숫자 (재사용 방지)
         let rouletteFlipped = 0;
         let rouletteAudioCtx = null;
 
@@ -1883,14 +1897,23 @@
           phase.classList.add('active');
           document.getElementById('roulette-instruction').textContent = '한 명씩 카드를 누르세요';
 
-          // 1~99 중 중복 없는 랜덤 번호 rouletteCount개 뽑기
-          const pool = [];
-          for (let n = 1; n <= 99; n++) pool.push(n);
+          // 1~99 중, 직전 라운드 숫자는 제외하고 rouletteCount개 뽑기
+          const excluded = new Set(lastRouletteNumbers);
+          let pool = [];
+          for (let n = 1; n <= 99; n++) {
+            if (!excluded.has(n)) pool.push(n);
+          }
+          // 혹시 풀이 부족하면 전체 풀로 폴백
+          if (pool.length < rouletteCount) {
+            pool = [];
+            for (let n = 1; n <= 99; n++) pool.push(n);
+          }
           for (let i = pool.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
             [pool[i], pool[j]] = [pool[j], pool[i]];
           }
           rouletteNumbers = pool.slice(0, rouletteCount);
+          lastRouletteNumbers = rouletteNumbers.slice();
           rouletteFlipped = 0;
 
           // 카드 생성
