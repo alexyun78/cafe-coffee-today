@@ -635,9 +635,8 @@ async function openDuplicate(id) {
     $("#field-process").value = it["프로세싱"] || "";
     $("#field-cup-notes").value = it["컵노트"] || "";
     $("#field-comment").value = it["감상"] || "";
-    const status = it["상태"] || "예정";
-    $("#field-status").value = status;
-    syncSegmented(status);
+    $("#field-status").value = "예정";
+    syncSegmented("예정");
     $("#field-serve-date").value = "";
     $("#btn-delete").style.display = "none";
     clearErrors();
