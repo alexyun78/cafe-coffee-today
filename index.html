@@ -1897,22 +1897,19 @@
           phase.classList.add('active');
           document.getElementById('roulette-instruction').textContent = '한 명씩 카드를 누르세요';
 
-          // 1~99 중, 직전 라운드 숫자는 제외하고 rouletteCount개 뽑기
-          const excluded = new Set(lastRouletteNumbers);
-          let pool = [];
-          for (let n = 1; n <= 99; n++) {
-            if (!excluded.has(n)) pool.push(n);
-          }
-          // 혹시 풀이 부족하면 전체 풀로 폴백
-          if (pool.length < rouletteCount) {
-            pool = [];
-            for (let n = 1; n <= 99; n++) pool.push(n);
-          }
-          for (let i = pool.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [pool[i], pool[j]] = [pool[j], pool[i]];
-          }
-          rouletteNumbers = pool.slice(0, rouletteCount);
+          // 1~N 번호를 매 라운드 다른 순서로 셔플 (직전 라운드와 동일 순서 방지)
+          const sameAsLast = (arr) =>
+            lastRouletteNumbers.length === arr.length &&
+            lastRouletteNumbers.every((v, i) => v === arr[i]);
+          rouletteNumbers = Array.from({ length: rouletteCount }, (_, i) => i + 1);
+          let attempts = 0;
+          do {
+            for (let i = rouletteNumbers.length - 1; i > 0; i--) {
+              const j = Math.floor(Math.random() * (i + 1));
+              [rouletteNumbers[i], rouletteNumbers[j]] = [rouletteNumbers[j], rouletteNumbers[i]];
+            }
+            attempts++;
+          } while (rouletteCount > 1 && sameAsLast(rouletteNumbers) && attempts < 20);
           lastRouletteNumbers = rouletteNumbers.slice();
           rouletteFlipped = 0;
 
