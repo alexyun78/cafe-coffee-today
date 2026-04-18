@@ -799,12 +799,14 @@
             width: 256px; height: 352px;
             border-radius: 24px; cursor: pointer;
             perspective: 1200px; position: relative;
+            touch-action: manipulation;
         }
         .roulette-card-inner {
             width: 100%; height: 100%;
             position: relative;
             transform-style: preserve-3d;
             transition: transform 0.6s;
+            pointer-events: none;
         }
         .roulette-card.flipped .roulette-card-inner {
             transform: rotateY(180deg);
@@ -815,6 +817,7 @@
             display: flex; align-items: center; justify-content: center;
             backface-visibility: hidden;
             -webkit-backface-visibility: hidden;
+            pointer-events: none;
         }
         .roulette-card-front {
             background: linear-gradient(145deg, #6F4E37, #A0845C);
@@ -837,15 +840,22 @@
         .roulette-spin-phase.active { display: flex; }
         .roulette-wheel-container {
             position: relative;
-            width: 280px; height: 280px;
-            margin: 20px 0;
+            width: min(92vw, 75vh);
+            height: min(92vw, 75vh);
+            margin: 30px 0;
         }
         .roulette-wheel {
             width: 100%; height: 100%;
             border-radius: 50%;
-            border: 4px solid rgba(255,255,255,0.3);
+            border: 6px solid rgba(255,255,255,0.35);
             position: relative;
             overflow: hidden;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.35), inset 0 0 20px rgba(0,0,0,0.15);
+        }
+        .roulette-wheel svg {
+            width: 100% !important;
+            height: 100% !important;
+            display: block;
         }
         .roulette-segment {
             position: absolute;
@@ -859,14 +869,14 @@
             text-shadow: 0 1px 3px rgba(0,0,0,0.4);
         }
         .roulette-pointer {
-            position: absolute; top: -18px; left: 50%;
+            position: absolute; top: -28px; left: 50%;
             transform: translateX(-50%);
             width: 0; height: 0;
-            border-left: 14px solid transparent;
-            border-right: 14px solid transparent;
-            border-top: 24px solid #FF6B00;
+            border-left: 26px solid transparent;
+            border-right: 26px solid transparent;
+            border-top: 44px solid #FF6B00;
             z-index: 5;
-            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+            filter: drop-shadow(0 3px 8px rgba(0,0,0,0.45));
         }
 
         /* ========== 공통 당첨 오버레이 ========== */
@@ -961,7 +971,7 @@
             .roulette-card { width: 232px; height: 320px; }
             .roulette-card-front { font-size: 5.5rem; }
             .roulette-card-back { font-size: 6.4rem; }
-            .roulette-wheel-container { width: 240px; height: 240px; }
+            /* roulette-wheel-container는 상단의 min(92vw,75vh) 규칙 유지 */
 
             /* 모바일에서 테이블 숨기고 카드 표시 */
             .desktop-table {
@@ -1966,7 +1976,12 @@
                 <div class="roulette-card-back">${rouletteNumbers[i]}</div>
               </div>
             `;
-            card.addEventListener('click', () => flipRouletteCard(card, i));
+            const handler = (e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              flipRouletteCard(card, i);
+            };
+            card.addEventListener('pointerup', handler);
             grid.appendChild(card);
           }
         }
@@ -2054,8 +2069,8 @@
             const pathData = `M${radius},${radius} L${x1},${y1} A${radius},${radius} 0 ${largeArc},1 ${x2},${y2} Z`;
 
             const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-            svg.setAttribute('width', radius * 2);
-            svg.setAttribute('height', radius * 2);
+            svg.setAttribute('viewBox', `0 0 ${radius * 2} ${radius * 2}`);
+            svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
             svg.style.position = 'absolute';
             svg.style.left = '0';
             svg.style.top = '0';
