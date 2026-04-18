@@ -305,12 +305,14 @@
       </div>
 
       <div class="field">
-        <label for="field-roastery">로스터리</label>
+        <label for="field-roastery" class="req">로스터리</label>
         <div class="autocomplete-wrap">
           <input type="text" id="field-roastery" name="roastery"
-                 placeholder="예: 92도씨 로스터리" autocomplete="off">
+                 placeholder="예: 92도씨 로스터리" autocomplete="off"
+                 aria-required="true" required>
           <div class="autocomplete-list" id="ac-roastery"></div>
         </div>
+        <div class="field-error">로스터리를 입력하세요.</div>
       </div>
 
       <div class="field">
@@ -320,12 +322,14 @@
       </div>
 
       <div class="field">
-        <label for="field-process">프로세싱</label>
+        <label for="field-process" class="req">프로세싱</label>
         <div class="autocomplete-wrap">
           <input type="text" id="field-process" name="process"
-                 placeholder="예: 내추럴, 워시드" autocomplete="off">
+                 placeholder="예: 내추럴, 워시드" autocomplete="off"
+                 aria-required="true" required>
           <div class="autocomplete-list" id="ac-process"></div>
         </div>
+        <div class="field-error">프로세싱을 입력하세요.</div>
       </div>
 
       <div class="field">
@@ -339,9 +343,11 @@
       </div>
 
       <div class="field">
-        <label for="field-cup-notes">컵노트</label>
+        <label for="field-cup-notes" class="req">컵노트</label>
         <textarea id="field-cup-notes" name="cup_notes"
-                  placeholder="예: 자몽, 블랙베리, 다크초콜릿"></textarea>
+                  placeholder="예: 자몽, 블랙베리, 다크초콜릿"
+                  aria-required="true" required></textarea>
+        <div class="field-error">컵노트를 입력하세요.</div>
         <div class="chips" id="cup-notes-chips"></div>
       </div>
 
@@ -705,9 +711,17 @@ function clearErrors() {
 function validate() {
   clearErrors();
   let ok = true;
-  if (!$("#field-name").value.trim()) {
-    $("#field-name").closest(".field").classList.add("error");
-    ok = false;
+  const requiredText = [
+    "#field-name",
+    "#field-roastery",
+    "#field-process",
+    "#field-cup-notes",
+  ];
+  for (const sel of requiredText) {
+    if (!$(sel).value.trim()) {
+      $(sel).closest(".field").classList.add("error");
+      ok = false;
+    }
   }
   if (!$("#field-roast-date").value) {
     $("#field-roast-date").closest(".field").classList.add("error");
