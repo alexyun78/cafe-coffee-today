@@ -5,6 +5,20 @@
 
 ---
 
+## ⚡ 기본 워크플로 (질문하지 말 것)
+
+소스 수정 요청을 처리한 뒤에는 **자동으로 commit + push** 한다. 사용자에게 "푸시할까요?", "빌드할까요?" 같은 확인을 받지 않는다.
+
+- `git add <수정파일> && git commit -m "..."` → `git push origin main`
+- 푸시 후 자동으로 실행되는 것:
+  1. 서버(`49.247.207.115`)가 60초 내 `cafe-coffee-deploy.timer`로 `git pull` + `systemctl restart cafe-coffee` → 웹 반영
+  2. GitHub Actions `Build APK` 워크플로가 자동으로 APK 빌드 + 서버 `static/downloads/`로 SCP → [/apk](http://49.247.207.115:3002/apk)에서 다운로드 가능
+- 커밋 메시지는 기존 스타일(`feat:`, `fix:`, `chore:` + 한국어 요약) 유지.
+- **예외**: 파괴적 작업(`git reset --hard`, `push --force`, 브랜치 삭제 등)은 여전히 사전 확인.
+- `version.json`을 올릴지 여부는 사용자가 명시하지 않으면 올리지 않는다. WebView는 서버 URL을 로드하므로 일반 수정은 APK 재빌드 없이도 반영됨. (업데이트 배너를 띄워야 할 때만 `cafe-coffee-apk/www/version.json` 증가)
+
+---
+
 ## 프로젝트 개요
 
 오늘 매장에서 내리는 커피를 기록·공개하는 앱. 2026-04 이전에는 Notion DB를 읽기 전용으로 조회했으나, 현재는 **자체 서버(49.247.207.115) + SQLite**로 이전되었다.
