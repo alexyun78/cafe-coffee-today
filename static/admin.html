@@ -106,6 +106,10 @@
     color: var(--coffee-dark); margin-bottom: 6px;
   }
   .req::after { content: " *"; color: var(--accent); }
+  .label-hint {
+    font-weight: 400; font-size: 0.78rem; color: var(--muted);
+    margin-left: 4px;
+  }
   input[type="text"], input[type="date"], textarea, select {
     width: 100%; padding: 12px 14px; border: 1.5px solid var(--border);
     border-radius: 8px; font-size: 1rem; font-family: inherit;
@@ -349,9 +353,9 @@
       </div>
 
       <div class="field">
-        <label for="field-roast-point">로스팅 포인트</label>
+        <label for="field-roast-point">로스팅 포인트 <span class="label-hint">(LIGHT:30 MEDIUM:60 DARK:80)</span></label>
         <input type="number" id="field-roast-point" name="roast_point"
-               min="0" max="100" step="1" placeholder="LIGHT:30 / MEDIUM:60 / DARK:80" inputmode="numeric">
+               min="0" max="100" step="1" placeholder="예: 60" inputmode="numeric">
       </div>
 
       <div class="field">
