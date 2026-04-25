@@ -117,6 +117,15 @@ def _parse_payload(data: dict) -> dict:
                 return v
         return None
 
+    def pick_int(*keys):
+        v = pick(*keys)
+        if v is None:
+            return None
+        try:
+            return int(v)
+        except (TypeError, ValueError):
+            return None
+
     return {
         "name": pick("name", "커피"),
         "roastery": pick("roastery", "로스터리"),
@@ -126,6 +135,9 @@ def _parse_payload(data: dict) -> dict:
         "cup_notes": pick("cup_notes", "컵노트"),
         "comment": pick("comment", "감상"),
         "serve_date": pick("serve_date", "제공일"),
+        "category": pick("category", "구분"),
+        "brewed_at": pick_int("brewed_at", "BREWED AT"),
+        "roast_point": pick_int("roast_point", "로스팅 포인트"),
     }
 
 

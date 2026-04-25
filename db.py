@@ -20,23 +20,32 @@ DB_PATH = os.environ.get(
 
 SCHEMA = """
 CREATE TABLE IF NOT EXISTS coffees (
-    id         INTEGER PRIMARY KEY AUTOINCREMENT,
-    name       TEXT NOT NULL,
-    roastery   TEXT,
-    roast_date TEXT,
-    process    TEXT,
-    status     TEXT,
-    cup_notes  TEXT,
-    comment    TEXT,
-    serve_date TEXT,
-    notion_id  TEXT UNIQUE,
-    created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now')),
-    updated_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now'))
+    id          INTEGER PRIMARY KEY AUTOINCREMENT,
+    name        TEXT NOT NULL,
+    roastery    TEXT,
+    roast_date  TEXT,
+    process     TEXT,
+    status      TEXT,
+    cup_notes   TEXT,
+    comment     TEXT,
+    serve_date  TEXT,
+    category    TEXT,
+    brewed_at   INTEGER,
+    roast_point INTEGER,
+    notion_id   TEXT UNIQUE,
+    created_at  TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now')),
+    updated_at  TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now'))
 );
 CREATE INDEX IF NOT EXISTS idx_coffees_roast_date ON coffees(roast_date DESC);
 CREATE INDEX IF NOT EXISTS idx_coffees_status ON coffees(status);
 CREATE INDEX IF NOT EXISTS idx_coffees_name ON coffees(name);
 """
+
+_EXTRA_COLUMNS = (
+    ("category", "TEXT"),
+    ("brewed_at", "INTEGER"),
+    ("roast_point", "INTEGER"),
+)
 
 
 def _ensure_dir():
@@ -61,6 +70,10 @@ def connect():
 def init_schema():
     with connect() as conn:
         conn.executescript(SCHEMA)
+        existing = {r["name"] for r in conn.execute("PRAGMA table_info(coffees)").fetchall()}
+        for col, ctype in _EXTRA_COLUMNS:
+            if col not in existing:
+                conn.execute(f"ALTER TABLE coffees ADD COLUMN {col} {ctype}")
 
 
 def _date_obj(s: Optional[str]):
@@ -82,6 +95,9 @@ def _row_to_api(row: sqlite3.Row) -> dict:
         "컵노트": row["cup_notes"],
         "감상": row["comment"],
         "제공일": _date_obj(row["serve_date"]),
+        "구분": row["category"],
+        "BREWED AT": row["brewed_at"],
+        "로스팅 포인트": row["roast_point"],
     }
 
 
@@ -162,6 +178,9 @@ def create(data: dict) -> int:
         "cup_notes",
         "comment",
         "serve_date",
+        "category",
+        "brewed_at",
+        "roast_point",
         "notion_id",
     )
     values = [data.get(f) for f in fields]
@@ -183,6 +202,9 @@ def update(coffee_id: int, data: dict) -> bool:
         "cup_notes",
         "comment",
         "serve_date",
+        "category",
+        "brewed_at",
+        "roast_point",
     )
     sets = [f"{k}=?" for k in allowed if k in data]
     if not sets:

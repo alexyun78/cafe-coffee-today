@@ -131,6 +131,7 @@
     display: grid; grid-template-columns: repeat(3, 1fr);
     border: 1.5px solid var(--border); border-radius: 8px; overflow: hidden;
   }
+  .segmented.cols-2 { grid-template-columns: repeat(2, 1fr); }
   .segmented button {
     padding: 12px 8px; border: none; background: white;
     font-size: 0.95rem; font-family: inherit; cursor: pointer;
@@ -330,6 +331,27 @@
           <div class="autocomplete-list" id="ac-process"></div>
         </div>
         <div class="field-error">프로세싱을 입력하세요.</div>
+      </div>
+
+      <div class="field">
+        <label>구분</label>
+        <div class="segmented cols-2" role="radiogroup" aria-label="구분">
+          <button type="button" data-category="원두">원두</button>
+          <button type="button" data-category="브루잉">브루잉</button>
+        </div>
+        <input type="hidden" name="category" id="field-category" value="">
+      </div>
+
+      <div class="field">
+        <label for="field-brewed-at">BREWED AT (°C)</label>
+        <input type="number" id="field-brewed-at" name="brewed_at"
+               min="60" max="100" step="1" placeholder="예: 92" inputmode="numeric">
+      </div>
+
+      <div class="field">
+        <label for="field-roast-point">로스팅 포인트</label>
+        <input type="number" id="field-roast-point" name="roast_point"
+               min="0" max="100" step="1" placeholder="LIGHT:30 / MEDIUM:60 / DARK:80" inputmode="numeric">
       </div>
 
       <div class="field">
@@ -618,6 +640,10 @@ function openNew() {
   $("#field-roastery").value = "92도씨 로스터리";
   $("#field-status").value = "예정";
   syncSegmented("예정");
+  $("#field-category").value = "";
+  syncCategory("");
+  $("#field-brewed-at").value = "";
+  $("#field-roast-point").value = "";
   $("#btn-delete").style.display = "none";
   $("#field-serve-date").value = "";
   clearErrors();
@@ -641,6 +667,11 @@ async function openDuplicate(id) {
     $("#field-process").value = it["프로세싱"] || "";
     $("#field-cup-notes").value = it["컵노트"] || "";
     $("#field-comment").value = it["감상"] || "";
+    const dupCat = it["구분"] || "";
+    $("#field-category").value = dupCat;
+    syncCategory(dupCat);
+    $("#field-brewed-at").value = it["BREWED AT"] != null ? it["BREWED AT"] : "";
+    $("#field-roast-point").value = it["로스팅 포인트"] != null ? it["로스팅 포인트"] : "";
     $("#field-status").value = "예정";
     syncSegmented("예정");
     $("#field-serve-date").value = "";
@@ -670,6 +701,11 @@ async function openEdit(id) {
     $("#field-process").value = it["프로세싱"] || "";
     $("#field-cup-notes").value = it["컵노트"] || "";
     $("#field-comment").value = it["감상"] || "";
+    const editCat = it["구분"] || "";
+    $("#field-category").value = editCat;
+    syncCategory(editCat);
+    $("#field-brewed-at").value = it["BREWED AT"] != null ? it["BREWED AT"] : "";
+    $("#field-roast-point").value = it["로스팅 포인트"] != null ? it["로스팅 포인트"] : "";
     const status = it["상태"] || "예정";
     $("#field-status").value = status;
     syncSegmented(status);
@@ -686,19 +722,36 @@ async function openEdit(id) {
 }
 
 function syncSegmented(status) {
-  $$(".segmented button").forEach((b) => {
+  $$(".segmented button[data-status]").forEach((b) => {
     b.classList.toggle("active", b.dataset.status === status);
     b.setAttribute("aria-pressed", b.dataset.status === status ? "true" : "false");
   });
 }
 
-$$(".segmented button").forEach((b) => {
+$$(".segmented button[data-status]").forEach((b) => {
   b.addEventListener("click", () => {
     $("#field-status").value = b.dataset.status;
     syncSegmented(b.dataset.status);
     if (b.dataset.status === "진행 중" && !$("#field-serve-date").value) {
       $("#field-serve-date").value = new Date().toISOString().slice(0, 10);
     }
+  });
+});
+
+function syncCategory(cat) {
+  $$(".segmented button[data-category]").forEach((b) => {
+    const on = b.dataset.category === cat;
+    b.classList.toggle("active", on);
+    b.setAttribute("aria-pressed", on ? "true" : "false");
+  });
+}
+
+$$(".segmented button[data-category]").forEach((b) => {
+  b.addEventListener("click", () => {
+    const cur = $("#field-category").value;
+    const next = cur === b.dataset.category ? "" : b.dataset.category;
+    $("#field-category").value = next;
+    syncCategory(next);
   });
 });
 
@@ -741,6 +794,9 @@ form.addEventListener("submit", async (e) => {
   const roastDate = $("#field-roast-date").value;
   const serveDate = $("#field-serve-date").value;
 
+  const brewedAtRaw = $("#field-brewed-at").value.trim();
+  const roastPointRaw = $("#field-roast-point").value.trim();
+
   const payload = {
     name: $("#field-name").value.trim(),
     roastery: $("#field-roastery").value.trim() || null,
@@ -750,6 +806,9 @@ form.addEventListener("submit", async (e) => {
     cup_notes: $("#field-cup-notes").value.trim() || null,
     comment: $("#field-comment").value.trim() || null,
     serve_date: serveDate || null,
+    category: $("#field-category").value || null,
+    brewed_at: brewedAtRaw === "" ? null : Number(brewedAtRaw),
+    roast_point: roastPointRaw === "" ? null : Number(roastPointRaw),
   };
 
   try {
