@@ -79,6 +79,16 @@ def init_schema():
         conn.execute(
             "UPDATE coffees SET availability='운영' WHERE availability IS NULL OR availability=''"
         )
+        # 일회성 마이그레이션 기록 테이블
+        conn.execute("CREATE TABLE IF NOT EXISTS migrations (name TEXT PRIMARY KEY)")
+        # 모든 행의 로스터리를 '92도씨 로스터리'로 통일 (1회만 실행)
+        if not conn.execute(
+            "SELECT 1 FROM migrations WHERE name=?", ("roastery_92cafe_default",)
+        ).fetchone():
+            conn.execute("UPDATE coffees SET roastery='92도씨 로스터리'")
+            conn.execute(
+                "INSERT INTO migrations (name) VALUES (?)", ("roastery_92cafe_default",)
+            )
 
 
 def _date_obj(s: Optional[str]):
@@ -224,6 +234,20 @@ def update(coffee_id: int, data: dict) -> bool:
             f"UPDATE coffees SET {','.join(sets)} WHERE id=?", values
         )
         return cur.rowcount > 0
+
+
+def set_availability_by_name(name: str, value: str) -> int:
+    """같은 이름의 모든 원두에 운영/품절 상태를 일괄 적용."""
+    if not name:
+        return 0
+    with connect() as conn:
+        cur = conn.execute(
+            "UPDATE coffees SET availability=?, "
+            "updated_at=strftime('%Y-%m-%dT%H:%M:%SZ','now') "
+            "WHERE name=?",
+            (value, name),
+        )
+        return cur.rowcount
 
 
 def complete_other_in_progress(except_id: Optional[int]) -> int:

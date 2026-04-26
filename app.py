@@ -168,7 +168,12 @@ def api_update(coffee_id):
         return jsonify({"success": False, "error": "not found or no changes"}), 404
     if parsed.get("status") == "진행 중":
         db.complete_other_in_progress(coffee_id)
-    return jsonify({"success": True, "item": db.get_by_id(coffee_id)})
+    cascaded = 0
+    if parsed.get("availability"):
+        item = db.get_by_id(coffee_id)
+        if item and item.get("커피"):
+            cascaded = db.set_availability_by_name(item["커피"], parsed["availability"])
+    return jsonify({"success": True, "item": db.get_by_id(coffee_id), "cascaded": cascaded})
 
 
 @app.delete("/api/coffee/<int:coffee_id>")

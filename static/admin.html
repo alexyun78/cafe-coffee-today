@@ -222,6 +222,14 @@
   }
   .list-item.sold-out .list-item-meta { opacity: 0.55; }
 
+  /* 고정 로스터리 표시 (입력 불가) */
+  .roastery-fixed {
+    padding: 12px 14px; background: #faf8f5;
+    border: 1.5px solid var(--border); border-radius: 8px;
+    font-size: 1rem; color: var(--coffee-mid); font-weight: 600;
+    display: flex; align-items: center; min-height: 48px;
+  }
+
   /* 폼 */
   form { display: none; }
   form.active { display: block; }
@@ -439,14 +447,9 @@
       </div>
 
       <div class="field">
-        <label for="field-roastery" class="req">로스터리</label>
-        <div class="autocomplete-wrap">
-          <input type="text" id="field-roastery" name="roastery"
-                 placeholder="예: 92도씨 로스터리" autocomplete="off"
-                 aria-required="true" required>
-          <div class="autocomplete-list" id="ac-roastery"></div>
-        </div>
-        <div class="field-error">로스터리를 입력하세요.</div>
+        <label>로스터리</label>
+        <div class="roastery-fixed">92도씨 로스터리</div>
+        <input type="hidden" name="roastery" id="field-roastery" value="92도씨 로스터리">
       </div>
 
       <div class="field">
@@ -707,8 +710,10 @@ function renderList(items) {
       const next = btn.dataset.availability === "품절" ? "운영" : "품절";
       btn.disabled = true;
       try {
-        await api("PUT", "/api/coffee/" + id, { availability: next });
-        showToast(next === "품절" ? "품절로 변경" : "운영으로 변경");
+        const result = await api("PUT", "/api/coffee/" + id, { availability: next });
+        const n = result && result.cascaded ? result.cascaded : 1;
+        const label = next === "품절" ? "품절" : "운영";
+        showToast(n > 1 ? `${label}로 변경 (같은 이름 ${n}개)` : `${label}로 변경`);
         await loadList();
       } catch (err) {
         if (err.message !== "unauthorized") showBanner("변경 실패: " + err.message, "error");
@@ -724,7 +729,6 @@ async function loadSuggestions() {
     const s = await api("GET", "/api/suggestions");
     suggestionsCache = s;
     setupAutocomplete("field-name", "ac-name", s.name || []);
-    setupAutocomplete("field-roastery", "ac-roastery", s.roastery || []);
     setupAutocomplete("field-process", "ac-process", s.process || []);
     // 새 항목이면서 컵노트가 비어있으면 마지막 기록값 불러오기
     if (!editingId && !$("#field-cup-notes").value.trim() && s.last_cup_notes) {
@@ -835,7 +839,6 @@ function openNew() {
   editingId = null;
   form.reset();
   $("#field-id").value = "";
-  $("#field-roastery").value = "92도씨 로스터리";
   $("#field-status").value = "예정";
   syncSegmented("예정");
   $("#field-category").value = "";
@@ -862,7 +865,6 @@ async function openDuplicate(id) {
     form.reset();
     $("#field-id").value = "";
     $("#field-name").value = it["커피"] || "";
-    $("#field-roastery").value = it["로스터리"] || "";
     $("#field-roast-date").value = (it["로스팅"] && it["로스팅"].start) || "";
     $("#field-process").value = it["프로세싱"] || "";
     $("#field-cup-notes").value = it["컵노트"] || "";
@@ -898,7 +900,6 @@ async function openEdit(id) {
     form.reset();
     $("#field-id").value = id;
     $("#field-name").value = it["커피"] || "";
-    $("#field-roastery").value = it["로스터리"] || "";
     $("#field-roast-date").value = (it["로스팅"] && it["로스팅"].start) || "";
     $("#field-process").value = it["프로세싱"] || "";
     $("#field-cup-notes").value = it["컵노트"] || "";
@@ -987,7 +988,6 @@ function validate() {
   let ok = true;
   const requiredText = [
     "#field-name",
-    "#field-roastery",
     "#field-process",
     "#field-cup-notes",
   ];
@@ -1020,7 +1020,7 @@ form.addEventListener("submit", async (e) => {
 
   const payload = {
     name: $("#field-name").value.trim(),
-    roastery: $("#field-roastery").value.trim() || null,
+    roastery: "92도씨 로스터리",
     roast_date: roastDate,
     process: $("#field-process").value.trim() || null,
     status: $("#field-status").value,
