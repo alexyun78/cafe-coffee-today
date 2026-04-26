@@ -138,6 +138,7 @@ def _parse_payload(data: dict) -> dict:
         "category": pick("category", "구분"),
         "brewed_at": pick_int("brewed_at", "BREWED AT"),
         "roast_point": pick_int("roast_point", "로스팅 포인트"),
+        "availability": pick("availability", "운영상태"),
     }
 
 

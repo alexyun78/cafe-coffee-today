@@ -207,6 +207,21 @@
     font-weight: 600; cursor: pointer; font-family: inherit;
   }
   .btn-duplicate:hover { background: #e6ddd0; }
+  .btn-availability {
+    background: #E8F5E9; color: #2E7D32; border: none;
+    padding: 6px 10px; border-radius: 14px; font-size: 0.75rem;
+    font-weight: 600; cursor: pointer; font-family: inherit;
+    min-width: 56px;
+  }
+  .btn-availability:hover { background: #c8e6c9; }
+  .btn-availability.sold-out {
+    background: #FFEBEE; color: #c62828;
+  }
+  .btn-availability.sold-out:hover { background: #ffcdd2; }
+  .list-item.sold-out .list-item-name {
+    text-decoration: line-through; opacity: 0.65;
+  }
+  .list-item.sold-out .list-item-meta { opacity: 0.55; }
 
   /* 폼 */
   form { display: none; }
@@ -484,6 +499,15 @@
       </div>
 
       <div class="field">
+        <label>운영 상태 <span class="label-hint">(품절은 텍스트·카드 데이터에서 제외)</span></label>
+        <div class="segmented cols-2" role="radiogroup" aria-label="운영 상태">
+          <button type="button" data-availability="운영">🟢 운영</button>
+          <button type="button" data-availability="품절">⛔ 품절</button>
+        </div>
+        <input type="hidden" name="availability" id="field-availability" value="운영">
+      </div>
+
+      <div class="field">
         <label for="field-cup-notes" class="req">컵노트</label>
         <textarea id="field-cup-notes" name="cup_notes"
                   placeholder="예: 자몽, 블랙베리, 다크초콜릿"
@@ -638,15 +662,18 @@ function renderList(items) {
     const serve = it["제공일"]?.start || "";
     const status = it["상태"] || "";
     const statusCls = status.replace(/\s/g, "");
+    const availability = it["운영상태"] || "운영";
+    const isSold = availability === "품절";
     const dupBtn = status === "완료"
       ? `<button type="button" class="btn-duplicate" data-id="${it.id}">복제</button>`
       : "";
+    const availBtn = `<button type="button" class="btn-availability ${isSold ? 'sold-out' : ''}" data-id="${it.id}" data-availability="${availability}">${isSold ? '⛔ 품절' : '🟢 운영'}</button>`;
     const dateParts = [];
     if (roast) dateParts.push("🫘 " + roast);
     if (serve) dateParts.push("☕ " + serve);
     const dateStr = dateParts.join(" · ");
     return `
-      <div class="list-item" data-id="${it.id}">
+      <div class="list-item ${isSold ? 'sold-out' : ''}" data-id="${it.id}">
         <div class="list-item-main">
           <div class="list-item-name">${escapeHtml(it["커피"] || "(이름 없음)")}</div>
           <div class="list-item-meta">
@@ -655,6 +682,7 @@ function renderList(items) {
         </div>
         <div class="list-item-actions">
           ${status ? `<span class="status-chip status-${statusCls}">${status}</span>` : ""}
+          ${availBtn}
           ${dupBtn}
         </div>
       </div>
@@ -663,6 +691,7 @@ function renderList(items) {
   $$(".list-item").forEach((row) => {
     row.addEventListener("click", (e) => {
       if (e.target.closest(".btn-duplicate")) return;
+      if (e.target.closest(".btn-availability")) return;
       openEdit(parseInt(row.dataset.id, 10));
     });
   });
@@ -670,6 +699,22 @@ function renderList(items) {
     btn.addEventListener("click", (e) => {
       e.stopPropagation();
       openDuplicate(parseInt(btn.dataset.id, 10));
+    });
+  });
+  $$(".btn-availability").forEach((btn) => {
+    btn.addEventListener("click", async (e) => {
+      e.stopPropagation();
+      const id = parseInt(btn.dataset.id, 10);
+      const next = btn.dataset.availability === "품절" ? "운영" : "품절";
+      btn.disabled = true;
+      try {
+        await api("PUT", "/api/coffee/" + id, { availability: next });
+        showToast(next === "품절" ? "품절로 변경" : "운영으로 변경");
+        await loadList();
+      } catch (err) {
+        if (err.message !== "unauthorized") showBanner("변경 실패: " + err.message, "error");
+        btn.disabled = false;
+      }
     });
   });
 }
@@ -798,6 +843,8 @@ function openNew() {
   syncCategory("");
   $("#field-brewed-at").value = "";
   $("#field-roast-point").value = "";
+  $("#field-availability").value = "운영";
+  syncAvailability("운영");
   $("#btn-delete").style.display = "none";
   $("#field-serve-date").value = "";
   clearErrors();
@@ -828,6 +875,8 @@ async function openDuplicate(id) {
     $("#field-roast-point").value = it["로스팅 포인트"] != null ? it["로스팅 포인트"] : "";
     $("#field-status").value = "예정";
     syncSegmented("예정");
+    $("#field-availability").value = "운영";
+    syncAvailability("운영");
     $("#field-serve-date").value = "";
     $("#btn-delete").style.display = "none";
     clearErrors();
@@ -863,6 +912,9 @@ async function openEdit(id) {
     const status = it["상태"] || "예정";
     $("#field-status").value = status;
     syncSegmented(status);
+    const editAv = it["운영상태"] || "운영";
+    $("#field-availability").value = editAv;
+    syncAvailability(editAv);
     $("#field-serve-date").value = (it["제공일"] && it["제공일"].start) || "";
     $("#btn-delete").style.display = "";
     clearErrors();
@@ -906,6 +958,22 @@ $$(".segmented button[data-category]").forEach((b) => {
     const next = cur === b.dataset.category ? "" : b.dataset.category;
     $("#field-category").value = next;
     syncCategory(next);
+  });
+});
+
+function syncAvailability(av) {
+  const v = av || "운영";
+  $$(".segmented button[data-availability]").forEach((b) => {
+    const on = b.dataset.availability === v;
+    b.classList.toggle("active", on);
+    b.setAttribute("aria-pressed", on ? "true" : "false");
+  });
+}
+
+$$(".segmented button[data-availability]").forEach((b) => {
+  b.addEventListener("click", () => {
+    $("#field-availability").value = b.dataset.availability;
+    syncAvailability(b.dataset.availability);
   });
 });
 
@@ -963,6 +1031,7 @@ form.addEventListener("submit", async (e) => {
     category: $("#field-category").value || null,
     brewed_at: brewedAtRaw === "" ? null : Number(brewedAtRaw),
     roast_point: roastPointRaw === "" ? null : Number(roastPointRaw),
+    availability: $("#field-availability").value || "운영",
   };
 
   try {
@@ -1104,7 +1173,8 @@ $("#btn-copy").addEventListener("click", async () => {
 async function openTextDump() {
   try {
     const data = await api("GET", "/api/coffee/all");
-    const items = data.items || [];
+    // 품절 항목은 텍스트·카드 참조 데이터에서 제외
+    const items = (data.items || []).filter((it) => (it["운영상태"] || "운영") !== "품절");
     const sorted = items.slice().sort((a, b) => {
       const ad = (a["로스팅"] && a["로스팅"].start) || "";
       const bd = (b["로스팅"] && b["로스팅"].start) || "";
