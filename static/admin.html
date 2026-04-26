@@ -75,6 +75,109 @@
     font-family: inherit;
   }
   .btn-text:hover { background: #e6ddd0; }
+
+  /* 달력 모달 */
+  .calendar-backdrop {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.6);
+    display: flex; align-items: flex-start; justify-content: center;
+    padding: 24px 16px; z-index: 250; overflow-y: auto;
+  }
+  .calendar-backdrop.hidden { display: none; }
+  .calendar-panel {
+    background: white; border-radius: var(--radius);
+    width: 100%; max-width: 1200px; padding: 20px;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.25);
+  }
+  .calendar-header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 16px; gap: 12px; flex-wrap: wrap;
+  }
+  .calendar-nav { display: flex; align-items: center; gap: 12px; }
+  .calendar-nav h2 {
+    color: var(--coffee-dark); font-size: 1.3rem;
+    min-width: 140px; text-align: center;
+  }
+  .calendar-nav button {
+    background: var(--coffee-dark); color: white; border: none;
+    width: 40px; height: 40px; border-radius: 8px; font-size: 1.3rem;
+    cursor: pointer; line-height: 1;
+  }
+  .calendar-nav button:hover { background: var(--coffee-mid); }
+  .cal-today-btn {
+    background: #f0ebe4 !important; color: var(--coffee-dark) !important;
+    width: auto !important; padding: 0 14px; font-size: 0.85rem !important;
+    font-weight: 600;
+  }
+  .cal-close {
+    background: transparent; color: var(--muted); border: none;
+    font-size: 1.6rem; cursor: pointer; padding: 4px 12px; line-height: 1;
+  }
+  .cal-close:hover { color: var(--coffee-dark); }
+
+  .calendar-grid {
+    display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px;
+  }
+  .cal-day-header {
+    text-align: center; font-weight: 700; padding: 8px 0;
+    font-size: 0.9rem; color: var(--coffee-dark);
+  }
+  .cal-day-header.sun { color: #c62828; }
+  .cal-day-header.sat { color: #1565c0; }
+
+  .cal-cell {
+    min-height: 140px; padding: 6px;
+    background: #faf8f5; border-radius: 6px;
+    display: flex; flex-direction: column; gap: 4px;
+    overflow: hidden; border: 1px solid transparent;
+  }
+  .cal-cell-out { background: #f0ede8; opacity: 0.6; }
+  .cal-cell-today { border-color: var(--accent); background: #fff8f0; }
+
+  .cal-date {
+    font-size: 0.85rem; color: var(--muted); font-weight: 600;
+    padding: 2px 4px;
+  }
+  .cal-date.sun { color: #c62828; }
+  .cal-date.sat { color: #1565c0; }
+  .cal-date-today {
+    background: var(--accent); color: white !important;
+    border-radius: 12px; padding: 2px 10px; align-self: flex-start;
+  }
+
+  .cal-coffees {
+    display: flex; flex-direction: column; gap: 4px;
+    flex: 1; overflow: hidden;
+  }
+  .cal-coffee {
+    background: white; padding: 6px 8px; border-radius: 4px;
+    border-left: 3px solid var(--accent);
+  }
+  .cal-coffee-name {
+    font-weight: 700; color: var(--coffee-dark);
+    font-size: 1rem; line-height: 1.3;
+    overflow: hidden; text-overflow: ellipsis;
+    word-break: keep-all;
+  }
+  .cal-coffee-roast {
+    font-size: 0.72rem; color: var(--muted); margin-top: 2px;
+  }
+  .cal-coffee-cup {
+    font-size: 0.78rem; color: var(--text); margin-top: 4px;
+    line-height: 1.35;
+  }
+
+  @media (max-width: 720px) {
+    .calendar-panel { padding: 12px; }
+    .cal-cell { min-height: 92px; padding: 3px; gap: 2px; }
+    .cal-coffee { padding: 4px 5px; }
+    .cal-coffee-name { font-size: 0.78rem; }
+    .cal-coffee-roast { font-size: 0.62rem; }
+    .cal-coffee-cup { font-size: 0.68rem; line-height: 1.25; }
+    .cal-date { font-size: 0.72rem; padding: 1px 3px; }
+    .cal-day-header { font-size: 0.78rem; padding: 4px 0; }
+    .calendar-nav h2 { font-size: 1.05rem; min-width: 110px; }
+    .calendar-nav button { width: 34px; height: 34px; font-size: 1.1rem; }
+  }
   .list-items { display: flex; flex-direction: column; gap: 8px; }
   .list-item {
     display: flex; justify-content: space-between; align-items: center;
@@ -295,6 +398,7 @@
     <div class="list-header">
       <h2>기록된 커피</h2>
       <div class="header-actions">
+        <button class="btn-text" type="button" id="btn-calendar">📅 달력</button>
         <button class="btn-text" type="button" id="btn-text">📋 텍스트</button>
         <button class="btn-new" type="button" id="btn-new">+ 새로 추가</button>
       </div>
@@ -406,6 +510,22 @@
       </div>
     </form>
   </section>
+</div>
+
+<!-- 달력 모달 -->
+<div class="calendar-backdrop hidden" id="calendar-modal">
+  <div class="calendar-panel">
+    <div class="calendar-header">
+      <div class="calendar-nav">
+        <button type="button" id="cal-prev" aria-label="이전 달">‹</button>
+        <h2 id="cal-title">—</h2>
+        <button type="button" id="cal-next" aria-label="다음 달">›</button>
+        <button type="button" id="cal-today" class="cal-today-btn">오늘</button>
+      </div>
+      <button type="button" class="cal-close" id="cal-close" aria-label="닫기">✕</button>
+    </div>
+    <div class="calendar-grid" id="calendar-grid"></div>
+  </div>
 </div>
 
 <!-- 텍스트 팝업 모달 -->
@@ -864,6 +984,103 @@ form.addEventListener("submit", async (e) => {
 
 $("#btn-cancel").addEventListener("click", showList);
 $("#btn-new").addEventListener("click", openNew);
+
+// ---------- 달력 ----------
+let calendarMonth = null;
+let calendarItems = null;
+
+$("#btn-calendar").addEventListener("click", openCalendar);
+$("#cal-close").addEventListener("click", () => $("#calendar-modal").classList.add("hidden"));
+$("#cal-prev").addEventListener("click", () => changeCalendarMonth(-1));
+$("#cal-next").addEventListener("click", () => changeCalendarMonth(1));
+$("#cal-today").addEventListener("click", () => {
+  const now = new Date();
+  calendarMonth = { year: now.getFullYear(), month: now.getMonth() };
+  renderCalendar();
+});
+
+async function openCalendar() {
+  const now = new Date();
+  calendarMonth = { year: now.getFullYear(), month: now.getMonth() };
+  try {
+    const data = await api("GET", "/api/coffee/all");
+    calendarItems = data.items || [];
+    renderCalendar();
+    $("#calendar-modal").classList.remove("hidden");
+  } catch (e) {
+    if (e.message !== "unauthorized") showBanner("달력 로드 실패: " + e.message, "error");
+  }
+}
+
+function changeCalendarMonth(delta) {
+  const d = new Date(calendarMonth.year, calendarMonth.month + delta, 1);
+  calendarMonth = { year: d.getFullYear(), month: d.getMonth() };
+  renderCalendar();
+}
+
+function ymdLocal(d) {
+  return d.getFullYear() + "-" +
+         String(d.getMonth() + 1).padStart(2, "0") + "-" +
+         String(d.getDate()).padStart(2, "0");
+}
+
+function renderCalendar() {
+  const { year, month } = calendarMonth;
+  $("#cal-title").textContent = year + "년 " + (month + 1) + "월";
+
+  // 제공일 → 항목 매핑
+  const byDate = {};
+  for (const it of (calendarItems || [])) {
+    const d = (it["제공일"] && it["제공일"].start) || "";
+    if (!d) continue;
+    (byDate[d] = byDate[d] || []).push(it);
+  }
+
+  // 첫 주 일요일 ~ 마지막 주 토요일까지 (이전·다음달 패딩 포함)
+  const firstOfMonth = new Date(year, month, 1);
+  const lastOfMonth = new Date(year, month + 1, 0);
+  const gridStart = new Date(year, month, 1 - firstOfMonth.getDay());
+  const gridEnd = new Date(year, month + 1, 6 - lastOfMonth.getDay());
+
+  const dayLabels = ["일", "월", "화", "수", "목", "금", "토"];
+  const dayCls = ["sun", "", "", "", "", "", "sat"];
+  let html = "";
+  for (let i = 0; i < 7; i++) {
+    html += `<div class="cal-day-header ${dayCls[i]}">${dayLabels[i]}</div>`;
+  }
+
+  const today = ymdLocal(new Date());
+  const cur = new Date(gridStart);
+  while (cur <= gridEnd) {
+    const ymd = ymdLocal(cur);
+    const dow = cur.getDay();
+    const inMonth = (cur.getMonth() === month);
+    const isToday = (ymd === today);
+    const items = byDate[ymd] || [];
+
+    let cell = `<div class="cal-cell ${inMonth ? "" : "cal-cell-out"} ${isToday ? "cal-cell-today" : ""}">`;
+    cell += `<div class="cal-date ${dayCls[dow]} ${isToday ? "cal-date-today" : ""}">${cur.getDate()}</div>`;
+    if (items.length) {
+      cell += `<div class="cal-coffees">`;
+      for (const it of items) {
+        const name = escapeHtml(it["커피"] || "");
+        const roast = (it["로스팅"] && it["로스팅"].start) || "";
+        const cup = escapeHtml(it["컵노트"] || "");
+        cell += `<div class="cal-coffee">`;
+        cell += `<div class="cal-coffee-name">${name}</div>`;
+        if (roast) cell += `<div class="cal-coffee-roast">🫘 ${escapeHtml(roast)}</div>`;
+        if (cup) cell += `<div class="cal-coffee-cup">${cup}</div>`;
+        cell += `</div>`;
+      }
+      cell += `</div>`;
+    }
+    cell += `</div>`;
+    html += cell;
+    cur.setDate(cur.getDate() + 1);
+  }
+
+  $("#calendar-grid").innerHTML = html;
+}
 
 // ---------- 텍스트 덤프 ----------
 $("#btn-text").addEventListener("click", openTextDump);
