@@ -67,6 +67,14 @@
     cursor: pointer; min-height: 44px; font-weight: 600;
   }
   .btn-new:hover { background: var(--coffee-mid); }
+  .header-actions { display: flex; gap: 8px; flex-shrink: 0; }
+  .btn-text {
+    background: #f0ebe4; color: var(--coffee-dark); border: none;
+    padding: 10px 14px; border-radius: 8px; font-size: 0.9rem;
+    cursor: pointer; min-height: 44px; font-weight: 600;
+    font-family: inherit;
+  }
+  .btn-text:hover { background: #e6ddd0; }
   .list-items { display: flex; flex-direction: column; gap: 8px; }
   .list-item {
     display: flex; justify-content: space-between; align-items: center;
@@ -286,7 +294,10 @@
   <section id="list-view" class="card">
     <div class="list-header">
       <h2>기록된 커피</h2>
-      <button class="btn-new" type="button" id="btn-new">+ 새로 추가</button>
+      <div class="header-actions">
+        <button class="btn-text" type="button" id="btn-text">📋 텍스트</button>
+        <button class="btn-new" type="button" id="btn-new">+ 새로 추가</button>
+      </div>
     </div>
     <div id="list-items" class="list-items">
       <div class="empty">불러오는 중...</div>
@@ -395,6 +406,25 @@
       </div>
     </form>
   </section>
+</div>
+
+<!-- 텍스트 팝업 모달 -->
+<div class="modal-backdrop hidden" id="text-modal">
+  <div class="modal" style="max-width: 560px;">
+    <div style="display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:12px;">
+      <h2>커피 텍스트 (로스팅 최신순)</h2>
+      <button type="button" class="btn-text" id="btn-copy">📋 복사하기</button>
+    </div>
+    <textarea id="text-output" readonly
+              style="width:100%; min-height:360px; max-height:60vh; padding:12px;
+                     font-family: ui-monospace, Menlo, Consolas, monospace;
+                     font-size:0.82rem; line-height:1.5;
+                     border:1.5px solid var(--border); border-radius:8px;
+                     background:#faf8f5; color:var(--text); resize:vertical;"></textarea>
+    <div class="button-bar">
+      <button type="button" class="btn btn-secondary" id="btn-text-close">닫기</button>
+    </div>
+  </div>
 </div>
 
 <!-- PIN 모달 -->
@@ -834,6 +864,52 @@ form.addEventListener("submit", async (e) => {
 
 $("#btn-cancel").addEventListener("click", showList);
 $("#btn-new").addEventListener("click", openNew);
+
+// ---------- 텍스트 덤프 ----------
+$("#btn-text").addEventListener("click", openTextDump);
+$("#btn-text-close").addEventListener("click", () => $("#text-modal").classList.add("hidden"));
+$("#btn-copy").addEventListener("click", async () => {
+  const ta = $("#text-output");
+  const text = ta.value;
+  if (!text) { showToast("복사할 내용이 없습니다"); return; }
+  try {
+    await navigator.clipboard.writeText(text);
+    showToast("복사되었습니다");
+  } catch (e) {
+    ta.removeAttribute("readonly");
+    ta.select();
+    try { document.execCommand("copy"); showToast("복사되었습니다"); }
+    catch (err) { showToast("복사 실패 — 직접 선택해 복사하세요"); }
+    ta.setAttribute("readonly", "");
+  }
+});
+
+async function openTextDump() {
+  try {
+    const data = await api("GET", "/api/coffee/all");
+    const items = data.items || [];
+    const sorted = items.slice().sort((a, b) => {
+      const ad = (a["로스팅"] && a["로스팅"].start) || "";
+      const bd = (b["로스팅"] && b["로스팅"].start) || "";
+      return bd.localeCompare(ad);
+    });
+    const seen = new Set();
+    const lines = [];
+    const flat = (s) => String(s || "").trim().replace(/\s*\n\s*/g, " ");
+    for (const it of sorted) {
+      const name = flat(it["커피"]);
+      if (!name) continue;
+      const key = name.toLowerCase();
+      if (seen.has(key)) continue;
+      seen.add(key);
+      lines.push([name, flat(it["프로세싱"]), flat(it["컵노트"]), flat(it["감상"])].join(", "));
+    }
+    $("#text-output").value = lines.join("\n");
+    $("#text-modal").classList.remove("hidden");
+  } catch (e) {
+    if (e.message !== "unauthorized") showBanner("텍스트 생성 실패: " + e.message, "error");
+  }
+}
 
 $("#btn-delete").addEventListener("click", async () => {
   if (!editingId) return;
