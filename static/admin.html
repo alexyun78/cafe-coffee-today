@@ -149,30 +149,29 @@
     flex: 1; overflow: hidden;
   }
   .cal-coffee {
-    background: white; padding: 6px 8px; border-radius: 4px;
-    border-left: 3px solid var(--accent);
+    padding: 6px 8px; border-radius: 5px;
+    border-left: 4px solid transparent;
   }
   .cal-coffee-name {
-    font-weight: 700; color: var(--coffee-dark);
-    font-size: 1rem; line-height: 1.3;
+    font-weight: 700; font-size: 0.95rem; line-height: 1.3;
     overflow: hidden; text-overflow: ellipsis;
     word-break: keep-all;
   }
   .cal-coffee-roast {
-    font-size: 0.72rem; color: var(--muted); margin-top: 2px;
+    font-size: 0.72rem; margin-top: 2px; opacity: 0.85;
   }
-  .cal-coffee-cup {
-    font-size: 0.78rem; color: var(--text); margin-top: 4px;
-    line-height: 1.35;
-  }
+  /* 상태별 색상 (공개 페이지와 동일) */
+  .cal-coffee-예정    { background: #E1F5FE; border-left-color: #0277BD; color: #01579B; }
+  .cal-coffee-진행중  { background: #E8F5E9; border-left-color: #2E7D32; color: #1B5E20; }
+  .cal-coffee-완료    { background: #ECECEC; border-left-color: #757575; color: #424242; }
+  .cal-coffee-soldout .cal-coffee-name { text-decoration: line-through; opacity: 0.7; }
 
   @media (max-width: 720px) {
     .calendar-panel { padding: 12px; }
-    .cal-cell { min-height: 92px; padding: 3px; gap: 2px; }
+    .cal-cell { min-height: 88px; padding: 3px; gap: 2px; }
     .cal-coffee { padding: 4px 5px; }
-    .cal-coffee-name { font-size: 0.78rem; }
+    .cal-coffee-name { font-size: 0.75rem; }
     .cal-coffee-roast { font-size: 0.62rem; }
-    .cal-coffee-cup { font-size: 0.68rem; line-height: 1.25; }
     .cal-date { font-size: 0.72rem; padding: 1px 3px; }
     .cal-day-header { font-size: 0.78rem; padding: 4px 0; }
     .calendar-nav h2 { font-size: 1.05rem; min-width: 110px; }
@@ -1134,11 +1133,11 @@ function renderCalendar() {
       for (const it of items) {
         const name = escapeHtml(it["커피"] || "");
         const roast = (it["로스팅"] && it["로스팅"].start) || "";
-        const cup = escapeHtml(it["컵노트"] || "");
-        cell += `<div class="cal-coffee">`;
+        const statusCls = String(it["상태"] || "").replace(/\s/g, "");
+        const isSold = (it["운영상태"] || "운영") === "품절";
+        cell += `<div class="cal-coffee cal-coffee-${statusCls} ${isSold ? 'cal-coffee-soldout' : ''}">`;
         cell += `<div class="cal-coffee-name">${name}</div>`;
         if (roast) cell += `<div class="cal-coffee-roast">🫘 ${escapeHtml(roast)}</div>`;
-        if (cup) cell += `<div class="cal-coffee-cup">${cup}</div>`;
         cell += `</div>`;
       }
       cell += `</div>`;
