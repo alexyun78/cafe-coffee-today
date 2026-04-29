@@ -60,6 +60,13 @@ jobs:
       - name: Add Android platform
         run: npx cap add android
 
+      - name: Apply Android overrides (custom MainActivity with DownloadListener)
+        run: |
+          cp android-overrides/MainActivity.java \
+             android/app/src/main/java/com/cafe92/todaycoffee/MainActivity.java
+          echo "MainActivity.java overridden:"
+          head -20 android/app/src/main/java/com/cafe92/todaycoffee/MainActivity.java
+
       - name: Sync Capacitor
         run: npx cap sync android
 

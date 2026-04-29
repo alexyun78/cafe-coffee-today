@@ -740,6 +740,12 @@ function renderList(items) {
       btn.disabled = true;
       btn.innerHTML = '<span class="spinner" style="border-color:rgba(230,81,0,0.3);border-top-color:#E65100;"></span>';
       try {
+        // APK v1.0.6+: 네이티브 DownloadListener 사용 (시스템 다운로드 폴더에 직접 저장)
+        if (isAndroidWebView() && appVersionAtLeast("1.0.6")) {
+          downloadViaNativeListener(`/api/coffee/${id}/card.png`);
+          showToast("📥 다운로드 시작");
+          return;
+        }
         const res = await fetch(`/api/coffee/${id}/card.png`, { credentials: "include" });
         if (res.status === 401) { showPinModal(); return; }
         if (!res.ok) {
@@ -1249,6 +1255,27 @@ $("#btn-delete").addEventListener("click", async () => {
 // ---------- 이미지 저장/공유 ----------
 function isAndroidWebView() {
   return /Android.*wv\)|; wv\)/.test(navigator.userAgent);
+}
+
+function appVersionAtLeast(want) {
+  const m = navigator.userAgent.match(/CafeCoffeeApp\/([\d.]+)/);
+  if (!m) return false;
+  const cur = m[1].split(".").map(Number);
+  const tgt = want.split(".").map(Number);
+  for (let i = 0; i < tgt.length; i++) {
+    if ((cur[i] || 0) > tgt[i]) return true;
+    if ((cur[i] || 0) < tgt[i]) return false;
+  }
+  return true;
+}
+
+function downloadViaNativeListener(url) {
+  // APK v1.0.6+: MainActivity의 DownloadListener가 DownloadManager로 저장
+  const iframe = document.createElement("iframe");
+  iframe.style.display = "none";
+  iframe.src = url;
+  document.body.appendChild(iframe);
+  setTimeout(() => iframe.remove(), 30000);
 }
 
 async function saveOrShareImage(blob, filename) {
