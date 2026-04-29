@@ -50,6 +50,9 @@ else
   $SSH "cd /root/92cafe && git clone $REPO_URL cafe-today-coffee"
 fi
 
+echo "==> 시스템 패키지 (한글 폰트 — 카드 이미지 생성용)"
+$SSH "(dpkg -s fonts-nanum >/dev/null 2>&1) || (apt-get update -qq && apt-get install -y -qq fonts-nanum)"
+
 echo "==> Python venv + 의존성"
 $SSH "cd /root/92cafe/cafe-today-coffee && \
     (python3 -m venv .venv 2>/dev/null || true) && \

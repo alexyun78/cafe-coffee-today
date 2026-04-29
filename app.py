@@ -3,7 +3,9 @@
 공개 엔드포인트는 GET /, GET /api/coffee, GET /apk.
 관리 엔드포인트는 세션 기반 PIN 인증 필요.
 """
+import io
 import os
+import re
 from datetime import date
 from functools import wraps
 
@@ -188,6 +190,32 @@ def api_delete(coffee_id):
 @require_pin
 def api_suggestions():
     return jsonify({"success": True, **db.suggestions()})
+
+
+@app.get("/api/coffee/<int:coffee_id>/card.png")
+@require_pin
+def api_card_png(coffee_id):
+    item = db.get_by_id(coffee_id)
+    if not item:
+        return jsonify({"success": False, "error": "not found"}), 404
+    try:
+        from generate_bean_images import render_card_for_coffee
+        img = render_card_for_coffee(item)
+    except FileNotFoundError as e:
+        return jsonify({"success": False, "error": str(e)}), 500
+    except Exception as e:
+        import traceback
+        traceback.print_exc()
+        return jsonify({"success": False, "error": str(e)}), 500
+    buf = io.BytesIO()
+    img.save(buf, "PNG")
+    buf.seek(0)
+    raw_name = item.get("커피") or "card"
+    safe = re.sub(r'[\\/:*?"<>|]', "", raw_name).replace(" ", "_") or "card"
+    return send_file(
+        buf, mimetype="image/png", as_attachment=True,
+        download_name=f"{safe}.png",
+    )
 
 
 # ---------- 정적 페이지 ----------

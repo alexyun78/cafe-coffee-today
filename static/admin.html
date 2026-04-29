@@ -217,6 +217,13 @@
     background: #FFEBEE; color: #c62828;
   }
   .btn-availability.sold-out:hover { background: #ffcdd2; }
+  .btn-image {
+    background: #FFF3E0; color: #E65100; border: none;
+    padding: 6px 10px; border-radius: 14px; font-size: 0.75rem;
+    font-weight: 600; cursor: pointer; font-family: inherit;
+  }
+  .btn-image:hover { background: #FFE0B2; }
+  .btn-image:disabled { opacity: 0.6; cursor: wait; }
   .list-item.sold-out .list-item-name {
     text-decoration: line-through; opacity: 0.65;
   }
@@ -670,6 +677,7 @@ function renderList(items) {
       ? `<button type="button" class="btn-duplicate" data-id="${it.id}">복제</button>`
       : "";
     const availBtn = `<button type="button" class="btn-availability ${isSold ? 'sold-out' : ''}" data-id="${it.id}" data-availability="${availability}">${isSold ? '⛔ 품절' : '🟢 운영'}</button>`;
+    const imgBtn = `<button type="button" class="btn-image" data-id="${it.id}" data-name="${escapeAttr(it["커피"] || "card")}">🖼️ 이미지</button>`;
     const dateParts = [];
     if (roast) dateParts.push("🫘 " + roast);
     if (serve) dateParts.push("☕ " + serve);
@@ -685,6 +693,7 @@ function renderList(items) {
         <div class="list-item-actions">
           ${status ? `<span class="status-chip status-${statusCls}">${status}</span>` : ""}
           ${availBtn}
+          ${imgBtn}
           ${dupBtn}
         </div>
       </div>
@@ -694,6 +703,7 @@ function renderList(items) {
     row.addEventListener("click", (e) => {
       if (e.target.closest(".btn-duplicate")) return;
       if (e.target.closest(".btn-availability")) return;
+      if (e.target.closest(".btn-image")) return;
       openEdit(parseInt(row.dataset.id, 10));
     });
   });
@@ -718,6 +728,40 @@ function renderList(items) {
       } catch (err) {
         if (err.message !== "unauthorized") showBanner("변경 실패: " + err.message, "error");
         btn.disabled = false;
+      }
+    });
+  });
+  $$(".btn-image").forEach((btn) => {
+    btn.addEventListener("click", async (e) => {
+      e.stopPropagation();
+      const id = parseInt(btn.dataset.id, 10);
+      const name = btn.dataset.name || "card";
+      const original = btn.innerHTML;
+      btn.disabled = true;
+      btn.innerHTML = '<span class="spinner" style="border-color:rgba(230,81,0,0.3);border-top-color:#E65100;"></span>';
+      try {
+        const res = await fetch(`/api/coffee/${id}/card.png`, { credentials: "include" });
+        if (res.status === 401) { showPinModal(); return; }
+        if (!res.ok) {
+          const err = await res.json().catch(() => ({}));
+          throw new Error(err.error || `HTTP ${res.status}`);
+        }
+        const blob = await res.blob();
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        const safe = name.replace(/[\\/:*?"<>|]/g, "").replace(/\s+/g, "_") || "card";
+        a.href = url;
+        a.download = `${safe}.png`;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(url);
+        showToast("이미지 다운로드");
+      } catch (err) {
+        showBanner("이미지 생성 실패: " + err.message, "error");
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = original;
       }
     });
   });
