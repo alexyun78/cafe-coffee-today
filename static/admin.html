@@ -747,16 +747,8 @@ function renderList(items) {
           throw new Error(err.error || `HTTP ${res.status}`);
         }
         const blob = await res.blob();
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement("a");
         const safe = name.replace(/[\\/:*?"<>|]/g, "").replace(/\s+/g, "_") || "card";
-        a.href = url;
-        a.download = `${safe}.png`;
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
-        URL.revokeObjectURL(url);
-        showToast("이미지 다운로드");
+        await saveOrShareImage(blob, `${safe}.png`);
       } catch (err) {
         showBanner("이미지 생성 실패: " + err.message, "error");
       } finally {
@@ -1253,6 +1245,71 @@ $("#btn-delete").addEventListener("click", async () => {
     if (err.message !== "unauthorized") showBanner("삭제 실패: " + err.message, "error");
   }
 });
+
+// ---------- 이미지 저장/공유 ----------
+function isAndroidWebView() {
+  return /Android.*wv\)|; wv\)/.test(navigator.userAgent);
+}
+
+async function saveOrShareImage(blob, filename) {
+  // 1) Web Share API (Android 시스템 공유 시트 — 갤러리 저장 포함)
+  if (navigator.canShare && navigator.share) {
+    try {
+      const file = new File([blob], filename, { type: "image/png" });
+      if (navigator.canShare({ files: [file] })) {
+        await navigator.share({ files: [file], title: filename });
+        showToast("공유됨");
+        return;
+      }
+    } catch (e) {
+      if (e && e.name === "AbortError") return; // 사용자 취소
+      // 그 외 에러 → 폴백
+    }
+  }
+
+  // 2) 데스크톱/모바일 브라우저: anchor 다운로드
+  if (!isAndroidWebView()) {
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 30000);
+    showToast("이미지 다운로드");
+    return;
+  }
+
+  // 3) APK WebView 폴백: 미리보기 모달 — 길게 눌러 갤러리에 저장
+  showImagePreview(blob, filename);
+}
+
+function showImagePreview(blob, filename) {
+  const url = URL.createObjectURL(blob);
+  const wrap = document.createElement("div");
+  wrap.style.cssText =
+    "position:fixed;inset:0;background:rgba(0,0,0,0.85);" +
+    "display:flex;align-items:center;justify-content:center;" +
+    "padding:16px;z-index:300;";
+  wrap.innerHTML =
+    '<div style="background:white;border-radius:12px;padding:16px;max-width:92vw;' +
+    'max-height:92vh;display:flex;flex-direction:column;gap:12px;align-items:center;">' +
+    '<div style="font-weight:600;color:#6F4E37;font-size:0.95rem;text-align:center;">' +
+    '이미지를 길게 눌러 <span style="color:#D2691E;">갤러리에 저장</span>하세요' +
+    '</div>' +
+    '<img alt="' + escapeAttr(filename) + '" src="' + url + '" ' +
+    'style="max-width:100%;max-height:70vh;border-radius:8px;display:block;' +
+    '-webkit-touch-callout:default;user-select:none;">' +
+    '<button type="button" class="btn btn-secondary" ' +
+    'style="padding:10px 20px;border:none;border-radius:8px;' +
+    'background:#f0ebe4;color:#6F4E37;font-weight:600;cursor:pointer;">닫기</button>' +
+    '</div>';
+  const close = () => { wrap.remove(); URL.revokeObjectURL(url); };
+  wrap.querySelector("button").addEventListener("click", close);
+  wrap.addEventListener("click", (e) => { if (e.target === wrap) close(); });
+  document.body.appendChild(wrap);
+}
 
 // ---------- utils ----------
 function showBanner(msg, type) {
