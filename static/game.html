@@ -1,0 +1,1024 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>누가 쏠까?</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html, body {
+            min-height: 100vh;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            color: white;
+            line-height: 1.5;
+        }
+
+        body { padding: 20px; }
+
+        .container { max-width: 1200px; margin: 0 auto; }
+
+        .header {
+            text-align: center;
+            margin-bottom: 32px;
+            padding: 28px 20px;
+            background: linear-gradient(100deg,
+              #8B6914 0%, #B8860B 18%, #DAA520 32%,
+              #FFD700 45%, #FFF4B0 50%, #FFD700 55%,
+              #DAA520 68%, #B8860B 82%, #8B6914 100%);
+            background-size: 250% 100%;
+            animation: brassShimmer 3.2s linear infinite;
+            border-radius: 20px;
+            box-shadow:
+              0 8px 30px rgba(218,165,32,0.4),
+              inset 0 1px 0 rgba(255,255,255,0.55),
+              inset 0 -2px 4px rgba(139,105,20,0.5);
+        }
+        @keyframes brassShimmer {
+            0%   { background-position: 0%   50%; }
+            100% { background-position: 250% 50%; }
+        }
+        .header h1 {
+            font-size: 2.4rem;
+            color: #3d2518;
+            font-weight: 900;
+            line-height: 1.2;
+            text-shadow: 0 1px 1px rgba(255,248,180,0.7), 0 -1px 0 rgba(139,105,20,0.25);
+            letter-spacing: 0.5px;
+        }
+        .header .subtitle {
+            font-size: 1rem;
+            color: #4a2f10;
+            margin-top: 6px;
+            font-weight: 600;
+        }
+
+        /* ========== 게임 선택 ========== */
+        .game-select {
+            display: flex;
+            gap: 24px;
+            justify-content: center;
+            align-items: center;
+            min-height: 60vh;
+            padding: 20px;
+            flex-wrap: wrap;
+        }
+        .game-card {
+            flex: 1;
+            max-width: 240px;
+            min-width: 200px;
+            aspect-ratio: 1;
+            background: linear-gradient(145deg, #6F4E37 0%, #8B6F47 40%, #A0845C 100%);
+            border-radius: 28px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 18px;
+            color: white;
+            cursor: pointer;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.45), 0 4px 8px rgba(111,78,55,0.4);
+            transition: transform 0.3s, box-shadow 0.3s;
+            text-decoration: none;
+        }
+        .game-card:hover { transform: translateY(-6px); box-shadow: 0 18px 50px rgba(0,0,0,0.55); }
+        .game-card:active { transform: scale(0.96); }
+        .game-card-icon { font-size: 4rem; }
+        .game-card-label { font-size: 1.3rem; font-weight: 800; letter-spacing: 1px; }
+
+        /* ========== 손가락 게임 ========== */
+        .finger-game {
+            position: fixed; inset: 0; z-index: 3000;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            display: none; flex-direction: column;
+            touch-action: none; user-select: none;
+            -webkit-user-select: none;
+        }
+        .finger-game.active { display: flex; }
+        .finger-game-header {
+            position: relative;
+            padding: 28px 64px 22px;
+            color: white;
+        }
+        .finger-game-status {
+            font-size: 2.4rem;
+            font-weight: 900;
+            color: white;
+            text-align: center;
+            letter-spacing: -0.02em;
+            line-height: 1.1;
+            text-shadow: 0 2px 16px rgba(0,0,0,0.35);
+            transition: color 0.2s;
+        }
+        .finger-game-status.countdown {
+            font-size: 6.5rem;
+            color: #FFD700;
+            animation: countdownPulse 0.5s ease-out;
+        }
+        .finger-game-status.winner {
+            font-size: 2.8rem;
+            color: #FFD700;
+        }
+        @keyframes countdownPulse {
+            0% { transform: scale(1.6); opacity: 0.3; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .finger-game-close {
+            position: absolute; top: 16px; right: 16px;
+            width: 36px; height: 36px;
+            border-radius: 50%; border: none;
+            background: rgba(255,255,255,0.15); color: white;
+            font-size: 1.3rem; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .finger-game-area {
+            flex: 1; position: relative; overflow: hidden;
+        }
+        .touch-circle {
+            position: absolute; width: 110px; height: 110px;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            animation: touchPulse 1.5s ease-in-out infinite;
+            transition: width 0.4s, height 0.4s, opacity 0.4s;
+            pointer-events: none;
+        }
+        .touch-label {
+            position: absolute;
+            left: 50%;
+            bottom: 100%;
+            transform: translateX(-50%);
+            margin-bottom: 10px;
+            color: white;
+            font-weight: 900;
+            font-size: 1.35rem;
+            text-shadow: 0 2px 6px rgba(0,0,0,0.85), 0 0 12px rgba(0,0,0,0.5);
+            pointer-events: none;
+            white-space: nowrap;
+            transition: font-size 0.4s, margin-bottom 0.4s;
+        }
+        .touch-circle.loser {
+            opacity: 0 !important;
+            transform: translate(-50%, -50%) scale(0.3) !important;
+        }
+        .touch-circle.winner {
+            animation: winnerGlow 0.6s ease-in-out infinite alternate !important;
+            width: 280px !important; height: 280px !important;
+            z-index: 10;
+        }
+        .touch-circle.winner .touch-label {
+            font-size: 2.8rem;
+            margin-bottom: 18px;
+        }
+        @keyframes touchPulse {
+            0%, 100% { box-shadow: 0 0 0 0 currentColor; }
+            50% { box-shadow: 0 0 20px 8px currentColor; }
+        }
+        @keyframes winnerGlow {
+            from { box-shadow: 0 0 30px 10px currentColor; transform: translate(-50%,-50%) scale(1); }
+            to { box-shadow: 0 0 60px 24px currentColor; transform: translate(-50%,-50%) scale(1.08); }
+        }
+
+        /* ========== 룰렛 게임 ========== */
+        .roulette-game {
+            position: fixed; inset: 0; z-index: 3000;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            display: none; flex-direction: column; align-items: center;
+            overflow-y: auto;
+        }
+        .roulette-game.active { display: flex; }
+        .roulette-game-header {
+            width: 100%; padding: 16px 20px;
+            display: flex; justify-content: space-between; align-items: center;
+            color: white;
+        }
+        .roulette-game-title { font-size: 1.1rem; font-weight: 600; }
+        .roulette-game-close {
+            width: 36px; height: 36px; border-radius: 50%; border: none;
+            background: rgba(255,255,255,0.15); color: white;
+            font-size: 1.3rem; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .roulette-setup {
+            flex: 1; display: flex; flex-direction: column;
+            align-items: center; justify-content: center; gap: 30px;
+            color: white;
+        }
+        .roulette-count-row {
+            display: flex; align-items: center; gap: 24px;
+        }
+        .roulette-count-btn {
+            width: 56px; height: 56px; border-radius: 50%;
+            border: 2px solid rgba(255,255,255,0.3); background: rgba(255,255,255,0.1);
+            color: white; font-size: 1.8rem; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            transition: background 0.2s;
+        }
+        .roulette-count-btn:hover { background: rgba(255,255,255,0.2); }
+        .roulette-count-btn:active { transform: scale(0.9); }
+        .roulette-count-num {
+            font-size: 5rem; font-weight: 900; min-width: 80px; text-align: center;
+        }
+        .roulette-start-btn {
+            padding: 18px 60px; border: none; border-radius: 16px;
+            background: linear-gradient(135deg, #FF8C00, #FF6B00);
+            color: white; font-size: 1.3rem; font-weight: 700;
+            cursor: pointer; letter-spacing: 2px;
+            box-shadow: 0 6px 25px rgba(255,140,0,0.4);
+            transition: transform 0.2s, box-shadow 0.2s;
+            font-family: inherit;
+        }
+        .roulette-start-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(255,140,0,0.5); }
+        .roulette-start-btn:active { transform: scale(0.96); }
+        .roulette-cards-phase {
+            flex: 1; display: none; flex-direction: column;
+            align-items: center; padding: 20px; width: 100%;
+        }
+        .roulette-cards-phase.active { display: flex; }
+        .roulette-instruction {
+            color: rgba(255,255,255,0.8); font-size: 1rem;
+            margin-bottom: 24px; text-align: center;
+        }
+        .roulette-cards-grid {
+            display: flex; flex-wrap: wrap; gap: 28px;
+            justify-content: center; max-width: 100%;
+            padding: 10px;
+        }
+        .roulette-card {
+            width: 256px; height: 352px;
+            border-radius: 24px; cursor: pointer;
+            perspective: 1200px; position: relative;
+            touch-action: manipulation;
+        }
+        .roulette-card-inner {
+            width: 100%; height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.6s;
+            pointer-events: none;
+        }
+        .roulette-card.flipped .roulette-card-inner {
+            transform: rotateY(180deg);
+        }
+        .roulette-card-front, .roulette-card-back {
+            position: absolute; inset: 0;
+            border-radius: 24px;
+            display: flex; align-items: center; justify-content: center;
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+            pointer-events: none;
+        }
+        .roulette-card-front {
+            background: linear-gradient(145deg, #6F4E37, #A0845C);
+            color: rgba(255,255,255,0.45); font-size: 6rem;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+        }
+        .roulette-card-back {
+            background: white;
+            color: #fff;
+            font-size: 7rem; font-weight: 900;
+            text-shadow: 0 3px 14px rgba(0,0,0,0.4), 0 1px 2px rgba(0,0,0,0.5);
+            transform: rotateY(180deg);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+        }
+        .roulette-spin-phase {
+            flex: 1; display: none; flex-direction: column;
+            align-items: center; justify-content: center;
+            padding: 20px; width: 100%;
+        }
+        .roulette-spin-phase.active { display: flex; }
+        .roulette-wheel-container {
+            position: relative;
+            width: min(92vw, 75vh);
+            height: min(92vw, 75vh);
+            margin: 30px 0;
+        }
+        .roulette-wheel {
+            width: 100%; height: 100%;
+            border-radius: 50%;
+            border: 6px solid rgba(255,255,255,0.35);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.35), inset 0 0 20px rgba(0,0,0,0.15);
+        }
+        .roulette-wheel svg {
+            width: 100% !important;
+            height: 100% !important;
+            display: block;
+        }
+        .close-hint {
+            position: absolute;
+            top: 64px; left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255,107,0,0.95);
+            color: white;
+            font-size: 1.2rem; font-weight: 800;
+            padding: 10px 22px;
+            border-radius: 22px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.35);
+            letter-spacing: 0.3px;
+            z-index: 20;
+            white-space: nowrap;
+            animation: closeHintPulse 0.4s ease-out;
+        }
+        @keyframes closeHintPulse {
+            0% { transform: translate(-50%, -8px) scale(1.15); opacity: 0.4; }
+            100% { transform: translate(-50%, 0) scale(1); opacity: 1; }
+        }
+        .roulette-pointer {
+            position: absolute; top: -28px; left: 50%;
+            transform: translateX(-50%);
+            width: 0; height: 0;
+            border-left: 26px solid transparent;
+            border-right: 26px solid transparent;
+            border-top: 44px solid #FF6B00;
+            z-index: 5;
+            filter: drop-shadow(0 3px 8px rgba(0,0,0,0.45));
+        }
+
+        /* ========== 공통 당첨 오버레이 ========== */
+        .winner-overlay {
+            position: fixed; inset: 0; z-index: 4000;
+            background: rgba(0,0,0,0.85);
+            display: none; flex-direction: column;
+            align-items: center; justify-content: center;
+            color: white;
+        }
+        .winner-overlay.active { display: flex; }
+        .winner-message {
+            font-size: 2rem; font-weight: 800;
+            text-align: center;
+            animation: winnerAppear 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+            line-height: 1.4;
+        }
+        .winner-sub {
+            font-size: 1.1rem; color: rgba(255,255,255,0.7);
+            margin-top: 16px;
+            animation: winnerAppear 0.8s 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+        }
+        .winner-emoji {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            animation: winnerAppear 0.8s 0.1s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+        }
+        @keyframes winnerAppear {
+            from { opacity: 0; transform: scale(0.5) translateY(30px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+        .confetti-piece {
+            position: fixed;
+            width: 10px; height: 10px;
+            top: -10px;
+            z-index: 4001;
+            animation: confettiFall linear forwards;
+        }
+        @keyframes confettiFall {
+            to { top: 110vh; transform: rotate(720deg); }
+        }
+
+        @media (max-width: 768px) {
+            body { padding: 10px; }
+            .header { padding: 20px 15px; margin-bottom: 22px; }
+            .header h1 { font-size: 1.8rem; }
+            .header .subtitle { font-size: 0.9rem; }
+            .game-select { flex-direction: column; gap: 16px; min-height: 50vh; }
+            .game-card { max-width: 220px; width: 80%; }
+            .roulette-count-num { font-size: 4rem; }
+            .roulette-card { width: 232px; height: 320px; }
+            .roulette-card-front { font-size: 5.5rem; }
+            .roulette-card-back { font-size: 6.4rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎲 누가 쏠까?</h1>
+            <p class="subtitle">오늘 커피 한 잔, 누가 쏠지 정해볼까요?</p>
+        </div>
+
+        <div class="game-select">
+            <div class="game-card" onclick="startFingerGame()">
+                <div class="game-card-icon">👆</div>
+                <div class="game-card-label">손가락</div>
+            </div>
+            <div class="game-card" onclick="startRouletteGame()">
+                <div class="game-card-icon">🎡</div>
+                <div class="game-card-label">룰렛</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 손가락 게임 풀스크린 -->
+    <div class="finger-game" id="finger-game">
+        <div class="finger-game-header">
+            <button class="finger-game-close" onclick="closeFingerGame()">&times;</button>
+            <div class="finger-game-status" id="finger-status">손가락을 대세요</div>
+        </div>
+        <div class="finger-game-area" id="finger-area"></div>
+    </div>
+
+    <!-- 룰렛 게임 풀스크린 -->
+    <div class="roulette-game" id="roulette-game">
+        <div class="roulette-game-header">
+            <span class="roulette-game-title">🎡 룰렛</span>
+            <button class="roulette-game-close" onclick="closeRouletteGame()">&times;</button>
+        </div>
+        <div class="close-hint" id="roulette-close-hint" style="display:none;"></div>
+        <div class="roulette-setup" id="roulette-setup">
+            <div class="roulette-count-row">
+                <button class="roulette-count-btn" onclick="changeRouletteCount(-1)">−</button>
+                <div class="roulette-count-num" id="roulette-count">2</div>
+                <button class="roulette-count-btn" onclick="changeRouletteCount(1)">+</button>
+            </div>
+            <button class="roulette-start-btn" onclick="startRouletteCards()">START</button>
+        </div>
+        <div class="roulette-cards-phase" id="roulette-cards-phase">
+            <div class="roulette-instruction" id="roulette-instruction">한 명씩 카드를 누르세요</div>
+            <div class="roulette-cards-grid" id="roulette-cards-grid"></div>
+        </div>
+        <div class="roulette-spin-phase" id="roulette-spin-phase">
+            <div class="roulette-wheel-container">
+                <div class="roulette-pointer"></div>
+                <div class="roulette-wheel" id="roulette-wheel"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 공통 당첨 오버레이 -->
+    <div class="winner-overlay" id="winner-overlay">
+        <div class="winner-emoji" id="winner-emoji">🎉</div>
+        <div class="winner-message" id="winner-message"></div>
+        <div class="winner-sub">덕분에 잘 먹겠습니다</div>
+    </div>
+
+    <script>
+        // ========== 공통 색상 ==========
+        const COLORS = [
+          '#FF6B6B','#4ECDC4','#45B7D1','#FFA07A','#98D8C8',
+          '#F7DC6F','#BB8FCE','#85C1E9','#F1948A','#82E0AA'
+        ];
+
+        function showWinner(message, callback) {
+          const overlay = document.getElementById('winner-overlay');
+          const msgEl = document.getElementById('winner-message');
+          msgEl.textContent = message;
+          overlay.classList.add('active');
+          spawnConfetti();
+          setTimeout(() => {
+            overlay.classList.remove('active');
+            document.querySelectorAll('.confetti-piece').forEach(c => c.remove());
+            if (callback) callback();
+          }, 3000);
+        }
+
+        function spawnConfetti() {
+          for (let i = 0; i < 40; i++) {
+            const c = document.createElement('div');
+            c.className = 'confetti-piece';
+            c.style.left = Math.random() * 100 + 'vw';
+            c.style.background = COLORS[Math.floor(Math.random() * COLORS.length)];
+            c.style.animationDuration = (1.5 + Math.random() * 2) + 's';
+            c.style.animationDelay = Math.random() * 0.5 + 's';
+            c.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+            c.style.width = (6 + Math.random() * 8) + 'px';
+            c.style.height = (6 + Math.random() * 8) + 'px';
+            document.body.appendChild(c);
+          }
+        }
+
+        // ========== 손가락 게임 ==========
+        const ANIMALS = ['사자','호랑이','양','고양이','강아지','얼룩말','기린','낙타','사슴','악어','코끼리','공작새','고래'];
+        const FINGER_COLORS = [
+          '#FF6B6B','#4ECDC4','#45B7D1','#FFA07A','#98D8C8',
+          '#F7DC6F','#BB8FCE','#85C1E9','#F1948A','#82E0AA',
+          '#F39C12','#E74C3C','#9B59B6'
+        ];
+
+        let fingerTouches = {};
+        let fingerTimer = null;
+        let countdownInterval = null;
+        let countdownValue = 3;
+        let fingerIdleTimer = null;
+        let fingerCloseInterval = null;
+        let fingerCloseValue = 3;
+        let fingerGameActive = false;
+        let fingerWinnerShown = false;
+        let fingerAudioCtx = null;
+
+        function startFingerGame() {
+          const game = document.getElementById('finger-game');
+          game.classList.add('active');
+          fingerGameActive = true;
+          fingerWinnerShown = false;
+          fingerTouches = {};
+          clearFingerTimers();
+          document.querySelectorAll('.touch-circle').forEach(c => c.remove());
+          updateFingerStatus();
+
+          const area = document.getElementById('finger-area');
+          area.addEventListener('touchstart', onFingerTouch, { passive: false });
+          area.addEventListener('touchmove', onFingerMove, { passive: false });
+          area.addEventListener('touchend', onFingerEnd, { passive: false });
+          area.addEventListener('touchcancel', onFingerEnd, { passive: false });
+          area.addEventListener('mousedown', onMouseDown);
+
+          resetFingerWait();
+        }
+
+        function closeFingerGame() {
+          const game = document.getElementById('finger-game');
+          game.classList.remove('active');
+          fingerGameActive = false;
+          fingerWinnerShown = false;
+          clearFingerTimers();
+          fingerTouches = {};
+          document.querySelectorAll('.touch-circle').forEach(c => c.remove());
+          const area = document.getElementById('finger-area');
+          area.removeEventListener('touchstart', onFingerTouch);
+          area.removeEventListener('touchmove', onFingerMove);
+          area.removeEventListener('touchend', onFingerEnd);
+          area.removeEventListener('touchcancel', onFingerEnd);
+          area.removeEventListener('mousedown', onMouseDown);
+        }
+
+        function clearFingerTimers() {
+          clearTimeout(fingerTimer); fingerTimer = null;
+          clearInterval(countdownInterval); countdownInterval = null;
+          clearTimeout(fingerIdleTimer); fingerIdleTimer = null;
+          clearInterval(fingerCloseInterval); fingerCloseInterval = null;
+        }
+
+        function startFingerCloseCountdown() {
+          if (!fingerGameActive || fingerWinnerShown) return;
+          fingerCloseValue = 3;
+          showFingerCloseTick();
+          fingerCloseInterval = setInterval(() => {
+            fingerCloseValue--;
+            if (fingerCloseValue <= 0) {
+              clearInterval(fingerCloseInterval);
+              fingerCloseInterval = null;
+              closeFingerGame();
+            } else {
+              showFingerCloseTick();
+            }
+          }, 1000);
+        }
+
+        function showFingerCloseTick() {
+          const el = document.getElementById('finger-status');
+          el.classList.remove('countdown', 'winner');
+          void el.offsetWidth;
+          el.classList.add('countdown');
+          el.textContent = fingerCloseValue + '초 뒤 종료';
+          playFingerBeep(480, 0.15);
+        }
+
+        function pickUniqueFingerColor() {
+          const used = new Set(Object.values(fingerTouches).map(t => t.color));
+          const available = FINGER_COLORS.filter(c => !used.has(c));
+          const pool = available.length ? available : FINGER_COLORS;
+          return pool[Math.floor(Math.random() * pool.length)];
+        }
+
+        function pickUniqueFingerAnimal() {
+          const used = new Set(Object.values(fingerTouches).map(t => t.animal));
+          const available = ANIMALS.filter(a => !used.has(a));
+          const pool = available.length ? available : ANIMALS;
+          return pool[Math.floor(Math.random() * pool.length)];
+        }
+
+        function onFingerTouch(e) {
+          e.preventDefault();
+          if (fingerWinnerShown) return;
+          const area = document.getElementById('finger-area');
+          const rect = area.getBoundingClientRect();
+          for (const touch of e.changedTouches) {
+            const id = touch.identifier;
+            if (!fingerTouches[id]) {
+              const color = pickUniqueFingerColor();
+              const animal = pickUniqueFingerAnimal();
+              fingerTouches[id] = {
+                x: touch.clientX - rect.left,
+                y: touch.clientY - rect.top,
+                color, animal
+              };
+              createTouchCircle(id, fingerTouches[id], area);
+            }
+          }
+          resetFingerWait();
+          updateFingerStatus();
+        }
+
+        function onFingerMove(e) {
+          e.preventDefault();
+          if (fingerWinnerShown) return;
+          const area = document.getElementById('finger-area');
+          const rect = area.getBoundingClientRect();
+          for (const touch of e.changedTouches) {
+            const id = touch.identifier;
+            if (fingerTouches[id]) {
+              fingerTouches[id].x = touch.clientX - rect.left;
+              fingerTouches[id].y = touch.clientY - rect.top;
+              const el = document.getElementById('touch-' + id);
+              if (el) {
+                el.style.left = fingerTouches[id].x + 'px';
+                el.style.top = fingerTouches[id].y + 'px';
+              }
+            }
+          }
+        }
+
+        function onFingerEnd(e) {
+          e.preventDefault();
+          if (fingerWinnerShown) return;
+          for (const touch of e.changedTouches) {
+            removeFingerTouch(touch.identifier);
+          }
+          resetFingerWait();
+          updateFingerStatus();
+        }
+
+        function removeFingerTouch(id) {
+          delete fingerTouches[id];
+          const el = document.getElementById('touch-' + id);
+          if (el) el.remove();
+        }
+
+        let mouseClickId = 100;
+        function onMouseDown(e) {
+          if (fingerWinnerShown) return;
+          const area = document.getElementById('finger-area');
+          const rect = area.getBoundingClientRect();
+          const id = 'mouse-' + (mouseClickId++);
+          const color = pickUniqueFingerColor();
+          const animal = pickUniqueFingerAnimal();
+          fingerTouches[id] = { x: e.clientX - rect.left, y: e.clientY - rect.top, color, animal };
+          createTouchCircle(id, fingerTouches[id], area);
+          resetFingerWait();
+          updateFingerStatus();
+        }
+
+        function createTouchCircle(id, data, area) {
+          const el = document.createElement('div');
+          el.className = 'touch-circle';
+          el.id = 'touch-' + id;
+          el.style.left = data.x + 'px';
+          el.style.top = data.y + 'px';
+          el.style.background = data.color;
+          el.style.color = data.color;
+          const label = document.createElement('span');
+          label.className = 'touch-label';
+          label.textContent = data.animal;
+          el.appendChild(label);
+          area.appendChild(el);
+        }
+
+        function updateFingerStatus() {
+          const el = document.getElementById('finger-status');
+          if (!el) return;
+          el.classList.remove('countdown', 'winner');
+          const count = Object.keys(fingerTouches).length;
+          if (count === 0) el.textContent = '손가락을 대세요';
+          else if (count === 1) el.textContent = '2명 이상 필요해요';
+          else el.textContent = '그대로 유지하세요';
+        }
+
+        function resetFingerWait() {
+          clearFingerTimers();
+          countdownValue = 3;
+          if (fingerWinnerShown) return;
+          const touchCount = Object.keys(fingerTouches).length;
+          if (touchCount === 0) {
+            fingerIdleTimer = setTimeout(() => startFingerCloseCountdown(), 5000);
+            return;
+          }
+          if (touchCount < 2) return;
+          fingerTimer = setTimeout(() => startFingerCountdown(), 2000);
+        }
+
+        function startFingerCountdown() {
+          if (!fingerGameActive) return;
+          if (Object.keys(fingerTouches).length < 2) return;
+          countdownValue = 3;
+          showFingerCountdownTick();
+          countdownInterval = setInterval(() => {
+            countdownValue--;
+            if (countdownValue <= 0) {
+              clearInterval(countdownInterval);
+              countdownInterval = null;
+              pickFingerWinner();
+            } else {
+              showFingerCountdownTick();
+            }
+          }, 1000);
+        }
+
+        function showFingerCountdownTick() {
+          const el = document.getElementById('finger-status');
+          el.classList.remove('countdown', 'winner');
+          void el.offsetWidth;
+          el.classList.add('countdown');
+          el.textContent = countdownValue;
+          playFingerBeep(700, 0.18);
+        }
+
+        function pickFingerWinner() {
+          if (!fingerGameActive) return;
+          const ids = Object.keys(fingerTouches);
+          if (ids.length < 2) {
+            updateFingerStatus();
+            resetFingerWait();
+            return;
+          }
+          playFingerBeep(1200, 0.5);
+          fingerWinnerShown = true;
+          const winnerId = ids[Math.floor(Math.random() * ids.length)];
+          const winnerData = fingerTouches[winnerId];
+
+          ids.forEach(id => {
+            const el = document.getElementById('touch-' + id);
+            if (!el) return;
+            if (id === winnerId) el.classList.add('winner');
+            else el.classList.add('loser');
+          });
+
+          const statusEl = document.getElementById('finger-status');
+          statusEl.classList.remove('countdown');
+          statusEl.classList.add('winner');
+          statusEl.textContent = '🎉 ' + winnerData.animal + ' 당첨!';
+
+          spawnConfetti();
+          setTimeout(() => {
+            document.querySelectorAll('.confetti-piece').forEach(c => c.remove());
+            closeFingerGame();
+          }, 3500);
+        }
+
+        function playFingerBeep(freq, duration) {
+          try {
+            if (!fingerAudioCtx) fingerAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            const osc = fingerAudioCtx.createOscillator();
+            const gain = fingerAudioCtx.createGain();
+            osc.connect(gain);
+            gain.connect(fingerAudioCtx.destination);
+            osc.frequency.value = freq;
+            osc.type = 'sine';
+            gain.gain.setValueAtTime(0.3, fingerAudioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, fingerAudioCtx.currentTime + duration);
+            osc.start();
+            osc.stop(fingerAudioCtx.currentTime + duration);
+          } catch (e) {}
+        }
+
+        // ========== 룰렛 게임 ==========
+        let rouletteCount = 2;
+        let rouletteNumbers = [];
+        let lastRouletteNumbers = [];
+        let rouletteFlipped = 0;
+        let rouletteAudioCtx = null;
+        let rouletteIdleTimer = null;
+        let rouletteCloseInterval = null;
+        let rouletteCloseValue = 3;
+
+        function armRouletteIdle(ms = 5000) {
+          clearRouletteIdle();
+          rouletteIdleTimer = setTimeout(() => startRouletteCloseCountdown(), ms);
+        }
+        function clearRouletteIdle() {
+          clearTimeout(rouletteIdleTimer); rouletteIdleTimer = null;
+          clearInterval(rouletteCloseInterval); rouletteCloseInterval = null;
+          const el = document.getElementById('roulette-close-hint');
+          if (el) el.style.display = 'none';
+        }
+        function startRouletteCloseCountdown() {
+          rouletteCloseValue = 3;
+          showRouletteCloseTick();
+          rouletteCloseInterval = setInterval(() => {
+            rouletteCloseValue--;
+            if (rouletteCloseValue <= 0) {
+              clearInterval(rouletteCloseInterval);
+              rouletteCloseInterval = null;
+              closeRouletteGame();
+            } else {
+              showRouletteCloseTick();
+            }
+          }, 1000);
+        }
+        function showRouletteCloseTick() {
+          const el = document.getElementById('roulette-close-hint');
+          if (el) {
+            el.style.display = 'block';
+            el.style.animation = 'none';
+            void el.offsetWidth;
+            el.style.animation = '';
+            el.textContent = rouletteCloseValue + '초 뒤 종료';
+          }
+          try { playTickSound(); } catch (e) {}
+        }
+
+        function startRouletteGame() {
+          const game = document.getElementById('roulette-game');
+          game.classList.add('active');
+          rouletteCount = 2;
+          document.getElementById('roulette-count').textContent = '2';
+          document.getElementById('roulette-setup').style.display = 'flex';
+          document.getElementById('roulette-cards-phase').classList.remove('active');
+          document.getElementById('roulette-spin-phase').classList.remove('active');
+          armRouletteIdle();
+        }
+
+        function closeRouletteGame() {
+          clearRouletteIdle();
+          document.getElementById('roulette-game').classList.remove('active');
+        }
+
+        function changeRouletteCount(delta) {
+          rouletteCount = Math.max(2, rouletteCount + delta);
+          document.getElementById('roulette-count').textContent = rouletteCount;
+          armRouletteIdle();
+        }
+
+        function startRouletteCards() {
+          document.getElementById('roulette-setup').style.display = 'none';
+          const phase = document.getElementById('roulette-cards-phase');
+          phase.classList.add('active');
+          document.getElementById('roulette-instruction').textContent = '한 명씩 카드를 누르세요';
+
+          const sameAsLast = (arr) =>
+            lastRouletteNumbers.length === arr.length &&
+            lastRouletteNumbers.every((v, i) => v === arr[i]);
+          rouletteNumbers = Array.from({ length: rouletteCount }, (_, i) => i + 1);
+          let attempts = 0;
+          do {
+            for (let i = rouletteNumbers.length - 1; i > 0; i--) {
+              const j = Math.floor(Math.random() * (i + 1));
+              [rouletteNumbers[i], rouletteNumbers[j]] = [rouletteNumbers[j], rouletteNumbers[i]];
+            }
+            attempts++;
+          } while (rouletteCount > 1 && sameAsLast(rouletteNumbers) && attempts < 20);
+          lastRouletteNumbers = rouletteNumbers.slice();
+          rouletteFlipped = 0;
+
+          const grid = document.getElementById('roulette-cards-grid');
+          grid.innerHTML = '';
+          for (let i = 0; i < rouletteCount; i++) {
+            const card = document.createElement('div');
+            card.className = 'roulette-card';
+            card.dataset.index = i;
+            const cardColor = COLORS[i % COLORS.length];
+            card.innerHTML = `
+              <div class="roulette-card-inner">
+                <div class="roulette-card-front">?</div>
+                <div class="roulette-card-back" style="background:${cardColor};">${rouletteNumbers[i]}</div>
+              </div>
+            `;
+            const handler = (e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              flipRouletteCard(card, i);
+            };
+            card.addEventListener('pointerup', handler);
+            grid.appendChild(card);
+          }
+
+          armRouletteIdle();
+        }
+
+        function flipRouletteCard(card, index) {
+          if (card.classList.contains('flipped')) return;
+          card.classList.add('flipped');
+          playTickSound();
+          rouletteFlipped++;
+
+          if (rouletteFlipped >= rouletteCount) {
+            clearRouletteIdle();
+            document.getElementById('roulette-instruction').textContent = '룰렛 시작!';
+            setTimeout(() => {
+              startRouletteWheel();
+            }, 1000);
+          } else {
+            armRouletteIdle();
+          }
+        }
+
+        function startRouletteWheel() {
+          document.getElementById('roulette-cards-phase').classList.remove('active');
+          const spinPhase = document.getElementById('roulette-spin-phase');
+          spinPhase.classList.add('active');
+
+          buildRouletteWheel();
+
+          const winnerIdx = Math.floor(Math.random() * rouletteCount);
+          const winnerNum = rouletteNumbers[winnerIdx];
+          const segAngle = 360 / rouletteCount;
+          const targetAngle = 360 - (winnerIdx * segAngle + segAngle / 2);
+          const totalRotation = 360 * 8 + targetAngle;
+
+          const wheel = document.getElementById('roulette-wheel');
+          wheel.style.transition = 'none';
+          wheel.style.transform = 'rotate(0deg)';
+
+          let tickCount = 0;
+          const tickInterval = setInterval(() => {
+            playTickSound();
+            tickCount++;
+            if (tickCount > 30) clearInterval(tickInterval);
+          }, 150);
+
+          requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+              wheel.style.transition = 'transform 5s cubic-bezier(0.17, 0.67, 0.12, 0.99)';
+              wheel.style.transform = `rotate(${totalRotation}deg)`;
+            });
+          });
+
+          setTimeout(() => {
+            clearInterval(tickInterval);
+            document.getElementById('winner-emoji').textContent = '🎉';
+            showWinner(winnerNum + '번 당첨!', () => {
+              closeRouletteGame();
+            });
+          }, 5200);
+        }
+
+        function buildRouletteWheel() {
+          const wheel = document.getElementById('roulette-wheel');
+          wheel.innerHTML = '';
+          wheel.style.transform = 'rotate(0deg)';
+          wheel.style.transition = 'none';
+
+          const segAngle = 360 / rouletteCount;
+          const radius = 140;
+
+          for (let i = 0; i < rouletteCount; i++) {
+            const startAngle = i * segAngle;
+            const endAngle = startAngle + segAngle;
+            const startRad = (startAngle - 90) * Math.PI / 180;
+            const endRad = (endAngle - 90) * Math.PI / 180;
+
+            const x1 = radius + radius * Math.cos(startRad);
+            const y1 = radius + radius * Math.sin(startRad);
+            const x2 = radius + radius * Math.cos(endRad);
+            const y2 = radius + radius * Math.sin(endRad);
+
+            const largeArc = segAngle > 180 ? 1 : 0;
+            const pathData = `M${radius},${radius} L${x1},${y1} A${radius},${radius} 0 ${largeArc},1 ${x2},${y2} Z`;
+
+            const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+            svg.setAttribute('viewBox', `0 0 ${radius * 2} ${radius * 2}`);
+            svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
+            svg.style.position = 'absolute';
+            svg.style.left = '0';
+            svg.style.top = '0';
+
+            const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+            path.setAttribute('d', pathData);
+            path.setAttribute('fill', COLORS[i % COLORS.length]);
+            path.setAttribute('stroke', 'rgba(255,255,255,0.3)');
+            path.setAttribute('stroke-width', '2');
+            svg.appendChild(path);
+
+            const midAngle = (startAngle + segAngle / 2 - 90) * Math.PI / 180;
+            const labelR = radius * 0.65;
+            const lx = radius + labelR * Math.cos(midAngle);
+            const ly = radius + labelR * Math.sin(midAngle);
+
+            const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+            text.setAttribute('x', lx);
+            text.setAttribute('y', ly);
+            text.setAttribute('text-anchor', 'middle');
+            text.setAttribute('dominant-baseline', 'central');
+            text.setAttribute('fill', 'white');
+            text.setAttribute('font-size', '22');
+            text.setAttribute('font-weight', '800');
+            text.textContent = rouletteNumbers[i];
+            svg.appendChild(text);
+
+            wheel.appendChild(svg);
+          }
+        }
+
+        function playTickSound() {
+          try {
+            if (!rouletteAudioCtx) rouletteAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            const osc = rouletteAudioCtx.createOscillator();
+            const gain = rouletteAudioCtx.createGain();
+            osc.connect(gain);
+            gain.connect(rouletteAudioCtx.destination);
+            osc.frequency.value = 800 + Math.random() * 400;
+            osc.type = 'sine';
+            gain.gain.value = 0.08;
+            gain.gain.exponentialRampToValueAtTime(0.001, rouletteAudioCtx.currentTime + 0.08);
+            osc.start();
+            osc.stop(rouletteAudioCtx.currentTime + 0.08);
+          } catch(e) {}
+        }
+    </script>
+</body>
+</html>

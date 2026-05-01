@@ -1,0 +1,21 @@
+{
+  "name": "cafe-game-apk",
+  "version": "1.0.0",
+  "private": true,
+  "description": "누가 쏠까? — standalone Android APK (Capacitor webview wrapper)",
+  "scripts": {
+    "cap:add": "cap add android",
+    "cap:sync": "cap sync android",
+    "build:apk": "cap sync android && cd android && ./gradlew assembleDebug",
+    "clean": "rimraf android"
+  },
+  "dependencies": {
+    "@capacitor/android": "^6.1.2",
+    "@capacitor/app": "^6.0.1",
+    "@capacitor/core": "^6.1.2",
+    "@capacitor/status-bar": "^6.0.1"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^6.1.2"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "appId": "com.cafe92.todaygame",
+  "appName": "누가쏠까",
+  "webDir": "www",
+  "backgroundColor": "#1a1a2e",
+  "server": {
+    "url": "http://49.247.207.115:3002/game",
+    "cleartext": true,
+    "androidScheme": "https"
+  },
+  "android": {
+    "backgroundColor": "#1a1a2e",
+    "allowMixedContent": true,
+    "webContentsDebuggingEnabled": true
+  }
+}

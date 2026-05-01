@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>누가 쏠까?</title>
+<style>
+  html, body {
+    margin: 0; padding: 0; height: 100%;
+    background: #1a1a2e; color: white;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  }
+  .box {
+    height: 100%; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; padding: 24px;
+    text-align: center;
+  }
+  h1 { font-size: 1.6rem; margin: 0 0 8px; color: #FFD700; }
+  p { margin: 0; opacity: 0.85; font-size: 0.95rem; }
+  .spinner {
+    width: 32px; height: 32px; margin-top: 24px;
+    border: 3px solid rgba(255,255,255,0.2);
+    border-top-color: #FFD700; border-radius: 50%;
+    animation: spin 0.9s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+</style>
+</head>
+<body>
+  <div class="box">
+    <h1>🎲 누가 쏠까?</h1>
+    <p>연결 중...</p>
+    <div class="spinner"></div>
+  </div>
+  <script>
+    // Capacitor의 server.url이 설정되어 있으면 이 페이지는 거의 보이지 않음.
+    // 앱이 로컬 파일만 로드하는 비상 상황의 폴백.
+  </script>
+</body>
+</html>
