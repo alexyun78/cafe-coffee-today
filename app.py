@@ -240,6 +240,11 @@ def game_page():
     return send_from_directory("static", "game.html")
 
 
+@app.get("/game-apk")
+def game_apk_page():
+    return send_from_directory("static", "game-apk.html")
+
+
 @app.get("/api/app-version")
 def api_app_version():
     try:

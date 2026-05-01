@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>누가 쏠까? — 앱 다운로드</title>
+<style>
+  :root { --gold: #DAA520; --gold-dark: #8B6914; --ink: #3d2518; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    min-height: 100vh; padding: 24px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .card {
+    background: white; padding: 36px 28px;
+    border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.35);
+    max-width: 380px; width: 100%; text-align: center;
+  }
+  h1 {
+    background: linear-gradient(100deg,
+      #8B6914 0%, #B8860B 18%, #DAA520 32%,
+      #FFD700 45%, #FFF4B0 50%, #FFD700 55%,
+      #DAA520 68%, #B8860B 82%, #8B6914 100%);
+    background-size: 250% 100%;
+    animation: brassShimmer 3.2s linear infinite;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+    font-size: 1.6rem;
+    margin-bottom: 8px;
+    font-weight: 900;
+  }
+  @keyframes brassShimmer {
+    0%   { background-position: 0%   50%; }
+    100% { background-position: 250% 50%; }
+  }
+  .sub { color: #8a7f78; font-size: 0.9rem; margin-bottom: 24px; }
+  .download {
+    display: inline-block; padding: 14px 28px;
+    background: linear-gradient(135deg, #B8860B 0%, #DAA520 50%, #B8860B 100%);
+    color: var(--ink);
+    text-decoration: none; border-radius: 10px;
+    font-weight: 700; font-size: 1rem;
+    min-width: 220px;
+    box-shadow: 0 4px 14px rgba(218,165,32,0.4);
+    letter-spacing: 0.3px;
+  }
+  .download:hover { filter: brightness(1.05); }
+  .note {
+    margin-top: 20px; font-size: 0.8rem; color: #8a7f78; line-height: 1.5;
+  }
+  .features {
+    margin: 18px 0;
+    font-size: 0.88rem;
+    color: #6F5B3E;
+    line-height: 1.7;
+  }
+  .other-app {
+    margin-top: 22px; padding-top: 18px;
+    border-top: 1px dashed #e2dcd2;
+    font-size: 0.85rem; color: #8a7f78;
+  }
+  .other-app a { color: #6F4E37; text-decoration: none; font-weight: 600; }
+  .other-app a:hover { text-decoration: underline; }
+  .back { display: block; margin-top: 20px; color: #6F4E37; text-decoration: none; font-size: 0.9rem; }
+</style>
+</head>
+<body>
+  <div class="card">
+    <h1>🎲 누가 쏠까?</h1>
+    <p class="sub">오늘 커피 한 잔, 누가 쏠지 정해볼까요?</p>
+    <div class="features">
+      👆 손가락 게임 &nbsp;·&nbsp; 🎡 룰렛
+    </div>
+    <a class="download" href="/static/downloads/game-latest.apk" download>game.apk 다운로드</a>
+    <p class="note">
+      설치 시 "출처를 알 수 없는 앱"을 허용해야 할 수 있습니다.<br>
+      웹 브라우저로 이용하려면 <a href="/game">여기를 누르세요</a>.
+    </p>
+    <div class="other-app">
+      ☕ 오늘의 커피 앱은 → <a href="/apk">여기서 받기</a>
+    </div>
+    <a class="back" href="/">← 돌아가기</a>
+  </div>
+</body>
+</html>
