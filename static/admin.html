@@ -196,6 +196,19 @@
     font-size: 0.75rem; font-weight: 600;
     margin-left: 8px; flex-shrink: 0;
   }
+  @media (max-width: 600px) {
+    .list-item {
+      flex-direction: column; align-items: stretch; gap: 8px;
+    }
+    .list-item-name {
+      white-space: normal; overflow: visible; text-overflow: clip;
+      word-break: keep-all; line-height: 1.35;
+    }
+    .list-item-actions {
+      flex-wrap: wrap; justify-content: flex-start; gap: 6px;
+    }
+    .status-chip { margin-left: 0; }
+  }
   .status-예정 { background: #e1f5fe; color: #0277bd; }
   .status-진행중 { background: #e8f5e9; color: #2e7d32; }
   .status-완료 { background: #eeeeee; color: #616161; }
@@ -660,12 +673,34 @@ async function loadList() {
   }
 }
 
+function sortAdminItems(items) {
+  const today = ymdLocal(new Date());
+  function rank(serve) {
+    if (!serve) return 2;
+    if (serve === today) return 0;
+    if (serve > today) return 1;
+    return 2;
+  }
+  return items.slice().sort((a, b) => {
+    const aServe = (a["제공일"] && a["제공일"].start) || "";
+    const bServe = (b["제공일"] && b["제공일"].start) || "";
+    const ar = rank(aServe);
+    const br = rank(bServe);
+    if (ar !== br) return ar - br;
+    if (ar === 1 && aServe !== bServe) return aServe.localeCompare(bServe);
+    const aRoast = (a["로스팅"] && a["로스팅"].start) || "";
+    const bRoast = (b["로스팅"] && b["로스팅"].start) || "";
+    return bRoast.localeCompare(aRoast);
+  });
+}
+
 function renderList(items) {
   const el = $("#list-items");
   if (!items.length) {
     el.innerHTML = '<div class="empty">기록된 커피가 없습니다. "새로 추가"를 눌러 시작하세요.</div>';
     return;
   }
+  items = sortAdminItems(items);
   el.innerHTML = items.map((it) => {
     const roast = it["로스팅"]?.start || "";
     const serve = it["제공일"]?.start || "";
@@ -673,9 +708,7 @@ function renderList(items) {
     const statusCls = status.replace(/\s/g, "");
     const availability = it["운영상태"] || "운영";
     const isSold = availability === "품절";
-    const dupBtn = status === "완료"
-      ? `<button type="button" class="btn-duplicate" data-id="${it.id}">복제</button>`
-      : "";
+    const dupBtn = `<button type="button" class="btn-duplicate" data-id="${it.id}">복제</button>`;
     const availBtn = `<button type="button" class="btn-availability ${isSold ? 'sold-out' : ''}" data-id="${it.id}" data-availability="${availability}">${isSold ? '⛔ 품절' : '🟢 운영'}</button>`;
     const imgBtn = `<button type="button" class="btn-image" data-id="${it.id}" data-name="${escapeAttr(it["커피"] || "card")}">🖼️ 이미지</button>`;
     const dateParts = [];
