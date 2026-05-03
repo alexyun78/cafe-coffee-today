@@ -1502,15 +1502,56 @@
                     </div>
                 `;
             } else {
+                const now = new Date();
+                const pad = (n) => String(n).padStart(2, '0');
+                const todayStr = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`;
+                const tmr = new Date(now.getTime() + 86400000);
+                const tomorrowStr = `${tmr.getFullYear()}-${pad(tmr.getMonth() + 1)}-${pad(tmr.getDate())}`;
+
+                const serveStart = (c) => (c && c.제공일 && c.제공일.start) ? c.제공일.start : '';
+                const soldOut = (history || [])
+                    .filter(c => c.상태 === '완료' && serveStart(c) === todayStr)
+                    .sort((a, b) => (b.id || 0) - (a.id || 0))[0];
+                const tomorrowCoffee = (history || [])
+                    .filter(c => c.상태 === '예정' && serveStart(c) === tomorrowStr)
+                    .sort((a, b) => (a.id || 0) - (b.id || 0))[0];
+
+                let bodyHtml;
+                if (soldOut) {
+                    const tomorrowLine = tomorrowCoffee
+                        ? `<div style="margin-top: 14px; opacity: 0.85; font-size: 0.98rem;">내일은 <strong>${tomorrowCoffee.커피}</strong> 커피를 준비할 예정입니다.</div>`
+                        : '';
+                    bodyHtml = `
+                        <div class="coffee-card" style="text-align:center; padding: 36px 28px;">
+                            <div style="font-size: 2.6rem; margin-bottom: 12px; opacity: 0.7;">☕</div>
+                            <div class="coffee-card-title" style="font-size: 1.4rem; margin-bottom: 6px;">${soldOut.커피}</div>
+                            ${soldOut.컵노트 ? `<div style="opacity: 0.75; font-size: 0.95rem; margin-bottom: 14px;">${soldOut.컵노트}</div>` : ''}
+                            <div style="font-size: 1.05rem; font-weight: 600;">오늘의 커피는 품절되었습니다.</div>
+                            ${tomorrowLine}
+                        </div>
+                    `;
+                } else if (tomorrowCoffee) {
+                    bodyHtml = `
+                        <div class="coffee-card" style="text-align:center; padding: 40px 28px;">
+                            <div style="font-size: 3rem; margin-bottom: 16px; opacity: 0.7;">☕</div>
+                            <div class="coffee-card-title" style="font-size: 1.3rem; margin-bottom: 8px;">내일은 <strong>${tomorrowCoffee.커피}</strong> 커피를 준비할 예정입니다.</div>
+                        </div>
+                    `;
+                } else {
+                    bodyHtml = `
+                        <div class="coffee-card" style="text-align:center; padding: 40px 28px;">
+                            <div style="font-size: 3rem; margin-bottom: 16px; opacity: 0.7;">☕</div>
+                            <div class="coffee-card-title" style="font-size: 1.3rem; margin-bottom: 8px;">준비 중입니다</div>
+                            <div style="opacity: 0.7; font-size: 0.95rem;">곧 새로운 커피가 제공될 예정이에요</div>
+                        </div>
+                    `;
+                }
+
                 html += `
                     <div class="today-section">
                         <h2>지금 제공 중인 커피</h2>
                         <div class="coffee-cards">
-                            <div class="coffee-card" style="text-align:center; padding: 40px 28px;">
-                                <div style="font-size: 3rem; margin-bottom: 16px; opacity: 0.7;">☕</div>
-                                <div class="coffee-card-title" style="font-size: 1.3rem; margin-bottom: 8px;">준비 중입니다</div>
-                                <div style="opacity: 0.7; font-size: 0.95rem;">곧 새로운 커피가 제공될 예정이에요</div>
-                            </div>
+                            ${bodyHtml}
                         </div>
                     </div>
                 `;
