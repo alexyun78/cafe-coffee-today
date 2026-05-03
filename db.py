@@ -98,6 +98,31 @@ def _date_obj(s: Optional[str]):
     return {"start": s, "end": None}
 
 
+_STATUS_ORDER = {"예정": 0, "진행 중": 1, "완료": 2}
+
+
+def _compute_display_status(raw: Optional[str], serve_date: Optional[str]) -> Optional[str]:
+    """제공일 기준으로 상태 자동 진행. 관리자 수동값(raw)이 더 진행돼 있으면 그쪽 보존.
+
+    예) raw=예정 + serve=오늘 → '진행 중'
+        raw=예정 + serve=어제 → '완료'
+        raw=완료 + serve=내일 → '완료' (관리자가 일찍 마감한 경우 보존)
+    """
+    if not serve_date:
+        return raw
+    today = date.today().isoformat()
+    if serve_date > today:
+        natural = "예정"
+    elif serve_date == today:
+        natural = "진행 중"
+    else:
+        natural = "완료"
+    raw_key = raw or "예정"
+    raw_o = _STATUS_ORDER.get(raw_key, 0)
+    nat_o = _STATUS_ORDER.get(natural, 0)
+    return natural if nat_o > raw_o else raw_key
+
+
 def _row_to_api(row: sqlite3.Row) -> dict:
     """Convert DB row to API response (Korean keys, Notion-compatible shape)."""
     return {
@@ -106,7 +131,7 @@ def _row_to_api(row: sqlite3.Row) -> dict:
         "로스터리": row["roastery"],
         "로스팅": _date_obj(row["roast_date"]),
         "프로세싱": row["process"],
-        "상태": row["status"],
+        "상태": _compute_display_status(row["status"], row["serve_date"]),
         "컵노트": row["cup_notes"],
         "감상": row["comment"],
         "제공일": _date_obj(row["serve_date"]),
