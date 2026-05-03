@@ -346,6 +346,130 @@
             .view-toggle button { padding: 8px 12px; font-size: 0.85rem; }
         }
 
+        /* 주간 달력 (히스토리 기본 뷰) */
+        .hcal-week-nav {
+            display: flex; justify-content: center; align-items: center;
+            gap: 12px; margin-bottom: 18px; flex-wrap: wrap;
+        }
+        .hcal-week-nav h3 {
+            color: #6F4E37; font-size: 1.25rem; font-weight: 700;
+            min-width: 220px; text-align: center;
+        }
+        .hcal-week-nav button {
+            background: #6F4E37; color: white; border: none;
+            width: 42px; height: 42px; border-radius: 8px;
+            font-size: 1.4rem; cursor: pointer; line-height: 1;
+        }
+        .hcal-week-nav button:hover { background: #8B6F47; }
+
+        .hcal-week-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-auto-rows: 1fr;
+            gap: 12px;
+        }
+        .hcal-wcell {
+            background: #faf8f5; border-radius: 12px;
+            padding: 14px;
+            display: flex; flex-direction: column;
+            min-height: 240px;
+            border: 1.5px solid transparent;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.15s, box-shadow 0.15s;
+        }
+        .hcal-wcell-today {
+            border-color: #D2691E;
+            background: #fff8f0;
+            box-shadow: 0 4px 18px rgba(210,105,30,0.18);
+        }
+        .hcal-wcell-header {
+            display: flex; align-items: center; gap: 10px;
+            margin-bottom: 12px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(111,78,55,0.12);
+        }
+        .hcal-wcell-date {
+            font-size: 1.7rem; font-weight: 800; color: #6F4E37;
+            line-height: 1;
+        }
+        .hcal-wcell-date.sun { color: #c62828; }
+        .hcal-wcell-date.sat { color: #1565c0; }
+        .hcal-wcell-day {
+            font-size: 0.9rem; color: #8a7f78; font-weight: 700;
+        }
+        .hcal-wcell-day.sun { color: #c62828; }
+        .hcal-wcell-day.sat { color: #1565c0; }
+        .hcal-wcell-today .hcal-wcell-date {
+            background: #D2691E; color: white !important;
+            padding: 4px 14px; border-radius: 18px;
+            font-size: 1.45rem;
+        }
+        .hcal-wcoffees {
+            display: flex; flex-direction: column; gap: 8px;
+            flex: 1; overflow-y: auto;
+        }
+        .hcal-wcoffee {
+            padding: 10px 12px; border-radius: 8px;
+            border-left: 4px solid transparent;
+            cursor: pointer;
+        }
+        .hcal-wcoffee-name {
+            font-weight: 700; font-size: 1.05rem; line-height: 1.3;
+            word-break: keep-all;
+        }
+        .hcal-wcoffee-notes {
+            font-size: 0.9rem; line-height: 1.45;
+            margin-top: 5px;
+            word-break: keep-all;
+            opacity: 0.95;
+        }
+        .hcal-wcoffee-예정     { background: #E1F5FE; border-left-color: #0277BD; color: #01579B; }
+        .hcal-wcoffee-진행중   { background: #E8F5E9; border-left-color: #2E7D32; color: #1B5E20; }
+        .hcal-wcoffee-완료     { background: #ECECEC; border-left-color: #757575; color: #424242; }
+        .hcal-wempty {
+            flex: 1; display: flex; align-items: center; justify-content: center;
+            color: #d6cdc0; font-size: 1.6rem;
+        }
+
+        /* 8번째 셀: 로고 */
+        .hcal-wlogo {
+            background: linear-gradient(135deg, #faf8f5 0%, #efe7d9 100%);
+            border-radius: 12px;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            padding: 18px;
+            min-height: 240px;
+            border: 1.5px solid #e5ddd3;
+        }
+        .hcal-wlogo img {
+            max-width: 80%;
+            max-height: 70%;
+            object-fit: contain;
+            opacity: 0.92;
+        }
+        .hcal-wlogo-caption {
+            margin-top: 10px;
+            font-size: 0.78rem; color: #8B6F47;
+            letter-spacing: 1.5px; font-weight: 600;
+        }
+
+        /* 10인치 태블릿 미만 */
+        @media (max-width: 720px) {
+            .hcal-wcell, .hcal-wlogo { min-height: 150px; padding: 8px; }
+            .hcal-wcell-header { margin-bottom: 8px; padding-bottom: 6px; gap: 6px; }
+            .hcal-wcell-date { font-size: 1.15rem; }
+            .hcal-wcell-today .hcal-wcell-date { font-size: 1rem; padding: 3px 10px; }
+            .hcal-wcell-day { font-size: 0.72rem; }
+            .hcal-wcoffee { padding: 6px 8px; }
+            .hcal-wcoffee-name { font-size: 0.82rem; }
+            .hcal-wcoffee-notes { font-size: 0.72rem; margin-top: 3px; }
+            .hcal-wcoffees { gap: 5px; }
+            .hcal-week-nav h3 { font-size: 1rem; min-width: 170px; }
+            .hcal-week-nav button { width: 36px; height: 36px; font-size: 1.15rem; }
+            .hcal-wlogo-caption { font-size: 0.66rem; letter-spacing: 1px; }
+        }
+
         /* 데스크톱용 테이블 */
         .desktop-table {
             display: block;
@@ -1559,7 +1683,7 @@
 
             // 히스토리 섹션
             window.coffeeHistoryData = { today: today || [], history: history || [] };
-            window.historyViewMode = window.historyViewMode || 'list';
+            window.historyViewMode = window.historyViewMode || 'calendar';
             const isCal = window.historyViewMode === 'calendar';
             html += `
                 <div class="history-section">
@@ -1727,6 +1851,7 @@
 
         // ---------- 히스토리 뷰 토글 + 달력 ----------
         let historyCalMonth = null;
+        let historyCalWeekStart = null; // Date (해당 주 일요일)
 
         function setHistoryView(mode) {
             window.historyViewMode = mode;
@@ -1758,12 +1883,34 @@
             if (c) c.innerHTML = renderHistoryCalendar();
         }
 
+        function startOfWeek(d) {
+            const sun = new Date(d);
+            sun.setDate(d.getDate() - d.getDay());
+            sun.setHours(0, 0, 0, 0);
+            return sun;
+        }
+
+        function changeHistoryCalWeek(deltaDays) {
+            if (!historyCalWeekStart) historyCalWeekStart = startOfWeek(new Date());
+            const d = new Date(historyCalWeekStart);
+            d.setDate(d.getDate() + deltaDays);
+            historyCalWeekStart = startOfWeek(d);
+            const c = document.getElementById('history-content');
+            if (c) c.innerHTML = renderHistoryCalendar();
+        }
+
+        function goHistoryCalThisWeek() {
+            historyCalWeekStart = startOfWeek(new Date());
+            const c = document.getElementById('history-content');
+            if (c) c.innerHTML = renderHistoryCalendar();
+        }
+
+        function fmtMd(d) {
+            return (d.getMonth() + 1) + '월 ' + d.getDate() + '일';
+        }
+
         function renderHistoryCalendar() {
-            if (!historyCalMonth) {
-                const now = new Date();
-                historyCalMonth = { year: now.getFullYear(), month: now.getMonth() };
-            }
-            const { year, month } = historyCalMonth;
+            if (!historyCalWeekStart) historyCalWeekStart = startOfWeek(new Date());
             const data = window.coffeeHistoryData || { today: [], history: [] };
             const all = [...(data.today || []), ...(data.history || [])];
             window.coffeeAllForCal = all;
@@ -1775,54 +1922,63 @@
                 (byDate[d] = byDate[d] || []).push({ it, idx });
             });
 
-            const firstOfMonth = new Date(year, month, 1);
-            const lastOfMonth = new Date(year, month + 1, 0);
-            const gridStart = new Date(year, month, 1 - firstOfMonth.getDay());
-            const gridEnd = new Date(year, month + 1, 6 - lastOfMonth.getDay());
+            const weekStart = historyCalWeekStart;
+            const weekEnd = new Date(weekStart);
+            weekEnd.setDate(weekStart.getDate() + 6);
             const today = ymdLocalCal(new Date());
-
             const dayLabels = ['일', '월', '화', '수', '목', '금', '토'];
             const dayCls = ['sun', '', '', '', '', '', 'sat'];
 
             let html = `
-                <div class="hcal-month-nav">
-                    <button onclick="changeHistoryCalMonth(-1)" aria-label="이전 달">‹</button>
-                    <h3>${year}년 ${month + 1}월</h3>
-                    <button onclick="changeHistoryCalMonth(1)" aria-label="다음 달">›</button>
-                    <button class="hcal-today-btn" onclick="goHistoryCalToday()">오늘</button>
+                <div class="hcal-week-nav">
+                    <button onclick="changeHistoryCalWeek(-7)" aria-label="이전 주">‹</button>
+                    <h3>${fmtMd(weekStart)} — ${fmtMd(weekEnd)}</h3>
+                    <button onclick="changeHistoryCalWeek(7)" aria-label="다음 주">›</button>
+                    <button class="hcal-today-btn" onclick="goHistoryCalThisWeek()">이번 주</button>
                 </div>
-                <div class="history-calendar">
+                <div class="hcal-week-grid">
             `;
-            for (let i = 0; i < 7; i++) {
-                html += `<div class="hcal-day-header ${dayCls[i]}">${dayLabels[i]}</div>`;
-            }
 
-            const cur = new Date(gridStart);
-            while (cur <= gridEnd) {
+            // 일~토 7개 셀 (4×2 그리드 — 일/월/화/수 그리고 목/금/토/로고)
+            for (let i = 0; i < 7; i++) {
+                const cur = new Date(weekStart);
+                cur.setDate(weekStart.getDate() + i);
                 const ymd = ymdLocalCal(cur);
-                const dow = cur.getDay();
-                const inMonth = (cur.getMonth() === month);
                 const isToday = (ymd === today);
                 const items = byDate[ymd] || [];
-
-                html += `<div class="hcal-cell ${inMonth ? '' : 'hcal-cell-out'} ${isToday ? 'hcal-cell-today' : ''}">`;
-                html += `<div class="hcal-date ${dayCls[dow]} ${isToday ? 'hcal-date-today' : ''}">${cur.getDate()}</div>`;
+                html += `<div class="hcal-wcell ${isToday ? 'hcal-wcell-today' : ''}">`;
+                html += `
+                    <div class="hcal-wcell-header">
+                        <span class="hcal-wcell-date ${dayCls[i]}">${cur.getDate()}</span>
+                        <span class="hcal-wcell-day ${dayCls[i]}">${dayLabels[i]}</span>
+                    </div>
+                `;
                 if (items.length) {
-                    html += `<div class="hcal-coffees">`;
+                    html += `<div class="hcal-wcoffees">`;
                     for (const { it, idx } of items) {
                         const name = escapeCalText(it['커피'] || '');
-                        const roast = (it['로스팅'] && it['로스팅'].start) || '';
+                        const notes = escapeCalText(it['컵노트'] || '');
                         const statusCls = String(it['상태'] || '').replace(/\s/g, '');
-                        html += `<div class="hcal-coffee hcal-coffee-${statusCls}" onclick="openCoffeeModal(window.coffeeAllForCal[${idx}])">`;
-                        html += `<div class="hcal-coffee-name">${name}</div>`;
-                        if (roast) html += `<div class="hcal-coffee-roast">🫘 ${escapeCalText(roast)}</div>`;
+                        html += `<div class="hcal-wcoffee hcal-wcoffee-${statusCls}" onclick="openCoffeeModal(window.coffeeAllForCal[${idx}])">`;
+                        html += `<div class="hcal-wcoffee-name">${name}</div>`;
+                        if (notes) html += `<div class="hcal-wcoffee-notes">${notes}</div>`;
                         html += `</div>`;
                     }
                     html += `</div>`;
+                } else {
+                    html += `<div class="hcal-wempty">·</div>`;
                 }
                 html += `</div>`;
-                cur.setDate(cur.getDate() + 1);
             }
+
+            // 8번째 셀: 92도씨 로고
+            html += `
+                <div class="hcal-wlogo">
+                    <img src="/static/img/logo-92black.png" alt="92도씨 로고">
+                    <div class="hcal-wlogo-caption">92°C ROASTERY</div>
+                </div>
+            `;
+
             html += `</div>`;
             return html;
         }
