@@ -393,13 +393,85 @@
             .roulette-card-front { font-size: 5.5rem; }
             .roulette-card-back { font-size: 6.4rem; }
         }
+
+        /* ========== 관리자 편집 모달 ========== */
+        .header h1 { cursor: pointer; user-select: none; -webkit-user-select: none; }
+        .admin-modal {
+            position: fixed; inset: 0; z-index: 5000;
+            background: rgba(0,0,0,0.75);
+            display: none; align-items: center; justify-content: center;
+            padding: 20px;
+        }
+        .admin-modal.active { display: flex; }
+        .admin-modal-card {
+            background: #1f2640;
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 18px;
+            padding: 24px;
+            width: 100%; max-width: 420px;
+            color: white;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+        }
+        .admin-modal-title {
+            font-size: 1.3rem; font-weight: 800;
+            margin-bottom: 18px; text-align: center;
+        }
+        .admin-modal label {
+            display: block;
+            font-size: 0.9rem; font-weight: 600;
+            color: rgba(255,255,255,0.75);
+            margin: 14px 0 6px;
+        }
+        .admin-modal input[type="text"],
+        .admin-modal input[type="password"] {
+            width: 100%;
+            padding: 12px 14px;
+            border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.18);
+            background: rgba(255,255,255,0.06);
+            color: white;
+            font-size: 1rem;
+            font-family: inherit;
+        }
+        .admin-modal input:focus {
+            outline: none;
+            border-color: #FFD700;
+            background: rgba(255,255,255,0.12);
+        }
+        .admin-modal-error {
+            color: #FF6B6B;
+            font-size: 0.85rem;
+            margin-top: 8px;
+            min-height: 1em;
+        }
+        .admin-modal-btns {
+            display: flex; gap: 10px;
+            margin-top: 20px;
+        }
+        .admin-modal-btn {
+            flex: 1;
+            padding: 12px;
+            border: none; border-radius: 10px;
+            font-size: 1rem; font-weight: 700;
+            cursor: pointer;
+            font-family: inherit;
+        }
+        .admin-modal-btn.primary {
+            background: linear-gradient(135deg, #FF8C00, #FF6B00);
+            color: white;
+        }
+        .admin-modal-btn.secondary {
+            background: rgba(255,255,255,0.1);
+            color: rgba(255,255,255,0.8);
+        }
+        .admin-modal-btn:active { transform: scale(0.97); }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1>🎲 누가 쏠까?</h1>
-            <p class="subtitle">오늘 커피 한 잔, 누가 쏠지 정해볼까요?</p>
+            <h1 id="header-title">🎲 누가 쏠까?</h1>
+            <p class="subtitle" id="header-subtitle">오늘 커피 한 잔, 누가 쏠지 정해볼까요?</p>
         </div>
 
         <div class="game-select">
@@ -457,7 +529,123 @@
         <div class="winner-sub">덕분에 잘 먹겠습니다</div>
     </div>
 
+    <!-- 관리자 PIN 모달 -->
+    <div class="admin-modal" id="admin-pin-modal">
+        <div class="admin-modal-card">
+            <div class="admin-modal-title">관리자 인증</div>
+            <label for="admin-pin-input">PIN</label>
+            <input type="password" id="admin-pin-input" inputmode="numeric" maxlength="8" autocomplete="off">
+            <div class="admin-modal-error" id="admin-pin-error"></div>
+            <div class="admin-modal-btns">
+                <button class="admin-modal-btn secondary" onclick="closeAdminPin()">취소</button>
+                <button class="admin-modal-btn primary" onclick="submitAdminPin()">확인</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 관리자 편집 모달 -->
+    <div class="admin-modal" id="admin-edit-modal">
+        <div class="admin-modal-card">
+            <div class="admin-modal-title">화면 텍스트 편집</div>
+            <label for="admin-title-input">타이틀</label>
+            <input type="text" id="admin-title-input" maxlength="60">
+            <label for="admin-subtitle-input">부제목</label>
+            <input type="text" id="admin-subtitle-input" maxlength="120">
+            <label for="admin-winner-input">당첨 표시 텍스트</label>
+            <input type="text" id="admin-winner-input" maxlength="20">
+            <div class="admin-modal-btns">
+                <button class="admin-modal-btn secondary" onclick="closeAdminEdit()">취소</button>
+                <button class="admin-modal-btn primary" onclick="saveAdminEdit()">저장</button>
+            </div>
+        </div>
+    </div>
+
     <script>
+        // ========== 관리자 편집: 화면 텍스트 ==========
+        const GAME_SETTINGS_KEY = 'gameSettings_v1';
+        const ADMIN_PIN = '0000';
+        const DEFAULT_GAME_SETTINGS = {
+          title: '🎲 누가 쏠까?',
+          subtitle: '오늘 커피 한 잔, 누가 쏠지 정해볼까요?',
+          winnerLabel: '당첨'
+        };
+        function loadGameSettings() {
+          try {
+            const raw = localStorage.getItem(GAME_SETTINGS_KEY);
+            if (raw) return Object.assign({}, DEFAULT_GAME_SETTINGS, JSON.parse(raw));
+          } catch (e) {}
+          return Object.assign({}, DEFAULT_GAME_SETTINGS);
+        }
+        let gameSettings = loadGameSettings();
+        function applyGameSettings() {
+          document.getElementById('header-title').textContent = gameSettings.title;
+          document.getElementById('header-subtitle').textContent = gameSettings.subtitle;
+        }
+
+        // 타이틀 5번 탭 → PIN 모달
+        let titleTapCount = 0;
+        let titleTapTimer = null;
+        function onTitleTap() {
+          titleTapCount++;
+          clearTimeout(titleTapTimer);
+          titleTapTimer = setTimeout(() => { titleTapCount = 0; }, 2000);
+          if (titleTapCount >= 5) {
+            titleTapCount = 0;
+            clearTimeout(titleTapTimer);
+            openAdminPin();
+          }
+        }
+
+        function openAdminPin() {
+          const input = document.getElementById('admin-pin-input');
+          input.value = '';
+          document.getElementById('admin-pin-error').textContent = '';
+          document.getElementById('admin-pin-modal').classList.add('active');
+          setTimeout(() => input.focus(), 50);
+        }
+        function closeAdminPin() {
+          document.getElementById('admin-pin-modal').classList.remove('active');
+        }
+        function submitAdminPin() {
+          const input = document.getElementById('admin-pin-input');
+          if (input.value === ADMIN_PIN) {
+            closeAdminPin();
+            openAdminEdit();
+          } else {
+            document.getElementById('admin-pin-error').textContent = 'PIN이 일치하지 않습니다';
+            input.value = '';
+            input.focus();
+          }
+        }
+
+        function openAdminEdit() {
+          document.getElementById('admin-title-input').value = gameSettings.title;
+          document.getElementById('admin-subtitle-input').value = gameSettings.subtitle;
+          document.getElementById('admin-winner-input').value = gameSettings.winnerLabel;
+          document.getElementById('admin-edit-modal').classList.add('active');
+        }
+        function closeAdminEdit() {
+          document.getElementById('admin-edit-modal').classList.remove('active');
+        }
+        function saveAdminEdit() {
+          const title = document.getElementById('admin-title-input').value.trim() || DEFAULT_GAME_SETTINGS.title;
+          const subtitle = document.getElementById('admin-subtitle-input').value.trim() || DEFAULT_GAME_SETTINGS.subtitle;
+          const winnerLabel = document.getElementById('admin-winner-input').value.trim() || DEFAULT_GAME_SETTINGS.winnerLabel;
+          gameSettings = { title, subtitle, winnerLabel };
+          try { localStorage.setItem(GAME_SETTINGS_KEY, JSON.stringify(gameSettings)); } catch (e) {}
+          applyGameSettings();
+          closeAdminEdit();
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+          applyGameSettings();
+          const titleEl = document.getElementById('header-title');
+          titleEl.addEventListener('click', onTitleTap);
+          document.getElementById('admin-pin-input').addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') submitAdminPin();
+          });
+        });
+
         // ========== 공통 색상 ==========
         const COLORS = [
           '#FF6B6B','#4ECDC4','#45B7D1','#FFA07A','#98D8C8',
@@ -751,7 +939,7 @@
           const statusEl = document.getElementById('finger-status');
           statusEl.classList.remove('countdown');
           statusEl.classList.add('winner');
-          statusEl.textContent = '🎉 ' + winnerData.animal + ' 당첨!';
+          statusEl.textContent = '🎉 ' + winnerData.animal + ' ' + gameSettings.winnerLabel + '!';
 
           spawnConfetti();
           setTimeout(() => {
@@ -941,7 +1129,7 @@
           setTimeout(() => {
             clearInterval(tickInterval);
             document.getElementById('winner-emoji').textContent = '🎉';
-            showWinner(winnerNum + '번 당첨!', () => {
+            showWinner(winnerNum + '번 ' + gameSettings.winnerLabel + '!', () => {
               closeRouletteGame();
             });
           }, 5200);
