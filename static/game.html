@@ -351,20 +351,12 @@
         }
         .winner-overlay.active { display: flex; }
         .winner-message {
-            font-size: 2rem; font-weight: 800;
+            font-size: 2.8rem; font-weight: 900;
+            color: #FFD700;
             text-align: center;
             animation: winnerAppear 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
-            line-height: 1.4;
-        }
-        .winner-sub {
-            font-size: 1.1rem; color: rgba(255,255,255,0.7);
-            margin-top: 16px;
-            animation: winnerAppear 0.8s 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) both;
-        }
-        .winner-emoji {
-            font-size: 4rem;
-            margin-bottom: 20px;
-            animation: winnerAppear 0.8s 0.1s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+            line-height: 1.2;
+            padding: 0 20px;
         }
         @keyframes winnerAppear {
             from { opacity: 0; transform: scale(0.5) translateY(30px); }
@@ -524,9 +516,7 @@
 
     <!-- 공통 당첨 오버레이 -->
     <div class="winner-overlay" id="winner-overlay">
-        <div class="winner-emoji" id="winner-emoji">🎉</div>
         <div class="winner-message" id="winner-message"></div>
-        <div class="winner-sub">덕분에 잘 먹겠습니다</div>
     </div>
 
     <!-- 관리자 PIN 모달 -->
@@ -1128,8 +1118,7 @@
 
           setTimeout(() => {
             clearInterval(tickInterval);
-            document.getElementById('winner-emoji').textContent = '🎉';
-            showWinner(winnerNum + '번 ' + gameSettings.winnerLabel + '!', () => {
+            showWinner('🎉 ' + winnerNum + '번 ' + gameSettings.winnerLabel + '!', () => {
               closeRouletteGame();
             });
           }, 5200);
