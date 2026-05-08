@@ -1883,24 +1883,26 @@
             if (c) c.innerHTML = renderHistoryCalendar();
         }
 
-        function startOfWeek(d) {
-            const sun = new Date(d);
-            sun.setDate(d.getDate() - d.getDay());
-            sun.setHours(0, 0, 0, 0);
-            return sun;
+        // 달력 기본 시작: 어제 (D-1) — 첫 줄에 어제·오늘·내일·로고가 오도록
+        function defaultCalStart() {
+            const d = new Date();
+            d.setDate(d.getDate() - 1);
+            d.setHours(0, 0, 0, 0);
+            return d;
         }
 
         function changeHistoryCalWeek(deltaDays) {
-            if (!historyCalWeekStart) historyCalWeekStart = startOfWeek(new Date());
+            if (!historyCalWeekStart) historyCalWeekStart = defaultCalStart();
             const d = new Date(historyCalWeekStart);
             d.setDate(d.getDate() + deltaDays);
-            historyCalWeekStart = startOfWeek(d);
+            d.setHours(0, 0, 0, 0);
+            historyCalWeekStart = d;
             const c = document.getElementById('history-content');
             if (c) c.innerHTML = renderHistoryCalendar();
         }
 
         function goHistoryCalThisWeek() {
-            historyCalWeekStart = startOfWeek(new Date());
+            historyCalWeekStart = defaultCalStart();
             const c = document.getElementById('history-content');
             if (c) c.innerHTML = renderHistoryCalendar();
         }
@@ -1910,9 +1912,20 @@
         }
 
         function renderHistoryCalendar() {
-            if (!historyCalWeekStart) historyCalWeekStart = startOfWeek(new Date());
+            if (!historyCalWeekStart) historyCalWeekStart = defaultCalStart();
             const data = window.coffeeHistoryData || { today: [], history: [] };
-            const all = [...(data.today || []), ...(data.history || [])];
+
+            // today와 history 양쪽에 진행 중 항목이 들어올 수 있으므로 id 기준 dedup
+            const seen = new Set();
+            const all = [];
+            for (const it of [...(data.today || []), ...(data.history || [])]) {
+                const id = it && it.id;
+                if (id != null) {
+                    if (seen.has(id)) continue;
+                    seen.add(id);
+                }
+                all.push(it);
+            }
             window.coffeeAllForCal = all;
 
             const byDate = {};
@@ -1926,58 +1939,62 @@
             const weekEnd = new Date(weekStart);
             weekEnd.setDate(weekStart.getDate() + 6);
             const today = ymdLocalCal(new Date());
-            const dayLabels = ['일', '월', '화', '수', '목', '금', '토'];
-            const dayCls = ['sun', '', '', '', '', '', 'sat'];
+            const dayLabelsAll = ['일', '월', '화', '수', '목', '금', '토'];
+            const dayClsAll = ['sun', '', '', '', '', '', 'sat'];
 
-            let html = `
-                <div class="hcal-week-nav">
-                    <button onclick="changeHistoryCalWeek(-7)" aria-label="이전 주">‹</button>
-                    <h3>${fmtMd(weekStart)} — ${fmtMd(weekEnd)}</h3>
-                    <button onclick="changeHistoryCalWeek(7)" aria-label="다음 주">›</button>
-                    <button class="hcal-today-btn" onclick="goHistoryCalThisWeek()">이번 주</button>
-                </div>
-                <div class="hcal-week-grid">
-            `;
-
-            // 일~토 7개 셀 (4×2 그리드 — 일/월/화/수 그리고 목/금/토/로고)
-            for (let i = 0; i < 7; i++) {
+            function renderDayCell(offset) {
                 const cur = new Date(weekStart);
-                cur.setDate(weekStart.getDate() + i);
+                cur.setDate(weekStart.getDate() + offset);
                 const ymd = ymdLocalCal(cur);
                 const isToday = (ymd === today);
                 const items = byDate[ymd] || [];
-                html += `<div class="hcal-wcell ${isToday ? 'hcal-wcell-today' : ''}">`;
-                html += `
+                const dow = cur.getDay();
+                let cell = `<div class="hcal-wcell ${isToday ? 'hcal-wcell-today' : ''}">`;
+                cell += `
                     <div class="hcal-wcell-header">
-                        <span class="hcal-wcell-date ${dayCls[i]}">${cur.getDate()}</span>
-                        <span class="hcal-wcell-day ${dayCls[i]}">${dayLabels[i]}</span>
+                        <span class="hcal-wcell-date ${dayClsAll[dow]}">${cur.getDate()}</span>
+                        <span class="hcal-wcell-day ${dayClsAll[dow]}">${dayLabelsAll[dow]}</span>
                     </div>
                 `;
                 if (items.length) {
-                    html += `<div class="hcal-wcoffees">`;
+                    cell += `<div class="hcal-wcoffees">`;
                     for (const { it, idx } of items) {
                         const name = escapeCalText(it['커피'] || '');
                         const notes = escapeCalText(it['컵노트'] || '');
                         const statusCls = String(it['상태'] || '').replace(/\s/g, '');
-                        html += `<div class="hcal-wcoffee hcal-wcoffee-${statusCls}" onclick="openCoffeeModal(window.coffeeAllForCal[${idx}])">`;
-                        html += `<div class="hcal-wcoffee-name">${name}</div>`;
-                        if (notes) html += `<div class="hcal-wcoffee-notes">${notes}</div>`;
-                        html += `</div>`;
+                        cell += `<div class="hcal-wcoffee hcal-wcoffee-${statusCls}" onclick="openCoffeeModal(window.coffeeAllForCal[${idx}])">`;
+                        cell += `<div class="hcal-wcoffee-name">${name}</div>`;
+                        if (notes) cell += `<div class="hcal-wcoffee-notes">${notes}</div>`;
+                        cell += `</div>`;
                     }
-                    html += `</div>`;
+                    cell += `</div>`;
                 } else {
-                    html += `<div class="hcal-wempty">·</div>`;
+                    cell += `<div class="hcal-wempty">·</div>`;
                 }
-                html += `</div>`;
+                cell += `</div>`;
+                return cell;
             }
 
-            // 8번째 셀: 92도씨 로고
+            let html = `
+                <div class="hcal-week-nav">
+                    <button onclick="changeHistoryCalWeek(-7)" aria-label="이전 7일">‹</button>
+                    <h3>${fmtMd(weekStart)} — ${fmtMd(weekEnd)}</h3>
+                    <button onclick="changeHistoryCalWeek(7)" aria-label="다음 7일">›</button>
+                    <button class="hcal-today-btn" onclick="goHistoryCalThisWeek()">오늘</button>
+                </div>
+                <div class="hcal-week-grid">
+            `;
+
+            // 첫 줄: 어제(D-1) · 오늘(D) · 내일(D+1) · 로고
+            for (let i = 0; i < 3; i++) html += renderDayCell(i);
             html += `
                 <div class="hcal-wlogo">
                     <img src="/static/img/logo-92black.png" alt="92도씨 로고">
                     <div class="hcal-wlogo-caption">92°C ROASTERY</div>
                 </div>
             `;
+            // 둘째 줄: D+2 ~ D+5 (4개)
+            for (let i = 3; i < 7; i++) html += renderDayCell(i);
 
             html += `</div>`;
             return html;

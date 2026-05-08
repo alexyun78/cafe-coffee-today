@@ -170,20 +170,23 @@ def _months_ago_iso(months: int) -> str:
 
 
 def list_today_and_history():
-    """현재 '진행 중' 항목과 히스토리(예정·완료만)를 한글 키로 반환.
+    """현재 '진행 중' 항목과 히스토리를 한글 키로 반환.
 
     공개용: '완료' 항목은 최근 3개월 이내(제공일 우선, 없으면 로스팅일)만 노출.
     예정 항목은 향후 일정이므로 기간 필터 없이 모두 노출.
+    진행 중 항목은 '지금 제공 중' 카드와 히스토리 리스트 양쪽에 노출되며,
+    히스토리 리스트에서는 우선순위 1번이 된다.
 
-    히스토리 정렬:
-      1) 예정 → 완료 순
-      2) 예정: 로스팅 오래된 순(오름차순), 같은 날이면 가나다순
-      3) 완료: 로스팅 최신순(내림차순), 같은 날이면 가나다순
-    진행 중은 이미 '지금 제공 중'에 표시되므로 히스토리에서 제외.
+    히스토리 정렬 우선순위:
+      1) 진행 중 (제공중인 커피)
+      2) 예정 + 미래 제공일 — 오늘과 가까운 제공일 순(오름차순)
+      3) 그 외 — 로스팅 최신순(내림차순)
+    동순위 내 동률은 이름 가나다순.
     """
     today = []
     history = []
     cutoff = _months_ago_iso(3)
+    today_iso = date.today().isoformat()
 
     with connect() as conn:
         rows = conn.execute("SELECT * FROM coffees").fetchall()
@@ -196,6 +199,7 @@ def list_today_and_history():
         status = item.get("상태")
         if status == "진행 중":
             today.append(item)
+            history.append(item)
         elif status == "예정":
             history.append(item)
         elif status == "완료":
@@ -207,17 +211,16 @@ def list_today_and_history():
 
     def sort_key(item):
         status = item.get("상태")
-        status_priority = 0 if status == "예정" else 1
-        roast = item.get("로스팅") or {}
-        start = roast.get("start") or ""
-        ts = _date_to_ts(start)
+        serve = (item.get("제공일") or {}).get("start") or ""
+        roast = (item.get("로스팅") or {}).get("start") or ""
         name = item.get("커피") or ""
-        if status == "예정":
-            # 오래된 순 (오름차순)
-            return (status_priority, ts, name)
-        else:
-            # 최신순 (내림차순)
-            return (status_priority, -ts, name)
+        roast_ts = _date_to_ts(roast)
+        serve_ts = _date_to_ts(serve)
+        if status == "진행 중":
+            return (0, -roast_ts, name)
+        if status == "예정" and serve and serve >= today_iso:
+            return (1, serve_ts, name)
+        return (2, -roast_ts, name)
 
     history.sort(key=sort_key)
     return today, history
