@@ -230,6 +230,11 @@ def admin_page():
     return send_from_directory("static", "admin.html")
 
 
+@app.get("/roastery")
+def roastery_page():
+    return send_from_directory("static", "roastery.html")
+
+
 @app.get("/apk")
 def apk_page():
     return send_from_directory("static", "apk.html")

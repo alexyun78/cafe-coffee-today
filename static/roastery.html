@@ -1,0 +1,1131 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>92°C ROASTERY — Specialty Coffee, Daily Roasted</title>
+    <meta name="description" content="92도씨 로스터리 — 매일 소량 로스팅한 스페셜티 단일 산지 원두를 한 잔으로 내립니다.">
+    <link rel="icon" type="image/png" href="/static/img/logo-92black.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* 따뜻한 미니멀 — refero 스타일 골격 + 커피 톤 */
+            --canvas: #FFFFFF;
+            --canvas-warm: #FAF7F2;
+            --canvas-stone: #F2ECE3;
+            --ink: #1A1410;
+            --ink-mute: #4A3F36;
+            --ink-soft: #6B5E52;
+            --espresso: #6F4E37;
+            --caramel: #C9986A;
+            --copper: #B5703D;
+            --line: #E8E0D5;
+            --line-soft: #F0E9DD;
+
+            --font-display: "Cormorant Garamond", "Pretendard", serif;
+            --font-body: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            --font-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", monospace;
+
+            --container: 1200px;
+            --r-sm: 6px;
+            --r-md: 12px;
+            --r-pill: 999px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: var(--font-body);
+            color: var(--ink);
+            background: var(--canvas);
+            font-feature-settings: "kern", "ss01";
+            line-height: 1.55;
+            -webkit-font-smoothing: antialiased;
+        }
+        a { color: inherit; text-decoration: none; }
+        img { display: block; max-width: 100%; height: auto; }
+
+        .container {
+            max-width: var(--container);
+            margin: 0 auto;
+            padding: 0 32px;
+        }
+
+        /* ========== 네비게이션 ========== */
+        .site-nav {
+            position: sticky; top: 0; z-index: 50;
+            background: rgba(255,255,255,0.85);
+            backdrop-filter: saturate(140%) blur(14px);
+            -webkit-backdrop-filter: saturate(140%) blur(14px);
+            border-bottom: 1px solid var(--line-soft);
+        }
+        .nav-inner {
+            max-width: var(--container);
+            margin: 0 auto;
+            padding: 18px 32px;
+            display: flex; align-items: center; justify-content: space-between;
+            gap: 24px;
+        }
+        .brand {
+            font-family: var(--font-display);
+            font-size: 1.3rem; font-weight: 600;
+            letter-spacing: 0.02em;
+            display: flex; align-items: baseline; gap: 8px;
+        }
+        .brand-temp { font-family: var(--font-mono); font-size: 0.75rem; color: var(--copper); letter-spacing: 0.1em; }
+        .nav-links { display: flex; gap: 28px; align-items: center; }
+        .nav-links a {
+            font-size: 0.85rem; color: var(--ink-mute); font-weight: 500;
+            letter-spacing: 0.04em;
+            transition: color 0.2s;
+        }
+        .nav-links a:hover { color: var(--ink); }
+        .nav-cta {
+            font-size: 0.85rem; font-weight: 600;
+            background: var(--ink); color: var(--canvas);
+            padding: 10px 20px; border-radius: var(--r-pill);
+            transition: background 0.2s, transform 0.2s;
+        }
+        .nav-cta:hover { background: var(--espresso); transform: translateY(-1px); }
+        @media (max-width: 720px) {
+            .nav-links { display: none; }
+            .nav-inner { padding: 14px 20px; }
+        }
+
+        /* ========== 히어로 ========== */
+        .hero {
+            padding: 96px 0 120px;
+            background: var(--canvas);
+            border-bottom: 1px solid var(--line-soft);
+            position: relative;
+            overflow: hidden;
+        }
+        .hero-grid {
+            display: grid;
+            grid-template-columns: 1.4fr 1fr;
+            gap: 80px;
+            align-items: center;
+        }
+        .hero-eyebrow {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            letter-spacing: 0.25em;
+            color: var(--copper);
+            margin-bottom: 32px;
+            display: flex; align-items: center; gap: 12px;
+        }
+        .hero-eyebrow::before {
+            content: ""; display: inline-block;
+            width: 32px; height: 1px; background: var(--copper);
+        }
+        .hero-title {
+            font-family: var(--font-display);
+            font-weight: 500;
+            font-size: clamp(2.6rem, 6vw, 4.6rem);
+            line-height: 1.05;
+            letter-spacing: -0.02em;
+            color: var(--ink);
+            margin-bottom: 28px;
+        }
+        .hero-title em {
+            font-style: italic; font-weight: 600;
+            color: var(--espresso);
+        }
+        .hero-title .temp {
+            font-family: var(--font-mono);
+            font-style: normal;
+            font-size: 0.6em;
+            font-weight: 500;
+            color: var(--copper);
+            vertical-align: 0.18em;
+            letter-spacing: 0;
+        }
+        .hero-sub {
+            font-size: 1.1rem;
+            color: var(--ink-mute);
+            line-height: 1.7;
+            max-width: 520px;
+            margin-bottom: 40px;
+        }
+        .hero-meta {
+            display: flex; gap: 32px; flex-wrap: wrap;
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            letter-spacing: 0.18em;
+            color: var(--ink-soft);
+        }
+        .hero-meta span {
+            display: flex; align-items: center; gap: 8px;
+        }
+        .hero-meta span::before {
+            content: "■"; color: var(--caramel); font-size: 0.6rem;
+        }
+        .hero-visual {
+            position: relative;
+            display: flex; justify-content: center; align-items: center;
+        }
+        .hero-visual::after {
+            content: ""; position: absolute;
+            inset: 8% -8% 8% 8%;
+            background: radial-gradient(circle at 60% 40%, rgba(201,152,106,0.18), transparent 70%);
+            z-index: -1;
+        }
+        .hero-visual img {
+            width: 100%; max-width: 420px;
+            mix-blend-mode: multiply;
+        }
+        @media (max-width: 900px) {
+            .hero { padding: 64px 0 80px; }
+            .hero-grid { grid-template-columns: 1fr; gap: 48px; }
+            .hero-visual img { max-width: 280px; }
+        }
+
+        /* ========== 필러스 ========== */
+        .pillars {
+            padding: 100px 0;
+            background: var(--canvas-warm);
+            border-bottom: 1px solid var(--line-soft);
+        }
+        .pillars-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 48px;
+        }
+        .pillar { padding: 0; }
+        .pillar-num {
+            font-family: var(--font-mono);
+            font-size: 0.75rem; color: var(--caramel);
+            letter-spacing: 0.2em;
+            margin-bottom: 20px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--line);
+        }
+        .pillar h3 {
+            font-family: var(--font-display);
+            font-size: 1.7rem;
+            font-weight: 600;
+            line-height: 1.25;
+            margin-bottom: 14px;
+            letter-spacing: -0.01em;
+        }
+        .pillar p {
+            font-size: 0.97rem;
+            color: var(--ink-mute);
+            line-height: 1.7;
+        }
+        @media (max-width: 720px) {
+            .pillars { padding: 64px 0; }
+            .pillars-grid { grid-template-columns: 1fr; gap: 40px; }
+        }
+
+        /* ========== 섹션 헤드 공통 ========== */
+        .section { padding: 120px 0; }
+        .section-head { margin-bottom: 64px; max-width: 720px; }
+        .eyebrow {
+            display: inline-block;
+            font-family: var(--font-mono);
+            font-size: 0.72rem;
+            letter-spacing: 0.28em;
+            color: var(--copper);
+            margin-bottom: 20px;
+        }
+        .section-head h2 {
+            font-family: var(--font-display);
+            font-weight: 500;
+            font-size: clamp(2.1rem, 4.5vw, 3.4rem);
+            letter-spacing: -0.02em;
+            line-height: 1.1;
+            color: var(--ink);
+            margin-bottom: 18px;
+        }
+        .section-head h2 em { font-style: italic; color: var(--espresso); font-weight: 600; }
+        .section-sub {
+            font-size: 1.02rem;
+            color: var(--ink-mute);
+            line-height: 1.7;
+        }
+        @media (max-width: 720px) {
+            .section { padding: 80px 0; }
+            .section-head { margin-bottom: 40px; }
+        }
+
+        /* ========== Now Serving ========== */
+        .now-serving { background: var(--canvas); }
+        .now-card {
+            background: var(--canvas-warm);
+            border: 1px solid var(--line);
+            border-radius: var(--r-md);
+            padding: 64px 56px;
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            gap: 64px;
+            position: relative;
+            overflow: hidden;
+        }
+        .now-card::before {
+            content: ""; position: absolute;
+            top: 0; right: 0; width: 280px; height: 280px;
+            background: radial-gradient(circle, rgba(201,152,106,0.18), transparent 65%);
+            pointer-events: none;
+        }
+        .now-card-meta {
+            display: flex; align-items: center; gap: 16px;
+            margin-bottom: 28px;
+            position: relative;
+        }
+        .now-status {
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            font-weight: 500;
+            letter-spacing: 0.25em;
+            color: var(--canvas);
+            background: var(--ink);
+            padding: 6px 14px;
+            border-radius: var(--r-pill);
+            display: inline-flex; align-items: center; gap: 8px;
+        }
+        .now-status::before {
+            content: ""; width: 7px; height: 7px;
+            background: var(--caramel);
+            border-radius: 50%;
+            animation: pulse 2.4s ease-in-out infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(0.85); }
+        }
+        .now-process {
+            font-family: var(--font-mono);
+            font-size: 0.78rem;
+            letter-spacing: 0.12em;
+            color: var(--ink-mute);
+            padding: 6px 12px;
+            border: 1px solid var(--line);
+            border-radius: var(--r-pill);
+            background: var(--canvas);
+        }
+        .now-title {
+            font-family: var(--font-display);
+            font-weight: 500;
+            font-size: clamp(1.8rem, 3.4vw, 2.8rem);
+            line-height: 1.15;
+            letter-spacing: -0.015em;
+            color: var(--ink);
+            margin-bottom: 28px;
+        }
+        .now-roastery {
+            font-family: var(--font-mono);
+            font-size: 0.78rem;
+            color: var(--ink-soft);
+            letter-spacing: 0.12em;
+            margin-bottom: 24px;
+        }
+        .now-comment {
+            font-family: var(--font-display);
+            font-style: italic;
+            font-size: 1.15rem;
+            color: var(--espresso);
+            line-height: 1.55;
+            padding: 20px 24px;
+            border-left: 2px solid var(--caramel);
+            background: rgba(255,255,255,0.5);
+            border-radius: 0 var(--r-sm) var(--r-sm) 0;
+            margin-bottom: 0;
+        }
+        .now-side {
+            display: flex; flex-direction: column; gap: 24px;
+            position: relative;
+        }
+        .now-side-block { padding: 0; }
+        .now-side-label {
+            font-family: var(--font-mono);
+            font-size: 0.7rem; letter-spacing: 0.2em;
+            color: var(--ink-soft);
+            margin-bottom: 12px;
+            display: block;
+        }
+        .now-notes-list {
+            display: flex; flex-wrap: wrap; gap: 8px;
+        }
+        .note-chip {
+            font-size: 0.85rem;
+            padding: 7px 14px;
+            background: var(--canvas);
+            border: 1px solid var(--line);
+            border-radius: var(--r-pill);
+            color: var(--ink-mute);
+            font-weight: 500;
+        }
+        .now-roast-date {
+            font-family: var(--font-mono);
+            font-size: 1.05rem;
+            color: var(--ink);
+            font-weight: 500;
+            letter-spacing: 0.04em;
+        }
+        .now-empty {
+            text-align: center;
+            padding: 80px 40px;
+            background: var(--canvas-warm);
+            border: 1px solid var(--line);
+            border-radius: var(--r-md);
+            font-family: var(--font-display);
+            font-style: italic;
+            color: var(--ink-mute);
+            font-size: 1.3rem;
+        }
+        @media (max-width: 900px) {
+            .now-card { grid-template-columns: 1fr; gap: 36px; padding: 40px 28px; }
+        }
+
+        /* ========== Upcoming Rail ========== */
+        .upcoming { background: var(--canvas-warm); }
+        .upcoming-rail {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+        .upcoming-card {
+            background: var(--canvas);
+            border: 1px solid var(--line);
+            border-radius: var(--r-md);
+            padding: 28px 24px;
+            display: flex; flex-direction: column;
+            gap: 14px;
+            transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+            cursor: default;
+        }
+        .upcoming-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 32px rgba(111, 78, 55, 0.08);
+            border-color: var(--caramel);
+        }
+        .upcoming-head {
+            display: flex; justify-content: space-between; align-items: flex-start;
+            gap: 12px;
+        }
+        .upcoming-process {
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            letter-spacing: 0.14em;
+            color: var(--copper);
+            white-space: nowrap;
+        }
+        .upcoming-serve {
+            font-family: var(--font-mono);
+            font-size: 0.72rem;
+            letter-spacing: 0.1em;
+            color: var(--ink-soft);
+            background: var(--canvas-warm);
+            padding: 4px 10px;
+            border-radius: var(--r-pill);
+        }
+        .upcoming-title {
+            font-family: var(--font-display);
+            font-size: 1.45rem;
+            font-weight: 600;
+            line-height: 1.2;
+            letter-spacing: -0.01em;
+            color: var(--ink);
+            min-height: 2.4em;
+        }
+        .upcoming-notes {
+            font-size: 0.88rem;
+            color: var(--ink-mute);
+            line-height: 1.55;
+        }
+        .upcoming-empty {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 60px;
+            color: var(--ink-soft);
+            font-family: var(--font-display);
+            font-style: italic;
+            font-size: 1.1rem;
+        }
+
+        /* ========== Hours ========== */
+        .hours-section { background: var(--canvas); }
+        .hours-grid {
+            display: grid;
+            grid-template-columns: 1.4fr 1fr;
+            gap: 24px;
+        }
+        .hours-card {
+            border: 1px solid var(--line);
+            border-radius: var(--r-md);
+            padding: 56px 48px;
+            position: relative;
+            overflow: hidden;
+        }
+        .hours-card--main {
+            background: var(--ink);
+            color: var(--canvas);
+            border-color: var(--ink);
+        }
+        .hours-card--early {
+            background: var(--canvas-warm);
+        }
+        .hours-day-en {
+            font-family: var(--font-mono);
+            font-size: 0.78rem;
+            letter-spacing: 0.22em;
+            opacity: 0.75;
+            margin-bottom: 14px;
+        }
+        .hours-card--early .hours-day-en { color: var(--copper); opacity: 1; }
+        .hours-day-ko {
+            font-family: var(--font-display);
+            font-size: 1.6rem;
+            font-weight: 500;
+            letter-spacing: -0.005em;
+            margin-bottom: 28px;
+            line-height: 1.3;
+        }
+        .hours-time {
+            font-family: var(--font-display);
+            font-size: clamp(2.6rem, 5.2vw, 4rem);
+            font-weight: 500;
+            letter-spacing: -0.02em;
+            line-height: 1;
+            margin-bottom: 22px;
+        }
+        .hours-time em {
+            font-style: italic;
+            font-weight: 600;
+            color: var(--caramel);
+        }
+        .hours-card--early .hours-time em { color: var(--copper); }
+        .hours-note {
+            font-size: 0.92rem;
+            opacity: 0.7;
+            line-height: 1.6;
+            max-width: 320px;
+        }
+        .hours-card--early .hours-note { color: var(--ink-mute); opacity: 1; }
+        .early-badge {
+            position: absolute;
+            top: 28px; right: 28px;
+            font-family: var(--font-mono);
+            font-size: 0.66rem;
+            letter-spacing: 0.22em;
+            color: var(--copper);
+            border: 1px solid var(--copper);
+            padding: 5px 12px;
+            border-radius: var(--r-pill);
+            background: var(--canvas);
+        }
+        .hours-foot {
+            margin-top: 48px;
+            padding-top: 32px;
+            border-top: 1px solid var(--line);
+            display: flex; justify-content: space-between; align-items: center;
+            flex-wrap: wrap; gap: 16px;
+            font-family: var(--font-mono);
+            font-size: 0.76rem;
+            letter-spacing: 0.14em;
+            color: var(--ink-soft);
+        }
+        @media (max-width: 900px) {
+            .hours-grid { grid-template-columns: 1fr; }
+            .hours-card { padding: 40px 28px; }
+        }
+
+        /* ========== Catalog ========== */
+        .catalog { background: var(--canvas-warm); }
+        .filter-bar {
+            display: flex; flex-wrap: wrap; gap: 8px;
+            margin-bottom: 40px;
+            padding-bottom: 28px;
+            border-bottom: 1px solid var(--line);
+        }
+        .filter-chip {
+            font-family: var(--font-body);
+            font-size: 0.85rem;
+            font-weight: 500;
+            padding: 9px 18px;
+            border-radius: var(--r-pill);
+            border: 1px solid var(--line);
+            background: var(--canvas);
+            color: var(--ink-mute);
+            cursor: pointer;
+            transition: all 0.18s;
+            white-space: nowrap;
+        }
+        .filter-chip:hover { border-color: var(--caramel); color: var(--ink); }
+        .filter-chip.active {
+            background: var(--ink);
+            color: var(--canvas);
+            border-color: var(--ink);
+        }
+        .filter-chip-count {
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            margin-left: 6px;
+            opacity: 0.6;
+        }
+        .catalog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+        }
+        .cat-card {
+            background: var(--canvas);
+            border: 1px solid var(--line);
+            border-radius: var(--r-md);
+            padding: 26px 24px;
+            display: flex; flex-direction: column;
+            gap: 14px;
+            position: relative;
+            transition: transform 0.18s, box-shadow 0.18s, border-color 0.18s;
+            min-height: 220px;
+        }
+        .cat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 28px rgba(111, 78, 55, 0.07);
+            border-color: var(--caramel);
+        }
+        .cat-card-head {
+            display: flex; justify-content: space-between; align-items: flex-start;
+            gap: 10px;
+        }
+        .cat-status {
+            font-family: var(--font-mono);
+            font-size: 0.62rem;
+            letter-spacing: 0.18em;
+            padding: 4px 10px;
+            border-radius: var(--r-pill);
+            white-space: nowrap;
+        }
+        .cat-status-진행중 { background: #f0ebe2; color: var(--espresso); }
+        .cat-status-예정 { background: #FFF3E4; color: var(--copper); }
+        .cat-status-완료 { background: var(--canvas-warm); color: var(--ink-soft); border: 1px solid var(--line); }
+        .cat-process {
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            letter-spacing: 0.13em;
+            color: var(--copper);
+        }
+        .cat-name {
+            font-family: var(--font-display);
+            font-size: 1.3rem;
+            font-weight: 600;
+            line-height: 1.22;
+            letter-spacing: -0.005em;
+            color: var(--ink);
+        }
+        .cat-notes {
+            font-size: 0.86rem;
+            color: var(--ink-mute);
+            line-height: 1.55;
+            flex: 1;
+        }
+        .cat-foot {
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            letter-spacing: 0.1em;
+            color: var(--ink-soft);
+            padding-top: 14px;
+            border-top: 1px solid var(--line-soft);
+            display: flex; justify-content: space-between;
+        }
+
+        /* ========== Footer ========== */
+        .site-footer {
+            background: var(--ink);
+            color: var(--canvas);
+            padding: 80px 0 32px;
+        }
+        .footer-inner { max-width: var(--container); margin: 0 auto; padding: 0 32px; }
+        .footer-top {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 64px;
+            padding-bottom: 56px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            margin-bottom: 32px;
+        }
+        .footer-brand h3 {
+            font-family: var(--font-display);
+            font-size: 2.2rem;
+            font-weight: 500;
+            margin-bottom: 14px;
+            letter-spacing: -0.01em;
+        }
+        .footer-brand p {
+            font-size: 0.92rem;
+            color: rgba(255,255,255,0.6);
+            line-height: 1.7;
+            max-width: 360px;
+        }
+        .footer-cols {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 32px;
+        }
+        .footer-col h4 {
+            font-family: var(--font-mono);
+            font-size: 0.72rem;
+            letter-spacing: 0.22em;
+            color: var(--caramel);
+            margin-bottom: 16px;
+            font-weight: 500;
+        }
+        .footer-col p, .footer-col a {
+            font-size: 0.92rem;
+            color: rgba(255,255,255,0.7);
+            line-height: 1.85;
+        }
+        .footer-col a:hover { color: var(--caramel); }
+        .footer-bottom {
+            display: flex; justify-content: space-between; align-items: center;
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            letter-spacing: 0.18em;
+            color: rgba(255,255,255,0.4);
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        @media (max-width: 720px) {
+            .footer-top { grid-template-columns: 1fr; gap: 40px; }
+            .footer-cols { grid-template-columns: 1fr 1fr; }
+            .footer-bottom { font-size: 0.62rem; letter-spacing: 0.14em; }
+        }
+
+        /* 로딩/스켈레톤 */
+        .skeleton {
+            background: linear-gradient(90deg, var(--line-soft) 0%, var(--canvas-warm) 50%, var(--line-soft) 100%);
+            background-size: 200% 100%;
+            animation: shimmer 1.6s infinite;
+            border-radius: var(--r-sm);
+        }
+        @keyframes shimmer {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+    </style>
+</head>
+<body>
+
+<header class="site-nav">
+    <div class="nav-inner">
+        <a class="brand" href="/roastery">
+            92<span class="brand-temp">°C</span> ROASTERY
+        </a>
+        <nav class="nav-links">
+            <a href="#now">지금</a>
+            <a href="#upcoming">곧 만날</a>
+            <a href="#hours">영업</a>
+            <a href="#catalog">컬렉션</a>
+        </nav>
+        <a class="nav-cta" href="/">오늘의 커피 →</a>
+    </div>
+</header>
+
+<!-- ============== HERO ============== -->
+<section class="hero">
+    <div class="container">
+        <div class="hero-grid">
+            <div class="hero-text">
+                <div class="hero-eyebrow">SINGLE ORIGIN · DAILY ROASTED</div>
+                <h1 class="hero-title">
+                    한 잔의 <em>정확함</em>은<br>
+                    92<span class="temp">°C</span>에서<br>
+                    시작됩니다.
+                </h1>
+                <p class="hero-sub">
+                    스페셜티 그린빈을 매일 소량 로스팅하여, 향이 가장 살아 있는 순간에 한 잔으로 내립니다.
+                    산지의 색을 바꾸지 않고 그대로 옮기는 것이, 92도씨가 정한 단 하나의 약속입니다.
+                </p>
+                <div class="hero-meta">
+                    <span>EST. 2024</span>
+                    <span>SEOUL</span>
+                    <span>SMALL BATCH</span>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <img src="/static/img/logo-92black.png" alt="92도씨 로스터리 로고">
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============== PILLARS ============== -->
+<section class="pillars">
+    <div class="container">
+        <div class="pillars-grid">
+            <article class="pillar">
+                <div class="pillar-num">— 01 / DAILY ROAST</div>
+                <h3>매일 새로 볶습니다</h3>
+                <p>로스팅 후 14일 이내의 원두만 매장에서 사용합니다. 향이 가장 좋을 때 한 잔으로 내려, 원두의 가장 좋은 시간을 손님께 그대로 드립니다.</p>
+            </article>
+            <article class="pillar">
+                <div class="pillar-num">— 02 / SINGLE ORIGIN</div>
+                <h3>단일 산지만 다룹니다</h3>
+                <p>에티오피아, 니카라과, 케냐, 과테말라, 콜롬비아, 인도네시아 등 단일 농장 그린빈만 취급합니다. 블렌딩 없이, 산지의 향을 그대로 추출합니다.</p>
+            </article>
+            <article class="pillar">
+                <div class="pillar-num">— 03 / 92°C BREW</div>
+                <h3>92도씨에서 추출합니다</h3>
+                <p>커피 향이 가장 잘 풀리는 92°C, 그 한 점의 정확함이 92도씨의 이름이 되었습니다. 매일 같은 온도, 같은 정성으로 한 잔을 내립니다.</p>
+            </article>
+        </div>
+    </div>
+</section>
+
+<!-- ============== NOW SERVING ============== -->
+<section class="section now-serving" id="now">
+    <div class="container">
+        <div class="section-head">
+            <span class="eyebrow">— NOW SERVING</span>
+            <h2>지금 한 <em>잔</em></h2>
+            <p class="section-sub">오늘 매장에서 내리고 있는 커피입니다.</p>
+        </div>
+        <div id="now-content">
+            <div class="now-empty skeleton" style="height: 280px;"></div>
+        </div>
+    </div>
+</section>
+
+<!-- ============== UPCOMING ============== -->
+<section class="section upcoming" id="upcoming">
+    <div class="container">
+        <div class="section-head">
+            <span class="eyebrow">— COMING UP</span>
+            <h2>곧 만날 <em>커피</em></h2>
+            <p class="section-sub">로스팅을 마치고 매장 입고를 기다리는 원두들. 가까운 제공일 순으로 정렬됩니다.</p>
+        </div>
+        <div class="upcoming-rail" id="upcoming-rail">
+            <!-- JS render -->
+        </div>
+    </div>
+</section>
+
+<!-- ============== HOURS ============== -->
+<section class="section hours-section" id="hours">
+    <div class="container">
+        <div class="section-head">
+            <span class="eyebrow">— OPENING HOURS</span>
+            <h2>영업 <em>일정</em></h2>
+            <p class="section-sub">매일 같은 시간, 한 잔의 정확한 온도로 기다리고 있습니다.</p>
+        </div>
+        <div class="hours-grid">
+            <div class="hours-card hours-card--main">
+                <div class="hours-day-en">MON · TUE · THU · FRI · SAT · SUN</div>
+                <div class="hours-day-ko">월 · 화 · 목 · 금 · 토 · 일</div>
+                <div class="hours-time">08:30 — 20:00</div>
+                <div class="hours-note">매일 오전 8시 30분 첫 잔부터, 저녁 8시 마지막 잔까지.</div>
+            </div>
+            <div class="hours-card hours-card--early">
+                <span class="early-badge">EARLY CLOSE</span>
+                <div class="hours-day-en">WEDNESDAY</div>
+                <div class="hours-day-ko">수요일</div>
+                <div class="hours-time">08:30 — <em>17:00</em></div>
+                <div class="hours-note">로스팅 정비일. 매장은 5시에 문을 닫고, 다음 날 아침 새 원두로 다시 만납니다.</div>
+            </div>
+        </div>
+        <div class="hours-foot">
+            <span>OPEN 365 · CLOSED ON HOLIDAYS</span>
+            <span id="hours-now-status">— 오늘의 영업시간 확인 중</span>
+        </div>
+    </div>
+</section>
+
+<!-- ============== CATALOG ============== -->
+<section class="section catalog" id="catalog">
+    <div class="container">
+        <div class="section-head">
+            <span class="eyebrow">— OUR COLLECTION</span>
+            <h2>로스터리 <em>컬렉션</em></h2>
+            <p class="section-sub">지금까지 92도씨 로스터리에서 다룬 원두들. 산지와 가공방식별로 한 잔의 결이 어떻게 달라지는지 확인해 보세요.</p>
+        </div>
+        <div class="filter-bar" id="filter-bar"></div>
+        <div class="catalog-grid" id="catalog-grid">
+            <!-- JS render -->
+        </div>
+    </div>
+</section>
+
+<!-- ============== FOOTER ============== -->
+<footer class="site-footer">
+    <div class="footer-inner">
+        <div class="footer-top">
+            <div class="footer-brand">
+                <h3>92<span style="font-family: var(--font-mono); font-size: 0.6em; color: var(--caramel);">°C</span> ROASTERY</h3>
+                <p>스페셜티 단일 산지 원두를 매일 소량 로스팅하는, 작은 동네의 로스터리입니다.</p>
+            </div>
+            <div class="footer-cols">
+                <div class="footer-col">
+                    <h4>HOURS</h4>
+                    <p>매일 08:30 — 20:00<br>수요일 08:30 — 17:00<br>(조기 마감)</p>
+                </div>
+                <div class="footer-col">
+                    <h4>ONLINE</h4>
+                    <p><a href="/">오늘의 커피 →</a><br><a href="/apk">앱 다운로드 →</a></p>
+                </div>
+                <div class="footer-col">
+                    <h4>CRAFT</h4>
+                    <p>SINGLE ORIGIN<br>SMALL BATCH<br>BREWED AT 92°C</p>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <span>© <span id="copy-year"></span> 92°C ROASTERY · ALL RIGHTS RESERVED</span>
+            <span>BREWED AT NINETY-TWO DEGREES CELSIUS</span>
+        </div>
+    </div>
+</footer>
+
+<script>
+(function () {
+    'use strict';
+
+    document.getElementById('copy-year').textContent = new Date().getFullYear();
+
+    // ---------- 유틸 ----------
+    function escapeHtml(s) {
+        return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+            return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+        });
+    }
+    function notesArr(s) {
+        if (!s) return [];
+        // 쉼표/슬래시/2칸 이상 공백으로 분리
+        return String(s)
+            .split(/[,，/]\s*|\s{2,}/)
+            .map(function (x) { return x.trim(); })
+            .filter(Boolean);
+    }
+    function fmtRoast(d) {
+        if (!d) return '';
+        if (typeof d === 'object' && d.start) d = d.start;
+        if (typeof d !== 'string') return '';
+        var m = d.match(/^(\d{4})-(\d{2})-(\d{2})/);
+        if (!m) return d;
+        return m[1] + '.' + m[2] + '.' + m[3];
+    }
+    function fmtServe(d) {
+        if (!d) return '';
+        if (typeof d === 'object' && d.start) d = d.start;
+        if (typeof d !== 'string') return '';
+        var m = d.match(/^(\d{4})-(\d{2})-(\d{2})/);
+        if (!m) return d;
+        return parseInt(m[2], 10) + '월 ' + parseInt(m[3], 10) + '일';
+    }
+
+    // ---------- 영업시간 안내 ----------
+    function updateHoursStatus() {
+        var now = new Date();
+        var dow = now.getDay(); // 0=Sun..6=Sat
+        var hr = now.getHours();
+        var mn = now.getMinutes();
+        var t = hr * 60 + mn;
+        var open = 8 * 60 + 30;
+        var close = (dow === 3) ? 17 * 60 : 20 * 60; // 수요일 17시
+        var status = document.getElementById('hours-now-status');
+        if (!status) return;
+        if (t >= open && t < close) {
+            var rem = close - t;
+            var h = Math.floor(rem / 60), m = rem % 60;
+            status.textContent = '● NOW OPEN · 마감까지 ' + (h ? h + '시간 ' : '') + m + '분';
+            status.style.color = 'var(--copper)';
+        } else {
+            status.textContent = '○ CLOSED · 내일 08:30에 다시 만나요';
+        }
+    }
+    updateHoursStatus();
+    setInterval(updateHoursStatus, 60000);
+
+    // ---------- 데이터 로드 ----------
+    fetch('/api/coffee')
+        .then(function (r) { return r.ok ? r.json() : Promise.reject(r.statusText); })
+        .then(render)
+        .catch(function (err) {
+            console.warn('데이터 로드 실패:', err);
+            document.getElementById('now-content').innerHTML = '<div class="now-empty">데이터를 불러오지 못했습니다.</div>';
+            document.getElementById('upcoming-rail').innerHTML = '<div class="upcoming-empty">데이터를 불러오지 못했습니다.</div>';
+        });
+
+    function render(data) {
+        var today = (data && data.today) || [];
+        var history = (data && data.history) || [];
+
+        // dedup by id
+        var seen = new Set();
+        var all = [];
+        [].concat(today, history).forEach(function (it) {
+            var id = it && it.id;
+            if (id != null) {
+                if (seen.has(id)) return;
+                seen.add(id);
+            }
+            all.push(it);
+        });
+
+        // Now serving — 진행 중 첫 항목
+        var now = all.find(function (x) { return x['상태'] === '진행 중'; }) || today[0];
+        renderNowServing(now);
+
+        // Upcoming — 예정 (서버 정렬: serve_date ASC)
+        var upcoming = all.filter(function (x) { return x['상태'] === '예정'; });
+        renderUpcoming(upcoming);
+
+        // Catalog — 이름 기준 dedup, 최신순
+        var byName = new Map();
+        all.forEach(function (it) {
+            var key = it['커피'];
+            if (!key) return;
+            var ex = byName.get(key);
+            if (!ex) { byName.set(key, it); return; }
+            // 더 최근 로스팅을 유지
+            var a = (ex['로스팅'] && ex['로스팅'].start) || '';
+            var b = (it['로스팅'] && it['로스팅'].start) || '';
+            if (b > a) byName.set(key, it);
+        });
+        var catalog = Array.from(byName.values());
+        // 정렬: 진행중 → 예정(가까운 순) → 완료(최근 로스팅 순)
+        var todayIso = (function () {
+            var d = new Date();
+            return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+        })();
+        catalog.sort(function (a, b) {
+            var sa = a['상태'], sb = b['상태'];
+            var ra = sa === '진행 중' ? 0 : (sa === '예정' ? 1 : 2);
+            var rb = sb === '진행 중' ? 0 : (sb === '예정' ? 1 : 2);
+            if (ra !== rb) return ra - rb;
+            if (ra === 1) {
+                var sva = (a['제공일'] && a['제공일'].start) || '';
+                var svb = (b['제공일'] && b['제공일'].start) || '';
+                return sva.localeCompare(svb);
+            }
+            var roa = (a['로스팅'] && a['로스팅'].start) || '';
+            var rob = (b['로스팅'] && b['로스팅'].start) || '';
+            return rob.localeCompare(roa);
+        });
+        renderCatalog(catalog);
+        renderFilterBar(catalog);
+    }
+
+    // ---------- Now Serving 렌더 ----------
+    function renderNowServing(c) {
+        var el = document.getElementById('now-content');
+        if (!c) {
+            el.innerHTML = '<div class="now-empty">오늘은 잠시 쉬어가는 중입니다.<br><span style="font-size:0.85rem; font-style:normal; opacity:0.7;">다음 한 잔을 곧 준비할게요.</span></div>';
+            return;
+        }
+        var notes = notesArr(c['컵노트']);
+        el.innerHTML = '' +
+            '<article class="now-card">' +
+                '<div class="now-main">' +
+                    '<div class="now-card-meta">' +
+                        '<span class="now-status">NOW BREWING</span>' +
+                        (c['프로세싱'] ? '<span class="now-process">' + escapeHtml(c['프로세싱']) + '</span>' : '') +
+                    '</div>' +
+                    (c['로스터리'] ? '<div class="now-roastery">' + escapeHtml(c['로스터리']) + '</div>' : '') +
+                    '<h3 class="now-title">' + escapeHtml(c['커피'] || '') + '</h3>' +
+                    (c['감상'] ? '<p class="now-comment">' + escapeHtml(c['감상']) + '</p>' : '') +
+                '</div>' +
+                '<div class="now-side">' +
+                    (notes.length ? '' +
+                        '<div class="now-side-block">' +
+                            '<span class="now-side-label">— CUP NOTES</span>' +
+                            '<div class="now-notes-list">' +
+                                notes.map(function (n) { return '<span class="note-chip">' + escapeHtml(n) + '</span>'; }).join('') +
+                            '</div>' +
+                        '</div>' : '') +
+                    (c['로스팅'] && c['로스팅'].start ? '' +
+                        '<div class="now-side-block">' +
+                            '<span class="now-side-label">— ROAST DATE</span>' +
+                            '<div class="now-roast-date">' + fmtRoast(c['로스팅']) + '</div>' +
+                        '</div>' : '') +
+                '</div>' +
+            '</article>';
+    }
+
+    // ---------- Upcoming 렌더 ----------
+    function renderUpcoming(items) {
+        var el = document.getElementById('upcoming-rail');
+        if (!items.length) {
+            el.innerHTML = '<div class="upcoming-empty">예정된 입고가 없습니다.</div>';
+            return;
+        }
+        el.innerHTML = items.slice(0, 8).map(function (c) {
+            var notes = notesArr(c['컵노트']);
+            var serve = (c['제공일'] && c['제공일'].start) ? fmtServe(c['제공일']) : '';
+            return '' +
+                '<article class="upcoming-card">' +
+                    '<div class="upcoming-head">' +
+                        '<span class="upcoming-process">' + escapeHtml(c['프로세싱'] || 'COMING') + '</span>' +
+                        (serve ? '<span class="upcoming-serve">' + escapeHtml(serve) + '</span>' : '') +
+                    '</div>' +
+                    '<h4 class="upcoming-title">' + escapeHtml(c['커피'] || '') + '</h4>' +
+                    (notes.length ? '<div class="upcoming-notes">' + notes.slice(0, 5).map(escapeHtml).join(' · ') + '</div>' : '') +
+                '</article>';
+        }).join('');
+    }
+
+    // ---------- 필터 바 ----------
+    var currentFilter = 'all';
+    var fullCatalog = [];
+
+    function renderFilterBar(items) {
+        fullCatalog = items;
+        var counts = {};
+        items.forEach(function (it) {
+            var p = (it['프로세싱'] || '').trim() || '기타';
+            counts[p] = (counts[p] || 0) + 1;
+        });
+        var processes = Object.keys(counts).sort(function (a, b) { return counts[b] - counts[a]; });
+        var bar = document.getElementById('filter-bar');
+        bar.innerHTML = '<button class="filter-chip active" data-process="all">전체<span class="filter-chip-count">' + items.length + '</span></button>' +
+            processes.map(function (p) {
+                return '<button class="filter-chip" data-process="' + escapeHtml(p) + '">' + escapeHtml(p) + '<span class="filter-chip-count">' + counts[p] + '</span></button>';
+            }).join('');
+        bar.querySelectorAll('.filter-chip').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                currentFilter = btn.dataset.process;
+                bar.querySelectorAll('.filter-chip').forEach(function (b) { b.classList.toggle('active', b === btn); });
+                applyFilter();
+            });
+        });
+    }
+
+    function applyFilter() {
+        var items = currentFilter === 'all'
+            ? fullCatalog
+            : fullCatalog.filter(function (it) { return ((it['프로세싱'] || '').trim() || '기타') === currentFilter; });
+        renderCatalog(items);
+    }
+
+    // ---------- Catalog 렌더 ----------
+    function renderCatalog(items) {
+        var el = document.getElementById('catalog-grid');
+        if (!items.length) {
+            el.innerHTML = '<div class="upcoming-empty">해당 가공방식의 원두가 없습니다.</div>';
+            return;
+        }
+        el.innerHTML = items.map(function (c) {
+            var status = c['상태'] || '';
+            var statusCls = status.replace(/\s/g, '');
+            var notes = notesArr(c['컵노트']);
+            var roast = (c['로스팅'] && c['로스팅'].start) ? fmtRoast(c['로스팅']) : '';
+            return '' +
+                '<article class="cat-card">' +
+                    '<div class="cat-card-head">' +
+                        (status ? '<span class="cat-status cat-status-' + escapeHtml(statusCls) + '">' + escapeHtml(status) + '</span>' : '<span></span>') +
+                        (c['프로세싱'] ? '<span class="cat-process">' + escapeHtml(c['프로세싱']) + '</span>' : '') +
+                    '</div>' +
+                    '<h4 class="cat-name">' + escapeHtml(c['커피'] || '') + '</h4>' +
+                    (notes.length ? '<div class="cat-notes">' + notes.slice(0, 6).map(escapeHtml).join(' · ') + '</div>' : '<div class="cat-notes" style="opacity:0.5;">테이스팅 노트 준비 중</div>') +
+                    (roast ? '<div class="cat-foot"><span>ROASTED</span><span>' + escapeHtml(roast) + '</span></div>' : '') +
+                '</article>';
+        }).join('');
+    }
+})();
+</script>
+
+</body>
+</html>
