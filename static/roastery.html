@@ -210,7 +210,15 @@
             grid-template-columns: repeat(3, 1fr);
             gap: 48px;
         }
-        .pillar { padding: 0; }
+        .pillar {
+            padding: 0;
+            transition: transform 0.32s cubic-bezier(.2,.8,.2,1);
+            transform-origin: center top;
+            will-change: transform;
+        }
+        .pillar:hover {
+            transform: translateY(-6px) scale(1.035);
+        }
         .pillar-num {
             font-family: var(--font-mono);
             font-size: 0.75rem; color: var(--caramel);
@@ -218,6 +226,11 @@
             margin-bottom: 20px;
             padding-bottom: 16px;
             border-bottom: 1px solid var(--line);
+            transition: color 0.25s, border-color 0.25s;
+        }
+        .pillar:hover .pillar-num {
+            color: var(--copper);
+            border-color: var(--copper);
         }
         .pillar h3 {
             font-family: var(--font-display);
@@ -226,11 +239,18 @@
             line-height: 1.25;
             margin-bottom: 14px;
             letter-spacing: -0.01em;
+            transition: color 0.25s;
         }
+        .pillar:hover h3 { color: var(--espresso); }
         .pillar p {
             font-size: 0.97rem;
             color: var(--ink-mute);
             line-height: 1.7;
+            transition: color 0.25s;
+        }
+        .pillar:hover p { color: var(--ink); }
+        @media (hover: none) {
+            .pillar:hover { transform: none; }
         }
         @media (max-width: 720px) {
             .pillars { padding: 64px 0; }
