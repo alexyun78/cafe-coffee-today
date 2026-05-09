@@ -71,11 +71,27 @@
         }
         .brand {
             font-family: var(--font-display);
-            font-size: 1.3rem; font-weight: 600;
-            letter-spacing: 0.02em;
-            display: flex; align-items: baseline; gap: 8px;
+            font-size: 1.5rem; font-weight: 700;
+            letter-spacing: 0.01em;
+            display: inline-flex; align-items: center; gap: 4px;
+            color: var(--ink);
         }
-        .brand-temp { font-family: var(--font-mono); font-size: 0.75rem; color: var(--copper); letter-spacing: 0.1em; }
+
+        /* 로고 °C 스택 — 로고 디자인을 인라인으로 재현 */
+        .temp-mark {
+            display: inline-flex;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: center;
+            font-family: "Pretendard", -apple-system, sans-serif;
+            font-weight: 800;
+            line-height: 0.82;
+            color: currentColor;
+            vertical-align: 0.05em;
+            margin: 0 0.04em 0 0.02em;
+        }
+        .temp-mark .temp-deg { font-size: 0.42em; letter-spacing: -0.02em; }
+        .temp-mark .temp-c   { font-size: 0.6em;  letter-spacing: -0.03em; margin-top: -0.02em; }
         .nav-links { display: flex; gap: 28px; align-items: center; }
         .nav-links a {
             font-size: 0.85rem; color: var(--ink-mute); font-weight: 500;
@@ -133,15 +149,6 @@
         .hero-title em {
             font-style: italic; font-weight: 600;
             color: var(--espresso);
-        }
-        .hero-title .temp {
-            font-family: var(--font-mono);
-            font-style: normal;
-            font-size: 0.6em;
-            font-weight: 500;
-            color: var(--copper);
-            vertical-align: 0.18em;
-            letter-spacing: 0;
         }
         .hero-sub {
             font-size: 1.1rem;
@@ -534,103 +541,116 @@
             .hours-card { padding: 40px 28px; }
         }
 
-        /* ========== Catalog ========== */
-        .catalog { background: var(--canvas-warm); }
-        .filter-bar {
-            display: flex; flex-wrap: wrap; gap: 8px;
-            margin-bottom: 40px;
-            padding-bottom: 28px;
-            border-bottom: 1px solid var(--line);
-        }
-        .filter-chip {
-            font-family: var(--font-body);
-            font-size: 0.85rem;
-            font-weight: 500;
-            padding: 9px 18px;
-            border-radius: var(--r-pill);
-            border: 1px solid var(--line);
-            background: var(--canvas);
-            color: var(--ink-mute);
+        /* ========== 곧 만날 카드 인터랙션 ========== */
+        .upcoming-card {
             cursor: pointer;
-            transition: all 0.18s;
-            white-space: nowrap;
         }
-        .filter-chip:hover { border-color: var(--caramel); color: var(--ink); }
-        .filter-chip.active {
-            background: var(--ink);
-            color: var(--canvas);
-            border-color: var(--ink);
+
+        /* ========== 상세 모달 ========== */
+        .modal { position: fixed; inset: 0; z-index: 100; display: none; }
+        .modal.is-open { display: block; }
+        .modal-overlay {
+            position: absolute; inset: 0;
+            background: rgba(26,20,16,0.55);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            animation: fadeIn 0.18s ease;
         }
-        .filter-chip-count {
-            font-family: var(--font-mono);
-            font-size: 0.7rem;
-            margin-left: 6px;
-            opacity: 0.6;
-        }
-        .catalog-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 20px;
-        }
-        .cat-card {
-            background: var(--canvas);
-            border: 1px solid var(--line);
-            border-radius: var(--r-md);
-            padding: 26px 24px;
-            display: flex; flex-direction: column;
-            gap: 14px;
+        .modal-card {
             position: relative;
-            transition: transform 0.18s, box-shadow 0.18s, border-color 0.18s;
-            min-height: 220px;
+            max-width: 640px;
+            margin: 5vh auto;
+            background: var(--canvas);
+            border-radius: var(--r-md);
+            padding: 48px 40px 40px;
+            box-shadow: 0 24px 64px rgba(26,20,16,0.25);
+            animation: modalRise 0.22s cubic-bezier(.2,.8,.2,1);
+            max-height: 90vh; overflow: auto;
         }
-        .cat-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 28px rgba(111, 78, 55, 0.07);
-            border-color: var(--caramel);
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes modalRise {
+            from { opacity: 0; transform: translateY(12px); }
+            to   { opacity: 1; transform: translateY(0); }
         }
-        .cat-card-head {
-            display: flex; justify-content: space-between; align-items: flex-start;
-            gap: 10px;
+        .modal-close {
+            position: absolute; top: 14px; right: 16px;
+            background: transparent; border: 0;
+            font-size: 1.6rem; color: var(--ink-soft);
+            cursor: pointer; line-height: 1;
+            padding: 8px 12px; border-radius: var(--r-pill);
+            transition: background 0.15s, color 0.15s;
         }
-        .cat-status {
+        .modal-close:hover { background: var(--canvas-warm); color: var(--ink); }
+        .modal-meta {
+            display: flex; align-items: center; gap: 10px;
+            margin-bottom: 18px; flex-wrap: wrap;
+        }
+        .modal-status {
             font-family: var(--font-mono);
-            font-size: 0.62rem;
-            letter-spacing: 0.18em;
-            padding: 4px 10px;
+            font-size: 0.66rem;
+            letter-spacing: 0.22em;
+            padding: 5px 12px;
             border-radius: var(--r-pill);
-            white-space: nowrap;
         }
-        .cat-status-진행중 { background: #f0ebe2; color: var(--espresso); }
-        .cat-status-예정 { background: #FFF3E4; color: var(--copper); }
-        .cat-status-완료 { background: var(--canvas-warm); color: var(--ink-soft); border: 1px solid var(--line); }
-        .cat-process {
+        .modal-status-진행중 { background: var(--ink); color: var(--canvas); }
+        .modal-status-예정   { background: #FFF3E4; color: var(--copper); }
+        .modal-status-완료   { background: var(--canvas-warm); color: var(--ink-soft); border: 1px solid var(--line); }
+        .modal-process {
             font-family: var(--font-mono);
-            font-size: 0.7rem;
-            letter-spacing: 0.13em;
+            font-size: 0.72rem;
+            letter-spacing: 0.14em;
             color: var(--copper);
+            padding: 5px 10px;
+            border: 1px solid var(--line);
+            border-radius: var(--r-pill);
         }
-        .cat-name {
-            font-family: var(--font-display);
-            font-size: 1.3rem;
-            font-weight: 600;
-            line-height: 1.22;
-            letter-spacing: -0.005em;
-            color: var(--ink);
-        }
-        .cat-notes {
-            font-size: 0.86rem;
-            color: var(--ink-mute);
-            line-height: 1.55;
-            flex: 1;
-        }
-        .cat-foot {
+        .modal-roastery {
             font-family: var(--font-mono);
-            font-size: 0.7rem;
-            letter-spacing: 0.1em;
+            font-size: 0.78rem;
+            letter-spacing: 0.12em;
             color: var(--ink-soft);
-            padding-top: 14px;
-            border-top: 1px solid var(--line-soft);
-            display: flex; justify-content: space-between;
+            margin-bottom: 12px;
+        }
+        .modal-title {
+            font-family: var(--font-display);
+            font-weight: 600;
+            font-size: clamp(1.7rem, 3.2vw, 2.4rem);
+            line-height: 1.18;
+            letter-spacing: -0.01em;
+            color: var(--ink);
+            margin-bottom: 22px;
+        }
+        .modal-comment {
+            font-family: var(--font-display);
+            font-style: italic;
+            font-size: 1.1rem;
+            color: var(--espresso);
+            line-height: 1.55;
+            padding: 16px 20px;
+            border-left: 2px solid var(--caramel);
+            background: var(--canvas-warm);
+            border-radius: 0 var(--r-sm) var(--r-sm) 0;
+            margin-bottom: 24px;
+        }
+        .modal-block { margin-bottom: 22px; }
+        .modal-block:last-child { margin-bottom: 0; }
+        .modal-label {
+            font-family: var(--font-mono);
+            font-size: 0.7rem; letter-spacing: 0.2em;
+            color: var(--ink-soft);
+            margin-bottom: 10px;
+            display: block;
+        }
+        .modal-notes-list { display: flex; flex-wrap: wrap; gap: 8px; }
+        .modal-date {
+            font-family: var(--font-mono);
+            font-size: 1rem;
+            color: var(--ink);
+            font-weight: 500;
+            letter-spacing: 0.04em;
+        }
+        @media (max-width: 720px) {
+            .modal-card { margin: 4vh 16px; padding: 40px 24px 28px; }
         }
 
         /* ========== Footer ========== */
@@ -713,13 +733,12 @@
 <header class="site-nav">
     <div class="nav-inner">
         <a class="brand" href="/">
-            92<span class="brand-temp">°C</span> ROASTERY
+            92<span class="temp-mark"><span class="temp-deg">°</span><span class="temp-c">C</span></span>ROASTERY
         </a>
         <nav class="nav-links">
-            <a href="#now">지금</a>
+            <a href="#now">오늘의 커피</a>
             <a href="#upcoming">곧 만날</a>
             <a href="#hours">영업</a>
-            <a href="#catalog">컬렉션</a>
         </nav>
         <a class="nav-cta" href="/today">오늘의 커피 →</a>
     </div>
@@ -733,7 +752,7 @@
                 <div class="hero-eyebrow">SINGLE ORIGIN · DAILY ROASTED</div>
                 <h1 class="hero-title">
                     한 잔의 <em>정확함</em>은<br>
-                    92<span class="temp">°C</span>에서<br>
+                    92<span class="temp-mark"><span class="temp-deg">°</span><span class="temp-c">C</span></span>에서<br>
                     시작됩니다.
                 </h1>
                 <p class="hero-sub">
@@ -781,7 +800,7 @@
     <div class="container">
         <div class="section-head">
             <span class="eyebrow">— NOW SERVING</span>
-            <h2>지금 한 <em>잔</em></h2>
+            <h2>오늘의 <em>커피</em></h2>
             <p class="section-sub">오늘 매장에서 내리고 있는 커피입니다.</p>
         </div>
         <div id="now-content">
@@ -834,27 +853,21 @@
     </div>
 </section>
 
-<!-- ============== CATALOG ============== -->
-<section class="section catalog" id="catalog">
-    <div class="container">
-        <div class="section-head">
-            <span class="eyebrow">— OUR COLLECTION</span>
-            <h2>로스터리 <em>컬렉션</em></h2>
-            <p class="section-sub">지금까지 92도씨 로스터리에서 다룬 원두들. 산지와 가공방식별로 한 잔의 결이 어떻게 달라지는지 확인해 보세요.</p>
-        </div>
-        <div class="filter-bar" id="filter-bar"></div>
-        <div class="catalog-grid" id="catalog-grid">
-            <!-- JS render -->
-        </div>
+<!-- ============== 상세 모달 ============== -->
+<div class="modal" id="coffee-modal" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="modal-overlay" data-modal-close></div>
+    <div class="modal-card" role="document">
+        <button class="modal-close" type="button" data-modal-close aria-label="닫기">&times;</button>
+        <div class="modal-body" id="modal-body"></div>
     </div>
-</section>
+</div>
 
 <!-- ============== FOOTER ============== -->
 <footer class="site-footer">
     <div class="footer-inner">
         <div class="footer-top">
             <div class="footer-brand">
-                <h3>92<span style="font-family: var(--font-mono); font-size: 0.6em; color: var(--caramel);">°C</span> ROASTERY</h3>
+                <h3>92<span class="temp-mark"><span class="temp-deg">°</span><span class="temp-c">C</span></span>ROASTERY</h3>
                 <p>스페셜티 단일 산지 원두를 매일 소량 로스팅하는, 작은 동네의 로스터리입니다.</p>
             </div>
             <div class="footer-cols">
@@ -864,7 +877,7 @@
                 </div>
                 <div class="footer-col">
                     <h4>ONLINE</h4>
-                    <p><a href="/today">오늘의 커피 →</a><br><a href="/apk">앱 다운로드 →</a></p>
+                    <p><a href="/today">오늘의 커피 →</a></p>
                 </div>
                 <div class="footer-col">
                     <h4>CRAFT</h4>
@@ -873,7 +886,7 @@
             </div>
         </div>
         <div class="footer-bottom">
-            <span>© <span id="copy-year"></span> 92°C ROASTERY · ALL RIGHTS RESERVED</span>
+            <span>© <span id="copy-year"></span> 92<span class="temp-mark" style="font-size:0.95em;"><span class="temp-deg">°</span><span class="temp-c">C</span></span>ROASTERY · ALL RIGHTS RESERVED</span>
             <span>BREWED AT NINETY-TWO DEGREES CELSIUS</span>
         </div>
     </div>
@@ -939,15 +952,36 @@
     updateHoursStatus();
     setInterval(updateHoursStatus, 60000);
 
-    // ---------- 데이터 로드 ----------
-    fetch('/api/coffee')
-        .then(function (r) { return r.ok ? r.json() : Promise.reject(r.statusText); })
-        .then(render)
-        .catch(function (err) {
-            console.warn('데이터 로드 실패:', err);
-            document.getElementById('now-content').innerHTML = '<div class="now-empty">데이터를 불러오지 못했습니다.</div>';
-            document.getElementById('upcoming-rail').innerHTML = '<div class="upcoming-empty">데이터를 불러오지 못했습니다.</div>';
-        });
+    // ---------- 데이터 로드 (지연) ----------
+    var dataLoaded = false;
+    var upcomingByKey = {};
+
+    function loadData() {
+        if (dataLoaded) return;
+        dataLoaded = true;
+        fetch('/api/coffee')
+            .then(function (r) { return r.ok ? r.json() : Promise.reject(r.statusText); })
+            .then(render)
+            .catch(function (err) {
+                console.warn('데이터 로드 실패:', err);
+                dataLoaded = false; // 다음 트리거에서 재시도 가능
+                document.getElementById('now-content').innerHTML = '<div class="now-empty">데이터를 불러오지 못했습니다.</div>';
+                document.getElementById('upcoming-rail').innerHTML = '<div class="upcoming-empty">데이터를 불러오지 못했습니다.</div>';
+            });
+    }
+
+    // 데이터 섹션이 시야 근처에 들어올 때 로드. 미지원 환경은 즉시 로드.
+    if ('IntersectionObserver' in window) {
+        var triggers = ['now', 'upcoming'].map(function (id) { return document.getElementById(id); }).filter(Boolean);
+        var io = new IntersectionObserver(function (entries) {
+            for (var i = 0; i < entries.length; i++) {
+                if (entries[i].isIntersecting) { loadData(); io.disconnect(); break; }
+            }
+        }, { rootMargin: '300px 0px' });
+        triggers.forEach(function (el) { io.observe(el); });
+    } else {
+        loadData();
+    }
 
     function render(data) {
         var today = (data && data.today) || [];
@@ -972,41 +1006,6 @@
         // Upcoming — 예정 (서버 정렬: serve_date ASC)
         var upcoming = all.filter(function (x) { return x['상태'] === '예정'; });
         renderUpcoming(upcoming);
-
-        // Catalog — 이름 기준 dedup, 최신순
-        var byName = new Map();
-        all.forEach(function (it) {
-            var key = it['커피'];
-            if (!key) return;
-            var ex = byName.get(key);
-            if (!ex) { byName.set(key, it); return; }
-            // 더 최근 로스팅을 유지
-            var a = (ex['로스팅'] && ex['로스팅'].start) || '';
-            var b = (it['로스팅'] && it['로스팅'].start) || '';
-            if (b > a) byName.set(key, it);
-        });
-        var catalog = Array.from(byName.values());
-        // 정렬: 진행중 → 예정(가까운 순) → 완료(최근 로스팅 순)
-        var todayIso = (function () {
-            var d = new Date();
-            return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
-        })();
-        catalog.sort(function (a, b) {
-            var sa = a['상태'], sb = b['상태'];
-            var ra = sa === '진행 중' ? 0 : (sa === '예정' ? 1 : 2);
-            var rb = sb === '진행 중' ? 0 : (sb === '예정' ? 1 : 2);
-            if (ra !== rb) return ra - rb;
-            if (ra === 1) {
-                var sva = (a['제공일'] && a['제공일'].start) || '';
-                var svb = (b['제공일'] && b['제공일'].start) || '';
-                return sva.localeCompare(svb);
-            }
-            var roa = (a['로스팅'] && a['로스팅'].start) || '';
-            var rob = (b['로스팅'] && b['로스팅'].start) || '';
-            return rob.localeCompare(roa);
-        });
-        renderCatalog(catalog);
-        renderFilterBar(catalog);
     }
 
     // ---------- Now Serving 렌더 ----------
@@ -1050,13 +1049,18 @@
         var el = document.getElementById('upcoming-rail');
         if (!items.length) {
             el.innerHTML = '<div class="upcoming-empty">예정된 입고가 없습니다.</div>';
+            upcomingByKey = {};
             return;
         }
-        el.innerHTML = items.slice(0, 8).map(function (c) {
+        var sliced = items.slice(0, 8);
+        upcomingByKey = {};
+        el.innerHTML = sliced.map(function (c, idx) {
+            var key = String(c.id != null ? c.id : ('idx-' + idx));
+            upcomingByKey[key] = c;
             var notes = notesArr(c['컵노트']);
             var serve = (c['제공일'] && c['제공일'].start) ? fmtServe(c['제공일']) : '';
             return '' +
-                '<article class="upcoming-card">' +
+                '<article class="upcoming-card" data-key="' + escapeHtml(key) + '" tabindex="0" role="button" aria-label="자세히 보기">' +
                     '<div class="upcoming-head">' +
                         '<span class="upcoming-process">' + escapeHtml(c['프로세싱'] || 'COMING') + '</span>' +
                         (serve ? '<span class="upcoming-serve">' + escapeHtml(serve) + '</span>' : '') +
@@ -1067,63 +1071,71 @@
         }).join('');
     }
 
-    // ---------- 필터 바 ----------
-    var currentFilter = 'all';
-    var fullCatalog = [];
+    // ---------- 상세 모달 ----------
+    var modal = document.getElementById('coffee-modal');
+    var modalBody = document.getElementById('modal-body');
 
-    function renderFilterBar(items) {
-        fullCatalog = items;
-        var counts = {};
-        items.forEach(function (it) {
-            var p = (it['프로세싱'] || '').trim() || '기타';
-            counts[p] = (counts[p] || 0) + 1;
-        });
-        var processes = Object.keys(counts).sort(function (a, b) { return counts[b] - counts[a]; });
-        var bar = document.getElementById('filter-bar');
-        bar.innerHTML = '<button class="filter-chip active" data-process="all">전체<span class="filter-chip-count">' + items.length + '</span></button>' +
-            processes.map(function (p) {
-                return '<button class="filter-chip" data-process="' + escapeHtml(p) + '">' + escapeHtml(p) + '<span class="filter-chip-count">' + counts[p] + '</span></button>';
-            }).join('');
-        bar.querySelectorAll('.filter-chip').forEach(function (btn) {
-            btn.addEventListener('click', function () {
-                currentFilter = btn.dataset.process;
-                bar.querySelectorAll('.filter-chip').forEach(function (b) { b.classList.toggle('active', b === btn); });
-                applyFilter();
-            });
-        });
-    }
-
-    function applyFilter() {
-        var items = currentFilter === 'all'
-            ? fullCatalog
-            : fullCatalog.filter(function (it) { return ((it['프로세싱'] || '').trim() || '기타') === currentFilter; });
-        renderCatalog(items);
-    }
-
-    // ---------- Catalog 렌더 ----------
-    function renderCatalog(items) {
-        var el = document.getElementById('catalog-grid');
-        if (!items.length) {
-            el.innerHTML = '<div class="upcoming-empty">해당 가공방식의 원두가 없습니다.</div>';
-            return;
-        }
-        el.innerHTML = items.map(function (c) {
-            var status = c['상태'] || '';
-            var statusCls = status.replace(/\s/g, '');
-            var notes = notesArr(c['컵노트']);
-            var roast = (c['로스팅'] && c['로스팅'].start) ? fmtRoast(c['로스팅']) : '';
-            return '' +
-                '<article class="cat-card">' +
-                    '<div class="cat-card-head">' +
-                        (status ? '<span class="cat-status cat-status-' + escapeHtml(statusCls) + '">' + escapeHtml(status) + '</span>' : '<span></span>') +
-                        (c['프로세싱'] ? '<span class="cat-process">' + escapeHtml(c['프로세싱']) + '</span>' : '') +
+    function openModal(c) {
+        if (!c) return;
+        var status = c['상태'] || '';
+        var statusCls = status.replace(/\s/g, '');
+        var notes = notesArr(c['컵노트']);
+        var roast = (c['로스팅'] && c['로스팅'].start) ? fmtRoast(c['로스팅']) : '';
+        var serve = (c['제공일'] && c['제공일'].start) ? fmtServe(c['제공일']) : '';
+        modalBody.innerHTML = '' +
+            '<div class="modal-meta">' +
+                (status ? '<span class="modal-status modal-status-' + escapeHtml(statusCls) + '">' + escapeHtml(status) + '</span>' : '') +
+                (c['프로세싱'] ? '<span class="modal-process">' + escapeHtml(c['프로세싱']) + '</span>' : '') +
+            '</div>' +
+            (c['로스터리'] ? '<div class="modal-roastery">' + escapeHtml(c['로스터리']) + '</div>' : '') +
+            '<h3 class="modal-title">' + escapeHtml(c['커피'] || '') + '</h3>' +
+            (c['감상'] ? '<p class="modal-comment">' + escapeHtml(c['감상']) + '</p>' : '') +
+            (notes.length ? '' +
+                '<div class="modal-block">' +
+                    '<span class="modal-label">— CUP NOTES</span>' +
+                    '<div class="modal-notes-list">' +
+                        notes.map(function (n) { return '<span class="note-chip">' + escapeHtml(n) + '</span>'; }).join('') +
                     '</div>' +
-                    '<h4 class="cat-name">' + escapeHtml(c['커피'] || '') + '</h4>' +
-                    (notes.length ? '<div class="cat-notes">' + notes.slice(0, 6).map(escapeHtml).join(' · ') + '</div>' : '<div class="cat-notes" style="opacity:0.5;">테이스팅 노트 준비 중</div>') +
-                    (roast ? '<div class="cat-foot"><span>ROASTED</span><span>' + escapeHtml(roast) + '</span></div>' : '') +
-                '</article>';
-        }).join('');
+                '</div>' : '') +
+            (roast ? '' +
+                '<div class="modal-block">' +
+                    '<span class="modal-label">— ROAST DATE</span>' +
+                    '<div class="modal-date">' + escapeHtml(roast) + '</div>' +
+                '</div>' : '') +
+            (serve ? '' +
+                '<div class="modal-block">' +
+                    '<span class="modal-label">— SERVE DATE</span>' +
+                    '<div class="modal-date">' + escapeHtml(serve) + '</div>' +
+                '</div>' : '');
+        modal.classList.add('is-open');
+        modal.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
     }
+
+    function closeModal() {
+        modal.classList.remove('is-open');
+        modal.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+    }
+
+    document.getElementById('upcoming-rail').addEventListener('click', function (e) {
+        var card = e.target.closest('.upcoming-card');
+        if (!card) return;
+        openModal(upcomingByKey[card.dataset.key]);
+    });
+    document.getElementById('upcoming-rail').addEventListener('keydown', function (e) {
+        if (e.key !== 'Enter' && e.key !== ' ') return;
+        var card = e.target.closest('.upcoming-card');
+        if (!card) return;
+        e.preventDefault();
+        openModal(upcomingByKey[card.dataset.key]);
+    });
+    modal.addEventListener('click', function (e) {
+        if (e.target.hasAttribute('data-modal-close')) closeModal();
+    });
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && modal.classList.contains('is-open')) closeModal();
+    });
 })();
 </script>
 
