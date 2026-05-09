@@ -4,7 +4,7 @@
   "webDir": "www",
   "backgroundColor": "#6F4E37",
   "server": {
-    "url": "http://49.247.207.115:3002",
+    "url": "http://49.247.207.115:3002/today",
     "cleartext": true,
     "androidScheme": "https"
   },

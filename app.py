@@ -222,6 +222,11 @@ def api_card_png(coffee_id):
 
 @app.get("/")
 def index():
+    return send_from_directory("static", "roastery.html")
+
+
+@app.get("/today")
+def today_page():
     return send_file("index.html")
 
 
