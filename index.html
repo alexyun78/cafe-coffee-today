@@ -2697,11 +2697,8 @@
           } catch(e) { /* 오디오 미지원 무시 */ }
         }
 
-        // ---------- APK 히든 관리자 진입 (제목 5회 탭) ----------
+        // ---------- 히든 관리자 진입 (제목 5회 탭) — APK·일반 브라우저 공통 ----------
         (function setupHiddenAdmin() {
-          const ua = navigator.userAgent;
-          if (!/Android.*wv\)|; wv\)/.test(ua)) return;
-
           const title = document.querySelector('.header h1');
           if (!title) return;
 

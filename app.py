@@ -320,21 +320,29 @@ def today_page():
     return send_file("index.html")
 
 
-def _serve_admin():
-    """관리 페이지는 인증된 세션에만 노출. 그 외에는 404로 위장."""
+def _serve_admin_authed_only():
+    """공개 /admin: 인증된 세션에만 노출, 그 외에는 404로 위장."""
     if not session.get("admin"):
-        return send_from_directory("static", "404.html") if os.path.exists("static/404.html") else ("Not Found", 404)
+        return ("Not Found", 404)
+    return send_from_directory("static", "admin.html")
+
+
+def _serve_admin_form():
+    """비공개 별칭 경로: 인증 무관 admin.html 응답.
+    admin.html이 init()에서 /api/admin/status로 자체 PIN 모달을 띄움.
+    """
     return send_from_directory("static", "admin.html")
 
 
 @app.get("/admin")
 def admin_page():
-    return _serve_admin()
+    return _serve_admin_authed_only()
 
 
 # 환경변수로 비공개 별칭 경로 추가 (.env: ADMIN_ALIAS_PATH=/a-7f2e91b3)
+# 이 경로는 PIN 입력 진입점 — 인증되지 않아도 admin.html을 응답해 PIN 모달을 띄움.
 if ADMIN_ALIAS_PATH and ADMIN_ALIAS_PATH.startswith("/") and ADMIN_ALIAS_PATH != "/admin":
-    app.add_url_rule(ADMIN_ALIAS_PATH, "admin_alias", _serve_admin, methods=["GET"])
+    app.add_url_rule(ADMIN_ALIAS_PATH, "admin_alias", _serve_admin_form, methods=["GET"])
 
 
 @app.get("/roastery")
