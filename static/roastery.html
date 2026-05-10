@@ -53,6 +53,12 @@
             margin: 0 auto;
             padding: 0 32px;
         }
+        @media (max-width: 720px) {
+            .container { padding: 0 20px; }
+        }
+        @media (max-width: 480px) {
+            .container { padding: 0 16px; }
+        }
 
         /* ========== 네비게이션 ========== */
         .site-nav {
@@ -117,7 +123,14 @@
         .nav-cta:hover { background: var(--espresso); transform: translateY(-1px); }
         @media (max-width: 720px) {
             .nav-links { display: none; }
-            .nav-inner { padding: 14px 20px; }
+            .nav-inner { padding: 12px 18px; }
+            .brand { font-size: 1.05rem; }
+            .nav-cta { padding: 9px 16px; font-size: 0.75rem; letter-spacing: 0.14em; }
+        }
+        @media (max-width: 480px) {
+            .nav-inner { padding: 10px 14px; }
+            .brand { font-size: 0.95rem; letter-spacing: 0; }
+            .nav-cta { padding: 8px 14px; font-size: 0.7rem; }
         }
 
         /* ========== 히어로 ========== */
@@ -194,9 +207,23 @@
             mix-blend-mode: multiply;
         }
         @media (max-width: 900px) {
-            .hero { padding: 64px 0 80px; }
-            .hero-grid { grid-template-columns: 1fr; gap: 48px; }
-            .hero-visual img { max-width: 280px; }
+            .hero { padding: 56px 0 64px; }
+            .hero-grid { grid-template-columns: 1fr; gap: 32px; }
+            .hero-visual img { max-width: 240px; }
+            .hero-visual { order: -1; }   /* 이미지 위, 텍스트 아래 — 첫 인상에 비주얼 노출 */
+            .hero-eyebrow { margin-bottom: 20px; }
+            .hero-sub { font-size: 1rem; margin-bottom: 28px; max-width: none; }
+            .hero-meta { gap: 18px 24px; font-size: 0.7rem; }
+        }
+        @media (max-width: 480px) {
+            .hero { padding: 40px 0 48px; }
+            .hero-grid { gap: 24px; }
+            .hero-visual img { max-width: 180px; }
+            .hero-eyebrow { margin-bottom: 14px; font-size: 0.68rem; letter-spacing: 0.2em; }
+            .hero-eyebrow::before { width: 20px; }
+            .hero-title { font-size: 2.2rem; margin-bottom: 18px; }
+            .hero-sub { font-size: 0.95rem; line-height: 1.65; margin-bottom: 22px; }
+            .hero-meta { gap: 12px 18px; font-size: 0.65rem; letter-spacing: 0.14em; }
         }
 
         /* ========== 필러스 ========== */
@@ -253,8 +280,17 @@
             .pillar:hover { transform: none; }
         }
         @media (max-width: 720px) {
-            .pillars { padding: 64px 0; }
-            .pillars-grid { grid-template-columns: 1fr; gap: 40px; }
+            .pillars { padding: 56px 0; }
+            .pillars-grid { grid-template-columns: 1fr; gap: 32px; }
+            .pillar h3 { font-size: 1.4rem; }
+            .pillar p { font-size: 0.92rem; }
+        }
+        @media (max-width: 480px) {
+            .pillars { padding: 44px 0; }
+            .pillars-grid { gap: 26px; }
+            .pillar-num { margin-bottom: 14px; padding-bottom: 12px; font-size: 0.68rem; }
+            .pillar h3 { font-size: 1.25rem; margin-bottom: 10px; }
+            .pillar p { font-size: 0.88rem; line-height: 1.65; }
         }
 
         /* ========== 섹션 헤드 공통 ========== */
@@ -310,8 +346,13 @@
             padding-bottom: 1px;
         }
         @media (max-width: 720px) {
-            .section { padding: 80px 0; }
-            .section-head { margin-bottom: 40px; }
+            .section { padding: 64px 0; }
+            .section-head { margin-bottom: 32px; }
+        }
+        @media (max-width: 480px) {
+            .section { padding: 48px 0; }
+            .section-head { margin-bottom: 24px; }
+            .eyebrow { font-size: 0.66rem; letter-spacing: 0.22em; margin-bottom: 14px; }
         }
 
         /* ========== Now Serving ========== */
@@ -440,7 +481,21 @@
             font-size: 1.3rem;
         }
         @media (max-width: 900px) {
-            .now-card { grid-template-columns: 1fr; gap: 36px; padding: 40px 28px; }
+            .now-card { grid-template-columns: 1fr; gap: 32px; padding: 36px 24px; }
+        }
+        @media (max-width: 480px) {
+            .now-card { padding: 28px 20px; gap: 24px; border-radius: 10px; }
+            .now-card-meta { gap: 10px; margin-bottom: 20px; }
+            .now-status { font-size: 0.62rem; padding: 5px 11px; letter-spacing: 0.18em; }
+            .now-process { font-size: 0.7rem; padding: 5px 10px; }
+            .now-roastery { font-size: 0.7rem; margin-bottom: 16px; }
+            .now-title { font-size: 1.6rem; line-height: 1.2; margin-bottom: 18px; }
+            .now-comment { font-size: 1rem; padding: 14px 16px; line-height: 1.55; }
+            .now-side { gap: 18px; }
+            .now-side-label { font-size: 0.66rem; margin-bottom: 9px; }
+            .note-chip { font-size: 0.8rem; padding: 6px 11px; }
+            .now-roast-date { font-size: 0.95rem; }
+            .now-empty { padding: 56px 24px; font-size: 1.1rem; }
         }
 
         /* ========== Upcoming Rail ========== */
@@ -507,6 +562,13 @@
             font-family: var(--font-display);
             font-style: italic;
             font-size: 1.1rem;
+        }
+        @media (max-width: 720px) {
+            .upcoming-rail { grid-template-columns: 1fr; gap: 14px; }
+            .upcoming-card { padding: 22px 20px; gap: 12px; }
+            .upcoming-title { font-size: 1.25rem; min-height: 0; }
+            .upcoming-notes { font-size: 0.85rem; }
+            .upcoming-empty { padding: 44px 20px; font-size: 1rem; }
         }
 
         /* ========== Hours ========== */
@@ -593,7 +655,16 @@
         }
         @media (max-width: 900px) {
             .hours-grid { grid-template-columns: 1fr; }
-            .hours-card { padding: 40px 28px; }
+            .hours-card { padding: 36px 24px; }
+        }
+        @media (max-width: 480px) {
+            .hours-card { padding: 28px 20px; }
+            .hours-day-en { font-size: 0.7rem; letter-spacing: 0.16em; margin-bottom: 10px; }
+            .hours-day-ko { font-size: 1.25rem; margin-bottom: 18px; }
+            .hours-time { font-size: 2.2rem; margin-bottom: 16px; }
+            .hours-note { font-size: 0.85rem; line-height: 1.55; }
+            .early-badge { top: 18px; right: 18px; font-size: 0.6rem; padding: 4px 10px; letter-spacing: 0.18em; }
+            .hours-foot { margin-top: 32px; padding-top: 24px; font-size: 0.68rem; gap: 8px 14px; }
         }
 
         /* ========== 곧 만날 카드 인터랙션 ========== */
@@ -768,9 +839,23 @@
             gap: 12px;
         }
         @media (max-width: 720px) {
-            .footer-top { grid-template-columns: 1fr; gap: 40px; }
-            .footer-cols { grid-template-columns: 1fr 1fr; }
+            .site-footer { padding: 56px 0 24px; }
+            .footer-inner { padding: 0 20px; }
+            .footer-top { grid-template-columns: 1fr; gap: 32px; padding-bottom: 36px; }
+            .footer-brand h3 { font-size: 1.7rem; }
+            .footer-cols { grid-template-columns: 1fr 1fr; gap: 24px; }
             .footer-bottom { font-size: 0.62rem; letter-spacing: 0.14em; }
+        }
+        @media (max-width: 480px) {
+            .site-footer { padding: 44px 0 22px; }
+            .footer-inner { padding: 0 16px; }
+            .footer-top { gap: 26px; padding-bottom: 28px; }
+            .footer-brand h3 { font-size: 1.5rem; margin-bottom: 10px; }
+            .footer-brand p { font-size: 0.85rem; }
+            .footer-cols { grid-template-columns: 1fr; gap: 22px; }
+            .footer-col h4 { margin-bottom: 10px; font-size: 0.68rem; }
+            .footer-col p, .footer-col a { font-size: 0.88rem; line-height: 1.7; }
+            .footer-bottom { font-size: 0.58rem; gap: 8px; }
         }
 
         /* 로딩/스켈레톤 */
