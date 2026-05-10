@@ -6,8 +6,10 @@
 import io
 import os
 import re
+import time
 from datetime import date
 from functools import wraps
+from threading import Lock
 
 from flask import (
     Flask,
@@ -29,6 +31,11 @@ import db
 
 ADMIN_PIN = os.environ.get("ADMIN_PIN", "")
 FLASK_SECRET = os.environ.get("FLASK_SECRET", "dev-secret-change-me")
+ADMIN_ALIAS_PATH = os.environ.get("ADMIN_ALIAS_PATH", "").strip()
+SESSION_COOKIE_SECURE = os.environ.get("SESSION_COOKIE_SECURE", "0") == "1"
+ALLOWED_ORIGINS = [
+    o.strip() for o in os.environ.get("ALLOWED_ORIGINS", "").split(",") if o.strip()
+]
 
 if not ADMIN_PIN:
     raise ValueError(
@@ -40,10 +47,83 @@ app.secret_key = FLASK_SECRET
 app.config.update(
     SESSION_COOKIE_HTTPONLY=True,
     SESSION_COOKIE_SAMESITE="Lax",
+    SESSION_COOKIE_SECURE=SESSION_COOKIE_SECURE,
 )
-CORS(app, supports_credentials=True)
+if ALLOWED_ORIGINS:
+    CORS(app, supports_credentials=True, origins=ALLOWED_ORIGINS)
+else:
+    CORS(app, supports_credentials=True)
 
 db.init_schema()
+
+
+# ---------- 보안 헤더 ----------
+
+@app.after_request
+def add_security_headers(resp):
+    resp.headers.setdefault("X-Content-Type-Options", "nosniff")
+    resp.headers.setdefault("X-Frame-Options", "DENY")
+    resp.headers.setdefault("Referrer-Policy", "strict-origin-when-cross-origin")
+    resp.headers.setdefault("Permissions-Policy", "geolocation=(), microphone=(), camera=()")
+    resp.headers.setdefault(
+        "Content-Security-Policy",
+        "default-src 'self'; "
+        "img-src 'self' data: blob:; "
+        "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net; "
+        "font-src 'self' data: https://fonts.gstatic.com https://cdn.jsdelivr.net; "
+        "script-src 'self' 'unsafe-inline'; "
+        "connect-src 'self'; "
+        "frame-ancestors 'none'; "
+        "base-uri 'self'; "
+        "form-action 'self'",
+    )
+    return resp
+
+
+# ---------- PIN brute-force 방지 (워커 메모리) ----------
+
+PIN_MAX_ATTEMPTS = 5
+PIN_WINDOW_SEC = 300      # 5분 동안 누적
+PIN_LOCK_SEC = 900        # 임계 도달 시 15분 잠금
+_pin_attempts: dict = {}  # ip -> [count, window_start, locked_until]
+_pin_lock = Lock()
+
+
+def _client_ip() -> str:
+    fwd = request.headers.get("X-Forwarded-For", "")
+    if fwd:
+        return fwd.split(",")[0].strip()
+    return request.remote_addr or "unknown"
+
+
+def _check_pin_lock(ip: str) -> int:
+    """잠겨 있으면 남은 초, 아니면 0."""
+    with _pin_lock:
+        rec = _pin_attempts.get(ip)
+        if not rec:
+            return 0
+        now = time.time()
+        if rec[2] > now:
+            return int(rec[2] - now)
+        return 0
+
+
+def _record_pin_failure(ip: str):
+    with _pin_lock:
+        now = time.time()
+        rec = _pin_attempts.get(ip)
+        if not rec or now - rec[1] > PIN_WINDOW_SEC:
+            rec = [1, now, 0.0]
+        else:
+            rec[0] += 1
+        if rec[0] >= PIN_MAX_ATTEMPTS:
+            rec[2] = now + PIN_LOCK_SEC
+        _pin_attempts[ip] = rec
+
+
+def _reset_pin_failures(ip: str):
+    with _pin_lock:
+        _pin_attempts.pop(ip, None)
 
 
 # ---------- 인증 ----------
@@ -59,11 +139,21 @@ def require_pin(fn):
 
 @app.post("/api/admin/verify")
 def admin_verify():
+    ip = _client_ip()
+    locked = _check_pin_lock(ip)
+    if locked:
+        return jsonify({"success": False, "error": "too many attempts", "retry_after": locked}), 429
+
     data = request.get_json(silent=True) or {}
     pin = (data.get("pin") or "").strip()
     if pin and pin == ADMIN_PIN:
         session["admin"] = True
+        _reset_pin_failures(ip)
         return jsonify({"success": True})
+
+    _record_pin_failure(ip)
+    # 응답 시간 살짝 지연 — 타이밍 공격/스크립트 속도 저하
+    time.sleep(0.4)
     return jsonify({"success": False, "error": "invalid pin"}), 401
 
 
@@ -230,9 +320,21 @@ def today_page():
     return send_file("index.html")
 
 
+def _serve_admin():
+    """관리 페이지는 인증된 세션에만 노출. 그 외에는 404로 위장."""
+    if not session.get("admin"):
+        return send_from_directory("static", "404.html") if os.path.exists("static/404.html") else ("Not Found", 404)
+    return send_from_directory("static", "admin.html")
+
+
 @app.get("/admin")
 def admin_page():
-    return send_from_directory("static", "admin.html")
+    return _serve_admin()
+
+
+# 환경변수로 비공개 별칭 경로 추가 (.env: ADMIN_ALIAS_PATH=/a-7f2e91b3)
+if ADMIN_ALIAS_PATH and ADMIN_ALIAS_PATH.startswith("/") and ADMIN_ALIAS_PATH != "/admin":
+    app.add_url_rule(ADMIN_ALIAS_PATH, "admin_alias", _serve_admin, methods=["GET"])
 
 
 @app.get("/roastery")
@@ -271,11 +373,13 @@ def downloads(name):
 # ---------- 엔트리 ----------
 
 if __name__ == "__main__":
+    debug_on = os.environ.get("FLASK_DEBUG", "0") == "1"
     print("=" * 50)
     print("☕ 오늘의 커피 웹 앱 서버 시작 (SQLite)")
     print("=" * 50)
     print(f"DB: {db.DB_PATH}")
     print("🌐 http://localhost:5000")
-    print("🔒 관리: http://localhost:5000/admin")
+    if debug_on:
+        print("⚠️  FLASK_DEBUG=1 — 디버거 활성. 운영 환경에서 절대 사용 금지.")
     print("=" * 50)
-    app.run(host="0.0.0.0", port=5000, debug=True)
+    app.run(host="0.0.0.0", port=5000, debug=debug_on)
