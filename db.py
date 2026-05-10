@@ -3,12 +3,14 @@
 스키마:
     coffees(id, name, roastery, roast_date, process, status,
             cup_notes, comment, serve_date, notion_id, created_at, updated_at)
+    pin_attempts(ip, count, window_start, locked_until)
 
 API 응답은 기존 Notion 스키마와 호환되도록 한글 키(`커피`, `로스팅` 등)로
 변환되어 리턴된다. 날짜 필드는 {"start": "YYYY-MM-DD", "end": None} 객체 형태.
 """
 import os
 import sqlite3
+import time
 from contextlib import contextmanager
 from datetime import date, datetime
 from typing import Optional
@@ -40,6 +42,13 @@ CREATE TABLE IF NOT EXISTS coffees (
 CREATE INDEX IF NOT EXISTS idx_coffees_roast_date ON coffees(roast_date DESC);
 CREATE INDEX IF NOT EXISTS idx_coffees_status ON coffees(status);
 CREATE INDEX IF NOT EXISTS idx_coffees_name ON coffees(name);
+
+CREATE TABLE IF NOT EXISTS pin_attempts (
+    ip            TEXT PRIMARY KEY,
+    count         INTEGER NOT NULL DEFAULT 0,
+    window_start  REAL NOT NULL,
+    locked_until  REAL NOT NULL DEFAULT 0
+);
 """
 
 _EXTRA_COLUMNS = (
@@ -89,6 +98,54 @@ def init_schema():
             conn.execute(
                 "INSERT INTO migrations (name) VALUES (?)", ("roastery_92cafe_default",)
             )
+
+
+# ---------- PIN brute-force 카운터 (워커 공유 영속) ----------
+
+def pin_check_lock(ip: str) -> int:
+    """잠겨 있으면 남은 초, 아니면 0."""
+    now = time.time()
+    with connect() as conn:
+        row = conn.execute(
+            "SELECT locked_until FROM pin_attempts WHERE ip=?", (ip,)
+        ).fetchone()
+        if row and row["locked_until"] > now:
+            return int(row["locked_until"] - now)
+    return 0
+
+
+def pin_record_failure(ip: str, max_attempts: int, window_sec: int, lock_sec: int):
+    """실패 기록. 반환 (count, lock_remaining_sec).
+    lock_remaining_sec > 0이면 이번 실패로 잠김.
+    """
+    now = time.time()
+    with connect() as conn:
+        conn.execute("BEGIN IMMEDIATE")
+        row = conn.execute(
+            "SELECT count, window_start FROM pin_attempts WHERE ip=?", (ip,)
+        ).fetchone()
+        if row is None or now - row["window_start"] > window_sec:
+            count = 1
+            window_start = now
+        else:
+            count = row["count"] + 1
+            window_start = row["window_start"]
+        locked_until = now + lock_sec if count >= max_attempts else 0.0
+        conn.execute(
+            "INSERT INTO pin_attempts(ip, count, window_start, locked_until) "
+            "VALUES(?,?,?,?) "
+            "ON CONFLICT(ip) DO UPDATE SET "
+            "count=excluded.count, window_start=excluded.window_start, "
+            "locked_until=excluded.locked_until",
+            (ip, count, window_start, locked_until),
+        )
+        conn.execute("COMMIT")
+        return count, max(0, int(locked_until - now))
+
+
+def pin_reset(ip: str):
+    with connect() as conn:
+        conn.execute("DELETE FROM pin_attempts WHERE ip=?", (ip,))
 
 
 def _date_obj(s: Optional[str]):

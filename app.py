@@ -9,7 +9,6 @@ import re
 import time
 from datetime import date
 from functools import wraps
-from threading import Lock
 
 from flask import (
     Flask,
@@ -80,13 +79,11 @@ def add_security_headers(resp):
     return resp
 
 
-# ---------- PIN brute-force 방지 (워커 메모리) ----------
+# ---------- PIN brute-force 방지 (sqlite, 워커 공유) ----------
 
 PIN_MAX_ATTEMPTS = 5
 PIN_WINDOW_SEC = 300      # 5분 동안 누적
 PIN_LOCK_SEC = 900        # 임계 도달 시 15분 잠금
-_pin_attempts: dict = {}  # ip -> [count, window_start, locked_until]
-_pin_lock = Lock()
 
 
 def _client_ip() -> str:
@@ -94,36 +91,6 @@ def _client_ip() -> str:
     if fwd:
         return fwd.split(",")[0].strip()
     return request.remote_addr or "unknown"
-
-
-def _check_pin_lock(ip: str) -> int:
-    """잠겨 있으면 남은 초, 아니면 0."""
-    with _pin_lock:
-        rec = _pin_attempts.get(ip)
-        if not rec:
-            return 0
-        now = time.time()
-        if rec[2] > now:
-            return int(rec[2] - now)
-        return 0
-
-
-def _record_pin_failure(ip: str):
-    with _pin_lock:
-        now = time.time()
-        rec = _pin_attempts.get(ip)
-        if not rec or now - rec[1] > PIN_WINDOW_SEC:
-            rec = [1, now, 0.0]
-        else:
-            rec[0] += 1
-        if rec[0] >= PIN_MAX_ATTEMPTS:
-            rec[2] = now + PIN_LOCK_SEC
-        _pin_attempts[ip] = rec
-
-
-def _reset_pin_failures(ip: str):
-    with _pin_lock:
-        _pin_attempts.pop(ip, None)
 
 
 # ---------- 인증 ----------
@@ -140,7 +107,7 @@ def require_pin(fn):
 @app.post("/api/admin/verify")
 def admin_verify():
     ip = _client_ip()
-    locked = _check_pin_lock(ip)
+    locked = db.pin_check_lock(ip)
     if locked:
         return jsonify({
             "success": False, "error": "locked",
@@ -151,25 +118,22 @@ def admin_verify():
     pin = (data.get("pin") or "").strip()
     if pin and pin == ADMIN_PIN:
         session["admin"] = True
-        _reset_pin_failures(ip)
+        db.pin_reset(ip)
         return jsonify({"success": True})
 
-    _record_pin_failure(ip)
+    count, lock_remaining = db.pin_record_failure(
+        ip, PIN_MAX_ATTEMPTS, PIN_WINDOW_SEC, PIN_LOCK_SEC
+    )
     # 응답 시간 살짝 지연 — 타이밍 공격/스크립트 속도 저하
     time.sleep(0.4)
 
-    # 이번 실패로 잠겼는지 즉시 확인
-    locked_after = _check_pin_lock(ip)
-    if locked_after:
+    if lock_remaining:
         return jsonify({
             "success": False, "error": "locked",
-            "retry_after": locked_after, "max_attempts": PIN_MAX_ATTEMPTS,
+            "retry_after": lock_remaining, "max_attempts": PIN_MAX_ATTEMPTS,
         }), 429
 
-    with _pin_lock:
-        rec = _pin_attempts.get(ip)
-        attempts_used = rec[0] if rec else 0
-    attempts_left = max(0, PIN_MAX_ATTEMPTS - attempts_used)
+    attempts_left = max(0, PIN_MAX_ATTEMPTS - count)
     return jsonify({
         "success": False, "error": "invalid pin",
         "attempts_left": attempts_left,
