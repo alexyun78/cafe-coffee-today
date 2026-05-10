@@ -829,6 +829,13 @@
             line-height: 1.85;
         }
         .footer-col a:hover { color: var(--caramel); }
+        .footer-ig {
+            display: inline-flex; align-items: center; gap: 8px;
+            margin-top: 4px;
+            transition: color 0.2s;
+        }
+        .footer-ig .ig-icon { flex-shrink: 0; }
+        .footer-ig:hover { color: var(--caramel); }
         .footer-bottom {
             display: flex; justify-content: space-between; align-items: center;
             font-family: var(--font-mono);
@@ -1021,7 +1028,17 @@
                 </div>
                 <div class="footer-col">
                     <h4>CONTACT</h4>
-                    <p><a href="tel:0507-1325-6407">0507-1325-6407</a></p>
+                    <p>
+                        <a href="tel:0507-1325-6407">0507-1325-6407</a><br>
+                        <a class="footer-ig" href="https://instagram.com/92doc_cafe" target="_blank" rel="noopener noreferrer" aria-label="92도씨 인스타그램">
+                            <svg class="ig-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <rect x="3" y="3" width="18" height="18" rx="5" ry="5"></rect>
+                                <circle cx="12" cy="12" r="4"></circle>
+                                <circle cx="17.5" cy="6.5" r="0.9" fill="currentColor" stroke="none"></circle>
+                            </svg>
+                            <span>@92doc_cafe</span>
+                        </a>
+                    </p>
                 </div>
                 <div class="footer-col">
                     <h4>CRAFT</h4>
