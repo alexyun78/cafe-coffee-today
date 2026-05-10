@@ -304,23 +304,16 @@ def today_page():
     return send_file("index.html")
 
 
-def _serve_admin_authed_only():
-    """공개 /admin: 인증된 세션에만 노출, 그 외에는 404로 위장."""
-    if not session.get("admin"):
-        return ("Not Found", 404)
-    return send_from_directory("static", "admin.html")
-
-
 def _serve_admin_form():
-    """비공개 별칭 경로: 인증 무관 admin.html 응답.
-    admin.html이 init()에서 /api/admin/status로 자체 PIN 모달을 띄움.
+    """admin.html 응답. 인증 게이트는 admin.html init()이 /api/admin/status로 처리하고,
+    실제 데이터/CRUD는 모두 @require_pin이 막는다. 따라서 HTML 자체는 무조건 응답해도 안전.
     """
     return send_from_directory("static", "admin.html")
 
 
 @app.get("/admin")
 def admin_page():
-    return _serve_admin_authed_only()
+    return _serve_admin_form()
 
 
 # 환경변수로 비공개 별칭 경로 추가 (.env: ADMIN_ALIAS_PATH=/a-7f2e91b3)
