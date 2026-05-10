@@ -647,16 +647,77 @@ async function api(method, path, body) {
 function showPinModal() { pinModal.classList.remove("hidden"); $("#pin-input").focus(); }
 function hidePinModal() { pinModal.classList.add("hidden"); }
 
+let _pinLockTimer = null;
+function _setPinError(msg) {
+  const el = $("#pin-error");
+  el.textContent = msg;
+  el.style.display = "block";
+}
+function _clearPinError() {
+  const el = $("#pin-error");
+  el.textContent = "PIN이 올바르지 않습니다.";
+  el.style.display = "none";
+}
+function _startPinLockCountdown(seconds) {
+  clearInterval(_pinLockTimer);
+  $("#pin-input").disabled = true;
+  $("#pin-submit").disabled = true;
+  $("#pin-input").value = "";
+  let remaining = seconds;
+  function tick() {
+    if (remaining <= 0) {
+      clearInterval(_pinLockTimer);
+      _pinLockTimer = null;
+      $("#pin-input").disabled = false;
+      $("#pin-submit").disabled = false;
+      _clearPinError();
+      $("#pin-input").focus();
+      return;
+    }
+    const m = Math.floor(remaining / 60);
+    const s = remaining % 60;
+    _setPinError(`5회 모두 실패 — ${m}:${String(s).padStart(2, "0")} 후 다시 시도하세요.`);
+    remaining--;
+  }
+  tick();
+  _pinLockTimer = setInterval(tick, 1000);
+}
+
 $("#pin-submit").addEventListener("click", async () => {
+  if ($("#pin-submit").disabled) return;
   const pin = $("#pin-input").value.trim();
+  if (!pin) return;
   try {
-    await api("POST", "/api/admin/verify", { pin });
-    hidePinModal();
-    $("#pin-error").style.display = "none";
+    const res = await fetch("/api/admin/verify", {
+      method: "POST",
+      credentials: "include",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ pin }),
+    });
+    const data = await res.json().catch(() => ({}));
+    if (res.ok && data.success) {
+      hidePinModal();
+      _clearPinError();
+      $("#pin-input").value = "";
+      init();
+      return;
+    }
+    if (res.status === 429 && data.retry_after) {
+      _startPinLockCountdown(data.retry_after);
+      return;
+    }
+    const left = (typeof data.attempts_left === "number") ? data.attempts_left : null;
+    if (left === 0) {
+      _setPinError("5회 모두 실패 — 잠시 후 다시 시도하세요.");
+    } else if (left !== null) {
+      _setPinError(`PIN이 올바르지 않습니다. ${left}회 남음`);
+    } else {
+      _setPinError("PIN이 올바르지 않습니다.");
+    }
     $("#pin-input").value = "";
-    init();
+    $("#pin-input").focus();
   } catch (e) {
-    $("#pin-error").style.display = "block";
+    _setPinError("네트워크 오류 — 다시 시도해 주세요.");
   }
 });
 $("#pin-input").addEventListener("keydown", (e) => {

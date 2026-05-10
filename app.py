@@ -142,7 +142,10 @@ def admin_verify():
     ip = _client_ip()
     locked = _check_pin_lock(ip)
     if locked:
-        return jsonify({"success": False, "error": "too many attempts", "retry_after": locked}), 429
+        return jsonify({
+            "success": False, "error": "locked",
+            "retry_after": locked, "max_attempts": PIN_MAX_ATTEMPTS,
+        }), 429
 
     data = request.get_json(silent=True) or {}
     pin = (data.get("pin") or "").strip()
@@ -154,7 +157,24 @@ def admin_verify():
     _record_pin_failure(ip)
     # 응답 시간 살짝 지연 — 타이밍 공격/스크립트 속도 저하
     time.sleep(0.4)
-    return jsonify({"success": False, "error": "invalid pin"}), 401
+
+    # 이번 실패로 잠겼는지 즉시 확인
+    locked_after = _check_pin_lock(ip)
+    if locked_after:
+        return jsonify({
+            "success": False, "error": "locked",
+            "retry_after": locked_after, "max_attempts": PIN_MAX_ATTEMPTS,
+        }), 429
+
+    with _pin_lock:
+        rec = _pin_attempts.get(ip)
+        attempts_used = rec[0] if rec else 0
+    attempts_left = max(0, PIN_MAX_ATTEMPTS - attempts_used)
+    return jsonify({
+        "success": False, "error": "invalid pin",
+        "attempts_left": attempts_left,
+        "max_attempts": PIN_MAX_ATTEMPTS,
+    }), 401
 
 
 @app.post("/api/admin/logout")

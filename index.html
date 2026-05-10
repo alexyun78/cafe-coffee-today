@@ -2725,8 +2725,44 @@
             }
           });
 
+          let _pinLockTimer = null;
+          function _setPinErr(msg) {
+            const el = document.getElementById('admin-pin-error');
+            el.textContent = msg;
+            el.style.display = 'block';
+          }
+          function _clearPinErr() {
+            const el = document.getElementById('admin-pin-error');
+            el.textContent = 'PIN이 올바르지 않습니다.';
+            el.style.display = 'none';
+          }
+          function _startPinLock(seconds) {
+            clearInterval(_pinLockTimer);
+            const inp = document.getElementById('admin-pin-input');
+            const btn = document.getElementById('admin-pin-submit');
+            inp.disabled = true; btn.disabled = true; inp.value = '';
+            let remaining = seconds;
+            function tick() {
+              if (remaining <= 0) {
+                clearInterval(_pinLockTimer); _pinLockTimer = null;
+                inp.disabled = false; btn.disabled = false;
+                _clearPinErr(); inp.focus();
+                return;
+              }
+              const m = Math.floor(remaining / 60);
+              const s = remaining % 60;
+              _setPinErr(`5회 모두 실패 — ${m}:${String(s).padStart(2, '0')} 후 다시 시도하세요.`);
+              remaining--;
+            }
+            tick();
+            _pinLockTimer = setInterval(tick, 1000);
+          }
+
           document.getElementById('admin-pin-submit').addEventListener('click', async () => {
+            const btn = document.getElementById('admin-pin-submit');
+            if (btn.disabled) return;
             const pin = document.getElementById('admin-pin-input').value.trim();
+            if (!pin) return;
             try {
               const res = await fetch('/api/admin/verify', {
                 method: 'POST',
@@ -2734,15 +2770,29 @@
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ pin }),
               });
-              const data = await res.json();
-              if (data.success) {
+              const data = await res.json().catch(() => ({}));
+              if (res.ok && data.success) {
                 document.getElementById('pin-modal').classList.add('hidden');
+                _clearPinErr();
                 window.location.href = '/admin';
-              } else {
-                document.getElementById('admin-pin-error').style.display = 'block';
+                return;
               }
+              if (res.status === 429 && data.retry_after) {
+                _startPinLock(data.retry_after);
+                return;
+              }
+              const left = (typeof data.attempts_left === 'number') ? data.attempts_left : null;
+              if (left === 0) {
+                _setPinErr('5회 모두 실패 — 잠시 후 다시 시도하세요.');
+              } else if (left !== null) {
+                _setPinErr(`PIN이 올바르지 않습니다. ${left}회 남음`);
+              } else {
+                _setPinErr('PIN이 올바르지 않습니다.');
+              }
+              document.getElementById('admin-pin-input').value = '';
+              document.getElementById('admin-pin-input').focus();
             } catch (e) {
-              document.getElementById('admin-pin-error').style.display = 'block';
+              _setPinErr('네트워크 오류 — 다시 시도해 주세요.');
             }
           });
 
@@ -2754,8 +2804,13 @@
           function closePinModal() {
             const modal = document.getElementById('pin-modal');
             modal.classList.add('hidden');
-            document.getElementById('admin-pin-input').value = '';
-            document.getElementById('admin-pin-error').style.display = 'none';
+            const inp = document.getElementById('admin-pin-input');
+            const btn = document.getElementById('admin-pin-submit');
+            inp.value = '';
+            inp.disabled = false;
+            btn.disabled = false;
+            _clearPinErr();
+            if (_pinLockTimer) { clearInterval(_pinLockTimer); _pinLockTimer = null; }
             tapCount = 0;
             clearTimeout(tapTimer);
           }
