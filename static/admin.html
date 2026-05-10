@@ -625,16 +625,31 @@ const pinModal = $("#pin-modal");
 let editingId = null;
 let suggestionsCache = null;
 
+// ---------- 토큰 저장 (APK용 — WebView 쿠키 동기화 우회) ----------
+const ADMIN_TOKEN_KEY = "cafe_admin_token";
+function _getAdminToken() {
+  try { return localStorage.getItem(ADMIN_TOKEN_KEY) || ""; }
+  catch (e) { return ""; }
+}
+function _setAdminToken(t) {
+  try { if (t) localStorage.setItem(ADMIN_TOKEN_KEY, t); }
+  catch (e) {}
+}
+function _clearAdminToken() {
+  try { localStorage.removeItem(ADMIN_TOKEN_KEY); }
+  catch (e) {}
+}
+
 // ---------- API helpers ----------
 async function api(method, path, body) {
-  const opts = {
-    method,
-    credentials: "include",
-    headers: { "Content-Type": "application/json" },
-  };
+  const headers = { "Content-Type": "application/json" };
+  const tok = _getAdminToken();
+  if (tok) headers["Authorization"] = "Bearer " + tok;
+  const opts = { method, credentials: "include", headers };
   if (body !== undefined) opts.body = JSON.stringify(body);
   const res = await fetch(path, opts);
   if (res.status === 401) {
+    _clearAdminToken();
     showPinModal();
     throw new Error("unauthorized");
   }
@@ -696,6 +711,7 @@ $("#pin-submit").addEventListener("click", async () => {
     });
     const data = await res.json().catch(() => ({}));
     if (res.ok && data.success) {
+      if (data.token) _setAdminToken(data.token);
       hidePinModal();
       _clearPinError();
       $("#pin-input").value = "";

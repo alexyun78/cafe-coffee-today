@@ -19,6 +19,7 @@ from flask import (
     session,
 )
 from flask_cors import CORS
+from itsdangerous import BadSignature, SignatureExpired, URLSafeTimedSerializer
 
 try:
     from dotenv import load_dotenv
@@ -94,11 +95,44 @@ def _client_ip() -> str:
 
 
 # ---------- 인증 ----------
+# 두 가지 인증 경로 병행:
+#   (1) 세션 쿠키 (브라우저용 — Flask 기본)
+#   (2) Authorization: Bearer <token> 헤더 (APK용 — WebView 쿠키 불안정 대응)
+# 토큰은 itsdangerous로 FLASK_SECRET 서명 + TTL 보장. 서버 측 상태 없음.
+
+ADMIN_TOKEN_TTL_SEC = 60 * 60 * 24 * 7  # 7일
+ADMIN_TOKEN_SALT = "admin-token-v1"
+_token_serializer = URLSafeTimedSerializer(FLASK_SECRET, salt=ADMIN_TOKEN_SALT)
+
+
+def _issue_admin_token() -> str:
+    return _token_serializer.dumps({"admin": True})
+
+
+def _bearer_token() -> str | None:
+    auth = request.headers.get("Authorization", "")
+    if auth.startswith("Bearer "):
+        return auth[7:].strip() or None
+    return None
+
+
+def _is_admin_authed() -> bool:
+    if session.get("admin"):
+        return True
+    tok = _bearer_token()
+    if not tok:
+        return False
+    try:
+        data = _token_serializer.loads(tok, max_age=ADMIN_TOKEN_TTL_SEC)
+        return bool(isinstance(data, dict) and data.get("admin"))
+    except (BadSignature, SignatureExpired):
+        return False
+
 
 def require_pin(fn):
     @wraps(fn)
     def wrapper(*args, **kwargs):
-        if not session.get("admin"):
+        if not _is_admin_authed():
             return jsonify({"success": False, "error": "unauthorized"}), 401
         return fn(*args, **kwargs)
     return wrapper
@@ -119,7 +153,7 @@ def admin_verify():
     if pin and pin == ADMIN_PIN:
         session["admin"] = True
         db.pin_reset(ip)
-        return jsonify({"success": True})
+        return jsonify({"success": True, "token": _issue_admin_token()})
 
     count, lock_remaining = db.pin_record_failure(
         ip, PIN_MAX_ATTEMPTS, PIN_WINDOW_SEC, PIN_LOCK_SEC
@@ -144,12 +178,13 @@ def admin_verify():
 @app.post("/api/admin/logout")
 def admin_logout():
     session.pop("admin", None)
+    # 토큰은 stateless라 서버에서 무효화할 수 없음. 클라이언트가 localStorage에서 제거.
     return jsonify({"success": True})
 
 
 @app.get("/api/admin/status")
 def admin_status():
-    return jsonify({"success": True, "authenticated": bool(session.get("admin"))})
+    return jsonify({"success": True, "authenticated": _is_admin_authed()})
 
 
 # ---------- 공개 조회 ----------
