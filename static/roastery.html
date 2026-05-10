@@ -883,7 +883,6 @@
             <a href="#upcoming">곧 만날</a>
             <a href="#hours">영업</a>
         </nav>
-        <a class="nav-cta" href="/today">오늘의 커피 →</a>
     </div>
 </header>
 
@@ -1022,7 +1021,7 @@
                 </div>
                 <div class="footer-col">
                     <h4>CONTACT</h4>
-                    <p><a href="tel:0507-1325-6407">0507-1325-6407</a><br><a href="/today">오늘의 커피 →</a></p>
+                    <p><a href="tel:0507-1325-6407">0507-1325-6407</a></p>
                 </div>
                 <div class="footer-col">
                     <h4>CRAFT</h4>
@@ -1148,8 +1147,16 @@
         var now = all.find(function (x) { return x['상태'] === '진행 중'; }) || today[0];
         renderNowServing(now);
 
-        // Upcoming — 예정 (서버 정렬: serve_date ASC)
-        var upcoming = all.filter(function (x) { return x['상태'] === '예정'; });
+        // Upcoming — 예정 (서버 정렬: serve_date ASC). 오늘 ~ 일주일 이내, 날짜 있는 것만.
+        var todayStart = new Date(); todayStart.setHours(0, 0, 0, 0);
+        var weekEnd = new Date(todayStart); weekEnd.setDate(weekEnd.getDate() + 7);
+        var upcoming = all.filter(function (x) {
+            if (x['상태'] !== '예정') return false;
+            var serve = x['제공일'] && x['제공일'].start;
+            if (!serve) return false;
+            var d = new Date(serve);
+            return !isNaN(d.getTime()) && d >= todayStart && d <= weekEnd;
+        });
         renderUpcoming(upcoming);
     }
 
