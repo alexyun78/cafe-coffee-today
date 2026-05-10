@@ -1389,21 +1389,6 @@
         <div class="winner-sub">덕분에 잘 먹겠습니다</div>
     </div>
 
-    <!-- PIN 모달 (APK 히든 진입) -->
-    <div class="pin-modal-backdrop hidden" id="pin-modal">
-      <div class="pin-modal">
-        <h2>관리자 인증</h2>
-        <p>PIN을 입력하세요.</p>
-        <input type="password" inputmode="numeric" pattern="[0-9]*"
-               id="admin-pin-input" maxlength="8" autocomplete="off">
-        <div class="pin-modal-error" id="admin-pin-error">PIN이 올바르지 않습니다.</div>
-        <div class="pin-modal-actions">
-          <button class="pin-modal-btn secondary" id="admin-pin-cancel" type="button">취소</button>
-          <button class="pin-modal-btn" id="admin-pin-submit" type="button">확인</button>
-        </div>
-      </div>
-    </div>
-
     <!-- 커피 상세 모달 -->
     <div id="coffeeModal" class="modal">
         <div class="modal-content">
@@ -2698,128 +2683,24 @@
         }
 
         // ---------- 히든 관리자 진입 (제목 5회 탭) — APK·일반 브라우저 공통 ----------
+        // 5-탭 시 /admin으로 바로 이동. PIN 입력은 admin.html이 자체 모달로 처리한다.
+        // (이전엔 여기서 PIN을 받고 /admin으로 리다이렉트했는데, WebView에서 인증 직후
+        //  풀 네비게이션 시 세션 쿠키 동기화가 어긋나 PIN을 다시 묻는 문제가 있었음.)
         (function setupHiddenAdmin() {
           const title = document.querySelector('.header h1');
           if (!title) return;
-
           let tapCount = 0;
           let tapTimer = null;
-
           title.style.cursor = 'default';
           title.addEventListener('click', (e) => {
             e.stopPropagation();
-            const modal = document.getElementById('pin-modal');
-            // 모달이 이미 열려있으면 무시
-            if (!modal.classList.contains('hidden')) return;
-
             tapCount++;
             clearTimeout(tapTimer);
             tapTimer = setTimeout(() => { tapCount = 0; }, 2000);
-
             if (tapCount >= 5) {
               tapCount = 0;
-              modal.classList.remove('hidden');
-              document.getElementById('admin-pin-input').value = '';
-              document.getElementById('admin-pin-error').style.display = 'none';
-              document.getElementById('admin-pin-input').focus();
+              window.location.href = '/admin';
             }
-          });
-
-          let _pinLockTimer = null;
-          function _setPinErr(msg) {
-            const el = document.getElementById('admin-pin-error');
-            el.textContent = msg;
-            el.style.display = 'block';
-          }
-          function _clearPinErr() {
-            const el = document.getElementById('admin-pin-error');
-            el.textContent = 'PIN이 올바르지 않습니다.';
-            el.style.display = 'none';
-          }
-          function _startPinLock(seconds) {
-            clearInterval(_pinLockTimer);
-            const inp = document.getElementById('admin-pin-input');
-            const btn = document.getElementById('admin-pin-submit');
-            inp.disabled = true; btn.disabled = true; inp.value = '';
-            let remaining = seconds;
-            function tick() {
-              if (remaining <= 0) {
-                clearInterval(_pinLockTimer); _pinLockTimer = null;
-                inp.disabled = false; btn.disabled = false;
-                _clearPinErr(); inp.focus();
-                return;
-              }
-              const m = Math.floor(remaining / 60);
-              const s = remaining % 60;
-              _setPinErr(`5회 모두 실패 — ${m}:${String(s).padStart(2, '0')} 후 다시 시도하세요.`);
-              remaining--;
-            }
-            tick();
-            _pinLockTimer = setInterval(tick, 1000);
-          }
-
-          document.getElementById('admin-pin-submit').addEventListener('click', async () => {
-            const btn = document.getElementById('admin-pin-submit');
-            if (btn.disabled) return;
-            const pin = document.getElementById('admin-pin-input').value.trim();
-            if (!pin) return;
-            try {
-              const res = await fetch('/api/admin/verify', {
-                method: 'POST',
-                credentials: 'include',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ pin }),
-              });
-              const data = await res.json().catch(() => ({}));
-              if (res.ok && data.success) {
-                document.getElementById('pin-modal').classList.add('hidden');
-                _clearPinErr();
-                window.location.href = '/admin';
-                return;
-              }
-              if (res.status === 429 && data.retry_after) {
-                _startPinLock(data.retry_after);
-                return;
-              }
-              const left = (typeof data.attempts_left === 'number') ? data.attempts_left : null;
-              if (left === 0) {
-                _setPinErr('5회 모두 실패 — 잠시 후 다시 시도하세요.');
-              } else if (left !== null) {
-                _setPinErr(`PIN이 올바르지 않습니다. ${left}회 남음`);
-              } else {
-                _setPinErr('PIN이 올바르지 않습니다.');
-              }
-              document.getElementById('admin-pin-input').value = '';
-              document.getElementById('admin-pin-input').focus();
-            } catch (e) {
-              _setPinErr('네트워크 오류 — 다시 시도해 주세요.');
-            }
-          });
-
-          document.getElementById('admin-pin-input').addEventListener('keydown', (e) => {
-            if (e.key === 'Enter') document.getElementById('admin-pin-submit').click();
-            if (e.key === 'Escape') closePinModal();
-          });
-
-          function closePinModal() {
-            const modal = document.getElementById('pin-modal');
-            modal.classList.add('hidden');
-            const inp = document.getElementById('admin-pin-input');
-            const btn = document.getElementById('admin-pin-submit');
-            inp.value = '';
-            inp.disabled = false;
-            btn.disabled = false;
-            _clearPinErr();
-            if (_pinLockTimer) { clearInterval(_pinLockTimer); _pinLockTimer = null; }
-            tapCount = 0;
-            clearTimeout(tapTimer);
-          }
-
-          document.getElementById('admin-pin-cancel').addEventListener('click', closePinModal);
-
-          // 모달 backdrop 클릭은 내부 클릭 전파를 막되, 모달 자체는 닫지 않음
-          document.getElementById('pin-modal').addEventListener('click', (e) => {
-            e.stopPropagation();
           });
         })();
     </script>
