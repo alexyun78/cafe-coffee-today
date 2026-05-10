@@ -876,6 +876,42 @@
             0% { background-position: 200% 0; }
             100% { background-position: -200% 0; }
         }
+
+        /* PIN 모달 (히든 진입 — 브랜드 5회 탭) */
+        .pin-modal-backdrop {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.5);
+            display: flex; align-items: center; justify-content: center;
+            padding: 16px; z-index: 2000;
+        }
+        .pin-modal-backdrop.hidden { display: none; }
+        .pin-modal-box {
+            background: white; border-radius: 16px;
+            padding: 28px 24px; max-width: 320px; width: 100%;
+            text-align: center; font-family: var(--font-body);
+        }
+        .pin-modal-box h2 { color: var(--espresso); font-size: 1.2rem; margin-bottom: 8px; }
+        .pin-modal-box p { color: var(--ink-soft); font-size: 0.9rem; margin-bottom: 16px; }
+        .pin-modal-box input {
+            width: 100%; padding: 12px; border: 1.5px solid var(--line);
+            border-radius: 8px; font-size: 1.3rem; font-weight: 600;
+            text-align: center; letter-spacing: 4px; font-family: inherit;
+        }
+        .pin-modal-box input:focus {
+            outline: none; border-color: var(--copper);
+            box-shadow: 0 0 0 3px rgba(181,112,61,0.15);
+        }
+        .pin-modal-err {
+            color: #c62828; font-size: 0.85rem; margin-top: 8px; display: none;
+        }
+        .pin-modal-actions { display: flex; gap: 10px; margin-top: 16px; }
+        .pin-modal-btn {
+            flex: 1; padding: 14px; background: var(--espresso); color: white;
+            border: none; border-radius: 10px; font-size: 1rem; font-weight: 600;
+            cursor: pointer; font-family: inherit;
+        }
+        .pin-modal-btn:hover { background: #8B6F47; }
+        .pin-modal-btn.secondary { background: #f0ebe4; color: var(--espresso); }
+        .pin-modal-btn.secondary:hover { background: #e6ddd0; }
     </style>
 </head>
 <body>
@@ -1305,6 +1341,137 @@
     document.addEventListener('keydown', function (e) {
         if (e.key === 'Escape' && modal.classList.contains('is-open')) closeModal();
     });
+})();
+</script>
+
+<!-- 히든 관리자 진입: 브랜드 로고 5회 탭 -->
+<div class="pin-modal-backdrop hidden" id="pin-modal">
+  <div class="pin-modal-box">
+    <h2>관리자 인증</h2>
+    <p>PIN을 입력하세요.</p>
+    <input type="password" inputmode="numeric" pattern="[0-9]*"
+           id="admin-pin-input" maxlength="8" autocomplete="off">
+    <div class="pin-modal-err" id="admin-pin-error">PIN이 올바르지 않습니다.</div>
+    <div class="pin-modal-actions">
+      <button class="pin-modal-btn secondary" id="admin-pin-cancel" type="button">취소</button>
+      <button class="pin-modal-btn" id="admin-pin-submit" type="button">확인</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function setupHiddenAdmin() {
+  var brand = document.querySelector('.site-nav .brand');
+  if (!brand) return;
+  var modal = document.getElementById('pin-modal');
+  var input = document.getElementById('admin-pin-input');
+  var errEl = document.getElementById('admin-pin-error');
+  var btn = document.getElementById('admin-pin-submit');
+  var cancelBtn = document.getElementById('admin-pin-cancel');
+
+  var tapCount = 0;
+  var tapTimer = null;
+  var lockTimer = null;
+
+  brand.addEventListener('click', function (e) {
+    e.preventDefault();
+    if (!modal.classList.contains('hidden')) return;
+    tapCount++;
+    clearTimeout(tapTimer);
+    tapTimer = setTimeout(function () { tapCount = 0; }, 2000);
+    if (tapCount >= 5) {
+      tapCount = 0;
+      openModal();
+    }
+  });
+
+  function openModal() {
+    modal.classList.remove('hidden');
+    input.value = '';
+    input.disabled = false;
+    btn.disabled = false;
+    clearErr();
+    setTimeout(function () { input.focus(); }, 50);
+  }
+
+  function closeModal() {
+    modal.classList.add('hidden');
+    input.value = '';
+    input.disabled = false;
+    btn.disabled = false;
+    clearErr();
+    if (lockTimer) { clearInterval(lockTimer); lockTimer = null; }
+    tapCount = 0;
+    clearTimeout(tapTimer);
+  }
+
+  function setErr(msg) { errEl.textContent = msg; errEl.style.display = 'block'; }
+  function clearErr() { errEl.textContent = 'PIN이 올바르지 않습니다.'; errEl.style.display = 'none'; }
+
+  function startLock(seconds) {
+    clearInterval(lockTimer);
+    input.disabled = true; btn.disabled = true; input.value = '';
+    var remaining = seconds;
+    function tick() {
+      if (remaining <= 0) {
+        clearInterval(lockTimer); lockTimer = null;
+        input.disabled = false; btn.disabled = false;
+        clearErr(); input.focus();
+        return;
+      }
+      var m = Math.floor(remaining / 60);
+      var s = remaining % 60;
+      setErr('5회 모두 실패 — ' + m + ':' + String(s).padStart(2, '0') + ' 후 다시 시도하세요.');
+      remaining--;
+    }
+    tick();
+    lockTimer = setInterval(tick, 1000);
+  }
+
+  btn.addEventListener('click', async function () {
+    if (btn.disabled) return;
+    var pin = input.value.trim();
+    if (!pin) return;
+    try {
+      var res = await fetch('/api/admin/verify', {
+        method: 'POST',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ pin: pin }),
+      });
+      var data = await res.json().catch(function () { return {}; });
+      if (res.ok && data.success) {
+        modal.classList.add('hidden');
+        clearErr();
+        window.location.href = '/admin';
+        return;
+      }
+      if (res.status === 429 && data.retry_after) {
+        startLock(data.retry_after);
+        return;
+      }
+      var left = (typeof data.attempts_left === 'number') ? data.attempts_left : null;
+      if (left === 0) {
+        setErr('5회 모두 실패 — 잠시 후 다시 시도하세요.');
+      } else if (left !== null) {
+        setErr('PIN이 올바르지 않습니다. ' + left + '회 남음');
+      } else {
+        setErr('PIN이 올바르지 않습니다.');
+      }
+      input.value = '';
+      input.focus();
+    } catch (e) {
+      setErr('네트워크 오류 — 다시 시도해 주세요.');
+    }
+  });
+
+  input.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') btn.click();
+    if (e.key === 'Escape') closeModal();
+  });
+
+  cancelBtn.addEventListener('click', closeModal);
+  modal.addEventListener('click', function (e) { e.stopPropagation(); });
 })();
 </script>
 
