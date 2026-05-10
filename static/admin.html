@@ -626,19 +626,23 @@ let editingId = null;
 let suggestionsCache = null;
 
 // ---------- 토큰 저장 (APK용 — WebView 쿠키 동기화 우회) ----------
+// sessionStorage 사용 — WebView가 종료되면 토큰 폐기 → 앱 재실행 시 PIN 재입력 강제.
+// (localStorage는 7일 동안 살아남아 매장 공용 기기에서 보안상 부적절.)
 const ADMIN_TOKEN_KEY = "cafe_admin_token";
 function _getAdminToken() {
-  try { return localStorage.getItem(ADMIN_TOKEN_KEY) || ""; }
+  try { return sessionStorage.getItem(ADMIN_TOKEN_KEY) || ""; }
   catch (e) { return ""; }
 }
 function _setAdminToken(t) {
-  try { if (t) localStorage.setItem(ADMIN_TOKEN_KEY, t); }
+  try { if (t) sessionStorage.setItem(ADMIN_TOKEN_KEY, t); }
   catch (e) {}
 }
 function _clearAdminToken() {
-  try { localStorage.removeItem(ADMIN_TOKEN_KEY); }
+  try { sessionStorage.removeItem(ADMIN_TOKEN_KEY); }
   catch (e) {}
 }
+// 이전 버전에서 localStorage에 남아있을 수 있는 토큰 정리
+try { localStorage.removeItem(ADMIN_TOKEN_KEY); } catch (e) {}
 
 // ---------- API helpers ----------
 async function api(method, path, body) {
