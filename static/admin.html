@@ -55,6 +55,90 @@
     padding: 24px; margin-bottom: 16px;
   }
 
+  /* 방문자 통계 */
+  .stats-card h2 {
+    font-size: 1.1rem; color: var(--coffee-dark); margin-bottom: 14px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .stats-card h2 .stats-date {
+    font-size: 0.75rem; color: var(--muted); font-weight: 500;
+  }
+  .stats-row {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
+    margin-bottom: 18px;
+  }
+  .stats-tile {
+    background: linear-gradient(135deg, #faf6f0 0%, #f0ebe4 100%);
+    border: 1px solid var(--border); border-radius: 10px;
+    padding: 14px 16px;
+  }
+  .stats-tile-label {
+    font-size: 0.72rem; color: var(--muted); letter-spacing: 0.06em;
+    text-transform: uppercase; margin-bottom: 6px; font-weight: 600;
+  }
+  .stats-tile-value {
+    font-size: 1.7rem; color: var(--coffee-dark); font-weight: 700;
+    line-height: 1.1; letter-spacing: -0.01em;
+  }
+  .stats-tile-sub {
+    font-size: 0.74rem; color: var(--muted); margin-top: 4px;
+  }
+  .stats-section { margin-top: 14px; }
+  .stats-section-title {
+    font-size: 0.78rem; color: var(--muted); letter-spacing: 0.06em;
+    text-transform: uppercase; margin-bottom: 8px; font-weight: 600;
+  }
+  .hourly-chart {
+    width: 100%; height: auto; display: block;
+  }
+  .hourly-chart .bar {
+    fill: var(--coffee-mid); transition: fill 0.18s;
+  }
+  .hourly-chart .bar.now { fill: var(--accent); }
+  .hourly-chart .axis-label {
+    font-family: ui-monospace, 'SFMono-Regular', monospace;
+    font-size: 9px; fill: var(--muted);
+  }
+  .hourly-chart .tick {
+    stroke: var(--border); stroke-width: 1;
+  }
+  .device-row {
+    display: flex; align-items: center; gap: 10px;
+    padding: 6px 0;
+  }
+  .device-label {
+    width: 64px; font-size: 0.85rem; color: var(--text);
+    flex-shrink: 0;
+  }
+  .device-bar-wrap {
+    flex: 1; height: 14px; background: #f4ece0;
+    border-radius: 7px; overflow: hidden;
+  }
+  .device-bar {
+    height: 100%; background: var(--coffee-mid);
+    border-radius: 7px; transition: width 0.4s;
+  }
+  .device-bar.mobile { background: var(--coffee-dark); }
+  .device-bar.desktop { background: var(--accent); }
+  .device-bar.tablet { background: var(--coffee-light); }
+  .device-count {
+    width: 36px; text-align: right;
+    font-family: ui-monospace, monospace; font-size: 0.85rem;
+    color: var(--muted); font-weight: 600;
+  }
+  .stats-empty {
+    color: var(--muted); font-size: 0.9rem; text-align: center;
+    padding: 18px 0;
+  }
+  .stats-refresh {
+    margin-left: auto; background: transparent; border: 1px solid var(--border);
+    color: var(--muted); font-size: 0.75rem;
+    padding: 5px 10px; border-radius: 6px; cursor: pointer;
+    font-family: inherit;
+  }
+  .stats-refresh:hover { color: var(--coffee-dark); border-color: var(--coffee-mid); }
+  .stats-refresh:disabled { opacity: 0.5; cursor: default; }
+
   /* 기존 항목 리스트 */
   .list-header {
     display: flex; align-items: center; justify-content: space-between;
@@ -434,6 +518,18 @@
   </header>
 
   <div id="banner" class="banner" role="alert" aria-live="polite"></div>
+
+  <!-- 방문자 통계 -->
+  <section id="stats-view" class="card stats-card" style="display:none;">
+    <h2>
+      📊 방문 통계
+      <span class="stats-date" id="stats-date"></span>
+      <button type="button" class="stats-refresh" id="stats-refresh" aria-label="새로고침">↻</button>
+    </h2>
+    <div id="stats-body">
+      <div class="stats-empty">불러오는 중...</div>
+    </div>
+  </section>
 
   <!-- 기존 항목 리스트 -->
   <section id="list-view" class="card">
@@ -1486,6 +1582,101 @@ function escapeAttr(s) { return escapeHtml(s); }
   }
 })();
 
+// ---------- 방문 통계 ----------
+const DEVICE_LABELS = { mobile: "모바일", desktop: "데스크톱", tablet: "태블릿" };
+
+function renderHourlyChart(hourly) {
+  const W = 480, H = 110;
+  const PAD_L = 24, PAD_R = 8, PAD_T = 8, PAD_B = 22;
+  const plotW = W - PAD_L - PAD_R;
+  const plotH = H - PAD_T - PAD_B;
+  const max = Math.max(1, ...hourly.map(h => h.count));
+  const n = hourly.length;
+  const slot = plotW / n;
+  const barW = slot * 0.7;
+  const nowHr = new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Seoul" })).getHours();
+  let bars = "";
+  for (let i = 0; i < n; i++) {
+    const v = hourly[i].count;
+    const h = (v / max) * plotH;
+    const x = PAD_L + slot * i + (slot - barW) / 2;
+    const y = PAD_T + plotH - h;
+    const cls = i === nowHr ? "bar now" : "bar";
+    bars += `<rect class="${cls}" x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${barW.toFixed(1)}" height="${Math.max(1, h).toFixed(1)}" rx="2"/>`;
+    if (v > 0) {
+      bars += `<text class="axis-label" x="${(x + barW/2).toFixed(1)}" y="${(y - 2).toFixed(1)}" text-anchor="middle">${v}</text>`;
+    }
+  }
+  // x-axis ticks: 0, 6, 12, 18, 23
+  let ticks = "";
+  for (const hr of [0, 6, 12, 18, 23]) {
+    const x = PAD_L + slot * hr + slot/2;
+    ticks += `<text class="axis-label" x="${x.toFixed(1)}" y="${(H - 6).toFixed(1)}" text-anchor="middle">${hr}</text>`;
+  }
+  return `<svg class="hourly-chart" viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid meet" role="img" aria-label="시간별 방문자">${bars}${ticks}</svg>`;
+}
+
+function renderDevices(devices) {
+  const known = ["mobile", "desktop", "tablet"];
+  const items = known.map(k => ({ k, count: devices[k] || 0 }));
+  const max = Math.max(1, ...items.map(x => x.count));
+  if (items.every(x => x.count === 0)) {
+    return '<div class="stats-empty" style="padding:8px 0;">아직 데이터 없음</div>';
+  }
+  return items.map(x => {
+    const w = (x.count / max * 100).toFixed(1);
+    return `<div class="device-row">
+      <span class="device-label">${DEVICE_LABELS[x.k]}</span>
+      <span class="device-bar-wrap"><span class="device-bar ${x.k}" style="width: ${w}%"></span></span>
+      <span class="device-count">${x.count}</span>
+    </div>`;
+  }).join("");
+}
+
+async function loadStats() {
+  const refreshBtn = document.getElementById("stats-refresh");
+  const view = document.getElementById("stats-view");
+  const body = document.getElementById("stats-body");
+  const dateEl = document.getElementById("stats-date");
+  if (!view) return;
+  view.style.display = "";
+  if (refreshBtn) refreshBtn.disabled = true;
+  try {
+    const r = await api("GET", "/api/admin/stats");
+    if (dateEl) dateEl.textContent = r.today_kst + " 기준";
+    const todayPv = r.today_pv ?? 0;
+    const totalPv = r.total_pv ?? 0;
+    body.innerHTML = `
+      <div class="stats-row">
+        <div class="stats-tile">
+          <div class="stats-tile-label">오늘 방문자</div>
+          <div class="stats-tile-value">${r.today_uniques}<span style="font-size:1rem; color:var(--muted); font-weight:500;"> 명</span></div>
+          <div class="stats-tile-sub">조회 ${todayPv}회</div>
+        </div>
+        <div class="stats-tile">
+          <div class="stats-tile-label">누적 방문자</div>
+          <div class="stats-tile-value">${r.total_uniques}<span style="font-size:1rem; color:var(--muted); font-weight:500;"> 명</span></div>
+          <div class="stats-tile-sub">조회 ${totalPv}회</div>
+        </div>
+      </div>
+      <div class="stats-section">
+        <div class="stats-section-title">시간별 (오늘 KST · unique)</div>
+        ${renderHourlyChart(r.hourly_kst || [])}
+      </div>
+      <div class="stats-section">
+        <div class="stats-section-title">디바이스 (오늘 · unique)</div>
+        ${renderDevices(r.devices || {})}
+      </div>
+    `;
+  } catch (e) {
+    body.innerHTML = '<div class="stats-empty">불러오기 실패</div>';
+  } finally {
+    if (refreshBtn) refreshBtn.disabled = false;
+  }
+}
+
+document.getElementById("stats-refresh")?.addEventListener("click", loadStats);
+
 // ---------- init ----------
 async function init() {
   try {
@@ -1493,6 +1684,7 @@ async function init() {
     if (!st.authenticated) { showPinModal(); return; }
     hidePinModal();
     await loadList();
+    loadStats(); // 비동기, 실패해도 목록은 보임
   } catch (e) {
     showPinModal();
   }

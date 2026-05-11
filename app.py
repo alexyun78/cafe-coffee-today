@@ -7,12 +7,14 @@ import io
 import json
 import os
 import re
+import secrets
 import time
-from datetime import date
+from datetime import date, datetime, timezone
 from functools import wraps
 
 from flask import (
     Flask,
+    g,
     jsonify,
     request,
     send_file,
@@ -58,10 +60,81 @@ else:
 db.init_schema()
 
 
+# ---------- 방문자 추적 ----------
+# 쿠키 기반 (IP 저장 X). 공개 페이지만 카운트. 봇 UA 제외.
+
+VISIT_COOKIE = "vid"
+VISIT_COOKIE_TTL = 86400  # 1일 — 자정 KST 가 아니라 첫 방문 후 24h. 단순함을 위해.
+
+_BOT_RE = re.compile(
+    r"bot|crawler|spider|crawl|http://|googlebot|bingbot|yandex|duckduck|"
+    r"baiduspider|slurp|facebookexternalhit|whatsapp|telegrambot|"
+    r"applebot|amazonbot|petalbot|semrushbot|ahrefsbot|mj12bot|"
+    r"headlesschrome|phantomjs|puppeteer|playwright|selenium",
+    re.I,
+)
+
+# 공개 페이지 화이트리스트. /admin, /api, /static, /downloads 는 카운트 X.
+_TRACK_PATH_RE = re.compile(
+    r"^/(?:$|insight(?:/|$)|apk(?:/|$)|game(?:-apk)?(?:/|$)|today(?:/|$)|roastery(?:/|$))"
+)
+
+_VID_RE = re.compile(r"^[A-Za-z0-9_-]{8,40}$")
+
+
+def _classify_device(ua: str) -> str:
+    ua_l = (ua or "").lower()
+    if not ua_l:
+        return "desktop"
+    if _BOT_RE.search(ua_l):
+        return "bot"
+    if "ipad" in ua_l or ("android" in ua_l and "mobile" not in ua_l):
+        return "tablet"
+    if any(s in ua_l for s in ("mobile", "iphone", "ipod", "android")):
+        return "mobile"
+    return "desktop"
+
+
+@app.before_request
+def _track_visit():
+    if request.method != "GET":
+        return
+    path = request.path
+    if not _TRACK_PATH_RE.match(path):
+        return
+    ua = request.headers.get("User-Agent", "")
+    device = _classify_device(ua)
+    if device == "bot":
+        return
+    vid = request.cookies.get(VISIT_COOKIE) or ""
+    is_new = 0
+    if not _VID_RE.match(vid):
+        vid = secrets.token_urlsafe(12)
+        is_new = 1
+        g.set_vid = vid
+    try:
+        ts_utc = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+        db.record_visit(vid, path, device, is_new, ts_utc)
+    except Exception:
+        # 통계는 보조 기능 — 실패해도 요청 본 흐름은 절대 막지 않음
+        pass
+
+
 # ---------- 보안 헤더 ----------
 
 @app.after_request
 def add_security_headers(resp):
+    vid = getattr(g, "set_vid", None)
+    if vid:
+        resp.set_cookie(
+            VISIT_COOKIE,
+            vid,
+            max_age=VISIT_COOKIE_TTL,
+            httponly=True,
+            samesite="Lax",
+            secure=SESSION_COOKIE_SECURE,
+            path="/",
+        )
     resp.headers.setdefault("X-Content-Type-Options", "nosniff")
     resp.headers.setdefault("X-Frame-Options", "DENY")
     resp.headers.setdefault("Referrer-Policy", "strict-origin-when-cross-origin")
@@ -186,6 +259,12 @@ def admin_logout():
 @app.get("/api/admin/status")
 def admin_status():
     return jsonify({"success": True, "authenticated": _is_admin_authed()})
+
+
+@app.get("/api/admin/stats")
+@require_pin
+def admin_stats():
+    return jsonify({"success": True, **db.stats_summary()})
 
 
 # ---------- 공개 조회 ----------

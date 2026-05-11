@@ -49,6 +49,19 @@ CREATE TABLE IF NOT EXISTS pin_attempts (
     window_start  REAL NOT NULL,
     locked_until  REAL NOT NULL DEFAULT 0
 );
+
+CREATE TABLE IF NOT EXISTS visits (
+    id          INTEGER PRIMARY KEY AUTOINCREMENT,
+    ts          TEXT NOT NULL,           -- ISO UTC
+    date_kst    TEXT NOT NULL,           -- YYYY-MM-DD (KST)
+    hour_kst    INTEGER NOT NULL,        -- 0..23 (KST)
+    path        TEXT NOT NULL,
+    visitor_id  TEXT NOT NULL,
+    device      TEXT NOT NULL,           -- mobile|tablet|desktop
+    is_new      INTEGER NOT NULL DEFAULT 0
+);
+CREATE INDEX IF NOT EXISTS idx_visits_date ON visits(date_kst);
+CREATE INDEX IF NOT EXISTS idx_visits_visitor ON visits(visitor_id);
 """
 
 _EXTRA_COLUMNS = (
@@ -432,6 +445,70 @@ def upsert_from_notion(data: dict) -> str:
             ),
         )
         return "inserted"
+
+
+# ---------- 방문자 통계 ----------
+
+def record_visit(visitor_id: str, path: str, device: str, is_new: int, ts_utc: str) -> None:
+    """단일 페이지뷰 기록. date_kst, hour_kst 는 ts_utc 에서 +9h."""
+    from datetime import datetime, timedelta
+    dt_utc = datetime.fromisoformat(ts_utc.replace("Z", "+00:00"))
+    dt_kst = dt_utc + timedelta(hours=9)
+    date_kst = dt_kst.strftime("%Y-%m-%d")
+    hour_kst = dt_kst.hour
+    with connect() as conn:
+        conn.execute(
+            "INSERT INTO visits (ts, date_kst, hour_kst, path, visitor_id, device, is_new) "
+            "VALUES (?,?,?,?,?,?,?)",
+            (ts_utc, date_kst, hour_kst, path, visitor_id, device, int(bool(is_new))),
+        )
+
+
+def stats_summary() -> dict:
+    """오늘/전체 unique 방문자, 시간별 (오늘 KST), 디바이스 분포 (오늘 KST)."""
+    from datetime import datetime, timedelta, timezone
+    now_kst = datetime.now(timezone.utc) + timedelta(hours=9)
+    today_kst = now_kst.strftime("%Y-%m-%d")
+    with connect() as conn:
+        row = conn.execute(
+            "SELECT COUNT(DISTINCT visitor_id) AS c FROM visits WHERE date_kst=?",
+            (today_kst,),
+        ).fetchone()
+        today_uniques = row["c"] if row else 0
+        row = conn.execute(
+            "SELECT COUNT(DISTINCT visitor_id) AS c FROM visits"
+        ).fetchone()
+        total_uniques = row["c"] if row else 0
+        row = conn.execute("SELECT COUNT(*) AS c FROM visits").fetchone()
+        total_pv = row["c"] if row else 0
+        row = conn.execute(
+            "SELECT COUNT(*) AS c FROM visits WHERE date_kst=?", (today_kst,)
+        ).fetchone()
+        today_pv = row["c"] if row else 0
+        # 시간별 (오늘 KST)
+        rows = conn.execute(
+            "SELECT hour_kst, COUNT(DISTINCT visitor_id) AS c FROM visits "
+            "WHERE date_kst=? GROUP BY hour_kst",
+            (today_kst,),
+        ).fetchall()
+        hourly_map = {r["hour_kst"]: r["c"] for r in rows}
+        hourly = [{"hour": h, "count": hourly_map.get(h, 0)} for h in range(24)]
+        # 디바이스 분포 (오늘 KST)
+        rows = conn.execute(
+            "SELECT device, COUNT(DISTINCT visitor_id) AS c FROM visits "
+            "WHERE date_kst=? GROUP BY device",
+            (today_kst,),
+        ).fetchall()
+        devices = {r["device"]: r["c"] for r in rows}
+    return {
+        "today_kst": today_kst,
+        "today_uniques": today_uniques,
+        "today_pv": today_pv,
+        "total_uniques": total_uniques,
+        "total_pv": total_pv,
+        "hourly_kst": hourly,
+        "devices": devices,
+    }
 
 
 def suggestions() -> dict:
