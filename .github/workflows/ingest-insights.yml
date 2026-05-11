@@ -1,10 +1,10 @@
 name: Ingest Coffee Insights
 
-# 매일 07:30 KST = 22:30 UTC (전날). cron은 UTC 기준.
-# /schedule 클라우드 루틴이 07:00 KST 에 Drive 에 sidecar JSON 을 올린 직후를 노린다.
+# 매일 22:30 KST = 13:30 UTC. cron은 UTC 기준.
+# /schedule 클라우드 루틴이 22:00 KST 에 Drive 에 sidecar JSON 을 올린 직후를 노린다.
 on:
   schedule:
-    - cron: "30 22 * * *"
+    - cron: "30 13 * * *"
   workflow_dispatch:
     # 수동 실행 가능 (Actions UI 의 "Run workflow")
 
