@@ -74,9 +74,51 @@ img { display: block; max-width: 100%; height: auto; }
 }
 .nav-links a:hover { color: var(--ink); }
 .nav-links a.current { color: var(--copper); }
+
+/* 모바일 햄버거 */
+.nav-toggle {
+  display: none; background: transparent; border: 0;
+  width: 40px; height: 40px; padding: 0;
+  position: relative; cursor: pointer; margin-left: auto;
+  -webkit-tap-highlight-color: transparent;
+}
+.nav-toggle span {
+  position: absolute; left: 9px; right: 9px;
+  height: 1.8px; background: var(--ink); border-radius: 2px;
+  transition: transform .25s ease, opacity .15s ease, top .25s ease;
+}
+.nav-toggle span:nth-child(1) { top: 13px; }
+.nav-toggle span:nth-child(2) { top: 19px; }
+.nav-toggle span:nth-child(3) { top: 25px; }
+.nav-toggle.is-open span:nth-child(1) { top: 19px; transform: rotate(45deg); }
+.nav-toggle.is-open span:nth-child(2) { opacity: 0; }
+.nav-toggle.is-open span:nth-child(3) { top: 19px; transform: rotate(-45deg); }
+
 @media (max-width: 720px) {
-  .nav-links { display: none; }
-  .nav-inner { padding: 12px 18px; }
+  .nav-toggle { display: block; }
+  .nav-inner { padding: 12px 18px; position: relative; }
+  .nav-links {
+    position: absolute; top: 100%; left: 0; right: 0;
+    background: var(--canvas);
+    border-bottom: 1px solid var(--line-soft);
+    box-shadow: 0 10px 24px rgba(26,20,16,0.06);
+    flex-direction: column; gap: 0;
+    padding: 6px 0;
+    max-height: 0; overflow: hidden;
+    opacity: 0; pointer-events: none;
+    transition: max-height .28s ease, opacity .18s ease, padding .2s ease;
+  }
+  .nav-links.is-open {
+    max-height: 60vh; opacity: 1; padding: 10px 0 14px;
+    pointer-events: auto;
+  }
+  .nav-links a {
+    font-size: 1rem; padding: 14px 22px; width: 100%;
+    border-bottom: 1px solid var(--line-soft);
+    letter-spacing: .02em; color: var(--ink-mute);
+  }
+  .nav-links a:last-child { border-bottom: 0; }
+  .nav-links a:active { background: var(--canvas-warm); color: var(--ink); }
   .brand { font-size: 1.05rem; }
 }
 
@@ -192,12 +234,16 @@ img { display: block; max-width: 100%; height: auto; }
     <a class="brand" href="/">
       <span class="brand-mark">92<span class="temp-mark"><span class="temp-deg">°</span><span class="temp-c">C</span></span></span>ROASTERY
     </a>
-    <nav class="nav-links">
+    <nav class="nav-links" id="nav-links">
       <a href="/#now">오늘의 커피</a>
       <a href="/#upcoming">곧 만날</a>
       <a href="/insight" class="current">인사이트</a>
       <a href="/#hours">영업</a>
     </nav>
+    <button type="button" class="nav-toggle" id="nav-toggle"
+            aria-label="메뉴 열기" aria-expanded="false" aria-controls="nav-links">
+      <span></span><span></span><span></span>
+    </button>
   </div>
 </header>
 
@@ -230,6 +276,36 @@ img { display: block; max-width: 100%; height: auto; }
 <script>
 (function () {
   'use strict';
+
+  // ---------- 모바일 햄버거 ----------
+  (function () {
+    var toggle = document.getElementById('nav-toggle');
+    var links = document.getElementById('nav-links');
+    if (!toggle || !links) return;
+    function close() {
+      toggle.classList.remove('is-open');
+      links.classList.remove('is-open');
+      toggle.setAttribute('aria-expanded', 'false');
+      toggle.setAttribute('aria-label', '메뉴 열기');
+    }
+    function open() {
+      toggle.classList.add('is-open');
+      links.classList.add('is-open');
+      toggle.setAttribute('aria-expanded', 'true');
+      toggle.setAttribute('aria-label', '메뉴 닫기');
+    }
+    toggle.addEventListener('click', function (e) {
+      e.stopPropagation();
+      if (toggle.classList.contains('is-open')) close(); else open();
+    });
+    links.querySelectorAll('a').forEach(function (a) { a.addEventListener('click', close); });
+    document.addEventListener('click', function (e) {
+      if (!toggle.classList.contains('is-open')) return;
+      if (!e.target.closest('.site-nav')) close();
+    });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') close(); });
+    window.addEventListener('resize', function () { if (window.innerWidth > 720) close(); });
+  })();
 
   function escapeHtml(s) {
     return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
