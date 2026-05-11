@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-05-11T14:54:53Z",
+  "updated_at": "2026-05-11T14:58:24Z",
   "items": [
     {
       "id": "2026-05-11-shade-grown-coffee-soil-enzymes",
@@ -35,6 +35,25 @@
       "journal": "Food Research International",
       "pub_date": "2026-04-22",
       "source_basis": "fulltext"
+    },
+    {
+      "id": "2026-05-11-coffee-cyclic-voltammetry-brew-strength-roast-color",
+      "date": "2026-05-11",
+      "title_ko": "전처리 없이 순환전압전류법으로 블랙 커피의 농도와 로스트 색도를 동시 측정",
+      "one_liner": "전극을 커피에 담그면 음료 강도와 로스트 레벨이 동시에 정량화 — 시료 전처리 불필요",
+      "categories_primary": [
+        "로스팅 공학·품질 관리",
+        "분석화학·센서"
+      ],
+      "categories_secondary": [
+        "커피 화학",
+        "클로로젠산",
+        "QC 자동화"
+      ],
+      "hero_image": "/static/img/insights/hero/roasting.svg",
+      "journal": "Nature Communications",
+      "pub_date": "2026-04-28",
+      "source_basis": "abstract_only"
     }
   ]
 }

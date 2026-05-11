@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>전처리 없이 순환전압전류법으로 블랙 커피의 농도와 로스트 색도를 동시 측정 — 92°C ROASTERY</title>
+<meta name="description" content="전극을 커피에 담그면 음료 강도와 로스트 레벨이 동시에 정량화 — 시료 전처리 불필요">
+<link rel="icon" type="image/png" href="/static/img/logo-92black.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --canvas: #FFFFFF; --canvas-warm: #FAF7F2; --canvas-stone: #F2ECE3;
+  --ink: #1A1410; --ink-mute: #4A3F36; --ink-soft: #6B5E52;
+  --espresso: #6F4E37; --caramel: #C9986A; --copper: #B5703D;
+  --line: #E8E0D5; --line-soft: #F0E9DD;
+  --font-display: "Cormorant Garamond", "Pretendard", serif;
+  --font-body: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  --r-sm: 6px; --r-md: 12px; --r-pill: 999px;
+}
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color: transparent; }
+html { scroll-behavior: smooth; }
+body { font-family: var(--font-body); color: var(--ink); background: var(--canvas); font-feature-settings: "kern","ss01"; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+a { color: var(--copper); text-decoration: none; border-bottom: 1px solid transparent; transition: border-color .2s; }
+a:hover { border-bottom-color: var(--copper); }
+img { display: block; max-width: 100%; height: auto; }
+.container { max-width: 860px; margin: 0 auto; padding: 0 32px; }
+@media (max-width: 720px) { .container { padding: 0 20px; } }
+@media (max-width: 480px) { .container { padding: 0 16px; } }
+.site-nav { position: sticky; top: 0; z-index: 50; background: rgba(255,255,255,0.9); backdrop-filter: saturate(140%) blur(14px); -webkit-backdrop-filter: saturate(140%) blur(14px); border-bottom: 1px solid var(--line-soft); }
+.nav-inner { max-width: 1200px; margin: 0 auto; padding: 16px 32px; display: flex; align-items: center; justify-content: space-between; }
+.brand { font-family: var(--font-display); font-size: 1.3rem; font-weight: 700; color: var(--ink); display: inline-flex; align-items: center; gap: 4px; border-bottom: none; }
+.brand:hover { border-bottom: none; }
+.brand-mark { display: inline-flex; align-items: flex-start; font-family: "Pretendard", sans-serif; font-weight: 900; letter-spacing: -0.04em; line-height: 1; color: inherit; }
+.temp-mark { display: flex; flex-direction: column; line-height: .82; margin: 0 .05em 0 .04em; }
+.temp-mark .temp-deg { font-size: .42em; letter-spacing: -.04em; }
+.temp-mark .temp-c { font-size: .58em; letter-spacing: -.05em; margin-top: -.05em; }
+.nav-back { font-family: var(--font-mono); font-size: .75rem; letter-spacing: .18em; color: var(--ink-mute); border-bottom: none; }
+.nav-back:hover { color: var(--copper); border-bottom: none; }
+.article-hero { padding: 56px 0 48px; border-bottom: 1px solid var(--line-soft); }
+.eyebrow { font-family: var(--font-mono); font-size: .72rem; letter-spacing: .28em; color: var(--copper); margin-bottom: 18px; display: flex; align-items: center; gap: 12px; }
+.eyebrow::before { content: ""; display: inline-block; width: 28px; height: 1px; background: var(--copper); }
+.article-title { font-family: var(--font-display); font-weight: 500; font-size: clamp(2rem, 4.5vw, 3.2rem); line-height: 1.15; letter-spacing: -0.02em; color: var(--ink); margin-bottom: 20px; }
+.article-title em { font-style: italic; color: var(--espresso); font-weight: 600; }
+.article-one-liner { font-family: var(--font-display); font-style: italic; font-size: 1.3rem; line-height: 1.5; color: var(--espresso); margin-bottom: 28px; padding-left: 20px; border-left: 3px solid var(--caramel); }
+.article-meta { display: flex; gap: 24px; flex-wrap: wrap; font-family: var(--font-mono); font-size: .75rem; letter-spacing: .12em; color: var(--ink-soft); padding-top: 20px; border-top: 1px solid var(--line-soft); }
+.article-meta span { display: inline-flex; align-items: center; gap: 6px; }
+.article-meta span::before { content: "■"; color: var(--caramel); font-size: .55rem; }
+.hero-image { margin: 32px 0 0; border-radius: var(--r-md); overflow: hidden; border: 1px solid var(--line); }
+.hero-image img { width: 100%; }
+.article-body { padding: 56px 0 80px; }
+.section-block { margin-bottom: 56px; }
+.section-block:last-child { margin-bottom: 0; }
+.section-block h2 { font-family: var(--font-display); font-weight: 600; font-size: 1.85rem; line-height: 1.2; letter-spacing: -0.01em; color: var(--ink); margin-bottom: 18px; display: flex; align-items: baseline; gap: 14px; }
+.section-block h2::before { content: ""; display: inline-block; width: 10px; height: 10px; background: var(--caramel); border-radius: 2px; }
+.section-block p { font-size: 1.04rem; color: var(--ink-mute); line-height: 1.85; margin-bottom: 18px; }
+.section-block p:last-child { margin-bottom: 0; }
+ul.findings { list-style: none; padding: 0; counter-reset: f; }
+ul.findings li { position: relative; padding: 16px 18px 16px 56px; font-size: 1rem; color: var(--ink-mute); line-height: 1.75; background: var(--canvas-warm); border: 1px solid var(--line); border-radius: var(--r-sm); margin-bottom: 12px; counter-increment: f; }
+ul.findings li::before { content: counter(f, decimal-leading-zero); position: absolute; left: 18px; top: 18px; font-family: var(--font-mono); font-size: .85rem; font-weight: 600; color: var(--copper); letter-spacing: .04em; }
+.implications-grid { display: grid; gap: 18px; grid-template-columns: 1fr; }
+.implication-card { padding: 22px 24px; background: var(--canvas-warm); border: 1px solid var(--line); border-radius: var(--r-md); border-left: 3px solid var(--caramel); }
+.implication-card h3 { font-family: var(--font-mono); font-size: .8rem; letter-spacing: .18em; color: var(--copper); margin-bottom: 10px; font-weight: 600; }
+.implication-card p { font-size: 1rem; color: var(--ink-mute); line-height: 1.75; }
+.glossary-list { list-style: none; padding: 0; }
+.glossary-list li { padding: 16px 0; border-bottom: 1px solid var(--line-soft); display: grid; grid-template-columns: 220px 1fr; gap: 24px; font-size: 1rem; line-height: 1.7; }
+.glossary-list li:last-child { border-bottom: none; }
+.glossary-list dt { font-family: var(--font-display); font-style: italic; font-size: 1.05rem; color: var(--espresso); font-weight: 600; }
+.glossary-list dd { color: var(--ink-mute); }
+@media (max-width: 600px) { .glossary-list li { grid-template-columns: 1fr; gap: 4px; } }
+.citation-block { margin-top: 12px; padding: 22px 24px; background: var(--canvas-warm); border: 1px solid var(--line); border-radius: var(--r-md); font-family: var(--font-mono); font-size: .85rem; color: var(--ink-mute); line-height: 1.7; word-break: break-word; }
+.links-row { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 18px; }
+.link-pill { display: inline-flex; align-items: center; gap: 8px; padding: 9px 16px; background: var(--canvas-warm); border: 1px solid var(--line); border-radius: var(--r-pill); font-family: var(--font-mono); font-size: .78rem; letter-spacing: .08em; color: var(--ink-mute); border-bottom: 1px solid var(--line); transition: border-color .2s, color .2s; }
+.link-pill:hover { color: var(--copper); border-color: var(--copper); }
+.charts-grid { display: grid; gap: 28px; grid-template-columns: 1fr; }
+@media (min-width: 720px) { .charts-grid { grid-template-columns: 1fr 1fr; } }
+.chart-card { padding: 24px 24px 18px; background: var(--canvas); border: 1px solid var(--line); border-radius: var(--r-md); }
+.chart-title { font-family: var(--font-display); font-size: 1.1rem; font-weight: 600; color: var(--ink); margin-bottom: 14px; line-height: 1.3; }
+.chart-svg { width: 100%; height: auto; display: block; }
+.chart-svg .bar { fill: var(--caramel); transition: fill .2s; }
+.chart-svg .bar.highlight { fill: var(--copper); }
+.chart-svg .axis-line { stroke: var(--line); stroke-width: 1; }
+.chart-svg .axis-label { font-family: var(--font-mono); font-size: 11px; fill: var(--ink-soft); }
+.chart-svg .value-label { font-family: var(--font-mono); font-size: 11px; font-weight: 600; fill: var(--espresso); }
+.chart-svg .y-label { font-family: var(--font-mono); font-size: 10px; fill: var(--ink-soft); letter-spacing: .1em; }
+.figures-grid { display: flex; flex-direction: column; gap: 24px; }
+.figure-card { border: 1px solid var(--line); border-radius: var(--r-md); overflow: hidden; }
+.figure-card img { width: 100%; }
+.figure-caption { padding: 14px 18px; font-size: .9rem; color: var(--ink-soft); font-family: var(--font-body); line-height: 1.6; background: var(--canvas-warm); border-top: 1px solid var(--line); }
+.source-basis { display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; background: rgba(201,152,106,.18); border: 1px solid rgba(181,112,61,.35); border-radius: var(--r-pill); font-family: var(--font-mono); font-size: .72rem; letter-spacing: .12em; color: var(--espresso); font-weight: 500; }
+.source-basis.abstract { background: rgba(107,94,82,.1); border-color: rgba(107,94,82,.3); color: var(--ink-soft); }
+.article-footer { padding: 36px 0 56px; border-top: 1px solid var(--line-soft); text-align: center; font-family: var(--font-mono); font-size: .75rem; letter-spacing: .14em; color: var(--ink-soft); }
+.article-footer a { color: var(--ink-mute); border-bottom: 1px solid transparent; }
+.article-footer a:hover { color: var(--copper); border-bottom-color: var(--copper); }
+@media (max-width: 720px) {
+  .article-hero { padding: 36px 0 32px; }
+  .article-body { padding: 36px 0 56px; }
+  .section-block { margin-bottom: 40px; }
+  .section-block h2 { font-size: 1.5rem; }
+  .article-meta { gap: 12px 18px; font-size: .68rem; }
+}
+</style>
+</head>
+<body>
+
+<header class="site-nav">
+  <div class="nav-inner">
+    <a class="brand" href="/">
+      <span class="brand-mark">92<span class="temp-mark"><span class="temp-deg">°</span><span class="temp-c">C</span></span></span>ROASTERY
+    </a>
+    <a class="nav-back" href="/insight">← INSIGHTS</a>
+  </div>
+</header>
+
+<article>
+  <section class="article-hero">
+    <div class="container">
+      <div class="eyebrow">— COFFEE INSIGHT · 2026.05.11</div>
+      <h1 class="article-title">전처리 없이 순환전압전류법으로 블랙 커피의 농도와 로스트 색도를 동시 측정</h1>
+      <p class="article-one-liner">전극을 커피에 담그면 음료 강도와 로스트 레벨이 동시에 정량화 — 시료 전처리 불필요</p>
+      <div class="article-meta">
+        <span>NATURE COMMUNICATIONS</span>
+        <span>2026-04-28</span>
+        <span>DOI 10.1038/S41467-026-71526-5</span>
+        <span>로스팅 공학·품질 관리 · 분석화학·센서 · 커피 화학 · 클로로젠산 · QC 자동화</span>
+      </div>
+      
+      <div class="hero-image">
+        <img src="/static/img/insights/hero/roasting.svg" alt="전처리 없이 순환전압전류법으로 블랙 커피의 농도와 로스트 색도를 동시 측정">
+      </div>
+      
+    </div>
+  </section>
+
+  <section class="article-body">
+    <div class="container">
+
+      
+      <div class="section-block">
+        <h2>요약</h2>
+        <p>커피는 세계에서 가장 광범위하게 소비되는 음료 중 하나이지만, 음료 상태의 블랙 커피에서 화학적 성질을 전처리 없이 현장에서 직접 측정하고 이를 향미 경험과 연결하는 방법은 사실상 존재하지 않았다. 현행 품질 관리는 굴절계(TDS 측정)와 색도계(아그트론) 등 별개 기기에 의존하며, 각각 하나의 변수만 측정할 수 있고 별도의 시료 준비가 필요하다는 구조적 한계를 지닌다.</p><p>CV는 포테시오스탯을 이용해 작업전극과 기준전극 사이에 전압을 주기적으로 변화시키면서 전류 응답을 기록하는 전기화학 분석법이다. 연구팀은 전처리 없이 블랙 커피에 전극을 직접 담근 뒤 CV를 수행했다. 핵심 지표는 수소 기포 발생 직전의 음극 전류 피크(HUPD)이다. 실험 1에서는 콜롬비아 카우카 엘탐보 생두를 아그트론 75.8(라이트)~55.7(다크) 6단계 로스트, SCA 컵핑 프로토콜(1:13.5)로 추출했다. 실험 2에서는 영국 Colonna Coffee 배치 4종(명목 아그트론 93.0 ± 1.0)을 단일 눈가림으로 평가했다.</p><p>HUPD 음극 피크 전류 크기는 커피 TDS와 선형 비례 관계를 보여, 단 한 번의 전압 주사로 음료 강도를 정량화할 수 있음이 실증되었다.</p><p>반복 CV 주사에서 HUPD 피크가 억제되는 크기가 로스트 색도와 직접 상관관계를 가졌다. 라이트 로스트는 CGA 함량이 높아 전극 표면 피복이 강하게 일어나 억제가 크며, 다크 로스트는 CGA가 열분해되어 억제가 약하다. 단일 눈가림 QC 실험에서 불량 배치를 p &lt; 0.0039로 정상 배치 3개와 통계 구별했다.</p><p>이 연구는 전기화학이라는 도구로 음료 강도와 로스트 색도를 한 번의 측정으로 동시에 분리 정량(decouple)하는 첫 사례를 제시했다. 소형 포테시오스탯의 저가화·오픈소스화가 진행 중이어서 로스터리·카페 현장의 실시간 QC 도구로 발전할 잠재력이 높다.</p>
+      </div>
+      
+
+      
+      <div class="section-block">
+        <h2>핵심 발견</h2>
+        <ul class="findings">
+          <li>HUPD 음극 전류는 커피 TDS(농도)와 선형 비례 — 전기화학으로 음료 강도 직접 정량화 최초 실증</li><li>반복 CV 스캔의 신호 억제 크기가 로스트 색도(아그트론)와 정비례: 라이트 로스트(억제 강) vs. 다크 로스트(억제 약)</li><li>억제 메커니즘: 라이트 로스트의 높은 CGA 함량 → 전극 표면 피복 → HUPD 피크 억제</li><li>단일 눈가림 QC 실험에서 불량 배치를 p &lt; 0.0039로 정상 3개 배치와 통계 구별; 정상 배치는 동일 군집</li><li>전처리 없이 단 한 번의 CV 측정으로 강도·색도 두 변수 동시 파악 — 종전 2대 기기를 1회 측정으로 대체 가능성 제시</li>
+        </ul>
+      </div>
+      
+
+      
+
+      
+
+      
+      <div class="section-block">
+        <h2>방법론</h2>
+        <p>포테시오스탯이 작업전극-기준전극 간 전압을 선형 주사하며 전류를 기록하는 순환전압전류법(CV)을 블랙 커피 음료에 직접 적용했다. 전처리 없이 커피에 전극을 침지한 상태에서 측정 수행. 핵심 신호: 수소 기포 발생 전 영역의 음극 전류 피크(HUPD). 실험 1: 콜롬비아 엘탐보 생두, 인하우스 50g 배치 로스팅, 아그트론 75.8–55.7 범위 6단계, SCA 컵핑 프로토콜(1:13.5, 4분 침지), 1주 숙성. 실험 2: 영국 Colonna Coffee 배치 4종(공칭 아그트론 93.0 ± 1.0), 단일 눈가림, 3회 반복 스캔 통계 분류 검증.</p>
+      </div>
+      
+
+      
+      <div class="section-block">
+        <h2>시사점</h2>
+        <div class="implications-grid">
+          
+          <div class="implication-card">
+            <h3>농가 · 가공장</h3>
+            <p>해당 없음 (재배·가공 단계 무관한 기술)</p>
+          </div>
+          
+          <div class="implication-card">
+            <h3>로스터 · 큐그레이더</h3>
+            <p>아그트론 색도계나 굴절계 없이 전기화학 측정으로 배치 간 색도 일관성과 음료 강도를 동시에 확인 가능. 불량 배치 자동 검출에 직접 활용 가능성 있음. 전처리 불필요로 현장 적용이 현실적</p>
+          </div>
+          
+          <div class="implication-card">
+            <h3>R&amp;D</h3>
+            <p>소형 오픈소스 포테시오스탯과 결합한 인라인·실시간 커피 QC 시스템 개발의 직접 기초. 다른 전극 소재(탄소, 금 등) 및 에스프레소·콜드브루 적용 확장 검증 여지</p>
+          </div>
+          
+        </div>
+      </div>
+      
+
+      
+      <div class="section-block">
+        <h2>한계</h2>
+        <p>블랙 커피에만 적용(첨가물 있는 음료 미검증); 주로 아라비카 소수 샘플(단일 산지+단일 로스터리)로 일반화 한계; 연구실용 포테시오스탯 사용(저가 장비 재현성 미검증); TDS·로스트 색도 두 변수에 국한(산도·바디·향미 프로파일 직접 연결 미검증).</p>
+      </div>
+      
+
+      
+      <div class="section-block">
+        <h2>용어집</h2>
+        <ul class="glossary-list">
+          
+          <li><dt>Cyclic Voltammetry (CV)</dt><dd>순환전압전류법: 전압을 주기적으로 올리고 내리며 전류를 기록하는 전기화학 분석법</dd></li>
+          
+          <li><dt>TDS (Total Dissolved Solids)</dt><dd>총 용존 고형물: 커피 음료에 녹아 있는 물질의 총 농도. 추출 강도의 주요 지표</dd></li>
+          
+          <li><dt>HUPD (Hydrogen Underpotential Deposition)</dt><dd>수소 과소전위 흡착: 수소 기포 발생 이전에 전극 표면에 수소가 흡착되는 현상. 전극 표면 상태에 민감</dd></li>
+          
+          <li><dt>Chlorogenic Acid (CGA)</dt><dd>클로로젠산: 커피 생두의 주요 폴리페놀. 배전 중 열분해되어 키니산·카페산으로 전환됨</dd></li>
+          
+          <li><dt>Agtron</dt><dd>아그트론: 근적외선 반사를 이용한 로스트 색도 수치. 높을수록 라이트, 낮을수록 다크</dd></li>
+          
+          <li><dt>Potentiostat</dt><dd>포테시오스탯: 전기화학 측정에서 전극 간 전압을 정밀하게 제어하는 장치</dd></li>
+          
+        </ul>
+      </div>
+      
+
+      <div class="section-block">
+        <h2>인용 · 링크</h2>
+        <div class="citation-block">Bumbaugh, R. E., Pennington, D. L., Wehn, L. C., Rheingold, E. J., Williams, J. R., Alemán, B. J., &amp; Hendon, C. H. (2026). Direct electrochemical appraisal of black coffee quality using cyclic voltammetry. Nature Communications, 17, 3618. https://doi.org/10.1038/s41467-026-71526-5</div>
+        <div class="links-row">
+          <a class="link-pill" href="https://doi.org/10.1038/s41467-026-71526-5" target="_blank" rel="noopener noreferrer">DOI →</a>
+          <a class="link-pill" href="https://www.nature.com/articles/s41467-026-71526-5.pdf" target="_blank" rel="noopener noreferrer">OA PDF →</a>
+          <a class="link-pill" href="https://www.nature.com/ncomms" target="_blank" rel="noopener noreferrer">JOURNAL HOMEPAGE →</a>
+        </div>
+        <div style="margin-top: 18px;">
+          
+          <span class="source-basis abstract">ABSTRACT BASIS</span>
+          
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <footer class="article-footer">
+    <div class="container">
+      <a href="/insight">← BACK TO INSIGHTS</a>
+      <span style="margin: 0 16px;">·</span>
+      <a href="/">HOME</a>
+    </div>
+  </footer>
+</article>
+
+
+
+</body>
+</html>
