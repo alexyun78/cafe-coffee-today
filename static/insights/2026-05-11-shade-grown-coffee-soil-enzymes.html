@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>그늘재배 커피밭 토양의 효소 활성과 미생물 군집 — 92°C ROASTERY</title>
+<meta name="description" content="단백질 분해 효소 활성이 토양 질산염 수치와 강한 양의 상관관계를 보였다.">
+<link rel="icon" type="image/png" href="/static/img/logo-92black.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --canvas: #FFFFFF; --canvas-warm: #FAF7F2; --canvas-stone: #F2ECE3;
+  --ink: #1A1410; --ink-mute: #4A3F36; --ink-soft: #6B5E52;
+  --espresso: #6F4E37; --caramel: #C9986A; --copper: #B5703D;
+  --line: #E8E0D5; --line-soft: #F0E9DD;
+  --font-display: "Cormorant Garamond", "Pretendard", serif;
+  --font-body: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  --r-sm: 6px; --r-md: 12px; --r-pill: 999px;
+}
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color: transparent; }
+html { scroll-behavior: smooth; }
+body { font-family: var(--font-body); color: var(--ink); background: var(--canvas); font-feature-settings: "kern","ss01"; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+a { color: var(--copper); text-decoration: none; border-bottom: 1px solid transparent; transition: border-color .2s; }
+a:hover { border-bottom-color: var(--copper); }
+img { display: block; max-width: 100%; height: auto; }
+.container { max-width: 860px; margin: 0 auto; padding: 0 32px; }
+@media (max-width: 720px) { .container { padding: 0 20px; } }
+@media (max-width: 480px) { .container { padding: 0 16px; } }
+.site-nav { position: sticky; top: 0; z-index: 50; background: rgba(255,255,255,0.9); backdrop-filter: saturate(140%) blur(14px); -webkit-backdrop-filter: saturate(140%) blur(14px); border-bottom: 1px solid var(--line-soft); }
+.nav-inner { max-width: 1200px; margin: 0 auto; padding: 16px 32px; display: flex; align-items: center; justify-content: space-between; }
+.brand { font-family: var(--font-display); font-size: 1.3rem; font-weight: 700; color: var(--ink); display: inline-flex; align-items: center; gap: 4px; border-bottom: none; }
+.brand:hover { border-bottom: none; }
+.brand-mark { display: inline-flex; align-items: flex-start; font-family: "Pretendard", sans-serif; font-weight: 900; letter-spacing: -0.04em; line-height: 1; color: inherit; }
+.temp-mark { display: flex; flex-direction: column; line-height: .82; margin: 0 .05em 0 .04em; }
+.temp-mark .temp-deg { font-size: .42em; letter-spacing: -.04em; }
+.temp-mark .temp-c { font-size: .58em; letter-spacing: -.05em; margin-top: -.05em; }
+.nav-back { font-family: var(--font-mono); font-size: .75rem; letter-spacing: .18em; color: var(--ink-mute); border-bottom: none; }
+.nav-back:hover { color: var(--copper); border-bottom: none; }
+.article-hero { padding: 56px 0 48px; border-bottom: 1px solid var(--line-soft); }
+.eyebrow { font-family: var(--font-mono); font-size: .72rem; letter-spacing: .28em; color: var(--copper); margin-bottom: 18px; display: flex; align-items: center; gap: 12px; }
+.eyebrow::before { content: ""; display: inline-block; width: 28px; height: 1px; background: var(--copper); }
+.article-title { font-family: var(--font-display); font-weight: 500; font-size: clamp(2rem, 4.5vw, 3.2rem); line-height: 1.15; letter-spacing: -0.02em; color: var(--ink); margin-bottom: 20px; }
+.article-title em { font-style: italic; color: var(--espresso); font-weight: 600; }
+.article-one-liner { font-family: var(--font-display); font-style: italic; font-size: 1.3rem; line-height: 1.5; color: var(--espresso); margin-bottom: 28px; padding-left: 20px; border-left: 3px solid var(--caramel); }
+.article-meta { display: flex; gap: 24px; flex-wrap: wrap; font-family: var(--font-mono); font-size: .75rem; letter-spacing: .12em; color: var(--ink-soft); padding-top: 20px; border-top: 1px solid var(--line-soft); }
+.article-meta span { display: inline-flex; align-items: center; gap: 6px; }
+.article-meta span::before { content: "■"; color: var(--caramel); font-size: .55rem; }
+.hero-image { margin: 32px 0 0; border-radius: var(--r-md); overflow: hidden; border: 1px solid var(--line); }
+.hero-image img { width: 100%; }
+.article-body { padding: 56px 0 80px; }
+.section-block { margin-bottom: 56px; }
+.section-block:last-child { margin-bottom: 0; }
+.section-block h2 { font-family: var(--font-display); font-weight: 600; font-size: 1.85rem; line-height: 1.2; letter-spacing: -0.01em; color: var(--ink); margin-bottom: 18px; display: flex; align-items: baseline; gap: 14px; }
+.section-block h2::before { content: ""; display: inline-block; width: 10px; height: 10px; background: var(--caramel); border-radius: 2px; }
+.section-block p { font-size: 1.04rem; color: var(--ink-mute); line-height: 1.85; margin-bottom: 18px; }
+.section-block p:last-child { margin-bottom: 0; }
+ul.findings { list-style: none; padding: 0; counter-reset: f; }
+ul.findings li { position: relative; padding: 16px 18px 16px 56px; font-size: 1rem; color: var(--ink-mute); line-height: 1.75; background: var(--canvas-warm); border: 1px solid var(--line); border-radius: var(--r-sm); margin-bottom: 12px; counter-increment: f; }
+ul.findings li::before { content: counter(f, decimal-leading-zero); position: absolute; left: 18px; top: 18px; font-family: var(--font-mono); font-size: .85rem; font-weight: 600; color: var(--copper); letter-spacing: .04em; }
+.implications-grid { display: grid; gap: 18px; grid-template-columns: 1fr; }
+.implication-card { padding: 22px 24px; background: var(--canvas-warm); border: 1px solid var(--line); border-radius: var(--r-md); border-left: 3px solid var(--caramel); }
+.implication-card h3 { font-family: var(--font-mono); font-size: .8rem; letter-spacing: .18em; color: var(--copper); margin-bottom: 10px; font-weight: 600; }
+.implication-card p { font-size: 1rem; color: var(--ink-mute); line-height: 1.75; }
+.glossary-list { list-style: none; padding: 0; }
+.glossary-list li { padding: 16px 0; border-bottom: 1px solid var(--line-soft); display: grid; grid-template-columns: 220px 1fr; gap: 24px; font-size: 1rem; line-height: 1.7; }
+.glossary-list li:last-child { border-bottom: none; }
+.glossary-list dt { font-family: var(--font-display); font-style: italic; font-size: 1.05rem; color: var(--espresso); font-weight: 600; }
+.glossary-list dd { color: var(--ink-mute); }
+@media (max-width: 600px) { .glossary-list li { grid-template-columns: 1fr; gap: 4px; } }
+.citation-block { margin-top: 12px; padding: 22px 24px; background: var(--canvas-warm); border: 1px solid var(--line); border-radius: var(--r-md); font-family: var(--font-mono); font-size: .85rem; color: var(--ink-mute); line-height: 1.7; word-break: break-word; }
+.links-row { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 18px; }
+.link-pill { display: inline-flex; align-items: center; gap: 8px; padding: 9px 16px; background: var(--canvas-warm); border: 1px solid var(--line); border-radius: var(--r-pill); font-family: var(--font-mono); font-size: .78rem; letter-spacing: .08em; color: var(--ink-mute); border-bottom: 1px solid var(--line); transition: border-color .2s, color .2s; }
+.link-pill:hover { color: var(--copper); border-color: var(--copper); }
+.charts-grid { display: grid; gap: 28px; grid-template-columns: 1fr; }
+@media (min-width: 720px) { .charts-grid { grid-template-columns: 1fr 1fr; } }
+.chart-card { padding: 24px 24px 18px; background: var(--canvas); border: 1px solid var(--line); border-radius: var(--r-md); }
+.chart-title { font-family: var(--font-display); font-size: 1.1rem; font-weight: 600; color: var(--ink); margin-bottom: 14px; line-height: 1.3; }
+.chart-svg { width: 100%; height: auto; display: block; }
+.chart-svg .bar { fill: var(--caramel); transition: fill .2s; }
+.chart-svg .bar.highlight { fill: var(--copper); }
+.chart-svg .axis-line { stroke: var(--line); stroke-width: 1; }
+.chart-svg .axis-label { font-family: var(--font-mono); font-size: 11px; fill: var(--ink-soft); }
+.chart-svg .value-label { font-family: var(--font-mono); font-size: 11px; font-weight: 600; fill: var(--espresso); }
+.chart-svg .y-label { font-family: var(--font-mono); font-size: 10px; fill: var(--ink-soft); letter-spacing: .1em; }
+.figures-grid { display: flex; flex-direction: column; gap: 24px; }
+.figure-card { border: 1px solid var(--line); border-radius: var(--r-md); overflow: hidden; }
+.figure-card img { width: 100%; }
+.figure-caption { padding: 14px 18px; font-size: .9rem; color: var(--ink-soft); font-family: var(--font-body); line-height: 1.6; background: var(--canvas-warm); border-top: 1px solid var(--line); }
+.source-basis { display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; background: rgba(201,152,106,.18); border: 1px solid rgba(181,112,61,.35); border-radius: var(--r-pill); font-family: var(--font-mono); font-size: .72rem; letter-spacing: .12em; color: var(--espresso); font-weight: 500; }
+.source-basis.abstract { background: rgba(107,94,82,.1); border-color: rgba(107,94,82,.3); color: var(--ink-soft); }
+.article-footer { padding: 36px 0 56px; border-top: 1px solid var(--line-soft); text-align: center; font-family: var(--font-mono); font-size: .75rem; letter-spacing: .14em; color: var(--ink-soft); }
+.article-footer a { color: var(--ink-mute); border-bottom: 1px solid transparent; }
+.article-footer a:hover { color: var(--copper); border-bottom-color: var(--copper); }
+@media (max-width: 720px) {
+  .article-hero { padding: 36px 0 32px; }
+  .article-body { padding: 36px 0 56px; }
+  .section-block { margin-bottom: 40px; }
+  .section-block h2 { font-size: 1.5rem; }
+  .article-meta { gap: 12px 18px; font-size: .68rem; }
+}
+</style>
+</head>
+<body>
+
+<header class="site-nav">
+  <div class="nav-inner">
+    <a class="brand" href="/">
+      <span class="brand-mark">92<span class="temp-mark"><span class="temp-deg">°</span><span class="temp-c">C</span></span></span>ROASTERY
+    </a>
+    <a class="nav-back" href="/insight">← INSIGHTS</a>
+  </div>
+</header>
+
+<article>
+  <section class="article-hero">
+    <div class="container">
+      <div class="eyebrow">— COFFEE INSIGHT · 2026.05.11</div>
+      <h1 class="article-title">그늘재배 커피밭 토양의 효소 활성과 미생물 군집</h1>
+      <p class="article-one-liner">단백질 분해 효소 활성이 토양 질산염 수치와 강한 양의 상관관계를 보였다.</p>
+      <div class="article-meta">
+        <span>SUSTAINABILITY</span>
+        <span>2026-05-07</span>
+        <span>DOI 10.3390/SU18104635</span>
+        <span>생두 · 지속가능성/경제 · 미생물학</span>
+      </div>
+      
+      <div class="hero-image">
+        <img src="/static/img/insights/hero/green-bean.svg" alt="그늘재배 커피밭 토양의 효소 활성과 미생물 군집">
+      </div>
+      
+    </div>
+  </section>
+
+  <section class="article-body">
+    <div class="container">
+
+      
+      <div class="section-block">
+        <h2>요약</h2>
+        <p>멕시코 베라크루스 주의 그늘재배 커피 농장 38곳(열대 운무림 산지)을 대상으로, 토양에 들어 있는 여러 가지 효소의 활성 패턴이 토양의 물리·화학 성질과 그곳에 사는 미생물 군집과 어떻게 연결되는지를 분석한 연구다. 그늘재배(shade-grown)는 커피 농가의 친환경 모델로 자주 언급되지만, 정작 그 효과가 토양 생물학적 활성도에 어떻게 드러나는지에 대한 정량 데이터는 충분치 않았다.</p><p>연구진은 단백질을 분해하는 프로테아제, 인 회수에 관여하는 산성 인산분해효소 등을 측정해 토양 pH, 인 농도, 전기전도도, 수분 함량 같은 환경 변수와 비교했다. 가장 뚜렷한 결과는 단백질 분해 효소 활성이 토양 질산염 농도와 양의 상관관계를 보였다는 점이다. 반면 산성 인산분해효소 활성은 토양에 실제로 식물이 쓸 수 있는 인의 양과는 거의 상관이 없었다 — 즉 효소가 있다고 해서 자동으로 영양가 있는 인이 풍부해지는 것은 아니라는 의미.</p><p>다변량 분석으로 보면 토양 pH·인 농도·전도도·수분이 효소 활성과 미생물 군집을 동시에 끌어가는 핵심 변수로 드러났다. 즉 ‘그늘재배 농장’이라는 라벨만으로는 토양 건강을 보장할 수 없고, 농장별 관리 디테일(멀칭, 차광율, 배수)이 미생물·효소 생태계 전체에 직결된다는 뜻이다.</p>
+      </div>
+      
+
+      
+      <div class="section-block">
+        <h2>핵심 발견</h2>
+        <ul class="findings">
+          <li>단백질 분해 효소(프로테아제) 활성이 토양 질산염 수치와 양의 상관관계를 보였다 — 단백질 분해가 식물 가용 질소 공급의 중요한 경로임을 시사.</li><li>산성 인산분해효소 활성과 가용 인 농도 사이에는 유의한 상관이 없었다 — 효소량만으로 영양 가용성을 판단하기는 어렵다.</li><li>다변량 분석에서 토양 pH·가용 인·전기전도도·수분 함량이 효소 활성과 미생물 군집을 동시에 좌우하는 핵심 변수로 확인되었다.</li><li>38개 사이트 간 효소 활성 편차가 컸다 — 그늘재배라는 범주 안에서도 농장별 관리 수준에 따라 토양 건강이 매우 다양함을 보였다.</li>
+        </ul>
+      </div>
+      
+
+      
+
+      
+
+      
+      <div class="section-block">
+        <h2>방법론</h2>
+        <p>멕시코 베라크루스 주의 그늘재배 커피 농장 38곳에서 표층 토양 시료를 수집했다. 각 시료에서 프로테아제·산성 인산분해효소를 비롯한 여러 가수분해 효소의 활성을 비색법으로 측정하고, 동시에 pH·가용 인·질산염·전기전도도·수분 함량을 분석했다. 미생물 군집은 분리 배양 가능한 분류군을 중심으로 동정했다. 효소 활성·환경 변수·미생물 데이터를 결합한 다변량 통계로 변수 간 관계를 추출했다.</p>
+      </div>
+      
+
+      
+      <div class="section-block">
+        <h2>시사점</h2>
+        <div class="implications-grid">
+          
+          <div class="implication-card">
+            <h3>농가 · 가공장</h3>
+            <p>그늘재배 자체로 좋은 토양이 보장되지 않는다. 같은 그늘재배 농장이라도 pH 관리·유기물 공급·수분 관리에 따라 미생물·효소 생태계가 크게 갈리므로, 정기 토양 검사와 함께 멀칭·차광율 조절을 권장.</p>
+          </div>
+          
+          <div class="implication-card">
+            <h3>로스터 · 큐그레이더</h3>
+            <p>직접적 컵 프로파일 영향은 한 단계 떨어져 있지만, 산지 정보를 받을 때 ‘그늘재배 = 친환경’ 같은 단순 라벨링에 머무르지 않고 토양 관리까지 추적하는 산지가 장기적으로 품질 일관성을 보일 가능성이 크다.</p>
+          </div>
+          
+          <div class="implication-card">
+            <h3>R&amp;D</h3>
+            <p>효소 활성을 토양 건강의 단일 지표로 쓰기에는 한계가 있다 — 영양소 가용성과 효소 활성의 비선형 관계를 더 정밀하게 모델링하는 후속 연구가 유망.</p>
+          </div>
+          
+        </div>
+      </div>
+      
+
+      
+      <div class="section-block">
+        <h2>한계</h2>
+        <p>배양 가능한 미생물만을 대상으로 한 분석이라 토양 미생물 전체 다양성의 일부만 포착한다(메타지놈 분석 미포함). 단일 시즌·단일 지역(베라크루스) 데이터라 계절 변동과 다른 커피 산지로의 일반화에는 한계가 있다.</p>
+      </div>
+      
+
+      
+      <div class="section-block">
+        <h2>용어집</h2>
+        <ul class="glossary-list">
+          
+          <li><dt>Protease</dt><dd>단백질을 펩타이드·아미노산으로 분해하는 효소. 토양에서는 미생물이 분비해 유기 질소를 식물이 쓸 수 있는 형태로 바꾼다.</dd></li>
+          
+          <li><dt>Acid phosphatase</dt><dd>산성 환경에서 유기 인 화합물의 인산기를 떼어내 가용 인을 공급하는 효소.</dd></li>
+          
+          <li><dt>Shade-grown coffee</dt><dd>큰 나무 그늘 아래에서 키우는 커피. 생물다양성 보전과 토양 보호에 유리한 재배 방식.</dd></li>
+          
+          <li><dt>Tropical montane cloud forest</dt><dd>고도가 높은 열대 산지에 형성되는 안개가 잦은 숲. 멕시코·중남미 커피 산지에서 흔히 보임.</dd></li>
+          
+        </ul>
+      </div>
+      
+
+      <div class="section-block">
+        <h2>인용 · 링크</h2>
+        <div class="citation-block">Alarcón-Gutiérrez, E., Pensado-Leglise, M. del R., &amp; Salazar-Huerta, M. A. (2026). Extracellular enzyme activity patterns associated with soil properties and culturable microbial taxa in shade-grown coffee orchards of tropical montane cloud forest. Sustainability, 18(10), 4635. https://doi.org/10.3390/su18104635</div>
+        <div class="links-row">
+          <a class="link-pill" href="https://doi.org/10.3390/su18104635" target="_blank" rel="noopener noreferrer">DOI →</a>
+          <a class="link-pill" href="https://www.mdpi.com/2071-1050/18/10/4635/pdf" target="_blank" rel="noopener noreferrer">OA PDF →</a>
+          <a class="link-pill" href="https://www.mdpi.com/journal/sustainability" target="_blank" rel="noopener noreferrer">JOURNAL HOMEPAGE →</a>
+        </div>
+        <div style="margin-top: 18px;">
+          
+          <span class="source-basis abstract">ABSTRACT BASIS</span>
+          
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <footer class="article-footer">
+    <div class="container">
+      <a href="/insight">← BACK TO INSIGHTS</a>
+      <span style="margin: 0 16px;">·</span>
+      <a href="/">HOME</a>
+    </div>
+  </footer>
+</article>
+
+
+
+</body>
+</html>
