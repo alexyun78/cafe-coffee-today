@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400" role="img" aria-label="생두">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#FAF7F2"/>
+      <stop offset="100%" stop-color="#F2ECE3"/>
+    </linearGradient>
+    <radialGradient id="bean" cx="0.45" cy="0.4" r="0.65">
+      <stop offset="0%" stop-color="#A0845C"/>
+      <stop offset="100%" stop-color="#6F4E37"/>
+    </radialGradient>
+  </defs>
+  <rect width="600" height="400" fill="url(#bg)"/>
+  <g transform="translate(220 110)">
+    <ellipse cx="80" cy="90" rx="78" ry="92" fill="url(#bean)"/>
+    <path d="M80 0 C 60 50, 60 130, 80 180" stroke="#3C2C1F" stroke-width="3" fill="none" stroke-linecap="round"/>
+    <ellipse cx="80" cy="90" rx="78" ry="92" fill="none" stroke="#3C2C1F" stroke-width="2" opacity="0.4"/>
+  </g>
+  <g transform="translate(80 60)" stroke="#B5703D" stroke-width="1.6" fill="none" opacity="0.45">
+    <path d="M0 280 C 30 240, 70 220, 120 220" stroke-linecap="round"/>
+    <circle cx="14" cy="276" r="6" fill="#C9986A" stroke="none"/>
+    <circle cx="46" cy="252" r="5" fill="#C9986A" stroke="none"/>
+    <circle cx="88" cy="232" r="5" fill="#C9986A" stroke="none"/>
+  </g>
+  <text x="40" y="370" font-family="ui-monospace, 'JetBrains Mono', monospace" font-size="14" letter-spacing="6" fill="#6B5E52">— GREEN BEAN</text>
+  <text x="560" y="50" text-anchor="end" font-family="'Cormorant Garamond', serif" font-style="italic" font-size="22" fill="#6F4E37">생두</text>
+</svg>

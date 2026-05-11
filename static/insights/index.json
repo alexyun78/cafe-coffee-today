@@ -1,0 +1,18 @@
+{
+  "version": 1,
+  "updated_at": "2026-05-11T07:30:00Z",
+  "items": [
+    {
+      "id": "2026-05-11-peru-fermentation-starter-cultures",
+      "date": "2026-05-11",
+      "title_ko": "스타터 컬처가 페루산 커피 발효의 향미에 미치는 영향",
+      "one_liner": "Saccharomyces 단독 접종이 발효 시간을 30% 단축하고 큐핑 점수를 평균 2.4점 끌어올렸다.",
+      "categories_primary": ["생두"],
+      "categories_secondary": ["발효", "향미/관능"],
+      "hero_image": "/static/img/insights/hero/green-bean.svg",
+      "journal": "Food Research International",
+      "pub_date": "2026-04-22",
+      "source_basis": "fulltext"
+    }
+  ]
+}

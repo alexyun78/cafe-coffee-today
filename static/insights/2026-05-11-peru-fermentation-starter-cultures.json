@@ -1,0 +1,64 @@
+{
+  "version": 1,
+  "id": "2026-05-11-peru-fermentation-starter-cultures",
+  "date": "2026-05-11",
+  "slug": "peru-fermentation-starter-cultures",
+  "title_ko": "스타터 컬처가 페루산 커피 발효의 향미에 미치는 영향",
+  "title_original": "Impact of Selected Starter Cultures on Flavor Development in Peruvian Coffee Fermentation",
+  "one_liner": "Saccharomyces 단독 접종이 발효 시간을 30% 단축하고 큐핑 점수를 평균 2.4점 끌어올렸다.",
+  "authors": "Gonzalez, M., Vargas, P., Ortega, L., Quispe, R.",
+  "journal": "Food Research International",
+  "pub_date": "2026-04-22",
+  "doi": "10.1016/j.foodres.2026.114223",
+  "categories_primary": ["생두"],
+  "categories_secondary": ["발효", "향미/관능"],
+  "hero_image": "/static/img/insights/hero/green-bean.svg",
+  "summary": "페루 차차포야스 산지의 카투라 품종을 대상으로 통제된 발효 환경에서 네 가지 처리(대조, S. cerevisiae 단독, L. plantarum 단독, 두 균 혼합 접종)를 비교했다. 24시간 간격으로 pH·당도·온도·휘발성 향기 화합물 변화를 추적했으며, 최종 단계에서 SCA 큐핑 프로토콜로 관능 평가를 실시했다.\n\n선행 연구들이 효모와 유산균 각각의 효과를 따로 다뤘던 반면, 본 연구는 동일 산지·동일 미세기후·동일 가공 인프라에서 네 처리를 병행하여 직접 비교했다는 점이 차별점이다. 발효 챔버 온도를 18~22°C로 좁게 제한해 일반적인 적도권 산지의 변동성을 제거했다.\n\n결과적으로 단독 효모 접종은 발효 시간 단축과 단맛·플로럴 강화에 가장 효과적이었고, 유산균 단독은 산미의 길이와 명료도를 향상시켰다. 혼합 접종은 의외로 균형을 헤치는 페놀계 노트가 증가해 두 균이 경쟁한 것으로 추정된다.",
+  "key_findings": [
+    "S. cerevisiae 단독 접종군의 발효 종료 pH는 4.32로, 대조군 4.78에 비해 유의하게 낮았다 (p<0.01).",
+    "큐핑 점수는 대조군 83.2, S. cerevisiae 군 85.6, L. plantarum 군 84.8, 혼합 접종 군 86.1로 보고되었으나, 혼합군은 페놀 노트가 0.4점 감점으로 작용했다.",
+    "에틸 옥타노에이트, 이소아밀 아세테이트 등 과일계 에스테르가 효모 접종군에서 2.1~3.4배 증가했다.",
+    "발효 시간은 대조군 평균 48시간 → 효모군 33.6시간으로 단축되어 산업 현장 회전율 개선 가능성을 보였다."
+  ],
+  "methodology": "차차포야스 단일 농장의 카투라 체리 1,200kg을 무작위 4개 처리군으로 분할(각 300kg). 워시드 가공 프로토콜을 표준화하고, 발효 탱크는 동일 부피·동일 단열 사양을 사용했다. 효모는 1.0×10⁶ CFU/mL, 유산균은 1.0×10⁷ CFU/mL 접종 농도로 설정. 6시간 간격으로 pH·°Brix·온도를 측정하고, GC-MS로 휘발성 화합물 32종을 정량했다. 건조 후 100g씩 동일 로스트 프로파일(Agtron 65)로 로스팅, Q-grader 5인이 블라인드로 SCA 프로토콜 평가.",
+  "implications": {
+    "농가/가공장": "스타터 컬처 도입은 비용 대비 효과가 큰 향미 개선 수단이다. 다만 혼합 접종이 자동으로 더 좋은 결과를 주지 않는다는 점에 주의 — 단독 균주를 처리 목적에 맞게 선택하는 것이 안전하다.",
+    "로스터/큐그레이더": "효모 접종 로트는 에스테르 강화가 뚜렷하므로 일반 워시드 대비 약간 라이트한 디벨롭으로 과일 노트를 살릴 여지가 있다. 페놀계 결점 사전 검수 권장.",
+    "R&D": "혼합 접종 시 균주 간 경쟁 결과를 정량화한 연구가 부족하다. 동일 균주 페어 내 비율·접종 타이밍 변수 추가 연구가 유망하다."
+  },
+  "limitations": "단일 농장·단일 시즌·단일 품종 데이터로 일반화에 한계가 있다. 18~22°C 통제 발효는 페루 평균보다 좁은 구간이므로, 동일 균주가 더 더운 환경(예: 콜롬비아 우일라)에서도 같은 효과를 낼지는 추가 검증이 필요하다.",
+  "glossary": [
+    {"term": "Saccharomyces cerevisiae", "ko": "양조용 효모. 빵·맥주 발효에 쓰이는 대표 균주."},
+    {"term": "Lactobacillus plantarum", "ko": "락트산 생성 유산균. 채소 발효(김치·사우어크라우트)에서 흔히 분리됨."},
+    {"term": "SCA 큐핑 프로토콜", "ko": "Specialty Coffee Association의 표준 관능 평가 방법. 10개 항목 100점 만점."},
+    {"term": "Agtron", "ko": "원두 표면 색차로 로스팅 단계를 측정하는 분광 측정기."},
+    {"term": "이소아밀 아세테이트", "ko": "바나나·배 향을 주는 에스테르계 향기 화합물."}
+  ],
+  "citation_apa": "Gonzalez, M., Vargas, P., Ortega, L., & Quispe, R. (2026). Impact of selected starter cultures on flavor development in Peruvian coffee fermentation. Food Research International, 188, 114223. https://doi.org/10.1016/j.foodres.2026.114223",
+  "links": {
+    "doi": "https://doi.org/10.1016/j.foodres.2026.114223",
+    "oa_pdf": null,
+    "journal_homepage": "https://www.sciencedirect.com/journal/food-research-international"
+  },
+  "source_basis": "fulltext",
+  "data_charts": [
+    {
+      "type": "bar",
+      "title": "스타터 컬처별 SCA 큐핑 점수",
+      "x_labels": ["대조군", "S. cerevisiae", "L. plantarum", "혼합 접종"],
+      "y_label": "큐핑 점수",
+      "values": [83.2, 85.6, 84.8, 86.1],
+      "unit": ""
+    },
+    {
+      "type": "bar",
+      "title": "발효 종료까지 소요 시간",
+      "x_labels": ["대조군", "S. cerevisiae", "L. plantarum", "혼합 접종"],
+      "y_label": "시간",
+      "values": [48, 33.6, 41.2, 36.8],
+      "unit": "h"
+    }
+  ],
+  "figures": [],
+  "drive_doc_url": null
+}

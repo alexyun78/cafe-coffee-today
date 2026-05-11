@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400" role="img" aria-label="로스팅">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#FAF7F2"/>
+      <stop offset="100%" stop-color="#F2ECE3"/>
+    </linearGradient>
+    <linearGradient id="drum" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#8B6F47"/>
+      <stop offset="100%" stop-color="#5A3F2B"/>
+    </linearGradient>
+    <radialGradient id="flame" cx="0.5" cy="1" r="0.9">
+      <stop offset="0%" stop-color="#FFE2B3"/>
+      <stop offset="55%" stop-color="#E89945"/>
+      <stop offset="100%" stop-color="#B5703D" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="600" height="400" fill="url(#bg)"/>
+  <ellipse cx="310" cy="190" rx="150" ry="120" fill="url(#drum)" stroke="#3C2C1F" stroke-width="3"/>
+  <circle cx="310" cy="190" r="50" fill="none" stroke="#FAF7F2" stroke-width="3" opacity="0.6"/>
+  <circle cx="310" cy="190" r="14" fill="#FAF7F2" opacity="0.6"/>
+  <line x1="160" y1="190" x2="125" y2="190" stroke="#3C2C1F" stroke-width="4"/>
+  <line x1="460" y1="190" x2="500" y2="190" stroke="#3C2C1F" stroke-width="4"/>
+  <g transform="translate(280 305)">
+    <ellipse cx="30" cy="20" rx="42" ry="14" fill="url(#flame)" opacity="0.85"/>
+    <path d="M5 30 Q 15 5, 30 10 Q 45 0, 55 30" fill="url(#flame)"/>
+    <path d="M15 30 Q 25 12, 35 18 Q 45 8, 50 30" fill="#FFE2B3" opacity="0.7"/>
+  </g>
+  <text x="40" y="370" font-family="ui-monospace, 'JetBrains Mono', monospace" font-size="14" letter-spacing="6" fill="#6B5E52">— ROASTING</text>
+  <text x="560" y="50" text-anchor="end" font-family="'Cormorant Garamond', serif" font-style="italic" font-size="22" fill="#6F4E37">로스팅</text>
+</svg>

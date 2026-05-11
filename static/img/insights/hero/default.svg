@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400" role="img" aria-label="커피 인사이트">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#FAF7F2"/>
+      <stop offset="100%" stop-color="#F2ECE3"/>
+    </linearGradient>
+    <radialGradient id="bean" cx="0.45" cy="0.4" r="0.65">
+      <stop offset="0%" stop-color="#A0845C"/>
+      <stop offset="100%" stop-color="#6F4E37"/>
+    </radialGradient>
+  </defs>
+  <rect width="600" height="400" fill="url(#bg)"/>
+  <g transform="translate(220 110)">
+    <ellipse cx="80" cy="90" rx="78" ry="92" fill="url(#bean)"/>
+    <path d="M80 0 C 60 50, 60 130, 80 180" stroke="#3C2C1F" stroke-width="3" fill="none" stroke-linecap="round"/>
+  </g>
+  <g transform="translate(420 280)" stroke="#6F4E37" stroke-width="1.6" fill="none" opacity="0.6">
+    <circle cx="0" cy="0" r="14"/>
+    <line x1="-22" y1="0" x2="-30" y2="0"/>
+    <line x1="22" y1="0" x2="30" y2="0"/>
+    <line x1="0" y1="-22" x2="0" y2="-30"/>
+    <line x1="0" y1="22" x2="0" y2="30"/>
+  </g>
+  <text x="40" y="370" font-family="ui-monospace, 'JetBrains Mono', monospace" font-size="14" letter-spacing="6" fill="#6B5E52">— COFFEE INSIGHT</text>
+  <text x="560" y="50" text-anchor="end" font-family="'Cormorant Garamond', serif" font-style="italic" font-size="22" fill="#6F4E37">커피 인사이트</text>
+</svg>

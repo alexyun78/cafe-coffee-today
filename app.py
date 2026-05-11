@@ -4,6 +4,7 @@
 관리 엔드포인트는 세션 기반 PIN 인증 필요.
 """
 import io
+import json
 import os
 import re
 import time
@@ -365,6 +366,78 @@ def roastery_page():
 @app.get("/apk")
 def apk_page():
     return send_from_directory("static", "apk.html")
+
+
+# ---------- Coffee Insight ----------
+# 컨텐츠는 static/insights/ 에 JSON + standalone HTML 형태로 살아 있고,
+# GitHub Actions 워커가 매일 새 파일을 add/commit/push 한다.
+# 여기서는 단순히 파일을 서빙하고 /api/insights 로 인덱스를 노출한다.
+
+INSIGHTS_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "static", "insights")
+INSIGHT_ID_RE = re.compile(r"^[A-Za-z0-9][A-Za-z0-9\-]{0,127}$")
+
+
+def _read_insight_index() -> dict:
+    path = os.path.join(INSIGHTS_DIR, "index.json")
+    try:
+        with open(path, "r", encoding="utf-8") as f:
+            return json.load(f)
+    except (OSError, ValueError):
+        return {"version": 1, "items": []}
+
+
+@app.get("/insight")
+def insight_list_page():
+    return send_from_directory("static", "insight-list.html")
+
+
+@app.get("/insight/<insight_id>")
+def insight_article_page(insight_id: str):
+    if not INSIGHT_ID_RE.match(insight_id):
+        return jsonify({"success": False, "error": "invalid id"}), 404
+    filename = f"{insight_id}.html"
+    full_path = os.path.join(INSIGHTS_DIR, filename)
+    if not os.path.isfile(full_path):
+        return jsonify({"success": False, "error": "not found"}), 404
+    return send_from_directory(INSIGHTS_DIR, filename)
+
+
+@app.get("/api/insights")
+def api_insights_list():
+    index = _read_insight_index()
+    items = index.get("items") or []
+    # 최신순 정렬 (date desc, then id desc)
+    items = sorted(
+        items,
+        key=lambda x: (x.get("date") or "", x.get("id") or ""),
+        reverse=True,
+    )
+    try:
+        limit = int(request.args.get("limit", "") or 0)
+    except ValueError:
+        limit = 0
+    if limit > 0:
+        items = items[:limit]
+    return jsonify({
+        "success": True,
+        "items": items,
+        "updated_at": index.get("updated_at"),
+    })
+
+
+@app.get("/api/insights/<insight_id>")
+def api_insights_get(insight_id: str):
+    if not INSIGHT_ID_RE.match(insight_id):
+        return jsonify({"success": False, "error": "invalid id"}), 404
+    path = os.path.join(INSIGHTS_DIR, f"{insight_id}.json")
+    if not os.path.isfile(path):
+        return jsonify({"success": False, "error": "not found"}), 404
+    try:
+        with open(path, "r", encoding="utf-8") as f:
+            data = json.load(f)
+    except (OSError, ValueError) as e:
+        return jsonify({"success": False, "error": str(e)}), 500
+    return jsonify({"success": True, "item": data})
 
 
 @app.get("/game")

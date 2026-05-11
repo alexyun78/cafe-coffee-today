@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400" role="img" aria-label="화학과 분석">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#FAF7F2"/>
+      <stop offset="100%" stop-color="#F2ECE3"/>
+    </linearGradient>
+  </defs>
+  <rect width="600" height="400" fill="url(#bg)"/>
+  <g transform="translate(300 200)" stroke="#6F4E37" stroke-width="2.5" fill="none">
+    <line x1="0" y1="0" x2="-80" y2="-50"/>
+    <line x1="0" y1="0" x2="80" y2="-50"/>
+    <line x1="0" y1="0" x2="0" y2="90"/>
+    <line x1="-80" y1="-50" x2="-50" y2="-130"/>
+    <line x1="80" y1="-50" x2="50" y2="-130"/>
+    <line x1="-50" y1="-130" x2="50" y2="-130"/>
+    <line x1="0" y1="90" x2="-70" y2="130"/>
+    <line x1="0" y1="90" x2="70" y2="130"/>
+    <circle cx="0" cy="0" r="14" fill="#6F4E37"/>
+    <circle cx="-80" cy="-50" r="11" fill="#C9986A" stroke="none"/>
+    <circle cx="80" cy="-50" r="11" fill="#C9986A" stroke="none"/>
+    <circle cx="-50" cy="-130" r="9" fill="#B5703D" stroke="none"/>
+    <circle cx="50" cy="-130" r="9" fill="#B5703D" stroke="none"/>
+    <circle cx="0" cy="90" r="11" fill="#C9986A" stroke="none"/>
+    <circle cx="-70" cy="130" r="9" fill="#B5703D" stroke="none"/>
+    <circle cx="70" cy="130" r="9" fill="#B5703D" stroke="none"/>
+  </g>
+  <text x="40" y="370" font-family="ui-monospace, 'JetBrains Mono', monospace" font-size="14" letter-spacing="6" fill="#6B5E52">— CHEMISTRY</text>
+  <text x="560" y="50" text-anchor="end" font-family="'Cormorant Garamond', serif" font-style="italic" font-size="22" fill="#6F4E37">화학 · 분석</text>
+</svg>

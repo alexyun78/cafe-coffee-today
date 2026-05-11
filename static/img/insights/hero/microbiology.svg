@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400" role="img" aria-label="미생물학">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#FAF7F2"/>
+      <stop offset="100%" stop-color="#F2ECE3"/>
+    </linearGradient>
+  </defs>
+  <rect width="600" height="400" fill="url(#bg)"/>
+  <circle cx="300" cy="210" r="125" fill="none" stroke="#6F4E37" stroke-width="3" opacity="0.5"/>
+  <circle cx="300" cy="210" r="125" fill="#FAF7F2" opacity="0.5"/>
+  <g>
+    <ellipse cx="250" cy="170" rx="20" ry="10" fill="#B5703D" transform="rotate(-30 250 170)"/>
+    <ellipse cx="260" cy="200" rx="18" ry="9" fill="#C9986A" transform="rotate(20 260 200)"/>
+    <ellipse cx="320" cy="180" rx="22" ry="11" fill="#6F4E37" transform="rotate(45 320 180)"/>
+    <ellipse cx="350" cy="220" rx="16" ry="8" fill="#B5703D" transform="rotate(-15 350 220)"/>
+    <ellipse cx="290" cy="245" rx="20" ry="10" fill="#C9986A" transform="rotate(60 290 245)"/>
+    <ellipse cx="240" cy="240" rx="14" ry="7" fill="#6F4E37" transform="rotate(-50 240 240)"/>
+    <ellipse cx="335" cy="255" rx="18" ry="9" fill="#B5703D" transform="rotate(10 335 255)"/>
+    <circle cx="220" cy="210" r="4" fill="#6F4E37"/>
+    <circle cx="370" cy="175" r="3" fill="#B5703D"/>
+    <circle cx="380" cy="240" r="4" fill="#C9986A"/>
+    <circle cx="225" cy="265" r="3" fill="#6F4E37"/>
+  </g>
+  <text x="40" y="370" font-family="ui-monospace, 'JetBrains Mono', monospace" font-size="14" letter-spacing="6" fill="#6B5E52">— MICROBIOLOGY</text>
+  <text x="560" y="50" text-anchor="end" font-family="'Cormorant Garamond', serif" font-style="italic" font-size="22" fill="#6F4E37">미생물학</text>
+</svg>

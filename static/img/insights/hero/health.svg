@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400" role="img" aria-label="건강과 영양">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#FAF7F2"/>
+      <stop offset="100%" stop-color="#F2ECE3"/>
+    </linearGradient>
+    <linearGradient id="heart" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#C9986A"/>
+      <stop offset="100%" stop-color="#6F4E37"/>
+    </linearGradient>
+  </defs>
+  <rect width="600" height="400" fill="url(#bg)"/>
+  <path d="M300 290 C 220 230, 180 170, 215 130 C 240 100, 280 110, 300 150 C 320 110, 360 100, 385 130 C 420 170, 380 230, 300 290 Z" fill="url(#heart)" stroke="#3C2C1F" stroke-width="2.5" stroke-linejoin="round"/>
+  <path d="M120 215 L 195 215 L 215 175 L 245 250 L 270 200 L 320 200" fill="none" stroke="#B5703D" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M340 200 L 395 200 L 415 165 L 445 235 L 475 200 L 530 200" fill="none" stroke="#B5703D" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity="0.7"/>
+  <text x="40" y="370" font-family="ui-monospace, 'JetBrains Mono', monospace" font-size="14" letter-spacing="6" fill="#6B5E52">— HEALTH</text>
+  <text x="560" y="50" text-anchor="end" font-family="'Cormorant Garamond', serif" font-style="italic" font-size="22" fill="#6F4E37">건강 · 영양</text>
+</svg>

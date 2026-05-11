@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400" role="img" aria-label="머신과 장비">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#FAF7F2"/>
+      <stop offset="100%" stop-color="#F2ECE3"/>
+    </linearGradient>
+    <linearGradient id="gear" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#A0845C"/>
+      <stop offset="100%" stop-color="#6F4E37"/>
+    </linearGradient>
+  </defs>
+  <rect width="600" height="400" fill="url(#bg)"/>
+  <g transform="translate(260 200)">
+    <g fill="url(#gear)" stroke="#3C2C1F" stroke-width="2.5">
+      <path d="M0 -100 L 18 -94 L 12 -78 L 30 -68 L 44 -82 L 60 -64 L 50 -50 L 68 -38 L 84 -50 L 96 -34 L 82 -22 L 92 -4 L 110 -8 L 116 12 L 100 18 L 104 38 L 122 42 L 120 62 L 102 64 L 96 84 L 112 94 L 102 110 L 84 102 L 70 116 L 78 134 L 60 144 L 48 130 L 30 134 L 26 152 L 6 152 L 0 134 L -18 134 L -22 152 L -42 148 L -38 130 L -56 122 L -70 134 L -84 122 L -76 106 L -90 92 L -108 96 L -114 78 L -98 70 L -104 52 L -122 50 L -120 30 L -102 28 L -98 10 L -114 0 L -106 -18 L -88 -14 L -78 -30 L -90 -44 L -76 -58 L -60 -50 L -48 -64 L -56 -82 L -38 -90 L -28 -76 L -10 -82 Z" transform="scale(0.6)"/>
+    </g>
+    <circle r="22" fill="#FAF7F2" stroke="#3C2C1F" stroke-width="2.5"/>
+  </g>
+  <g transform="translate(420 250)">
+    <circle r="55" fill="url(#gear)" stroke="#3C2C1F" stroke-width="2"/>
+    <g fill="url(#gear)" stroke="#3C2C1F" stroke-width="2">
+      <rect x="-8" y="-72" width="16" height="22"/>
+      <rect x="-8" y="50" width="16" height="22"/>
+      <rect x="-72" y="-8" width="22" height="16"/>
+      <rect x="50" y="-8" width="22" height="16"/>
+    </g>
+    <circle r="14" fill="#FAF7F2" stroke="#3C2C1F" stroke-width="2"/>
+  </g>
+  <text x="40" y="370" font-family="ui-monospace, 'JetBrains Mono', monospace" font-size="14" letter-spacing="6" fill="#6B5E52">— EQUIPMENT</text>
+  <text x="560" y="50" text-anchor="end" font-family="'Cormorant Garamond', serif" font-style="italic" font-size="22" fill="#6F4E37">장비 · 공학</text>
+</svg>

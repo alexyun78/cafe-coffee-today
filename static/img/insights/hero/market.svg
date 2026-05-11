@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400" role="img" aria-label="시장과 문화">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#FAF7F2"/>
+      <stop offset="100%" stop-color="#F2ECE3"/>
+    </linearGradient>
+    <linearGradient id="cup" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#FAF7F2"/>
+      <stop offset="100%" stop-color="#E8DCC8"/>
+    </linearGradient>
+  </defs>
+  <rect width="600" height="400" fill="url(#bg)"/>
+  <g transform="translate(300 210)">
+    <path d="M-70 -50 L 70 -50 L 60 60 Q 60 80, 40 80 L -40 80 Q -60 80, -60 60 Z" fill="url(#cup)" stroke="#6F4E37" stroke-width="3" stroke-linejoin="round"/>
+    <ellipse cx="0" cy="-50" rx="70" ry="14" fill="#5A3F2B"/>
+    <ellipse cx="0" cy="-50" rx="60" ry="10" fill="#3C2C1F"/>
+    <path d="M70 -30 Q 110 -30, 110 0 Q 110 30, 70 30" fill="none" stroke="#6F4E37" stroke-width="3"/>
+    <g stroke="#6F4E37" stroke-width="2" fill="none" stroke-linecap="round" opacity="0.7">
+      <path d="M-25 -85 Q -20 -100, -15 -85"/>
+      <path d="M0 -90 Q 5 -110, 10 -90"/>
+      <path d="M20 -85 Q 25 -100, 30 -85"/>
+    </g>
+  </g>
+  <g fill="#C9986A" stroke="#6F4E37" stroke-width="2">
+    <circle cx="140" cy="115" r="18"/>
+    <path d="M118 165 Q 118 140, 140 140 Q 162 140, 162 165 Z" stroke-linejoin="round"/>
+  </g>
+  <g fill="#B5703D" stroke="#6F4E37" stroke-width="2">
+    <circle cx="470" cy="115" r="18"/>
+    <path d="M448 165 Q 448 140, 470 140 Q 492 140, 492 165 Z" stroke-linejoin="round"/>
+  </g>
+  <text x="40" y="370" font-family="ui-monospace, 'JetBrains Mono', monospace" font-size="14" letter-spacing="6" fill="#6B5E52">— MARKET · CULTURE</text>
+  <text x="560" y="50" text-anchor="end" font-family="'Cormorant Garamond', serif" font-style="italic" font-size="22" fill="#6F4E37">시장 · 문화</text>
+</svg>
