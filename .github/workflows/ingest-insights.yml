@@ -50,7 +50,13 @@ jobs:
         run: |
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add static/insights/ static/img/insights/articles/ || true
+          # 한 줄에 두 경로를 넣으면, 두 번째 경로가 비어 있을 때 git add 가
+          # 전체 실패하고 || true 가 삼켜 첫 경로도 staging 안 되는 버그가 있다.
+          # 두 줄로 분리하고 각각 무시.
+          git add static/insights/ || true
+          if [ -d static/img/insights/articles ]; then
+            git add static/img/insights/articles/ || true
+          fi
           if git diff --cached --quiet; then
             echo "변경 없음 — commit skip"
             exit 0
