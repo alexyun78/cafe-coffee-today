@@ -1062,6 +1062,8 @@
             100% { background-position: -200% 0; }
         }
     </style>
+    <link rel="stylesheet" href="/static/feedback.css">
+    <script src="/static/feedback.js" defer></script>
 </head>
 <body>
 
@@ -1505,8 +1507,15 @@
             return;
         }
         var notes = notesArr(c['컵노트']);
+        // 피드백 모달이 참조할 수 있도록 전역 맵에 등록 (id 있을 때만 버튼 노출)
+        window.coffeeTodayMap = window.coffeeTodayMap || {};
+        if (c.id != null) window.coffeeTodayMap[c.id] = c;
+        var fbBtn = (c.id != null)
+            ? '<button class="feedback-btn feedback-btn--dark" type="button" onclick="openFeedbackModalById(' + c.id + ')">💬 피드백</button>'
+            : '';
         el.innerHTML = '' +
             '<article class="now-card">' +
+                fbBtn +
                 '<div class="now-main">' +
                     '<div class="now-card-meta">' +
                         '<span class="now-status">NOW SERVING</span>' +

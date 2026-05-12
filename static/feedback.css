@@ -1,0 +1,169 @@
+/* ============================================================
+ * 피드백 UI — 공유 스타일 (index.html, roastery.html 양쪽)
+ *
+ * 동작 컨텍스트:
+ *   - 버튼(.feedback-btn) 은 position:absolute. 컨테이너에
+ *     position:relative 가 있어야 정상 배치됨.
+ *     - index.html: .coffee-card (relative 지정됨)
+ *     - roastery.html: .now-card (이미 relative)
+ *   - 모달은 feedback.js 가 첫 호출 시 body 에 주입.
+ * ============================================================ */
+
+/* ===== 버튼 ===== */
+.feedback-btn {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background: rgba(255, 255, 255, 0.18);
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    padding: 7px 14px;
+    border-radius: 999px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    transition: background 0.2s ease, transform 0.2s ease;
+    z-index: 2;
+    font-family: inherit;
+    -webkit-tap-highlight-color: transparent;
+}
+.feedback-btn:hover { background: rgba(255, 255, 255, 0.28); transform: translateY(-1px); }
+.feedback-btn:active { transform: translateY(0); }
+
+/* roastery 같은 밝은/투명 카드에서도 가독성 보장: 카드 배경이 밝으면
+ * 자동으로 어두운 톤. 사용 페이지에서 .feedback-btn--dark 로 override 가능. */
+.feedback-btn--dark {
+    background: rgba(30, 20, 12, 0.78);
+    color: #fff;
+    border-color: rgba(255, 255, 255, 0.18);
+}
+.feedback-btn--dark:hover { background: rgba(30, 20, 12, 0.92); }
+
+/* ===== 모달 ===== */
+.fb-modal {
+    display: none;
+    position: fixed; inset: 0;
+    background: rgba(20, 15, 10, 0.55);
+    z-index: 10000;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 24px 14px;
+    overflow-y: auto;
+}
+.fb-modal.open { display: flex; }
+.fb-modal-content {
+    background: #fff;
+    border-radius: 18px;
+    max-width: 520px;
+    width: 100%;
+    padding: 24px 22px 20px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    margin-top: 4vh;
+    margin-bottom: 4vh;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    color: #2a1f15;
+}
+.fb-modal-header {
+    display: flex; justify-content: space-between; align-items: flex-start;
+    margin-bottom: 8px; gap: 12px;
+}
+.fb-modal-title { font-size: 1.25rem; font-weight: 700; color: #6F4E37; line-height: 1.3; }
+.fb-modal-subtitle { font-size: 0.85rem; color: #8B6F47; margin-top: 2px; }
+.fb-modal-close {
+    background: none; border: none; font-size: 1.6rem; cursor: pointer;
+    color: #999; padding: 0; line-height: 1;
+    font-family: inherit;
+}
+.fb-modal-close:hover { color: #6F4E37; }
+
+.fb-field { margin-top: 16px; }
+.fb-label { display: block; font-size: 0.9rem; font-weight: 600; color: #4a3a2a; margin-bottom: 8px; }
+.fb-label .fb-req { color: #c0392b; margin-left: 2px; }
+.fb-input, .fb-textarea {
+    width: 100%; padding: 10px 12px; border: 1px solid #d5cabe;
+    border-radius: 10px; font-size: 0.95rem; font-family: inherit;
+    background: #fffdfa; color: #2a1f15; box-sizing: border-box;
+}
+.fb-input:focus, .fb-textarea:focus {
+    outline: none; border-color: #8B6F47; box-shadow: 0 0 0 3px rgba(139,111,71,0.15);
+}
+.fb-textarea { resize: vertical; min-height: 80px; }
+.fb-hint { font-size: 0.78rem; color: #999; margin-top: 4px; }
+
+/* 별점 */
+.fb-stars { display: flex; gap: 4px; }
+.fb-star {
+    font-size: 2rem; cursor: pointer; color: #d5cabe;
+    transition: transform 0.1s ease, color 0.1s ease;
+    user-select: none;
+    -webkit-user-select: none;
+    line-height: 1;
+}
+.fb-star.active { color: #f5b400; }
+.fb-star:hover { transform: scale(1.15); }
+
+/* 컵노트 토큰 */
+.fb-tokens { display: flex; flex-wrap: wrap; gap: 8px; }
+.fb-tokens:empty { display: none; }
+.fb-token {
+    background: #f5ede2; color: #5a4730; border: 1px solid #e2d5c0;
+    padding: 8px 14px; border-radius: 999px; cursor: pointer;
+    font-size: 0.88rem; font-weight: 500;
+    transition: all 0.15s ease;
+    user-select: none;
+    -webkit-user-select: none;
+}
+.fb-token:hover { background: #efe1cd; }
+.fb-token.selected {
+    background: linear-gradient(135deg, #6F4E37, #8B6F47);
+    color: #fff; border-color: transparent;
+}
+.fb-token.disabled { opacity: 0.4; cursor: not-allowed; }
+.fb-custom-row { display: flex; gap: 8px; margin-top: 8px; }
+.fb-custom-row .fb-input { flex: 1; }
+.fb-custom-add {
+    background: #6F4E37; color: #fff; border: none;
+    padding: 0 16px; border-radius: 10px; cursor: pointer;
+    font-size: 0.88rem; font-weight: 600;
+    white-space: nowrap;
+    font-family: inherit;
+}
+.fb-custom-add:hover { background: #8B6F47; }
+.fb-custom-add:disabled { background: #c5b8a5; cursor: not-allowed; }
+.fb-selected-count { font-size: 0.78rem; color: #8B6F47; margin-top: 6px; }
+
+/* 액션 */
+.fb-actions { display: flex; gap: 10px; margin-top: 24px; }
+.fb-btn {
+    flex: 1; padding: 12px; border-radius: 10px;
+    font-size: 0.95rem; font-weight: 600; cursor: pointer;
+    border: none; transition: background 0.15s ease;
+    font-family: inherit;
+}
+.fb-btn-cancel { background: #f0e8dc; color: #6F4E37; }
+.fb-btn-cancel:hover { background: #e5d9c5; }
+.fb-btn-submit { background: linear-gradient(135deg, #6F4E37, #8B6F47); color: #fff; }
+.fb-btn-submit:hover { filter: brightness(1.08); }
+.fb-btn-submit:disabled { opacity: 0.5; cursor: not-allowed; filter: none; }
+
+.fb-toast {
+    position: fixed; left: 50%; bottom: 32px; transform: translateX(-50%);
+    background: rgba(40, 30, 20, 0.92); color: #fff;
+    padding: 12px 22px; border-radius: 999px;
+    font-size: 0.9rem; font-weight: 500;
+    z-index: 10100; box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.2s ease;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+.fb-toast.show { opacity: 1; }
+
+@media (max-width: 480px) {
+    .feedback-btn { top: 10px; right: 10px; padding: 6px 11px; font-size: 0.78rem; }
+    .fb-modal { padding: 12px 10px; }
+    .fb-modal-content { padding: 20px 16px 16px; margin-top: 2vh; }
+    .fb-modal-title { font-size: 1.1rem; }
+    .fb-star { font-size: 1.7rem; }
+}

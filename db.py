@@ -607,6 +607,27 @@ def delete_feedback(feedback_id: int) -> bool:
         return cur.rowcount > 0
 
 
+def popular_cup_notes(limit: int = 20) -> list:
+    """coffees.cup_notes 전체에서 개별 향미를 빈도 내림차순으로 반환.
+
+    동일 빈도는 가나다순(안정 정렬). 피드백 모달의 토큰 후보로 사용.
+    """
+    import re as _re
+    from collections import Counter
+    with connect() as conn:
+        rows = conn.execute(
+            "SELECT cup_notes FROM coffees "
+            "WHERE cup_notes IS NOT NULL AND cup_notes != ''"
+        ).fetchall()
+    counter: Counter = Counter()
+    for r in rows:
+        for note in _re.split(r"[,/\n;|]", r["cup_notes"] or ""):
+            note = note.strip()
+            if note:
+                counter[note] += 1
+    return [n for n, _ in sorted(counter.items(), key=lambda x: (-x[1], x[0]))[:limit]]
+
+
 def feedback_summary_for_coffee(coffee_id: int) -> dict:
     """공개 노출용 요약 — 평균 별점, 건수, 가장 많이 선택된 컵노트 top 5."""
     import json as _json

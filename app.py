@@ -487,6 +487,50 @@ def api_feedback_summary(coffee_id):
     return jsonify({"success": True, **db.feedback_summary_for_coffee(coffee_id)})
 
 
+FEEDBACK_NOTE_OPTIONS_MAX = 10
+_NOTE_SPLIT_RE = re.compile(r"[,/\n;|]")
+
+
+@app.get("/api/feedback/note-options")
+def api_feedback_note_options():
+    """피드백 모달의 컵노트 토큰 후보. 공개.
+
+    우선순위:
+      1) 해당 커피의 cup_notes 를 split 한 노트들 (순서 보존)
+      2) coffees 테이블 전체에서 빈도가 높은 노트들
+      위 둘을 합쳐 중복 제거 후 최대 FEEDBACK_NOTE_OPTIONS_MAX 개 반환.
+    """
+    cid = request.args.get("coffee_id", "")
+    current: list[str] = []
+    if cid:
+        try:
+            item = db.get_by_id(int(cid))
+        except (TypeError, ValueError):
+            item = None
+        if item and item.get("컵노트"):
+            seen = set()
+            for note in _NOTE_SPLIT_RE.split(item["컵노트"]):
+                note = note.strip()
+                if note and note not in seen:
+                    seen.add(note)
+                    current.append(note)
+
+    popular = db.popular_cup_notes(limit=FEEDBACK_NOTE_OPTIONS_MAX * 2)
+    seen = {n for n in current}
+    merged = list(current)
+    for n in popular:
+        if n not in seen:
+            seen.add(n)
+            merged.append(n)
+            if len(merged) >= FEEDBACK_NOTE_OPTIONS_MAX:
+                break
+    return jsonify({
+        "success": True,
+        "notes": merged[:FEEDBACK_NOTE_OPTIONS_MAX],
+        "current_count": len(current),
+    })
+
+
 @app.get("/api/coffee/<int:coffee_id>/card.png")
 @require_pin
 def api_card_png(coffee_id):
