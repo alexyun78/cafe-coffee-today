@@ -139,6 +139,56 @@
   .stats-refresh:hover { color: var(--coffee-dark); border-color: var(--coffee-mid); }
   .stats-refresh:disabled { opacity: 0.5; cursor: default; }
 
+  /* ===== 피드백 섹션 ===== */
+  .fb-empty { color: var(--muted); font-size: 0.9rem; text-align: center; padding: 18px 0; }
+  .fb-coffee-group {
+    margin-bottom: 22px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--border);
+  }
+  .fb-coffee-group:last-child { border-bottom: none; margin-bottom: 0; }
+  .fb-coffee-name {
+    font-size: 1rem; font-weight: 700; color: var(--coffee-dark);
+    margin-bottom: 4px;
+  }
+  .fb-coffee-meta {
+    font-size: 0.78rem; color: var(--muted); margin-bottom: 10px;
+  }
+  .fb-item {
+    background: #fbf6ec; border-radius: 10px;
+    padding: 12px 14px; margin-bottom: 8px;
+    position: relative;
+  }
+  .fb-item:last-child { margin-bottom: 0; }
+  .fb-item-head {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 6px; gap: 8px;
+  }
+  .fb-item-stars { color: #f5b400; font-size: 0.95rem; letter-spacing: 1px; }
+  .fb-item-stars .dim { color: #d5cabe; }
+  .fb-item-nick { font-size: 0.85rem; color: var(--coffee-dark); font-weight: 600; }
+  .fb-item-date { font-size: 0.72rem; color: var(--muted); }
+  .fb-item-notes {
+    display: flex; flex-wrap: wrap; gap: 4px;
+    margin-top: 6px;
+  }
+  .fb-item-note {
+    background: #efe1cd; color: #5a4730;
+    padding: 2px 8px; border-radius: 999px;
+    font-size: 0.74rem;
+  }
+  .fb-item-comment {
+    margin-top: 8px; font-size: 0.88rem; color: #4a3a2a;
+    line-height: 1.5; white-space: pre-wrap; word-break: break-word;
+  }
+  .fb-item-delete {
+    position: absolute; top: 10px; right: 10px;
+    background: transparent; border: none; color: var(--muted);
+    cursor: pointer; font-size: 1rem; padding: 4px 8px;
+    border-radius: 6px; line-height: 1;
+  }
+  .fb-item-delete:hover { color: #c0392b; background: #fff5f4; }
+
   /* 기존 항목 리스트 */
   .list-header {
     display: flex; align-items: center; justify-content: space-between;
@@ -528,6 +578,18 @@
     </h2>
     <div id="stats-body">
       <div class="stats-empty">불러오는 중...</div>
+    </div>
+  </section>
+
+  <!-- 피드백 -->
+  <section id="feedback-view" class="card stats-card" style="display:none;">
+    <h2>
+      💬 사용자 피드백
+      <span class="stats-date" id="fb-count"></span>
+      <button type="button" class="stats-refresh" id="fb-refresh" aria-label="새로고침">↻</button>
+    </h2>
+    <div id="fb-body">
+      <div class="fb-empty">불러오는 중...</div>
     </div>
   </section>
 
@@ -1677,6 +1739,106 @@ async function loadStats() {
 
 document.getElementById("stats-refresh")?.addEventListener("click", loadStats);
 
+// ---------- 피드백 ----------
+function renderStars(n) {
+  const max = 5;
+  const full = Math.max(0, Math.min(max, Math.floor(n)));
+  return '<span class="fb-item-stars">' +
+    '★'.repeat(full) +
+    '<span class="dim">' + '★'.repeat(max - full) + '</span>' +
+    '</span>';
+}
+
+function formatFbDate(iso) {
+  try {
+    const d = new Date(iso);
+    const kst = new Date(d.getTime() + 9 * 3600 * 1000);
+    const pad = (n) => String(n).padStart(2, '0');
+    return `${kst.getUTCFullYear()}-${pad(kst.getUTCMonth()+1)}-${pad(kst.getUTCDate())} ${pad(kst.getUTCHours())}:${pad(kst.getUTCMinutes())}`;
+  } catch (e) { return iso || ''; }
+}
+
+async function loadFeedback() {
+  const refreshBtn = document.getElementById("fb-refresh");
+  const view = document.getElementById("feedback-view");
+  const body = document.getElementById("fb-body");
+  const countEl = document.getElementById("fb-count");
+  if (!view) return;
+  view.style.display = "";
+  if (refreshBtn) refreshBtn.disabled = true;
+  try {
+    const r = await api("GET", "/api/feedback");
+    const items = r.items || [];
+    if (countEl) countEl.textContent = `${items.length}건`;
+    if (!items.length) {
+      body.innerHTML = '<div class="fb-empty">아직 받은 피드백이 없습니다.</div>';
+      return;
+    }
+    // coffee_id 기준 그룹핑
+    const groups = {};
+    for (const it of items) {
+      const key = it.coffee_id;
+      if (!groups[key]) groups[key] = { name: it.coffee_name || `#${key}`, items: [] };
+      groups[key].items.push(it);
+    }
+    const groupKeys = Object.keys(groups).sort((a, b) => {
+      const da = groups[a].items[0]?.created_at || '';
+      const db = groups[b].items[0]?.created_at || '';
+      return db.localeCompare(da);
+    });
+    body.innerHTML = groupKeys.map(k => {
+      const g = groups[k];
+      const avg = g.items.reduce((s, x) => s + (x.rating || 0), 0) / g.items.length;
+      return `
+        <div class="fb-coffee-group">
+          <div class="fb-coffee-name">${escapeHtml(g.name)}</div>
+          <div class="fb-coffee-meta">${g.items.length}건 · 평균 ${avg.toFixed(1)} ★</div>
+          ${g.items.map(it => `
+            <div class="fb-item" data-id="${it.id}">
+              <button class="fb-item-delete" type="button" title="삭제" aria-label="삭제">🗑</button>
+              <div class="fb-item-head">
+                <div>
+                  ${renderStars(it.rating)}
+                  ${it.nickname ? `<span class="fb-item-nick" style="margin-left:8px;">${escapeHtml(it.nickname)}</span>` : ''}
+                </div>
+                <span class="fb-item-date">${formatFbDate(it.created_at)}</span>
+              </div>
+              ${(it.cup_notes && it.cup_notes.length) ? `
+                <div class="fb-item-notes">
+                  ${it.cup_notes.map(n => `<span class="fb-item-note">${escapeHtml(n)}</span>`).join('')}
+                </div>` : ''}
+              ${it.comment ? `<div class="fb-item-comment">${escapeHtml(it.comment)}</div>` : ''}
+            </div>
+          `).join('')}
+        </div>
+      `;
+    }).join('');
+
+    body.querySelectorAll('.fb-item-delete').forEach(btn => {
+      btn.addEventListener('click', async (e) => {
+        e.stopPropagation();
+        const itemEl = btn.closest('.fb-item');
+        const id = itemEl?.dataset.id;
+        if (!id) return;
+        if (!confirm('이 피드백을 삭제할까요?')) return;
+        try {
+          await api("DELETE", `/api/feedback/${id}`);
+          showToast('삭제됨');
+          loadFeedback();
+        } catch (err) {
+          showBanner('삭제 실패: ' + (err.message || err), 'error');
+        }
+      });
+    });
+  } catch (e) {
+    body.innerHTML = '<div class="fb-empty">불러오기 실패</div>';
+  } finally {
+    if (refreshBtn) refreshBtn.disabled = false;
+  }
+}
+
+document.getElementById("fb-refresh")?.addEventListener("click", loadFeedback);
+
 // ---------- init ----------
 async function init() {
   try {
@@ -1684,7 +1846,8 @@ async function init() {
     if (!st.authenticated) { showPinModal(); return; }
     hidePinModal();
     await loadList();
-    loadStats(); // 비동기, 실패해도 목록은 보임
+    loadStats();     // 비동기, 실패해도 목록은 보임
+    loadFeedback();  // 비동기
   } catch (e) {
     showPinModal();
   }

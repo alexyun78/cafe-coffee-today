@@ -3,6 +3,7 @@
 공개 엔드포인트는 GET /, GET /api/coffee, GET /apk.
 관리 엔드포인트는 세션 기반 PIN 인증 필요.
 """
+import hashlib
 import io
 import json
 import os
@@ -379,6 +380,104 @@ def api_delete(coffee_id):
 @require_pin
 def api_suggestions():
     return jsonify({"success": True, **db.suggestions()})
+
+
+# ---------- 피드백 ----------
+
+FEEDBACK_RATE_WINDOW_SEC = 3600     # 1시간
+FEEDBACK_RATE_MAX = 5               # IP당 1시간 5건
+FEEDBACK_MAX_CUP_NOTES = 3
+FEEDBACK_NICKNAME_MAX = 20
+FEEDBACK_COMMENT_MAX = 500
+FEEDBACK_NOTE_MAX = 30
+
+
+def _ip_hash() -> str:
+    raw = (_client_ip() + "|" + FLASK_SECRET).encode("utf-8")
+    return hashlib.sha256(raw).hexdigest()
+
+
+def _clean_notes(value) -> list:
+    """입력값을 정규화한 컵노트 리스트로. 빈 값/중복/길이초과 제거, 최대 3개."""
+    if not isinstance(value, list):
+        return []
+    out, seen = [], set()
+    for item in value:
+        if not isinstance(item, str):
+            continue
+        s = item.strip()[:FEEDBACK_NOTE_MAX]
+        if not s or s in seen:
+            continue
+        seen.add(s)
+        out.append(s)
+        if len(out) >= FEEDBACK_MAX_CUP_NOTES:
+            break
+    return out
+
+
+@app.post("/api/feedback")
+def api_feedback_create():
+    data = request.get_json(silent=True) or {}
+    try:
+        coffee_id = int(data.get("coffee_id"))
+        rating = int(data.get("rating"))
+    except (TypeError, ValueError):
+        return jsonify({"success": False, "error": "coffee_id와 rating(정수) 필수"}), 400
+    if not (1 <= rating <= 5):
+        return jsonify({"success": False, "error": "rating은 1~5"}), 400
+    if db.get_by_id(coffee_id) is None:
+        return jsonify({"success": False, "error": "coffee not found"}), 404
+
+    nickname = (data.get("nickname") or "").strip()[:FEEDBACK_NICKNAME_MAX]
+    comment = (data.get("comment") or "").strip()[:FEEDBACK_COMMENT_MAX]
+    notes = _clean_notes(data.get("cup_notes"))
+
+    ip_hash = _ip_hash()
+    if db.feedback_recent_count_by_ip(ip_hash, FEEDBACK_RATE_WINDOW_SEC) >= FEEDBACK_RATE_MAX:
+        return jsonify({
+            "success": False, "error": "rate_limited",
+            "retry_after": FEEDBACK_RATE_WINDOW_SEC,
+        }), 429
+
+    new_id = db.create_feedback(
+        coffee_id=coffee_id,
+        nickname=nickname,
+        rating=rating,
+        cup_notes_json=json.dumps(notes, ensure_ascii=False) if notes else "",
+        comment=comment,
+        ip_hash=ip_hash,
+    )
+    return jsonify({"success": True, "id": new_id})
+
+
+@app.get("/api/feedback")
+@require_pin
+def api_feedback_list():
+    """관리자 전체 조회. ?coffee_id=N 으로 필터링 가능."""
+    cid = request.args.get("coffee_id", "")
+    try:
+        cid_int = int(cid) if cid else None
+    except ValueError:
+        cid_int = None
+    if cid_int is not None:
+        items = db.list_feedback_for_coffee(cid_int, limit=500)
+    else:
+        items = db.list_feedback_all(limit=500)
+    return jsonify({"success": True, "items": items})
+
+
+@app.delete("/api/feedback/<int:feedback_id>")
+@require_pin
+def api_feedback_delete(feedback_id):
+    if not db.delete_feedback(feedback_id):
+        return jsonify({"success": False, "error": "not found"}), 404
+    return jsonify({"success": True})
+
+
+@app.get("/api/feedback/summary/<int:coffee_id>")
+def api_feedback_summary(coffee_id):
+    """공개 — 카드에 평균 별점/건수 표시할 때 사용."""
+    return jsonify({"success": True, **db.feedback_summary_for_coffee(coffee_id)})
 
 
 @app.get("/api/coffee/<int:coffee_id>/card.png")

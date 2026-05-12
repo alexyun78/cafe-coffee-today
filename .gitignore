@@ -74,3 +74,4 @@ cafe-coffee-apk/www/
 
 # 다운로드 산출물 (서버에 SCP로 배포됨)
 static/downloads/
+.env-ingest.*

@@ -62,6 +62,19 @@ CREATE TABLE IF NOT EXISTS visits (
 );
 CREATE INDEX IF NOT EXISTS idx_visits_date ON visits(date_kst);
 CREATE INDEX IF NOT EXISTS idx_visits_visitor ON visits(visitor_id);
+
+CREATE TABLE IF NOT EXISTS feedback (
+    id              INTEGER PRIMARY KEY AUTOINCREMENT,
+    coffee_id       INTEGER NOT NULL REFERENCES coffees(id) ON DELETE CASCADE,
+    nickname        TEXT,
+    rating          INTEGER NOT NULL,
+    cup_notes_json  TEXT,                -- JSON array, 최대 3개
+    comment         TEXT,
+    ip_hash         TEXT,                -- SHA256(ip + FLASK_SECRET) — 동일성 비교용
+    created_at      TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now'))
+);
+CREATE INDEX IF NOT EXISTS idx_feedback_coffee ON feedback(coffee_id, created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_feedback_ip ON feedback(ip_hash, created_at);
 """
 
 _EXTRA_COLUMNS = (
@@ -508,6 +521,124 @@ def stats_summary() -> dict:
         "total_pv": total_pv,
         "hourly_kst": hourly,
         "devices": devices,
+    }
+
+
+# ---------- 피드백 ----------
+
+def feedback_recent_count_by_ip(ip_hash: str, window_sec: int) -> int:
+    """현재 시각으로부터 window_sec 초 이내 동일 IP의 제출 건수.
+
+    created_at 는 'YYYY-MM-DDTHH:MM:SSZ' ISO 문자열이라 사전식 비교로 충분.
+    """
+    from datetime import timedelta
+    cutoff = (datetime.utcnow() - timedelta(seconds=window_sec)).strftime("%Y-%m-%dT%H:%M:%SZ")
+    with connect() as conn:
+        row = conn.execute(
+            "SELECT COUNT(*) AS c FROM feedback WHERE ip_hash=? AND created_at > ?",
+            (ip_hash, cutoff),
+        ).fetchone()
+    return row["c"] if row else 0
+
+
+def create_feedback(coffee_id: int, nickname: str, rating: int,
+                    cup_notes_json: str, comment: str, ip_hash: str) -> int:
+    with connect() as conn:
+        cur = conn.execute(
+            "INSERT INTO feedback "
+            "(coffee_id, nickname, rating, cup_notes_json, comment, ip_hash) "
+            "VALUES (?,?,?,?,?,?)",
+            (coffee_id, nickname or None, rating,
+             cup_notes_json or None, comment or None, ip_hash or None),
+        )
+        return cur.lastrowid
+
+
+def _feedback_row_to_dict(row: sqlite3.Row) -> dict:
+    import json as _json
+    notes = []
+    if row["cup_notes_json"]:
+        try:
+            notes = _json.loads(row["cup_notes_json"])
+            if not isinstance(notes, list):
+                notes = []
+        except (ValueError, TypeError):
+            notes = []
+    return {
+        "id": row["id"],
+        "coffee_id": row["coffee_id"],
+        "coffee_name": row["coffee_name"] if "coffee_name" in row.keys() else None,
+        "nickname": row["nickname"] or "",
+        "rating": row["rating"],
+        "cup_notes": notes,
+        "comment": row["comment"] or "",
+        "created_at": row["created_at"],
+    }
+
+
+def list_feedback_for_coffee(coffee_id: int, limit: int = 100) -> list:
+    """공개 노출용. ip_hash 는 응답에 포함하지 않음."""
+    with connect() as conn:
+        rows = conn.execute(
+            "SELECT id, coffee_id, nickname, rating, cup_notes_json, comment, created_at "
+            "FROM feedback WHERE coffee_id=? ORDER BY created_at DESC LIMIT ?",
+            (coffee_id, limit),
+        ).fetchall()
+    return [_feedback_row_to_dict(r) for r in rows]
+
+
+def list_feedback_all(limit: int = 500) -> list:
+    """관리자용. 커피 이름 조인."""
+    with connect() as conn:
+        rows = conn.execute(
+            "SELECT f.id, f.coffee_id, f.nickname, f.rating, f.cup_notes_json, "
+            "       f.comment, f.created_at, c.name AS coffee_name "
+            "FROM feedback f "
+            "LEFT JOIN coffees c ON c.id = f.coffee_id "
+            "ORDER BY f.created_at DESC LIMIT ?",
+            (limit,),
+        ).fetchall()
+    return [_feedback_row_to_dict(r) for r in rows]
+
+
+def delete_feedback(feedback_id: int) -> bool:
+    with connect() as conn:
+        cur = conn.execute("DELETE FROM feedback WHERE id=?", (feedback_id,))
+        return cur.rowcount > 0
+
+
+def feedback_summary_for_coffee(coffee_id: int) -> dict:
+    """공개 노출용 요약 — 평균 별점, 건수, 가장 많이 선택된 컵노트 top 5."""
+    import json as _json
+    with connect() as conn:
+        row = conn.execute(
+            "SELECT COUNT(*) AS c, AVG(rating) AS avg_rating "
+            "FROM feedback WHERE coffee_id=?",
+            (coffee_id,),
+        ).fetchone()
+        count = row["c"] if row else 0
+        avg = float(row["avg_rating"]) if row and row["avg_rating"] is not None else 0.0
+        rows = conn.execute(
+            "SELECT cup_notes_json FROM feedback WHERE coffee_id=? "
+            "AND cup_notes_json IS NOT NULL",
+            (coffee_id,),
+        ).fetchall()
+    tallies: dict[str, int] = {}
+    for r in rows:
+        try:
+            arr = _json.loads(r["cup_notes_json"])
+            if isinstance(arr, list):
+                for note in arr:
+                    if isinstance(note, str) and note.strip():
+                        k = note.strip()
+                        tallies[k] = tallies.get(k, 0) + 1
+        except (ValueError, TypeError):
+            continue
+    top_notes = sorted(tallies.items(), key=lambda x: (-x[1], x[0]))[:5]
+    return {
+        "count": count,
+        "avg_rating": round(avg, 2),
+        "top_notes": [{"note": k, "count": v} for k, v in top_notes],
     }
 
 
