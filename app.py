@@ -425,8 +425,15 @@ def api_feedback_create():
         return jsonify({"success": False, "error": "coffee_id와 rating(정수) 필수"}), 400
     if not (1 <= rating <= 5):
         return jsonify({"success": False, "error": "rating은 1~5"}), 400
-    if db.get_by_id(coffee_id) is None:
+    item = db.get_by_id(coffee_id)
+    if item is None:
         return jsonify({"success": False, "error": "coffee not found"}), 404
+    # 피드백은 지금 제공 중인 커피에만. 과거(완료)/미래(예정) 커피는 차단.
+    if item.get("상태") != "진행 중":
+        return jsonify({
+            "success": False, "error": "not_serving",
+            "message": "지금 제공 중인 커피에만 피드백을 남길 수 있어요",
+        }), 403
 
     nickname = (data.get("nickname") or "").strip()[:FEEDBACK_NICKNAME_MAX]
     comment = (data.get("comment") or "").strip()[:FEEDBACK_COMMENT_MAX]

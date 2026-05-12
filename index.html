@@ -2399,6 +2399,8 @@
                 if (!res.ok || !data.success) {
                     if (data.error === 'rate_limited') {
                         fbToast('잠깐 — 너무 자주 보내고 있어요. 잠시 후 다시 시도해주세요.');
+                    } else if (data.error === 'not_serving') {
+                        fbToast(data.message || '지금 제공 중인 커피에만 피드백을 남길 수 있어요');
                     } else {
                         fbToast('전송 실패: ' + (data.error || res.status));
                     }
