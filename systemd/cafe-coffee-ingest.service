@@ -1,0 +1,13 @@
+[Unit]
+Description=Cafe Today Coffee — daily insight ingest
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=/root/92cafe/cafe-today-coffee
+EnvironmentFile=/root/92cafe/cafe-today-coffee/.env
+ExecStart=/bin/bash /root/92cafe/cafe-today-coffee/scripts/ingest.sh
+StandardOutput=journal
+StandardError=journal
+TimeoutStartSec=15min

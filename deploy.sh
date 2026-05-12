@@ -5,11 +5,24 @@
 set -e
 cd /root/92cafe/cafe-today-coffee
 
+# ingest.sh 와 락 공유. 인제스트가 commit/push 도중이면
+# 그 사이에 reset --hard 가 끼어들어 commit 을 날리지 않게 skip.
+exec 9>/var/lock/cafe-coffee-ops.lock
+flock -n 9 || exit 0
+
 git fetch origin main --quiet
 LOCAL=$(git rev-parse HEAD)
 REMOTE=$(git rev-parse origin/main)
 
 if [ "$LOCAL" = "$REMOTE" ]; then
+  exit 0
+fi
+
+# 로컬이 원격보다 앞서 있으면(아직 push 안 된 commit) reset 금지.
+# 예: ingest.sh 가 commit 까지 했고 push 직전인 짧은 창에 deploy 가 끼어든 경우.
+BASE=$(git merge-base HEAD origin/main)
+if [ "$BASE" = "$REMOTE" ] && [ "$BASE" != "$LOCAL" ]; then
+  echo "[$(date -Iseconds)] 로컬이 원격보다 앞섬 — push 대기 commit 추정, skip"
   exit 0
 fi
 

@@ -157,7 +157,49 @@ python migrate_notion.py
 - [systemd/cafe-coffee.service](systemd/cafe-coffee.service) — gunicorn 앱 구동 (127.0.0.1:3002)
 - [systemd/cafe-coffee-deploy.service](systemd/cafe-coffee-deploy.service) — `deploy.sh` 1회 실행
 - [systemd/cafe-coffee-deploy.timer](systemd/cafe-coffee-deploy.timer) — 60초 주기 트리거
-- [deploy.sh](deploy.sh) (루트 레벨) — 서버에서 실행되는 배포 스크립트: `git fetch/reset → pip install(조건부) → systemctl restart`
+- [systemd/cafe-coffee-ingest.service](systemd/cafe-coffee-ingest.service) — `scripts/ingest.sh` 1회 실행
+- [systemd/cafe-coffee-ingest.timer](systemd/cafe-coffee-ingest.timer) — **매일 21:00 KST** 인사이트 인제스트
+- [deploy.sh](deploy.sh) (루트 레벨) — 서버에서 실행되는 배포 스크립트: `git fetch/reset → pip install(조건부) → systemctl restart`. `flock` 으로 ingest 와 충돌 방지.
+- [scripts/ingest.sh](scripts/ingest.sh) — 서버 인제스트 래퍼: `git pull → ingest_insights.py → git commit/push`. deploy.sh 와 같은 락 공유.
+
+### Coffee Insight 발행 파이프라인
+
+매일 자동 발행 흐름 (2026-05-12 이후):
+
+1. **21:00 KST 전** — Claude `/schedule` 클라우드 루틴이 `cafe-insight YYYY-MM-DD — *` sidecar JSON 을 Google Drive 에 업로드 (보통 22:00 → 20:30 으로 앞당겨야 함, 21:00 KST ingest 전에 끝나야 함).
+2. **21:00 KST** — 서버 `cafe-coffee-ingest.timer` 가 `scripts/ingest.sh` 실행:
+   - `git pull --ff-only`
+   - `.venv/bin/python scripts/ingest_insights.py` (Drive → static/insights/*.html|json + 차트 PNG)
+   - `git add static/insights/ static/img/insights/articles/`
+   - `git commit -m "chore(insights): ingest daily coffee insight (YYYY-MM-DD)"`
+   - `git push` (HTTPS + .env 의 `INGEST_GITHUB_TOKEN` PAT 사용, 임시 URL 로 토큰 미저장)
+3. **~21:01 KST** — `cafe-coffee-deploy.timer` 가 push 를 감지 → `git reset --hard` → `systemctl restart`. 사이트에 즉시 반영.
+
+**백업**: GitHub Actions [.github/workflows/ingest-insights.yml](.github/workflows/ingest-insights.yml) 은 `workflow_dispatch` 만 남겨둠 (Actions UI 에서 "Run workflow" 로 수동 실행 가능). 정기 cron 은 무료 티어에서 지연이 잦아 사용 안 함.
+
+**최초 1회 셋업 (서버에서)**:
+```bash
+# 1) .env 에 키 추가
+cat >> /root/92cafe/cafe-today-coffee/.env <<'EOF'
+GOOGLE_CLIENT_ID=...
+GOOGLE_CLIENT_SECRET=...
+GOOGLE_REFRESH_TOKEN=...
+INGEST_GITHUB_TOKEN=ghp_...   # contents:write 권한 fine-grained PAT
+EOF
+chmod 600 /root/92cafe/cafe-today-coffee/.env
+
+# 2) systemd 유닛 설치 + 활성화
+cd /root/92cafe/cafe-today-coffee
+cp systemd/cafe-coffee-ingest.service /etc/systemd/system/
+cp systemd/cafe-coffee-ingest.timer   /etc/systemd/system/
+systemctl daemon-reload
+systemctl enable --now cafe-coffee-ingest.timer
+systemctl list-timers cafe-coffee-ingest.timer
+
+# 3) (선택) 즉시 1회 테스트
+systemctl start cafe-coffee-ingest.service
+journalctl -u cafe-coffee-ingest.service -n 100 --no-pager
+```
 
 ---
 

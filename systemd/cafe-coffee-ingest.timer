@@ -1,0 +1,13 @@
+[Unit]
+Description=Cafe Today Coffee — daily insight ingest timer (21:00 KST)
+
+[Timer]
+# 매일 저녁 9시 (Asia/Seoul). 서버 타임존과 무관하게 KST 기준.
+OnCalendar=*-*-* 21:00:00 Asia/Seoul
+# 서버가 꺼져 있다가 켜졌을 때 놓친 시각이 있으면 즉시 한 번 실행
+Persistent=true
+AccuracySec=30s
+Unit=cafe-coffee-ingest.service
+
+[Install]
+WantedBy=timers.target

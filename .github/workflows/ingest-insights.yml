@@ -1,10 +1,9 @@
 name: Ingest Coffee Insights
 
-# 매일 22:30 KST = 13:30 UTC. cron은 UTC 기준.
-# /schedule 클라우드 루틴이 22:00 KST 에 Drive 에 sidecar JSON 을 올린 직후를 노린다.
+# 정기 실행은 server-side systemd timer (cafe-coffee-ingest.timer, 21:00 KST) 로 이전됨.
+# GitHub Actions 의 schedule cron 은 무료 티어에서 자주 30분~수 시간씩 밀려 의존 불가.
+# 이 워크플로는 서버가 꺼져 있거나 인제스트 실패 시의 수동 백업 용도로만 남김.
 on:
-  schedule:
-    - cron: "30 13 * * *"
   workflow_dispatch:
     # 수동 실행 가능 (Actions UI 의 "Run workflow")
 
