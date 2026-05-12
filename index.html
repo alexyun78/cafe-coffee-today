@@ -48,6 +48,30 @@
             color: #6F5B3E;
         }
 
+        /* 웹에서만 노출되는 홈(92cafe.co.kr) 버튼 — APK WebView에서는 JS로 숨김 */
+        .home-link {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 14px;
+            background: linear-gradient(135deg, #6F4E37, #8B6F47);
+            color: #fff;
+            border-radius: 999px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-decoration: none;
+            box-shadow: 0 4px 12px rgba(111, 78, 55, 0.25);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .home-link:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 16px rgba(111, 78, 55, 0.35);
+        }
+        .home-link.hidden { display: none; }
+
         /* 오늘의 커피 섹션 — 히어로 */
         .today-section {
             margin-bottom: 50px;
@@ -1308,6 +1332,7 @@
 <body>
     <div class="container">
         <div class="header">
+            <a id="home-link" class="home-link" href="https://92cafe.co.kr" aria-label="92cafe.co.kr 홈으로 이동">🏠 Home</a>
             <h1>오늘의 커피</h1>
             <p class="subtitle">매일 다른 92도씨 로스터리 커피를 만나보세요</p>
         </div>
@@ -2002,6 +2027,14 @@
 
         // 5분마다 자동 새로고침
         setInterval(loadCoffeeData, 5 * 60 * 1000);
+
+        // ---------- APK WebView에서는 Home 버튼 숨김 ----------
+        (function hideHomeInApk() {
+          const ua = navigator.userAgent;
+          if (!/Android.*wv\)|; wv\)/.test(ua)) return;
+          const btn = document.getElementById('home-link');
+          if (btn) btn.classList.add('hidden');
+        })();
 
         // ---------- APK 자동 업데이트 체크 ----------
         (function checkAppUpdate() {
