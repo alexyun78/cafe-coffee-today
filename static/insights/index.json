@@ -1,7 +1,24 @@
 {
   "version": 1,
-  "updated_at": "2026-05-11T14:58:24Z",
+  "updated_at": "2026-05-12T14:58:45Z",
   "items": [
+    {
+      "id": "2026-05-12-brewed-coffee-nr4a1-receptor-health",
+      "date": "2026-05-12",
+      "title_ko": "커피 폴리페놀이 항노화 핵수용체 NR4A1에 직접 결합해 세포 보호 효과를 유발한다",
+      "one_liner": "커피 폴리페놀이 NR4A1 수용체에 µM 친화도로 결합 — 노화·만성질환 방어 기전 분자 실증",
+      "categories_primary": [
+        "건강/영양"
+      ],
+      "categories_secondary": [
+        "화학/분석화학",
+        "커피 생화학"
+      ],
+      "hero_image": "/static/img/insights/hero/health.svg",
+      "journal": "Nutrients",
+      "pub_date": "2026-03-10",
+      "source_basis": "abstract_only"
+    },
     {
       "id": "2026-05-11-shade-grown-coffee-soil-enzymes",
       "date": "2026-05-11",

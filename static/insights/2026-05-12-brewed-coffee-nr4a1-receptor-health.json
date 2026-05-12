@@ -1,0 +1,101 @@
+{
+  "version": 1,
+  "id": "2026-05-12-brewed-coffee-nr4a1-receptor-health",
+  "date": "2026-05-12",
+  "slug": "brewed-coffee-nr4a1-receptor-health",
+  "title_ko": "커피 폴리페놀이 항노화 핵수용체 NR4A1에 직접 결합해 세포 보호 효과를 유발한다",
+  "title_original": "Brewed Coffee and Its Components Act Through Orphan Nuclear Receptor 4A1 (NR4A1)",
+  "one_liner": "커피 폴리페놀이 NR4A1 수용체에 µM 친화도로 결합 — 노화·만성질환 방어 기전 분자 실증",
+  "authors": "Amanuel Hailemariam, Srijana Upadhyay, Arafat Rahman Oany, Wai Ning Tiffany Tsui, Vinod Srivastava, Gargi Sivaram, Kelly Churion, Robert S. Chapkin, Laurie A. Davidson, Shoshana Eitan, James J. Cai, Roger Norton, Stephen Safe",
+  "journal": "Nutrients",
+  "pub_date": "2026-03-10",
+  "doi": "10.3390/nu18060877",
+  "categories_primary": [
+    "건강/영양"
+  ],
+  "categories_secondary": [
+    "화학/분석화학",
+    "커피 생화학"
+  ],
+  "summary": "텍사스 A&M대학교 Safe 연구팀은 커피의 건강 보호 효과가 고아 핵수용체 NR4A1을 통해 일어남을 실증했다. 형광 소광법·SPR·분자 도킹의 세 결합 분석을 통해 커피 추출물과 주요 폴리페놀(카페산·클로로젠산·페룰산·p-쿠마르산) 및 디테르페노이드(카웨올·카페스톨)가 모두 NR4A1 LBD에 µM 수준 친화도로 결합함을 확인했다. Rh30 암 세포 실험에서는 커피 성분이 농도 의존적으로 세포 성장을 억제했으며, NR4A1 RNAi 녹다운 시 효과가 약화되어 NR4A1 의존적 기전임을 입증했다. 카웨올과 카페스톨은 역작동제로 작용해 NR4A1을 억제했고, 카페인·퀴닌산은 결합은 하나 기능적 효과가 약해 건강 이익의 주역이 폴리페놀임을 지지한다.",
+  "key_findings": [
+    "커피 추출물 및 주요 폴리페놀·디테르페노이드가 NR4A1 LBD에 µM 수준 친화도로 직접 결합 (Kd < 10 µM)",
+    "형광 소광법 Kd: 카페산 ≈1.23 µM, 클로로젠산 ≈2.13 µM, 페룰산 ≈7.89 µM",
+    "SPR Kd: 카웨올 ≈0.75 µM, 카페스톨 ≈0.37 µM; 두 디테르페노이드는 역작동제로 작용",
+    "Rh30 세포에서 100–500 µM 커피 폴리페놀이 농도 의존적 세포 성장 억제; 카페산·클로로젠산·p-쿠마르산이 가장 강력",
+    "NR4A1 RNAi 녹다운 시 성장 억제 효과 약화·소실 → NR4A1 의존적 메커니즘 확인",
+    "카페인·퀴닌산은 결합은 하나 기능적 효과 미약 → 건강 이익의 주역은 폴리페놀"
+  ],
+  "methodology": "형광 소광법(fluorescence quenching assay), 표면 플라즈몬 공명(SPR), 분자 도킹으로 결합 친화도 측정. NR4A1 반응성 Rh30 세포주에서 전사활성화·세포 성장 억제·특정 유전자 발현 억제 평가. siRNA를 이용한 NR4A1 녹다운으로 인과 관계 검증.",
+  "implications": {
+    "농가/가공장": "해당 없음 (분자 약리학 연구로 재배·가공 단계와 직접 관련 없음)",
+    "로스터/큐그레이더": "카웨올·카페스톨은 비여과 브루잉(프렌치프레스·에스프레소)에서 더 많이 추출됨. 브루잉 방식이 건강 활성 성분 함량에 미치는 중요성을 재확인. 클로로젠산 보존을 위한 미디엄 이하 로스팅의 건강 기능 측면 근거 강화",
+    "R&D": "NR4A1 표적 커피 폴리페놀 기반 기능성 추출물 개발, 카웨올·카페스톨 역작동제 활용 항암·항염 연구, 디카페인 커피의 건강 동등성 입증 근거로 활용 가능"
+  },
+  "limitations": "in vitro 세포 연구 한계(Rh30 단일 세포주, 체내 흡수·대사 미반영). 폴리페놀 처리 농도(100–500 µM)가 실제 혈중 농도보다 높을 수 있음. 복합 혼합물의 시너지·길항 작용 미분석. 결정구조를 통한 결합 구조 직접 확인 필요.",
+  "glossary": [
+    {
+      "term": "NR4A1 (Nur77/TR3)",
+      "ko": "고아 핵수용체 4A1. 리간드 없이도 활성화되는 전사인자로 염증·세포사멸·대사 조절 관여"
+    },
+    {
+      "term": "Inverse Agonist",
+      "ko": "역작동제. 수용체 기저 활성을 오히려 낮추는 리간드"
+    },
+    {
+      "term": "Ligand-Binding Domain (LBD)",
+      "ko": "리간드 결합 도메인. 핵수용체에서 소분자가 결합하는 단백질 영역"
+    },
+    {
+      "term": "Chlorogenic Acid (CGA)",
+      "ko": "클로로젠산. 커피의 주요 폴리페놀, 강한 항산화·항염 특성"
+    },
+    {
+      "term": "Kahweol / Cafestol",
+      "ko": "카웨올·카페스톨. 커피 오일의 디테르페노이드 계열 화합물, 비여과 커피에서 주로 추출"
+    },
+    {
+      "term": "Surface Plasmon Resonance (SPR)",
+      "ko": "표면 플라즈몬 공명. 실시간 결합/해리 동역학을 측정하는 단백질 결합 분석법"
+    },
+    {
+      "term": "Rh30 cell line",
+      "ko": "Rh30 세포주. 인간 횡문근육종 유래 세포, NR4A1 연구 표준 모델"
+    },
+    {
+      "term": "RNA interference (RNAi)",
+      "ko": "RNA 간섭. 특정 유전자 발현을 선택적으로 억제하는 기전"
+    }
+  ],
+  "citation_apa": "Hailemariam, A., Upadhyay, S., Oany, A. R., Tsui, W. N. T., Srivastava, V., Sivaram, G., Churion, K., Chapkin, R. S., Davidson, L. A., Eitan, S., Cai, J. J., Norton, R., & Safe, S. (2026). Brewed coffee and its components act through orphan nuclear receptor 4A1 (NR4A1). Nutrients, 18(6), 877. https://doi.org/10.3390/nu18060877",
+  "links": {
+    "doi": "https://doi.org/10.3390/nu18060877",
+    "oa_pdf": "https://www.mdpi.com/2072-6643/18/6/877/pdf",
+    "journal_homepage": "https://www.mdpi.com/journal/nutrients"
+  },
+  "source_basis": "abstract_only",
+  "data_charts": [
+    {
+      "type": "bar",
+      "title": "NR4A1 LBD 결합 친화도 (Kd, µM) — 커피 폴리페놀 비교",
+      "x_labels": [
+        "카페스톨",
+        "카웨올",
+        "카페산",
+        "클로로젠산",
+        "페룰산"
+      ],
+      "y_label": "Kd (µM)",
+      "values": [
+        0.37,
+        0.75,
+        1.23,
+        2.13,
+        7.89
+      ],
+      "unit": "µM"
+    }
+  ],
+  "drive_doc_url": "https://docs.google.com/document/d/1GaLYzLZm6Thh9MEDRrQIm21A39Vx_znviCEOo-aJwqM/edit",
+  "hero_image": "/static/img/insights/hero/health.svg"
+}
