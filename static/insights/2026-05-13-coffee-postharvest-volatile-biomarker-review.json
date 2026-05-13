@@ -1,0 +1,76 @@
+{
+  "version": 1,
+  "id": "2026-05-13-coffee-postharvest-volatile-biomarker-review",
+  "date": "2026-05-13",
+  "slug": "coffee-postharvest-volatile-biomarker-review",
+  "title_ko": "커피 원두 수확 후 단계별 방향족 휘발성 바이오마커 추적 리뷰",
+  "title_original": "Tracking Aromatic Volatile Biomarkers Through Coffee Bean Postharvest Stages",
+  "one_liner": "수확부터 로스팅까지 4단계 공정 이상을 포착하는 휘발성 바이오마커 체계 최초 종합 — 800종 이상 중 신뢰 근거 갖춘 단계 특이적 마커 패턴 규명",
+  "authors": "Alexa J. Pajuelo-Muñoz, Ilse S. Cayo-Colca, Carlos Granda-Wong, César R. Balcázar-Zumaeta 외 (페루 아마조나스 국립 토리비오 로드리게스 데 멘도사 대학교, UNTRM)",
+  "journal": "Molecules (MDPI)",
+  "pub_date": "2026-03-04",
+  "doi": "10.3390/molecules31050853",
+  "categories_primary": [
+    "향미/관능"
+  ],
+  "categories_secondary": [
+    "화학/분석화학",
+    "생두"
+  ],
+  "summary": "커피 원두에서 800종 이상의 휘발성 화합물이 확인되었으나 '휘발성 바이오마커'(단계 특이적 일관된 지표)와 단순 '품질 관련 휘발성 물질'을 구분하는 프레임워크가 부재했다. 이 리뷰는 수확 후 4단계(수확, 펄핑·발효, 건조, 로스팅)별 바이오마커를 최초로 체계화했다. 수확: 알데히드·푸란·락톤이 성숙도·결함 지표; 발효: 2-페닐에탄올·아세트산에틸·메틸페닐아세테이트가 발효 균형 지표; 건조: 지질 산화 알데히드+에스터 잔류량이 탈수 동역학·산화 안정성 지표; 로스팅: 피라진·푸란·티올·페놀이 로스트 정도·열과잉·최종 향미 통합 지표. 향후 산지별 임계 범위 데이터베이스 구축과 분석 표준화가 과제.",
+  "key_findings": [
+    "커피 원두에서 800종 이상 휘발성 화합물 확인; '바이오마커' 인정 기준(단계 특이적 일관된 근거)을 처음으로 정의·분류",
+    "수확 단계 바이오마커: 알데히드·푸란·락톤 → 과실 성숙도 및 생리적 결함 지표 (이후 전 단계의 화학적 출발점)",
+    "발효 단계 긍정적 바이오마커: 2-페닐에탄올, 아세트산에틸, 메틸페닐아세테이트 → 점액질 관리 적절성 + 발효 균형 지표",
+    "건조 단계 바이오마커: 지질 산화 유래 알데히드 증가 + 방향족 에스터 잔류량 → 탈수 속도 및 산화 안정성 지표",
+    "로스팅 단계 통합 바이오마커: 피라진·푸란·티올·페놀 → 로스팅 정도, 열과잉 노출, 최종 향미 발현 지표",
+    "현재 한계: 산지·가공 시스템별 임계 농도 범위 데이터베이스 미구축, 분석 방법 비표준화"
+  ],
+  "methodology": "체계적 문헌 고찰(systematic review) 방식의 리뷰 논문. 수확 후 처리 4단계(수확, 펄핑·발효, 건조, 로스팅)별 커피 휘발성 화합물 관련 최신 1차 연구를 검토하고, '품질 관련 휘발성 물질'과 '휘발성 바이오마커'를 개념적으로 구분하는 분류 체계를 제안. 검토 분석 기법: GC-MS, SPME, 전자코(electronic nose) 등.",
+  "implications": {
+    "농가/가공장": "수확 시점(과실 성숙도) 관리와 발효·건조 조건이 2-페닐에탄올·에틸에스터 등 긍정적 향미 바이오마커 생성에 직결됨을 화학적으로 재확인. 발효 중 불쾌 알데히드·고급 알코올 급증을 모니터링하면 가공 실패를 조기 감지하는 지표로 활용 가능",
+    "로스터/큐그레이더": "동일 산지라도 수확 후 처리 이력이 다른 로트는 피라진·티올 생성 패턴이 달라짐. 생두 구매 시 GC-MS 또는 전자코 데이터로 발효 품질 바이오마커를 확인하는 접근의 이론적 토대; 티올 보존을 위한 라이트·미디엄 로스팅 타이밍 최적화에 화학적 논리 제공",
+    "R&D": "단계별 휘발성 바이오마커 기반 실시간 품질 모니터링 시스템 개발의 이론적 프레임워크. 산지·품종별 임계 범위 데이터베이스, 휴대용 GC·전자코 결합 현장 모니터링 기기, 스마트 발효·건조 자동제어 연구의 직접적 문헌 기반"
+  },
+  "limitations": "리뷰 논문으로 독자적 1차 실험 데이터 없음; 산지·품종·가공 시스템별 바이오마커 임계 농도 범위 데이터베이스 미구축; 분석 방법 비표준화로 연구 간 직접 비교 어려움; 특정 바이오마커의 감각적 역치와 관능 특성 간 정량적 연결 부족",
+  "glossary": [
+    {
+      "term": "Volatile Biomarker",
+      "ko": "휘발성 바이오마커 — 특정 처리 단계나 조건의 일관된 지표로 축적된 근거를 갖는 화합물·패턴"
+    },
+    {
+      "term": "2-Phenylethanol (2-PE)",
+      "ko": "2-페닐에탄올 — 장미·꿀향 알코올. 효모 페닐알라닌 대사(Ehrlich 경로) 산물. 발효 건강성 양성 바이오마커"
+    },
+    {
+      "term": "Ethyl Acetate",
+      "ko": "아세트산에틸 — 과실향 에스터. 발효 중 에탄올-아세트산 반응 산물. 적정량 긍정적, 과다 시 결함 지표"
+    },
+    {
+      "term": "Pyrazine",
+      "ko": "피라진 — 마이야르 반응·스트레커 분해 산물. 구운향·견과향·코코아향. 로스팅 정도의 핵심 화학적 지표"
+    },
+    {
+      "term": "Thiol",
+      "ko": "티올 — 황 함유 휘발성 화합물. 3-MH 등 라이트 로스팅에서 열대 과실향 기여. 열 불안정"
+    },
+    {
+      "term": "SPME",
+      "ko": "고체상 마이크로 추출 — 흡착 섬유를 이용한 휘발성 화합물 전처리 기법. GC-MS와 결합"
+    },
+    {
+      "term": "Mucilage",
+      "ko": "점액질 — 커피 과피 안쪽의 당질·펙틴층. 발효 미생물의 주요 기질"
+    }
+  ],
+  "citation_apa": "Pajuelo-Muñoz, A. J., Cayo-Colca, I. S., Granda-Wong, C., & Balcázar-Zumaeta, C. R. (2026). Tracking aromatic volatile biomarkers through coffee bean postharvest stages. Molecules, 31(5), 853. https://doi.org/10.3390/molecules31050853",
+  "links": {
+    "doi": "https://doi.org/10.3390/molecules31050853",
+    "oa_pdf": "https://www.mdpi.com/1420-3049/31/5/853/pdf",
+    "journal_homepage": "https://www.mdpi.com/journal/molecules"
+  },
+  "source_basis": "abstract_only",
+  "data_charts": [],
+  "drive_doc_url": "https://docs.google.com/document/d/1aQWD2ja4DJi8kd52lOe5Xi5YfAQv9kBDs4eQ9zOvHWI/edit",
+  "hero_image": "/static/img/insights/hero/flavor.svg"
+}

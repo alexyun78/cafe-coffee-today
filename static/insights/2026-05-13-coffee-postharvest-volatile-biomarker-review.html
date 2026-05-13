@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>커피 원두 수확 후 단계별 방향족 휘발성 바이오마커 추적 리뷰 — 92°C ROASTERY</title>
+<meta name="description" content="수확부터 로스팅까지 4단계 공정 이상을 포착하는 휘발성 바이오마커 체계 최초 종합 — 800종 이상 중 신뢰 근거 갖춘 단계 특이적 마커 패턴 규명">
+<link rel="icon" type="image/png" href="/static/img/logo-92black.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --canvas: #FFFFFF; --canvas-warm: #FAF7F2; --canvas-stone: #F2ECE3;
+  --ink: #1A1410; --ink-mute: #4A3F36; --ink-soft: #6B5E52;
+  --espresso: #6F4E37; --caramel: #C9986A; --copper: #B5703D;
+  --line: #E8E0D5; --line-soft: #F0E9DD;
+  --font-display: "Cormorant Garamond", "Pretendard", serif;
+  --font-body: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  --r-sm: 6px; --r-md: 12px; --r-pill: 999px;
+}
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color: transparent; }
+html { scroll-behavior: smooth; }
+body { font-family: var(--font-body); color: var(--ink); background: var(--canvas); font-feature-settings: "kern","ss01"; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+a { color: var(--copper); text-decoration: none; border-bottom: 1px solid transparent; transition: border-color .2s; }
+a:hover { border-bottom-color: var(--copper); }
+img { display: block; max-width: 100%; height: auto; }
+.container { max-width: 860px; margin: 0 auto; padding: 0 32px; }
+@media (max-width: 720px) { .container { padding: 0 20px; } }
+@media (max-width: 480px) { .container { padding: 0 16px; } }
+.site-nav { position: sticky; top: 0; z-index: 50; background: rgba(255,255,255,0.9); backdrop-filter: saturate(140%) blur(14px); -webkit-backdrop-filter: saturate(140%) blur(14px); border-bottom: 1px solid var(--line-soft); }
+.nav-inner { max-width: 1200px; margin: 0 auto; padding: 16px 32px; display: flex; align-items: center; justify-content: space-between; }
+.brand { font-family: var(--font-display); font-size: 1.3rem; font-weight: 700; color: var(--ink); display: inline-flex; align-items: center; gap: 4px; border-bottom: none; }
+.brand:hover { border-bottom: none; }
+.brand-mark { display: inline-flex; align-items: flex-start; font-family: "Pretendard", sans-serif; font-weight: 900; letter-spacing: -0.04em; line-height: 1; color: inherit; }
+.temp-mark { display: flex; flex-direction: column; line-height: .82; margin: 0 .05em 0 .04em; }
+.temp-mark .temp-deg { font-size: .42em; letter-spacing: -.04em; }
+.temp-mark .temp-c { font-size: .58em; letter-spacing: -.05em; margin-top: -.05em; }
+.nav-back { font-family: var(--font-mono); font-size: .75rem; letter-spacing: .18em; color: var(--ink-mute); border-bottom: none; }
+.nav-back:hover { color: var(--copper); border-bottom: none; }
+.article-hero { padding: 56px 0 48px; border-bottom: 1px solid var(--line-soft); }
+.eyebrow { font-family: var(--font-mono); font-size: .72rem; letter-spacing: .28em; color: var(--copper); margin-bottom: 18px; display: flex; align-items: center; gap: 12px; }
+.eyebrow::before { content: ""; display: inline-block; width: 28px; height: 1px; background: var(--copper); }
+.article-title { font-family: var(--font-display); font-weight: 500; font-size: clamp(2rem, 4.5vw, 3.2rem); line-height: 1.15; letter-spacing: -0.02em; color: var(--ink); margin-bottom: 20px; }
+.article-title em { font-style: italic; color: var(--espresso); font-weight: 600; }
+.article-one-liner { font-family: var(--font-display); font-style: italic; font-size: 1.3rem; line-height: 1.5; color: var(--espresso); margin-bottom: 28px; padding-left: 20px; border-left: 3px solid var(--caramel); }
+.article-meta { display: flex; gap: 24px; flex-wrap: wrap; font-family: var(--font-mono); font-size: .75rem; letter-spacing: .12em; color: var(--ink-soft); padding-top: 20px; border-top: 1px solid var(--line-soft); }
+.article-meta span { display: inline-flex; align-items: center; gap: 6px; }
+.article-meta span::before { content: "■"; color: var(--caramel); font-size: .55rem; }
+.hero-image { margin: 32px 0 0; border-radius: var(--r-md); overflow: hidden; border: 1px solid var(--line); }
+.hero-image img { width: 100%; }
+.article-body { padding: 56px 0 80px; }
+.section-block { margin-bottom: 56px; }
+.section-block:last-child { margin-bottom: 0; }
+.section-block h2 { font-family: var(--font-display); font-weight: 600; font-size: 1.85rem; line-height: 1.2; letter-spacing: -0.01em; color: var(--ink); margin-bottom: 18px; display: flex; align-items: baseline; gap: 14px; }
+.section-block h2::before { content: ""; display: inline-block; width: 10px; height: 10px; background: var(--caramel); border-radius: 2px; }
+.section-block p { font-size: 1.04rem; color: var(--ink-mute); line-height: 1.85; margin-bottom: 18px; }
+.section-block p:last-child { margin-bottom: 0; }
+ul.findings { list-style: none; padding: 0; counter-reset: f; }
+ul.findings li { position: relative; padding: 16px 18px 16px 56px; font-size: 1rem; color: var(--ink-mute); line-height: 1.75; background: var(--canvas-warm); border: 1px solid var(--line); border-radius: var(--r-sm); margin-bottom: 12px; counter-increment: f; }
+ul.findings li::before { content: counter(f, decimal-leading-zero); position: absolute; left: 18px; top: 18px; font-family: var(--font-mono); font-size: .85rem; font-weight: 600; color: var(--copper); letter-spacing: .04em; }
+.implications-grid { display: grid; gap: 18px; grid-template-columns: 1fr; }
+.implication-card { padding: 22px 24px; background: var(--canvas-warm); border: 1px solid var(--line); border-radius: var(--r-md); border-left: 3px solid var(--caramel); }
+.implication-card h3 { font-family: var(--font-mono); font-size: .8rem; letter-spacing: .18em; color: var(--copper); margin-bottom: 10px; font-weight: 600; }
+.implication-card p { font-size: 1rem; color: var(--ink-mute); line-height: 1.75; }
+.glossary-list { list-style: none; padding: 0; }
+.glossary-list li { padding: 16px 0; border-bottom: 1px solid var(--line-soft); display: grid; grid-template-columns: 220px 1fr; gap: 24px; font-size: 1rem; line-height: 1.7; }
+.glossary-list li:last-child { border-bottom: none; }
+.glossary-list dt { font-family: var(--font-display); font-style: italic; font-size: 1.05rem; color: var(--espresso); font-weight: 600; }
+.glossary-list dd { color: var(--ink-mute); }
+@media (max-width: 600px) { .glossary-list li { grid-template-columns: 1fr; gap: 4px; } }
+.citation-block { margin-top: 12px; padding: 22px 24px; background: var(--canvas-warm); border: 1px solid var(--line); border-radius: var(--r-md); font-family: var(--font-mono); font-size: .85rem; color: var(--ink-mute); line-height: 1.7; word-break: break-word; }
+.links-row { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 18px; }
+.link-pill { display: inline-flex; align-items: center; gap: 8px; padding: 9px 16px; background: var(--canvas-warm); border: 1px solid var(--line); border-radius: var(--r-pill); font-family: var(--font-mono); font-size: .78rem; letter-spacing: .08em; color: var(--ink-mute); border-bottom: 1px solid var(--line); transition: border-color .2s, color .2s; }
+.link-pill:hover { color: var(--copper); border-color: var(--copper); }
+.charts-grid { display: grid; gap: 28px; grid-template-columns: 1fr; }
+@media (min-width: 720px) { .charts-grid { grid-template-columns: 1fr 1fr; } }
+.chart-card { padding: 24px 24px 18px; background: var(--canvas); border: 1px solid var(--line); border-radius: var(--r-md); }
+.chart-title { font-family: var(--font-display); font-size: 1.1rem; font-weight: 600; color: var(--ink); margin-bottom: 14px; line-height: 1.3; }
+.chart-svg { width: 100%; height: auto; display: block; }
+.chart-svg .bar { fill: var(--caramel); transition: fill .2s; }
+.chart-svg .bar.highlight { fill: var(--copper); }
+.chart-svg .axis-line { stroke: var(--line); stroke-width: 1; }
+.chart-svg .axis-label { font-family: var(--font-mono); font-size: 11px; fill: var(--ink-soft); }
+.chart-svg .value-label { font-family: var(--font-mono); font-size: 11px; font-weight: 600; fill: var(--espresso); }
+.chart-svg .y-label { font-family: var(--font-mono); font-size: 10px; fill: var(--ink-soft); letter-spacing: .1em; }
+.figures-grid { display: flex; flex-direction: column; gap: 24px; }
+.figure-card { border: 1px solid var(--line); border-radius: var(--r-md); overflow: hidden; }
+.figure-card img { width: 100%; }
+.figure-caption { padding: 14px 18px; font-size: .9rem; color: var(--ink-soft); font-family: var(--font-body); line-height: 1.6; background: var(--canvas-warm); border-top: 1px solid var(--line); }
+.source-basis { display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; background: rgba(201,152,106,.18); border: 1px solid rgba(181,112,61,.35); border-radius: var(--r-pill); font-family: var(--font-mono); font-size: .72rem; letter-spacing: .12em; color: var(--espresso); font-weight: 500; }
+.source-basis.abstract { background: rgba(107,94,82,.1); border-color: rgba(107,94,82,.3); color: var(--ink-soft); }
+.article-footer { padding: 36px 0 56px; border-top: 1px solid var(--line-soft); text-align: center; font-family: var(--font-mono); font-size: .75rem; letter-spacing: .14em; color: var(--ink-soft); }
+.article-footer a { color: var(--ink-mute); border-bottom: 1px solid transparent; }
+.article-footer a:hover { color: var(--copper); border-bottom-color: var(--copper); }
+@media (max-width: 720px) {
+  .article-hero { padding: 36px 0 32px; }
+  .article-body { padding: 36px 0 56px; }
+  .section-block { margin-bottom: 40px; }
+  .section-block h2 { font-size: 1.5rem; }
+  .article-meta { gap: 12px 18px; font-size: .68rem; }
+}
+</style>
+</head>
+<body>
+
+<header class="site-nav">
+  <div class="nav-inner">
+    <a class="brand" href="/">
+      <span class="brand-mark">92<span class="temp-mark"><span class="temp-deg">°</span><span class="temp-c">C</span></span></span>ROASTERY
+    </a>
+    <a class="nav-back" href="/insight">← INSIGHTS</a>
+  </div>
+</header>
+
+<article>
+  <section class="article-hero">
+    <div class="container">
+      <div class="eyebrow">— COFFEE INSIGHT · 2026.05.13</div>
+      <h1 class="article-title">커피 원두 수확 후 단계별 방향족 휘발성 바이오마커 추적 리뷰</h1>
+      <p class="article-one-liner">수확부터 로스팅까지 4단계 공정 이상을 포착하는 휘발성 바이오마커 체계 최초 종합 — 800종 이상 중 신뢰 근거 갖춘 단계 특이적 마커 패턴 규명</p>
+      <div class="article-meta">
+        <span>MOLECULES (MDPI)</span>
+        <span>2026-03-04</span>
+        <span>DOI 10.3390/MOLECULES31050853</span>
+        <span>향미/관능 · 화학/분석화학 · 생두</span>
+      </div>
+      
+      <div class="hero-image">
+        <img src="/static/img/insights/hero/flavor.svg" alt="커피 원두 수확 후 단계별 방향족 휘발성 바이오마커 추적 리뷰">
+      </div>
+      
+    </div>
+  </section>
+
+  <section class="article-body">
+    <div class="container">
+
+      
+      <div class="section-block">
+        <h2>요약</h2>
+        <p>커피 원두에서 800종 이상의 휘발성 화합물이 확인되었으나 &#39;휘발성 바이오마커&#39;(단계 특이적 일관된 지표)와 단순 &#39;품질 관련 휘발성 물질&#39;을 구분하는 프레임워크가 부재했다. 이 리뷰는 수확 후 4단계(수확, 펄핑·발효, 건조, 로스팅)별 바이오마커를 최초로 체계화했다. 수확: 알데히드·푸란·락톤이 성숙도·결함 지표; 발효: 2-페닐에탄올·아세트산에틸·메틸페닐아세테이트가 발효 균형 지표; 건조: 지질 산화 알데히드+에스터 잔류량이 탈수 동역학·산화 안정성 지표; 로스팅: 피라진·푸란·티올·페놀이 로스트 정도·열과잉·최종 향미 통합 지표. 향후 산지별 임계 범위 데이터베이스 구축과 분석 표준화가 과제.</p>
+      </div>
+      
+
+      
+      <div class="section-block">
+        <h2>핵심 발견</h2>
+        <ul class="findings">
+          <li>커피 원두에서 800종 이상 휘발성 화합물 확인; &#39;바이오마커&#39; 인정 기준(단계 특이적 일관된 근거)을 처음으로 정의·분류</li><li>수확 단계 바이오마커: 알데히드·푸란·락톤 → 과실 성숙도 및 생리적 결함 지표 (이후 전 단계의 화학적 출발점)</li><li>발효 단계 긍정적 바이오마커: 2-페닐에탄올, 아세트산에틸, 메틸페닐아세테이트 → 점액질 관리 적절성 + 발효 균형 지표</li><li>건조 단계 바이오마커: 지질 산화 유래 알데히드 증가 + 방향족 에스터 잔류량 → 탈수 속도 및 산화 안정성 지표</li><li>로스팅 단계 통합 바이오마커: 피라진·푸란·티올·페놀 → 로스팅 정도, 열과잉 노출, 최종 향미 발현 지표</li><li>현재 한계: 산지·가공 시스템별 임계 농도 범위 데이터베이스 미구축, 분석 방법 비표준화</li>
+        </ul>
+      </div>
+      
+
+      
+
+      
+
+      
+      <div class="section-block">
+        <h2>방법론</h2>
+        <p>체계적 문헌 고찰(systematic review) 방식의 리뷰 논문. 수확 후 처리 4단계(수확, 펄핑·발효, 건조, 로스팅)별 커피 휘발성 화합물 관련 최신 1차 연구를 검토하고, &#39;품질 관련 휘발성 물질&#39;과 &#39;휘발성 바이오마커&#39;를 개념적으로 구분하는 분류 체계를 제안. 검토 분석 기법: GC-MS, SPME, 전자코(electronic nose) 등.</p>
+      </div>
+      
+
+      
+      <div class="section-block">
+        <h2>시사점</h2>
+        <div class="implications-grid">
+          
+          <div class="implication-card">
+            <h3>농가 · 가공장</h3>
+            <p>수확 시점(과실 성숙도) 관리와 발효·건조 조건이 2-페닐에탄올·에틸에스터 등 긍정적 향미 바이오마커 생성에 직결됨을 화학적으로 재확인. 발효 중 불쾌 알데히드·고급 알코올 급증을 모니터링하면 가공 실패를 조기 감지하는 지표로 활용 가능</p>
+          </div>
+          
+          <div class="implication-card">
+            <h3>로스터 · 큐그레이더</h3>
+            <p>동일 산지라도 수확 후 처리 이력이 다른 로트는 피라진·티올 생성 패턴이 달라짐. 생두 구매 시 GC-MS 또는 전자코 데이터로 발효 품질 바이오마커를 확인하는 접근의 이론적 토대; 티올 보존을 위한 라이트·미디엄 로스팅 타이밍 최적화에 화학적 논리 제공</p>
+          </div>
+          
+          <div class="implication-card">
+            <h3>R&amp;D</h3>
+            <p>단계별 휘발성 바이오마커 기반 실시간 품질 모니터링 시스템 개발의 이론적 프레임워크. 산지·품종별 임계 범위 데이터베이스, 휴대용 GC·전자코 결합 현장 모니터링 기기, 스마트 발효·건조 자동제어 연구의 직접적 문헌 기반</p>
+          </div>
+          
+        </div>
+      </div>
+      
+
+      
+      <div class="section-block">
+        <h2>한계</h2>
+        <p>리뷰 논문으로 독자적 1차 실험 데이터 없음; 산지·품종·가공 시스템별 바이오마커 임계 농도 범위 데이터베이스 미구축; 분석 방법 비표준화로 연구 간 직접 비교 어려움; 특정 바이오마커의 감각적 역치와 관능 특성 간 정량적 연결 부족</p>
+      </div>
+      
+
+      
+      <div class="section-block">
+        <h2>용어집</h2>
+        <ul class="glossary-list">
+          
+          <li><dt>Volatile Biomarker</dt><dd>휘발성 바이오마커 — 특정 처리 단계나 조건의 일관된 지표로 축적된 근거를 갖는 화합물·패턴</dd></li>
+          
+          <li><dt>2-Phenylethanol (2-PE)</dt><dd>2-페닐에탄올 — 장미·꿀향 알코올. 효모 페닐알라닌 대사(Ehrlich 경로) 산물. 발효 건강성 양성 바이오마커</dd></li>
+          
+          <li><dt>Ethyl Acetate</dt><dd>아세트산에틸 — 과실향 에스터. 발효 중 에탄올-아세트산 반응 산물. 적정량 긍정적, 과다 시 결함 지표</dd></li>
+          
+          <li><dt>Pyrazine</dt><dd>피라진 — 마이야르 반응·스트레커 분해 산물. 구운향·견과향·코코아향. 로스팅 정도의 핵심 화학적 지표</dd></li>
+          
+          <li><dt>Thiol</dt><dd>티올 — 황 함유 휘발성 화합물. 3-MH 등 라이트 로스팅에서 열대 과실향 기여. 열 불안정</dd></li>
+          
+          <li><dt>SPME</dt><dd>고체상 마이크로 추출 — 흡착 섬유를 이용한 휘발성 화합물 전처리 기법. GC-MS와 결합</dd></li>
+          
+          <li><dt>Mucilage</dt><dd>점액질 — 커피 과피 안쪽의 당질·펙틴층. 발효 미생물의 주요 기질</dd></li>
+          
+        </ul>
+      </div>
+      
+
+      <div class="section-block">
+        <h2>인용 · 링크</h2>
+        <div class="citation-block">Pajuelo-Muñoz, A. J., Cayo-Colca, I. S., Granda-Wong, C., &amp; Balcázar-Zumaeta, C. R. (2026). Tracking aromatic volatile biomarkers through coffee bean postharvest stages. Molecules, 31(5), 853. https://doi.org/10.3390/molecules31050853</div>
+        <div class="links-row">
+          <a class="link-pill" href="https://doi.org/10.3390/molecules31050853" target="_blank" rel="noopener noreferrer">DOI →</a>
+          <a class="link-pill" href="https://www.mdpi.com/1420-3049/31/5/853/pdf" target="_blank" rel="noopener noreferrer">OA PDF →</a>
+          <a class="link-pill" href="https://www.mdpi.com/journal/molecules" target="_blank" rel="noopener noreferrer">JOURNAL HOMEPAGE →</a>
+        </div>
+        <div style="margin-top: 18px;">
+          
+          <span class="source-basis abstract">ABSTRACT BASIS</span>
+          
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <footer class="article-footer">
+    <div class="container">
+      <a href="/insight">← BACK TO INSIGHTS</a>
+      <span style="margin: 0 16px;">·</span>
+      <a href="/">HOME</a>
+    </div>
+  </footer>
+</article>
+
+
+
+</body>
+</html>
