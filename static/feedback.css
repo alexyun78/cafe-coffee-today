@@ -9,37 +9,60 @@
  *   - 모달은 feedback.js 가 첫 호출 시 body 에 주입.
  * ============================================================ */
 
-/* ===== 버튼 ===== */
+/* ===== 버튼 =====
+ * 카드 배경(브라운 그라디언트)에 묻히지 않도록 비비드한 오렌지-레드 그라디언트 +
+ * 글로우 + 은은한 펄스로 시선을 끈다. */
 .feedback-btn {
     position: absolute;
     top: 16px;
     right: 16px;
-    background: rgba(255, 255, 255, 0.18);
+    background: linear-gradient(135deg, #FF8A00 0%, #FF3D00 100%);
     color: #fff;
-    border: 1px solid rgba(255, 255, 255, 0.35);
-    padding: 7px 14px;
+    border: 1.5px solid rgba(255, 255, 255, 0.7);
+    padding: 8px 16px;
     border-radius: 999px;
-    font-size: 0.85rem;
-    font-weight: 600;
+    font-size: 0.88rem;
+    font-weight: 700;
+    letter-spacing: 0.2px;
     cursor: pointer;
-    backdrop-filter: blur(4px);
-    -webkit-backdrop-filter: blur(4px);
-    transition: background 0.2s ease, transform 0.2s ease;
+    box-shadow:
+        0 4px 14px rgba(255, 61, 0, 0.55),
+        0 0 0 4px rgba(255, 138, 0, 0.18);
+    transition: transform 0.18s ease, box-shadow 0.18s ease, filter 0.18s ease;
     z-index: 2;
     font-family: inherit;
     -webkit-tap-highlight-color: transparent;
+    animation: feedbackPulse 2.2s ease-in-out infinite;
 }
-.feedback-btn:hover { background: rgba(255, 255, 255, 0.28); transform: translateY(-1px); }
-.feedback-btn:active { transform: translateY(0); }
+.feedback-btn:hover {
+    transform: translateY(-1px) scale(1.04);
+    filter: brightness(1.08);
+    box-shadow:
+        0 6px 18px rgba(255, 61, 0, 0.7),
+        0 0 0 6px rgba(255, 138, 0, 0.22);
+}
+.feedback-btn:active { transform: translateY(0) scale(1); }
 
-/* roastery 같은 밝은/투명 카드에서도 가독성 보장: 카드 배경이 밝으면
- * 자동으로 어두운 톤. 사용 페이지에서 .feedback-btn--dark 로 override 가능. */
-.feedback-btn--dark {
-    background: rgba(30, 20, 12, 0.78);
-    color: #fff;
-    border-color: rgba(255, 255, 255, 0.18);
+@keyframes feedbackPulse {
+    0%, 100% {
+        box-shadow:
+            0 4px 14px rgba(255, 61, 0, 0.55),
+            0 0 0 0 rgba(255, 138, 0, 0.45);
+    }
+    50% {
+        box-shadow:
+            0 4px 14px rgba(255, 61, 0, 0.55),
+            0 0 0 8px rgba(255, 138, 0, 0);
+    }
 }
-.feedback-btn--dark:hover { background: rgba(30, 20, 12, 0.92); }
+
+/* roastery 같은 밝은/투명 카드용 변형 — 동일한 비비드 톤 유지 (override 시 사용). */
+.feedback-btn--dark {
+    background: linear-gradient(135deg, #FF8A00 0%, #E63900 100%);
+    color: #fff;
+    border-color: rgba(255, 255, 255, 0.55);
+}
+.feedback-btn--dark:hover { filter: brightness(1.08); }
 
 /* ===== 모달 ===== */
 .fb-modal {
