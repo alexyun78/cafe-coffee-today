@@ -32,6 +32,8 @@ except ImportError:
     pass
 
 import db
+import requests
+import xml.etree.ElementTree as ET
 
 ADMIN_PIN = os.environ.get("ADMIN_PIN", "")
 FLASK_SECRET = os.environ.get("FLASK_SECRET", "dev-secret-change-me")
@@ -148,6 +150,7 @@ def add_security_headers(resp):
         "font-src 'self' data: https://fonts.gstatic.com https://cdn.jsdelivr.net; "
         "script-src 'self' 'unsafe-inline'; "
         "connect-src 'self'; "
+        "frame-src https://www.youtube.com https://www.youtube-nocookie.com; "
         "frame-ancestors 'none'; "
         "base-uri 'self'; "
         "form-action 'self'",
@@ -595,6 +598,79 @@ def roastery_page():
 @app.get("/apk")
 def apk_page():
     return send_from_directory("static", "apk.html")
+
+
+# ---------- 수요책 Shorts ('커피 마시러 가는 길') ----------
+# 화/목 업로드되는 유튜브 시리즈를 채널 RSS 로 자동 추적.
+# 캐시: 메모리 10분. 외부 호출 실패 시 마지막 성공 결과(또는 빈 리스트) 폴백.
+
+SUYOCHEK_CHANNEL_ID = "UC1OMiatCVGDGzjgiZyaM1Tg"  # @수요책 (sp.yun: 2026-05-14 확인)
+SUYOCHEK_FEED_URL = f"https://www.youtube.com/feeds/videos.xml?channel_id={SUYOCHEK_CHANNEL_ID}"
+SUYOCHEK_CACHE_TTL = 600  # 10분
+SUYOCHEK_FETCH_TIMEOUT = 6
+SUYOCHEK_MAX_ITEMS = 50
+
+# "커피 마시러 가는 길" 만 — "커피 마시고 돌아가는 길" 시리즈는 제외.
+_SUYOCHEK_TITLE_RE = re.compile(r"커피\s*마시러\s*가는\s*길")
+_SUYOCHEK_EP_RE = re.compile(r"\((\d+)\s*회\)")
+_SUYOCHEK_ATOM_NS = {
+    "atom": "http://www.w3.org/2005/Atom",
+    "yt": "http://www.youtube.com/xml/schemas/2015",
+}
+
+_suyochek_cache = {"ts": 0.0, "items": []}
+
+
+def _parse_suyochek_feed(xml_text: str) -> list:
+    items = []
+    root = ET.fromstring(xml_text)
+    for entry in root.findall("atom:entry", _SUYOCHEK_ATOM_NS):
+        vid_el = entry.find("yt:videoId", _SUYOCHEK_ATOM_NS)
+        title_el = entry.find("atom:title", _SUYOCHEK_ATOM_NS)
+        if vid_el is None or title_el is None:
+            continue
+        vid = (vid_el.text or "").strip()
+        title = (title_el.text or "").strip()
+        if not vid or not _SUYOCHEK_TITLE_RE.search(title):
+            continue
+        ep_match = _SUYOCHEK_EP_RE.search(title)
+        ep = int(ep_match.group(1)) if ep_match else None
+        items.append({"id": vid, "title": title, "ep": ep})
+        if len(items) >= SUYOCHEK_MAX_ITEMS:
+            break
+    return items
+
+
+def _fetch_suyochek_shorts() -> list:
+    now = time.time()
+    if _suyochek_cache["items"] and (now - _suyochek_cache["ts"] < SUYOCHEK_CACHE_TTL):
+        return _suyochek_cache["items"]
+    try:
+        r = requests.get(
+            SUYOCHEK_FEED_URL,
+            timeout=SUYOCHEK_FETCH_TIMEOUT,
+            headers={"User-Agent": "cafe-today-coffee/1.0 (+https://92cafe.co.kr)"},
+        )
+        r.raise_for_status()
+        items = _parse_suyochek_feed(r.text)
+        _suyochek_cache["ts"] = now
+        _suyochek_cache["items"] = items
+        return items
+    except Exception:
+        return _suyochek_cache.get("items") or []
+
+
+@app.get("/api/suyochek-shorts")
+def api_suyochek_shorts():
+    items = _fetch_suyochek_shorts()
+    resp = jsonify({
+        "success": True,
+        "items": items,
+        "updated_at": _suyochek_cache.get("ts") or None,
+    })
+    # 프런트는 자체적으로도 거의 변동 없으니 클라이언트 캐시 허용
+    resp.headers["Cache-Control"] = "public, max-age=600"
+    return resp
 
 
 # ---------- Coffee Insight ----------

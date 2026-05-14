@@ -2053,10 +2053,24 @@
         }
 
         // ---------- 8번째 셀: 92도씨 로고 또는 (화/목, 10%) 수요책 Shorts ----------
-        // 유튜버 "수요책"의 '커피 마시러 가는 길' 숏츠 후보 — ID 만 추가하면 풀에 포함됨
-        const SUYOCHEK_SHORTS_IDS = [
-            'V-VQVnnuoM0'
+        // 유튜버 "수요책"의 '커피 마시러 가는 길' 후보 풀.
+        // 서버 /api/suyochek-shorts 가 채널 RSS 를 자동 추적해 121회 이상도 자동 포함.
+        // 페치 실패해도 최소 동작하도록 마지막 알려진 ID 한두 개를 폴백으로 둠.
+        let SUYOCHEK_SHORTS_IDS = [
+            'V-VQVnnuoM0'  // 120회 (2026-05-14 기준)
         ];
+
+        // 서버에서 최신 풀 받아와 갱신. 결과는 캘린더 렌더 직전에 리졸브.
+        function refreshSuyochekShorts() {
+            return fetch('/api/suyochek-shorts', { credentials: 'same-origin' })
+                .then(r => r.ok ? r.json() : null)
+                .then(data => {
+                    if (!data || !data.success || !Array.isArray(data.items)) return;
+                    const ids = data.items.map(it => it && it.id).filter(Boolean);
+                    if (ids.length > 0) SUYOCHEK_SHORTS_IDS = ids;
+                })
+                .catch(() => { /* 무시 — 폴백 풀로 동작 */ });
+        }
 
         // 세션당 한 번만 결정 — loadCoffeeData() 5분 주기 재호출이나 주(週) 네비게이션에도 안정 유지
         function getLogoShortsChoice() {
@@ -2110,6 +2124,9 @@
 
         // 페이지 로드 시 데이터 가져오기
         loadCoffeeData();
+
+        // 수요책 Shorts 풀 갱신 — fire-and-forget. 페치 실패해도 폴백 ID 로 동작.
+        refreshSuyochekShorts();
 
         // 5분마다 자동 새로고침
         setInterval(loadCoffeeData, 5 * 60 * 1000);
