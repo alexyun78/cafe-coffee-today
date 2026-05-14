@@ -1,0 +1,93 @@
+{
+  "version": 1,
+  "id": "2026-05-14-coffee-roasting-acoustic-crack-ml",
+  "date": "2026-05-14",
+  "slug": "coffee-roasting-acoustic-crack-ml",
+  "title_ko": "커피 로스팅 자동화를 위한 음향 기반 크랙 감지 머신러닝 프레임워크",
+  "title_original": "Augmenting Sensory Perception in Coffee Roasting Automation: A Machine Learning Framework for Acoustic-Based Crack Detection",
+  "one_liner": "랜덤 포레스트가 95.68% 정확도로 1·2차 크랙 이벤트를 음향 신호에서 자동 감지",
+  "authors": "Haojun Shi, Zhijian Li, Weizu Yu, Wenmeng He",
+  "journal": "Applied Food Research (Elsevier)",
+  "pub_date": "2026-04-25",
+  "doi": "10.1016/j.afres.2026.102058",
+  "categories_primary": [
+    "장비/공학"
+  ],
+  "categories_secondary": [
+    "로스팅"
+  ],
+  "summary": "커피 로스팅의 1차·2차 크랙 감지를 인간 청각 의존에서 머신러닝 음향 분류로 자동화하는 프레임워크. 케냐·에티오피아·중국 산지 원두 4,301개 검증 이벤트 데이터셋에서 KNN, SVM, Random Forest, XGBoost, CNN 5개 모델 비교 평가. 랜덤 포레스트가 95.68% 정확도 / ROC-AUC 0.992로 최우수 성능. MFCC 포함 주파수 도메인 기술자가 판별력 73% 이상 담당. 산지 간 재보정 불필요, 실시간 자율 로스터 시스템 통합 가능성 제시.",
+  "key_findings": [
+    "4,301개 검증 이벤트(케냐·에티오피아·중국 산지), 5종 ML 모델 체계적 비교",
+    "랜덤 포레스트 최우수: 정확도 95.68%, ROC-AUC 0.992",
+    "MFCC 포함 주파수 도메인 기술자가 판별력의 73% 이상 기여 — 음색이 음량보다 결정적",
+    "다양한 원두 산지에서 재보정 없이 범용 적용 가능",
+    "온도 센서 열 지연·인간 주관성 두 문제를 동시 해결하는 음향 기반 접근 검증"
+  ],
+  "methodology": "케냐·에티오피아·중국 3개 산지 원두 4,301개 검증 음향 이벤트 데이터셋. 시간·주파수 도메인 특징 벡터 추출(MFCC, 스펙트럴 롤오프, 센트로이드 등). KNN/SVM/RF/XGBoost/CNN 5개 분류기 교차 검증 평가. 정확도·ROC-AUC 기준 성능 비교 및 특징 중요도 정량 분석.",
+  "implications": {
+    "농가/가공장": "해당 없음 (로스팅 공정 자동화 연구로 생두 가공 단계와 무관)",
+    "로스터/큐그레이더": "청각 의존 크랙 판단을 ML 음향 센서로 보완·자동화. 다품종 취급 시 재보정 불필요. 대형 드럼 로스터 환경 소음 속 크랙 신호 자동 추출에 유용. 배치 간 로스트 포인트 일관성 향상 기대.",
+    "R&D": "MFCC 기반 음향 분류의 로스터 통합 실증. 엣지 AI 소형 음향 모듈 개발, 다양한 로스터 장비 유형 확장, 음향·온도·색도·CO₂ 다중 모달 융합 연구가 다음 단계."
+  },
+  "limitations": "3개 산지만 사용, 다른 주요 산지 범용성 추가 검증 필요. 실환경 소음 강건성 미평가. CNN 저성능 이유 불명확. 논문 In Press 상태로 최종본과 차이 가능성.",
+  "glossary": [
+    {
+      "term": "First Crack",
+      "ko": "1차 크랙 — 약 196~205°C, 세포벽 파열 팝핑 소리. 라이트~미디엄 로스트 경계 지표"
+    },
+    {
+      "term": "Second Crack",
+      "ko": "2차 크랙 — 약 224°C 이상, 탄화·오일 분출 균열음. 다크 로스트 진입 지표"
+    },
+    {
+      "term": "MFCC",
+      "ko": "멜 주파수 켑스트럼 계수 — 인간 청각 모사 스펙트럴 특징 벡터"
+    },
+    {
+      "term": "ROC-AUC",
+      "ko": "분류 판별력 지표 (0~1, 1에 가까울수록 완벽)"
+    },
+    {
+      "term": "Random Forest",
+      "ko": "랜덤 포레스트 — 의사결정 트리 배깅 앙상블 모델"
+    },
+    {
+      "term": "Thermal Lag",
+      "ko": "열 지연 — 온도 센서의 실시간 추적 지연 현상"
+    },
+    {
+      "term": "Spectral Timbre",
+      "ko": "스펙트럴 음색 — 주파수 분포 패턴으로 구별되는 소리 질감"
+    },
+    {
+      "term": "Edge AI",
+      "ko": "엣지 AI — 클라우드 없이 기기 자체에서 AI 추론 수행"
+    }
+  ],
+  "citation_apa": "Shi, H., Li, Z., Yu, W., & He, W. (2026). Augmenting sensory perception in coffee roasting automation: A machine learning framework for acoustic-based crack detection. Applied Food Research, 102058. https://doi.org/10.1016/j.afres.2026.102058",
+  "links": {
+    "doi": "https://doi.org/10.1016/j.afres.2026.102058",
+    "oa_pdf": "https://www.sciencedirect.com/science/article/pii/S2772502226003987/pdfft",
+    "journal_homepage": "https://www.sciencedirect.com/journal/applied-food-research"
+  },
+  "source_basis": "abstract_only",
+  "data_charts": [
+    {
+      "type": "bar",
+      "title": "랜덤 포레스트 모델 성능 (확인된 수치)",
+      "x_labels": [
+        "정확도 (%)",
+        "ROC-AUC × 100"
+      ],
+      "y_label": "점수",
+      "values": [
+        95.68,
+        99.2
+      ],
+      "unit": "점"
+    }
+  ],
+  "drive_doc_url": "https://docs.google.com/document/d/14Unu6mtc7aURTm9HFRzQBNHaA7XubBznoJaJV9BJhiQ/edit",
+  "hero_image": "/static/img/insights/hero/equipment.svg"
+}

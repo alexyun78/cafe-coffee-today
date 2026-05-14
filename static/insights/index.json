@@ -1,7 +1,23 @@
 {
   "version": 1,
-  "updated_at": "2026-05-13T14:50:36Z",
+  "updated_at": "2026-05-14T12:00:22Z",
   "items": [
+    {
+      "id": "2026-05-14-coffee-roasting-acoustic-crack-ml",
+      "date": "2026-05-14",
+      "title_ko": "커피 로스팅 자동화를 위한 음향 기반 크랙 감지 머신러닝 프레임워크",
+      "one_liner": "랜덤 포레스트가 95.68% 정확도로 1·2차 크랙 이벤트를 음향 신호에서 자동 감지",
+      "categories_primary": [
+        "장비/공학"
+      ],
+      "categories_secondary": [
+        "로스팅"
+      ],
+      "hero_image": "/static/img/insights/hero/equipment.svg",
+      "journal": "Applied Food Research (Elsevier)",
+      "pub_date": "2026-04-25",
+      "source_basis": "abstract_only"
+    },
     {
       "id": "2026-05-13-coffee-postharvest-volatile-biomarker-review",
       "date": "2026-05-13",
