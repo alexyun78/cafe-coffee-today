@@ -1661,10 +1661,11 @@
 })();
 </script>
 
-<!-- 화/목 10% 확률로 hero 로고 자리에 수요책 '커피 마시러 가는 길' Shorts 자동재생.
-     ?shorts 또는 ?shorts=비디오ID 쿼리로 강제 표시 (테스트용). -->
+<!-- 요일 무관 10% 확률로 hero 로고 자리에 수요책 '커피 마시러 가는 길' Shorts 자동재생.
+     풀은 최신 10개에서 균일 랜덤. ?shorts 또는 ?shorts=비디오ID 쿼리로 강제 표시 (테스트용). -->
 <script>
 (function setupSuyochekHeroShorts() {
+  var POOL_SIZE = 10;
   var visual = document.querySelector('.hero-visual');
   if (!visual) return;
   var img = visual.querySelector('img');
@@ -1676,10 +1677,8 @@
   var forced = forceParam !== null;                // 파라미터 자체가 있으면 강제
   var forcedId = (forceParam && forceParam !== '1') ? forceParam : null;
 
-  // 화(2) · 목(4) 확인 — 강제 모드면 요일 무관
+  // 요일 무관 — 강제 모드가 아니면 10% 확률만 검사
   if (!forced) {
-    var dow = new Date().getDay();
-    if (dow !== 2 && dow !== 4) return;
     if (Math.random() >= 0.1) return;
   }
 
@@ -1702,7 +1701,7 @@
   // forcedId 가 주어졌으면 페치 없이 즉시 사용
   if (forcedId) { mount(forcedId); return; }
 
-  // 서버 풀에서 ID 한 개 골라 마운트. 실패 시 마지막 알려진 120회 ID 폴백.
+  // 서버 풀(최신순)에서 상위 10개로 좁힌 뒤 한 개 골라 마운트. 실패 시 마지막 알려진 120회 ID 폴백.
   var FALLBACK = 'V-VQVnnuoM0';  // 120회 (2026-05-14 기준)
   fetch('/api/suyochek-shorts', { credentials: 'same-origin' })
     .then(function (r) { return r.ok ? r.json() : null; })
@@ -1710,7 +1709,7 @@
       var ids = (data && data.success && Array.isArray(data.items))
         ? data.items.map(function (it) { return it && it.id; }).filter(Boolean)
         : [];
-      var pool = ids.length ? ids : [FALLBACK];
+      var pool = ids.length ? ids.slice(0, POOL_SIZE) : [FALLBACK];
       mount(pool[Math.floor(Math.random() * pool.length)]);
     })
     .catch(function () { mount(FALLBACK); });

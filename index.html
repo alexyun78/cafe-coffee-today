@@ -2052,10 +2052,11 @@
                    String(d.getDate()).padStart(2, '0');
         }
 
-        // ---------- 8번째 셀: 92도씨 로고 또는 (화/목, 10%) 수요책 Shorts ----------
-        // 유튜버 "수요책"의 '커피 마시러 가는 길' 후보 풀.
-        // 서버 /api/suyochek-shorts 가 채널 RSS 를 자동 추적해 121회 이상도 자동 포함.
-        // 페치 실패해도 최소 동작하도록 마지막 알려진 ID 한두 개를 폴백으로 둠.
+        // ---------- 8번째 셀: 92도씨 로고 또는 (10% 확률) 수요책 Shorts ----------
+        // 유튜버 "수요책"의 '커피 마시러 가는 길' 후보 풀 — 최신 10개만 사용.
+        // 서버 /api/suyochek-shorts 가 채널 RSS(최신순)를 추적해 121회 이상도 자동 포함.
+        // 페치 실패해도 최소 동작하도록 마지막 알려진 ID 한 개를 폴백으로 둠.
+        const SUYOCHEK_POOL_SIZE = 10;
         let SUYOCHEK_SHORTS_IDS = [
             'V-VQVnnuoM0'  // 120회 (2026-05-14 기준)
         ];
@@ -2067,18 +2068,16 @@
                 .then(data => {
                     if (!data || !data.success || !Array.isArray(data.items)) return;
                     const ids = data.items.map(it => it && it.id).filter(Boolean);
-                    if (ids.length > 0) SUYOCHEK_SHORTS_IDS = ids;
+                    if (ids.length > 0) SUYOCHEK_SHORTS_IDS = ids.slice(0, SUYOCHEK_POOL_SIZE);
                 })
                 .catch(() => { /* 무시 — 폴백 풀로 동작 */ });
         }
 
-        // 세션당 한 번만 결정 — loadCoffeeData() 5분 주기 재호출이나 주(週) 네비게이션에도 안정 유지
+        // 세션당 한 번만 결정 — loadCoffeeData() 5분 주기 재호출이나 주(週) 네비게이션에도 안정 유지.
+        // 요일 무관 10% 확률, 풀은 최신 10개에서 균일 랜덤.
         function getLogoShortsChoice() {
             if (window.__logoShortsChoice !== undefined) return window.__logoShortsChoice;
-            const now = new Date();
-            const dow = now.getDay(); // 0=일, 2=화, 4=목
-            const isTueOrThu = (dow === 2 || dow === 4);
-            const hit = isTueOrThu && (Math.random() < 0.1) && SUYOCHEK_SHORTS_IDS.length > 0;
+            const hit = (Math.random() < 0.1) && SUYOCHEK_SHORTS_IDS.length > 0;
             const choice = hit
                 ? { type: 'shorts', id: SUYOCHEK_SHORTS_IDS[Math.floor(Math.random() * SUYOCHEK_SHORTS_IDS.length)] }
                 : { type: 'logo' };
