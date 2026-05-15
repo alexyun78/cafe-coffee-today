@@ -1,7 +1,24 @@
 {
   "version": 1,
-  "updated_at": "2026-05-14T12:00:22Z",
+  "updated_at": "2026-05-15T12:00:26Z",
   "items": [
+    {
+      "id": "2026-05-15-arara-fermentation-microbial-community-quality",
+      "date": "2026-05-15",
+      "title_ko": "커피 아라비카 cv. 아라라 SIAF 발효의 미생물 군집 동태와 스페셜티 커피 품질의 상관관계",
+      "one_liner": "SIAF 4변수 체계 실험에서 락토바실루스·카자크스타니아 우점 확인 — 의사결정나무로 미생물 마커가 스페셜티 관능 품질을 예측",
+      "categories_primary": [
+        "미생물학"
+      ],
+      "categories_secondary": [
+        "생두",
+        "향미/관능"
+      ],
+      "hero_image": "/static/img/insights/hero/microbiology.svg",
+      "journal": "Scientific Reports",
+      "pub_date": "2026-04-30",
+      "source_basis": "abstract_only"
+    },
     {
       "id": "2026-05-14-coffee-roasting-acoustic-crack-ml",
       "date": "2026-05-14",
