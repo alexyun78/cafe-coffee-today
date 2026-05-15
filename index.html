@@ -2053,10 +2053,10 @@
         }
 
         // ---------- 8번째 셀: 92도씨 로고 또는 (10% 확률) 수요책 Shorts ----------
-        // 유튜버 "수요책"의 '커피 마시러 가는 길' 후보 풀 — 최신 10개만 사용.
-        // 서버 /api/suyochek-shorts 가 채널 RSS(최신순)를 추적해 121회 이상도 자동 포함.
+        // 유튜버 "수요책"의 '커피 마시러 가는 길' 후보 풀 — 최신 5회만 사용.
+        // 서버 /api/suyochek-shorts 가 채널 RSS(최신순) + 보조 ID 로 5건 이상 보장.
         // 페치 실패해도 최소 동작하도록 마지막 알려진 ID 한 개를 폴백으로 둠.
-        const SUYOCHEK_POOL_SIZE = 10;
+        const SUYOCHEK_POOL_SIZE = 5;
         let SUYOCHEK_SHORTS_IDS = [
             'V-VQVnnuoM0'  // 120회 (2026-05-14 기준)
         ];

@@ -1662,10 +1662,10 @@
 </script>
 
 <!-- 요일 무관 10% 확률로 hero 로고 자리에 수요책 '커피 마시러 가는 길' Shorts 자동재생.
-     풀은 최신 10개에서 균일 랜덤. ?shorts 또는 ?shorts=비디오ID 쿼리로 강제 표시 (테스트용). -->
+     풀은 최신 5회에서 균일 랜덤. ?shorts 또는 ?shorts=비디오ID 쿼리로 강제 표시 (테스트용). -->
 <script>
 (function setupSuyochekHeroShorts() {
-  var POOL_SIZE = 10;
+  var POOL_SIZE = 5;
   var visual = document.querySelector('.hero-visual');
   if (!visual) return;
   var img = visual.querySelector('img');

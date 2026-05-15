@@ -620,6 +620,15 @@ _SUYOCHEK_ATOM_NS = {
 
 _suyochek_cache = {"ts": 0.0, "items": []}
 
+# YouTube 채널 RSS 는 최신 ~15 항목만 반환하고 그 사이에 다른 시리즈가 끼어 있어
+# '커피 마시러 가는 길' 매칭은 보통 4건 정도. 풀 5개를 채우기 위한 보조 ID.
+# RSS 결과에 같은 id 가 없을 때만 뒤에 덧붙여진다 — 새 회차가 올라오면 자동으로 밀려나감.
+_SUYOCHEK_SUPPLEMENT = [
+    {"id": "6V5H2D3Vg0Y", "title": "커피 마시러 가는 길(116회) — 보조", "ep": 116},
+    {"id": "cyJ8rWRIa4Q", "title": "커피 마시러 가는 길(115회) — 보조", "ep": 115},
+    {"id": "5ClREy_mKrM", "title": "커피 마시러 가는 길(114회) — 보조", "ep": 114},
+]
+
 
 def _parse_suyochek_feed(xml_text: str) -> list:
     items = []
@@ -641,6 +650,17 @@ def _parse_suyochek_feed(xml_text: str) -> list:
     return items
 
 
+def _merge_with_supplement(rss_items: list) -> list:
+    seen = {it["id"] for it in rss_items}
+    merged = list(rss_items)
+    for sup in _SUYOCHEK_SUPPLEMENT:
+        if sup["id"] in seen:
+            continue
+        merged.append(dict(sup))
+        seen.add(sup["id"])
+    return merged[:SUYOCHEK_MAX_ITEMS]
+
+
 def _fetch_suyochek_shorts() -> list:
     now = time.time()
     if _suyochek_cache["items"] and (now - _suyochek_cache["ts"] < SUYOCHEK_CACHE_TTL):
@@ -652,12 +672,13 @@ def _fetch_suyochek_shorts() -> list:
             headers={"User-Agent": "cafe-today-coffee/1.0 (+https://92cafe.co.kr)"},
         )
         r.raise_for_status()
-        items = _parse_suyochek_feed(r.text)
+        items = _merge_with_supplement(_parse_suyochek_feed(r.text))
         _suyochek_cache["ts"] = now
         _suyochek_cache["items"] = items
         return items
     except Exception:
-        return _suyochek_cache.get("items") or []
+        cached = _suyochek_cache.get("items") or []
+        return cached or _merge_with_supplement([])
 
 
 @app.get("/api/suyochek-shorts")
