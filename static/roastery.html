@@ -265,6 +265,36 @@
             width: 100%; max-width: 420px;
             mix-blend-mode: multiply;
         }
+        /* 로고 ↔ 메뉴 사진 자동 회전 슬라이드 (3초 간격) */
+        .hero-visual-slot {
+            position: relative;
+            width: 100%;
+            max-width: 420px;
+            flex-shrink: 1;
+        }
+        .hero-visual-slot img {
+            transition: opacity 450ms ease;
+        }
+        .hero-visual-slot.is-photo img {
+            mix-blend-mode: normal;
+            border-radius: 14px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18);
+        }
+        .hero-visual-label {
+            position: absolute;
+            top: 16px; right: 18px;
+            color: #fff;
+            font-family: var(--font-display);
+            font-weight: 600;
+            font-size: 1.7rem;
+            letter-spacing: 0.01em;
+            line-height: 1.1;
+            text-shadow: 0 2px 14px rgba(0, 0, 0, 0.75), 0 0 6px rgba(0, 0, 0, 0.5);
+            opacity: 0;
+            transition: opacity 450ms ease;
+            pointer-events: none;
+            z-index: 2;
+        }
         /* 화/목 10% 확률로 로고 자리에 수요책 Shorts (9:16 세로) */
         .hero-visual-shorts {
             width: min(100%, 320px);
@@ -291,6 +321,8 @@
             .hero { padding: 56px 0 64px; }
             .hero-grid { grid-template-columns: 1fr; gap: 32px; }
             .hero-visual img { max-width: 240px; }
+            .hero-visual-slot { max-width: 240px; }
+            .hero-visual-label { font-size: 1.3rem; top: 12px; right: 14px; }
             .hero-visual-shorts { width: min(100%, 240px); }
             .hero-visual { order: -1; }   /* 이미지 위, 텍스트 아래 — 첫 인상에 비주얼 노출 */
             .hero-eyebrow { margin-bottom: 20px; }
@@ -301,6 +333,8 @@
             .hero { padding: 40px 0 48px; }
             .hero-grid { gap: 24px; }
             .hero-visual img { max-width: 180px; }
+            .hero-visual-slot { max-width: 180px; }
+            .hero-visual-label { font-size: 1.05rem; top: 10px; right: 12px; }
             .hero-visual-shorts { width: min(100%, 200px); }
             .hero-eyebrow { margin-bottom: 14px; font-size: 0.68rem; letter-spacing: 0.2em; }
             .hero-eyebrow::before { width: 20px; }
@@ -1679,8 +1713,9 @@
 
   // 요일 무관 — 강제 모드가 아니면 10% 확률만 검사
   if (!forced) {
-    if (Math.random() >= 0.1) return;
+    if (Math.random() >= 0.1) { window.__heroShortsActive = false; return; }
   }
+  window.__heroShortsActive = true;
 
   function mount(videoId) {
     var src = 'https://www.youtube.com/embed/' + encodeURIComponent(videoId)
@@ -1713,6 +1748,89 @@
       mount(pool[Math.floor(Math.random() * pool.length)]);
     })
     .catch(function () { mount(FALLBACK); });
+})();
+</script>
+
+<!-- 히어로 슬라이드쇼: 로고 → 메뉴 사진들 → 로고 (3초 간격 회전).
+     수요책 Shorts 가 당첨된 경우(window.__heroShortsActive === true)에는 건너뜀. -->
+<script>
+(function setupHeroMenuSlideshow() {
+  if (window.__heroShortsActive) return;
+  var visual = document.querySelector('.hero-visual');
+  if (!visual) return;
+  if (visual.querySelector('.hero-visual-shorts')) return;
+  var img = visual.querySelector('img');
+  if (!img) return;
+
+  var BASE = '/static/img/menu/';
+  // label === null 인 항목은 사진 그대로(파일 자체에 메뉴명이 들어있음).
+  // 그 외에는 사진 우상단에 흰색 텍스트 라벨을 오버레이.
+  var MENU = [
+    { file: '데미카카오.png',                 label: '데미카카오' },
+    { file: '데미로투스.png',                 label: '데미로투스' },
+    { file: '데미말차.png',                   label: '데미말차' },
+    { file: '데미오레오.png',                 label: '데미오레오' },
+    { file: '데미시리즈.png',                 label: '데미시리즈' },
+    { file: '흑임자커피_솔트크림라떼.png',     label: null },
+    { file: '망고빙수_팥빙수.png',             label: null }
+  ];
+
+  var LOGO_SRC = img.getAttribute('src') || '/static/img/logo-92black.png';
+  var slides = [{ src: LOGO_SRC, label: null, isLogo: true }];
+  for (var i = 0; i < MENU.length; i++) {
+    slides.push({
+      src: BASE + encodeURIComponent(MENU[i].file),
+      label: MENU[i].label,
+      isLogo: false
+    });
+  }
+
+  // 슬라이드 컨테이너로 img 를 감싸고 라벨 요소를 부착.
+  var slot = document.createElement('div');
+  slot.className = 'hero-visual-slot';
+  visual.insertBefore(slot, img);
+  slot.appendChild(img);
+
+  var labelEl = document.createElement('div');
+  labelEl.className = 'hero-visual-label';
+  slot.appendChild(labelEl);
+
+  // 메뉴 사진들을 백그라운드 프리로드(전환 시 깜빡임 방지).
+  slides.forEach(function (s) {
+    if (s.isLogo) return;
+    var pre = new Image();
+    pre.src = s.src;
+  });
+
+  var FADE_MS = 450;
+  var INTERVAL_MS = 3000;
+  var idx = 0;
+
+  function show(nextIdx) {
+    var s = slides[nextIdx];
+    // 페이드 아웃
+    img.style.opacity = '0';
+    labelEl.style.opacity = '0';
+    setTimeout(function () {
+      img.src = s.src;
+      if (s.isLogo) {
+        slot.classList.remove('is-photo');
+      } else {
+        slot.classList.add('is-photo');
+      }
+      labelEl.textContent = s.label || '';
+      // 페이드 인 (다음 프레임에)
+      requestAnimationFrame(function () {
+        img.style.opacity = '1';
+        if (s.label) labelEl.style.opacity = '1';
+      });
+    }, FADE_MS);
+  }
+
+  setInterval(function () {
+    idx = (idx + 1) % slides.length;
+    show(idx);
+  }, INTERVAL_MS);
 })();
 </script>
 
