@@ -205,6 +205,51 @@
             grid-template-columns: 1.4fr 1fr;
             gap: 80px;
             align-items: center;
+            position: relative;
+        }
+        /* 데미시리즈 같은 가로형 합성 이미지를 hero-grid 전체(텍스트 열 포함)에 풀폭으로 띄울 때 사용. */
+        .hero-fullspan {
+            position: absolute;
+            inset: 0;
+            z-index: 5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: var(--canvas);
+            border-radius: 14px;
+            overflow: hidden;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 450ms ease;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+        }
+        .hero-fullspan.is-active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .hero-fullspan img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: block;
+        }
+        .hero-fullspan-label {
+            position: absolute;
+            top: 22px; right: 30px;
+            color: #fff;
+            font-family: var(--font-display);
+            font-weight: 600;
+            font-size: 2rem;
+            letter-spacing: 0.01em;
+            text-shadow: 0 2px 14px rgba(0, 0, 0, 0.75), 0 0 6px rgba(0, 0, 0, 0.5);
+            pointer-events: none;
+            z-index: 2;
+        }
+        @media (max-width: 900px) {
+            .hero-fullspan-label { font-size: 1.4rem; top: 16px; right: 20px; }
+        }
+        @media (max-width: 480px) {
+            .hero-fullspan-label { font-size: 1.05rem; top: 12px; right: 14px; }
         }
         .hero-eyebrow {
             font-family: var(--font-mono);
@@ -1765,23 +1810,25 @@
   var BASE = '/static/img/menu/';
   // label === null 인 항목은 사진 그대로(파일 자체에 메뉴명이 들어있음).
   // 그 외에는 사진 우상단에 흰색 텍스트 라벨을 오버레이.
+  // fullspan === true 인 항목은 로고 자리만이 아니라 hero-grid 전체(왼쪽 텍스트 열 포함)를 덮음.
   var MENU = [
-    { file: '데미카카오.png',                 label: '데미카카오' },
-    { file: '데미로투스.png',                 label: '데미로투스' },
-    { file: '데미말차.png',                   label: '데미말차' },
-    { file: '데미오레오.png',                 label: '데미오레오' },
-    { file: '데미시리즈.png',                 label: '데미시리즈' },
-    { file: '흑임자커피_솔트크림라떼.png',     label: null },
-    { file: '망고빙수_팥빙수.png',             label: null }
+    { file: '데미카카오.png',                 label: '데미카카오', fullspan: false },
+    { file: '데미로투스.png',                 label: '데미로투스', fullspan: false },
+    { file: '데미말차.png',                   label: '데미말차',   fullspan: false },
+    { file: '데미오레오.png',                 label: '데미오레오', fullspan: false },
+    { file: '데미시리즈.png',                 label: '데미시리즈', fullspan: true  },
+    { file: '흑임자커피_솔트크림라떼.png',     label: null,         fullspan: false },
+    { file: '망고빙수_팥빙수.png',             label: null,         fullspan: false }
   ];
 
   var LOGO_SRC = img.getAttribute('src') || '/static/img/logo-92black.png';
-  var slides = [{ src: LOGO_SRC, label: null, isLogo: true }];
+  var slides = [{ src: LOGO_SRC, label: null, isLogo: true, fullspan: false }];
   for (var i = 0; i < MENU.length; i++) {
     slides.push({
       src: BASE + encodeURIComponent(MENU[i].file),
       label: MENU[i].label,
-      isLogo: false
+      isLogo: false,
+      fullspan: !!MENU[i].fullspan
     });
   }
 
@@ -1795,6 +1842,21 @@
   labelEl.className = 'hero-visual-label';
   slot.appendChild(labelEl);
 
+  // hero-grid 전체를 덮는 풀폭 오버레이 (데미시리즈 같은 합성 이미지용).
+  var grid = visual.closest('.hero-grid');
+  var fullspanEl = null, fsImg = null, fsLabel = null;
+  if (grid) {
+    fullspanEl = document.createElement('div');
+    fullspanEl.className = 'hero-fullspan';
+    fsImg = document.createElement('img');
+    fsImg.alt = '';
+    fsLabel = document.createElement('div');
+    fsLabel.className = 'hero-fullspan-label';
+    fullspanEl.appendChild(fsImg);
+    fullspanEl.appendChild(fsLabel);
+    grid.appendChild(fullspanEl);
+  }
+
   // 메뉴 사진들을 백그라운드 프리로드(전환 시 깜빡임 방지).
   slides.forEach(function (s) {
     if (s.isLogo) return;
@@ -1805,25 +1867,39 @@
   var FADE_MS = 450;
   var INTERVAL_MS = 3000;
   var idx = 0;
+  var currentFullspan = false;
 
   function show(nextIdx) {
     var s = slides[nextIdx];
-    // 페이드 아웃
-    img.style.opacity = '0';
-    labelEl.style.opacity = '0';
+    var nextFullspan = !!(s.fullspan && fullspanEl);
+
+    // 현재 화면 페이드 아웃
+    if (currentFullspan && fullspanEl) {
+      fullspanEl.classList.remove('is-active');
+    } else {
+      img.style.opacity = '0';
+      labelEl.style.opacity = '0';
+    }
+
     setTimeout(function () {
-      img.src = s.src;
-      if (s.isLogo) {
-        slot.classList.remove('is-photo');
+      if (nextFullspan) {
+        fsImg.src = s.src;
+        fsLabel.textContent = s.label || '';
+        fsLabel.style.display = s.label ? 'block' : 'none';
+        requestAnimationFrame(function () {
+          fullspanEl.classList.add('is-active');
+        });
       } else {
-        slot.classList.add('is-photo');
+        img.src = s.src;
+        if (s.isLogo) slot.classList.remove('is-photo');
+        else slot.classList.add('is-photo');
+        labelEl.textContent = s.label || '';
+        requestAnimationFrame(function () {
+          img.style.opacity = '1';
+          if (s.label) labelEl.style.opacity = '1';
+        });
       }
-      labelEl.textContent = s.label || '';
-      // 페이드 인 (다음 프레임에)
-      requestAnimationFrame(function () {
-        img.style.opacity = '1';
-        if (s.label) labelEl.style.opacity = '1';
-      });
+      currentFullspan = nextFullspan;
     }, FADE_MS);
   }
 
