@@ -1,0 +1,90 @@
+{
+  "version": 1,
+  "id": "2026-05-16-coffee-byproduct-emerging-extraction-valorization",
+  "date": "2026-05-16",
+  "slug": "coffee-byproduct-emerging-extraction-valorization",
+  "title_ko": "커피 원두 및 부산물의 생리활성 화합물 지속가능 추출과 활용을 위한 신기술 총람: UAE·HPE·CAP·MAE의 원리·생리활성 강화·산업적 전망",
+  "title_original": "Emerging Technologies for Sustainable Extraction and Valorization of Bioactive Compounds from Coffee Beans and By-Products: Principles, Bioactivity Enhancement, and Industrial Perspectives",
+  "one_liner": "초음파·고압·저온플라즈마·마이크로파 4대 신기술이 커피 부산물 폴리페놀 회수율 최대 2배 향상, 처리 2.5~15분으로 단축",
+  "authors": "William Vera, Jhonsson Luis Quevedo-Olaya, César Samaniego-Rafaele, Carlos Culqui-Arce, Manuel Jesús Sánchez-Chero, Grimaldo Wilfredo Quispe-Santivañez, Rebeca Salvador-Reyes",
+  "journal": "Biomass (MDPI)",
+  "pub_date": "2026-03-02",
+  "doi": "10.3390/biomass6020018",
+  "categories_primary": [
+    "지속가능성/경제"
+  ],
+  "categories_secondary": [
+    "화학/분석화학"
+  ],
+  "summary": "커피 산업에서 발생하는 펄프, 파치먼트, 실버스킨, 소비된 커피 찌꺼기(SCG) 등 5대 부산물에는 클로로젠산·카페인·트리고넬린 등 고부가 생리활성 화합물이 다량 함유되어 있으나, 기존 전통 추출법은 고온·장시간·다량 용매 사용으로 환경 부담과 화합물 분해 문제를 안고 있다. 이 리뷰는 초음파 보조 추출(UAE), 고압 추출(HPE), 저온 대기압 플라즈마(CAP), 마이크로파 보조 추출(MAE) 4가지 신기술을 커피 원두 및 부산물에 적용한 최신 연구들을 체계적으로 종합한다. UAE는 음향 캐비테이션으로 세포벽을 파괴해 단시간 내 폴리페놀 회수를 극대화하며, HPE는 수백 MPa 고수압으로 열 손상 없이 세포막 투과성을 높인다. CAP는 비열 플라즈마로 상온에서 표면을 활성화하고, MAE는 유전 가열로 수 분 내 추출을 완료한다. 4기술 모두 기존 대비 총 페놀 함량을 최대 2배까지 향상시키고 처리 시간을 2.5~15분으로 단축하는 것으로 보고되며, 커피 부산물의 순환 경제 전환을 위한 핵심 기술 기반을 제공한다.",
+  "key_findings": [
+    "신흥 추출 4기술(UAE·HPE·CAP·MAE) 커피 원두 및 5대 부산물 적용 체계 최초 종합 리뷰",
+    "기존 전통 추출 대비 총 페놀 함량(TPC) 최대 2배 향상 달성 복수 사례 보고",
+    "처리 시간 2.5~15분으로 단축 — 기존 수 시간 대비 현격한 효율 개선",
+    "UAE: 음향 캐비테이션 → 실버스킨·SCG 클로로젠산 회수 탁월",
+    "HPE: 수백 MPa 고수압 → 열 손상 없이 세포막 투과성 향상",
+    "CAP: 비열 플라즈마 → 상온 표면 활성화, 항산화 화합물 분해 최소화",
+    "MAE: 유전 가열 → 카페인·트리고넬린·클로로젠산 단시간 고효율 동시 회수",
+    "커버 부산물: 커피 과육(펄프), 허스크, 파치먼트, 실버스킨, SCG 5종",
+    "순환 경제 지원 및 고부가 가치 응용 전환 가능성 제시"
+  ],
+  "methodology": "체계적 문헌 고찰(systematic review). UAE, HPE, CAP, MAE 각 기술에 대한 최신 1차 연구를 검토하고, 커피 원두 및 5개 부산물 스트림에의 적용 결과를 기술별로 비교 종합. 평가 지표: 추출 수율, 총 페놀 함량(TPC), 항산화 능력(DPPH·ABTS), 개별 화합물 프로파일(HPLC·LC-MS), 처리 시간, 에너지 소비량. 각 기술의 물리화학적 원리와 핵심 작동 매개변수(주파수, 압력, 플라즈마 방전 조건, 마이크로파 출력 등)를 문헌 데이터 기반으로 비교 기술.",
+  "implications": {
+    "농가/가공장": "습식 가공 부산물(펄프·파치먼트)에 UAE·CAP 도입 시 폐기물에서 항산화 추출물 생산으로 부가 수익 창출 가능. HPE 장비 소형화·가격 하락 추세로 농협 단위 도입 가능성 증가",
+    "로스터/큐그레이더": "로스팅 시 발생하는 실버스킨(채프)에서 UAE 기반 클로로젠산 추출물 회수 가능성 실증. 채프 기능성 추출물의 화장품·건강기능식품 공급 비즈니스 모델의 이론적 근거 제공",
+    "R&D": "UAE-MAE 연속 공정, CAP 전처리 후 HPE 등 하이브리드 추출 연구가 다음 단계로 명확. 파일럿·산업 스케일 전환 연구, 추출물 규제 적합성·안전성 데이터 구축이 핵심 과제"
+  },
+  "limitations": "리뷰 논문으로 1차 실험 데이터 없음. 보고된 수치는 연구별 기질·용매·조건 상이해 직접 비교 주의. 산업 스케일 경제성 분석 미제공. CAP 커피 분야 적용 문헌 제한적. 추출물 식품 안전성 규제 적합성 논의 부족.",
+  "glossary": [
+    {
+      "term": "UAE (Ultrasound-Assisted Extraction)",
+      "ko": "초음파 보조 추출 — 음향 캐비테이션으로 세포벽 파괴, 폴리페놀 단시간 회수"
+    },
+    {
+      "term": "HPE (High-Pressure Extraction)",
+      "ko": "고압 추출 — 수백 MPa 정수압으로 열 손상 없이 세포막 투과성 향상"
+    },
+    {
+      "term": "CAP (Cold Atmospheric Plasma)",
+      "ko": "저온 대기압 플라즈마 — 비열 플라즈마로 상온 표면 활성화"
+    },
+    {
+      "term": "MAE (Microwave-Assisted Extraction)",
+      "ko": "마이크로파 보조 추출 — 유전 가열로 수 분 내 추출 완료"
+    },
+    {
+      "term": "Chlorogenic Acid (CGA)",
+      "ko": "클로로젠산 — 커피 주요 페놀산, 항산화·항염 활성"
+    },
+    {
+      "term": "Silverskin / Chaff",
+      "ko": "실버스킨/채프 — 로스팅 시 분리되는 커피 종피, CGA·멜라노이딘 함유"
+    },
+    {
+      "term": "Spent Coffee Grounds (SCG)",
+      "ko": "소비된 커피 찌꺼기 — 추출 후 잔류물, 연간 수백만 톤 발생"
+    },
+    {
+      "term": "Trigonelline",
+      "ko": "트리고넬린 — 커피 알칼로이드, 로스팅 중 니아신으로 부분 전환"
+    },
+    {
+      "term": "Circular Economy",
+      "ko": "순환 경제 — 폐기물 최소화 자원 순환 경제 모델"
+    },
+    {
+      "term": "Acoustic Cavitation",
+      "ko": "음향 캐비테이션 — 초음파에 의한 마이크로 버블 생성·붕괴 현상, UAE 핵심 기전"
+    }
+  ],
+  "citation_apa": "Vera, W., Quevedo-Olaya, J. L., Samaniego-Rafaele, C., Culqui-Arce, C., Sánchez-Chero, M. J., Quispe-Santivañez, G. W., & Salvador-Reyes, R. (2026). Emerging technologies for sustainable extraction and valorization of bioactive compounds from coffee beans and by-products: Principles, bioactivity enhancement, and industrial perspectives. Biomass, 6(2), 18. https://doi.org/10.3390/biomass6020018",
+  "links": {
+    "doi": "https://doi.org/10.3390/biomass6020018",
+    "oa_pdf": "https://www.mdpi.com/2673-8783/6/2/18/pdf",
+    "journal_homepage": "https://www.mdpi.com/journal/biomass"
+  },
+  "source_basis": "abstract_only",
+  "data_charts": [],
+  "drive_doc_url": "https://docs.google.com/document/d/1YI-OL7Gj6w1FaF-EsBa6dm7An86UCd2OhA9PSesgVpM/edit",
+  "hero_image": "/static/img/insights/hero/sustainability.svg"
+}

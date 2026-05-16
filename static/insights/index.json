@@ -1,7 +1,23 @@
 {
   "version": 1,
-  "updated_at": "2026-05-15T12:00:26Z",
+  "updated_at": "2026-05-16T12:00:22Z",
   "items": [
+    {
+      "id": "2026-05-16-coffee-byproduct-emerging-extraction-valorization",
+      "date": "2026-05-16",
+      "title_ko": "커피 원두 및 부산물의 생리활성 화합물 지속가능 추출과 활용을 위한 신기술 총람: UAE·HPE·CAP·MAE의 원리·생리활성 강화·산업적 전망",
+      "one_liner": "초음파·고압·저온플라즈마·마이크로파 4대 신기술이 커피 부산물 폴리페놀 회수율 최대 2배 향상, 처리 2.5~15분으로 단축",
+      "categories_primary": [
+        "지속가능성/경제"
+      ],
+      "categories_secondary": [
+        "화학/분석화학"
+      ],
+      "hero_image": "/static/img/insights/hero/sustainability.svg",
+      "journal": "Biomass (MDPI)",
+      "pub_date": "2026-03-02",
+      "source_basis": "abstract_only"
+    },
     {
       "id": "2026-05-15-arara-fermentation-microbial-community-quality",
       "date": "2026-05-15",
