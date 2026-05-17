@@ -1,7 +1,23 @@
 {
   "version": 1,
-  "updated_at": "2026-05-16T12:00:22Z",
+  "updated_at": "2026-05-17T12:00:11Z",
   "items": [
+    {
+      "id": "2026-05-17-cold-brew-ijen-robusta-grind-brewing-time",
+      "date": "2026-05-17",
+      "title_ko": "분쇄 입도와 추출 시간이 이젠 로부스타 콜드 브루 커피의 이화학적·관능 특성에 미치는 영향",
+      "one_liner": "분쇄도·추출 시간이 이젠 로부스타 콜드 브루 품질의 핵심 결정 변수",
+      "categories_primary": [
+        "추출"
+      ],
+      "categories_secondary": [
+        "생두"
+      ],
+      "hero_image": "/static/img/insights/hero/extraction.svg",
+      "journal": "Journal of Food Science and Technology (Springer)",
+      "pub_date": "2026-02-23",
+      "source_basis": "abstract_only"
+    },
     {
       "id": "2026-05-16-coffee-byproduct-emerging-extraction-valorization",
       "date": "2026-05-16",

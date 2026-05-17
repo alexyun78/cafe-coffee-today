@@ -1,0 +1,86 @@
+{
+  "version": 1,
+  "id": "2026-05-17-cold-brew-ijen-robusta-grind-brewing-time",
+  "date": "2026-05-17",
+  "slug": "cold-brew-ijen-robusta-grind-brewing-time",
+  "title_ko": "분쇄 입도와 추출 시간이 이젠 로부스타 콜드 브루 커피의 이화학적·관능 특성에 미치는 영향",
+  "title_original": "Effects of grind size and brewing time on properties of cold brewed Robusta Ijen coffee",
+  "one_liner": "분쇄도·추출 시간이 이젠 로부스타 콜드 브루 품질의 핵심 결정 변수",
+  "authors": "Jayus, J.; Darmajana, D.A.; Fitria, A.N. 외 (인도네시아)",
+  "journal": "Journal of Food Science and Technology (Springer)",
+  "pub_date": "2026-02-23",
+  "doi": "10.1007/s13197-026-06628-5",
+  "categories_primary": [
+    "추출"
+  ],
+  "categories_secondary": [
+    "생두"
+  ],
+  "summary": "콜드 브루 커피는 냉수로 장시간 추출하여 쓴맛 화합물 생성을 억제하고 균형 잡힌 관능 프로파일을 구현하는 방식이다. 본 연구는 인도네시아 이젠 화산 고원 지역산 내추럴 가공 로부스타 생두를 10°C에서 콜드 브루 추출하며 분쇄 입도와 추출 시간이 이화학적·관능 특성에 미치는 영향을 체계적으로 규명했다.\n\n이화학적 분석에서 분쇄 입도가 미세해질수록, 추출 시간이 길어질수록 TDS, 항산화 활성, 카페인 함량이 모두 증가하는 정비례 관계가 확인되었다. 반면 추출액 밝기(L* 값)는 분쇄 입도 미세화에 따라 감소했다.\n\n관능 평가에서 콜드 브루는 고온 추출(컵핑 점수 78.38점) 대비 82.00점으로 향상되어 SCA 스페셜티 등급(80점 이상)에 진입했다. 달콤한 후미, 카라멜·산미·모카 복합 노트가 두드러졌으며, 단맛·산미·쓴맛의 균형이 현저히 개선되었다.",
+  "key_findings": [
+    "분쇄 입도 미세화 + 추출 시간 증가 → TDS, 항산화 활성, 카페인 함량 동반 상승",
+    "분쇄 입도 미세화 → 추출액 밝기(L*) 감소 (색이 진해짐)",
+    "콜드 브루 컵핑 점수 82.00 vs. 고온 추출 78.38 — SCA 스페셜티 기준 충족",
+    "콜드 브루에서 단맛·산미·쓴맛 균형이 고온 추출 대비 현저히 향상",
+    "주요 관능 노트: 달콤한 후미, 얇은 바디, 카라멜·산미·풀향·허브·그린·모카",
+    "냉장(10°C) 저온 추출이 쓴맛 억제 + 단맛·균형 향상에 효과적임을 이젠 로부스타에서 실증"
+  ],
+  "methodology": "인도네시아 이젠 지역산 내추럴 가공 로부스타 생두를 10°C 냉장 환경에서 분쇄 입도·추출 시간 변수를 달리해 콜드 브루 추출. TDS, CIE L*a*b* 색도, 항산화 활성, 카페인 함량 측정 및 관능 평가(향기·맛·색감·후미·컵핑 점수) 수행. 고온 추출 커피를 대조군으로 직접 비교.",
+  "implications": {
+    "농가/가공장": "내추럴 가공 이젠 로부스타를 콜드 브루 전용 프리미엄 제품으로 포지셔닝 가능. 분쇄 입도·추출 시간 표준화 가이드라인으로 소규모 농협·가공소에서도 스페셜티 등급 콜드 브루 생산 가능.",
+    "로스터/큐그레이더": "로부스타 콜드 브루 SCA 스페셜티 기준 충족 입증 — 라인업 확장 근거 마련. 레시피 개발 시 분쇄 입도·추출 시간 조합 우선 최적화 권장.",
+    "R&D": "다양한 로부스타 산지(베트남, 우간다 등) 및 아라비카에 동일 방법론 적용, 온도 변수 추가, 저장 중 품질 변화 연구로 확장 가능."
+  },
+  "limitations": "단일 산지·가공 방식·품종으로 일반화 한계. 추출 온도 10°C 단일 조건으로 다양한 온도 비교 불가. 최적 분쇄 입도·추출 시간 수치 초록 미공개. 저장 안정성 데이터 미포함.",
+  "glossary": [
+    {
+      "term": "TDS",
+      "ko": "총 용존 고형물 — 커피 추출액 농도 지표"
+    },
+    {
+      "term": "Ijen Robusta",
+      "ko": "이젠 로부스타 — 동자바 화산 고원산 고품질 로부스타"
+    },
+    {
+      "term": "Natural Processing",
+      "ko": "내추럴 가공 — 과육째 건조해 단맛 강화"
+    },
+    {
+      "term": "Cold Brew",
+      "ko": "콜드 브루 — 저온 장시간 추출로 쓴맛 억제"
+    },
+    {
+      "term": "L* value",
+      "ko": "L* 값 — CIE 색 체계 밝기 지표 (0=흑, 100=백)"
+    },
+    {
+      "term": "SCA Cupping Score",
+      "ko": "SCA 컵핑 점수 — 80점 이상 스페셜티 등급"
+    }
+  ],
+  "citation_apa": "Jayus, J., Darmajana, D. A., Fitria, A. N., et al. (2026). Effects of grind size and brewing time on properties of cold brewed Robusta Ijen coffee. Journal of Food Science and Technology. https://doi.org/10.1007/s13197-026-06628-5",
+  "links": {
+    "doi": "https://doi.org/10.1007/s13197-026-06628-5",
+    "oa_pdf": "",
+    "journal_homepage": "https://link.springer.com/journal/13197"
+  },
+  "source_basis": "abstract_only",
+  "data_charts": [
+    {
+      "type": "bar",
+      "title": "추출 방식별 컵핑 점수 비교",
+      "x_labels": [
+        "고온 추출",
+        "콜드 브루 (10°C)"
+      ],
+      "y_label": "컵핑 점수 (SCA, 100점 만점)",
+      "values": [
+        78.38,
+        82.0
+      ],
+      "unit": "점"
+    }
+  ],
+  "drive_doc_url": "https://docs.google.com/document/d/1V7pzzhJlFpO4NSYSzY1deAPNkbQgS6CIYVj5EiT1DZQ/edit",
+  "hero_image": "/static/img/insights/hero/extraction.svg"
+}
