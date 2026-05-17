@@ -459,7 +459,7 @@
             color: #d6cdc0; font-size: 1.6rem;
         }
 
-        /* 8번째 셀: 로고 */
+        /* 8번째 셀: 로고 (+ 5초 슬라이드쇼: 로고 ↔ 메뉴 사진) */
         .hcal-wlogo {
             background: linear-gradient(135deg, #faf8f5 0%, #efe7d9 100%);
             border-radius: 12px;
@@ -468,17 +468,54 @@
             padding: 18px;
             min-height: 240px;
             border: 1.5px solid #e5ddd3;
+            position: relative;
+            overflow: hidden;
         }
         .hcal-wlogo img {
             max-width: 80%;
             max-height: 70%;
             object-fit: contain;
             opacity: 0.92;
+            transition: opacity 450ms ease, max-width 450ms ease, max-height 450ms ease;
+        }
+        .hcal-wlogo.is-photo {
+            padding: 0;
+            background: #1a1410;
+            border-color: #2a1f17;
+        }
+        .hcal-wlogo.is-photo img {
+            max-width: 100%;
+            max-height: 100%;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 1;
+            border-radius: 10px;
         }
         .hcal-wlogo-caption {
             margin-top: 10px;
             font-size: 0.78rem; color: #8B6F47;
             letter-spacing: 1.5px; font-weight: 600;
+            transition: opacity 450ms ease;
+        }
+        .hcal-wlogo.is-photo .hcal-wlogo-caption {
+            display: none;
+        }
+        .hcal-wlogo-label {
+            position: absolute;
+            top: 10px; right: 12px;
+            color: #fff;
+            font-weight: 700;
+            font-size: 1rem;
+            letter-spacing: 0.02em;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8), 0 0 4px rgba(0, 0, 0, 0.6);
+            opacity: 0;
+            transition: opacity 450ms ease;
+            pointer-events: none;
+            z-index: 2;
+        }
+        .hcal-wlogo.is-photo .hcal-wlogo-label {
+            opacity: 1;
         }
 
         /* 8번째 셀이 수요책 Shorts 로 대체될 때 */
@@ -525,6 +562,7 @@
             .hcal-week-nav h3 { font-size: 1rem; min-width: 170px; }
             .hcal-week-nav button { width: 36px; height: 36px; font-size: 1.15rem; }
             .hcal-wlogo-caption { font-size: 0.66rem; letter-spacing: 1px; }
+            .hcal-wlogo-label { font-size: 0.82rem; top: 6px; right: 8px; }
         }
 
         /* 데스크톱용 테이블 */
@@ -2043,6 +2081,8 @@
             for (let i = 3; i < 7; i++) html += renderDayCell(i);
 
             html += `</div>`;
+            // DOM 에 innerHTML 이 반영된 직후 슬라이드쇼를 (재)부착.
+            setTimeout(setupHistoryLogoSlideshow, 0);
             return html;
         }
 
@@ -2106,11 +2146,84 @@
                 `;
             }
             return `
-                <div class="hcal-wlogo">
+                <div class="hcal-wlogo" data-logo-slideshow="1">
                     <img src="/static/img/logo-92black.png" alt="92도씨 로고">
                     <div class="hcal-wlogo-caption">92°C ROASTERY</div>
+                    <div class="hcal-wlogo-label"></div>
                 </div>
             `;
+        }
+
+        // ---------- 8번째 셀 슬라이드쇼: 로고 ↔ 메뉴 사진 (5초 간격) ----------
+        // 데미시리즈 모음 사진은 의도적으로 제외 (개별 메뉴 사진만 노출).
+        // 라벨이 null 인 항목은 사진 자체에 메뉴명이 들어있어 오버레이 라벨을 띄우지 않음.
+        const HISTORY_LOGO_SLIDES = [
+            { src: '/static/img/logo-92black.png',                                        label: null,         isLogo: true },
+            { src: '/static/img/menu/' + encodeURIComponent('데미카카오.png'),             label: '데미카카오' },
+            { src: '/static/img/menu/' + encodeURIComponent('데미로투스.png'),             label: '데미로투스' },
+            { src: '/static/img/menu/' + encodeURIComponent('데미말차.png'),               label: '데미말차'   },
+            { src: '/static/img/menu/' + encodeURIComponent('데미오레오.png'),             label: '데미오레오' },
+            { src: '/static/img/menu/' + encodeURIComponent('흑임자커피_솔트크림라떼.png'), label: null         },
+            { src: '/static/img/menu/' + encodeURIComponent('망고빙수_팥빙수.png'),         label: null         }
+        ];
+
+        // 메뉴 사진 프리로드 (전환 시 깜빡임 방지) — 1회만 수행.
+        function preloadHistoryLogoSlides() {
+            if (window.__historyLogoPreloaded) return;
+            window.__historyLogoPreloaded = true;
+            HISTORY_LOGO_SLIDES.forEach(function (s) {
+                if (s.isLogo) return;
+                var pre = new Image();
+                pre.src = s.src;
+            });
+        }
+
+        function setupHistoryLogoSlideshow() {
+            if (window.__historyLogoTimer) {
+                clearInterval(window.__historyLogoTimer);
+                window.__historyLogoTimer = null;
+            }
+            var cell = document.querySelector('.hcal-wlogo[data-logo-slideshow="1"]');
+            if (!cell) return;
+            if (cell.classList.contains('hcal-wlogo-shorts')) return;
+            var img = cell.querySelector('img');
+            var labelEl = cell.querySelector('.hcal-wlogo-label');
+            if (!img || !labelEl) return;
+
+            preloadHistoryLogoSlides();
+
+            var FADE_MS = 450;
+            var INTERVAL_MS = 5000;
+            var idx = 0;
+
+            function show(nextIdx) {
+                var s = HISTORY_LOGO_SLIDES[nextIdx];
+                img.style.opacity = '0';
+                setTimeout(function () {
+                    img.src = s.src;
+                    img.alt = s.label || (s.isLogo ? '92도씨 로고' : '');
+                    if (s.isLogo) {
+                        cell.classList.remove('is-photo');
+                        labelEl.textContent = '';
+                    } else {
+                        cell.classList.add('is-photo');
+                        labelEl.textContent = s.label || '';
+                    }
+                    requestAnimationFrame(function () {
+                        img.style.opacity = '';
+                    });
+                }, FADE_MS);
+            }
+
+            window.__historyLogoTimer = setInterval(function () {
+                if (!document.body.contains(cell)) {
+                    clearInterval(window.__historyLogoTimer);
+                    window.__historyLogoTimer = null;
+                    return;
+                }
+                idx = (idx + 1) % HISTORY_LOGO_SLIDES.length;
+                show(idx);
+            }, INTERVAL_MS);
         }
 
         function escapeCalText(s) {
