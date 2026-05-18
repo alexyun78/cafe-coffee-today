@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>생두에서 컵까지: 커피 품질의 유전적·환경적·수확후 결정인자 종합 리뷰 — 92°C ROASTERY</title>
+<meta name="description" content="DXMT·MYB·FADS2 유전자·고도·발효가 커피 품질을 통합 결정하는 분자 메커니즘 최초 종합">
+<link rel="icon" type="image/png" href="/static/img/logo-92black.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --canvas: #FFFFFF; --canvas-warm: #FAF7F2; --canvas-stone: #F2ECE3;
+  --ink: #1A1410; --ink-mute: #4A3F36; --ink-soft: #6B5E52;
+  --espresso: #6F4E37; --caramel: #C9986A; --copper: #B5703D;
+  --line: #E8E0D5; --line-soft: #F0E9DD;
+  --font-display: "Cormorant Garamond", "Pretendard", serif;
+  --font-body: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  --r-sm: 6px; --r-md: 12px; --r-pill: 999px;
+}
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color: transparent; }
+html { scroll-behavior: smooth; }
+body { font-family: var(--font-body); color: var(--ink); background: var(--canvas); font-feature-settings: "kern","ss01"; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+a { color: var(--copper); text-decoration: none; border-bottom: 1px solid transparent; transition: border-color .2s; }
+a:hover { border-bottom-color: var(--copper); }
+img { display: block; max-width: 100%; height: auto; }
+.container { max-width: 860px; margin: 0 auto; padding: 0 32px; }
+@media (max-width: 720px) { .container { padding: 0 20px; } }
+@media (max-width: 480px) { .container { padding: 0 16px; } }
+.site-nav { position: sticky; top: 0; z-index: 50; background: rgba(255,255,255,0.9); backdrop-filter: saturate(140%) blur(14px); -webkit-backdrop-filter: saturate(140%) blur(14px); border-bottom: 1px solid var(--line-soft); }
+.nav-inner { max-width: 1200px; margin: 0 auto; padding: 16px 32px; display: flex; align-items: center; justify-content: space-between; }
+.brand { font-family: var(--font-display); font-size: 1.3rem; font-weight: 700; color: var(--ink); display: inline-flex; align-items: center; gap: 4px; border-bottom: none; }
+.brand:hover { border-bottom: none; }
+.brand-mark { display: inline-flex; align-items: flex-start; font-family: "Pretendard", sans-serif; font-weight: 900; letter-spacing: -0.04em; line-height: 1; color: inherit; }
+.temp-mark { display: flex; flex-direction: column; line-height: .82; margin: 0 .05em 0 .04em; }
+.temp-mark .temp-deg { font-size: .42em; letter-spacing: -.04em; }
+.temp-mark .temp-c { font-size: .58em; letter-spacing: -.05em; margin-top: -.05em; }
+.nav-back { font-family: var(--font-mono); font-size: .75rem; letter-spacing: .18em; color: var(--ink-mute); border-bottom: none; }
+.nav-back:hover { color: var(--copper); border-bottom: none; }
+.article-hero { padding: 56px 0 48px; border-bottom: 1px solid var(--line-soft); }
+.eyebrow { font-family: var(--font-mono); font-size: .72rem; letter-spacing: .28em; color: var(--copper); margin-bottom: 18px; display: flex; align-items: center; gap: 12px; }
+.eyebrow::before { content: ""; display: inline-block; width: 28px; height: 1px; background: var(--copper); }
+.article-title { font-family: var(--font-display); font-weight: 500; font-size: clamp(2rem, 4.5vw, 3.2rem); line-height: 1.15; letter-spacing: -0.02em; color: var(--ink); margin-bottom: 20px; }
+.article-title em { font-style: italic; color: var(--espresso); font-weight: 600; }
+.article-one-liner { font-family: var(--font-display); font-style: italic; font-size: 1.3rem; line-height: 1.5; color: var(--espresso); margin-bottom: 28px; padding-left: 20px; border-left: 3px solid var(--caramel); }
+.article-meta { display: flex; gap: 24px; flex-wrap: wrap; font-family: var(--font-mono); font-size: .75rem; letter-spacing: .12em; color: var(--ink-soft); padding-top: 20px; border-top: 1px solid var(--line-soft); }
+.article-meta span { display: inline-flex; align-items: center; gap: 6px; }
+.article-meta span::before { content: "■"; color: var(--caramel); font-size: .55rem; }
+.hero-image { margin: 32px 0 0; border-radius: var(--r-md); overflow: hidden; border: 1px solid var(--line); }
+.hero-image img { width: 100%; }
+.article-body { padding: 56px 0 80px; }
+.section-block { margin-bottom: 56px; }
+.section-block:last-child { margin-bottom: 0; }
+.section-block h2 { font-family: var(--font-display); font-weight: 600; font-size: 1.85rem; line-height: 1.2; letter-spacing: -0.01em; color: var(--ink); margin-bottom: 18px; display: flex; align-items: baseline; gap: 14px; }
+.section-block h2::before { content: ""; display: inline-block; width: 10px; height: 10px; background: var(--caramel); border-radius: 2px; }
+.section-block p { font-size: 1.04rem; color: var(--ink-mute); line-height: 1.85; margin-bottom: 18px; }
+.section-block p:last-child { margin-bottom: 0; }
+ul.findings { list-style: none; padding: 0; counter-reset: f; }
+ul.findings li { position: relative; padding: 16px 18px 16px 56px; font-size: 1rem; color: var(--ink-mute); line-height: 1.75; background: var(--canvas-warm); border: 1px solid var(--line); border-radius: var(--r-sm); margin-bottom: 12px; counter-increment: f; }
+ul.findings li::before { content: counter(f, decimal-leading-zero); position: absolute; left: 18px; top: 18px; font-family: var(--font-mono); font-size: .85rem; font-weight: 600; color: var(--copper); letter-spacing: .04em; }
+.implications-grid { display: grid; gap: 18px; grid-template-columns: 1fr; }
+.implication-card { padding: 22px 24px; background: var(--canvas-warm); border: 1px solid var(--line); border-radius: var(--r-md); border-left: 3px solid var(--caramel); }
+.implication-card h3 { font-family: var(--font-mono); font-size: .8rem; letter-spacing: .18em; color: var(--copper); margin-bottom: 10px; font-weight: 600; }
+.implication-card p { font-size: 1rem; color: var(--ink-mute); line-height: 1.75; }
+.glossary-list { list-style: none; padding: 0; }
+.glossary-list li { padding: 16px 0; border-bottom: 1px solid var(--line-soft); display: grid; grid-template-columns: 220px 1fr; gap: 24px; font-size: 1rem; line-height: 1.7; }
+.glossary-list li:last-child { border-bottom: none; }
+.glossary-list dt { font-family: var(--font-display); font-style: italic; font-size: 1.05rem; color: var(--espresso); font-weight: 600; }
+.glossary-list dd { color: var(--ink-mute); }
+@media (max-width: 600px) { .glossary-list li { grid-template-columns: 1fr; gap: 4px; } }
+.citation-block { margin-top: 12px; padding: 22px 24px; background: var(--canvas-warm); border: 1px solid var(--line); border-radius: var(--r-md); font-family: var(--font-mono); font-size: .85rem; color: var(--ink-mute); line-height: 1.7; word-break: break-word; }
+.links-row { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 18px; }
+.link-pill { display: inline-flex; align-items: center; gap: 8px; padding: 9px 16px; background: var(--canvas-warm); border: 1px solid var(--line); border-radius: var(--r-pill); font-family: var(--font-mono); font-size: .78rem; letter-spacing: .08em; color: var(--ink-mute); border-bottom: 1px solid var(--line); transition: border-color .2s, color .2s; }
+.link-pill:hover { color: var(--copper); border-color: var(--copper); }
+.charts-grid { display: grid; gap: 28px; grid-template-columns: 1fr; }
+@media (min-width: 720px) { .charts-grid { grid-template-columns: 1fr 1fr; } }
+.chart-card { padding: 24px 24px 18px; background: var(--canvas); border: 1px solid var(--line); border-radius: var(--r-md); }
+.chart-title { font-family: var(--font-display); font-size: 1.1rem; font-weight: 600; color: var(--ink); margin-bottom: 14px; line-height: 1.3; }
+.chart-svg { width: 100%; height: auto; display: block; }
+.chart-svg .bar { fill: var(--caramel); transition: fill .2s; }
+.chart-svg .bar.highlight { fill: var(--copper); }
+.chart-svg .axis-line { stroke: var(--line); stroke-width: 1; }
+.chart-svg .axis-label { font-family: var(--font-mono); font-size: 11px; fill: var(--ink-soft); }
+.chart-svg .value-label { font-family: var(--font-mono); font-size: 11px; font-weight: 600; fill: var(--espresso); }
+.chart-svg .y-label { font-family: var(--font-mono); font-size: 10px; fill: var(--ink-soft); letter-spacing: .1em; }
+.figures-grid { display: flex; flex-direction: column; gap: 24px; }
+.figure-card { border: 1px solid var(--line); border-radius: var(--r-md); overflow: hidden; }
+.figure-card img { width: 100%; }
+.figure-caption { padding: 14px 18px; font-size: .9rem; color: var(--ink-soft); font-family: var(--font-body); line-height: 1.6; background: var(--canvas-warm); border-top: 1px solid var(--line); }
+.source-basis { display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; background: rgba(201,152,106,.18); border: 1px solid rgba(181,112,61,.35); border-radius: var(--r-pill); font-family: var(--font-mono); font-size: .72rem; letter-spacing: .12em; color: var(--espresso); font-weight: 500; }
+.source-basis.abstract { background: rgba(107,94,82,.1); border-color: rgba(107,94,82,.3); color: var(--ink-soft); }
+.article-footer { padding: 36px 0 56px; border-top: 1px solid var(--line-soft); text-align: center; font-family: var(--font-mono); font-size: .75rem; letter-spacing: .14em; color: var(--ink-soft); }
+.article-footer a { color: var(--ink-mute); border-bottom: 1px solid transparent; }
+.article-footer a:hover { color: var(--copper); border-bottom-color: var(--copper); }
+@media (max-width: 720px) {
+  .article-hero { padding: 36px 0 32px; }
+  .article-body { padding: 36px 0 56px; }
+  .section-block { margin-bottom: 40px; }
+  .section-block h2 { font-size: 1.5rem; }
+  .article-meta { gap: 12px 18px; font-size: .68rem; }
+}
+</style>
+</head>
+<body>
+
+<header class="site-nav">
+  <div class="nav-inner">
+    <a class="brand" href="/">
+      <span class="brand-mark">92<span class="temp-mark"><span class="temp-deg">°</span><span class="temp-c">C</span></span></span>ROASTERY
+    </a>
+    <a class="nav-back" href="/insight">← INSIGHTS</a>
+  </div>
+</header>
+
+<article>
+  <section class="article-hero">
+    <div class="container">
+      <div class="eyebrow">— COFFEE INSIGHT · 2026.05.18</div>
+      <h1 class="article-title">생두에서 컵까지: 커피 품질의 유전적·환경적·수확후 결정인자 종합 리뷰</h1>
+      <p class="article-one-liner">DXMT·MYB·FADS2 유전자·고도·발효가 커피 품질을 통합 결정하는 분자 메커니즘 최초 종합</p>
+      <div class="article-meta">
+        <span>AGRICULTURE (MDPI)</span>
+        <span>2026-03-27</span>
+        <span>DOI 10.3390/AGRICULTURE16070739</span>
+        <span>생두 · 화학/분석화학 · 지속가능성/경제</span>
+      </div>
+      
+      <div class="hero-image">
+        <img src="/static/img/insights/hero/green-bean.svg" alt="생두에서 컵까지: 커피 품질의 유전적·환경적·수확후 결정인자 종합 리뷰">
+      </div>
+      
+    </div>
+  </section>
+
+  <section class="article-body">
+    <div class="container">
+
+      
+      <div class="section-block">
+        <h2>요약</h2>
+        <p>C. arabica 사배체 게놈의 DXMT·MYB·FADS2 유전자 기능이 카페인(1.22% dmb)·클로로젠산·지질 프로파일을 결정하고, 고도 1,600~2,000m 및 적정 음지 관리가 당 축적을 지원하며, 수확후 처리(워시드/내추럴/발효)가 클로로젠산 및 GABA 수준을 조절해 최종 컵 품질을 결정한다는 세 결정 축을 분자 수준에서 통합 정리한 종합 리뷰 논문이다.</p>
+      </div>
+      
+
+      
+      <div class="section-block">
+        <h2>핵심 발견</h2>
+        <ul class="findings">
+          <li>C. arabica 사배체 게놈 DXMT 서브게놈 편향 발현 → 카페인 1.22% dmb (로부스타 2.54% dmb 대비 낮음)</li><li>MYB 전사인자가 카페인·클로로젠산·테르펜 3대 생합성 경로를 동시 조절하는 마스터 레귤레이터로 확인</li><li>FADS2 유전자가 생두 지질 대사·지방산 프로파일 결정 핵심 역할</li><li>야생 C. canephora가 C. arabica보다 클로로젠산 이성질체 다양성 현저히 높음</li><li>고도 1,600~2,000m에서 낮은 기온 → 당 축적 촉진; 과도 음지 → 탄소 동화 억제 → 향미 전구체 발달 저해</li><li>내추럴 가공 → GABA 증가; 워시드 가공 → 당 감소·클린 산미; 클로로젠산은 발효 시간 의존적 변동</li><li>카페인·트리고넬린은 가공 방식 무관하게 안정적</li>
+        </ul>
+      </div>
+      
+
+      
+
+      
+      <div class="section-block">
+        <h2>데이터로 보기</h2>
+        <div class="charts-grid" id="charts-grid"></div>
+      </div>
+      
+
+      
+      <div class="section-block">
+        <h2>방법론</h2>
+        <p>체계적 문헌 고찰 리뷰. C. arabica와 C. canephora 유전체 비교(사배체 구조, DXMT·MYB·FADS2 기능), 재배 환경(고도·온도·음지 관리)의 대사물질 영향, 수확후 가공(워시드·내추럴·허니·발효) 비교를 통합 정리. 광시성 아열대 커피 재배 맥락 포함, 글로벌 사례 망라.</p>
+      </div>
+      
+
+      
+      <div class="section-block">
+        <h2>시사점</h2>
+        <div class="implications-grid">
+          
+          <div class="implication-card">
+            <h3>농가 · 가공장</h3>
+            <p>고도 1,600~2,000m 재배지는 당 축적 지원 과학적 근거 명확화. 과도 음지 설치가 향미 전구체 발달 저해 가능 → 일조량 균형 필요. 내추럴 가공 GABA 증가는 프리미엄 내추럴 로트 품질 차별화 근거.</p>
+          </div>
+          
+          <div class="implication-card">
+            <h3>로스터 · 큐그레이더</h3>
+            <p>클로로젠산이 발효 시간 의존적으로 변동 → 발효 프로토콜 명시 생두 구매로 로스팅 반응 재현성 확보. 야생 로부스타 클로로젠산 이성질체 다양성은 고기능성 블렌드 소재 가능성.</p>
+          </div>
+          
+          <div class="implication-card">
+            <h3>R&amp;D</h3>
+            <p>MYB·DXMT·FADS2 마커 보조 선발(MAS) 육종 또는 CRISPR 기반 저카페인·고클로로젠산 아라비카 개발 근거. 야생 C. canephora 기능성 육종, 고도·음지 최적화 모델링, 발효 조건별 클로로젠산 동태 연구가 후속 과제.</p>
+          </div>
+          
+        </div>
+      </div>
+      
+
+      
+      <div class="section-block">
+        <h2>한계</h2>
+        <p>리뷰 논문으로 1차 실험 데이터 없음. 중국 광시성 맥락 편향 가능성. DXMT·MYB·FADS2 기능 일부는 타 작물 연구에서 유추. 클로로젠산 발효 시간 의존적 변동의 정량 수치 미제공. 세 결정 축 간 상호작용 효과 미정량화.</p>
+      </div>
+      
+
+      
+      <div class="section-block">
+        <h2>용어집</h2>
+        <ul class="glossary-list">
+          
+          <li><dt>Allotetraploid</dt><dd>사배체 — 두 이배체 조상이 합쳐진 4배체</dd></li>
+          
+          <li><dt>DXMT</dt><dd>카페인 합성 최종 효소 (테오브로민→카페인 전환)</dd></li>
+          
+          <li><dt>MYB Transcription Factor</dt><dd>카페인·클로로젠산·테르펜 경로 조절 마스터 전사인자</dd></li>
+          
+          <li><dt>FADS2</dt><dd>지방산 불포화도 조절 효소; 생두 지질 프로파일 결정</dd></li>
+          
+          <li><dt>Chlorogenic Acid (CGA)</dt><dd>클로로젠산 — 커피 주요 페놀산; 항산화 및 로스팅 반응 전구체</dd></li>
+          
+          <li><dt>GABA</dt><dd>γ-아미노부티르산 — 내추럴 가공 시 증가하는 비단백질 아미노산</dd></li>
+          
+          <li><dt>Homoeologous Exchange</dt><dd>동종 염색체 교환 — 사배체 서브게놈 간 염색체 단편 교환</dd></li>
+          
+          <li><dt>Subgenome-biased Expression</dt><dd>서브게놈 편향 발현 — 특정 서브게놈 유전자가 우선 발현</dd></li>
+          
+        </ul>
+      </div>
+      
+
+      <div class="section-block">
+        <h2>인용 · 링크</h2>
+        <div class="citation-block">Guangxi Academy of Agricultural Sciences Research Team. (2026). From germplasm to cup: A comprehensive review of the genetic, environmental, and postharvest determinants of coffee quality and their interactions. Agriculture, 16(7), 739. https://doi.org/10.3390/agriculture16070739</div>
+        <div class="links-row">
+          <a class="link-pill" href="https://doi.org/10.3390/agriculture16070739" target="_blank" rel="noopener noreferrer">DOI →</a>
+          <a class="link-pill" href="https://www.mdpi.com/2077-0472/16/7/739" target="_blank" rel="noopener noreferrer">OA PDF →</a>
+          <a class="link-pill" href="https://www.mdpi.com/journal/agriculture" target="_blank" rel="noopener noreferrer">JOURNAL HOMEPAGE →</a>
+        </div>
+        <div style="margin-top: 18px;">
+          
+          <span class="source-basis abstract">ABSTRACT BASIS</span>
+          
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <footer class="article-footer">
+    <div class="container">
+      <a href="/insight">← BACK TO INSIGHTS</a>
+      <span style="margin: 0 16px;">·</span>
+      <a href="/">HOME</a>
+    </div>
+  </footer>
+</article>
+
+
+<script>
+const CHARTS = [{"type": "bar", "title": "아라비카 vs 로부스타 카페인 함량 (건물 기준)", "x_labels": ["C. arabica", "C. canephora (Robusta)"], "y_label": "카페인 함량 (%)", "values": [1.22, 2.54], "unit": "% dmb (건물 기준)"}];
+function renderBarChart(chart) {
+  const W = 520, H = 280;
+  const PAD_L = 50, PAD_R = 16, PAD_T = 18, PAD_B = 56;
+  const plotW = W - PAD_L - PAD_R;
+  const plotH = H - PAD_T - PAD_B;
+  const max = Math.max(...chart.values);
+  const min = Math.min(...chart.values, 0);
+  const yMax = max + (max - min) * 0.12;
+  const yMin = min < 0 ? min : 0;
+  const yRange = yMax - yMin || 1;
+  const n = chart.values.length;
+  const slot = plotW / n;
+  const barW = Math.min(slot * 0.6, 80);
+  function yFor(v) { return PAD_T + plotH - ((v - yMin) / yRange) * plotH; }
+  const ticks = 4;
+  let gridSvg = "";
+  for (let i = 0; i <= ticks; i++) {
+    const v = yMin + (yRange / ticks) * i;
+    const y = yFor(v);
+    gridSvg += `<line class="axis-line" x1="${PAD_L}" y1="${y}" x2="${PAD_L + plotW}" y2="${y}"/>`;
+    gridSvg += `<text class="axis-label" x="${PAD_L - 8}" y="${y + 4}" text-anchor="end">${Number(v.toFixed(1))}</text>`;
+  }
+  const maxIdx = chart.values.indexOf(max);
+  let barsSvg = "";
+  for (let i = 0; i < n; i++) {
+    const v = chart.values[i];
+    const x = PAD_L + slot * i + (slot - barW) / 2;
+    const y = yFor(v);
+    const h = (PAD_T + plotH) - y;
+    const cls = i === maxIdx ? "bar highlight" : "bar";
+    barsSvg += `<rect class="${cls}" x="${x}" y="${y}" width="${barW}" height="${h}" rx="3"/>`;
+    barsSvg += `<text class="value-label" x="${x + barW / 2}" y="${y - 6}" text-anchor="middle">${v}${chart.unit || ""}</text>`;
+    const label = String(chart.x_labels[i] || "");
+    barsSvg += `<text class="axis-label" x="${x + barW / 2}" y="${PAD_T + plotH + 18}" text-anchor="middle">${label}</text>`;
+  }
+  const yTitle = chart.y_label ? `<text class="y-label" x="${PAD_L}" y="${PAD_T - 6}">${chart.y_label}${chart.unit ? " (" + chart.unit + ")" : ""}</text>` : "";
+  return `<svg class="chart-svg" viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid meet" role="img" aria-label="${chart.title}">${yTitle}${gridSvg}${barsSvg}</svg>`;
+}
+(function () {
+  const grid = document.getElementById("charts-grid");
+  if (!grid) return;
+  CHARTS.forEach(function (c) {
+    const card = document.createElement("div");
+    card.className = "chart-card";
+    card.innerHTML = `<div class="chart-title">${c.title}</div>` + (c.type === "bar" ? renderBarChart(c) : "");
+    grid.appendChild(card);
+  });
+})();
+</script>
+
+
+</body>
+</html>

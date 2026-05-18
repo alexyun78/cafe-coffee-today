@@ -1,7 +1,24 @@
 {
   "version": 1,
-  "updated_at": "2026-05-17T12:00:11Z",
+  "updated_at": "2026-05-18T12:00:13Z",
   "items": [
+    {
+      "id": "2026-05-18-germplasm-to-cup-coffee-quality-review",
+      "date": "2026-05-18",
+      "title_ko": "생두에서 컵까지: 커피 품질의 유전적·환경적·수확후 결정인자 종합 리뷰",
+      "one_liner": "DXMT·MYB·FADS2 유전자·고도·발효가 커피 품질을 통합 결정하는 분자 메커니즘 최초 종합",
+      "categories_primary": [
+        "생두"
+      ],
+      "categories_secondary": [
+        "화학/분석화학",
+        "지속가능성/경제"
+      ],
+      "hero_image": "/static/img/insights/hero/green-bean.svg",
+      "journal": "Agriculture (MDPI)",
+      "pub_date": "2026-03-27",
+      "source_basis": "abstract_only"
+    },
     {
       "id": "2026-05-17-cold-brew-ijen-robusta-grind-brewing-time",
       "date": "2026-05-17",

@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "id": "2026-05-18-germplasm-to-cup-coffee-quality-review",
+  "date": "2026-05-18",
+  "slug": "germplasm-to-cup-coffee-quality-review",
+  "title_ko": "생두에서 컵까지: 커피 품질의 유전적·환경적·수확후 결정인자 종합 리뷰",
+  "title_original": "From Germplasm to Cup: A Comprehensive Review of the Genetic, Environmental, and Postharvest Determinants of Coffee Quality and Their Interactions",
+  "one_liner": "DXMT·MYB·FADS2 유전자·고도·발효가 커피 품질을 통합 결정하는 분자 메커니즘 최초 종합",
+  "authors": "Guangxi Academy of Agricultural Sciences Research Team (Guangxi Subtropical Crops Research Institute, Nanning, China)",
+  "journal": "Agriculture (MDPI)",
+  "pub_date": "2026-03-27",
+  "doi": "10.3390/agriculture16070739",
+  "categories_primary": [
+    "생두"
+  ],
+  "categories_secondary": [
+    "화학/분석화학",
+    "지속가능성/경제"
+  ],
+  "summary": "C. arabica 사배체 게놈의 DXMT·MYB·FADS2 유전자 기능이 카페인(1.22% dmb)·클로로젠산·지질 프로파일을 결정하고, 고도 1,600~2,000m 및 적정 음지 관리가 당 축적을 지원하며, 수확후 처리(워시드/내추럴/발효)가 클로로젠산 및 GABA 수준을 조절해 최종 컵 품질을 결정한다는 세 결정 축을 분자 수준에서 통합 정리한 종합 리뷰 논문이다.",
+  "key_findings": [
+    "C. arabica 사배체 게놈 DXMT 서브게놈 편향 발현 → 카페인 1.22% dmb (로부스타 2.54% dmb 대비 낮음)",
+    "MYB 전사인자가 카페인·클로로젠산·테르펜 3대 생합성 경로를 동시 조절하는 마스터 레귤레이터로 확인",
+    "FADS2 유전자가 생두 지질 대사·지방산 프로파일 결정 핵심 역할",
+    "야생 C. canephora가 C. arabica보다 클로로젠산 이성질체 다양성 현저히 높음",
+    "고도 1,600~2,000m에서 낮은 기온 → 당 축적 촉진; 과도 음지 → 탄소 동화 억제 → 향미 전구체 발달 저해",
+    "내추럴 가공 → GABA 증가; 워시드 가공 → 당 감소·클린 산미; 클로로젠산은 발효 시간 의존적 변동",
+    "카페인·트리고넬린은 가공 방식 무관하게 안정적"
+  ],
+  "methodology": "체계적 문헌 고찰 리뷰. C. arabica와 C. canephora 유전체 비교(사배체 구조, DXMT·MYB·FADS2 기능), 재배 환경(고도·온도·음지 관리)의 대사물질 영향, 수확후 가공(워시드·내추럴·허니·발효) 비교를 통합 정리. 광시성 아열대 커피 재배 맥락 포함, 글로벌 사례 망라.",
+  "implications": {
+    "농가/가공장": "고도 1,600~2,000m 재배지는 당 축적 지원 과학적 근거 명확화. 과도 음지 설치가 향미 전구체 발달 저해 가능 → 일조량 균형 필요. 내추럴 가공 GABA 증가는 프리미엄 내추럴 로트 품질 차별화 근거.",
+    "로스터/큐그레이더": "클로로젠산이 발효 시간 의존적으로 변동 → 발효 프로토콜 명시 생두 구매로 로스팅 반응 재현성 확보. 야생 로부스타 클로로젠산 이성질체 다양성은 고기능성 블렌드 소재 가능성.",
+    "R&D": "MYB·DXMT·FADS2 마커 보조 선발(MAS) 육종 또는 CRISPR 기반 저카페인·고클로로젠산 아라비카 개발 근거. 야생 C. canephora 기능성 육종, 고도·음지 최적화 모델링, 발효 조건별 클로로젠산 동태 연구가 후속 과제."
+  },
+  "limitations": "리뷰 논문으로 1차 실험 데이터 없음. 중국 광시성 맥락 편향 가능성. DXMT·MYB·FADS2 기능 일부는 타 작물 연구에서 유추. 클로로젠산 발효 시간 의존적 변동의 정량 수치 미제공. 세 결정 축 간 상호작용 효과 미정량화.",
+  "glossary": [
+    {
+      "term": "Allotetraploid",
+      "ko": "사배체 — 두 이배체 조상이 합쳐진 4배체"
+    },
+    {
+      "term": "DXMT",
+      "ko": "카페인 합성 최종 효소 (테오브로민→카페인 전환)"
+    },
+    {
+      "term": "MYB Transcription Factor",
+      "ko": "카페인·클로로젠산·테르펜 경로 조절 마스터 전사인자"
+    },
+    {
+      "term": "FADS2",
+      "ko": "지방산 불포화도 조절 효소; 생두 지질 프로파일 결정"
+    },
+    {
+      "term": "Chlorogenic Acid (CGA)",
+      "ko": "클로로젠산 — 커피 주요 페놀산; 항산화 및 로스팅 반응 전구체"
+    },
+    {
+      "term": "GABA",
+      "ko": "γ-아미노부티르산 — 내추럴 가공 시 증가하는 비단백질 아미노산"
+    },
+    {
+      "term": "Homoeologous Exchange",
+      "ko": "동종 염색체 교환 — 사배체 서브게놈 간 염색체 단편 교환"
+    },
+    {
+      "term": "Subgenome-biased Expression",
+      "ko": "서브게놈 편향 발현 — 특정 서브게놈 유전자가 우선 발현"
+    }
+  ],
+  "citation_apa": "Guangxi Academy of Agricultural Sciences Research Team. (2026). From germplasm to cup: A comprehensive review of the genetic, environmental, and postharvest determinants of coffee quality and their interactions. Agriculture, 16(7), 739. https://doi.org/10.3390/agriculture16070739",
+  "links": {
+    "doi": "https://doi.org/10.3390/agriculture16070739",
+    "oa_pdf": "https://www.mdpi.com/2077-0472/16/7/739",
+    "journal_homepage": "https://www.mdpi.com/journal/agriculture"
+  },
+  "source_basis": "abstract_only",
+  "data_charts": [
+    {
+      "type": "bar",
+      "title": "아라비카 vs 로부스타 카페인 함량 (건물 기준)",
+      "x_labels": [
+        "C. arabica",
+        "C. canephora (Robusta)"
+      ],
+      "y_label": "카페인 함량 (%)",
+      "values": [
+        1.22,
+        2.54
+      ],
+      "unit": "% dmb (건물 기준)"
+    }
+  ],
+  "drive_doc_url": "https://docs.google.com/document/d/1m58g6xiJ_CSlJwZWwccjicUKhHSHMphKTXnGtnIIGcc/edit",
+  "hero_image": "/static/img/insights/hero/green-bean.svg"
+}
