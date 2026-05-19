@@ -1,7 +1,24 @@
 {
   "version": 1,
-  "updated_at": "2026-05-18T12:00:13Z",
+  "updated_at": "2026-05-19T12:00:17Z",
   "items": [
+    {
+      "id": "2026-05-19-biomimetic-fermentation-roasting-maillard-flavor",
+      "date": "2026-05-19",
+      "title_ko": "바이오미메틱 발효로 전구체 풀을 재설계해 로스팅 반응을 최적화하고 커피 향미 복잡성을 향상시킨다",
+      "one_liner": "바이오미메틱 발효로 아미노산 1.89배 증가·에스터화 3.08배 급등→과실향+견과향 복합성 최대화",
+      "categories_primary": [
+        "로스팅"
+      ],
+      "categories_secondary": [
+        "생두",
+        "화학/분석화학"
+      ],
+      "hero_image": "/static/img/insights/hero/roasting.svg",
+      "journal": "Foods (MDPI), Vol. 15, No. 5, Article 849",
+      "pub_date": "2026-03-03",
+      "source_basis": "abstract_only"
+    },
     {
       "id": "2026-05-18-germplasm-to-cup-coffee-quality-review",
       "date": "2026-05-18",

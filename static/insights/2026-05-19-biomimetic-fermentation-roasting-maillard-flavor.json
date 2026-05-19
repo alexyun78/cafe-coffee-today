@@ -1,0 +1,90 @@
+{
+  "version": 1,
+  "id": "2026-05-19-biomimetic-fermentation-roasting-maillard-flavor",
+  "date": "2026-05-19",
+  "slug": "biomimetic-fermentation-roasting-maillard-flavor",
+  "title_ko": "바이오미메틱 발효로 전구체 풀을 재설계해 로스팅 반응을 최적화하고 커피 향미 복잡성을 향상시킨다",
+  "title_original": "Biomimetic Fermentation Reshapes Precursor Pools to Drive Synergistic Roasting Reactions and Enhance Coffee Flavor Complexity",
+  "one_liner": "바이오미메틱 발효로 아미노산 1.89배 증가·에스터화 3.08배 급등→과실향+견과향 복합성 최대화",
+  "authors": "저자 정보 웹 검색 미수집 (Foods MDPI, 2026-03-03)",
+  "journal": "Foods (MDPI), Vol. 15, No. 5, Article 849",
+  "pub_date": "2026-03-03",
+  "doi": "10.3390/foods15050849",
+  "categories_primary": [
+    "로스팅"
+  ],
+  "categories_secondary": [
+    "생두",
+    "화학/분석화학"
+  ],
+  "summary": "커피 한 잔의 향미는 로스팅 중 마이야르 반응·스트레커 분해·에스터화 등 열화학 반응의 산물이다. 이 연구는 바이오미메틱 발효(BF) 프로토콜로 전구체 풀(자유 아미노산·유기산)을 타겟 조성으로 재설계하면 로스팅 반응 네트워크가 어떻게 변화하는지를 통합 멀티-오믹스와 관능 평가로 규명했다. BF는 류신·페닐알라닌 중심 자유 아미노산을 1.89배 증가시키고, 젖산·석신산 완충 시스템을 구축해 로스팅 중 pH 변화를 ΔpH 0.17로 안정화했다. 이 열 완충 효과는 마이야르 반응의 최적 동역학 창을 유지해 에스터화 플럭스를 3.08배 급등시키고 알킬피라진 다양성을 향상시켰다. 결과적으로 에틸아세테이트·에틸이소발레레이트 등 과실향 마커와 견과향 피라진이 동시에 풍부해지는 복합 향미 프로파일이 형성되었다. 이 연구는 발효-로스팅 커플링 기전을 처음으로 정량 프레임워크로 제시해 커피 가공을 경험적 관찰에서 합리적 향미 설계로 전환하는 이론적 토대를 제공한다.",
+  "key_findings": [
+    "BF로 자유 아미노산(류신·페닐알라닌) 1.89배 증가 → 마이야르 반응 전구체 풀 강화",
+    "젖산·석신산 완충 염 시스템 → 로스팅 중 ΔpH 0.17 안정화 (최적 마이야르 동역학 창 유지)",
+    "에스터화 플럭스 3.08배 급등 → 에틸아세테이트·에틸이소발레레이트 등 과실향 마커 현저 증가",
+    "알킬피라진(nutty-associated) 증가 → 마이야르 산물 다양성 향상",
+    "발효 전구체 설계 ↔ 로스팅 열화학 커플링 기전 최초 정량화"
+  ],
+  "methodology": "in vitro 바이오미메틱 발효(BF) 대 대조군 비교 실험. 통합 멀티-오믹스(자유 아미노산 프로파일링·유기산 분석·휘발성 GC-MS) + 관능 평가 + 반응 동역학 분석 수행.",
+  "implications": {
+    "농가/가공장": "BF 발효 프로토콜 적용으로 류신·페닐알라닌 풍부화 → 과실향 에스터 강화 설계 가능. 젖산·석신산 완충 시스템은 기존 유기산 모니터링 인프라 보유 농장에서 BF 도입 경로 제공.",
+    "로스터/큐그레이더": "BF 처리 생두는 자유 아미노산·유기산 완충 프로파일이 표준 발효 생두와 달라 라이트~미디엄 로스팅에서 과실향+견과향 복합성이 더 뚜렷하게 발현될 수 있다. 생두 구매 스펙에 BF 여부·발효 프로토콜 정보 포함 권장.",
+    "R&D": "BF 프레임워크의 다른 품종·산지 범용성 검증; 자유 아미노산 초기 조성-에스터 프로파일 예측 모델; BF 조건-로스팅 프로파일 상호작용 연구; 산업적 스케일업 가능성 탐색."
+  },
+  "limitations": "실험 반복 수·통계 유의성 등 세부 설계 초록 미공개; 산업적 스케일업 비용·실현 가능성 미평가; 단일 품종/산지 적용 범위 한계; 소비자 기호도 평가 부재; 건조·보관 후 전구체 안정성 미검증.",
+  "glossary": [
+    {
+      "term": "Biomimetic Fermentation (BF)",
+      "ko": "바이오미메틱 발효 — 자연 발효 핵심 대사를 in vitro에서 모사한 제어 발효 프로토콜"
+    },
+    {
+      "term": "Maillard Reaction",
+      "ko": "마이야르 반응 — 환원당+아미노산의 열 반응, 커피 향미 생성 핵심 경로"
+    },
+    {
+      "term": "Alkylpyrazines",
+      "ko": "알킬피라진 — 마이야르 반응 산물, 견과·코코아·구운향 기여"
+    },
+    {
+      "term": "Ethyl Isovalerate",
+      "ko": "에틸이소발레레이트 — 딸기·사과향 에스터, 류신 유래 스트레커 산물의 에스터화"
+    },
+    {
+      "term": "Esterification Flux",
+      "ko": "에스터화 플럭스 — 에스터 생성 반응의 총 속도·규모 지표"
+    },
+    {
+      "term": "Thermal Buffering Capacity",
+      "ko": "열 완충 능력 — 로스팅 중 pH 변화를 완화해 최적 마이야르 창 유지"
+    },
+    {
+      "term": "Precursor Pool",
+      "ko": "전구체 풀 — 로스팅 열화학 반응의 원료가 되는 화합물들의 총체"
+    }
+  ],
+  "citation_apa": "[저자 미확인] (2026). Biomimetic fermentation reshapes precursor pools to drive synergistic roasting reactions and enhance coffee flavor complexity. Foods, 15(5), 849. https://doi.org/10.3390/foods15050849",
+  "links": {
+    "doi": "https://doi.org/10.3390/foods15050849",
+    "oa_pdf": "https://www.mdpi.com/2304-8158/15/5/849",
+    "journal_homepage": "https://www.mdpi.com/journal/foods"
+  },
+  "source_basis": "abstract_only",
+  "data_charts": [
+    {
+      "type": "bar",
+      "title": "바이오미메틱 발효(BF)의 주요 화학적 효과 — 대조군 대비 배수 변화",
+      "x_labels": [
+        "자유 아미노산 증가",
+        "에스터화 플럭스 증가"
+      ],
+      "y_label": "대조군 대비 배수 (fold change)",
+      "values": [
+        1.89,
+        3.08
+      ],
+      "unit": "배수(x)"
+    }
+  ],
+  "drive_doc_url": "https://docs.google.com/document/d/1kvfyhyLq4c5E6c80A8qo64tF8lLEVRkAqPRmqf0xFn0/edit",
+  "hero_image": "/static/img/insights/hero/roasting.svg"
+}
