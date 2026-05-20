@@ -102,6 +102,58 @@ ul.findings li::before { content: counter(f, decimal-leading-zero); position: ab
   .section-block h2 { font-size: 1.5rem; }
   .article-meta { gap: 12px 18px; font-size: .68rem; }
 }
+
+/* ===== EZ: 쉬운 설명 스타일 ===== */
+.ez-hero { text-align: center; padding: 8px 0 32px; }
+.ez-hero-emoji { font-size: 3.4rem; line-height: 1; }
+.ez-hero-title { font-family: var(--font-display); font-size: clamp(1.6rem, 3.5vw, 2.2rem); font-weight: 600; color: var(--ink); margin-top: 14px; line-height: 1.3; }
+.ez-section { margin-bottom: 52px; }
+.ez-section h2 { font-family: var(--font-body); font-size: 1.5rem; font-weight: 700; color: var(--ink); margin-bottom: 18px; letter-spacing: -0.01em; }
+.ez-section h3 { font-size: 1.08rem; font-weight: 600; color: var(--espresso); margin: 22px 0 10px; }
+.ez-section p { font-size: 1.04rem; line-height: 1.85; color: var(--ink-mute); margin-bottom: 14px; }
+.ez-section p:last-child { margin-bottom: 0; }
+.ez-section ul { padding-left: 22px; margin-bottom: 14px; }
+.ez-section li { font-size: 1.02rem; line-height: 1.8; color: var(--ink-mute); margin-bottom: 8px; }
+.ez-callout { margin: 14px 0; padding: 14px 18px; background: var(--canvas-warm); border-left: 3px solid var(--caramel); border-radius: 4px; font-size: 0.98rem; color: var(--espresso); line-height: 1.75; }
+.ez-callout strong { color: var(--copper); }
+.ez-findings { list-style: none; padding: 0; }
+.ez-findings > li { padding: 18px 22px; margin-bottom: 14px; background: var(--canvas-warm); border: 1px solid var(--line); border-radius: 10px; font-size: 1.02rem; line-height: 1.7; color: var(--ink-mute); }
+.ez-findings > li strong { color: var(--ink); display: block; margin-bottom: 4px; font-size: 1.06rem; }
+.ez-findings > li.gold { background: linear-gradient(135deg, #FFF8E7, #FFEFCD); border-color: #F0D67A; }
+.ez-findings > li.silver { background: linear-gradient(135deg, #F6F6F6, #ECECEC); border-color: #C7C7C7; }
+.ez-findings > li.bronze { background: linear-gradient(135deg, #FFEEDD, #FFDCC0); border-color: #E4B07F; }
+.ez-findings > li.medal { background: linear-gradient(135deg, #F0E6FF, #E1D2FF); border-color: #BDA8E5; }
+.ez-table { width: 100%; border-collapse: collapse; margin: 16px 0 8px; font-size: 0.96rem; }
+.ez-table th, .ez-table td { padding: 11px 14px; border: 1px solid var(--line); text-align: left; vertical-align: top; }
+.ez-table thead th { background: var(--ink); color: #fff; font-weight: 600; letter-spacing: .02em; }
+.ez-table tbody th { background: var(--canvas-warm); color: var(--ink); font-weight: 600; }
+.ez-table tbody tr:nth-child(even) td { background: rgba(250, 247, 242, .55); }
+.ez-summary { padding: 26px 30px; background: linear-gradient(135deg, #FAF0E0, #F3E1C5); border-radius: 14px; font-size: 1.13rem; line-height: 1.75; font-weight: 500; color: var(--ink); border: 1px solid #E5C99B; }
+.ez-summary strong { color: var(--espresso); }
+.ez-citation { margin-top: 24px; padding: 18px 22px; background: var(--canvas-warm); border-radius: 8px; font-family: var(--font-mono); font-size: 0.82rem; color: var(--ink-soft); line-height: 1.7; }
+.ez-citation p { margin: 4px 0; }
+.ez-chart-card { padding: 22px 24px 18px; background: var(--canvas); border: 1px solid var(--line); border-radius: 12px; margin: 16px 0; }
+.ez-chart-card .ez-chart-title { font-size: 1rem; font-weight: 600; color: var(--ink); margin-bottom: 14px; }
+.ez-bar-row { display: flex; align-items: center; margin: 10px 0; font-size: 0.95rem; gap: 14px; }
+.ez-bar-label { width: 180px; flex-shrink: 0; color: var(--ink-mute); font-weight: 500; }
+.ez-bar-track { flex: 1; height: 32px; background: var(--canvas-warm); border-radius: 6px; overflow: hidden; position: relative; border: 1px solid var(--line); }
+.ez-bar-fill { height: 100%; background: linear-gradient(90deg, var(--caramel), var(--copper)); display: flex; align-items: center; justify-content: flex-end; padding: 0 12px; color: white; font-weight: 700; font-size: 0.92rem; min-width: 56px; }
+.ez-bar-fill.alt { background: linear-gradient(90deg, #6F4E37, #4A3F36); }
+.ez-bar-fill.cool { background: linear-gradient(90deg, #6A8FB5, #3D6FB5); }
+.ez-infographic { padding: 24px; background: var(--canvas-warm); border-radius: 12px; margin: 20px 0; border: 1px solid var(--line); }
+.ez-infographic svg { width: 100%; height: auto; display: block; }
+.ez-infographic-caption { margin-top: 12px; font-size: 0.88rem; color: var(--ink-soft); text-align: center; font-style: italic; }
+.ez-flow { display: flex; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap; margin: 16px 0; }
+.ez-flow-step { padding: 14px 18px; background: var(--canvas-warm); border: 2px solid var(--caramel); border-radius: 10px; font-weight: 600; color: var(--espresso); text-align: center; min-width: 120px; }
+.ez-flow-step .ez-flow-emoji { font-size: 1.6rem; display: block; margin-bottom: 6px; }
+.ez-flow-arrow { font-size: 1.6rem; color: var(--copper); font-weight: 700; }
+@media (max-width: 720px) {
+  .ez-bar-label { width: 100%; margin-bottom: 4px; }
+  .ez-bar-row { flex-direction: column; align-items: stretch; }
+  .ez-flow { flex-direction: column; }
+  .ez-flow-arrow { transform: rotate(90deg); }
+  .ez-section h2 { font-size: 1.3rem; }
+}
 </style>
 </head>
 <body>
@@ -138,101 +190,117 @@ ul.findings li::before { content: counter(f, decimal-leading-zero); position: ab
   <section class="article-body">
     <div class="container">
 
-      
-      <div class="section-block">
-        <h2>요약</h2>
-        <p>Arara는 브라질에서 개발된 아라비카 커피 품종으로, SCA 86~90점 이상의 스페셜티 잠재력을 가지며 브라질 내 재배 면적이 확대되고 있다. 이 연구는 Arara 체리에 SIAF(자기유도 혐기 발효)를 적용해 발효 시간(0·24·48·72h)·온도(주변 vs. 27°C)·처리 방식(고체 상태 vs. 침지)·스타터 컬처 유무의 4변수를 교차 설계하여 16S rRNA + ITS1 이중 메타택소노믹 분석으로 박테리아·진균 군집 동태를 추적했다. 박테리아에서는 Lactobacillus 속이, 진균에서는 Kazachstania 속이 우점으로 확인되었으며, 진균 다양성은 발효 24시간 이내에 급격히 붕괴해 내성 종으로 수렴했다. 의사결정나무 기반 예측 모델에서 Leuconostoc과 Lactobacillus가 스페셜티 관능 품질의 핵심 미생물 마커로 도출되었다.</p>
+      <div class="ez-hero">
+        <div class="ez-hero-emoji">🦠</div>
+        <div class="ez-hero-title">커피 발효 속 세균들이 맛을 어떻게 만들까?</div>
       </div>
-      
 
-      
-      <div class="section-block">
-        <h2>핵심 발견</h2>
-        <ul class="findings">
-          <li>SIAF 4변수(시간·온도·처리 방식·스타터) 교차 설계로 발효 조건별 미생물 군집 차별적 반응 정량화</li><li>16S rRNA + ITS1 이중 메타택소노믹 분석으로 박테리아·진균 군집 동태 동시 추적</li><li>박테리아 우점: Lactobacillus 속 (젖산 생성, 에스터 형성 기여)</li><li>진균 우점: Kazachstania 속 — 발효 24시간 이내 진균 다양성 급격히 감소, 소수 내성 종으로 수렴</li><li>의사결정나무 모델: Leuconostoc·Lactobacillus 상대 풍부도가 스페셜티 관능 품질의 핵심 예측 마커</li>
+      <div class="ez-section">
+        <h2>🤔 무슨 연구야?</h2>
+        <p>커피는 "씻어내기" 전에 <strong>발효</strong> 라는 단계를 거쳐. 발효는 김치나 요거트처럼 <strong>미생물(세균·효모)</strong>이 일을 하는 과정이야. 이 미생물들이 어떻게 일하느냐에 따라 커피 맛이 완전히 달라져.</p>
+        <p>이 연구는 <strong>브라질 아라라(Arara)</strong> 라는 품종으로 발효 중 미생물 사회가 시간에 따라 어떻게 변하는지, 그게 최종 맛(스페셜티 등급)과 어떻게 연결되는지를 봤어.</p>
+        <div class="ez-callout">💡 비유: 김치를 담그면 처음엔 여러 균이 섞여 있다가 시간이 지나면 좋은 유산균이 우점하지? 커피도 똑같이 발효 시간에 따라 미생물 풍경이 변해.</div>
+      </div>
+
+      <div class="ez-section">
+        <h2>🧪 실험 디자인 — 4변수 교차</h2>
+        <p>연구진은 <strong>SIAF(자기유도 혐기 발효)</strong> 라는 방식을 썼어. 산소를 차단한 상태에서 발효하는 거지. 그리고 다음 4가지를 다르게 줘 봤어:</p>
+        <table class="ez-table">
+          <thead><tr><th>변수</th><th>경우</th></tr></thead>
+          <tbody>
+            <tr><th>⏰ 시간</th><td>0 · 24 · 48 · 72 시간</td></tr>
+            <tr><th>🌡 온도</th><td>주변 온도 vs 27°C 일정</td></tr>
+            <tr><th>💧 처리 방식</th><td>고체 상태 vs 침지(물에 담금)</td></tr>
+            <tr><th>🦠 스타터</th><td>균을 넣음 vs 안 넣음</td></tr>
+          </tbody>
+        </table>
+        <p>그리고 두 가지 DNA 분석 방법으로 어떤 세균과 효모가 살아 있는지 추적했어:</p>
+        <ul>
+          <li><strong>16S rRNA</strong> → 세균 종류 식별</li>
+          <li><strong>ITS1</strong> → 효모/곰팡이 식별</li>
         </ul>
       </div>
-      
 
-      
-
-      
-
-      
-      <div class="section-block">
-        <h2>방법론</h2>
-        <p>Coffea arabica cv. Arara 체리에 SIAF 발효를 수행; 독립 변수는 발효 시간(0·24·48·72h), 온도(주변 vs. 27°C), 처리 방식(고체 상태 vs. 침지), 스타터 컬처 유무의 4원 교차 설계. 박테리아는 16S rRNA 앰플리콘 시퀀싱, 진균은 ITS1 시퀀싱으로 군집 구성·다양성 추적. 관능 평가는 SCA 컵핑 프로토콜 준거. 미생물 상대 풍부도와 관능 속성 간 연관성은 의사결정나무 알고리즘으로 분석.</p>
+      <div class="ez-section">
+        <h2>🎯 핵심 발견</h2>
+        <ul class="ez-findings">
+          <li class="gold"><strong>🥇 세균은 락토바실루스(Lactobacillus)가 우점</strong>김치 만드는 그 유산균! 젖산을 만들고 과일향 에스터 생성에 기여.</li>
+          <li class="silver"><strong>🥈 효모는 카자크스타니아(Kazachstania)가 우점</strong>산소가 부족한 환경에서 잘 자라는 내성 효모.</li>
+          <li class="bronze"><strong>🥉 24시간 안에 효모 다양성 급격히 붕괴</strong>발효 초기엔 여러 효모가 있다가, 24시간 안에 강한 몇 종만 살아남음. 그래서 초기 환경 관리가 결정적.</li>
+          <li class="medal"><strong>🏅 의사결정나무가 맛 예측 가능</strong>Leuconostoc · Lactobacillus 의 비율을 보면 SCA 스페셜티 점수를 예측할 수 있어. 즉 미생물 마커 = 맛 마커.</li>
+        </ul>
       </div>
-      
 
-      
-      <div class="section-block">
-        <h2>시사점</h2>
-        <div class="implications-grid">
-          
-          <div class="implication-card">
-            <h3>농가 · 가공장</h3>
-            <p>27°C 온도 조절 SIAF와 스타터 컬처 접종이 발효 재현성과 스페셜티 품질 안정화에 과학적 근거 제공. 발효 24시간 내 진균 다양성 붕괴 패턴은 초기 환경 표준화가 품질 재현성의 핵심 레버임을 시사.</p>
-          </div>
-          
-          <div class="implication-card">
-            <h3>로스터 · 큐그레이더</h3>
-            <p>Arara 품종의 발효 이력(SIAF 변수)에 따라 관능 속성이 달라짐을 이해하면 로트 간 맛 일관성 예측에 활용 가능. Lactobacillus 우점 발효 로트에서 젖산 계열 산미·과실향 에스터가 강화 예상.</p>
-          </div>
-          
-          <div class="implication-card">
-            <h3>R&amp;D</h3>
-            <p>Lactobacillus·Leuconostoc 마커를 실시간 발효 모니터링 센서(qPCR 기반)로 구현하는 후속 연구 방향 명확. 이중 메타택소믹스를 타 품종·처리법으로 확장해 일반화 가능성 검증 필요.</p>
-          </div>
-          
+      <div class="ez-section">
+        <h2>📊 미생물 사회 변화 흐름</h2>
+        <div class="ez-infographic">
+          <svg viewBox="0 0 700 220" xmlns="http://www.w3.org/2000/svg">
+            <defs><marker id="arr15" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#6F4E37"/></marker></defs>
+            <rect x="20" y="60" width="140" height="100" rx="14" fill="#FAF7F2" stroke="#C9986A" stroke-width="2"/>
+            <text x="90" y="92" text-anchor="middle" font-size="15" font-weight="700" fill="#1A1410">0h</text>
+            <text x="90" y="115" text-anchor="middle" font-size="12" fill="#6B5E52">다양한 효모·</text>
+            <text x="90" y="132" text-anchor="middle" font-size="12" fill="#6B5E52">세균 혼재</text>
+            <line x1="160" y1="110" x2="200" y2="110" stroke="#6F4E37" stroke-width="2" marker-end="url(#arr15)"/>
+            <rect x="210" y="60" width="140" height="100" rx="14" fill="#FFF3DC" stroke="#C9986A" stroke-width="2"/>
+            <text x="280" y="92" text-anchor="middle" font-size="15" font-weight="700" fill="#1A1410">24h</text>
+            <text x="280" y="115" text-anchor="middle" font-size="12" fill="#6B5E52">효모 다양성</text>
+            <text x="280" y="132" text-anchor="middle" font-size="12" fill="#B5703D" font-weight="700">급감 ⚠️</text>
+            <line x1="350" y1="110" x2="390" y2="110" stroke="#6F4E37" stroke-width="2" marker-end="url(#arr15)"/>
+            <rect x="400" y="60" width="140" height="100" rx="14" fill="#FFE5C7" stroke="#B5703D" stroke-width="2"/>
+            <text x="470" y="92" text-anchor="middle" font-size="15" font-weight="700" fill="#1A1410">48~72h</text>
+            <text x="470" y="115" text-anchor="middle" font-size="12" fill="#6B5E52">Kazachstania·</text>
+            <text x="470" y="132" text-anchor="middle" font-size="12" fill="#6B5E52">Lactobacillus 우점</text>
+            <line x1="540" y1="110" x2="580" y2="110" stroke="#6F4E37" stroke-width="2" marker-end="url(#arr15)"/>
+            <rect x="590" y="60" width="90" height="100" rx="14" fill="#C9986A" stroke="#B5703D" stroke-width="2"/>
+            <text x="635" y="92" text-anchor="middle" font-size="15" font-weight="700" fill="#fff">최종</text>
+            <text x="635" y="115" text-anchor="middle" font-size="12" fill="#FFF0DC">스페셜티</text>
+            <text x="635" y="132" text-anchor="middle" font-size="12" fill="#FFF0DC">86~90 점</text>
+          </svg>
+          <div class="ez-infographic-caption">발효 시간에 따른 미생물 군집 변화 — 24시간이 결정적 분기점</div>
         </div>
       </div>
-      
 
-      
-      <div class="section-block">
-        <h2>한계</h2>
-        <p>단일 품종(Arara)·단일 지역(브라질) 결과로 보편성 미검증; 계통 분류 기반으로 기능적 대사경로 직접 측정 미수행(메타볼로믹스 보완 필요); 스타터 컬처 세부 정보 미공개; 의사결정나무 예측 정확도 수치 미확인.</p>
+      <div class="ez-section">
+        <h2>💼 누구한테 의미가 있을까?</h2>
+        <table class="ez-table">
+          <thead><tr><th>대상</th><th>의미</th></tr></thead>
+          <tbody>
+            <tr><th>농가·가공장</th><td>27°C 일정 온도 + 스타터 균 넣기 = 재현성 있는 스페셜티 발효. 발효 첫 24시간 환경 관리가 핵심.</td></tr>
+            <tr><th>로스터·큐그레이더</th><td>Lactobacillus 우점 로트는 젖산 산미·과일향 에스터가 강할 것으로 예측. 발효 정보 받으면 로스팅 프로파일 미리 설계 가능.</td></tr>
+            <tr><th>R&amp;D</th><td>실시간으로 Lactobacillus·Leuconostoc 양을 측정하는 휴대 센서(qPCR) 개발 방향.</td></tr>
+          </tbody>
+        </table>
       </div>
-      
 
-      
-      <div class="section-block">
-        <h2>용어집</h2>
-        <ul class="glossary-list">
-          
-          <li><dt>SIAF</dt><dd>Self-Induced Anaerobic Fermentation, 자기유도 혐기 발효</dd></li>
-          
-          <li><dt>Metataxonomics</dt><dd>메타택소노믹스 — NGS로 군집 구성을 비배양 방식으로 파악하는 기법</dd></li>
-          
-          <li><dt>16S rRNA</dt><dd>박테리아 동정에 사용되는 리보솜 RNA 유전자 마커</dd></li>
-          
-          <li><dt>ITS1</dt><dd>진균 군집 분류에 사용되는 핵 리보솜 DNA 스페이서 영역</dd></li>
-          
-          <li><dt>Lactobacillus</dt><dd>유산균 속 — 커피 발효의 핵심 박테리아</dd></li>
-          
-          <li><dt>Kazachstania</dt><dd>내산성 효모 속 — 혐기 발효 후기 우점</dd></li>
-          
-          <li><dt>Leuconostoc</dt><dd>이종발효 유산균 속 — 관능 품질 예측 마커</dd></li>
-          
-          <li><dt>Decision Tree</dt><dd>의사결정나무 — 미생물 마커로 관능 품질 예측하는 지도 학습 알고리즘</dd></li>
-          
+      <div class="ez-section">
+        <h2>⚠️ 한계도 있어</h2>
+        <ul>
+          <li>단일 품종(Arara)·단일 지역(브라질) — 다른 데서도 통할까?</li>
+          <li>미생물 종류만 봤지 실제 대사물질(맛 성분)은 직접 측정 안 함</li>
+          <li>의사결정나무 모델의 예측 정확도 수치 미공개</li>
+          <li>스타터 균의 정체(어떤 균을 넣었는지) 정보 미공개</li>
         </ul>
       </div>
-      
 
-      <div class="section-block">
-        <h2>인용 · 링크</h2>
-        <div class="citation-block">Silva, L. C. F., Costa, G. X. R., &amp; da Silva, M. A. D., et al. (2026). Microbial community dynamics during Coffea arabica cv. Arara fermentation and their relationship with specialty coffee quality. Scientific Reports, 16. https://doi.org/10.1038/s41598-026-44864-z</div>
+      <div class="ez-section">
+        <div class="ez-summary">💡 <strong>한 줄 요약</strong> — 커피 발효에서 <strong>락토바실루스(유산균)와 카자크스타니아(효모)</strong> 가 우점하면 스페셜티 등급(86~90점)이 나온다. 발효 24시간이 결정적 분기점이고, 미생물 비율만 봐도 최종 맛을 예측할 수 있다는 첫 실증.</div>
+      </div>
+
+      <div class="ez-section">
+        <h2>📚 원문 정보</h2>
+        <div class="ez-citation">
+          <p><strong>📄 논문</strong> — Microbial community dynamics during Coffea arabica cv. Arara fermentation and their relationship with specialty coffee quality</p>
+          <p><strong>📰 저널</strong> — Scientific Reports, 2026-04-30</p>
+          <p><strong>👥 저자</strong> — Silva, Costa, da Silva 외 (브라질)</p>
+          <p><strong>🔗 DOI</strong> — <a href="https://doi.org/10.1038/s41598-026-44864-z" target="_blank" rel="noopener noreferrer" style="color: var(--copper);">10.1038/s41598-026-44864-z</a></p>
+        </div>
         <div class="links-row">
           <a class="link-pill" href="https://doi.org/10.1038/s41598-026-44864-z" target="_blank" rel="noopener noreferrer">DOI →</a>
           <a class="link-pill" href="https://www.nature.com/articles/s41598-026-44864-z" target="_blank" rel="noopener noreferrer">OA PDF →</a>
           <a class="link-pill" href="https://www.nature.com/srep/" target="_blank" rel="noopener noreferrer">JOURNAL HOMEPAGE →</a>
         </div>
         <div style="margin-top: 18px;">
-          
           <span class="source-basis abstract">ABSTRACT BASIS</span>
-          
         </div>
       </div>
 

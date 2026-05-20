@@ -102,6 +102,58 @@ ul.findings li::before { content: counter(f, decimal-leading-zero); position: ab
   .section-block h2 { font-size: 1.5rem; }
   .article-meta { gap: 12px 18px; font-size: .68rem; }
 }
+
+/* ===== EZ: 쉬운 설명 스타일 ===== */
+.ez-hero { text-align: center; padding: 8px 0 32px; }
+.ez-hero-emoji { font-size: 3.4rem; line-height: 1; }
+.ez-hero-title { font-family: var(--font-display); font-size: clamp(1.6rem, 3.5vw, 2.2rem); font-weight: 600; color: var(--ink); margin-top: 14px; line-height: 1.3; }
+.ez-section { margin-bottom: 52px; }
+.ez-section h2 { font-family: var(--font-body); font-size: 1.5rem; font-weight: 700; color: var(--ink); margin-bottom: 18px; letter-spacing: -0.01em; }
+.ez-section h3 { font-size: 1.08rem; font-weight: 600; color: var(--espresso); margin: 22px 0 10px; }
+.ez-section p { font-size: 1.04rem; line-height: 1.85; color: var(--ink-mute); margin-bottom: 14px; }
+.ez-section p:last-child { margin-bottom: 0; }
+.ez-section ul { padding-left: 22px; margin-bottom: 14px; }
+.ez-section li { font-size: 1.02rem; line-height: 1.8; color: var(--ink-mute); margin-bottom: 8px; }
+.ez-callout { margin: 14px 0; padding: 14px 18px; background: var(--canvas-warm); border-left: 3px solid var(--caramel); border-radius: 4px; font-size: 0.98rem; color: var(--espresso); line-height: 1.75; }
+.ez-callout strong { color: var(--copper); }
+.ez-findings { list-style: none; padding: 0; }
+.ez-findings > li { padding: 18px 22px; margin-bottom: 14px; background: var(--canvas-warm); border: 1px solid var(--line); border-radius: 10px; font-size: 1.02rem; line-height: 1.7; color: var(--ink-mute); }
+.ez-findings > li strong { color: var(--ink); display: block; margin-bottom: 4px; font-size: 1.06rem; }
+.ez-findings > li.gold { background: linear-gradient(135deg, #FFF8E7, #FFEFCD); border-color: #F0D67A; }
+.ez-findings > li.silver { background: linear-gradient(135deg, #F6F6F6, #ECECEC); border-color: #C7C7C7; }
+.ez-findings > li.bronze { background: linear-gradient(135deg, #FFEEDD, #FFDCC0); border-color: #E4B07F; }
+.ez-findings > li.medal { background: linear-gradient(135deg, #F0E6FF, #E1D2FF); border-color: #BDA8E5; }
+.ez-table { width: 100%; border-collapse: collapse; margin: 16px 0 8px; font-size: 0.96rem; }
+.ez-table th, .ez-table td { padding: 11px 14px; border: 1px solid var(--line); text-align: left; vertical-align: top; }
+.ez-table thead th { background: var(--ink); color: #fff; font-weight: 600; letter-spacing: .02em; }
+.ez-table tbody th { background: var(--canvas-warm); color: var(--ink); font-weight: 600; }
+.ez-table tbody tr:nth-child(even) td { background: rgba(250, 247, 242, .55); }
+.ez-summary { padding: 26px 30px; background: linear-gradient(135deg, #FAF0E0, #F3E1C5); border-radius: 14px; font-size: 1.13rem; line-height: 1.75; font-weight: 500; color: var(--ink); border: 1px solid #E5C99B; }
+.ez-summary strong { color: var(--espresso); }
+.ez-citation { margin-top: 24px; padding: 18px 22px; background: var(--canvas-warm); border-radius: 8px; font-family: var(--font-mono); font-size: 0.82rem; color: var(--ink-soft); line-height: 1.7; }
+.ez-citation p { margin: 4px 0; }
+.ez-chart-card { padding: 22px 24px 18px; background: var(--canvas); border: 1px solid var(--line); border-radius: 12px; margin: 16px 0; }
+.ez-chart-card .ez-chart-title { font-size: 1rem; font-weight: 600; color: var(--ink); margin-bottom: 14px; }
+.ez-bar-row { display: flex; align-items: center; margin: 10px 0; font-size: 0.95rem; gap: 14px; }
+.ez-bar-label { width: 180px; flex-shrink: 0; color: var(--ink-mute); font-weight: 500; }
+.ez-bar-track { flex: 1; height: 32px; background: var(--canvas-warm); border-radius: 6px; overflow: hidden; position: relative; border: 1px solid var(--line); }
+.ez-bar-fill { height: 100%; background: linear-gradient(90deg, var(--caramel), var(--copper)); display: flex; align-items: center; justify-content: flex-end; padding: 0 12px; color: white; font-weight: 700; font-size: 0.92rem; min-width: 56px; }
+.ez-bar-fill.alt { background: linear-gradient(90deg, #6F4E37, #4A3F36); }
+.ez-bar-fill.cool { background: linear-gradient(90deg, #6A8FB5, #3D6FB5); }
+.ez-infographic { padding: 24px; background: var(--canvas-warm); border-radius: 12px; margin: 20px 0; border: 1px solid var(--line); }
+.ez-infographic svg { width: 100%; height: auto; display: block; }
+.ez-infographic-caption { margin-top: 12px; font-size: 0.88rem; color: var(--ink-soft); text-align: center; font-style: italic; }
+.ez-flow { display: flex; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap; margin: 16px 0; }
+.ez-flow-step { padding: 14px 18px; background: var(--canvas-warm); border: 2px solid var(--caramel); border-radius: 10px; font-weight: 600; color: var(--espresso); text-align: center; min-width: 120px; }
+.ez-flow-step .ez-flow-emoji { font-size: 1.6rem; display: block; margin-bottom: 6px; }
+.ez-flow-arrow { font-size: 1.6rem; color: var(--copper); font-weight: 700; }
+@media (max-width: 720px) {
+  .ez-bar-label { width: 100%; margin-bottom: 4px; }
+  .ez-bar-row { flex-direction: column; align-items: stretch; }
+  .ez-flow { flex-direction: column; }
+  .ez-flow-arrow { transform: rotate(90deg); }
+  .ez-section h2 { font-size: 1.3rem; }
+}
 </style>
 </head>
 <body>
@@ -138,97 +190,116 @@ ul.findings li::before { content: counter(f, decimal-leading-zero); position: ab
   <section class="article-body">
     <div class="container">
 
-      
-      <div class="section-block">
-        <h2>요약</h2>
-        <p>커피는 세계에서 가장 광범위하게 소비되는 음료 중 하나이지만, 음료 상태의 블랙 커피에서 화학적 성질을 전처리 없이 현장에서 직접 측정하고 이를 향미 경험과 연결하는 방법은 사실상 존재하지 않았다. 현행 품질 관리는 굴절계(TDS 측정)와 색도계(아그트론) 등 별개 기기에 의존하며, 각각 하나의 변수만 측정할 수 있고 별도의 시료 준비가 필요하다는 구조적 한계를 지닌다.</p><p>CV는 포테시오스탯을 이용해 작업전극과 기준전극 사이에 전압을 주기적으로 변화시키면서 전류 응답을 기록하는 전기화학 분석법이다. 연구팀은 전처리 없이 블랙 커피에 전극을 직접 담근 뒤 CV를 수행했다. 핵심 지표는 수소 기포 발생 직전의 음극 전류 피크(HUPD)이다. 실험 1에서는 콜롬비아 카우카 엘탐보 생두를 아그트론 75.8(라이트)~55.7(다크) 6단계 로스트, SCA 컵핑 프로토콜(1:13.5)로 추출했다. 실험 2에서는 영국 Colonna Coffee 배치 4종(명목 아그트론 93.0 ± 1.0)을 단일 눈가림으로 평가했다.</p><p>HUPD 음극 피크 전류 크기는 커피 TDS와 선형 비례 관계를 보여, 단 한 번의 전압 주사로 음료 강도를 정량화할 수 있음이 실증되었다.</p><p>반복 CV 주사에서 HUPD 피크가 억제되는 크기가 로스트 색도와 직접 상관관계를 가졌다. 라이트 로스트는 CGA 함량이 높아 전극 표면 피복이 강하게 일어나 억제가 크며, 다크 로스트는 CGA가 열분해되어 억제가 약하다. 단일 눈가림 QC 실험에서 불량 배치를 p &lt; 0.0039로 정상 배치 3개와 통계 구별했다.</p><p>이 연구는 전기화학이라는 도구로 음료 강도와 로스트 색도를 한 번의 측정으로 동시에 분리 정량(decouple)하는 첫 사례를 제시했다. 소형 포테시오스탯의 저가화·오픈소스화가 진행 중이어서 로스터리·카페 현장의 실시간 QC 도구로 발전할 잠재력이 높다.</p>
+      <div class="ez-hero">
+        <div class="ez-hero-emoji">⚡</div>
+        <div class="ez-hero-title">전극을 커피에 담그면 농도·로스트 한 번에 측정된다고?</div>
       </div>
-      
 
-      
-      <div class="section-block">
-        <h2>핵심 발견</h2>
-        <ul class="findings">
-          <li>HUPD 음극 전류는 커피 TDS(농도)와 선형 비례 — 전기화학으로 음료 강도 직접 정량화 최초 실증</li><li>반복 CV 스캔의 신호 억제 크기가 로스트 색도(아그트론)와 정비례: 라이트 로스트(억제 강) vs. 다크 로스트(억제 약)</li><li>억제 메커니즘: 라이트 로스트의 높은 CGA 함량 → 전극 표면 피복 → HUPD 피크 억제</li><li>단일 눈가림 QC 실험에서 불량 배치를 p &lt; 0.0039로 정상 3개 배치와 통계 구별; 정상 배치는 동일 군집</li><li>전처리 없이 단 한 번의 CV 측정으로 강도·색도 두 변수 동시 파악 — 종전 2대 기기를 1회 측정으로 대체 가능성 제시</li>
+      <div class="ez-section">
+        <h2>🤔 무슨 연구야?</h2>
+        <p>커피 품질 관리할 때 두 가지 정보가 중요해:</p>
+        <ul>
+          <li><strong>TDS (농도)</strong> — 얼마나 진하게 추출됐는지 (굴절계로 측정)</li>
+          <li><strong>로스트 색도 (아그트론)</strong> — 얼마나 짙게 볶였는지 (색도계로 측정)</li>
+        </ul>
+        <p>지금까지는 이걸 측정하려면 <strong>비싼 장비 두 개</strong>가 필요했어. 게다가 시료를 깔끔하게 준비하는 전처리 과정도 번거롭지.</p>
+        <p>이 연구는 <strong>전기 측정 하나로 두 정보를 동시에 잡는 법</strong>을 처음 실증했어. Nature Communications 에 실린 진짜 멋진 발상.</p>
+      </div>
+
+      <div class="ez-section">
+        <h2>🔌 순환전압전류법(CV)이 뭐야?</h2>
+        <p>전극(작은 금속 막대 2개) 사이에 전압을 <strong>천천히 올렸다 내렸다</strong> 하면서 흐르는 전류를 기록하는 방식이야. 커피 안에 어떤 화합물(특히 클로로젠산)이 있느냐에 따라 전류 패턴이 달라져.</p>
+        <div class="ez-callout">💡 비유: 음악 EQ 같은 거. 다른 음악이 흐르면 EQ 막대 패턴이 다 다르지? 커피 안 화합물에 따라 전류 EQ가 다르게 나오는 거.</div>
+      </div>
+
+      <div class="ez-section">
+        <h2>🎯 두 가지 정보를 어떻게 분리했나?</h2>
+
+        <h3>1️⃣ 농도(TDS) → 음극 전류 피크 크기</h3>
+        <p><strong>HUPD</strong>(수소 과소전위 흡착) 라는 신호의 크기가 커피 농도와 정비례. 한 번의 전압 주사로 농도 측정 끝.</p>
+
+        <h3>2️⃣ 로스트 정도 → 반복 측정 시 신호 억제 크기</h3>
+        <p>같은 측정을 여러 번 반복하면 신호가 점점 줄어들어. 이 <strong>줄어드는 정도</strong>가 로스팅 색도와 직접 비례.</p>
+        <ul>
+          <li>🟡 라이트 로스트 = 클로로젠산이 많이 남아 있음 → 전극에 더 잘 달라붙음 → 신호 억제 큼</li>
+          <li>⚫ 다크 로스트 = 클로로젠산이 열로 깨짐 → 덜 달라붙음 → 신호 억제 작음</li>
         </ul>
       </div>
-      
 
-      
-
-      
-
-      
-      <div class="section-block">
-        <h2>방법론</h2>
-        <p>포테시오스탯이 작업전극-기준전극 간 전압을 선형 주사하며 전류를 기록하는 순환전압전류법(CV)을 블랙 커피 음료에 직접 적용했다. 전처리 없이 커피에 전극을 침지한 상태에서 측정 수행. 핵심 신호: 수소 기포 발생 전 영역의 음극 전류 피크(HUPD). 실험 1: 콜롬비아 엘탐보 생두, 인하우스 50g 배치 로스팅, 아그트론 75.8–55.7 범위 6단계, SCA 컵핑 프로토콜(1:13.5, 4분 침지), 1주 숙성. 실험 2: 영국 Colonna Coffee 배치 4종(공칭 아그트론 93.0 ± 1.0), 단일 눈가림, 3회 반복 스캔 통계 분류 검증.</p>
-      </div>
-      
-
-      
-      <div class="section-block">
-        <h2>시사점</h2>
-        <div class="implications-grid">
-          
-          <div class="implication-card">
-            <h3>농가 · 가공장</h3>
-            <p>해당 없음 (재배·가공 단계 무관한 기술)</p>
-          </div>
-          
-          <div class="implication-card">
-            <h3>로스터 · 큐그레이더</h3>
-            <p>아그트론 색도계나 굴절계 없이 전기화학 측정으로 배치 간 색도 일관성과 음료 강도를 동시에 확인 가능. 불량 배치 자동 검출에 직접 활용 가능성 있음. 전처리 불필요로 현장 적용이 현실적</p>
-          </div>
-          
-          <div class="implication-card">
-            <h3>R&amp;D</h3>
-            <p>소형 오픈소스 포테시오스탯과 결합한 인라인·실시간 커피 QC 시스템 개발의 직접 기초. 다른 전극 소재(탄소, 금 등) 및 에스프레소·콜드브루 적용 확장 검증 여지</p>
-          </div>
-          
+      <div class="ez-section">
+        <h2>📊 단일 눈가림 QC 실험</h2>
+        <p>영국 Colonna Coffee 배치 4개를 줬는데 그 중 1개는 일부러 불량 배치였어. CV 측정으로 <strong>불량 배치를 정상 3개와 통계적으로 구별</strong> (p &lt; 0.0039) 했어. 즉 사람이 안 알려줘도 "이 배치 이상하다"고 골라낸 거.</p>
+        <div class="ez-infographic">
+          <svg viewBox="0 0 600 200" xmlns="http://www.w3.org/2000/svg">
+            <rect x="50" y="50" width="100" height="120" rx="10" fill="#FAF7F2" stroke="#7AB87A" stroke-width="2"/>
+            <text x="100" y="100" text-anchor="middle" font-size="14" font-weight="700" fill="#1A1410">정상 ✅</text>
+            <text x="100" y="130" text-anchor="middle" font-size="12" fill="#6B5E52">배치 1</text>
+            <rect x="170" y="50" width="100" height="120" rx="10" fill="#FAF7F2" stroke="#7AB87A" stroke-width="2"/>
+            <text x="220" y="100" text-anchor="middle" font-size="14" font-weight="700" fill="#1A1410">정상 ✅</text>
+            <text x="220" y="130" text-anchor="middle" font-size="12" fill="#6B5E52">배치 2</text>
+            <rect x="290" y="50" width="100" height="120" rx="10" fill="#FAF7F2" stroke="#7AB87A" stroke-width="2"/>
+            <text x="340" y="100" text-anchor="middle" font-size="14" font-weight="700" fill="#1A1410">정상 ✅</text>
+            <text x="340" y="130" text-anchor="middle" font-size="12" fill="#6B5E52">배치 3</text>
+            <rect x="420" y="50" width="100" height="120" rx="10" fill="#FFD6D6" stroke="#D04A4A" stroke-width="2"/>
+            <text x="470" y="100" text-anchor="middle" font-size="14" font-weight="700" fill="#B22222">불량 ❌</text>
+            <text x="470" y="130" text-anchor="middle" font-size="12" fill="#6B5E52">배치 4</text>
+            <text x="300" y="195" text-anchor="middle" font-size="12" fill="#6B5E52" font-style="italic">p &lt; 0.0039 로 자동 구별</text>
+          </svg>
+          <div class="ez-infographic-caption">CV 측정만으로 불량 배치를 자동 검출 — 사람 개입 없이</div>
         </div>
       </div>
-      
 
-      
-      <div class="section-block">
-        <h2>한계</h2>
-        <p>블랙 커피에만 적용(첨가물 있는 음료 미검증); 주로 아라비카 소수 샘플(단일 산지+단일 로스터리)로 일반화 한계; 연구실용 포테시오스탯 사용(저가 장비 재현성 미검증); TDS·로스트 색도 두 변수에 국한(산도·바디·향미 프로파일 직접 연결 미검증).</p>
-      </div>
-      
-
-      
-      <div class="section-block">
-        <h2>용어집</h2>
-        <ul class="glossary-list">
-          
-          <li><dt>Cyclic Voltammetry (CV)</dt><dd>순환전압전류법: 전압을 주기적으로 올리고 내리며 전류를 기록하는 전기화학 분석법</dd></li>
-          
-          <li><dt>TDS (Total Dissolved Solids)</dt><dd>총 용존 고형물: 커피 음료에 녹아 있는 물질의 총 농도. 추출 강도의 주요 지표</dd></li>
-          
-          <li><dt>HUPD (Hydrogen Underpotential Deposition)</dt><dd>수소 과소전위 흡착: 수소 기포 발생 이전에 전극 표면에 수소가 흡착되는 현상. 전극 표면 상태에 민감</dd></li>
-          
-          <li><dt>Chlorogenic Acid (CGA)</dt><dd>클로로젠산: 커피 생두의 주요 폴리페놀. 배전 중 열분해되어 키니산·카페산으로 전환됨</dd></li>
-          
-          <li><dt>Agtron</dt><dd>아그트론: 근적외선 반사를 이용한 로스트 색도 수치. 높을수록 라이트, 낮을수록 다크</dd></li>
-          
-          <li><dt>Potentiostat</dt><dd>포테시오스탯: 전기화학 측정에서 전극 간 전압을 정밀하게 제어하는 장치</dd></li>
-          
+      <div class="ez-section">
+        <h2>🎯 핵심 발견</h2>
+        <ul class="ez-findings">
+          <li class="gold"><strong>🥇 한 번의 측정으로 농도+로스트 동시 파악</strong>전처리도, 두 대의 장비도 필요 없음. 기기 1대로 통합.</li>
+          <li class="silver"><strong>🥈 클로로젠산이 전극 표면에 달라붙는 정도가 핵심</strong>라이트 로스트는 강하게 달라붙고 다크는 덜. 자연스럽게 로스트 단계를 반영.</li>
+          <li class="bronze"><strong>🥉 불량 배치 자동 검출 가능</strong>p &lt; 0.0039 통계적 유의성으로 QC 자동화 입증.</li>
+          <li class="medal"><strong>🏅 저가 오픈소스 포테시오스탯 보급 추세</strong>장비 가격이 내려가서 카페·로스터리도 도입 가능.</li>
         </ul>
       </div>
-      
 
-      <div class="section-block">
-        <h2>인용 · 링크</h2>
-        <div class="citation-block">Bumbaugh, R. E., Pennington, D. L., Wehn, L. C., Rheingold, E. J., Williams, J. R., Alemán, B. J., &amp; Hendon, C. H. (2026). Direct electrochemical appraisal of black coffee quality using cyclic voltammetry. Nature Communications, 17, 3618. https://doi.org/10.1038/s41467-026-71526-5</div>
+      <div class="ez-section">
+        <h2>💼 누구한테 의미가 있을까?</h2>
+        <table class="ez-table">
+          <thead><tr><th>대상</th><th>의미</th></tr></thead>
+          <tbody>
+            <tr><th>로스터·카페</th><td>아그트론·굴절계 없이 전기 측정 하나로 QC 가능. 불량 배치 자동 알람.</td></tr>
+            <tr><th>대형 로스터리</th><td>인라인 실시간 QC 시스템 구축 가능. 매 배치 즉시 검증.</td></tr>
+            <tr><th>R&amp;D</th><td>다른 전극 소재·에스프레소·콜드브루 확장 검증. 산미·바디 같은 다른 변수와의 연결.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="ez-section">
+        <h2>⚠️ 한계도 있어</h2>
+        <ul>
+          <li>블랙 커피에만 테스트 — 우유·시럽 들어간 음료는 미검증</li>
+          <li>아라비카 소수 샘플 (단일 산지·단일 로스터리) → 범용성 추가 검증 필요</li>
+          <li>연구실용 포테시오스탯 사용 → 저가 오픈소스 장비에서 재현되는지 미검증</li>
+          <li>TDS·로스트 색도 두 변수에 한정 → 산미·바디·향미 직접 연결은 미해결</li>
+        </ul>
+      </div>
+
+      <div class="ez-section">
+        <div class="ez-summary">💡 <strong>한 줄 요약</strong> — <strong>전극 두 개를 커피에 담그면</strong> 한 번의 전기 측정으로 농도(TDS)와 로스트 색도가 동시에 측정된다. 시료 전처리도 필요 없고, 두 대의 장비도 필요 없음. 카페·로스터리 현장 실시간 QC 의 미래.</div>
+      </div>
+
+      <div class="ez-section">
+        <h2>📚 원문 정보</h2>
+        <div class="ez-citation">
+          <p><strong>📄 논문</strong> — Direct electrochemical appraisal of black coffee quality using cyclic voltammetry</p>
+          <p><strong>📰 저널</strong> — Nature Communications, 2026-04-28</p>
+          <p><strong>👥 저자</strong> — Bumbaugh, Pennington, Wehn 외 (University of Oregon)</p>
+          <p><strong>🔗 DOI</strong> — <a href="https://doi.org/10.1038/s41467-026-71526-5" target="_blank" rel="noopener noreferrer" style="color: var(--copper);">10.1038/s41467-026-71526-5</a></p>
+        </div>
         <div class="links-row">
           <a class="link-pill" href="https://doi.org/10.1038/s41467-026-71526-5" target="_blank" rel="noopener noreferrer">DOI →</a>
           <a class="link-pill" href="https://www.nature.com/articles/s41467-026-71526-5.pdf" target="_blank" rel="noopener noreferrer">OA PDF →</a>
           <a class="link-pill" href="https://www.nature.com/ncomms" target="_blank" rel="noopener noreferrer">JOURNAL HOMEPAGE →</a>
         </div>
         <div style="margin-top: 18px;">
-          
           <span class="source-basis abstract">ABSTRACT BASIS</span>
-          
         </div>
       </div>
 

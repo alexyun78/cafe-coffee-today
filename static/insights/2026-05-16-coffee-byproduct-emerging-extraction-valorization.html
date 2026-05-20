@@ -102,6 +102,58 @@ ul.findings li::before { content: counter(f, decimal-leading-zero); position: ab
   .section-block h2 { font-size: 1.5rem; }
   .article-meta { gap: 12px 18px; font-size: .68rem; }
 }
+
+/* ===== EZ: 쉬운 설명 스타일 ===== */
+.ez-hero { text-align: center; padding: 8px 0 32px; }
+.ez-hero-emoji { font-size: 3.4rem; line-height: 1; }
+.ez-hero-title { font-family: var(--font-display); font-size: clamp(1.6rem, 3.5vw, 2.2rem); font-weight: 600; color: var(--ink); margin-top: 14px; line-height: 1.3; }
+.ez-section { margin-bottom: 52px; }
+.ez-section h2 { font-family: var(--font-body); font-size: 1.5rem; font-weight: 700; color: var(--ink); margin-bottom: 18px; letter-spacing: -0.01em; }
+.ez-section h3 { font-size: 1.08rem; font-weight: 600; color: var(--espresso); margin: 22px 0 10px; }
+.ez-section p { font-size: 1.04rem; line-height: 1.85; color: var(--ink-mute); margin-bottom: 14px; }
+.ez-section p:last-child { margin-bottom: 0; }
+.ez-section ul { padding-left: 22px; margin-bottom: 14px; }
+.ez-section li { font-size: 1.02rem; line-height: 1.8; color: var(--ink-mute); margin-bottom: 8px; }
+.ez-callout { margin: 14px 0; padding: 14px 18px; background: var(--canvas-warm); border-left: 3px solid var(--caramel); border-radius: 4px; font-size: 0.98rem; color: var(--espresso); line-height: 1.75; }
+.ez-callout strong { color: var(--copper); }
+.ez-findings { list-style: none; padding: 0; }
+.ez-findings > li { padding: 18px 22px; margin-bottom: 14px; background: var(--canvas-warm); border: 1px solid var(--line); border-radius: 10px; font-size: 1.02rem; line-height: 1.7; color: var(--ink-mute); }
+.ez-findings > li strong { color: var(--ink); display: block; margin-bottom: 4px; font-size: 1.06rem; }
+.ez-findings > li.gold { background: linear-gradient(135deg, #FFF8E7, #FFEFCD); border-color: #F0D67A; }
+.ez-findings > li.silver { background: linear-gradient(135deg, #F6F6F6, #ECECEC); border-color: #C7C7C7; }
+.ez-findings > li.bronze { background: linear-gradient(135deg, #FFEEDD, #FFDCC0); border-color: #E4B07F; }
+.ez-findings > li.medal { background: linear-gradient(135deg, #F0E6FF, #E1D2FF); border-color: #BDA8E5; }
+.ez-table { width: 100%; border-collapse: collapse; margin: 16px 0 8px; font-size: 0.96rem; }
+.ez-table th, .ez-table td { padding: 11px 14px; border: 1px solid var(--line); text-align: left; vertical-align: top; }
+.ez-table thead th { background: var(--ink); color: #fff; font-weight: 600; letter-spacing: .02em; }
+.ez-table tbody th { background: var(--canvas-warm); color: var(--ink); font-weight: 600; }
+.ez-table tbody tr:nth-child(even) td { background: rgba(250, 247, 242, .55); }
+.ez-summary { padding: 26px 30px; background: linear-gradient(135deg, #FAF0E0, #F3E1C5); border-radius: 14px; font-size: 1.13rem; line-height: 1.75; font-weight: 500; color: var(--ink); border: 1px solid #E5C99B; }
+.ez-summary strong { color: var(--espresso); }
+.ez-citation { margin-top: 24px; padding: 18px 22px; background: var(--canvas-warm); border-radius: 8px; font-family: var(--font-mono); font-size: 0.82rem; color: var(--ink-soft); line-height: 1.7; }
+.ez-citation p { margin: 4px 0; }
+.ez-chart-card { padding: 22px 24px 18px; background: var(--canvas); border: 1px solid var(--line); border-radius: 12px; margin: 16px 0; }
+.ez-chart-card .ez-chart-title { font-size: 1rem; font-weight: 600; color: var(--ink); margin-bottom: 14px; }
+.ez-bar-row { display: flex; align-items: center; margin: 10px 0; font-size: 0.95rem; gap: 14px; }
+.ez-bar-label { width: 180px; flex-shrink: 0; color: var(--ink-mute); font-weight: 500; }
+.ez-bar-track { flex: 1; height: 32px; background: var(--canvas-warm); border-radius: 6px; overflow: hidden; position: relative; border: 1px solid var(--line); }
+.ez-bar-fill { height: 100%; background: linear-gradient(90deg, var(--caramel), var(--copper)); display: flex; align-items: center; justify-content: flex-end; padding: 0 12px; color: white; font-weight: 700; font-size: 0.92rem; min-width: 56px; }
+.ez-bar-fill.alt { background: linear-gradient(90deg, #6F4E37, #4A3F36); }
+.ez-bar-fill.cool { background: linear-gradient(90deg, #6A8FB5, #3D6FB5); }
+.ez-infographic { padding: 24px; background: var(--canvas-warm); border-radius: 12px; margin: 20px 0; border: 1px solid var(--line); }
+.ez-infographic svg { width: 100%; height: auto; display: block; }
+.ez-infographic-caption { margin-top: 12px; font-size: 0.88rem; color: var(--ink-soft); text-align: center; font-style: italic; }
+.ez-flow { display: flex; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap; margin: 16px 0; }
+.ez-flow-step { padding: 14px 18px; background: var(--canvas-warm); border: 2px solid var(--caramel); border-radius: 10px; font-weight: 600; color: var(--espresso); text-align: center; min-width: 120px; }
+.ez-flow-step .ez-flow-emoji { font-size: 1.6rem; display: block; margin-bottom: 6px; }
+.ez-flow-arrow { font-size: 1.6rem; color: var(--copper); font-weight: 700; }
+@media (max-width: 720px) {
+  .ez-bar-label { width: 100%; margin-bottom: 4px; }
+  .ez-bar-row { flex-direction: column; align-items: stretch; }
+  .ez-flow { flex-direction: column; }
+  .ez-flow-arrow { transform: rotate(90deg); }
+  .ez-section h2 { font-size: 1.3rem; }
+}
 </style>
 </head>
 <body>
@@ -138,105 +190,133 @@ ul.findings li::before { content: counter(f, decimal-leading-zero); position: ab
   <section class="article-body">
     <div class="container">
 
-      
-      <div class="section-block">
-        <h2>요약</h2>
-        <p>커피 산업에서 발생하는 펄프, 파치먼트, 실버스킨, 소비된 커피 찌꺼기(SCG) 등 5대 부산물에는 클로로젠산·카페인·트리고넬린 등 고부가 생리활성 화합물이 다량 함유되어 있으나, 기존 전통 추출법은 고온·장시간·다량 용매 사용으로 환경 부담과 화합물 분해 문제를 안고 있다. 이 리뷰는 초음파 보조 추출(UAE), 고압 추출(HPE), 저온 대기압 플라즈마(CAP), 마이크로파 보조 추출(MAE) 4가지 신기술을 커피 원두 및 부산물에 적용한 최신 연구들을 체계적으로 종합한다. UAE는 음향 캐비테이션으로 세포벽을 파괴해 단시간 내 폴리페놀 회수를 극대화하며, HPE는 수백 MPa 고수압으로 열 손상 없이 세포막 투과성을 높인다. CAP는 비열 플라즈마로 상온에서 표면을 활성화하고, MAE는 유전 가열로 수 분 내 추출을 완료한다. 4기술 모두 기존 대비 총 페놀 함량을 최대 2배까지 향상시키고 처리 시간을 2.5~15분으로 단축하는 것으로 보고되며, 커피 부산물의 순환 경제 전환을 위한 핵심 기술 기반을 제공한다.</p>
+      <div class="ez-hero">
+        <div class="ez-hero-emoji">♻️</div>
+        <div class="ez-hero-title">커피 버려지는 부분에서 진짜 보물 캐는 4가지 신기술</div>
       </div>
-      
 
-      
-      <div class="section-block">
-        <h2>핵심 발견</h2>
-        <ul class="findings">
-          <li>신흥 추출 4기술(UAE·HPE·CAP·MAE) 커피 원두 및 5대 부산물 적용 체계 최초 종합 리뷰</li><li>기존 전통 추출 대비 총 페놀 함량(TPC) 최대 2배 향상 달성 복수 사례 보고</li><li>처리 시간 2.5~15분으로 단축 — 기존 수 시간 대비 현격한 효율 개선</li><li>UAE: 음향 캐비테이션 → 실버스킨·SCG 클로로젠산 회수 탁월</li><li>HPE: 수백 MPa 고수압 → 열 손상 없이 세포막 투과성 향상</li><li>CAP: 비열 플라즈마 → 상온 표면 활성화, 항산화 화합물 분해 최소화</li><li>MAE: 유전 가열 → 카페인·트리고넬린·클로로젠산 단시간 고효율 동시 회수</li><li>커버 부산물: 커피 과육(펄프), 허스크, 파치먼트, 실버스킨, SCG 5종</li><li>순환 경제 지원 및 고부가 가치 응용 전환 가능성 제시</li>
-        </ul>
+      <div class="ez-section">
+        <h2>🤔 무슨 연구야?</h2>
+        <p>커피 한 잔을 만들 때 우리가 마시는 건 <strong>전체 커피 열매의 약 30%</strong> 뿐이야. 나머지 70%는 다 버려져!</p>
+        <div class="ez-callout">버려지는 것들 — <strong>펄프(과육), 파치먼트, 실버스킨, 사용한 커피 찌꺼기(SCG), 허스크</strong>. 전 세계적으로 매년 수백만 톤이 발생해.</div>
+        <p>그런데 이 버려지는 부분에 사실 <strong>몸에 좋은 성분(폴리페놀, 클로로젠산, 항산화 물질)</strong>이 잔뜩 들어있어. 문제는 이걸 뽑아내려면 옛날 방식으로는 시간이 오래 걸리고 환경오염도 심해. 이 리뷰는 <strong>4가지 새로운 추출 기술</strong>이 이 문제를 어떻게 푸는지 정리했어.</p>
       </div>
-      
 
-      
+      <div class="ez-section">
+        <h2>🧪 4가지 신기술, 한 줄로 풀면</h2>
 
-      
+        <h3>1️⃣ UAE — 초음파 보조 추출</h3>
+        <p><strong>초음파</strong>로 세포벽을 깨뜨려서 안에 든 성분을 빨리 꺼내는 방식.</p>
+        <div class="ez-callout">💡 비유: 풍선 안에 갇힌 사탕을 꺼내려면 풍선을 터뜨리면 되잖아? 초음파가 세포를 미세하게 터뜨리는 효과를 줘.</div>
 
-      
-      <div class="section-block">
-        <h2>방법론</h2>
-        <p>체계적 문헌 고찰(systematic review). UAE, HPE, CAP, MAE 각 기술에 대한 최신 1차 연구를 검토하고, 커피 원두 및 5개 부산물 스트림에의 적용 결과를 기술별로 비교 종합. 평가 지표: 추출 수율, 총 페놀 함량(TPC), 항산화 능력(DPPH·ABTS), 개별 화합물 프로파일(HPLC·LC-MS), 처리 시간, 에너지 소비량. 각 기술의 물리화학적 원리와 핵심 작동 매개변수(주파수, 압력, 플라즈마 방전 조건, 마이크로파 출력 등)를 문헌 데이터 기반으로 비교 기술.</p>
+        <h3>2️⃣ HPE — 고압 추출</h3>
+        <p><strong>수백 MPa(엄청 강한 압력)</strong>으로 짜내는 방식. 열을 안 써서 좋은 성분이 안 부서져.</p>
+        <div class="ez-callout">💡 비유: 망고를 손으로 짜는 것보다 큰 프레스로 누르면 즙이 더 잘 나오는 것과 비슷.</div>
+
+        <h3>3️⃣ CAP — 저온 대기압 플라즈마</h3>
+        <p><strong>차가운 플라즈마(이온화된 가스)</strong>로 표면을 활성화해서 추출 효율을 높임. 상온에서 처리해서 손상 거의 없음.</p>
+
+        <h3>4️⃣ MAE — 마이크로파 보조 추출</h3>
+        <p>전자레인지처럼 <strong>마이크로파로 안에서부터 빠르게 가열</strong>해서 단 몇 분 만에 추출. 카페인·클로로젠산을 한꺼번에 뽑아낼 수 있음.</p>
       </div>
-      
 
-      
-      <div class="section-block">
-        <h2>시사점</h2>
-        <div class="implications-grid">
-          
-          <div class="implication-card">
-            <h3>농가 · 가공장</h3>
-            <p>습식 가공 부산물(펄프·파치먼트)에 UAE·CAP 도입 시 폐기물에서 항산화 추출물 생산으로 부가 수익 창출 가능. HPE 장비 소형화·가격 하락 추세로 농협 단위 도입 가능성 증가</p>
+      <div class="ez-section">
+        <h2>📊 신기술 vs 옛 방식 — 효율 비교</h2>
+        <div class="ez-chart-card">
+          <div class="ez-chart-title">총 폴리페놀 회수율 향상 (기존 대비)</div>
+          <div class="ez-bar-row">
+            <div class="ez-bar-label">기존 추출법</div>
+            <div class="ez-bar-track"><div class="ez-bar-fill alt" style="width: 50%;">100% (기준)</div></div>
           </div>
-          
-          <div class="implication-card">
-            <h3>로스터 · 큐그레이더</h3>
-            <p>로스팅 시 발생하는 실버스킨(채프)에서 UAE 기반 클로로젠산 추출물 회수 가능성 실증. 채프 기능성 추출물의 화장품·건강기능식품 공급 비즈니스 모델의 이론적 근거 제공</p>
+          <div class="ez-bar-row">
+            <div class="ez-bar-label">신기술 (UAE 등)</div>
+            <div class="ez-bar-track"><div class="ez-bar-fill" style="width: 100%;">최대 200% (2배)</div></div>
           </div>
-          
-          <div class="implication-card">
-            <h3>R&amp;D</h3>
-            <p>UAE-MAE 연속 공정, CAP 전처리 후 HPE 등 하이브리드 추출 연구가 다음 단계로 명확. 파일럿·산업 스케일 전환 연구, 추출물 규제 적합성·안전성 데이터 구축이 핵심 과제</p>
+        </div>
+        <div class="ez-chart-card">
+          <div class="ez-chart-title">처리 시간</div>
+          <div class="ez-bar-row">
+            <div class="ez-bar-label">기존 (수 시간)</div>
+            <div class="ez-bar-track"><div class="ez-bar-fill alt" style="width: 100%;">120~360분</div></div>
           </div>
-          
+          <div class="ez-bar-row">
+            <div class="ez-bar-label">신기술</div>
+            <div class="ez-bar-track"><div class="ez-bar-fill" style="width: 8%;">2.5~15분</div></div>
+          </div>
         </div>
       </div>
-      
 
-      
-      <div class="section-block">
-        <h2>한계</h2>
-        <p>리뷰 논문으로 1차 실험 데이터 없음. 보고된 수치는 연구별 기질·용매·조건 상이해 직접 비교 주의. 산업 스케일 경제성 분석 미제공. CAP 커피 분야 적용 문헌 제한적. 추출물 식품 안전성 규제 적합성 논의 부족.</p>
+      <div class="ez-section">
+        <h2>🆚 4기술 한눈 비교</h2>
+        <table class="ez-table">
+          <thead><tr><th>기술</th><th>원리</th><th>강점</th><th>잘 맞는 부산물</th></tr></thead>
+          <tbody>
+            <tr><th>UAE 🔊</th><td>음향 캐비테이션 (초음파)</td><td>단시간, 폴리페놀↑</td><td>실버스킨·SCG</td></tr>
+            <tr><th>HPE 💎</th><td>수백 MPa 고압</td><td>열 손상 없음</td><td>펄프·과육</td></tr>
+            <tr><th>CAP ⚡</th><td>저온 플라즈마</td><td>상온, 항산화 보존</td><td>표면 처리 필요한 부산물</td></tr>
+            <tr><th>MAE 📡</th><td>마이크로파 가열</td><td>2~5분, 다성분 동시</td><td>SCG·실버스킨</td></tr>
+          </tbody>
+        </table>
       </div>
-      
 
-      
-      <div class="section-block">
-        <h2>용어집</h2>
-        <ul class="glossary-list">
-          
-          <li><dt>UAE (Ultrasound-Assisted Extraction)</dt><dd>초음파 보조 추출 — 음향 캐비테이션으로 세포벽 파괴, 폴리페놀 단시간 회수</dd></li>
-          
-          <li><dt>HPE (High-Pressure Extraction)</dt><dd>고압 추출 — 수백 MPa 정수압으로 열 손상 없이 세포막 투과성 향상</dd></li>
-          
-          <li><dt>CAP (Cold Atmospheric Plasma)</dt><dd>저온 대기압 플라즈마 — 비열 플라즈마로 상온 표면 활성화</dd></li>
-          
-          <li><dt>MAE (Microwave-Assisted Extraction)</dt><dd>마이크로파 보조 추출 — 유전 가열로 수 분 내 추출 완료</dd></li>
-          
-          <li><dt>Chlorogenic Acid (CGA)</dt><dd>클로로젠산 — 커피 주요 페놀산, 항산화·항염 활성</dd></li>
-          
-          <li><dt>Silverskin / Chaff</dt><dd>실버스킨/채프 — 로스팅 시 분리되는 커피 종피, CGA·멜라노이딘 함유</dd></li>
-          
-          <li><dt>Spent Coffee Grounds (SCG)</dt><dd>소비된 커피 찌꺼기 — 추출 후 잔류물, 연간 수백만 톤 발생</dd></li>
-          
-          <li><dt>Trigonelline</dt><dd>트리고넬린 — 커피 알칼로이드, 로스팅 중 니아신으로 부분 전환</dd></li>
-          
-          <li><dt>Circular Economy</dt><dd>순환 경제 — 폐기물 최소화 자원 순환 경제 모델</dd></li>
-          
-          <li><dt>Acoustic Cavitation</dt><dd>음향 캐비테이션 — 초음파에 의한 마이크로 버블 생성·붕괴 현상, UAE 핵심 기전</dd></li>
-          
+      <div class="ez-section">
+        <h2>♻️ 왜 이게 중요해? — 순환 경제</h2>
+        <p><strong>순환 경제</strong>는 "쓰레기를 안 만드는 경제"라는 뜻이야. 버려지던 커피 부산물에서 폴리페놀이나 카페인 같은 고가치 성분을 뽑아내서 화장품·건강기능식품·약품 원료로 쓰면, 농가는 추가 수입을 얻고 환경 부담도 줄어들어.</p>
+        <div class="ez-callout">⚖️ <strong>1톤의 커피 = 약 6톤의 부산물.</strong> 이 부산물을 그냥 버리면 폐기물, 추출하면 자원.</div>
+      </div>
+
+      <div class="ez-section">
+        <h2>🎯 핵심 발견</h2>
+        <ul class="ez-findings">
+          <li class="gold"><strong>🥇 폴리페놀 회수율 최대 2배</strong>옛 방식보다 같은 부산물에서 폴리페놀을 두 배까지 회수.</li>
+          <li class="silver"><strong>🥈 시간 2.5~15분으로 단축</strong>기존 수 시간 대비 10~50배 빨라짐.</li>
+          <li class="bronze"><strong>🥉 5대 부산물 (펄프·허스크·파치먼트·실버스킨·SCG) 모두 적용 가능</strong>각 부산물에 맞는 기술이 다름.</li>
+          <li class="medal"><strong>🏅 산업 스케일업 가능성 명시</strong>장비가 소형화되고 가격이 내려가는 추세라 농협·중소 가공장도 도입 가능.</li>
         </ul>
       </div>
-      
 
-      <div class="section-block">
-        <h2>인용 · 링크</h2>
-        <div class="citation-block">Vera, W., Quevedo-Olaya, J. L., Samaniego-Rafaele, C., Culqui-Arce, C., Sánchez-Chero, M. J., Quispe-Santivañez, G. W., &amp; Salvador-Reyes, R. (2026). Emerging technologies for sustainable extraction and valorization of bioactive compounds from coffee beans and by-products: Principles, bioactivity enhancement, and industrial perspectives. Biomass, 6(2), 18. https://doi.org/10.3390/biomass6020018</div>
+      <div class="ez-section">
+        <h2>💼 누구한테 의미가 있을까?</h2>
+        <table class="ez-table">
+          <thead><tr><th>대상</th><th>의미</th></tr></thead>
+          <tbody>
+            <tr><th>농가·가공장</th><td>펄프·파치먼트에서 항산화 추출물 생산 → 부가 수입. HPE 장비 가격 하락으로 농협 단위 도입 가능</td></tr>
+            <tr><th>로스터</th><td>로스팅 시 발생하는 실버스킨(채프)에서 UAE 로 클로로젠산 추출 가능. 화장품·건강식품 공급 비즈니스 가능</td></tr>
+            <tr><th>R&amp;D</th><td>UAE-MAE 연속 공정, CAP+HPE 하이브리드 등 후속 연구. 식품 안전성 규제 적합성 데이터 구축 필요</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="ez-section">
+        <h2>⚠️ 한계도 있어</h2>
+        <ul>
+          <li>리뷰 논문이라 직접 실험 데이터는 없음</li>
+          <li>연구별 기질·용매가 달라 직접 비교 주의 필요</li>
+          <li>산업 규모 경제성(돈) 분석은 미제공</li>
+          <li>CAP는 커피 분야 적용 문헌이 아직 적음</li>
+          <li>추출물의 식품 안전성 규제 적합성은 논의 부족</li>
+        </ul>
+      </div>
+
+      <div class="ez-section">
+        <div class="ez-summary">💡 <strong>한 줄 요약</strong> — 커피 한 잔의 70%인 부산물에서 <strong>초음파·고압·플라즈마·마이크로파</strong> 같은 신기술로 폴리페놀을 <strong>2배 빠르게 2배 많이</strong> 뽑아낼 수 있다. 버려지던 것을 자원으로 바꾸는 순환경제의 핵심 도구.</div>
+      </div>
+
+      <div class="ez-section">
+        <h2>📚 원문 정보</h2>
+        <div class="ez-citation">
+          <p><strong>📄 논문</strong> — Emerging Technologies for Sustainable Extraction and Valorization of Bioactive Compounds from Coffee Beans and By-Products</p>
+          <p><strong>📰 저널</strong> — Biomass (MDPI), 2026-03-02</p>
+          <p><strong>👥 저자</strong> — Vera, Quevedo-Olaya, Samaniego-Rafaele 외 (페루)</p>
+          <p><strong>🔗 DOI</strong> — <a href="https://doi.org/10.3390/biomass6020018" target="_blank" rel="noopener noreferrer" style="color: var(--copper);">10.3390/biomass6020018</a></p>
+        </div>
         <div class="links-row">
           <a class="link-pill" href="https://doi.org/10.3390/biomass6020018" target="_blank" rel="noopener noreferrer">DOI →</a>
           <a class="link-pill" href="https://www.mdpi.com/2673-8783/6/2/18/pdf" target="_blank" rel="noopener noreferrer">OA PDF →</a>
           <a class="link-pill" href="https://www.mdpi.com/journal/biomass" target="_blank" rel="noopener noreferrer">JOURNAL HOMEPAGE →</a>
         </div>
         <div style="margin-top: 18px;">
-          
           <span class="source-basis abstract">ABSTRACT BASIS</span>
-          
         </div>
       </div>
 

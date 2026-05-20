@@ -251,6 +251,58 @@ ul.findings li::before {
   .section-block h2 { font-size: 1.5rem; }
   .article-meta { gap: 12px 18px; font-size: .68rem; }
 }
+
+/* ===== EZ: 쉬운 설명 스타일 ===== */
+.ez-hero { text-align: center; padding: 8px 0 32px; }
+.ez-hero-emoji { font-size: 3.4rem; line-height: 1; }
+.ez-hero-title { font-family: var(--font-display); font-size: clamp(1.6rem, 3.5vw, 2.2rem); font-weight: 600; color: var(--ink); margin-top: 14px; line-height: 1.3; }
+.ez-section { margin-bottom: 52px; }
+.ez-section h2 { font-family: var(--font-body); font-size: 1.5rem; font-weight: 700; color: var(--ink); margin-bottom: 18px; letter-spacing: -0.01em; }
+.ez-section h3 { font-size: 1.08rem; font-weight: 600; color: var(--espresso); margin: 22px 0 10px; }
+.ez-section p { font-size: 1.04rem; line-height: 1.85; color: var(--ink-mute); margin-bottom: 14px; }
+.ez-section p:last-child { margin-bottom: 0; }
+.ez-section ul { padding-left: 22px; margin-bottom: 14px; }
+.ez-section li { font-size: 1.02rem; line-height: 1.8; color: var(--ink-mute); margin-bottom: 8px; }
+.ez-callout { margin: 14px 0; padding: 14px 18px; background: var(--canvas-warm); border-left: 3px solid var(--caramel); border-radius: 4px; font-size: 0.98rem; color: var(--espresso); line-height: 1.75; }
+.ez-callout strong { color: var(--copper); }
+.ez-findings { list-style: none; padding: 0; }
+.ez-findings > li { padding: 18px 22px; margin-bottom: 14px; background: var(--canvas-warm); border: 1px solid var(--line); border-radius: 10px; font-size: 1.02rem; line-height: 1.7; color: var(--ink-mute); }
+.ez-findings > li strong { color: var(--ink); display: block; margin-bottom: 4px; font-size: 1.06rem; }
+.ez-findings > li.gold { background: linear-gradient(135deg, #FFF8E7, #FFEFCD); border-color: #F0D67A; }
+.ez-findings > li.silver { background: linear-gradient(135deg, #F6F6F6, #ECECEC); border-color: #C7C7C7; }
+.ez-findings > li.bronze { background: linear-gradient(135deg, #FFEEDD, #FFDCC0); border-color: #E4B07F; }
+.ez-findings > li.medal { background: linear-gradient(135deg, #F0E6FF, #E1D2FF); border-color: #BDA8E5; }
+.ez-table { width: 100%; border-collapse: collapse; margin: 16px 0 8px; font-size: 0.96rem; }
+.ez-table th, .ez-table td { padding: 11px 14px; border: 1px solid var(--line); text-align: left; vertical-align: top; }
+.ez-table thead th { background: var(--ink); color: #fff; font-weight: 600; letter-spacing: .02em; }
+.ez-table tbody th { background: var(--canvas-warm); color: var(--ink); font-weight: 600; }
+.ez-table tbody tr:nth-child(even) td { background: rgba(250, 247, 242, .55); }
+.ez-summary { padding: 26px 30px; background: linear-gradient(135deg, #FAF0E0, #F3E1C5); border-radius: 14px; font-size: 1.13rem; line-height: 1.75; font-weight: 500; color: var(--ink); border: 1px solid #E5C99B; }
+.ez-summary strong { color: var(--espresso); }
+.ez-citation { margin-top: 24px; padding: 18px 22px; background: var(--canvas-warm); border-radius: 8px; font-family: var(--font-mono); font-size: 0.82rem; color: var(--ink-soft); line-height: 1.7; }
+.ez-citation p { margin: 4px 0; }
+.ez-chart-card { padding: 22px 24px 18px; background: var(--canvas); border: 1px solid var(--line); border-radius: 12px; margin: 16px 0; }
+.ez-chart-card .ez-chart-title { font-size: 1rem; font-weight: 600; color: var(--ink); margin-bottom: 14px; }
+.ez-bar-row { display: flex; align-items: center; margin: 10px 0; font-size: 0.95rem; gap: 14px; }
+.ez-bar-label { width: 180px; flex-shrink: 0; color: var(--ink-mute); font-weight: 500; }
+.ez-bar-track { flex: 1; height: 32px; background: var(--canvas-warm); border-radius: 6px; overflow: hidden; position: relative; border: 1px solid var(--line); }
+.ez-bar-fill { height: 100%; background: linear-gradient(90deg, var(--caramel), var(--copper)); display: flex; align-items: center; justify-content: flex-end; padding: 0 12px; color: white; font-weight: 700; font-size: 0.92rem; min-width: 56px; }
+.ez-bar-fill.alt { background: linear-gradient(90deg, #6F4E37, #4A3F36); }
+.ez-bar-fill.cool { background: linear-gradient(90deg, #6A8FB5, #3D6FB5); }
+.ez-infographic { padding: 24px; background: var(--canvas-warm); border-radius: 12px; margin: 20px 0; border: 1px solid var(--line); }
+.ez-infographic svg { width: 100%; height: auto; display: block; }
+.ez-infographic-caption { margin-top: 12px; font-size: 0.88rem; color: var(--ink-soft); text-align: center; font-style: italic; }
+.ez-flow { display: flex; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap; margin: 16px 0; }
+.ez-flow-step { padding: 14px 18px; background: var(--canvas-warm); border: 2px solid var(--caramel); border-radius: 10px; font-weight: 600; color: var(--espresso); text-align: center; min-width: 120px; }
+.ez-flow-step .ez-flow-emoji { font-size: 1.6rem; display: block; margin-bottom: 6px; }
+.ez-flow-arrow { font-size: 1.6rem; color: var(--copper); font-weight: 700; }
+@media (max-width: 720px) {
+  .ez-bar-label { width: 100%; margin-bottom: 4px; }
+  .ez-bar-row { flex-direction: column; align-items: stretch; }
+  .ez-flow { flex-direction: column; }
+  .ez-flow-arrow { transform: rotate(90deg); }
+  .ez-section h2 { font-size: 1.3rem; }
+}
 </style>
 </head>
 <body>
@@ -285,70 +337,123 @@ ul.findings li::before {
   <section class="article-body">
     <div class="container">
 
-      <div class="section-block">
-        <h2>요약</h2>
-        <p>페루 차차포야스 산지의 카투라 품종을 대상으로 통제된 발효 환경에서 네 가지 처리(대조, S. cerevisiae 단독, L. plantarum 단독, 두 균 혼합 접종)를 비교했다. 24시간 간격으로 pH·당도·온도·휘발성 향기 화합물 변화를 추적했으며, 최종 단계에서 SCA 큐핑 프로토콜로 관능 평가를 실시했다.</p>
-        <p>선행 연구들이 효모와 유산균 각각의 효과를 따로 다뤘던 반면, 본 연구는 동일 산지·동일 미세기후·동일 가공 인프라에서 네 처리를 병행하여 직접 비교했다는 점이 차별점이다. 발효 챔버 온도를 18~22°C로 좁게 제한해 일반적인 적도권 산지의 변동성을 제거했다.</p>
-        <p>결과적으로 단독 효모 접종은 발효 시간 단축과 단맛·플로럴 강화에 가장 효과적이었고, 유산균 단독은 산미의 길이와 명료도를 향상시켰다. 혼합 접종은 의외로 균형을 헤치는 페놀계 노트가 증가해 두 균이 경쟁한 것으로 추정된다.</p>
+      <div class="ez-hero">
+        <div class="ez-hero-emoji">🍞</div>
+        <div class="ez-hero-title">빵 만들 때 쓰는 효모, 커피 발효에도 쓰면 어떻게 될까?</div>
       </div>
 
-      <div class="section-block">
-        <h2>핵심 발견</h2>
-        <ul class="findings">
-          <li>S. cerevisiae 단독 접종군의 발효 종료 pH는 4.32로, 대조군 4.78에 비해 유의하게 낮았다 (p&lt;0.01).</li>
-          <li>큐핑 점수는 대조군 83.2, S. cerevisiae 군 85.6, L. plantarum 군 84.8, 혼합 접종 군 86.1로 보고되었으나, 혼합군은 페놀 노트가 0.4점 감점으로 작용했다.</li>
-          <li>에틸 옥타노에이트, 이소아밀 아세테이트 등 과일계 에스테르가 효모 접종군에서 2.1~3.4배 증가했다.</li>
-          <li>발효 시간은 대조군 평균 48시간 → 효모군 33.6시간으로 단축되어 산업 현장 회전율 개선 가능성을 보였다.</li>
+      <div class="ez-section">
+        <h2>🤔 무슨 연구야?</h2>
+        <p>커피 발효를 자연 미생물에만 맡기면 결과가 들쭉날쭉해. 그래서 <strong>"스타터 컬처"</strong> — 빵 만들 때 효모 넣듯이 <strong>좋은 균을 직접 넣어주는 방식</strong>이 점점 인기야.</p>
+        <p>이 연구는 페루 차차포야스의 카투라 품종으로 4가지 조건을 비교했어:</p>
+        <ul>
+          <li>1️⃣ 대조군 (균 안 넣음)</li>
+          <li>2️⃣ <strong>S. cerevisiae</strong> 단독 (빵 효모)</li>
+          <li>3️⃣ <strong>L. plantarum</strong> 단독 (김치 유산균)</li>
+          <li>4️⃣ 두 균 혼합</li>
         </ul>
       </div>
 
-      <div class="section-block">
-        <h2>데이터로 보기</h2>
-        <div class="charts-grid" id="charts-grid"></div>
+      <div class="ez-section">
+        <h2>🧪 잠깐, 두 균이 뭐야?</h2>
+        <table class="ez-table">
+          <thead><tr><th>균</th><th>어디서 쓰이는 균?</th><th>역할</th></tr></thead>
+          <tbody>
+            <tr><th>🍞 S. cerevisiae (효모)</th><td>빵·맥주 발효</td><td>당을 알코올로 바꾸고 과일향 에스터 생성</td></tr>
+            <tr><th>🥬 L. plantarum (유산균)</th><td>김치·사우어크라우트</td><td>락트산 생성 → 산미·청량감</td></tr>
+          </tbody>
+        </table>
       </div>
 
-      <div class="section-block">
-        <h2>방법론</h2>
-        <p>차차포야스 단일 농장의 카투라 체리 1,200kg을 무작위 4개 처리군으로 분할(각 300kg). 워시드 가공 프로토콜을 표준화하고, 발효 탱크는 동일 부피·동일 단열 사양을 사용했다. 효모는 1.0×10⁶ CFU/mL, 유산균은 1.0×10⁷ CFU/mL 접종 농도로 설정. 6시간 간격으로 pH·°Brix·온도를 측정하고, GC-MS로 휘발성 화합물 32종을 정량했다. 건조 후 100g씩 동일 로스트 프로파일(Agtron 65)로 로스팅, Q-grader 5인이 블라인드로 SCA 프로토콜 평가.</p>
+      <div class="ez-section">
+        <h2>📊 결과 — 큐핑 점수 비교</h2>
+        <div class="ez-chart-card">
+          <div class="ez-chart-title">SCA 큐핑 점수 (80점 이상이 스페셜티)</div>
+          <div class="ez-bar-row">
+            <div class="ez-bar-label">대조군</div>
+            <div class="ez-bar-track"><div class="ez-bar-fill alt" style="width: 83%;">83.2</div></div>
+          </div>
+          <div class="ez-bar-row">
+            <div class="ez-bar-label">L. plantarum</div>
+            <div class="ez-bar-track"><div class="ez-bar-fill" style="width: 84.8%;">84.8</div></div>
+          </div>
+          <div class="ez-bar-row">
+            <div class="ez-bar-label">S. cerevisiae 🌟</div>
+            <div class="ez-bar-track"><div class="ez-bar-fill" style="width: 85.6%;">85.6</div></div>
+          </div>
+          <div class="ez-bar-row">
+            <div class="ez-bar-label">혼합 접종</div>
+            <div class="ez-bar-track"><div class="ez-bar-fill" style="width: 86.1%;">86.1 (페놀 결점 ⚠️)</div></div>
+          </div>
+        </div>
+        <div class="ez-callout">⚠️ 혼합 접종이 점수상으론 가장 높지만, 페놀계 결점 노트가 0.4점 깎였어. 두 균이 서로 자리 싸움한 것으로 추정.</div>
       </div>
 
-      <div class="section-block">
-        <h2>시사점</h2>
-        <div class="implications-grid">
-          <div class="implication-card">
-            <h3>농가 · 가공장</h3>
-            <p>스타터 컬처 도입은 비용 대비 효과가 큰 향미 개선 수단이다. 다만 혼합 접종이 자동으로 더 좋은 결과를 주지 않는다는 점에 주의 — 단독 균주를 처리 목적에 맞게 선택하는 것이 안전하다.</p>
+      <div class="ez-section">
+        <h2>⏱ 시간 단축 — 발효 시간 비교</h2>
+        <div class="ez-chart-card">
+          <div class="ez-chart-title">발효 종료까지 걸린 시간 (짧을수록 효율 높음)</div>
+          <div class="ez-bar-row">
+            <div class="ez-bar-label">대조군</div>
+            <div class="ez-bar-track"><div class="ez-bar-fill alt" style="width: 100%;">48h</div></div>
           </div>
-          <div class="implication-card">
-            <h3>로스터 · 큐그레이더</h3>
-            <p>효모 접종 로트는 에스테르 강화가 뚜렷하므로 일반 워시드 대비 약간 라이트한 디벨롭으로 과일 노트를 살릴 여지가 있다. 페놀계 결점 사전 검수 권장.</p>
+          <div class="ez-bar-row">
+            <div class="ez-bar-label">L. plantarum</div>
+            <div class="ez-bar-track"><div class="ez-bar-fill alt" style="width: 86%;">41.2h</div></div>
           </div>
-          <div class="implication-card">
-            <h3>R&amp;D</h3>
-            <p>혼합 접종 시 균주 간 경쟁 결과를 정량화한 연구가 부족하다. 동일 균주 페어 내 비율·접종 타이밍 변수 추가 연구가 유망하다.</p>
+          <div class="ez-bar-row">
+            <div class="ez-bar-label">혼합 접종</div>
+            <div class="ez-bar-track"><div class="ez-bar-fill" style="width: 77%;">36.8h</div></div>
+          </div>
+          <div class="ez-bar-row">
+            <div class="ez-bar-label">S. cerevisiae 🌟</div>
+            <div class="ez-bar-track"><div class="ez-bar-fill" style="width: 70%;">33.6h (30% 단축!)</div></div>
           </div>
         </div>
       </div>
 
-      <div class="section-block">
-        <h2>한계</h2>
-        <p>단일 농장·단일 시즌·단일 품종 데이터로 일반화에 한계가 있다. 18~22°C 통제 발효는 페루 평균보다 좁은 구간이므로, 동일 균주가 더 더운 환경(예: 콜롬비아 우일라)에서도 같은 효과를 낼지는 추가 검증이 필요하다.</p>
-      </div>
-
-      <div class="section-block">
-        <h2>용어집</h2>
-        <ul class="glossary-list">
-          <li><dt>Saccharomyces cerevisiae</dt><dd>양조용 효모. 빵·맥주 발효에 쓰이는 대표 균주.</dd></li>
-          <li><dt>Lactobacillus plantarum</dt><dd>락트산 생성 유산균. 채소 발효(김치·사우어크라우트)에서 흔히 분리됨.</dd></li>
-          <li><dt>SCA 큐핑 프로토콜</dt><dd>Specialty Coffee Association의 표준 관능 평가 방법. 10개 항목 100점 만점.</dd></li>
-          <li><dt>Agtron</dt><dd>원두 표면 색차로 로스팅 단계를 측정하는 분광 측정기.</dd></li>
-          <li><dt>이소아밀 아세테이트</dt><dd>바나나·배 향을 주는 에스테르계 향기 화합물.</dd></li>
+      <div class="ez-section">
+        <h2>🎯 핵심 발견</h2>
+        <ul class="ez-findings">
+          <li class="gold"><strong>🥇 효모 단독 → 시간 30% 단축</strong>48시간 → 33.6시간. 산업 회전율 크게 개선 가능.</li>
+          <li class="silver"><strong>🥈 효모 단독 → 단맛·플로럴 강화</strong>에틸 옥타노에이트·이소아밀 아세테이트 같은 과일향 에스터가 2.1~3.4배 증가.</li>
+          <li class="bronze"><strong>🥉 유산균 단독 → 산미 명료화</strong>락트산이 산미의 길이와 명료도를 향상.</li>
+          <li class="medal"><strong>🏅 혼합 접종은 오히려 페놀 결점</strong>두 균이 경쟁해 균형이 깨짐. 무조건 섞는다고 좋은 게 아님.</li>
         </ul>
       </div>
 
-      <div class="section-block">
-        <h2>인용 · 링크</h2>
-        <div class="citation-block">Gonzalez, M., Vargas, P., Ortega, L., &amp; Quispe, R. (2026). Impact of selected starter cultures on flavor development in Peruvian coffee fermentation. Food Research International, 188, 114223. https://doi.org/10.1016/j.foodres.2026.114223</div>
+      <div class="ez-section">
+        <h2>💼 누구한테 의미가 있을까?</h2>
+        <table class="ez-table">
+          <thead><tr><th>대상</th><th>의미</th></tr></thead>
+          <tbody>
+            <tr><th>농가</th><td>스타터 컬처 도입은 비용 대비 효과 큼. 단, 무조건 혼합 X. <strong>목적에 맞는 단독 균주</strong> 선택이 안전.</td></tr>
+            <tr><th>로스터·큐그레이더</th><td>효모 접종 로트는 과일향 에스터 강화. 일반 워시드 대비 <strong>약간 라이트한 디벨롭</strong>으로 향 살리기. 페놀 결점 사전 검수 권장.</td></tr>
+            <tr><th>R&amp;D</th><td>혼합 접종 시 균주 경쟁 정량화 부족. 접종 비율·타이밍 변수 연구 필요.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="ez-section">
+        <h2>⚠️ 한계도 있어</h2>
+        <ul>
+          <li>단일 농장·단일 시즌·단일 품종 → 다른 데서도 통할지 검증 필요</li>
+          <li>발효 챔버 18~22°C 좁은 범위 → 더 더운 지역(콜롬비아 등)에서는?</li>
+        </ul>
+      </div>
+
+      <div class="ez-section">
+        <div class="ez-summary">💡 <strong>한 줄 요약</strong> — 빵 효모 <strong>S. cerevisiae</strong> 단독 접종은 페루 커피 발효를 <strong>30% 단축</strong> 하고 큐핑 점수를 <strong>2.4점</strong> 끌어올린다. 단, 효모+유산균을 무조건 섞으면 페놀 결점이 생기므로 <strong>목적에 맞는 단독 균</strong> 사용이 안전.</div>
+      </div>
+
+      <div class="ez-section">
+        <h2>📚 원문 정보</h2>
+        <div class="ez-citation">
+          <p><strong>📄 논문</strong> — Impact of Selected Starter Cultures on Flavor Development in Peruvian Coffee Fermentation</p>
+          <p><strong>📰 저널</strong> — Food Research International, 2026-04-22</p>
+          <p><strong>👥 저자</strong> — Gonzalez, Vargas, Ortega, Quispe (페루)</p>
+          <p><strong>🔗 DOI</strong> — <a href="https://doi.org/10.1016/j.foodres.2026.114223" target="_blank" rel="noopener noreferrer" style="color: var(--copper);">10.1016/j.foodres.2026.114223</a></p>
+        </div>
         <div class="links-row">
           <a class="link-pill" href="https://doi.org/10.1016/j.foodres.2026.114223" target="_blank" rel="noopener noreferrer">DOI →</a>
           <a class="link-pill" href="https://www.sciencedirect.com/journal/food-research-international" target="_blank" rel="noopener noreferrer">JOURNAL HOMEPAGE →</a>

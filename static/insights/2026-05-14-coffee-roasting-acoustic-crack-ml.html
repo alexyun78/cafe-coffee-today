@@ -102,6 +102,58 @@ ul.findings li::before { content: counter(f, decimal-leading-zero); position: ab
   .section-block h2 { font-size: 1.5rem; }
   .article-meta { gap: 12px 18px; font-size: .68rem; }
 }
+
+/* ===== EZ: 쉬운 설명 스타일 ===== */
+.ez-hero { text-align: center; padding: 8px 0 32px; }
+.ez-hero-emoji { font-size: 3.4rem; line-height: 1; }
+.ez-hero-title { font-family: var(--font-display); font-size: clamp(1.6rem, 3.5vw, 2.2rem); font-weight: 600; color: var(--ink); margin-top: 14px; line-height: 1.3; }
+.ez-section { margin-bottom: 52px; }
+.ez-section h2 { font-family: var(--font-body); font-size: 1.5rem; font-weight: 700; color: var(--ink); margin-bottom: 18px; letter-spacing: -0.01em; }
+.ez-section h3 { font-size: 1.08rem; font-weight: 600; color: var(--espresso); margin: 22px 0 10px; }
+.ez-section p { font-size: 1.04rem; line-height: 1.85; color: var(--ink-mute); margin-bottom: 14px; }
+.ez-section p:last-child { margin-bottom: 0; }
+.ez-section ul { padding-left: 22px; margin-bottom: 14px; }
+.ez-section li { font-size: 1.02rem; line-height: 1.8; color: var(--ink-mute); margin-bottom: 8px; }
+.ez-callout { margin: 14px 0; padding: 14px 18px; background: var(--canvas-warm); border-left: 3px solid var(--caramel); border-radius: 4px; font-size: 0.98rem; color: var(--espresso); line-height: 1.75; }
+.ez-callout strong { color: var(--copper); }
+.ez-findings { list-style: none; padding: 0; }
+.ez-findings > li { padding: 18px 22px; margin-bottom: 14px; background: var(--canvas-warm); border: 1px solid var(--line); border-radius: 10px; font-size: 1.02rem; line-height: 1.7; color: var(--ink-mute); }
+.ez-findings > li strong { color: var(--ink); display: block; margin-bottom: 4px; font-size: 1.06rem; }
+.ez-findings > li.gold { background: linear-gradient(135deg, #FFF8E7, #FFEFCD); border-color: #F0D67A; }
+.ez-findings > li.silver { background: linear-gradient(135deg, #F6F6F6, #ECECEC); border-color: #C7C7C7; }
+.ez-findings > li.bronze { background: linear-gradient(135deg, #FFEEDD, #FFDCC0); border-color: #E4B07F; }
+.ez-findings > li.medal { background: linear-gradient(135deg, #F0E6FF, #E1D2FF); border-color: #BDA8E5; }
+.ez-table { width: 100%; border-collapse: collapse; margin: 16px 0 8px; font-size: 0.96rem; }
+.ez-table th, .ez-table td { padding: 11px 14px; border: 1px solid var(--line); text-align: left; vertical-align: top; }
+.ez-table thead th { background: var(--ink); color: #fff; font-weight: 600; letter-spacing: .02em; }
+.ez-table tbody th { background: var(--canvas-warm); color: var(--ink); font-weight: 600; }
+.ez-table tbody tr:nth-child(even) td { background: rgba(250, 247, 242, .55); }
+.ez-summary { padding: 26px 30px; background: linear-gradient(135deg, #FAF0E0, #F3E1C5); border-radius: 14px; font-size: 1.13rem; line-height: 1.75; font-weight: 500; color: var(--ink); border: 1px solid #E5C99B; }
+.ez-summary strong { color: var(--espresso); }
+.ez-citation { margin-top: 24px; padding: 18px 22px; background: var(--canvas-warm); border-radius: 8px; font-family: var(--font-mono); font-size: 0.82rem; color: var(--ink-soft); line-height: 1.7; }
+.ez-citation p { margin: 4px 0; }
+.ez-chart-card { padding: 22px 24px 18px; background: var(--canvas); border: 1px solid var(--line); border-radius: 12px; margin: 16px 0; }
+.ez-chart-card .ez-chart-title { font-size: 1rem; font-weight: 600; color: var(--ink); margin-bottom: 14px; }
+.ez-bar-row { display: flex; align-items: center; margin: 10px 0; font-size: 0.95rem; gap: 14px; }
+.ez-bar-label { width: 180px; flex-shrink: 0; color: var(--ink-mute); font-weight: 500; }
+.ez-bar-track { flex: 1; height: 32px; background: var(--canvas-warm); border-radius: 6px; overflow: hidden; position: relative; border: 1px solid var(--line); }
+.ez-bar-fill { height: 100%; background: linear-gradient(90deg, var(--caramel), var(--copper)); display: flex; align-items: center; justify-content: flex-end; padding: 0 12px; color: white; font-weight: 700; font-size: 0.92rem; min-width: 56px; }
+.ez-bar-fill.alt { background: linear-gradient(90deg, #6F4E37, #4A3F36); }
+.ez-bar-fill.cool { background: linear-gradient(90deg, #6A8FB5, #3D6FB5); }
+.ez-infographic { padding: 24px; background: var(--canvas-warm); border-radius: 12px; margin: 20px 0; border: 1px solid var(--line); }
+.ez-infographic svg { width: 100%; height: auto; display: block; }
+.ez-infographic-caption { margin-top: 12px; font-size: 0.88rem; color: var(--ink-soft); text-align: center; font-style: italic; }
+.ez-flow { display: flex; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap; margin: 16px 0; }
+.ez-flow-step { padding: 14px 18px; background: var(--canvas-warm); border: 2px solid var(--caramel); border-radius: 10px; font-weight: 600; color: var(--espresso); text-align: center; min-width: 120px; }
+.ez-flow-step .ez-flow-emoji { font-size: 1.6rem; display: block; margin-bottom: 6px; }
+.ez-flow-arrow { font-size: 1.6rem; color: var(--copper); font-weight: 700; }
+@media (max-width: 720px) {
+  .ez-bar-label { width: 100%; margin-bottom: 4px; }
+  .ez-bar-row { flex-direction: column; align-items: stretch; }
+  .ez-flow { flex-direction: column; }
+  .ez-flow-arrow { transform: rotate(90deg); }
+  .ez-section h2 { font-size: 1.3rem; }
+}
 </style>
 </head>
 <body>
@@ -138,106 +190,115 @@ ul.findings li::before { content: counter(f, decimal-leading-zero); position: ab
   <section class="article-body">
     <div class="container">
 
-      
-      <div class="section-block">
-        <h2>요약</h2>
-        <p>커피 로스팅의 1차·2차 크랙 감지를 인간 청각 의존에서 머신러닝 음향 분류로 자동화하는 프레임워크. 케냐·에티오피아·중국 산지 원두 4,301개 검증 이벤트 데이터셋에서 KNN, SVM, Random Forest, XGBoost, CNN 5개 모델 비교 평가. 랜덤 포레스트가 95.68% 정확도 / ROC-AUC 0.992로 최우수 성능. MFCC 포함 주파수 도메인 기술자가 판별력 73% 이상 담당. 산지 간 재보정 불필요, 실시간 자율 로스터 시스템 통합 가능성 제시.</p>
+      <div class="ez-hero">
+        <div class="ez-hero-emoji">🎙️</div>
+        <div class="ez-hero-title">AI가 원두 볶는 소리를 듣고 타이밍을 잡는다고?</div>
       </div>
-      
 
-      
-      <div class="section-block">
-        <h2>핵심 발견</h2>
-        <ul class="findings">
-          <li>4,301개 검증 이벤트(케냐·에티오피아·중국 산지), 5종 ML 모델 체계적 비교</li><li>랜덤 포레스트 최우수: 정확도 95.68%, ROC-AUC 0.992</li><li>MFCC 포함 주파수 도메인 기술자가 판별력의 73% 이상 기여 — 음색이 음량보다 결정적</li><li>다양한 원두 산지에서 재보정 없이 범용 적용 가능</li><li>온도 센서 열 지연·인간 주관성 두 문제를 동시 해결하는 음향 기반 접근 검증</li>
+      <div class="ez-section">
+        <h2>🤔 무슨 연구야?</h2>
+        <p>커피를 볶을 때 <strong>"크랙(crack)"</strong> 이라는 소리가 두 번 나. 팝콘 터지는 듯한 소리지.</p>
+        <ul>
+          <li><strong>1차 크랙</strong> — 196~205°C, 세포벽이 터지면서 나는 작은 폭발음. 라이트~미디엄 로스트 경계.</li>
+          <li><strong>2차 크랙</strong> — 224°C 이상, 기름이 분출하면서 나는 균열음. 다크 로스트 진입.</li>
         </ul>
+        <p>로스터(커피 볶는 사람)는 이 소리를 <strong>귀로 듣고</strong> 언제 불을 끌지 결정해. 그런데 이게 문제야:</p>
+        <ul>
+          <li>👂 사람마다 듣는 게 달라서 일관성이 부족</li>
+          <li>🌡 온도 센서는 반응이 느려서(열 지연) 정확한 순간을 놓침</li>
+          <li>🔊 대형 드럼 로스터는 소음이 커서 크랙 소리를 듣기 어려움</li>
+        </ul>
+        <p>이 연구는 <strong>AI가 직접 소리를 듣고 크랙을 감지</strong>하게 만든 거야.</p>
       </div>
-      
 
-      
-
-      
-      <div class="section-block">
-        <h2>데이터로 보기</h2>
-        <div class="charts-grid" id="charts-grid"></div>
+      <div class="ez-section">
+        <h2>🔬 실험 — 5가지 AI 모델 비교</h2>
+        <p>연구진은 <strong>케냐·에티오피아·중국</strong> 3개 산지 원두 4,301개의 크랙 음향 데이터를 모았어. 그리고 5가지 AI 모델로 분류 정확도를 비교했어:</p>
+        <table class="ez-table">
+          <thead><tr><th>모델</th><th>스타일</th></tr></thead>
+          <tbody>
+            <tr><th>KNN</th><td>"가장 비슷한 이웃 찾기"</td></tr>
+            <tr><th>SVM</th><td>"선을 잘 그어 분리하기"</td></tr>
+            <tr><th>Random Forest 🏆</th><td>"여러 의사결정나무 모아 투표"</td></tr>
+            <tr><th>XGBoost</th><td>"순차 보강 학습"</td></tr>
+            <tr><th>CNN</th><td>"이미지처럼 패턴 학습 (딥러닝)"</td></tr>
+          </tbody>
+        </table>
       </div>
-      
 
-      
-      <div class="section-block">
-        <h2>방법론</h2>
-        <p>케냐·에티오피아·중국 3개 산지 원두 4,301개 검증 음향 이벤트 데이터셋. 시간·주파수 도메인 특징 벡터 추출(MFCC, 스펙트럴 롤오프, 센트로이드 등). KNN/SVM/RF/XGBoost/CNN 5개 분류기 교차 검증 평가. 정확도·ROC-AUC 기준 성능 비교 및 특징 중요도 정량 분석.</p>
-      </div>
-      
-
-      
-      <div class="section-block">
-        <h2>시사점</h2>
-        <div class="implications-grid">
-          
-          <div class="implication-card">
-            <h3>농가 · 가공장</h3>
-            <p>해당 없음 (로스팅 공정 자동화 연구로 생두 가공 단계와 무관)</p>
+      <div class="ez-section">
+        <h2>🏆 결과 — 랜덤 포레스트 압승</h2>
+        <div class="ez-chart-card">
+          <div class="ez-chart-title">랜덤 포레스트 성능</div>
+          <div class="ez-bar-row">
+            <div class="ez-bar-label">정확도</div>
+            <div class="ez-bar-track"><div class="ez-bar-fill" style="width: 95.68%;">95.68%</div></div>
           </div>
-          
-          <div class="implication-card">
-            <h3>로스터 · 큐그레이더</h3>
-            <p>청각 의존 크랙 판단을 ML 음향 센서로 보완·자동화. 다품종 취급 시 재보정 불필요. 대형 드럼 로스터 환경 소음 속 크랙 신호 자동 추출에 유용. 배치 간 로스트 포인트 일관성 향상 기대.</p>
+          <div class="ez-bar-row">
+            <div class="ez-bar-label">ROC-AUC</div>
+            <div class="ez-bar-track"><div class="ez-bar-fill" style="width: 99.2%;">0.992 / 1.0</div></div>
           </div>
-          
-          <div class="implication-card">
-            <h3>R&amp;D</h3>
-            <p>MFCC 기반 음향 분류의 로스터 통합 실증. 엣지 AI 소형 음향 모듈 개발, 다양한 로스터 장비 유형 확장, 음향·온도·색도·CO₂ 다중 모달 융합 연구가 다음 단계.</p>
-          </div>
-          
         </div>
+        <p>의외로 첨단 딥러닝(CNN)보다 <strong>전통적 랜덤 포레스트</strong>가 더 잘했어. 데이터 크기가 작을 땐 단순 모델이 더 안정적이거든.</p>
       </div>
-      
 
-      
-      <div class="section-block">
-        <h2>한계</h2>
-        <p>3개 산지만 사용, 다른 주요 산지 범용성 추가 검증 필요. 실환경 소음 강건성 미평가. CNN 저성능 이유 불명확. 논문 In Press 상태로 최종본과 차이 가능성.</p>
+      <div class="ez-section">
+        <h2>🎵 AI는 "음량"이 아니라 "음색"을 들었다</h2>
+        <p>가장 흥미로운 발견은 AI가 어떤 정보로 판단하느냐였어. <strong>MFCC</strong>(Mel-Frequency Cepstral Coefficients) 같은 주파수 영역 특징이 판별의 <strong>73% 이상</strong>을 차지했어.</p>
+        <div class="ez-callout">💡 비유: 사람도 친구 목소리를 구별할 때 "크다/작다"가 아니라 "음색이 다르다"로 구별하잖아? AI도 똑같이 <strong>크랙 소리의 음색 패턴</strong>으로 1차/2차 크랙을 구별한 거야.</div>
       </div>
-      
 
-      
-      <div class="section-block">
-        <h2>용어집</h2>
-        <ul class="glossary-list">
-          
-          <li><dt>First Crack</dt><dd>1차 크랙 — 약 196~205°C, 세포벽 파열 팝핑 소리. 라이트~미디엄 로스트 경계 지표</dd></li>
-          
-          <li><dt>Second Crack</dt><dd>2차 크랙 — 약 224°C 이상, 탄화·오일 분출 균열음. 다크 로스트 진입 지표</dd></li>
-          
-          <li><dt>MFCC</dt><dd>멜 주파수 켑스트럼 계수 — 인간 청각 모사 스펙트럴 특징 벡터</dd></li>
-          
-          <li><dt>ROC-AUC</dt><dd>분류 판별력 지표 (0~1, 1에 가까울수록 완벽)</dd></li>
-          
-          <li><dt>Random Forest</dt><dd>랜덤 포레스트 — 의사결정 트리 배깅 앙상블 모델</dd></li>
-          
-          <li><dt>Thermal Lag</dt><dd>열 지연 — 온도 센서의 실시간 추적 지연 현상</dd></li>
-          
-          <li><dt>Spectral Timbre</dt><dd>스펙트럴 음색 — 주파수 분포 패턴으로 구별되는 소리 질감</dd></li>
-          
-          <li><dt>Edge AI</dt><dd>엣지 AI — 클라우드 없이 기기 자체에서 AI 추론 수행</dd></li>
-          
+      <div class="ez-section">
+        <h2>🎯 핵심 발견</h2>
+        <ul class="ez-findings">
+          <li class="gold"><strong>🥇 정확도 95.68%, ROC-AUC 0.992</strong>실용 수준의 자동 크랙 감지가 가능함을 증명.</li>
+          <li class="silver"><strong>🥈 음색(MFCC)이 음량보다 결정적</strong>주파수 분포 특징이 판별의 73%를 담당.</li>
+          <li class="bronze"><strong>🥉 산지 간 재보정 불필요</strong>케냐 원두로 학습해도 에티오피아 원두에 잘 작동.</li>
+          <li class="medal"><strong>🏅 단순 모델이 딥러닝 이김</strong>4,301개 데이터 규모에서는 랜덤 포레스트가 CNN보다 우수.</li>
         </ul>
       </div>
-      
 
-      <div class="section-block">
-        <h2>인용 · 링크</h2>
-        <div class="citation-block">Shi, H., Li, Z., Yu, W., &amp; He, W. (2026). Augmenting sensory perception in coffee roasting automation: A machine learning framework for acoustic-based crack detection. Applied Food Research, 102058. https://doi.org/10.1016/j.afres.2026.102058</div>
+      <div class="ez-section">
+        <h2>💼 누구한테 의미가 있을까?</h2>
+        <table class="ez-table">
+          <thead><tr><th>대상</th><th>의미</th></tr></thead>
+          <tbody>
+            <tr><th>로스터</th><td>청각 의존을 줄이고 자동화 가능. 대형 드럼 로스터의 소음 속에서도 크랙 감지. 배치 간 일관성 ↑.</td></tr>
+            <tr><th>커피 장비 제조사</th><td>음향 센서 + AI 칩을 로스터에 내장해 자율 로스팅 시스템 개발 가능.</td></tr>
+            <tr><th>R&amp;D</th><td>소형 엣지 AI 음향 모듈 개발, 다양한 로스터 타입 확장, 음향+온도+색도 다중 모달 융합.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="ez-section">
+        <h2>⚠️ 한계도 있어</h2>
+        <ul>
+          <li>3개 산지만 사용 → 더 많은 산지로 검증 필요</li>
+          <li>실제 시끄러운 카페·공장 환경에서의 강건성 미검증</li>
+          <li>CNN이 왜 저성능이었는지 분석 부족</li>
+          <li>논문이 In Press 상태라 최종본과 다를 수 있음</li>
+        </ul>
+      </div>
+
+      <div class="ez-section">
+        <div class="ez-summary">💡 <strong>한 줄 요약</strong> — AI가 커피 볶는 소리를 듣고 <strong>95.68% 정확도</strong>로 1·2차 크랙을 자동 감지할 수 있다. 음량이 아니라 <strong>음색(MFCC)</strong> 이 핵심이고, 산지 바뀌어도 재보정 없이 작동. 자율 로스팅 시스템의 디딤돌.</div>
+      </div>
+
+      <div class="ez-section">
+        <h2>📚 원문 정보</h2>
+        <div class="ez-citation">
+          <p><strong>📄 논문</strong> — Augmenting Sensory Perception in Coffee Roasting Automation: A Machine Learning Framework for Acoustic-Based Crack Detection</p>
+          <p><strong>📰 저널</strong> — Applied Food Research (Elsevier), 2026-04-25</p>
+          <p><strong>👥 저자</strong> — Shi, Li, Yu, He</p>
+          <p><strong>🔗 DOI</strong> — <a href="https://doi.org/10.1016/j.afres.2026.102058" target="_blank" rel="noopener noreferrer" style="color: var(--copper);">10.1016/j.afres.2026.102058</a></p>
+        </div>
         <div class="links-row">
           <a class="link-pill" href="https://doi.org/10.1016/j.afres.2026.102058" target="_blank" rel="noopener noreferrer">DOI →</a>
           <a class="link-pill" href="https://www.sciencedirect.com/science/article/pii/S2772502226003987/pdfft" target="_blank" rel="noopener noreferrer">OA PDF →</a>
           <a class="link-pill" href="https://www.sciencedirect.com/journal/applied-food-research" target="_blank" rel="noopener noreferrer">JOURNAL HOMEPAGE →</a>
         </div>
         <div style="margin-top: 18px;">
-          
           <span class="source-basis abstract">ABSTRACT BASIS</span>
-          
         </div>
       </div>
 
@@ -253,58 +314,6 @@ ul.findings li::before { content: counter(f, decimal-leading-zero); position: ab
   </footer>
 </article>
 
-
-<script>
-const CHARTS = [{"type": "bar", "title": "랜덤 포레스트 모델 성능 (확인된 수치)", "x_labels": ["정확도 (%)", "ROC-AUC × 100"], "y_label": "점수", "values": [95.68, 99.2], "unit": "점"}];
-function renderBarChart(chart) {
-  const W = 520, H = 280;
-  const PAD_L = 50, PAD_R = 16, PAD_T = 18, PAD_B = 56;
-  const plotW = W - PAD_L - PAD_R;
-  const plotH = H - PAD_T - PAD_B;
-  const max = Math.max(...chart.values);
-  const min = Math.min(...chart.values, 0);
-  const yMax = max + (max - min) * 0.12;
-  const yMin = min < 0 ? min : 0;
-  const yRange = yMax - yMin || 1;
-  const n = chart.values.length;
-  const slot = plotW / n;
-  const barW = Math.min(slot * 0.6, 80);
-  function yFor(v) { return PAD_T + plotH - ((v - yMin) / yRange) * plotH; }
-  const ticks = 4;
-  let gridSvg = "";
-  for (let i = 0; i <= ticks; i++) {
-    const v = yMin + (yRange / ticks) * i;
-    const y = yFor(v);
-    gridSvg += `<line class="axis-line" x1="${PAD_L}" y1="${y}" x2="${PAD_L + plotW}" y2="${y}"/>`;
-    gridSvg += `<text class="axis-label" x="${PAD_L - 8}" y="${y + 4}" text-anchor="end">${Number(v.toFixed(1))}</text>`;
-  }
-  const maxIdx = chart.values.indexOf(max);
-  let barsSvg = "";
-  for (let i = 0; i < n; i++) {
-    const v = chart.values[i];
-    const x = PAD_L + slot * i + (slot - barW) / 2;
-    const y = yFor(v);
-    const h = (PAD_T + plotH) - y;
-    const cls = i === maxIdx ? "bar highlight" : "bar";
-    barsSvg += `<rect class="${cls}" x="${x}" y="${y}" width="${barW}" height="${h}" rx="3"/>`;
-    barsSvg += `<text class="value-label" x="${x + barW / 2}" y="${y - 6}" text-anchor="middle">${v}${chart.unit || ""}</text>`;
-    const label = String(chart.x_labels[i] || "");
-    barsSvg += `<text class="axis-label" x="${x + barW / 2}" y="${PAD_T + plotH + 18}" text-anchor="middle">${label}</text>`;
-  }
-  const yTitle = chart.y_label ? `<text class="y-label" x="${PAD_L}" y="${PAD_T - 6}">${chart.y_label}${chart.unit ? " (" + chart.unit + ")" : ""}</text>` : "";
-  return `<svg class="chart-svg" viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid meet" role="img" aria-label="${chart.title}">${yTitle}${gridSvg}${barsSvg}</svg>`;
-}
-(function () {
-  const grid = document.getElementById("charts-grid");
-  if (!grid) return;
-  CHARTS.forEach(function (c) {
-    const card = document.createElement("div");
-    card.className = "chart-card";
-    card.innerHTML = `<div class="chart-title">${c.title}</div>` + (c.type === "bar" ? renderBarChart(c) : "");
-    grid.appendChild(card);
-  });
-})();
-</script>
 
 
 </body>

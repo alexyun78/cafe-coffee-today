@@ -102,6 +102,58 @@ ul.findings li::before { content: counter(f, decimal-leading-zero); position: ab
   .section-block h2 { font-size: 1.5rem; }
   .article-meta { gap: 12px 18px; font-size: .68rem; }
 }
+
+/* ===== EZ: 쉬운 설명 스타일 ===== */
+.ez-hero { text-align: center; padding: 8px 0 32px; }
+.ez-hero-emoji { font-size: 3.4rem; line-height: 1; }
+.ez-hero-title { font-family: var(--font-display); font-size: clamp(1.6rem, 3.5vw, 2.2rem); font-weight: 600; color: var(--ink); margin-top: 14px; line-height: 1.3; }
+.ez-section { margin-bottom: 52px; }
+.ez-section h2 { font-family: var(--font-body); font-size: 1.5rem; font-weight: 700; color: var(--ink); margin-bottom: 18px; letter-spacing: -0.01em; }
+.ez-section h3 { font-size: 1.08rem; font-weight: 600; color: var(--espresso); margin: 22px 0 10px; }
+.ez-section p { font-size: 1.04rem; line-height: 1.85; color: var(--ink-mute); margin-bottom: 14px; }
+.ez-section p:last-child { margin-bottom: 0; }
+.ez-section ul { padding-left: 22px; margin-bottom: 14px; }
+.ez-section li { font-size: 1.02rem; line-height: 1.8; color: var(--ink-mute); margin-bottom: 8px; }
+.ez-callout { margin: 14px 0; padding: 14px 18px; background: var(--canvas-warm); border-left: 3px solid var(--caramel); border-radius: 4px; font-size: 0.98rem; color: var(--espresso); line-height: 1.75; }
+.ez-callout strong { color: var(--copper); }
+.ez-findings { list-style: none; padding: 0; }
+.ez-findings > li { padding: 18px 22px; margin-bottom: 14px; background: var(--canvas-warm); border: 1px solid var(--line); border-radius: 10px; font-size: 1.02rem; line-height: 1.7; color: var(--ink-mute); }
+.ez-findings > li strong { color: var(--ink); display: block; margin-bottom: 4px; font-size: 1.06rem; }
+.ez-findings > li.gold { background: linear-gradient(135deg, #FFF8E7, #FFEFCD); border-color: #F0D67A; }
+.ez-findings > li.silver { background: linear-gradient(135deg, #F6F6F6, #ECECEC); border-color: #C7C7C7; }
+.ez-findings > li.bronze { background: linear-gradient(135deg, #FFEEDD, #FFDCC0); border-color: #E4B07F; }
+.ez-findings > li.medal { background: linear-gradient(135deg, #F0E6FF, #E1D2FF); border-color: #BDA8E5; }
+.ez-table { width: 100%; border-collapse: collapse; margin: 16px 0 8px; font-size: 0.96rem; }
+.ez-table th, .ez-table td { padding: 11px 14px; border: 1px solid var(--line); text-align: left; vertical-align: top; }
+.ez-table thead th { background: var(--ink); color: #fff; font-weight: 600; letter-spacing: .02em; }
+.ez-table tbody th { background: var(--canvas-warm); color: var(--ink); font-weight: 600; }
+.ez-table tbody tr:nth-child(even) td { background: rgba(250, 247, 242, .55); }
+.ez-summary { padding: 26px 30px; background: linear-gradient(135deg, #FAF0E0, #F3E1C5); border-radius: 14px; font-size: 1.13rem; line-height: 1.75; font-weight: 500; color: var(--ink); border: 1px solid #E5C99B; }
+.ez-summary strong { color: var(--espresso); }
+.ez-citation { margin-top: 24px; padding: 18px 22px; background: var(--canvas-warm); border-radius: 8px; font-family: var(--font-mono); font-size: 0.82rem; color: var(--ink-soft); line-height: 1.7; }
+.ez-citation p { margin: 4px 0; }
+.ez-chart-card { padding: 22px 24px 18px; background: var(--canvas); border: 1px solid var(--line); border-radius: 12px; margin: 16px 0; }
+.ez-chart-card .ez-chart-title { font-size: 1rem; font-weight: 600; color: var(--ink); margin-bottom: 14px; }
+.ez-bar-row { display: flex; align-items: center; margin: 10px 0; font-size: 0.95rem; gap: 14px; }
+.ez-bar-label { width: 180px; flex-shrink: 0; color: var(--ink-mute); font-weight: 500; }
+.ez-bar-track { flex: 1; height: 32px; background: var(--canvas-warm); border-radius: 6px; overflow: hidden; position: relative; border: 1px solid var(--line); }
+.ez-bar-fill { height: 100%; background: linear-gradient(90deg, var(--caramel), var(--copper)); display: flex; align-items: center; justify-content: flex-end; padding: 0 12px; color: white; font-weight: 700; font-size: 0.92rem; min-width: 56px; }
+.ez-bar-fill.alt { background: linear-gradient(90deg, #6F4E37, #4A3F36); }
+.ez-bar-fill.cool { background: linear-gradient(90deg, #6A8FB5, #3D6FB5); }
+.ez-infographic { padding: 24px; background: var(--canvas-warm); border-radius: 12px; margin: 20px 0; border: 1px solid var(--line); }
+.ez-infographic svg { width: 100%; height: auto; display: block; }
+.ez-infographic-caption { margin-top: 12px; font-size: 0.88rem; color: var(--ink-soft); text-align: center; font-style: italic; }
+.ez-flow { display: flex; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap; margin: 16px 0; }
+.ez-flow-step { padding: 14px 18px; background: var(--canvas-warm); border: 2px solid var(--caramel); border-radius: 10px; font-weight: 600; color: var(--espresso); text-align: center; min-width: 120px; }
+.ez-flow-step .ez-flow-emoji { font-size: 1.6rem; display: block; margin-bottom: 6px; }
+.ez-flow-arrow { font-size: 1.6rem; color: var(--copper); font-weight: 700; }
+@media (max-width: 720px) {
+  .ez-bar-label { width: 100%; margin-bottom: 4px; }
+  .ez-bar-row { flex-direction: column; align-items: stretch; }
+  .ez-flow { flex-direction: column; }
+  .ez-flow-arrow { transform: rotate(90deg); }
+  .ez-section h2 { font-size: 1.3rem; }
+}
 </style>
 </head>
 <body>
@@ -138,106 +190,117 @@ ul.findings li::before { content: counter(f, decimal-leading-zero); position: ab
   <section class="article-body">
     <div class="container">
 
-      
-      <div class="section-block">
-        <h2>요약</h2>
-        <p>C. arabica 사배체 게놈의 DXMT·MYB·FADS2 유전자 기능이 카페인(1.22% dmb)·클로로젠산·지질 프로파일을 결정하고, 고도 1,600~2,000m 및 적정 음지 관리가 당 축적을 지원하며, 수확후 처리(워시드/내추럴/발효)가 클로로젠산 및 GABA 수준을 조절해 최종 컵 품질을 결정한다는 세 결정 축을 분자 수준에서 통합 정리한 종합 리뷰 논문이다.</p>
+      <div class="ez-hero">
+        <div class="ez-hero-emoji">🌱</div>
+        <div class="ez-hero-title">커피 맛은 도대체 어디서 결정되는 거야?</div>
       </div>
-      
 
-      
-      <div class="section-block">
-        <h2>핵심 발견</h2>
-        <ul class="findings">
-          <li>C. arabica 사배체 게놈 DXMT 서브게놈 편향 발현 → 카페인 1.22% dmb (로부스타 2.54% dmb 대비 낮음)</li><li>MYB 전사인자가 카페인·클로로젠산·테르펜 3대 생합성 경로를 동시 조절하는 마스터 레귤레이터로 확인</li><li>FADS2 유전자가 생두 지질 대사·지방산 프로파일 결정 핵심 역할</li><li>야생 C. canephora가 C. arabica보다 클로로젠산 이성질체 다양성 현저히 높음</li><li>고도 1,600~2,000m에서 낮은 기온 → 당 축적 촉진; 과도 음지 → 탄소 동화 억제 → 향미 전구체 발달 저해</li><li>내추럴 가공 → GABA 증가; 워시드 가공 → 당 감소·클린 산미; 클로로젠산은 발효 시간 의존적 변동</li><li>카페인·트리고넬린은 가공 방식 무관하게 안정적</li>
-        </ul>
+      <div class="ez-section">
+        <h2>🤔 무슨 연구야?</h2>
+        <p>"이 커피는 왜 맛있고, 저 커피는 왜 그저 그럴까?" 누구나 한번쯤 궁금했지? 사실 커피 맛은 <strong>유전자 → 재배 환경 → 수확 후 처리</strong>라는 세 단계가 차례로 영향을 주면서 결정돼. 이 리뷰 논문은 그 세 단계가 분자 수준에서 <em>어떻게 맞물려서</em> 한 잔의 맛을 만드는지 처음으로 한 번에 정리한 글이야.</p>
+        <div class="ez-callout">💡 한 마디로 — 커피 맛은 "<strong>씨앗(유전자) × 땅(환경) × 손길(가공)</strong>" 의 곱셈으로 정해진다.</div>
       </div>
-      
 
-      
+      <div class="ez-section">
+        <h2>🧬 등장하는 유전자 세 가지</h2>
+        <h3>1️⃣ DXMT — 카페인 만드는 마지막 효소</h3>
+        <p>커피가 카페인을 만드는 공장에서 <strong>마지막 마무리</strong>를 담당하는 효소야. 이 유전자가 얼마나 활발히 움직이느냐에 따라 카페인 양이 달라져. 아라비카는 이 활동이 약해서 카페인이 적고, 로부스타는 활발해서 카페인이 두 배 많아.</p>
 
-      
-      <div class="section-block">
-        <h2>데이터로 보기</h2>
-        <div class="charts-grid" id="charts-grid"></div>
+        <h3>2️⃣ MYB — 마스터 사령탑</h3>
+        <p>카페인, 클로로젠산(쓴맛/항산화), 테르펜(향) 세 가지 핵심 성분 생산 라인을 <strong>한꺼번에 지휘하는 사령탑</strong>이야. 큐레이터처럼 어디에 자원을 더 보낼지 결정해.</p>
+        <div class="ez-callout">💡 비유: 회사로 치면 CEO 같은 거. 이 친구가 어디 투자할지 정하면 각 부서(생산 라인)가 따라가는 식.</div>
+
+        <h3>3️⃣ FADS2 — 지방 프로파일 담당</h3>
+        <p>생두 안에 든 기름(지질) 종류를 정해. 어떤 지방산이 많은지에 따라 입에 닿는 바디감과 향의 풍부함이 달라져.</p>
       </div>
-      
 
-      
-      <div class="section-block">
-        <h2>방법론</h2>
-        <p>체계적 문헌 고찰 리뷰. C. arabica와 C. canephora 유전체 비교(사배체 구조, DXMT·MYB·FADS2 기능), 재배 환경(고도·온도·음지 관리)의 대사물질 영향, 수확후 가공(워시드·내추럴·허니·발효) 비교를 통합 정리. 광시성 아열대 커피 재배 맥락 포함, 글로벌 사례 망라.</p>
-      </div>
-      
-
-      
-      <div class="section-block">
-        <h2>시사점</h2>
-        <div class="implications-grid">
-          
-          <div class="implication-card">
-            <h3>농가 · 가공장</h3>
-            <p>고도 1,600~2,000m 재배지는 당 축적 지원 과학적 근거 명확화. 과도 음지 설치가 향미 전구체 발달 저해 가능 → 일조량 균형 필요. 내추럴 가공 GABA 증가는 프리미엄 내추럴 로트 품질 차별화 근거.</p>
+      <div class="ez-section">
+        <h2>📊 아라비카 vs 로부스타 카페인 한눈 비교</h2>
+        <div class="ez-chart-card">
+          <div class="ez-chart-title">카페인 함량 (건조 중량 기준)</div>
+          <div class="ez-bar-row">
+            <div class="ez-bar-label">C. arabica</div>
+            <div class="ez-bar-track"><div class="ez-bar-fill" style="width: 48%;">1.22%</div></div>
           </div>
-          
-          <div class="implication-card">
-            <h3>로스터 · 큐그레이더</h3>
-            <p>클로로젠산이 발효 시간 의존적으로 변동 → 발효 프로토콜 명시 생두 구매로 로스팅 반응 재현성 확보. 야생 로부스타 클로로젠산 이성질체 다양성은 고기능성 블렌드 소재 가능성.</p>
+          <div class="ez-bar-row">
+            <div class="ez-bar-label">C. canephora (로부스타)</div>
+            <div class="ez-bar-track"><div class="ez-bar-fill alt" style="width: 100%;">2.54%</div></div>
           </div>
-          
-          <div class="implication-card">
-            <h3>R&amp;D</h3>
-            <p>MYB·DXMT·FADS2 마커 보조 선발(MAS) 육종 또는 CRISPR 기반 저카페인·고클로로젠산 아라비카 개발 근거. 야생 C. canephora 기능성 육종, 고도·음지 최적화 모델링, 발효 조건별 클로로젠산 동태 연구가 후속 과제.</p>
-          </div>
-          
         </div>
+        <p>로부스타가 아라비카보다 카페인이 약 <strong>2배</strong> 많아. 이건 DXMT 유전자가 로부스타에서 훨씬 활발히 일하기 때문이야.</p>
       </div>
-      
 
-      
-      <div class="section-block">
-        <h2>한계</h2>
-        <p>리뷰 논문으로 1차 실험 데이터 없음. 중국 광시성 맥락 편향 가능성. DXMT·MYB·FADS2 기능 일부는 타 작물 연구에서 유추. 클로로젠산 발효 시간 의존적 변동의 정량 수치 미제공. 세 결정 축 간 상호작용 효과 미정량화.</p>
+      <div class="ez-section">
+        <h2>🏔️ 환경 — 고도와 그늘이 핵심</h2>
+        <p>커피는 보통 고도가 높을수록 맛있다고 해. 왜냐면 <strong>1,600~2,000m 고지대는 기온이 낮아서 열매가 천천히 익거든.</strong> 천천히 익으면 그 사이에 단맛 재료(당)가 차곡차곡 쌓여.</p>
+        <p>그런데 그늘은 좀 까다로워. 적당히 있으면 좋지만 너무 많으면 햇빛이 부족해서 광합성이 약해지고, 그러면 향 재료가 부족해져.</p>
+        <div class="ez-callout">💡 비유: 토마토를 너무 그늘에 두면 단맛이 안 나잖아? 똑같이 커피도 햇빛이 적당해야 향과 단맛이 차오른다.</div>
       </div>
-      
 
-      
-      <div class="section-block">
-        <h2>용어집</h2>
-        <ul class="glossary-list">
-          
-          <li><dt>Allotetraploid</dt><dd>사배체 — 두 이배체 조상이 합쳐진 4배체</dd></li>
-          
-          <li><dt>DXMT</dt><dd>카페인 합성 최종 효소 (테오브로민→카페인 전환)</dd></li>
-          
-          <li><dt>MYB Transcription Factor</dt><dd>카페인·클로로젠산·테르펜 경로 조절 마스터 전사인자</dd></li>
-          
-          <li><dt>FADS2</dt><dd>지방산 불포화도 조절 효소; 생두 지질 프로파일 결정</dd></li>
-          
-          <li><dt>Chlorogenic Acid (CGA)</dt><dd>클로로젠산 — 커피 주요 페놀산; 항산화 및 로스팅 반응 전구체</dd></li>
-          
-          <li><dt>GABA</dt><dd>γ-아미노부티르산 — 내추럴 가공 시 증가하는 비단백질 아미노산</dd></li>
-          
-          <li><dt>Homoeologous Exchange</dt><dd>동종 염색체 교환 — 사배체 서브게놈 간 염색체 단편 교환</dd></li>
-          
-          <li><dt>Subgenome-biased Expression</dt><dd>서브게놈 편향 발현 — 특정 서브게놈 유전자가 우선 발현</dd></li>
-          
+      <div class="ez-section">
+        <h2>🛁 가공 — 워시드 vs 내추럴 vs 발효</h2>
+        <table class="ez-table">
+          <thead><tr><th>가공 방식</th><th>특징</th><th>맛 결과</th></tr></thead>
+          <tbody>
+            <tr><th>💧 워시드 (Washed)</th><td>물로 과육을 씻어냄</td><td>당 감소, 깔끔한 산미</td></tr>
+            <tr><th>☀️ 내추럴 (Natural)</th><td>열매째로 햇볕 건조</td><td><strong>GABA 증가</strong> → 부드러운 단맛/향</td></tr>
+            <tr><th>🧪 발효 (Fermented)</th><td>특정 미생물로 처리</td><td>클로로젠산 변동 → 향 다양화</td></tr>
+          </tbody>
+        </table>
+        <p>재밌는 건 <strong>카페인이랑 트리고넬린(쓴맛 성분)</strong> 은 가공 방식이 어떻든 거의 안 변해. 그래서 "가공이 카페인 양을 바꾼다"는 말은 사실이 아니야!</p>
+      </div>
+
+      <div class="ez-section">
+        <h2>🎯 핵심 발견 정리</h2>
+        <ul class="ez-findings">
+          <li class="gold"><strong>🥇 아라비카가 카페인 적은 건 DXMT 유전자가 덜 발현되기 때문</strong>로부스타(2.54%) 대비 아라비카(1.22%) 절반 수준. 유전자 차이로 설명됨.</li>
+          <li class="silver"><strong>🥈 MYB 유전자가 향·쓴맛·항산화 세 라인을 동시에 조절</strong>이 유전자 하나만 바꾸면 향, 카페인, 클로로젠산이 한꺼번에 바뀌어. 육종할 때 핵심 타겟.</li>
+          <li class="bronze"><strong>🥉 고도 1,600~2,000m가 당 축적의 sweet spot</strong>너무 낮으면 맛 약하고 너무 높으면 광합성 부족. 이 구간이 황금 영역.</li>
+          <li class="medal"><strong>🏅 내추럴 가공이 GABA(좋은 아미노산) 함량을 높임</strong>내추럴 커피가 부드럽게 느껴지는 분자 수준 이유.</li>
         </ul>
       </div>
-      
 
-      <div class="section-block">
-        <h2>인용 · 링크</h2>
-        <div class="citation-block">Guangxi Academy of Agricultural Sciences Research Team. (2026). From germplasm to cup: A comprehensive review of the genetic, environmental, and postharvest determinants of coffee quality and their interactions. Agriculture, 16(7), 739. https://doi.org/10.3390/agriculture16070739</div>
+      <div class="ez-section">
+        <h2>💼 이게 왜 중요해?</h2>
+        <table class="ez-table">
+          <thead><tr><th>대상</th><th>의미</th></tr></thead>
+          <tbody>
+            <tr><th>농가</th><td>고도 1,600~2,000m + 적정 음지가 과학적 최적해. 내추럴 가공은 프리미엄 차별화 가능.</td></tr>
+            <tr><th>로스터</th><td>발효 시간에 따라 클로로젠산이 달라지니, 생두 스펙에 발효 정보 필수.</td></tr>
+            <tr><th>R&amp;D</th><td>MYB·DXMT·FADS2 마커로 마커보조선발(MAS) 육종 → 저카페인·고향미 커피 가능.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="ez-section">
+        <h2>⚠️ 한계도 있어</h2>
+        <ul>
+          <li>리뷰 논문이라 직접 실험한 새 데이터는 없음</li>
+          <li>중국 광시성(중국 남부) 관점이라 다른 산지 데이터는 적게 다룸</li>
+          <li>세 결정 축(유전자×환경×가공) 간 <strong>상호작용 효과</strong>는 정량화 안 됨</li>
+          <li>유전자 일부는 다른 작물 연구에서 유추한 것</li>
+        </ul>
+      </div>
+
+      <div class="ez-section">
+        <div class="ez-summary">💡 <strong>한 줄 요약</strong> — 커피 맛은 "<strong>유전자(DXMT·MYB·FADS2) × 고도·음지 × 가공방식</strong>" 세 단계의 합작품. 이 셋이 각자 무엇을 결정하는지 처음으로 분자 수준에서 한 번에 정리한 종합 지도 같은 논문이야.</div>
+      </div>
+
+      <div class="ez-section">
+        <h2>📚 원문 정보</h2>
+        <div class="ez-citation">
+          <p><strong>📄 논문</strong> — From Germplasm to Cup: A Comprehensive Review of the Genetic, Environmental, and Postharvest Determinants of Coffee Quality</p>
+          <p><strong>📰 저널</strong> — Agriculture (MDPI), 2026-03-27</p>
+          <p><strong>👥 저자</strong> — Guangxi Academy of Agricultural Sciences Research Team</p>
+          <p><strong>🔗 DOI</strong> — <a href="https://doi.org/10.3390/agriculture16070739" target="_blank" rel="noopener noreferrer" style="color: var(--copper);">10.3390/agriculture16070739</a></p>
+        </div>
         <div class="links-row">
           <a class="link-pill" href="https://doi.org/10.3390/agriculture16070739" target="_blank" rel="noopener noreferrer">DOI →</a>
           <a class="link-pill" href="https://www.mdpi.com/2077-0472/16/7/739" target="_blank" rel="noopener noreferrer">OA PDF →</a>
           <a class="link-pill" href="https://www.mdpi.com/journal/agriculture" target="_blank" rel="noopener noreferrer">JOURNAL HOMEPAGE →</a>
         </div>
         <div style="margin-top: 18px;">
-          
           <span class="source-basis abstract">ABSTRACT BASIS</span>
-          
         </div>
       </div>
 
@@ -253,58 +316,6 @@ ul.findings li::before { content: counter(f, decimal-leading-zero); position: ab
   </footer>
 </article>
 
-
-<script>
-const CHARTS = [{"type": "bar", "title": "아라비카 vs 로부스타 카페인 함량 (건물 기준)", "x_labels": ["C. arabica", "C. canephora (Robusta)"], "y_label": "카페인 함량 (%)", "values": [1.22, 2.54], "unit": "% dmb (건물 기준)"}];
-function renderBarChart(chart) {
-  const W = 520, H = 280;
-  const PAD_L = 50, PAD_R = 16, PAD_T = 18, PAD_B = 56;
-  const plotW = W - PAD_L - PAD_R;
-  const plotH = H - PAD_T - PAD_B;
-  const max = Math.max(...chart.values);
-  const min = Math.min(...chart.values, 0);
-  const yMax = max + (max - min) * 0.12;
-  const yMin = min < 0 ? min : 0;
-  const yRange = yMax - yMin || 1;
-  const n = chart.values.length;
-  const slot = plotW / n;
-  const barW = Math.min(slot * 0.6, 80);
-  function yFor(v) { return PAD_T + plotH - ((v - yMin) / yRange) * plotH; }
-  const ticks = 4;
-  let gridSvg = "";
-  for (let i = 0; i <= ticks; i++) {
-    const v = yMin + (yRange / ticks) * i;
-    const y = yFor(v);
-    gridSvg += `<line class="axis-line" x1="${PAD_L}" y1="${y}" x2="${PAD_L + plotW}" y2="${y}"/>`;
-    gridSvg += `<text class="axis-label" x="${PAD_L - 8}" y="${y + 4}" text-anchor="end">${Number(v.toFixed(1))}</text>`;
-  }
-  const maxIdx = chart.values.indexOf(max);
-  let barsSvg = "";
-  for (let i = 0; i < n; i++) {
-    const v = chart.values[i];
-    const x = PAD_L + slot * i + (slot - barW) / 2;
-    const y = yFor(v);
-    const h = (PAD_T + plotH) - y;
-    const cls = i === maxIdx ? "bar highlight" : "bar";
-    barsSvg += `<rect class="${cls}" x="${x}" y="${y}" width="${barW}" height="${h}" rx="3"/>`;
-    barsSvg += `<text class="value-label" x="${x + barW / 2}" y="${y - 6}" text-anchor="middle">${v}${chart.unit || ""}</text>`;
-    const label = String(chart.x_labels[i] || "");
-    barsSvg += `<text class="axis-label" x="${x + barW / 2}" y="${PAD_T + plotH + 18}" text-anchor="middle">${label}</text>`;
-  }
-  const yTitle = chart.y_label ? `<text class="y-label" x="${PAD_L}" y="${PAD_T - 6}">${chart.y_label}${chart.unit ? " (" + chart.unit + ")" : ""}</text>` : "";
-  return `<svg class="chart-svg" viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid meet" role="img" aria-label="${chart.title}">${yTitle}${gridSvg}${barsSvg}</svg>`;
-}
-(function () {
-  const grid = document.getElementById("charts-grid");
-  if (!grid) return;
-  CHARTS.forEach(function (c) {
-    const card = document.createElement("div");
-    card.className = "chart-card";
-    card.innerHTML = `<div class="chart-title">${c.title}</div>` + (c.type === "bar" ? renderBarChart(c) : "");
-    grid.appendChild(card);
-  });
-})();
-</script>
 
 
 </body>

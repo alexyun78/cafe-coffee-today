@@ -102,6 +102,58 @@ ul.findings li::before { content: counter(f, decimal-leading-zero); position: ab
   .section-block h2 { font-size: 1.5rem; }
   .article-meta { gap: 12px 18px; font-size: .68rem; }
 }
+
+/* ===== EZ: 쉬운 설명 스타일 ===== */
+.ez-hero { text-align: center; padding: 8px 0 32px; }
+.ez-hero-emoji { font-size: 3.4rem; line-height: 1; }
+.ez-hero-title { font-family: var(--font-display); font-size: clamp(1.6rem, 3.5vw, 2.2rem); font-weight: 600; color: var(--ink); margin-top: 14px; line-height: 1.3; }
+.ez-section { margin-bottom: 52px; }
+.ez-section h2 { font-family: var(--font-body); font-size: 1.5rem; font-weight: 700; color: var(--ink); margin-bottom: 18px; letter-spacing: -0.01em; }
+.ez-section h3 { font-size: 1.08rem; font-weight: 600; color: var(--espresso); margin: 22px 0 10px; }
+.ez-section p { font-size: 1.04rem; line-height: 1.85; color: var(--ink-mute); margin-bottom: 14px; }
+.ez-section p:last-child { margin-bottom: 0; }
+.ez-section ul { padding-left: 22px; margin-bottom: 14px; }
+.ez-section li { font-size: 1.02rem; line-height: 1.8; color: var(--ink-mute); margin-bottom: 8px; }
+.ez-callout { margin: 14px 0; padding: 14px 18px; background: var(--canvas-warm); border-left: 3px solid var(--caramel); border-radius: 4px; font-size: 0.98rem; color: var(--espresso); line-height: 1.75; }
+.ez-callout strong { color: var(--copper); }
+.ez-findings { list-style: none; padding: 0; }
+.ez-findings > li { padding: 18px 22px; margin-bottom: 14px; background: var(--canvas-warm); border: 1px solid var(--line); border-radius: 10px; font-size: 1.02rem; line-height: 1.7; color: var(--ink-mute); }
+.ez-findings > li strong { color: var(--ink); display: block; margin-bottom: 4px; font-size: 1.06rem; }
+.ez-findings > li.gold { background: linear-gradient(135deg, #FFF8E7, #FFEFCD); border-color: #F0D67A; }
+.ez-findings > li.silver { background: linear-gradient(135deg, #F6F6F6, #ECECEC); border-color: #C7C7C7; }
+.ez-findings > li.bronze { background: linear-gradient(135deg, #FFEEDD, #FFDCC0); border-color: #E4B07F; }
+.ez-findings > li.medal { background: linear-gradient(135deg, #F0E6FF, #E1D2FF); border-color: #BDA8E5; }
+.ez-table { width: 100%; border-collapse: collapse; margin: 16px 0 8px; font-size: 0.96rem; }
+.ez-table th, .ez-table td { padding: 11px 14px; border: 1px solid var(--line); text-align: left; vertical-align: top; }
+.ez-table thead th { background: var(--ink); color: #fff; font-weight: 600; letter-spacing: .02em; }
+.ez-table tbody th { background: var(--canvas-warm); color: var(--ink); font-weight: 600; }
+.ez-table tbody tr:nth-child(even) td { background: rgba(250, 247, 242, .55); }
+.ez-summary { padding: 26px 30px; background: linear-gradient(135deg, #FAF0E0, #F3E1C5); border-radius: 14px; font-size: 1.13rem; line-height: 1.75; font-weight: 500; color: var(--ink); border: 1px solid #E5C99B; }
+.ez-summary strong { color: var(--espresso); }
+.ez-citation { margin-top: 24px; padding: 18px 22px; background: var(--canvas-warm); border-radius: 8px; font-family: var(--font-mono); font-size: 0.82rem; color: var(--ink-soft); line-height: 1.7; }
+.ez-citation p { margin: 4px 0; }
+.ez-chart-card { padding: 22px 24px 18px; background: var(--canvas); border: 1px solid var(--line); border-radius: 12px; margin: 16px 0; }
+.ez-chart-card .ez-chart-title { font-size: 1rem; font-weight: 600; color: var(--ink); margin-bottom: 14px; }
+.ez-bar-row { display: flex; align-items: center; margin: 10px 0; font-size: 0.95rem; gap: 14px; }
+.ez-bar-label { width: 180px; flex-shrink: 0; color: var(--ink-mute); font-weight: 500; }
+.ez-bar-track { flex: 1; height: 32px; background: var(--canvas-warm); border-radius: 6px; overflow: hidden; position: relative; border: 1px solid var(--line); }
+.ez-bar-fill { height: 100%; background: linear-gradient(90deg, var(--caramel), var(--copper)); display: flex; align-items: center; justify-content: flex-end; padding: 0 12px; color: white; font-weight: 700; font-size: 0.92rem; min-width: 56px; }
+.ez-bar-fill.alt { background: linear-gradient(90deg, #6F4E37, #4A3F36); }
+.ez-bar-fill.cool { background: linear-gradient(90deg, #6A8FB5, #3D6FB5); }
+.ez-infographic { padding: 24px; background: var(--canvas-warm); border-radius: 12px; margin: 20px 0; border: 1px solid var(--line); }
+.ez-infographic svg { width: 100%; height: auto; display: block; }
+.ez-infographic-caption { margin-top: 12px; font-size: 0.88rem; color: var(--ink-soft); text-align: center; font-style: italic; }
+.ez-flow { display: flex; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap; margin: 16px 0; }
+.ez-flow-step { padding: 14px 18px; background: var(--canvas-warm); border: 2px solid var(--caramel); border-radius: 10px; font-weight: 600; color: var(--espresso); text-align: center; min-width: 120px; }
+.ez-flow-step .ez-flow-emoji { font-size: 1.6rem; display: block; margin-bottom: 6px; }
+.ez-flow-arrow { font-size: 1.6rem; color: var(--copper); font-weight: 700; }
+@media (max-width: 720px) {
+  .ez-bar-label { width: 100%; margin-bottom: 4px; }
+  .ez-bar-row { flex-direction: column; align-items: stretch; }
+  .ez-flow { flex-direction: column; }
+  .ez-flow-arrow { transform: rotate(90deg); }
+  .ez-section h2 { font-size: 1.3rem; }
+}
 </style>
 </head>
 <body>
@@ -138,99 +190,129 @@ ul.findings li::before { content: counter(f, decimal-leading-zero); position: ab
   <section class="article-body">
     <div class="container">
 
-      
-      <div class="section-block">
-        <h2>요약</h2>
-        <p>커피 원두에서 800종 이상의 휘발성 화합물이 확인되었으나 &#39;휘발성 바이오마커&#39;(단계 특이적 일관된 지표)와 단순 &#39;품질 관련 휘발성 물질&#39;을 구분하는 프레임워크가 부재했다. 이 리뷰는 수확 후 4단계(수확, 펄핑·발효, 건조, 로스팅)별 바이오마커를 최초로 체계화했다. 수확: 알데히드·푸란·락톤이 성숙도·결함 지표; 발효: 2-페닐에탄올·아세트산에틸·메틸페닐아세테이트가 발효 균형 지표; 건조: 지질 산화 알데히드+에스터 잔류량이 탈수 동역학·산화 안정성 지표; 로스팅: 피라진·푸란·티올·페놀이 로스트 정도·열과잉·최종 향미 통합 지표. 향후 산지별 임계 범위 데이터베이스 구축과 분석 표준화가 과제.</p>
+      <div class="ez-hero">
+        <div class="ez-hero-emoji">🌸</div>
+        <div class="ez-hero-title">커피 향에 숨겨진 800가지 분자, 어떤 게 진짜 지표일까?</div>
       </div>
-      
 
-      
-      <div class="section-block">
-        <h2>핵심 발견</h2>
-        <ul class="findings">
-          <li>커피 원두에서 800종 이상 휘발성 화합물 확인; &#39;바이오마커&#39; 인정 기준(단계 특이적 일관된 근거)을 처음으로 정의·분류</li><li>수확 단계 바이오마커: 알데히드·푸란·락톤 → 과실 성숙도 및 생리적 결함 지표 (이후 전 단계의 화학적 출발점)</li><li>발효 단계 긍정적 바이오마커: 2-페닐에탄올, 아세트산에틸, 메틸페닐아세테이트 → 점액질 관리 적절성 + 발효 균형 지표</li><li>건조 단계 바이오마커: 지질 산화 유래 알데히드 증가 + 방향족 에스터 잔류량 → 탈수 속도 및 산화 안정성 지표</li><li>로스팅 단계 통합 바이오마커: 피라진·푸란·티올·페놀 → 로스팅 정도, 열과잉 노출, 최종 향미 발현 지표</li><li>현재 한계: 산지·가공 시스템별 임계 농도 범위 데이터베이스 미구축, 분석 방법 비표준화</li>
-        </ul>
+      <div class="ez-section">
+        <h2>🤔 무슨 연구야?</h2>
+        <p>커피 한 잔 향을 맡으면 정말 다양한 향이 느껴지지? 사실 커피에는 <strong>800종 이상</strong>의 휘발성(공기 중에 떠다니는) 화합물이 들어 있어. 헷갈리는 건 — 이 중에서 어떤 게 "이 단계가 잘 됐다"는 신호이고, 어떤 게 단순한 부수적 향인지 구분이 어렵다는 거였어.</p>
+        <p>이 리뷰는 처음으로 <strong>"진짜 바이오마커"</strong>(공정 단계 특이적 일관된 지표)와 <strong>"단순 향기 물질"</strong>을 구분하는 체계를 만들었어.</p>
+        <div class="ez-callout">💡 비유: 병원에서 콜레스테롤·혈당·간수치는 <strong>"건강 바이오마커"</strong>야. 그냥 혈액 안에 떠다니는 수많은 분자 중 의미 있는 신호만 골라낸 거지. 커피 향도 똑같이 800종 중 의미 있는 신호만 분류한 거야.</div>
       </div>
-      
 
-      
-
-      
-
-      
-      <div class="section-block">
-        <h2>방법론</h2>
-        <p>체계적 문헌 고찰(systematic review) 방식의 리뷰 논문. 수확 후 처리 4단계(수확, 펄핑·발효, 건조, 로스팅)별 커피 휘발성 화합물 관련 최신 1차 연구를 검토하고, &#39;품질 관련 휘발성 물질&#39;과 &#39;휘발성 바이오마커&#39;를 개념적으로 구분하는 분류 체계를 제안. 검토 분석 기법: GC-MS, SPME, 전자코(electronic nose) 등.</p>
-      </div>
-      
-
-      
-      <div class="section-block">
-        <h2>시사점</h2>
-        <div class="implications-grid">
-          
-          <div class="implication-card">
-            <h3>농가 · 가공장</h3>
-            <p>수확 시점(과실 성숙도) 관리와 발효·건조 조건이 2-페닐에탄올·에틸에스터 등 긍정적 향미 바이오마커 생성에 직결됨을 화학적으로 재확인. 발효 중 불쾌 알데히드·고급 알코올 급증을 모니터링하면 가공 실패를 조기 감지하는 지표로 활용 가능</p>
-          </div>
-          
-          <div class="implication-card">
-            <h3>로스터 · 큐그레이더</h3>
-            <p>동일 산지라도 수확 후 처리 이력이 다른 로트는 피라진·티올 생성 패턴이 달라짐. 생두 구매 시 GC-MS 또는 전자코 데이터로 발효 품질 바이오마커를 확인하는 접근의 이론적 토대; 티올 보존을 위한 라이트·미디엄 로스팅 타이밍 최적화에 화학적 논리 제공</p>
-          </div>
-          
-          <div class="implication-card">
-            <h3>R&amp;D</h3>
-            <p>단계별 휘발성 바이오마커 기반 실시간 품질 모니터링 시스템 개발의 이론적 프레임워크. 산지·품종별 임계 범위 데이터베이스, 휴대용 GC·전자코 결합 현장 모니터링 기기, 스마트 발효·건조 자동제어 연구의 직접적 문헌 기반</p>
-          </div>
-          
+      <div class="ez-section">
+        <h2>🏭 커피 가공 4단계, 각 단계의 바이오마커</h2>
+        <div class="ez-infographic">
+          <svg viewBox="0 0 700 180" xmlns="http://www.w3.org/2000/svg">
+            <defs><marker id="arr13" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#6F4E37"/></marker></defs>
+            <rect x="10" y="50" width="155" height="80" rx="12" fill="#E8F5E8" stroke="#7AB87A" stroke-width="2"/>
+            <text x="87" y="78" text-anchor="middle" font-size="14" font-weight="700" fill="#1A1410">🍒 수확</text>
+            <text x="87" y="100" text-anchor="middle" font-size="11" fill="#6B5E52">알데히드·푸란·</text>
+            <text x="87" y="116" text-anchor="middle" font-size="11" fill="#6B5E52">락톤</text>
+            <line x1="165" y1="90" x2="180" y2="90" stroke="#6F4E37" stroke-width="2" marker-end="url(#arr13)"/>
+            <rect x="185" y="50" width="155" height="80" rx="12" fill="#FFF3DC" stroke="#C9986A" stroke-width="2"/>
+            <text x="262" y="78" text-anchor="middle" font-size="14" font-weight="700" fill="#1A1410">🧪 발효</text>
+            <text x="262" y="100" text-anchor="middle" font-size="11" fill="#6B5E52">2-페닐에탄올·</text>
+            <text x="262" y="116" text-anchor="middle" font-size="11" fill="#6B5E52">에틸아세테이트</text>
+            <line x1="340" y1="90" x2="355" y2="90" stroke="#6F4E37" stroke-width="2" marker-end="url(#arr13)"/>
+            <rect x="360" y="50" width="155" height="80" rx="12" fill="#FFE5C7" stroke="#B5703D" stroke-width="2"/>
+            <text x="437" y="78" text-anchor="middle" font-size="14" font-weight="700" fill="#1A1410">☀️ 건조</text>
+            <text x="437" y="100" text-anchor="middle" font-size="11" fill="#6B5E52">지질 산화</text>
+            <text x="437" y="116" text-anchor="middle" font-size="11" fill="#6B5E52">알데히드</text>
+            <line x1="515" y1="90" x2="530" y2="90" stroke="#6F4E37" stroke-width="2" marker-end="url(#arr13)"/>
+            <rect x="535" y="50" width="155" height="80" rx="12" fill="#5C3D2E" stroke="#3D2618" stroke-width="2"/>
+            <text x="612" y="78" text-anchor="middle" font-size="14" font-weight="700" fill="#fff">🔥 로스팅</text>
+            <text x="612" y="100" text-anchor="middle" font-size="11" fill="#FFF0DC">피라진·푸란·</text>
+            <text x="612" y="116" text-anchor="middle" font-size="11" fill="#FFF0DC">티올·페놀</text>
+          </svg>
+          <div class="ez-infographic-caption">수확 → 발효 → 건조 → 로스팅 — 각 단계마다 다른 향 분자가 신호 역할</div>
         </div>
       </div>
-      
 
-      
-      <div class="section-block">
-        <h2>한계</h2>
-        <p>리뷰 논문으로 독자적 1차 실험 데이터 없음; 산지·품종·가공 시스템별 바이오마커 임계 농도 범위 데이터베이스 미구축; 분석 방법 비표준화로 연구 간 직접 비교 어려움; 특정 바이오마커의 감각적 역치와 관능 특성 간 정량적 연결 부족</p>
+      <div class="ez-section">
+        <h2>🧪 단계별 핵심 바이오마커</h2>
+
+        <h3>1️⃣ 수확 단계 — 알데히드·푸란·락톤</h3>
+        <p>과실이 잘 익었는지, 결함이 있는지 알려주는 지표. 모든 후속 단계의 출발점이야.</p>
+
+        <h3>2️⃣ 발효 단계 — 긍정/부정 마커가 명확</h3>
+        <table class="ez-table">
+          <thead><tr><th>분자</th><th>유래</th><th>향</th></tr></thead>
+          <tbody>
+            <tr><th>🌹 2-페닐에탄올</th><td>효모가 페닐알라닌 분해</td><td>장미·꿀 (긍정)</td></tr>
+            <tr><th>🍎 아세트산에틸</th><td>에탄올+아세트산 반응</td><td>과실 (적정량 긍정, 과다 결함)</td></tr>
+            <tr><th>🍒 메틸페닐아세테이트</th><td>발효 균형 지표</td><td>과실 (긍정)</td></tr>
+          </tbody>
+        </table>
+
+        <h3>3️⃣ 건조 단계 — 지질 산화 알데히드</h3>
+        <p>건조가 너무 빨리/늦게 됐는지, 산화가 일어났는지 알려줘. 같은 발효 결과여도 건조에서 다 망가질 수 있어.</p>
+
+        <h3>4️⃣ 로스팅 단계 — 통합 지표</h3>
+        <table class="ez-table">
+          <thead><tr><th>분자</th><th>의미</th></tr></thead>
+          <tbody>
+            <tr><th>🥜 피라진</th><td>마이야르 반응 — 견과·코코아·구운향</td></tr>
+            <tr><th>🍫 푸란</th><td>로스팅 정도 — 캐러멜·달콤</td></tr>
+            <tr><th>🍋 티올</th><td>라이트 로스팅에서 열대과실향 (열에 약함!)</td></tr>
+            <tr><th>🌫️ 페놀</th><td>로스팅이 너무 강하면 증가 — 과로스팅 신호</td></tr>
+          </tbody>
+        </table>
       </div>
-      
 
-      
-      <div class="section-block">
-        <h2>용어집</h2>
-        <ul class="glossary-list">
-          
-          <li><dt>Volatile Biomarker</dt><dd>휘발성 바이오마커 — 특정 처리 단계나 조건의 일관된 지표로 축적된 근거를 갖는 화합물·패턴</dd></li>
-          
-          <li><dt>2-Phenylethanol (2-PE)</dt><dd>2-페닐에탄올 — 장미·꿀향 알코올. 효모 페닐알라닌 대사(Ehrlich 경로) 산물. 발효 건강성 양성 바이오마커</dd></li>
-          
-          <li><dt>Ethyl Acetate</dt><dd>아세트산에틸 — 과실향 에스터. 발효 중 에탄올-아세트산 반응 산물. 적정량 긍정적, 과다 시 결함 지표</dd></li>
-          
-          <li><dt>Pyrazine</dt><dd>피라진 — 마이야르 반응·스트레커 분해 산물. 구운향·견과향·코코아향. 로스팅 정도의 핵심 화학적 지표</dd></li>
-          
-          <li><dt>Thiol</dt><dd>티올 — 황 함유 휘발성 화합물. 3-MH 등 라이트 로스팅에서 열대 과실향 기여. 열 불안정</dd></li>
-          
-          <li><dt>SPME</dt><dd>고체상 마이크로 추출 — 흡착 섬유를 이용한 휘발성 화합물 전처리 기법. GC-MS와 결합</dd></li>
-          
-          <li><dt>Mucilage</dt><dd>점액질 — 커피 과피 안쪽의 당질·펙틴층. 발효 미생물의 주요 기질</dd></li>
-          
+      <div class="ez-section">
+        <h2>🎯 핵심 발견</h2>
+        <ul class="ez-findings">
+          <li class="gold"><strong>🥇 800종 휘발성 화합물 중 진짜 바이오마커만 분류</strong>"바이오마커 vs 단순 향기 물질"을 처음 정의·분류한 체계.</li>
+          <li class="silver"><strong>🥈 발효 단계 긍정 마커 3종 명확화</strong>2-페닐에탄올·아세트산에틸·메틸페닐아세테이트가 핵심.</li>
+          <li class="bronze"><strong>🥉 건조 단계는 지질 산화 알데히드가 핵심</strong>발효는 잘 됐어도 건조가 망치면 산화 알데히드가 늘어남.</li>
+          <li class="medal"><strong>🏅 티올 = 라이트 로스팅의 보물</strong>열대과실향을 만들지만 열에 약해서 다크 로스팅에서 사라짐.</li>
         </ul>
       </div>
-      
 
-      <div class="section-block">
-        <h2>인용 · 링크</h2>
-        <div class="citation-block">Pajuelo-Muñoz, A. J., Cayo-Colca, I. S., Granda-Wong, C., &amp; Balcázar-Zumaeta, C. R. (2026). Tracking aromatic volatile biomarkers through coffee bean postharvest stages. Molecules, 31(5), 853. https://doi.org/10.3390/molecules31050853</div>
+      <div class="ez-section">
+        <h2>💼 누구한테 의미가 있을까?</h2>
+        <table class="ez-table">
+          <thead><tr><th>대상</th><th>의미</th></tr></thead>
+          <tbody>
+            <tr><th>농가</th><td>발효·건조 중 알데히드 급증을 모니터링하면 실패를 조기 감지 가능</td></tr>
+            <tr><th>로스터</th><td>티올 보존 위해 라이트~미디엄 로스팅 시점 최적화. 생두에 바이오마커 데이터 첨부 시 로스팅 설계 정밀화</td></tr>
+            <tr><th>R&amp;D</th><td>휴대용 전자코·소형 GC로 현장 실시간 품질 모니터링 가능</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="ez-section">
+        <h2>⚠️ 한계도 있어</h2>
+        <ul>
+          <li>리뷰 논문이라 직접 실험 데이터는 없음</li>
+          <li>산지·품종별 임계 농도 데이터베이스가 아직 없음</li>
+          <li>분석 방법이 표준화 안 돼서 연구 간 비교가 어려움</li>
+          <li>바이오마커의 감각 역치(사람이 느낄 수 있는 최저 농도)와 관능 연결이 부족</li>
+        </ul>
+      </div>
+
+      <div class="ez-section">
+        <div class="ez-summary">💡 <strong>한 줄 요약</strong> — 커피 향 800종 분자 중 <strong>수확·발효·건조·로스팅 4단계 각각의 "성적표 분자"</strong> 를 처음으로 분류한 종합 지도. 어디서 망가졌고 어디가 잘 됐는지 향만 봐도 알 수 있게 된 첫 프레임워크.</div>
+      </div>
+
+      <div class="ez-section">
+        <h2>📚 원문 정보</h2>
+        <div class="ez-citation">
+          <p><strong>📄 논문</strong> — Tracking Aromatic Volatile Biomarkers Through Coffee Bean Postharvest Stages</p>
+          <p><strong>📰 저널</strong> — Molecules (MDPI), 2026-03-04</p>
+          <p><strong>👥 저자</strong> — Pajuelo-Muñoz, Cayo-Colca, Granda-Wong, Balcázar-Zumaeta (페루)</p>
+          <p><strong>🔗 DOI</strong> — <a href="https://doi.org/10.3390/molecules31050853" target="_blank" rel="noopener noreferrer" style="color: var(--copper);">10.3390/molecules31050853</a></p>
+        </div>
         <div class="links-row">
           <a class="link-pill" href="https://doi.org/10.3390/molecules31050853" target="_blank" rel="noopener noreferrer">DOI →</a>
           <a class="link-pill" href="https://www.mdpi.com/1420-3049/31/5/853/pdf" target="_blank" rel="noopener noreferrer">OA PDF →</a>
           <a class="link-pill" href="https://www.mdpi.com/journal/molecules" target="_blank" rel="noopener noreferrer">JOURNAL HOMEPAGE →</a>
         </div>
         <div style="margin-top: 18px;">
-          
           <span class="source-basis abstract">ABSTRACT BASIS</span>
-          
         </div>
       </div>
 
