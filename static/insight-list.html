@@ -320,13 +320,15 @@ img { display: block; max-width: 100%; height: auto; }
     return m[1] + '.' + m[2] + '.' + m[3];
   }
 
-  function cardHtml(item) {
+  function cardHtml(item, dateCounts) {
     var hero = item.hero_image || '/static/img/insights/hero/default.svg';
     var primary = (item.categories_primary || []).join(' · ');
     var second = (item.categories_secondary || []).slice(0, 2).join(' · ');
     var cats = [primary, second].filter(Boolean).join(' / ');
+    // 고유 날짜이면 /insight/YYYY-MM-DD 단축 URL 사용, 같은 날짜에 여러 글 있으면 풀 슬러그.
+    var hrefId = (dateCounts[item.date] === 1 && item.date) ? item.date : item.id;
     return ''
-      + '<a class="insight-card" href="/insight/' + encodeURIComponent(item.id) + '">'
+      + '<a class="insight-card" href="/insight/' + encodeURIComponent(hrefId) + '">'
       + '  <div class="insight-card-hero"><img src="' + hero + '" alt="' + escapeHtml(item.title_ko || '') + '" loading="lazy"></div>'
       + '  <div class="insight-card-body">'
       + '    <div class="insight-card-meta">'
@@ -345,7 +347,16 @@ img { display: block; max-width: 100%; height: auto; }
       root.innerHTML = '<div class="empty-state">아직 인사이트가 없습니다. 매일 아침 한 편씩 추가될 예정입니다.</div>';
       return;
     }
-    root.innerHTML = items.map(cardHtml).join('');
+    var dateCounts = {};
+    items.forEach(function (it) { if (it && it.date) dateCounts[it.date] = (dateCounts[it.date] || 0) + 1; });
+    // ?date=YYYY-MM-DD 쿼리가 있으면 그 날짜만 보여준다 (같은 날 여러 글 disambiguation).
+    var filterDate = new URLSearchParams(window.location.search).get('date');
+    var visible = filterDate ? items.filter(function (it) { return it.date === filterDate; }) : items;
+    if (visible.length === 0) {
+      root.innerHTML = '<div class="empty-state">해당 날짜의 인사이트가 없습니다.</div>';
+      return;
+    }
+    root.innerHTML = visible.map(function (it) { return cardHtml(it, dateCounts); }).join('');
   }
 
   fetch('/api/insights')

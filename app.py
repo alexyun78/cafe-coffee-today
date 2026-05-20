@@ -701,6 +701,7 @@ def api_suyochek_shorts():
 
 INSIGHTS_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "static", "insights")
 INSIGHT_ID_RE = re.compile(r"^[A-Za-z0-9][A-Za-z0-9\-]{0,127}$")
+INSIGHT_DATE_RE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
 
 
 def _read_insight_index() -> dict:
@@ -712,6 +713,11 @@ def _read_insight_index() -> dict:
         return {"version": 1, "items": []}
 
 
+def _insights_for_date(date_str: str) -> list:
+    items = _read_insight_index().get("items") or []
+    return [it for it in items if it.get("date") == date_str]
+
+
 @app.get("/insight")
 def insight_list_page():
     return send_from_directory("static", "insight-list.html")
@@ -721,11 +727,28 @@ def insight_list_page():
 def insight_article_page(insight_id: str):
     if not INSIGHT_ID_RE.match(insight_id):
         return jsonify({"success": False, "error": "invalid id"}), 404
+
+    # 1) 풀 슬러그가 그대로 들어온 경우 — 기존 파일 그대로 서빙 (구 URL 호환).
     filename = f"{insight_id}.html"
     full_path = os.path.join(INSIGHTS_DIR, filename)
-    if not os.path.isfile(full_path):
-        return jsonify({"success": False, "error": "not found"}), 404
-    return send_from_directory(INSIGHTS_DIR, filename)
+    if os.path.isfile(full_path):
+        return send_from_directory(INSIGHTS_DIR, filename)
+
+    # 2) 날짜만 (YYYY-MM-DD) 들어온 경우 — index.json 에서 해당 날짜 글을 찾는다.
+    if INSIGHT_DATE_RE.match(insight_id):
+        matches = _insights_for_date(insight_id)
+        if len(matches) == 1:
+            target_id = matches[0].get("id")
+            target_file = f"{target_id}.html"
+            if target_id and os.path.isfile(os.path.join(INSIGHTS_DIR, target_file)):
+                return send_from_directory(INSIGHTS_DIR, target_file)
+        elif len(matches) > 1:
+            # 같은 날짜에 여러 글이 있으면 라이트 인덱스 페이지로 응답.
+            # 인사이트 목록 페이지가 ?date= 쿼리로 필터링하도록 리다이렉트.
+            from flask import redirect
+            return redirect(f"/insight?date={insight_id}", code=302)
+
+    return jsonify({"success": False, "error": "not found"}), 404
 
 
 @app.get("/api/insights")
