@@ -102,6 +102,56 @@ ul.findings li::before { content: counter(f, decimal-leading-zero); position: ab
   .section-block h2 { font-size: 1.5rem; }
   .article-meta { gap: 12px 18px; font-size: .68rem; }
 }
+
+/* ===== EZ: 쉬운 설명 스타일 ===== */
+.ez-hero { text-align: center; padding: 8px 0 32px; }
+.ez-hero-emoji { font-size: 3.4rem; line-height: 1; }
+.ez-hero-title { font-family: var(--font-display); font-size: clamp(1.6rem, 3.5vw, 2.2rem); font-weight: 600; color: var(--ink); margin-top: 14px; line-height: 1.3; }
+.ez-section { margin-bottom: 52px; }
+.ez-section h2 { font-family: var(--font-body); font-size: 1.5rem; font-weight: 700; color: var(--ink); margin-bottom: 18px; letter-spacing: -0.01em; }
+.ez-section h3 { font-size: 1.08rem; font-weight: 600; color: var(--espresso); margin: 22px 0 10px; }
+.ez-section p { font-size: 1.04rem; line-height: 1.85; color: var(--ink-mute); margin-bottom: 14px; }
+.ez-section p:last-child { margin-bottom: 0; }
+.ez-section ul { padding-left: 22px; margin-bottom: 14px; }
+.ez-section li { font-size: 1.02rem; line-height: 1.8; color: var(--ink-mute); margin-bottom: 8px; }
+.ez-callout { margin: 14px 0; padding: 14px 18px; background: var(--canvas-warm); border-left: 3px solid var(--caramel); border-radius: 4px; font-size: 0.98rem; color: var(--espresso); line-height: 1.75; }
+.ez-callout strong { color: var(--copper); }
+.ez-findings { list-style: none; padding: 0; }
+.ez-findings > li { padding: 18px 22px; margin-bottom: 14px; background: var(--canvas-warm); border: 1px solid var(--line); border-radius: 10px; font-size: 1.02rem; line-height: 1.7; color: var(--ink-mute); }
+.ez-findings > li strong { color: var(--ink); display: block; margin-bottom: 4px; font-size: 1.06rem; }
+.ez-findings > li.gold { background: linear-gradient(135deg, #FFF8E7, #FFEFCD); border-color: #F0D67A; }
+.ez-findings > li.silver { background: linear-gradient(135deg, #F6F6F6, #ECECEC); border-color: #C7C7C7; }
+.ez-findings > li.bronze { background: linear-gradient(135deg, #FFEEDD, #FFDCC0); border-color: #E4B07F; }
+.ez-findings > li.medal { background: linear-gradient(135deg, #F0E6FF, #E1D2FF); border-color: #BDA8E5; }
+.ez-table { width: 100%; border-collapse: collapse; margin: 16px 0 8px; font-size: 0.96rem; }
+.ez-table th, .ez-table td { padding: 11px 14px; border: 1px solid var(--line); text-align: left; vertical-align: top; }
+.ez-table thead th { background: var(--ink); color: #fff; font-weight: 600; letter-spacing: .02em; }
+.ez-table tbody th { background: var(--canvas-warm); color: var(--ink); font-weight: 600; }
+.ez-table tbody tr:nth-child(even) td { background: rgba(250, 247, 242, .55); }
+.ez-summary { padding: 26px 30px; background: linear-gradient(135deg, #FAF0E0, #F3E1C5); border-radius: 14px; font-size: 1.13rem; line-height: 1.75; font-weight: 500; color: var(--ink); border: 1px solid #E5C99B; }
+.ez-summary strong { color: var(--espresso); }
+.ez-citation { margin-top: 24px; padding: 18px 22px; background: var(--canvas-warm); border-radius: 8px; font-family: var(--font-mono); font-size: 0.82rem; color: var(--ink-soft); line-height: 1.7; }
+.ez-citation p { margin: 4px 0; }
+.ez-chart-card { padding: 22px 24px 18px; background: var(--canvas); border: 1px solid var(--line); border-radius: 12px; margin: 16px 0; }
+.ez-chart-card .ez-chart-title { font-size: 1rem; font-weight: 600; color: var(--ink); margin-bottom: 14px; }
+.ez-bar-row { display: flex; align-items: center; margin: 10px 0; font-size: 0.95rem; gap: 14px; }
+.ez-bar-label { width: 180px; flex-shrink: 0; color: var(--ink-mute); font-weight: 500; }
+.ez-bar-track { flex: 1; height: 32px; background: var(--canvas-warm); border-radius: 6px; overflow: hidden; position: relative; border: 1px solid var(--line); }
+.ez-bar-fill { height: 100%; background: linear-gradient(90deg, var(--caramel), var(--copper)); display: flex; align-items: center; justify-content: flex-end; padding: 0 12px; color: white; font-weight: 700; font-size: 0.92rem; min-width: 56px; }
+.ez-infographic { padding: 24px; background: var(--canvas-warm); border-radius: 12px; margin: 20px 0; border: 1px solid var(--line); }
+.ez-infographic svg { width: 100%; height: auto; display: block; }
+.ez-infographic-caption { margin-top: 12px; font-size: 0.88rem; color: var(--ink-soft); text-align: center; font-style: italic; }
+.ez-flow { display: flex; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap; margin: 16px 0; }
+.ez-flow-step { padding: 14px 18px; background: var(--canvas-warm); border: 2px solid var(--caramel); border-radius: 10px; font-weight: 600; color: var(--espresso); text-align: center; min-width: 120px; }
+.ez-flow-step .ez-flow-emoji { font-size: 1.6rem; display: block; margin-bottom: 6px; }
+.ez-flow-arrow { font-size: 1.6rem; color: var(--copper); font-weight: 700; }
+@media (max-width: 720px) {
+  .ez-bar-label { width: 100%; margin-bottom: 4px; }
+  .ez-bar-row { flex-direction: column; align-items: stretch; }
+  .ez-flow { flex-direction: column; }
+  .ez-flow-arrow { transform: rotate(90deg); }
+  .ez-section h2 { font-size: 1.3rem; }
+}
 </style>
 </head>
 <body>
@@ -138,104 +188,154 @@ ul.findings li::before { content: counter(f, decimal-leading-zero); position: ab
   <section class="article-body">
     <div class="container">
 
-      
-      <div class="section-block">
-        <h2>요약</h2>
-        <p>커피 한 잔의 향미는 로스팅 중 마이야르 반응·스트레커 분해·에스터화 등 열화학 반응의 산물이다. 이 연구는 바이오미메틱 발효(BF) 프로토콜로 전구체 풀(자유 아미노산·유기산)을 타겟 조성으로 재설계하면 로스팅 반응 네트워크가 어떻게 변화하는지를 통합 멀티-오믹스와 관능 평가로 규명했다. BF는 류신·페닐알라닌 중심 자유 아미노산을 1.89배 증가시키고, 젖산·석신산 완충 시스템을 구축해 로스팅 중 pH 변화를 ΔpH 0.17로 안정화했다. 이 열 완충 효과는 마이야르 반응의 최적 동역학 창을 유지해 에스터화 플럭스를 3.08배 급등시키고 알킬피라진 다양성을 향상시켰다. 결과적으로 에틸아세테이트·에틸이소발레레이트 등 과실향 마커와 견과향 피라진이 동시에 풍부해지는 복합 향미 프로파일이 형성되었다. 이 연구는 발효-로스팅 커플링 기전을 처음으로 정량 프레임워크로 제시해 커피 가공을 경험적 관찰에서 합리적 향미 설계로 전환하는 이론적 토대를 제공한다.</p>
+      <div class="ez-hero">
+        <div class="ez-hero-emoji">🧬</div>
+        <div class="ez-hero-title">발효를 똑똑하게 하면 커피 맛이 더 풍부해진다고?</div>
       </div>
-      
 
-      
-      <div class="section-block">
-        <h2>핵심 발견</h2>
-        <ul class="findings">
-          <li>BF로 자유 아미노산(류신·페닐알라닌) 1.89배 증가 → 마이야르 반응 전구체 풀 강화</li><li>젖산·석신산 완충 염 시스템 → 로스팅 중 ΔpH 0.17 안정화 (최적 마이야르 동역학 창 유지)</li><li>에스터화 플럭스 3.08배 급등 → 에틸아세테이트·에틸이소발레레이트 등 과실향 마커 현저 증가</li><li>알킬피라진(nutty-associated) 증가 → 마이야르 산물 다양성 향상</li><li>발효 전구체 설계 ↔ 로스팅 열화학 커플링 기전 최초 정량화</li>
-        </ul>
+      <div class="ez-section">
+        <h2>🤔 도대체 무슨 연구야?</h2>
+        <p>커피 한 잔에서 우리가 느끼는 고소한 향, 과일 같은 향, 견과류 같은 향은 사실 마법이 아니라 <strong>화학 반응의 결과</strong>야. 생두를 불에 볶을 때(로스팅) 안에 들어있는 성분들이 열을 받아 서로 반응하면서 맛과 향이 만들어지지.</p>
+        <p>이 연구는 이런 질문에서 시작됐어:</p>
+        <div class="ez-callout"><strong>"볶기 전 단계인 발효를 우리가 원하는 방향으로 설계하면, 볶을 때 더 좋은 향이 나오게 할 수 있지 않을까?"</strong></div>
       </div>
-      
 
-      
+      <div class="ez-section">
+        <h2>🧪 핵심 개념을 쉽게 풀어보면</h2>
 
-      
-      <div class="section-block">
-        <h2>데이터로 보기</h2>
-        <div class="charts-grid" id="charts-grid"></div>
-      </div>
-      
+        <h3>1️⃣ 바이오미메틱 발효(BF) 란?</h3>
+        <p>'바이오미메틱'은 <strong>"자연을 따라 한다"</strong>는 뜻이야. 자연에서 일어나는 발효 과정을 실험실에서 딱 원하는 부분만 골라 정밀하게 재현하는 방법이지.</p>
+        <div class="ez-callout">💡 김치 발효를 아무 균이나 들어가게 두는 게 아니라, 좋은 균만 골라 넣어서 맛을 컨트롤하는 것과 비슷해.</div>
 
-      
-      <div class="section-block">
-        <h2>방법론</h2>
-        <p>in vitro 바이오미메틱 발효(BF) 대 대조군 비교 실험. 통합 멀티-오믹스(자유 아미노산 프로파일링·유기산 분석·휘발성 GC-MS) + 관능 평가 + 반응 동역학 분석 수행.</p>
-      </div>
-      
+        <h3>2️⃣ 마이야르 반응이란?</h3>
+        <p>스테이크를 구울 때 표면이 갈색으로 변하면서 고소한 냄새가 나지? 빵 굽거나 양파를 볶을 때도 마찬가지야. 이게 바로 <strong>마이야르 반응</strong> — 단백질 성분(아미노산)과 당이 열을 받아 만나면 새로운 향과 색이 만들어지는 반응이야. 커피의 풍부한 향도 대부분 여기서 나와.</p>
 
-      
-      <div class="section-block">
-        <h2>시사점</h2>
-        <div class="implications-grid">
-          
-          <div class="implication-card">
-            <h3>농가 · 가공장</h3>
-            <p>BF 발효 프로토콜 적용으로 류신·페닐알라닌 풍부화 → 과실향 에스터 강화 설계 가능. 젖산·석신산 완충 시스템은 기존 유기산 모니터링 인프라 보유 농장에서 BF 도입 경로 제공.</p>
-          </div>
-          
-          <div class="implication-card">
-            <h3>로스터 · 큐그레이더</h3>
-            <p>BF 처리 생두는 자유 아미노산·유기산 완충 프로파일이 표준 발효 생두와 달라 라이트~미디엄 로스팅에서 과실향+견과향 복합성이 더 뚜렷하게 발현될 수 있다. 생두 구매 스펙에 BF 여부·발효 프로토콜 정보 포함 권장.</p>
-          </div>
-          
-          <div class="implication-card">
-            <h3>R&amp;D</h3>
-            <p>BF 프레임워크의 다른 품종·산지 범용성 검증; 자유 아미노산 초기 조성-에스터 프로파일 예측 모델; BF 조건-로스팅 프로파일 상호작용 연구; 산업적 스케일업 가능성 탐색.</p>
-          </div>
-          
+        <h3>3️⃣ 전구체(前驅體) 란?</h3>
+        <p>요리 재료라고 생각하면 돼. 라면을 끓이려면 면, 스프, 물이 필요하잖아? 마찬가지로 커피 향이 만들어지려면 <strong>아미노산, 당, 유기산</strong> 같은 재료들이 생두 안에 있어야 해. 이 재료들을 모아놓은 게 "전구체 풀(pool)"이야.</p>
+
+        <div class="ez-infographic">
+          <svg viewBox="0 0 700 200" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="g1" x1="0" x2="1"><stop offset="0" stop-color="#C9986A"/><stop offset="1" stop-color="#B5703D"/></linearGradient>
+              <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#6F4E37"/></marker>
+            </defs>
+            <rect x="20" y="60" width="160" height="80" rx="14" fill="#FAF7F2" stroke="#C9986A" stroke-width="2"/>
+            <text x="100" y="92" text-anchor="middle" font-size="16" font-weight="700" fill="#1A1410">🌱 생두 + 발효</text>
+            <text x="100" y="118" text-anchor="middle" font-size="13" fill="#6B5E52">BF 설계</text>
+            <line x1="180" y1="100" x2="240" y2="100" stroke="#6F4E37" stroke-width="2.5" marker-end="url(#arr)"/>
+            <rect x="250" y="60" width="200" height="80" rx="14" fill="url(#g1)" stroke="#B5703D" stroke-width="2"/>
+            <text x="350" y="92" text-anchor="middle" font-size="16" font-weight="700" fill="#fff">🧂 전구체 풀</text>
+            <text x="350" y="118" text-anchor="middle" font-size="13" fill="#FFF0DC">아미노산↑ 1.89× 유기산</text>
+            <line x1="450" y1="100" x2="510" y2="100" stroke="#6F4E37" stroke-width="2.5" marker-end="url(#arr)"/>
+            <rect x="520" y="60" width="160" height="80" rx="14" fill="#FAF7F2" stroke="#C9986A" stroke-width="2"/>
+            <text x="600" y="92" text-anchor="middle" font-size="16" font-weight="700" fill="#1A1410">🔥 로스팅</text>
+            <text x="600" y="118" text-anchor="middle" font-size="13" fill="#6B5E52">마이야르 + 에스터화</text>
+            <text x="350" y="180" text-anchor="middle" font-size="13" fill="#6B5E52" font-style="italic">발효를 설계하면 → 전구체가 달라지고 → 로스팅 결과도 달라진다</text>
+          </svg>
+          <div class="ez-infographic-caption">발효-로스팅 커플링: 발효 단계의 설계가 로스팅 향미를 결정한다</div>
         </div>
       </div>
-      
 
-      
-      <div class="section-block">
-        <h2>한계</h2>
-        <p>실험 반복 수·통계 유의성 등 세부 설계 초록 미공개; 산업적 스케일업 비용·실현 가능성 미평가; 단일 품종/산지 적용 범위 한계; 소비자 기호도 평가 부재; 건조·보관 후 전구체 안정성 미검증.</p>
+      <div class="ez-section">
+        <h2>🎯 연구가 발견한 것</h2>
+        <p>연구진은 발효를 똑똑하게 디자인했더니 놀라운 일이 일어났어:</p>
+        <ul class="ez-findings">
+          <li class="gold"><strong>🥇 향의 재료가 1.89배 늘었다</strong>류신, 페닐알라닌 같은 아미노산이 거의 두 배 많아졌어. 향을 만들 재료가 풍부해진 거지.</li>
+          <li class="silver"><strong>🥈 로스팅 중 pH가 안정됐다</strong>젖산과 석신산이 완충제(pH 변동을 막아주는 안전장치) 역할을 해서, 볶는 동안 산도가 거의 안 변했어 (ΔpH 0.17). 마이야르 반응은 딱 적당한 산도에서만 잘 일어나거든. 빵 굽기에 딱 맞는 오븐 온도를 유지하는 것과 같아.</li>
+          <li class="bronze"><strong>🥉 과일향이 3배 이상 폭발했다</strong>에스터화 반응(과일향을 만드는 반응)이 3.08배 증가! 사과·딸기 같은 상큼한 향이 훨씬 진해졌어.</li>
+          <li class="medal"><strong>🏅 견과류 향도 다양해졌다</strong>알킬피라진이라는 향 물질이 늘어서 고소한 견과류·코코아 향도 함께 풍부해졌어.</li>
+        </ul>
+        <div class="ez-callout">🍓 + 🥜 <strong>결과적으로?</strong> 보통은 과일향이 강하면 견과향이 약해지고 그 반대도 마찬가지인 트레이드오프가 있어. 그런데 이 연구는 두 가지를 <em>동시에</em> 풍부하게 만드는 데 성공한 거야. 딸기맛이랑 헤이즐넛맛이 한 컵에 다 들어있는 느낌!</div>
       </div>
-      
 
-      
-      <div class="section-block">
-        <h2>용어집</h2>
-        <ul class="glossary-list">
-          
-          <li><dt>Biomimetic Fermentation (BF)</dt><dd>바이오미메틱 발효 — 자연 발효 핵심 대사를 in vitro에서 모사한 제어 발효 프로토콜</dd></li>
-          
-          <li><dt>Maillard Reaction</dt><dd>마이야르 반응 — 환원당+아미노산의 열 반응, 커피 향미 생성 핵심 경로</dd></li>
-          
-          <li><dt>Alkylpyrazines</dt><dd>알킬피라진 — 마이야르 반응 산물, 견과·코코아·구운향 기여</dd></li>
-          
-          <li><dt>Ethyl Isovalerate</dt><dd>에틸이소발레레이트 — 딸기·사과향 에스터, 류신 유래 스트레커 산물의 에스터화</dd></li>
-          
-          <li><dt>Esterification Flux</dt><dd>에스터화 플럭스 — 에스터 생성 반응의 총 속도·규모 지표</dd></li>
-          
-          <li><dt>Thermal Buffering Capacity</dt><dd>열 완충 능력 — 로스팅 중 pH 변화를 완화해 최적 마이야르 창 유지</dd></li>
-          
-          <li><dt>Precursor Pool</dt><dd>전구체 풀 — 로스팅 열화학 반응의 원료가 되는 화합물들의 총체</dd></li>
-          
+      <div class="ez-section">
+        <h2>📊 숫자로 보기</h2>
+        <div class="ez-chart-card">
+          <div class="ez-chart-title">바이오미메틱 발효(BF) 의 화학적 효과 — 대조군 대비 배수 변화</div>
+          <div class="ez-bar-row">
+            <div class="ez-bar-label">자유 아미노산</div>
+            <div class="ez-bar-track"><div class="ez-bar-fill" style="width: 61%;">1.89×</div></div>
+          </div>
+          <div class="ez-bar-row">
+            <div class="ez-bar-label">에스터화 플럭스</div>
+            <div class="ez-bar-track"><div class="ez-bar-fill" style="width: 100%;">3.08×</div></div>
+          </div>
+          <div class="ez-bar-row">
+            <div class="ez-bar-label">pH 안정성 (ΔpH)</div>
+            <div class="ez-bar-track"><div class="ez-bar-fill" style="width: 12%; background: linear-gradient(90deg, #6F4E37, #4A3F36);">0.17 (낮을수록 좋음)</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="ez-section">
+        <h2>🆚 일반 발효 vs 바이오미메틱 발효</h2>
+        <table class="ez-table">
+          <thead><tr><th>항목</th><th>일반 발효</th><th>바이오미메틱 발효 (BF)</th></tr></thead>
+          <tbody>
+            <tr><th>접근 방식</th><td>자연스럽게 우연한 발효</td><td>원하는 균/기질을 정밀 설계</td></tr>
+            <tr><th>아미노산 풀</th><td>기본값</td><td><strong>1.89배 증가</strong></td></tr>
+            <tr><th>유기산 완충</th><td>없음/불안정</td><td>젖산·석신산 시스템 구축</td></tr>
+            <tr><th>로스팅 중 pH</th><td>변동 큼</td><td><strong>ΔpH 0.17 안정</strong></td></tr>
+            <tr><th>과일향 (에스터)</th><td>중간</td><td><strong>3.08배 증가</strong></td></tr>
+            <tr><th>견과향 (피라진)</th><td>중간</td><td>다양성 향상</td></tr>
+            <tr><th>결과</th><td>한쪽이 강하면 한쪽 약함</td><td>과일+견과 동시 풍부</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="ez-section">
+        <h2>🎓 이게 왜 대단한 일이야?</h2>
+        <p>지금까지 커피 발효와 로스팅은 <strong>"오랜 경험과 감"</strong> 으로 했어. "이 산지에서 이렇게 발효하면 대충 이런 맛이 나더라" 하는 식이었지.</p>
+        <p>이 연구는 처음으로:</p>
+        <ul>
+          <li>발효 단계에서 <strong>무엇을 어떻게</strong> 바꾸면</li>
+          <li>로스팅 때 <strong>어떤 화학 반응</strong>이 어떻게 변하고</li>
+          <li>결국 <strong>어떤 향</strong>이 만들어지는지</li>
+        </ul>
+        <p>를 숫자로 증명했어. 즉, 커피 가공이 <strong>"감각의 영역"에서 "과학적 설계의 영역"</strong>으로 넘어가는 첫걸음을 만든 거야.</p>
+      </div>
+
+      <div class="ez-section">
+        <h2>💼 누구한테 의미가 있을까?</h2>
+        <table class="ez-table">
+          <thead><tr><th>대상</th><th>의미</th></tr></thead>
+          <tbody>
+            <tr><th>농가 · 가공장</th><td>BF 프로토콜로 류신·페닐알라닌을 풍부화하면 과실향 에스터를 의도적으로 강화 가능. 유기산 모니터링 인프라가 있는 농장은 BF 도입이 비교적 쉬움.</td></tr>
+            <tr><th>로스터 · 큐그레이더</th><td>BF 생두는 일반 생두와 전구체 프로파일이 달라 라이트~미디엄 로스팅에서 과실향+견과향 복합성이 더 잘 살아남. 생두 구매 스펙에 BF 정보 포함 권장.</td></tr>
+            <tr><th>R&amp;D</th><td>다른 품종·산지에서도 같은 효과가 나는지 검증 필요. 자유 아미노산 조성으로 향 프로파일을 예측하는 모델 가능.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="ez-section">
+        <h2>⚠️ 아직 한계도 있어</h2>
+        <ul>
+          <li>실험을 얼마나 반복했는지, 통계적으로 얼마나 확실한지 세부 정보 미공개</li>
+          <li>공장 규모로 키울 때 비용과 실현 가능성이 평가되지 않음</li>
+          <li>한 가지 품종·산지로만 실험해서 다른 커피에도 통할지 검증 필요</li>
+          <li>소비자들이 실제로 좋아하는지 기호도 평가는 없음</li>
+          <li>건조·보관 후 전구체가 안정적으로 유지되는지 미검증</li>
         </ul>
       </div>
-      
 
-      <div class="section-block">
-        <h2>인용 · 링크</h2>
-        <div class="citation-block">[저자 미확인] (2026). Biomimetic fermentation reshapes precursor pools to drive synergistic roasting reactions and enhance coffee flavor complexity. Foods, 15(5), 849. https://doi.org/10.3390/foods15050849</div>
+      <div class="ez-section">
+        <div class="ez-summary">💡 <strong>한 줄 요약</strong> — 커피를 볶기 전 발효 단계에서 재료(아미노산)를 풍부하게 만들고 산도를 안정시키면, 볶을 때 과일향과 견과류향이 <em>동시에</em> 강해진 멋진 커피가 탄생한다. 이걸 처음으로 과학적으로 증명한 연구!</div>
+      </div>
+
+      <div class="ez-section">
+        <h2>📚 원문 정보</h2>
+        <div class="ez-citation">
+          <p><strong>📄 논문</strong> — Biomimetic Fermentation Reshapes Precursor Pools to Drive Synergistic Roasting Reactions and Enhance Coffee Flavor Complexity</p>
+          <p><strong>📰 저널</strong> — Foods (MDPI), Vol. 15, No. 5, Article 849 (2026-03-03)</p>
+          <p><strong>🔗 DOI</strong> — <a href="https://doi.org/10.3390/foods15050849" target="_blank" rel="noopener noreferrer" style="color: var(--copper);">10.3390/foods15050849</a></p>
+        </div>
         <div class="links-row">
           <a class="link-pill" href="https://doi.org/10.3390/foods15050849" target="_blank" rel="noopener noreferrer">DOI →</a>
           <a class="link-pill" href="https://www.mdpi.com/2304-8158/15/5/849" target="_blank" rel="noopener noreferrer">OA PDF →</a>
           <a class="link-pill" href="https://www.mdpi.com/journal/foods" target="_blank" rel="noopener noreferrer">JOURNAL HOMEPAGE →</a>
         </div>
         <div style="margin-top: 18px;">
-          
           <span class="source-basis abstract">ABSTRACT BASIS</span>
-          
         </div>
       </div>
 
@@ -250,60 +350,6 @@ ul.findings li::before { content: counter(f, decimal-leading-zero); position: ab
     </div>
   </footer>
 </article>
-
-
-<script>
-const CHARTS = [{"type": "bar", "title": "바이오미메틱 발효(BF)의 주요 화학적 효과 — 대조군 대비 배수 변화", "x_labels": ["자유 아미노산 증가", "에스터화 플럭스 증가"], "y_label": "대조군 대비 배수 (fold change)", "values": [1.89, 3.08], "unit": "배수(x)"}];
-function renderBarChart(chart) {
-  const W = 520, H = 280;
-  const PAD_L = 50, PAD_R = 16, PAD_T = 18, PAD_B = 56;
-  const plotW = W - PAD_L - PAD_R;
-  const plotH = H - PAD_T - PAD_B;
-  const max = Math.max(...chart.values);
-  const min = Math.min(...chart.values, 0);
-  const yMax = max + (max - min) * 0.12;
-  const yMin = min < 0 ? min : 0;
-  const yRange = yMax - yMin || 1;
-  const n = chart.values.length;
-  const slot = plotW / n;
-  const barW = Math.min(slot * 0.6, 80);
-  function yFor(v) { return PAD_T + plotH - ((v - yMin) / yRange) * plotH; }
-  const ticks = 4;
-  let gridSvg = "";
-  for (let i = 0; i <= ticks; i++) {
-    const v = yMin + (yRange / ticks) * i;
-    const y = yFor(v);
-    gridSvg += `<line class="axis-line" x1="${PAD_L}" y1="${y}" x2="${PAD_L + plotW}" y2="${y}"/>`;
-    gridSvg += `<text class="axis-label" x="${PAD_L - 8}" y="${y + 4}" text-anchor="end">${Number(v.toFixed(1))}</text>`;
-  }
-  const maxIdx = chart.values.indexOf(max);
-  let barsSvg = "";
-  for (let i = 0; i < n; i++) {
-    const v = chart.values[i];
-    const x = PAD_L + slot * i + (slot - barW) / 2;
-    const y = yFor(v);
-    const h = (PAD_T + plotH) - y;
-    const cls = i === maxIdx ? "bar highlight" : "bar";
-    barsSvg += `<rect class="${cls}" x="${x}" y="${y}" width="${barW}" height="${h}" rx="3"/>`;
-    barsSvg += `<text class="value-label" x="${x + barW / 2}" y="${y - 6}" text-anchor="middle">${v}${chart.unit || ""}</text>`;
-    const label = String(chart.x_labels[i] || "");
-    barsSvg += `<text class="axis-label" x="${x + barW / 2}" y="${PAD_T + plotH + 18}" text-anchor="middle">${label}</text>`;
-  }
-  const yTitle = chart.y_label ? `<text class="y-label" x="${PAD_L}" y="${PAD_T - 6}">${chart.y_label}${chart.unit ? " (" + chart.unit + ")" : ""}</text>` : "";
-  return `<svg class="chart-svg" viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid meet" role="img" aria-label="${chart.title}">${yTitle}${gridSvg}${barsSvg}</svg>`;
-}
-(function () {
-  const grid = document.getElementById("charts-grid");
-  if (!grid) return;
-  CHARTS.forEach(function (c) {
-    const card = document.createElement("div");
-    card.className = "chart-card";
-    card.innerHTML = `<div class="chart-title">${c.title}</div>` + (c.type === "bar" ? renderBarChart(c) : "");
-    grid.appendChild(card);
-  });
-})();
-</script>
-
 
 </body>
 </html>
