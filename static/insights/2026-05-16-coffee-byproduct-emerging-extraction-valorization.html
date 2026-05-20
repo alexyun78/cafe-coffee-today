@@ -104,6 +104,11 @@ ul.findings li::before { content: counter(f, decimal-leading-zero); position: ab
 }
 
 /* ===== EZ: 쉬운 설명 스타일 ===== */
+.ez-glossary { display: grid; gap: 12px; }
+.ez-glossary-item { padding: 16px 20px; background: var(--canvas-warm); border: 1px solid var(--line); border-radius: 10px; border-left: 3px solid var(--caramel); }
+.ez-glossary-term { font-family: var(--font-display); font-style: italic; font-size: 1.1rem; font-weight: 600; color: var(--espresso); margin-bottom: 6px; }
+.ez-glossary-def { font-size: 0.98rem; color: var(--ink-mute); line-height: 1.7; }
+
 .ez-hero { text-align: center; padding: 8px 0 32px; }
 .ez-hero-emoji { font-size: 3.4rem; line-height: 1; }
 .ez-hero-title { font-family: var(--font-display); font-size: clamp(1.6rem, 3.5vw, 2.2rem); font-weight: 600; color: var(--ink); margin-top: 14px; line-height: 1.3; }
@@ -319,6 +324,53 @@ ul.findings li::before { content: counter(f, decimal-leading-zero); position: ab
           <span class="source-basis abstract">ABSTRACT BASIS</span>
         </div>
       </div>
+      <div class="ez-section">
+        <h2>📖 어려운 말 풀이 사전</h2>
+        <p>이 글에 나온 어려운 약어와 용어를 한 번에 정리했어. 의미만 알면 본문이 훨씬 쉬워져!</p>
+        <div class="ez-glossary">
+        <div class="ez-glossary-item">
+          <div class="ez-glossary-term">UAE (Ultrasound-Assisted Extraction)</div>
+          <div class="ez-glossary-def">초음파 보조 추출 — 음향 캐비테이션으로 세포벽 파괴, 폴리페놀 단시간 회수</div>
+        </div>
+        <div class="ez-glossary-item">
+          <div class="ez-glossary-term">HPE (High-Pressure Extraction)</div>
+          <div class="ez-glossary-def">고압 추출 — 수백 MPa 정수압으로 열 손상 없이 세포막 투과성 향상</div>
+        </div>
+        <div class="ez-glossary-item">
+          <div class="ez-glossary-term">CAP (Cold Atmospheric Plasma)</div>
+          <div class="ez-glossary-def">저온 대기압 플라즈마 — 비열 플라즈마로 상온 표면 활성화</div>
+        </div>
+        <div class="ez-glossary-item">
+          <div class="ez-glossary-term">MAE (Microwave-Assisted Extraction)</div>
+          <div class="ez-glossary-def">마이크로파 보조 추출 — 유전 가열로 수 분 내 추출 완료</div>
+        </div>
+        <div class="ez-glossary-item">
+          <div class="ez-glossary-term">Chlorogenic Acid (CGA)</div>
+          <div class="ez-glossary-def">클로로젠산 — 커피 주요 페놀산, 항산화·항염 활성</div>
+        </div>
+        <div class="ez-glossary-item">
+          <div class="ez-glossary-term">Silverskin / Chaff</div>
+          <div class="ez-glossary-def">실버스킨/채프 — 로스팅 시 분리되는 커피 종피, CGA·멜라노이딘 함유</div>
+        </div>
+        <div class="ez-glossary-item">
+          <div class="ez-glossary-term">Spent Coffee Grounds (SCG)</div>
+          <div class="ez-glossary-def">소비된 커피 찌꺼기 — 추출 후 잔류물, 연간 수백만 톤 발생</div>
+        </div>
+        <div class="ez-glossary-item">
+          <div class="ez-glossary-term">Trigonelline</div>
+          <div class="ez-glossary-def">트리고넬린 — 커피 알칼로이드, 로스팅 중 니아신으로 부분 전환</div>
+        </div>
+        <div class="ez-glossary-item">
+          <div class="ez-glossary-term">Circular Economy</div>
+          <div class="ez-glossary-def">순환 경제 — 폐기물 최소화 자원 순환 경제 모델</div>
+        </div>
+        <div class="ez-glossary-item">
+          <div class="ez-glossary-term">Acoustic Cavitation</div>
+          <div class="ez-glossary-def">음향 캐비테이션 — 초음파에 의한 마이크로 버블 생성·붕괴 현상, UAE 핵심 기전</div>
+        </div>
+        </div>
+      </div>
+
 
     </div>
   </section>

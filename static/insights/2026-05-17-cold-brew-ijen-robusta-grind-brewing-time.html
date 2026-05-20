@@ -104,6 +104,11 @@ ul.findings li::before { content: counter(f, decimal-leading-zero); position: ab
 }
 
 /* ===== EZ: 쉬운 설명 스타일 ===== */
+.ez-glossary { display: grid; gap: 12px; }
+.ez-glossary-item { padding: 16px 20px; background: var(--canvas-warm); border: 1px solid var(--line); border-radius: 10px; border-left: 3px solid var(--caramel); }
+.ez-glossary-term { font-family: var(--font-display); font-style: italic; font-size: 1.1rem; font-weight: 600; color: var(--espresso); margin-bottom: 6px; }
+.ez-glossary-def { font-size: 0.98rem; color: var(--ink-mute); line-height: 1.7; }
+
 .ez-hero { text-align: center; padding: 8px 0 32px; }
 .ez-hero-emoji { font-size: 3.4rem; line-height: 1; }
 .ez-hero-title { font-family: var(--font-display); font-size: clamp(1.6rem, 3.5vw, 2.2rem); font-weight: 600; color: var(--ink); margin-top: 14px; line-height: 1.3; }
@@ -320,6 +325,37 @@ ul.findings li::before { content: counter(f, decimal-leading-zero); position: ab
           <span class="source-basis abstract">ABSTRACT BASIS</span>
         </div>
       </div>
+      <div class="ez-section">
+        <h2>📖 어려운 말 풀이 사전</h2>
+        <p>이 글에 나온 어려운 약어와 용어를 한 번에 정리했어. 의미만 알면 본문이 훨씬 쉬워져!</p>
+        <div class="ez-glossary">
+        <div class="ez-glossary-item">
+          <div class="ez-glossary-term">TDS</div>
+          <div class="ez-glossary-def">총 용존 고형물 — 커피 추출액 농도 지표</div>
+        </div>
+        <div class="ez-glossary-item">
+          <div class="ez-glossary-term">Ijen Robusta</div>
+          <div class="ez-glossary-def">이젠 로부스타 — 동자바 화산 고원산 고품질 로부스타</div>
+        </div>
+        <div class="ez-glossary-item">
+          <div class="ez-glossary-term">Natural Processing</div>
+          <div class="ez-glossary-def">내추럴 가공 — 과육째 건조해 단맛 강화</div>
+        </div>
+        <div class="ez-glossary-item">
+          <div class="ez-glossary-term">Cold Brew</div>
+          <div class="ez-glossary-def">콜드 브루 — 저온 장시간 추출로 쓴맛 억제</div>
+        </div>
+        <div class="ez-glossary-item">
+          <div class="ez-glossary-term">L* value</div>
+          <div class="ez-glossary-def">L* 값 — CIE 색 체계 밝기 지표 (0=흑, 100=백)</div>
+        </div>
+        <div class="ez-glossary-item">
+          <div class="ez-glossary-term">SCA Cupping Score</div>
+          <div class="ez-glossary-def">SCA 컵핑 점수 — 80점 이상 스페셜티 등급</div>
+        </div>
+        </div>
+      </div>
+
 
     </div>
   </section>

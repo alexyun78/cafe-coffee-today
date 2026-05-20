@@ -104,6 +104,11 @@ ul.findings li::before { content: counter(f, decimal-leading-zero); position: ab
 }
 
 /* ===== EZ: 쉬운 설명 스타일 ===== */
+.ez-glossary { display: grid; gap: 12px; }
+.ez-glossary-item { padding: 16px 20px; background: var(--canvas-warm); border: 1px solid var(--line); border-radius: 10px; border-left: 3px solid var(--caramel); }
+.ez-glossary-term { font-family: var(--font-display); font-style: italic; font-size: 1.1rem; font-weight: 600; color: var(--espresso); margin-bottom: 6px; }
+.ez-glossary-def { font-size: 0.98rem; color: var(--ink-mute); line-height: 1.7; }
+
 .ez-hero { text-align: center; padding: 8px 0 32px; }
 .ez-hero-emoji { font-size: 3.4rem; line-height: 1; }
 .ez-hero-title { font-family: var(--font-display); font-size: clamp(1.6rem, 3.5vw, 2.2rem); font-weight: 600; color: var(--ink); margin-top: 14px; line-height: 1.3; }
@@ -301,6 +306,45 @@ ul.findings li::before { content: counter(f, decimal-leading-zero); position: ab
           <span class="source-basis abstract">ABSTRACT BASIS</span>
         </div>
       </div>
+      <div class="ez-section">
+        <h2>📖 어려운 말 풀이 사전</h2>
+        <p>이 글에 나온 어려운 약어와 용어를 한 번에 정리했어. 의미만 알면 본문이 훨씬 쉬워져!</p>
+        <div class="ez-glossary">
+        <div class="ez-glossary-item">
+          <div class="ez-glossary-term">NR4A1 (Nur77/TR3)</div>
+          <div class="ez-glossary-def">고아 핵수용체 4A1. 리간드 없이도 활성화되는 전사인자로 염증·세포사멸·대사 조절 관여</div>
+        </div>
+        <div class="ez-glossary-item">
+          <div class="ez-glossary-term">Inverse Agonist</div>
+          <div class="ez-glossary-def">역작동제. 수용체 기저 활성을 오히려 낮추는 리간드</div>
+        </div>
+        <div class="ez-glossary-item">
+          <div class="ez-glossary-term">Ligand-Binding Domain (LBD)</div>
+          <div class="ez-glossary-def">리간드 결합 도메인. 핵수용체에서 소분자가 결합하는 단백질 영역</div>
+        </div>
+        <div class="ez-glossary-item">
+          <div class="ez-glossary-term">Chlorogenic Acid (CGA)</div>
+          <div class="ez-glossary-def">클로로젠산. 커피의 주요 폴리페놀, 강한 항산화·항염 특성</div>
+        </div>
+        <div class="ez-glossary-item">
+          <div class="ez-glossary-term">Kahweol / Cafestol</div>
+          <div class="ez-glossary-def">카웨올·카페스톨. 커피 오일의 디테르페노이드 계열 화합물, 비여과 커피에서 주로 추출</div>
+        </div>
+        <div class="ez-glossary-item">
+          <div class="ez-glossary-term">Surface Plasmon Resonance (SPR)</div>
+          <div class="ez-glossary-def">표면 플라즈몬 공명. 실시간 결합/해리 동역학을 측정하는 단백질 결합 분석법</div>
+        </div>
+        <div class="ez-glossary-item">
+          <div class="ez-glossary-term">Rh30 cell line</div>
+          <div class="ez-glossary-def">Rh30 세포주. 인간 횡문근육종 유래 세포, NR4A1 연구 표준 모델</div>
+        </div>
+        <div class="ez-glossary-item">
+          <div class="ez-glossary-term">RNA interference (RNAi)</div>
+          <div class="ez-glossary-def">RNA 간섭. 특정 유전자 발현을 선택적으로 억제하는 기전</div>
+        </div>
+        </div>
+      </div>
+
 
     </div>
   </section>

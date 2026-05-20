@@ -269,6 +269,7 @@ def render_html(payload: dict, env: Environment) -> str:
     return tpl.render(
         title_ko=payload.get("title_ko", ""),
         title_original=payload.get("title_original", ""),
+        authors=payload.get("authors", ""),
         one_liner=payload.get("one_liner", ""),
         date_display=date_display,
         journal=payload.get("journal", ""),
@@ -288,6 +289,14 @@ def render_html(payload: dict, env: Environment) -> str:
         data_charts=data_charts,
         data_charts_json=json.dumps(data_charts, ensure_ascii=False),
         figures=payload.get("figures") or [],
+        # easy_* 필드 — 사이드카 JSON 이 친근 본문을 제공하면 우선 사용. 없으면 템플릿이 폴백.
+        easy_hero_emoji=payload.get("easy_hero_emoji") or "",
+        easy_hero_title=payload.get("easy_hero_title") or "",
+        easy_intro_paragraphs=payload.get("easy_intro_paragraphs") or [],
+        easy_concepts=payload.get("easy_concepts") or [],
+        easy_findings=payload.get("easy_findings") or [],
+        easy_tables=payload.get("easy_tables") or [],
+        easy_summary=payload.get("easy_summary") or "",
     )
 
 

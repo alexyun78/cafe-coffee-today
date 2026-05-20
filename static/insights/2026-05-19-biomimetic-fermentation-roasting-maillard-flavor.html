@@ -104,6 +104,11 @@ ul.findings li::before { content: counter(f, decimal-leading-zero); position: ab
 }
 
 /* ===== EZ: 쉬운 설명 스타일 ===== */
+.ez-glossary { display: grid; gap: 12px; }
+.ez-glossary-item { padding: 16px 20px; background: var(--canvas-warm); border: 1px solid var(--line); border-radius: 10px; border-left: 3px solid var(--caramel); }
+.ez-glossary-term { font-family: var(--font-display); font-style: italic; font-size: 1.1rem; font-weight: 600; color: var(--espresso); margin-bottom: 6px; }
+.ez-glossary-def { font-size: 0.98rem; color: var(--ink-mute); line-height: 1.7; }
+
 .ez-hero { text-align: center; padding: 8px 0 32px; }
 .ez-hero-emoji { font-size: 3.4rem; line-height: 1; }
 .ez-hero-title { font-family: var(--font-display); font-size: clamp(1.6rem, 3.5vw, 2.2rem); font-weight: 600; color: var(--ink); margin-top: 14px; line-height: 1.3; }
@@ -338,6 +343,41 @@ ul.findings li::before { content: counter(f, decimal-leading-zero); position: ab
           <span class="source-basis abstract">ABSTRACT BASIS</span>
         </div>
       </div>
+      <div class="ez-section">
+        <h2>📖 어려운 말 풀이 사전</h2>
+        <p>이 글에 나온 어려운 약어와 용어를 한 번에 정리했어. 의미만 알면 본문이 훨씬 쉬워져!</p>
+        <div class="ez-glossary">
+        <div class="ez-glossary-item">
+          <div class="ez-glossary-term">Biomimetic Fermentation (BF)</div>
+          <div class="ez-glossary-def">바이오미메틱 발효 — 자연 발효 핵심 대사를 in vitro에서 모사한 제어 발효 프로토콜</div>
+        </div>
+        <div class="ez-glossary-item">
+          <div class="ez-glossary-term">Maillard Reaction</div>
+          <div class="ez-glossary-def">마이야르 반응 — 환원당+아미노산의 열 반응, 커피 향미 생성 핵심 경로</div>
+        </div>
+        <div class="ez-glossary-item">
+          <div class="ez-glossary-term">Alkylpyrazines</div>
+          <div class="ez-glossary-def">알킬피라진 — 마이야르 반응 산물, 견과·코코아·구운향 기여</div>
+        </div>
+        <div class="ez-glossary-item">
+          <div class="ez-glossary-term">Ethyl Isovalerate</div>
+          <div class="ez-glossary-def">에틸이소발레레이트 — 딸기·사과향 에스터, 류신 유래 스트레커 산물의 에스터화</div>
+        </div>
+        <div class="ez-glossary-item">
+          <div class="ez-glossary-term">Esterification Flux</div>
+          <div class="ez-glossary-def">에스터화 플럭스 — 에스터 생성 반응의 총 속도·규모 지표</div>
+        </div>
+        <div class="ez-glossary-item">
+          <div class="ez-glossary-term">Thermal Buffering Capacity</div>
+          <div class="ez-glossary-def">열 완충 능력 — 로스팅 중 pH 변화를 완화해 최적 마이야르 창 유지</div>
+        </div>
+        <div class="ez-glossary-item">
+          <div class="ez-glossary-term">Precursor Pool</div>
+          <div class="ez-glossary-def">전구체 풀 — 로스팅 열화학 반응의 원료가 되는 화합물들의 총체</div>
+        </div>
+        </div>
+      </div>
+
 
     </div>
   </section>

@@ -253,6 +253,11 @@ ul.findings li::before {
 }
 
 /* ===== EZ: 쉬운 설명 스타일 ===== */
+.ez-glossary { display: grid; gap: 12px; }
+.ez-glossary-item { padding: 16px 20px; background: var(--canvas-warm); border: 1px solid var(--line); border-radius: 10px; border-left: 3px solid var(--caramel); }
+.ez-glossary-term { font-family: var(--font-display); font-style: italic; font-size: 1.1rem; font-weight: 600; color: var(--espresso); margin-bottom: 6px; }
+.ez-glossary-def { font-size: 0.98rem; color: var(--ink-mute); line-height: 1.7; }
+
 .ez-hero { text-align: center; padding: 8px 0 32px; }
 .ez-hero-emoji { font-size: 3.4rem; line-height: 1; }
 .ez-hero-title { font-family: var(--font-display); font-size: clamp(1.6rem, 3.5vw, 2.2rem); font-weight: 600; color: var(--ink); margin-top: 14px; line-height: 1.3; }
@@ -462,6 +467,33 @@ ul.findings li::before {
           <span class="source-basis">FULL TEXT BASIS</span>
         </div>
       </div>
+      <div class="ez-section">
+        <h2>📖 어려운 말 풀이 사전</h2>
+        <p>이 글에 나온 어려운 약어와 용어를 한 번에 정리했어. 의미만 알면 본문이 훨씬 쉬워져!</p>
+        <div class="ez-glossary">
+        <div class="ez-glossary-item">
+          <div class="ez-glossary-term">Saccharomyces cerevisiae</div>
+          <div class="ez-glossary-def">양조용 효모. 빵·맥주 발효에 쓰이는 대표 균주.</div>
+        </div>
+        <div class="ez-glossary-item">
+          <div class="ez-glossary-term">Lactobacillus plantarum</div>
+          <div class="ez-glossary-def">락트산 생성 유산균. 채소 발효(김치·사우어크라우트)에서 흔히 분리됨.</div>
+        </div>
+        <div class="ez-glossary-item">
+          <div class="ez-glossary-term">SCA 큐핑 프로토콜</div>
+          <div class="ez-glossary-def">Specialty Coffee Association의 표준 관능 평가 방법. 10개 항목 100점 만점.</div>
+        </div>
+        <div class="ez-glossary-item">
+          <div class="ez-glossary-term">Agtron</div>
+          <div class="ez-glossary-def">원두 표면 색차로 로스팅 단계를 측정하는 분광 측정기.</div>
+        </div>
+        <div class="ez-glossary-item">
+          <div class="ez-glossary-term">이소아밀 아세테이트</div>
+          <div class="ez-glossary-def">바나나·배 향을 주는 에스테르계 향기 화합물.</div>
+        </div>
+        </div>
+      </div>
+
 
     </div>
   </section>

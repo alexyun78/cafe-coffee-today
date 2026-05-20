@@ -104,6 +104,11 @@ ul.findings li::before { content: counter(f, decimal-leading-zero); position: ab
 }
 
 /* ===== EZ: 쉬운 설명 스타일 ===== */
+.ez-glossary { display: grid; gap: 12px; }
+.ez-glossary-item { padding: 16px 20px; background: var(--canvas-warm); border: 1px solid var(--line); border-radius: 10px; border-left: 3px solid var(--caramel); }
+.ez-glossary-term { font-family: var(--font-display); font-style: italic; font-size: 1.1rem; font-weight: 600; color: var(--espresso); margin-bottom: 6px; }
+.ez-glossary-def { font-size: 0.98rem; color: var(--ink-mute); line-height: 1.7; }
+
 .ez-hero { text-align: center; padding: 8px 0 32px; }
 .ez-hero-emoji { font-size: 3.4rem; line-height: 1; }
 .ez-hero-title { font-family: var(--font-display); font-size: clamp(1.6rem, 3.5vw, 2.2rem); font-weight: 600; color: var(--ink); margin-top: 14px; line-height: 1.3; }
@@ -303,6 +308,45 @@ ul.findings li::before { content: counter(f, decimal-leading-zero); position: ab
           <span class="source-basis abstract">ABSTRACT BASIS</span>
         </div>
       </div>
+      <div class="ez-section">
+        <h2>📖 어려운 말 풀이 사전</h2>
+        <p>이 글에 나온 어려운 약어와 용어를 한 번에 정리했어. 의미만 알면 본문이 훨씬 쉬워져!</p>
+        <div class="ez-glossary">
+        <div class="ez-glossary-item">
+          <div class="ez-glossary-term">Allotetraploid</div>
+          <div class="ez-glossary-def">사배체 — 두 이배체 조상이 합쳐진 4배체</div>
+        </div>
+        <div class="ez-glossary-item">
+          <div class="ez-glossary-term">DXMT</div>
+          <div class="ez-glossary-def">카페인 합성 최종 효소 (테오브로민→카페인 전환)</div>
+        </div>
+        <div class="ez-glossary-item">
+          <div class="ez-glossary-term">MYB Transcription Factor</div>
+          <div class="ez-glossary-def">카페인·클로로젠산·테르펜 경로 조절 마스터 전사인자</div>
+        </div>
+        <div class="ez-glossary-item">
+          <div class="ez-glossary-term">FADS2</div>
+          <div class="ez-glossary-def">지방산 불포화도 조절 효소; 생두 지질 프로파일 결정</div>
+        </div>
+        <div class="ez-glossary-item">
+          <div class="ez-glossary-term">Chlorogenic Acid (CGA)</div>
+          <div class="ez-glossary-def">클로로젠산 — 커피 주요 페놀산; 항산화 및 로스팅 반응 전구체</div>
+        </div>
+        <div class="ez-glossary-item">
+          <div class="ez-glossary-term">GABA</div>
+          <div class="ez-glossary-def">γ-아미노부티르산 — 내추럴 가공 시 증가하는 비단백질 아미노산</div>
+        </div>
+        <div class="ez-glossary-item">
+          <div class="ez-glossary-term">Homoeologous Exchange</div>
+          <div class="ez-glossary-def">동종 염색체 교환 — 사배체 서브게놈 간 염색체 단편 교환</div>
+        </div>
+        <div class="ez-glossary-item">
+          <div class="ez-glossary-term">Subgenome-biased Expression</div>
+          <div class="ez-glossary-def">서브게놈 편향 발현 — 특정 서브게놈 유전자가 우선 발현</div>
+        </div>
+        </div>
+      </div>
+
 
     </div>
   </section>

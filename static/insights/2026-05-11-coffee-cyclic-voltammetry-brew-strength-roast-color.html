@@ -104,6 +104,11 @@ ul.findings li::before { content: counter(f, decimal-leading-zero); position: ab
 }
 
 /* ===== EZ: 쉬운 설명 스타일 ===== */
+.ez-glossary { display: grid; gap: 12px; }
+.ez-glossary-item { padding: 16px 20px; background: var(--canvas-warm); border: 1px solid var(--line); border-radius: 10px; border-left: 3px solid var(--caramel); }
+.ez-glossary-term { font-family: var(--font-display); font-style: italic; font-size: 1.1rem; font-weight: 600; color: var(--espresso); margin-bottom: 6px; }
+.ez-glossary-def { font-size: 0.98rem; color: var(--ink-mute); line-height: 1.7; }
+
 .ez-hero { text-align: center; padding: 8px 0 32px; }
 .ez-hero-emoji { font-size: 3.4rem; line-height: 1; }
 .ez-hero-title { font-family: var(--font-display); font-size: clamp(1.6rem, 3.5vw, 2.2rem); font-weight: 600; color: var(--ink); margin-top: 14px; line-height: 1.3; }
@@ -302,6 +307,37 @@ ul.findings li::before { content: counter(f, decimal-leading-zero); position: ab
           <span class="source-basis abstract">ABSTRACT BASIS</span>
         </div>
       </div>
+      <div class="ez-section">
+        <h2>📖 어려운 말 풀이 사전</h2>
+        <p>이 글에 나온 어려운 약어와 용어를 한 번에 정리했어. 의미만 알면 본문이 훨씬 쉬워져!</p>
+        <div class="ez-glossary">
+        <div class="ez-glossary-item">
+          <div class="ez-glossary-term">Cyclic Voltammetry (CV)</div>
+          <div class="ez-glossary-def">순환전압전류법: 전압을 주기적으로 올리고 내리며 전류를 기록하는 전기화학 분석법</div>
+        </div>
+        <div class="ez-glossary-item">
+          <div class="ez-glossary-term">TDS (Total Dissolved Solids)</div>
+          <div class="ez-glossary-def">총 용존 고형물: 커피 음료에 녹아 있는 물질의 총 농도. 추출 강도의 주요 지표</div>
+        </div>
+        <div class="ez-glossary-item">
+          <div class="ez-glossary-term">HUPD (Hydrogen Underpotential Deposition)</div>
+          <div class="ez-glossary-def">수소 과소전위 흡착: 수소 기포 발생 이전에 전극 표면에 수소가 흡착되는 현상. 전극 표면 상태에 민감</div>
+        </div>
+        <div class="ez-glossary-item">
+          <div class="ez-glossary-term">Chlorogenic Acid (CGA)</div>
+          <div class="ez-glossary-def">클로로젠산: 커피 생두의 주요 폴리페놀. 배전 중 열분해되어 키니산·카페산으로 전환됨</div>
+        </div>
+        <div class="ez-glossary-item">
+          <div class="ez-glossary-term">Agtron</div>
+          <div class="ez-glossary-def">아그트론: 근적외선 반사를 이용한 로스트 색도 수치. 높을수록 라이트, 낮을수록 다크</div>
+        </div>
+        <div class="ez-glossary-item">
+          <div class="ez-glossary-term">Potentiostat</div>
+          <div class="ez-glossary-def">포테시오스탯: 전기화학 측정에서 전극 간 전압을 정밀하게 제어하는 장치</div>
+        </div>
+        </div>
+      </div>
+
 
     </div>
   </section>

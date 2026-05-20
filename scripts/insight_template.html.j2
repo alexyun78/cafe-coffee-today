@@ -23,7 +23,7 @@
 }
 * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color: transparent; }
 html { scroll-behavior: smooth; }
-body { font-family: var(--font-body); color: var(--ink); background: var(--canvas); font-feature-settings: "kern","ss01"; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+body { font-family: var(--font-body); color: var(--ink); background: var(--canvas); font-feature-settings: "kern","ss01","lnum"; line-height: 1.65; -webkit-font-smoothing: antialiased; }
 a { color: var(--copper); text-decoration: none; border-bottom: 1px solid transparent; transition: border-color .2s; }
 a:hover { border-bottom-color: var(--copper); }
 img { display: block; max-width: 100%; height: auto; }
@@ -52,54 +52,62 @@ img { display: block; max-width: 100%; height: auto; }
 .hero-image { margin: 32px 0 0; border-radius: var(--r-md); overflow: hidden; border: 1px solid var(--line); }
 .hero-image img { width: 100%; }
 .article-body { padding: 56px 0 80px; }
-.section-block { margin-bottom: 56px; }
-.section-block:last-child { margin-bottom: 0; }
-.section-block h2 { font-family: var(--font-display); font-weight: 600; font-size: 1.85rem; line-height: 1.2; letter-spacing: -0.01em; color: var(--ink); margin-bottom: 18px; display: flex; align-items: baseline; gap: 14px; }
-.section-block h2::before { content: ""; display: inline-block; width: 10px; height: 10px; background: var(--caramel); border-radius: 2px; }
-.section-block p { font-size: 1.04rem; color: var(--ink-mute); line-height: 1.85; margin-bottom: 18px; }
-.section-block p:last-child { margin-bottom: 0; }
-ul.findings { list-style: none; padding: 0; counter-reset: f; }
-ul.findings li { position: relative; padding: 16px 18px 16px 56px; font-size: 1rem; color: var(--ink-mute); line-height: 1.75; background: var(--canvas-warm); border: 1px solid var(--line); border-radius: var(--r-sm); margin-bottom: 12px; counter-increment: f; }
-ul.findings li::before { content: counter(f, decimal-leading-zero); position: absolute; left: 18px; top: 18px; font-family: var(--font-mono); font-size: .85rem; font-weight: 600; color: var(--copper); letter-spacing: .04em; }
-.implications-grid { display: grid; gap: 18px; grid-template-columns: 1fr; }
-.implication-card { padding: 22px 24px; background: var(--canvas-warm); border: 1px solid var(--line); border-radius: var(--r-md); border-left: 3px solid var(--caramel); }
-.implication-card h3 { font-family: var(--font-mono); font-size: .8rem; letter-spacing: .18em; color: var(--copper); margin-bottom: 10px; font-weight: 600; }
-.implication-card p { font-size: 1rem; color: var(--ink-mute); line-height: 1.75; }
-.glossary-list { list-style: none; padding: 0; }
-.glossary-list li { padding: 16px 0; border-bottom: 1px solid var(--line-soft); display: grid; grid-template-columns: 220px 1fr; gap: 24px; font-size: 1rem; line-height: 1.7; }
-.glossary-list li:last-child { border-bottom: none; }
-.glossary-list dt { font-family: var(--font-display); font-style: italic; font-size: 1.05rem; color: var(--espresso); font-weight: 600; }
-.glossary-list dd { color: var(--ink-mute); }
-@media (max-width: 600px) { .glossary-list li { grid-template-columns: 1fr; gap: 4px; } }
-.citation-block { margin-top: 12px; padding: 22px 24px; background: var(--canvas-warm); border: 1px solid var(--line); border-radius: var(--r-md); font-family: var(--font-mono); font-size: .85rem; color: var(--ink-mute); line-height: 1.7; word-break: break-word; }
-.links-row { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 18px; }
-.link-pill { display: inline-flex; align-items: center; gap: 8px; padding: 9px 16px; background: var(--canvas-warm); border: 1px solid var(--line); border-radius: var(--r-pill); font-family: var(--font-mono); font-size: .78rem; letter-spacing: .08em; color: var(--ink-mute); border-bottom: 1px solid var(--line); transition: border-color .2s, color .2s; }
-.link-pill:hover { color: var(--copper); border-color: var(--copper); }
-.charts-grid { display: grid; gap: 28px; grid-template-columns: 1fr; }
-@media (min-width: 720px) { .charts-grid { grid-template-columns: 1fr 1fr; } }
-.chart-card { padding: 24px 24px 18px; background: var(--canvas); border: 1px solid var(--line); border-radius: var(--r-md); }
-.chart-title { font-family: var(--font-display); font-size: 1.1rem; font-weight: 600; color: var(--ink); margin-bottom: 14px; line-height: 1.3; }
-.chart-svg { width: 100%; height: auto; display: block; }
-.chart-svg .bar { fill: var(--caramel); transition: fill .2s; }
-.chart-svg .bar.highlight { fill: var(--copper); }
-.chart-svg .axis-line { stroke: var(--line); stroke-width: 1; }
-.chart-svg .axis-label { font-family: var(--font-mono); font-size: 11px; fill: var(--ink-soft); }
-.chart-svg .value-label { font-family: var(--font-mono); font-size: 11px; font-weight: 600; fill: var(--espresso); }
-.chart-svg .y-label { font-family: var(--font-mono); font-size: 10px; fill: var(--ink-soft); letter-spacing: .1em; }
-.figures-grid { display: flex; flex-direction: column; gap: 24px; }
-.figure-card { border: 1px solid var(--line); border-radius: var(--r-md); overflow: hidden; }
-.figure-card img { width: 100%; }
-.figure-caption { padding: 14px 18px; font-size: .9rem; color: var(--ink-soft); font-family: var(--font-body); line-height: 1.6; background: var(--canvas-warm); border-top: 1px solid var(--line); }
-.source-basis { display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; background: rgba(201,152,106,.18); border: 1px solid rgba(181,112,61,.35); border-radius: var(--r-pill); font-family: var(--font-mono); font-size: .72rem; letter-spacing: .12em; color: var(--espresso); font-weight: 500; }
-.source-basis.abstract { background: rgba(107,94,82,.1); border-color: rgba(107,94,82,.3); color: var(--ink-soft); }
 .article-footer { padding: 36px 0 56px; border-top: 1px solid var(--line-soft); text-align: center; font-family: var(--font-mono); font-size: .75rem; letter-spacing: .14em; color: var(--ink-soft); }
 .article-footer a { color: var(--ink-mute); border-bottom: 1px solid transparent; }
 .article-footer a:hover { color: var(--copper); border-bottom-color: var(--copper); }
+.source-basis { display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; background: rgba(201,152,106,.18); border: 1px solid rgba(181,112,61,.35); border-radius: var(--r-pill); font-family: var(--font-mono); font-size: .72rem; letter-spacing: .12em; color: var(--espresso); font-weight: 500; }
+.source-basis.abstract { background: rgba(107,94,82,.1); border-color: rgba(107,94,82,.3); color: var(--ink-soft); }
+.links-row { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 18px; }
+.link-pill { display: inline-flex; align-items: center; gap: 8px; padding: 9px 16px; background: var(--canvas-warm); border: 1px solid var(--line); border-radius: var(--r-pill); font-family: var(--font-mono); font-size: .78rem; letter-spacing: .08em; color: var(--ink-mute); border-bottom: 1px solid var(--line); transition: border-color .2s, color .2s; }
+.link-pill:hover { color: var(--copper); border-color: var(--copper); }
+
+/* ===== EZ: 쉬운 설명 스타일 ===== */
+.ez-hero { text-align: center; padding: 8px 0 32px; }
+.ez-hero-emoji { font-size: 3.4rem; line-height: 1; }
+.ez-hero-title { font-family: var(--font-display); font-size: clamp(1.6rem, 3.5vw, 2.2rem); font-weight: 600; color: var(--ink); margin-top: 14px; line-height: 1.3; }
+.ez-section { margin-bottom: 52px; }
+.ez-section h2 { font-family: var(--font-body); font-size: 1.5rem; font-weight: 700; color: var(--ink); margin-bottom: 18px; letter-spacing: -0.01em; }
+.ez-section h3 { font-size: 1.08rem; font-weight: 600; color: var(--espresso); margin: 22px 0 10px; }
+.ez-section p { font-size: 1.04rem; line-height: 1.85; color: var(--ink-mute); margin-bottom: 14px; }
+.ez-section p:last-child { margin-bottom: 0; }
+.ez-section ul { padding-left: 22px; margin-bottom: 14px; }
+.ez-section li { font-size: 1.02rem; line-height: 1.8; color: var(--ink-mute); margin-bottom: 8px; }
+.ez-callout { margin: 14px 0; padding: 14px 18px; background: var(--canvas-warm); border-left: 3px solid var(--caramel); border-radius: 4px; font-size: 0.98rem; color: var(--espresso); line-height: 1.75; }
+.ez-callout strong { color: var(--copper); }
+.ez-findings { list-style: none; padding: 0; }
+.ez-findings > li { padding: 18px 22px; margin-bottom: 14px; background: var(--canvas-warm); border: 1px solid var(--line); border-radius: 10px; font-size: 1.02rem; line-height: 1.7; color: var(--ink-mute); }
+.ez-findings > li strong { color: var(--ink); display: block; margin-bottom: 4px; font-size: 1.06rem; }
+.ez-findings > li.gold { background: linear-gradient(135deg, #FFF8E7, #FFEFCD); border-color: #F0D67A; }
+.ez-findings > li.silver { background: linear-gradient(135deg, #F6F6F6, #ECECEC); border-color: #C7C7C7; }
+.ez-findings > li.bronze { background: linear-gradient(135deg, #FFEEDD, #FFDCC0); border-color: #E4B07F; }
+.ez-findings > li.medal { background: linear-gradient(135deg, #F0E6FF, #E1D2FF); border-color: #BDA8E5; }
+.ez-table { width: 100%; border-collapse: collapse; margin: 16px 0 8px; font-size: 0.96rem; }
+.ez-table th, .ez-table td { padding: 11px 14px; border: 1px solid var(--line); text-align: left; vertical-align: top; }
+.ez-table thead th { background: var(--ink); color: #fff; font-weight: 600; letter-spacing: .02em; }
+.ez-table tbody th { background: var(--canvas-warm); color: var(--ink); font-weight: 600; }
+.ez-table tbody tr:nth-child(even) td { background: rgba(250, 247, 242, .55); }
+.ez-summary { padding: 26px 30px; background: linear-gradient(135deg, #FAF0E0, #F3E1C5); border-radius: 14px; font-size: 1.13rem; line-height: 1.75; font-weight: 500; color: var(--ink); border: 1px solid #E5C99B; }
+.ez-summary strong { color: var(--espresso); }
+.ez-citation { margin-top: 24px; padding: 18px 22px; background: var(--canvas-warm); border-radius: 8px; font-family: var(--font-mono); font-size: 0.82rem; color: var(--ink-soft); line-height: 1.7; }
+.ez-citation p { margin: 4px 0; }
+.ez-chart-card { padding: 22px 24px 18px; background: var(--canvas); border: 1px solid var(--line); border-radius: 12px; margin: 16px 0; }
+.ez-chart-card .ez-chart-title { font-size: 1rem; font-weight: 600; color: var(--ink); margin-bottom: 14px; }
+.ez-bar-row { display: flex; align-items: center; margin: 10px 0; font-size: 0.95rem; gap: 14px; }
+.ez-bar-label { width: 180px; flex-shrink: 0; color: var(--ink-mute); font-weight: 500; }
+.ez-bar-track { flex: 1; height: 32px; background: var(--canvas-warm); border-radius: 6px; overflow: hidden; position: relative; border: 1px solid var(--line); }
+.ez-bar-fill { height: 100%; background: linear-gradient(90deg, var(--caramel), var(--copper)); display: flex; align-items: center; justify-content: flex-end; padding: 0 12px; color: white; font-weight: 700; font-size: 0.92rem; min-width: 56px; }
+.ez-bar-fill.alt { background: linear-gradient(90deg, #6F4E37, #4A3F36); }
+.ez-glossary { display: grid; gap: 12px; }
+.ez-glossary-item { padding: 16px 20px; background: var(--canvas-warm); border: 1px solid var(--line); border-radius: 10px; border-left: 3px solid var(--caramel); }
+.ez-glossary-term { font-family: var(--font-display); font-style: italic; font-size: 1.1rem; font-weight: 600; color: var(--espresso); margin-bottom: 6px; }
+.ez-glossary-def { font-size: 0.98rem; color: var(--ink-mute); line-height: 1.7; }
 @media (max-width: 720px) {
   .article-hero { padding: 36px 0 32px; }
   .article-body { padding: 36px 0 56px; }
-  .section-block { margin-bottom: 40px; }
-  .section-block h2 { font-size: 1.5rem; }
+  .ez-section { margin-bottom: 40px; }
+  .ez-section h2 { font-size: 1.3rem; }
+  .ez-bar-label { width: 100%; margin-bottom: 4px; }
+  .ez-bar-row { flex-direction: column; align-items: stretch; }
   .article-meta { gap: 12px 18px; font-size: .68rem; }
 }
 </style>
@@ -138,85 +146,131 @@ ul.findings li::before { content: counter(f, decimal-leading-zero); position: ab
   <section class="article-body">
     <div class="container">
 
-      {% if summary_paragraphs %}
-      <div class="section-block">
-        <h2>요약</h2>
-        {% for p in summary_paragraphs %}<p>{{ p|e }}</p>{% endfor %}
+      {# 친근 헤더: easy_hero_title 이 있으면 그걸 쓰고, 없으면 one_liner 를 활용 #}
+      <div class="ez-hero">
+        <div class="ez-hero-emoji">{{ easy_hero_emoji|default('☕') }}</div>
+        <div class="ez-hero-title">{{ (easy_hero_title or one_liner or title_ko)|e }}</div>
+      </div>
+
+      {# 🤔 무슨 연구야 — summary 또는 easy_intro_paragraphs #}
+      <div class="ez-section">
+        <h2>🤔 무슨 연구야?</h2>
+        {% if easy_intro_paragraphs %}
+          {% for p in easy_intro_paragraphs %}<p>{{ p|e }}</p>{% endfor %}
+        {% elif summary_paragraphs %}
+          {% for p in summary_paragraphs %}<p>{{ p|e }}</p>{% endfor %}
+        {% endif %}
+      </div>
+
+      {# 🧪 핵심 개념 — easy_concepts 가 있을 때만 #}
+      {% if easy_concepts %}
+      <div class="ez-section">
+        <h2>🧪 핵심 개념 쉽게 풀어보면</h2>
+        {% for c in easy_concepts %}
+          <h3>{{ c.title|e }}</h3>
+          <p>{{ c.body|e }}</p>
+          {% if c.analogy %}<div class="ez-callout">💡 {{ c.analogy|e }}</div>{% endif %}
+        {% endfor %}
       </div>
       {% endif %}
 
-      {% if key_findings %}
-      <div class="section-block">
-        <h2>핵심 발견</h2>
-        <ul class="findings">
-          {% for f in key_findings %}<li>{{ f|e }}</li>{% endfor %}
+      {# 🎯 핵심 발견 — easy_findings 가 있으면 메달 카드, 없으면 key_findings 폴백 #}
+      {% if easy_findings or key_findings %}
+      <div class="ez-section">
+        <h2>🎯 핵심 발견</h2>
+        <ul class="ez-findings">
+          {% set _medals = ['gold','silver','bronze','medal'] %}
+          {% if easy_findings %}
+            {% for f in easy_findings %}
+              <li class="{{ f.medal|default(_medals[loop.index0 % 4]) }}">
+                {% if f.title %}<strong>{{ f.title|e }}</strong>{% endif %}{{ f.body|e }}
+              </li>
+            {% endfor %}
+          {% else %}
+            {% for f in key_findings %}
+              <li class="{{ _medals[loop.index0 % 4] }}">{{ f|e }}</li>
+            {% endfor %}
+          {% endif %}
         </ul>
       </div>
       {% endif %}
 
-      {% if figures %}
-      <div class="section-block">
-        <h2>원문 그림</h2>
-        <div class="figures-grid">
-          {% for fig in figures %}
-          <figure class="figure-card">
-            <img src="{{ fig.src }}" alt="{{ fig.caption|default('') |e }}">
-            {% if fig.caption %}<figcaption class="figure-caption">{{ fig.caption|e }}</figcaption>{% endif %}
-          </figure>
-          {% endfor %}
-        </div>
-      </div>
-      {% endif %}
-
+      {# 📊 차트 — data_charts (가로 막대) #}
       {% if data_charts %}
-      <div class="section-block">
-        <h2>데이터로 보기</h2>
-        <div class="charts-grid" id="charts-grid"></div>
-      </div>
-      {% endif %}
-
-      {% if methodology %}
-      <div class="section-block">
-        <h2>방법론</h2>
-        <p>{{ methodology|e }}</p>
-      </div>
-      {% endif %}
-
-      {% if implications %}
-      <div class="section-block">
-        <h2>시사점</h2>
-        <div class="implications-grid">
-          {% for label, body in implications.items() %}
-          <div class="implication-card">
-            <h3>{{ label|e }}</h3>
-            <p>{{ body|e }}</p>
+      <div class="ez-section">
+        <h2>📊 숫자로 보기</h2>
+        {% for chart in data_charts %}
+          {% set _max = chart.values|map('float')|max %}
+          <div class="ez-chart-card">
+            <div class="ez-chart-title">{{ chart.title|e }}</div>
+            {% for v in chart.values %}
+              {% set _pct = (v / _max * 100) if _max > 0 else 0 %}
+              <div class="ez-bar-row">
+                <div class="ez-bar-label">{{ chart.x_labels[loop.index0]|e }}</div>
+                <div class="ez-bar-track"><div class="ez-bar-fill" style="width: {{ '%.1f'|format(_pct) }}%;">{{ v }}{{ chart.unit|default('') }}</div></div>
+              </div>
+            {% endfor %}
           </div>
-          {% endfor %}
-        </div>
+        {% endfor %}
       </div>
       {% endif %}
 
+      {# 🆚 비교표 — easy_tables #}
+      {% if easy_tables %}
+      {% for t in easy_tables %}
+      <div class="ez-section">
+        <h2>{{ t.title|default('🆚 비교')|e }}</h2>
+        <table class="ez-table">
+          {% if t.headers %}<thead><tr>{% for h in t.headers %}<th>{{ h|e }}</th>{% endfor %}</tr></thead>{% endif %}
+          <tbody>
+            {% for row in t.rows %}<tr>
+              {% for cell in row %}{% if loop.first %}<th>{{ cell|e }}</th>{% else %}<td>{{ cell|e }}</td>{% endif %}{% endfor %}
+            </tr>{% endfor %}
+          </tbody>
+        </table>
+      </div>
+      {% endfor %}
+      {% endif %}
+
+      {# 💼 누구한테 의미가 있을까 — implications 객체를 비교표로 #}
+      {% if implications %}
+      <div class="ez-section">
+        <h2>💼 누구한테 의미가 있을까?</h2>
+        <table class="ez-table">
+          <thead><tr><th>대상</th><th>의미</th></tr></thead>
+          <tbody>
+            {% for label, body in implications.items() %}
+              <tr><th>{{ label|e }}</th><td>{{ body|e }}</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      {% endif %}
+
+      {# ⚠️ 한계 #}
       {% if limitations %}
-      <div class="section-block">
-        <h2>한계</h2>
+      <div class="ez-section">
+        <h2>⚠️ 한계도 있어</h2>
         <p>{{ limitations|e }}</p>
       </div>
       {% endif %}
 
-      {% if glossary %}
-      <div class="section-block">
-        <h2>용어집</h2>
-        <ul class="glossary-list">
-          {% for g in glossary %}
-          <li><dt>{{ g.term|e }}</dt><dd>{{ g.ko|e }}</dd></li>
-          {% endfor %}
-        </ul>
+      {# 💡 한 줄 요약 — easy_summary 우선, 없으면 one_liner #}
+      {% if easy_summary or one_liner %}
+      <div class="ez-section">
+        <div class="ez-summary">💡 <strong>한 줄 요약</strong> — {{ (easy_summary or one_liner)|e }}</div>
       </div>
       {% endif %}
 
-      <div class="section-block">
-        <h2>인용 · 링크</h2>
-        {% if citation_apa %}<div class="citation-block">{{ citation_apa|e }}</div>{% endif %}
+      {# 📚 원문 정보 #}
+      <div class="ez-section">
+        <h2>📚 원문 정보</h2>
+        <div class="ez-citation">
+          {% if title_original %}<p><strong>📄 논문</strong> — {{ title_original|e }}</p>{% endif %}
+          {% if journal %}<p><strong>📰 저널</strong> — {{ journal|e }}{% if pub_date %} ({{ pub_date }}){% endif %}</p>{% endif %}
+          {% if authors %}<p><strong>👥 저자</strong> — {{ authors|e }}</p>{% endif %}
+          {% if doi %}<p><strong>🔗 DOI</strong> — <a href="https://doi.org/{{ doi }}" target="_blank" rel="noopener noreferrer" style="color: var(--copper);">{{ doi|e }}</a></p>{% endif %}
+        </div>
         <div class="links-row">
           {% if links.doi %}<a class="link-pill" href="{{ links.doi }}" target="_blank" rel="noopener noreferrer">DOI →</a>{% endif %}
           {% if links.oa_pdf %}<a class="link-pill" href="{{ links.oa_pdf }}" target="_blank" rel="noopener noreferrer">OA PDF →</a>{% endif %}
@@ -231,6 +285,22 @@ ul.findings li::before { content: counter(f, decimal-leading-zero); position: ab
         </div>
       </div>
 
+      {# 📖 어려운 말 풀이 사전 — 항상 마지막에 #}
+      {% if glossary %}
+      <div class="ez-section">
+        <h2>📖 어려운 말 풀이 사전</h2>
+        <p>이 글에 나온 어려운 약어와 용어를 한 번에 정리했어. 의미만 알면 본문이 훨씬 쉬워져!</p>
+        <div class="ez-glossary">
+          {% for g in glossary %}
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">{{ g.term|e }}</div>
+            <div class="ez-glossary-def">{{ g.ko|e }}</div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      {% endif %}
+
     </div>
   </section>
 
@@ -242,60 +312,6 @@ ul.findings li::before { content: counter(f, decimal-leading-zero); position: ab
     </div>
   </footer>
 </article>
-
-{% if data_charts %}
-<script>
-const CHARTS = {{ data_charts_json|safe }};
-function renderBarChart(chart) {
-  const W = 520, H = 280;
-  const PAD_L = 50, PAD_R = 16, PAD_T = 18, PAD_B = 56;
-  const plotW = W - PAD_L - PAD_R;
-  const plotH = H - PAD_T - PAD_B;
-  const max = Math.max(...chart.values);
-  const min = Math.min(...chart.values, 0);
-  const yMax = max + (max - min) * 0.12;
-  const yMin = min < 0 ? min : 0;
-  const yRange = yMax - yMin || 1;
-  const n = chart.values.length;
-  const slot = plotW / n;
-  const barW = Math.min(slot * 0.6, 80);
-  function yFor(v) { return PAD_T + plotH - ((v - yMin) / yRange) * plotH; }
-  const ticks = 4;
-  let gridSvg = "";
-  for (let i = 0; i <= ticks; i++) {
-    const v = yMin + (yRange / ticks) * i;
-    const y = yFor(v);
-    gridSvg += `<line class="axis-line" x1="${PAD_L}" y1="${y}" x2="${PAD_L + plotW}" y2="${y}"/>`;
-    gridSvg += `<text class="axis-label" x="${PAD_L - 8}" y="${y + 4}" text-anchor="end">${Number(v.toFixed(1))}</text>`;
-  }
-  const maxIdx = chart.values.indexOf(max);
-  let barsSvg = "";
-  for (let i = 0; i < n; i++) {
-    const v = chart.values[i];
-    const x = PAD_L + slot * i + (slot - barW) / 2;
-    const y = yFor(v);
-    const h = (PAD_T + plotH) - y;
-    const cls = i === maxIdx ? "bar highlight" : "bar";
-    barsSvg += `<rect class="${cls}" x="${x}" y="${y}" width="${barW}" height="${h}" rx="3"/>`;
-    barsSvg += `<text class="value-label" x="${x + barW / 2}" y="${y - 6}" text-anchor="middle">${v}${chart.unit || ""}</text>`;
-    const label = String(chart.x_labels[i] || "");
-    barsSvg += `<text class="axis-label" x="${x + barW / 2}" y="${PAD_T + plotH + 18}" text-anchor="middle">${label}</text>`;
-  }
-  const yTitle = chart.y_label ? `<text class="y-label" x="${PAD_L}" y="${PAD_T - 6}">${chart.y_label}${chart.unit ? " (" + chart.unit + ")" : ""}</text>` : "";
-  return `<svg class="chart-svg" viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid meet" role="img" aria-label="${chart.title}">${yTitle}${gridSvg}${barsSvg}</svg>`;
-}
-(function () {
-  const grid = document.getElementById("charts-grid");
-  if (!grid) return;
-  CHARTS.forEach(function (c) {
-    const card = document.createElement("div");
-    card.className = "chart-card";
-    card.innerHTML = `<div class="chart-title">${c.title}</div>` + (c.type === "bar" ? renderBarChart(c) : "");
-    grid.appendChild(card);
-  });
-})();
-</script>
-{% endif %}
 
 </body>
 </html>

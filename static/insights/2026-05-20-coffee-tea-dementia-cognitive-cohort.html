@@ -102,6 +102,63 @@ ul.findings li::before { content: counter(f, decimal-leading-zero); position: ab
   .section-block h2 { font-size: 1.5rem; }
   .article-meta { gap: 12px 18px; font-size: .68rem; }
 }
+
+/* ===== EZ: 쉬운 설명 스타일 ===== */
+.ez-glossary { display: grid; gap: 12px; }
+.ez-glossary-item { padding: 16px 20px; background: var(--canvas-warm); border: 1px solid var(--line); border-radius: 10px; border-left: 3px solid var(--caramel); }
+.ez-glossary-term { font-family: var(--font-display); font-style: italic; font-size: 1.1rem; font-weight: 600; color: var(--espresso); margin-bottom: 6px; }
+.ez-glossary-def { font-size: 0.98rem; color: var(--ink-mute); line-height: 1.7; }
+
+.ez-hero { text-align: center; padding: 8px 0 32px; }
+.ez-hero-emoji { font-size: 3.4rem; line-height: 1; }
+.ez-hero-title { font-family: var(--font-display); font-size: clamp(1.6rem, 3.5vw, 2.2rem); font-weight: 600; color: var(--ink); margin-top: 14px; line-height: 1.3; }
+.ez-section { margin-bottom: 52px; }
+.ez-section h2 { font-family: var(--font-body); font-size: 1.5rem; font-weight: 700; color: var(--ink); margin-bottom: 18px; letter-spacing: -0.01em; }
+.ez-section h3 { font-size: 1.08rem; font-weight: 600; color: var(--espresso); margin: 22px 0 10px; }
+.ez-section p { font-size: 1.04rem; line-height: 1.85; color: var(--ink-mute); margin-bottom: 14px; }
+.ez-section p:last-child { margin-bottom: 0; }
+.ez-section ul { padding-left: 22px; margin-bottom: 14px; }
+.ez-section li { font-size: 1.02rem; line-height: 1.8; color: var(--ink-mute); margin-bottom: 8px; }
+.ez-callout { margin: 14px 0; padding: 14px 18px; background: var(--canvas-warm); border-left: 3px solid var(--caramel); border-radius: 4px; font-size: 0.98rem; color: var(--espresso); line-height: 1.75; }
+.ez-callout strong { color: var(--copper); }
+.ez-findings { list-style: none; padding: 0; }
+.ez-findings > li { padding: 18px 22px; margin-bottom: 14px; background: var(--canvas-warm); border: 1px solid var(--line); border-radius: 10px; font-size: 1.02rem; line-height: 1.7; color: var(--ink-mute); }
+.ez-findings > li strong { color: var(--ink); display: block; margin-bottom: 4px; font-size: 1.06rem; }
+.ez-findings > li.gold { background: linear-gradient(135deg, #FFF8E7, #FFEFCD); border-color: #F0D67A; }
+.ez-findings > li.silver { background: linear-gradient(135deg, #F6F6F6, #ECECEC); border-color: #C7C7C7; }
+.ez-findings > li.bronze { background: linear-gradient(135deg, #FFEEDD, #FFDCC0); border-color: #E4B07F; }
+.ez-findings > li.medal { background: linear-gradient(135deg, #F0E6FF, #E1D2FF); border-color: #BDA8E5; }
+.ez-table { width: 100%; border-collapse: collapse; margin: 16px 0 8px; font-size: 0.96rem; }
+.ez-table th, .ez-table td { padding: 11px 14px; border: 1px solid var(--line); text-align: left; vertical-align: top; }
+.ez-table thead th { background: var(--ink); color: #fff; font-weight: 600; letter-spacing: .02em; }
+.ez-table tbody th { background: var(--canvas-warm); color: var(--ink); font-weight: 600; }
+.ez-table tbody tr:nth-child(even) td { background: rgba(250, 247, 242, .55); }
+.ez-summary { padding: 26px 30px; background: linear-gradient(135deg, #FAF0E0, #F3E1C5); border-radius: 14px; font-size: 1.13rem; line-height: 1.75; font-weight: 500; color: var(--ink); border: 1px solid #E5C99B; }
+.ez-summary strong { color: var(--espresso); }
+.ez-citation { margin-top: 24px; padding: 18px 22px; background: var(--canvas-warm); border-radius: 8px; font-family: var(--font-mono); font-size: 0.82rem; color: var(--ink-soft); line-height: 1.7; }
+.ez-citation p { margin: 4px 0; }
+.ez-chart-card { padding: 22px 24px 18px; background: var(--canvas); border: 1px solid var(--line); border-radius: 12px; margin: 16px 0; }
+.ez-chart-card .ez-chart-title { font-size: 1rem; font-weight: 600; color: var(--ink); margin-bottom: 14px; }
+.ez-bar-row { display: flex; align-items: center; margin: 10px 0; font-size: 0.95rem; gap: 14px; }
+.ez-bar-label { width: 180px; flex-shrink: 0; color: var(--ink-mute); font-weight: 500; }
+.ez-bar-track { flex: 1; height: 32px; background: var(--canvas-warm); border-radius: 6px; overflow: hidden; position: relative; border: 1px solid var(--line); }
+.ez-bar-fill { height: 100%; background: linear-gradient(90deg, var(--caramel), var(--copper)); display: flex; align-items: center; justify-content: flex-end; padding: 0 12px; color: white; font-weight: 700; font-size: 0.92rem; min-width: 56px; }
+.ez-bar-fill.alt { background: linear-gradient(90deg, #6F4E37, #4A3F36); }
+.ez-bar-fill.cool { background: linear-gradient(90deg, #6A8FB5, #3D6FB5); }
+.ez-infographic { padding: 24px; background: var(--canvas-warm); border-radius: 12px; margin: 20px 0; border: 1px solid var(--line); }
+.ez-infographic svg { width: 100%; height: auto; display: block; }
+.ez-infographic-caption { margin-top: 12px; font-size: 0.88rem; color: var(--ink-soft); text-align: center; font-style: italic; }
+.ez-flow { display: flex; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap; margin: 16px 0; }
+.ez-flow-step { padding: 14px 18px; background: var(--canvas-warm); border: 2px solid var(--caramel); border-radius: 10px; font-weight: 600; color: var(--espresso); text-align: center; min-width: 120px; }
+.ez-flow-step .ez-flow-emoji { font-size: 1.6rem; display: block; margin-bottom: 6px; }
+.ez-flow-arrow { font-size: 1.6rem; color: var(--copper); font-weight: 700; }
+@media (max-width: 720px) {
+  .ez-bar-label { width: 100%; margin-bottom: 4px; }
+  .ez-bar-row { flex-direction: column; align-items: stretch; }
+  .ez-flow { flex-direction: column; }
+  .ez-flow-arrow { transform: rotate(90deg); }
+  .ez-section h2 { font-size: 1.3rem; }
+}
 </style>
 </head>
 <body>
@@ -138,106 +195,202 @@ ul.findings li::before { content: counter(f, decimal-leading-zero); position: ab
   <section class="article-body">
     <div class="container">
 
-      
-      <div class="section-block">
-        <h2>요약</h2>
-        <p>커피는 전 세계에서 가장 많이 소비되는 음료 중 하나이며, 역학 연구들은 꾸준히 커피 섭취와 치매 위험 감소의 연관성을 제시해 왔다. Yu Zhang 등은 미국의 두 대규모 장기 추적 코호트—간호사 건강 연구(NHS, n=86,606)와 보건 전문직 추적 연구(HPFS, n=45,215)—를 결합해 역사상 가장 긴 추적 기간(최장 43년, 중앙값 36.8년)과 최대 표본(131,821명)으로 카페인 커피·디카페인 커피·차 섭취와 치매 발생 위험 및 인지 기능의 관계를 분석했다. 카페인 커피 최고 섭취군은 최저 섭취군 대비 치매 위험이 18% 낮았고(HR 0.82, 95% CI 0.76–0.89), 주관적 인지 저하 유병률도 7.8% vs. 9.5%로 낮았다. 결정적으로 디카페인 커피는 두 결과 모두에서 유의미한 연관성이 없어 카페인이 핵심 활성 성분임을 시사한다. 카페인은 뇌의 아데노신 A1/A2A 수용체를 경쟁적으로 차단해 도파민·아세틸콜린 등 신경전달물질 방출을 유지하는 메커니즘이 유력하다.</p>
+      <div class="ez-hero">
+        <div class="ez-hero-emoji">🧠</div>
+        <div class="ez-hero-title">커피 마시는 사람이 치매에 덜 걸린다고? 43년 추적해 봤더니</div>
       </div>
-      
 
-      
-      <div class="section-block">
-        <h2>핵심 발견</h2>
-        <ul class="findings">
-          <li>카페인 커피 최고 섭취군 vs. 최저 섭취군: 치매 HR 0.82 (95% CI 0.76–0.89), 18% 위험 감소</li><li>최적 섭취량: 카페인 커피 2~3컵/일 또는 차 1~2컵/일 (비선형 용량반응)</li><li>주관적 인지 저하 유병률: 최고 섭취군 7.8% vs. 최저 섭취군 9.5%</li><li>디카페인 커피: 치매 위험 감소 및 인지 기능 향상과 무관 → 카페인이 핵심</li><li>차(tea) 섭취도 유사한 인지 보호 연관성 — 1~2컵/일 최적</li><li>NHS 코호트: 카페인 커피 높은 섭취군이 객관적 인지 기능 검사에서도 더 좋은 수행</li>
+      <div class="ez-section">
+        <h2>🤔 무슨 연구야?</h2>
+        <p>"커피 마시면 머리에 좋다"는 얘기 들어봤지? 실제로 그런지 미국 하버드 보건대학원 연구팀이 <strong>43년 동안 13만 명</strong>을 추적해서 정답을 찾았어. 의학 분야 최고 학술지 <strong>JAMA</strong>에 실린 진짜 큰 연구야.</p>
+        <div class="ez-callout">📏 <strong>이 연구의 무게감</strong> — 추적 기간 <strong>최장 43년 (중앙값 36.8년)</strong>, 참여자 <strong>131,821명</strong>, 치매 발생 <strong>11,033건</strong>. 커피-치매 관계 연구 중 역대 최대 규모.</div>
+      </div>
+
+      <div class="ez-section">
+        <h2>🧪 잠깐, 용어 살짝 풀고 가자</h2>
+
+        <h3>1️⃣ 코호트 연구가 뭐야?</h3>
+        <p>특정 집단을 <strong>오랫동안 추적</strong>하면서 누가 어떤 병에 걸리는지 보는 연구야. 이번엔 미국의 두 큰 코호트를 합쳤어:</p>
+        <ul>
+          <li>👩‍⚕️ <strong>NHS</strong> — 간호사 8만 6천 명, 1980년부터</li>
+          <li>👨‍⚕️ <strong>HPFS</strong> — 보건 전문직 4만 5천 명, 1986년부터</li>
         </ul>
+
+        <h3>2️⃣ HR(위험비) 이 뭐야?</h3>
+        <p>HR은 <strong>"커피 잘 마시는 그룹이 안 마시는 그룹보다 치매에 몇 배 잘 걸리나"</strong>를 나타내는 숫자. 1보다 작으면 위험 감소, 크면 위험 증가.</p>
+        <div class="ez-callout">💡 비유: HR 0.82 = <strong>"커피 마시는 사람이 안 마시는 사람보다 0.82배 위험"</strong> = <strong>"18% 적게 걸린다"</strong>는 뜻.</div>
+
+        <h3>3️⃣ 아데노신 수용체란?</h3>
+        <p>뇌에 있는 <strong>"피곤해, 쉬자" 신호 받는 스위치</strong>야. 아데노신이라는 분자가 이 스위치를 누르면 뇌가 졸리고 활동이 둔해져. <strong>카페인이 이 스위치를 가로채서</strong> 못 누르게 하는 거 — 그게 커피 마시면 정신이 맑아지는 이유.</p>
       </div>
-      
 
-      
-
-      
-      <div class="section-block">
-        <h2>데이터로 보기</h2>
-        <div class="charts-grid" id="charts-grid"></div>
-      </div>
-      
-
-      
-      <div class="section-block">
-        <h2>방법론</h2>
-        <p>NHS(여성 86,606명, 1980~2023) + HPFS(남성 45,215명, 1986~2023) 두 전향적 코호트 병렬 분석. 총 131,821명, 최장 43년 추적(중앙값 36.8년), 치매 11,033건. 식이 노출은 2~4년마다 검증된 FFQ 반복 측정·누적 평균. Cox 비례위험 모델 + 제한 3차 스플라인으로 비선형 용량반응 평가. 주요 교란 변수 다변수 보정.</p>
-      </div>
-      
-
-      
-      <div class="section-block">
-        <h2>시사점</h2>
-        <div class="implications-grid">
-          
-          <div class="implication-card">
-            <h3>농가 · 가공장</h3>
-            <p>해당 없음 (역학·임상 연구로 재배·가공 단계와 직접 관련 없음)</p>
+      <div class="ez-section">
+        <h2>📊 충격 결과 — 치매 위험 18% 감소</h2>
+        <div class="ez-chart-card">
+          <div class="ez-chart-title">카페인 커피 최고 vs 최저 섭취군 치매 위험비 (HR)</div>
+          <div class="ez-bar-row">
+            <div class="ez-bar-label">최저 섭취군 (기준)</div>
+            <div class="ez-bar-track"><div class="ez-bar-fill alt" style="width: 100%;">HR 1.00</div></div>
           </div>
-          
-          <div class="implication-card">
-            <h3>로스터 · 큐그레이더</h3>
-            <p>카페인 커피의 인지 보호 효과 증거가 강화되어 카페인 커피 가치를 강조하는 마케팅 내러티브 근거로 활용 가능. 하루 2~3잔 최적 섭취량을 고객 안내 자료에 인용 가능. 로스팅 정도·추출 방식에 따른 카페인 함량 변이 정보를 함께 제공하는 것이 권장됨.</p>
+          <div class="ez-bar-row">
+            <div class="ez-bar-label">최고 섭취군</div>
+            <div class="ez-bar-track"><div class="ez-bar-fill" style="width: 82%;">HR 0.82 (18% ↓) 🎉</div></div>
           </div>
-          
-          <div class="implication-card">
-            <h3>R&amp;D</h3>
-            <p>아데노신 A1/A2A 수용체 차단 기전 확인으로 후속 과제 명확화. 로스팅 정도별 카페인 잔존량과 신경보호 효과 상관 분석, CYP1A2 유전 다형성 기반 개인 맞춤 최적 섭취량 연구, 카페인 이외 커피 성분(클로로젠산·카웨올·카페스톨)과 아데노신 경로 상호작용 기전 규명이 핵심 후속 과제.</p>
-          </div>
-          
         </div>
+        <p>"최고 섭취군"은 <strong>여성 약 4.5컵/일, 남성 약 2.5컵/일</strong> 정도. 우유나 시럽 들어간 라떼·카푸치노 말고, <strong>카페인이 들어있는 일반 커피</strong> 기준이야.</p>
       </div>
-      
 
-      
-      <div class="section-block">
-        <h2>한계</h2>
-        <p>관찰 연구로 인과관계 확립 불가(역인과성 가능성). FFQ에서 커피 종류·컵 크기·카페인 농도 개별 포착 한계. 고학력 백인 미국인 코호트 편중으로 일반화 제한. 디카페인 처리 시 다른 생리활성 성분도 변화해 카페인만의 독립 효과 단정 어려움. 객관적 인지 검사가 NHS 일부에서만 수행.</p>
+      <div class="ez-section">
+        <h2>📈 인지 저하 유병률도 차이 났다</h2>
+        <div class="ez-chart-card">
+          <div class="ez-chart-title">주관적 인지 저하(SCD) 유병률</div>
+          <div class="ez-bar-row">
+            <div class="ez-bar-label">최저 섭취군</div>
+            <div class="ez-bar-track"><div class="ez-bar-fill alt" style="width: 95%;">9.5%</div></div>
+          </div>
+          <div class="ez-bar-row">
+            <div class="ez-bar-label">최고 섭취군</div>
+            <div class="ez-bar-track"><div class="ez-bar-fill" style="width: 78%;">7.8% (↓)</div></div>
+          </div>
+        </div>
+        <p><strong>주관적 인지 저하(SCD)</strong> 는 "내가 요즘 깜빡깜빡해" 같은 본인 느낌. 치매로 가는 전조 신호로 의학에서 추적해. 커피 많이 마신 사람이 이 비율도 낮았어.</p>
       </div>
-      
 
-      
-      <div class="section-block">
-        <h2>용어집</h2>
-        <ul class="glossary-list">
-          
-          <li><dt>Hazard Ratio (HR)</dt><dd>위험비 — 생존 분석에서 노출군 대 비노출군의 사건 발생 순간 위험 비율</dd></li>
-          
-          <li><dt>Adenosine A1/A2A Receptors</dt><dd>아데노신 A1/A2A 수용체 — 뇌에서 신경 활성 억제 및 신경전달물질 방출 감소를 매개; 카페인이 경쟁적으로 차단</dd></li>
-          
-          <li><dt>FFQ (Food Frequency Questionnaire)</dt><dd>식품 빈도 설문지 — 역학 연구 표준 식이 측정 도구</dd></li>
-          
-          <li><dt>Cumulative Average</dt><dd>누적 평균 — 반복 측정값을 시간 경과에 따라 업데이트한 평균</dd></li>
-          
-          <li><dt>Subjective Cognitive Decline</dt><dd>주관적 인지 저하(SCD) — 본인이 인식하나 객관 검사 정상; 치매 전구 지표</dd></li>
-          
-          <li><dt>Restricted Cubic Spline</dt><dd>제한 3차 스플라인 — 비선형 용량반응 관계 모델링 통계 기법</dd></li>
-          
-          <li><dt>CYP1A2</dt><dd>카페인 주요 대사 효소; 유전 다형성에 따라 개인별 카페인 대사 속도 차이</dd></li>
-          
+      <div class="ez-section">
+        <h2>⚡ 핵심 충격 — 디카페인은 효과 없었다!</h2>
+        <p>이 연구에서 가장 강력한 메시지야:</p>
+        <table class="ez-table">
+          <thead><tr><th>음료</th><th>치매 위험 감소</th></tr></thead>
+          <tbody>
+            <tr><th>☕ 일반 커피 (카페인)</th><td>✅ <strong>18% 감소</strong></td></tr>
+            <tr><th>🍵 차 (카페인 함유)</th><td>✅ 비슷한 효과 (1~2컵/일 최적)</td></tr>
+            <tr><th>☕ 디카페인 커피</th><td>❌ <strong>효과 없음</strong></td></tr>
+          </tbody>
+        </table>
+        <div class="ez-callout"><strong>의미:</strong> 카페인이 핵심 활성 성분. 디카페인은 폴리페놀은 있지만 카페인이 없어서 인지 보호 효과가 안 나옴. 즉 <strong>"커피의 인지 보호 = 주로 카페인의 힘"</strong>.</div>
+      </div>
+
+      <div class="ez-section">
+        <h2>🎯 최적 섭취량 — 너무 많아도 안 좋다</h2>
+        <p>연구는 <strong>비선형 용량반응</strong>도 확인했어. 즉 마실수록 좋은 게 아니라 적정선이 있다는 뜻.</p>
+        <div class="ez-infographic">
+          <svg viewBox="0 0 600 220" xmlns="http://www.w3.org/2000/svg">
+            <line x1="60" y1="180" x2="540" y2="180" stroke="#6B5E52" stroke-width="2"/>
+            <line x1="60" y1="180" x2="60" y2="40" stroke="#6B5E52" stroke-width="2"/>
+            <text x="540" y="200" text-anchor="end" font-size="12" fill="#6B5E52">카페인 커피 (컵/일)</text>
+            <text x="50" y="50" text-anchor="end" font-size="12" fill="#6B5E52">위험 감소</text>
+            <path d="M 60 165 Q 180 100 280 80 Q 380 75 480 105 L 540 130" fill="none" stroke="#C9986A" stroke-width="3"/>
+            <circle cx="280" cy="80" r="8" fill="#B5703D"/>
+            <text x="280" y="65" text-anchor="middle" font-size="13" font-weight="700" fill="#1A1410">최적 ⭐</text>
+            <text x="280" y="200" text-anchor="middle" font-size="12" fill="#6B5E52">2~3컵</text>
+            <text x="60" y="200" text-anchor="middle" font-size="12" fill="#6B5E52">0</text>
+            <text x="480" y="200" text-anchor="middle" font-size="12" fill="#6B5E52">5+</text>
+            <text x="300" y="160" text-anchor="middle" font-size="12" fill="#B5703D" font-style="italic">너무 많이 마시면 다시 위험 증가 추세</text>
+          </svg>
+          <div class="ez-infographic-caption">U자형(역U자형) 곡선 — 적정 섭취가 핵심, 과다 섭취는 도리어 손해</div>
+        </div>
+        <p>가장 좋은 양: <strong>카페인 커피 2~3컵/일</strong> 또는 <strong>차 1~2컵/일</strong>. 너무 많이 마시면 효과가 줄어들거나 다른 부작용(불면·심장 두근거림) 가능성.</p>
+      </div>
+
+      <div class="ez-section">
+        <h2>🧬 어떻게 막아주는 걸까?</h2>
+        <p>카페인이 뇌의 <strong>아데노신 A1/A2A 수용체</strong>를 막아서:</p>
+        <ul>
+          <li>💃 <strong>도파민·아세틸콜린 같은 행복·기억 신호 물질</strong> 방출이 유지됨</li>
+          <li>🛡️ <strong>신경 세포가 죽지 않게 보호</strong></li>
+          <li>🧠 <strong>뇌혈류 유지</strong></li>
+        </ul>
+        <div class="ez-callout">💡 비유: 뇌의 "쉬자" 알람을 카페인이 가로채서 꺼주는 거. 결과적으로 뇌가 활동적으로 유지됨.</div>
+      </div>
+
+      <div class="ez-section">
+        <h2>🎯 핵심 발견 4가지</h2>
+        <ul class="ez-findings">
+          <li class="gold"><strong>🥇 카페인 커피 = 치매 위험 18% 감소</strong>HR 0.82 (95% CI 0.76–0.89). 43년 추적, 13만 명 데이터로 확립.</li>
+          <li class="silver"><strong>🥈 디카페인은 효과 없음 → 카페인이 핵심</strong>커피 자체가 아니라 카페인이 인지 보호 주역.</li>
+          <li class="bronze"><strong>🥉 적정량은 2~3컵/일 (차는 1~2컵)</strong>너무 많이 마시면 효과 감소. 비선형 용량반응.</li>
+          <li class="medal"><strong>🏅 주관적 인지 저하도 1.7%p 차이</strong>9.5% → 7.8% (최저 vs 최고 섭취군). 치매 전 단계도 보호.</li>
         </ul>
       </div>
-      
 
-      <div class="section-block">
-        <h2>인용 · 링크</h2>
-        <div class="citation-block">Zhang, Y., Liu, Y., Li, Y., Li, Y., Gu, X., Kang, J. H., Eliassen, A. H., Wang, M., Rimm, E. B., Willett, W. C., Hu, F. B., Stampfer, M. J., &amp; Wang, D. D. (2026). Coffee and tea intake, dementia risk, and cognitive function. JAMA, 335(11), 961. https://doi.org/10.1001/jama.2025.27259</div>
+      <div class="ez-section">
+        <h2>💼 누구한테 의미가 있을까?</h2>
+        <table class="ez-table">
+          <thead><tr><th>대상</th><th>의미</th></tr></thead>
+          <tbody>
+            <tr><th>커피 마시는 사람</th><td>매일 2~3잔의 일반 커피는 <strong>장기 인지 건강에 긍정적</strong>. 단, 디카페인으로는 이 효과 못 봄.</td></tr>
+            <tr><th>로스터·카페</th><td>커피의 건강 가치를 강조하는 마케팅 근거. 카페인 함량 안내가 의미 있어짐.</td></tr>
+            <tr><th>의료진</th><td>치매 예방 관점에서 카페인 커피의 적정 섭취 권장 가능. 단, 개인별 카페인 대사 속도(CYP1A2 유전자) 차이 고려.</td></tr>
+            <tr><th>R&amp;D</th><td>로스팅·추출이 카페인 함량에 미치는 영향, 카페인 외 성분(클로로젠산 등)과 인지 보호 상호작용 연구 방향.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="ez-section">
+        <h2>⚠️ 한계도 있어</h2>
+        <ul>
+          <li><strong>관찰 연구</strong>라 인과관계 단정은 어려움 — "커피 마셔서 치매 줄어든 것"인지 "치매 안 걸릴 사람이 커피 잘 마시는 것"인지 100% 구분 못함</li>
+          <li>식이 설문(FFQ)이라 정확한 컵 크기·카페인 농도는 못 잡음</li>
+          <li>주로 미국·고학력·백인 코호트 → 다른 인종·문화 일반화 한계</li>
+          <li>디카페인 처리 과정에서 다른 성분도 변화하므로 카페인만의 독립 효과는 단정 어려움</li>
+        </ul>
+      </div>
+
+      <div class="ez-section">
+        <div class="ez-summary">💡 <strong>한 줄 요약</strong> — <strong>43년 추적, 13만 명 연구</strong>에서 카페인 커피를 <strong>하루 2~3잔</strong> 마신 사람은 치매 위험이 <strong>18% 낮았다</strong>. 디카페인은 효과 없음 → 핵심은 <strong>카페인</strong>. 뇌의 아데노신 수용체를 차단해 신경 보호 신호가 유지되는 게 메커니즘.</div>
+      </div>
+
+      <div class="ez-section">
+        <h2>📚 원문 정보</h2>
+        <div class="ez-citation">
+          <p><strong>📄 논문</strong> — Coffee and Tea Intake, Dementia Risk, and Cognitive Function</p>
+          <p><strong>📰 저널</strong> — JAMA (Journal of the American Medical Association), 2026-02-09</p>
+          <p><strong>👥 저자</strong> — Zhang, Liu, Li 외 (Harvard T.H. Chan School of Public Health)</p>
+          <p><strong>🔗 DOI</strong> — <a href="https://doi.org/10.1001/jama.2025.27259" target="_blank" rel="noopener noreferrer" style="color: var(--copper);">10.1001/jama.2025.27259</a></p>
+        </div>
         <div class="links-row">
           <a class="link-pill" href="https://doi.org/10.1001/jama.2025.27259" target="_blank" rel="noopener noreferrer">DOI →</a>
-          
           <a class="link-pill" href="https://jamanetwork.com/journals/jama" target="_blank" rel="noopener noreferrer">JOURNAL HOMEPAGE →</a>
         </div>
         <div style="margin-top: 18px;">
-          
           <span class="source-basis abstract">ABSTRACT BASIS</span>
-          
         </div>
       </div>
+      <div class="ez-section">
+        <h2>📖 어려운 말 풀이 사전</h2>
+        <p>이 글에 나온 어려운 약어와 용어를 한 번에 정리했어. 의미만 알면 본문이 훨씬 쉬워져!</p>
+        <div class="ez-glossary">
+        <div class="ez-glossary-item">
+          <div class="ez-glossary-term">Hazard Ratio (HR)</div>
+          <div class="ez-glossary-def">위험비 — 생존 분석에서 노출군 대 비노출군의 사건 발생 순간 위험 비율</div>
+        </div>
+        <div class="ez-glossary-item">
+          <div class="ez-glossary-term">Adenosine A1/A2A Receptors</div>
+          <div class="ez-glossary-def">아데노신 A1/A2A 수용체 — 뇌에서 신경 활성 억제 및 신경전달물질 방출 감소를 매개; 카페인이 경쟁적으로 차단</div>
+        </div>
+        <div class="ez-glossary-item">
+          <div class="ez-glossary-term">FFQ (Food Frequency Questionnaire)</div>
+          <div class="ez-glossary-def">식품 빈도 설문지 — 역학 연구 표준 식이 측정 도구</div>
+        </div>
+        <div class="ez-glossary-item">
+          <div class="ez-glossary-term">Cumulative Average</div>
+          <div class="ez-glossary-def">누적 평균 — 반복 측정값을 시간 경과에 따라 업데이트한 평균</div>
+        </div>
+        <div class="ez-glossary-item">
+          <div class="ez-glossary-term">Subjective Cognitive Decline</div>
+          <div class="ez-glossary-def">주관적 인지 저하(SCD) — 본인이 인식하나 객관 검사 정상; 치매 전구 지표</div>
+        </div>
+        <div class="ez-glossary-item">
+          <div class="ez-glossary-term">Restricted Cubic Spline</div>
+          <div class="ez-glossary-def">제한 3차 스플라인 — 비선형 용량반응 관계 모델링 통계 기법</div>
+        </div>
+        <div class="ez-glossary-item">
+          <div class="ez-glossary-term">CYP1A2</div>
+          <div class="ez-glossary-def">카페인 주요 대사 효소; 유전 다형성에 따라 개인별 카페인 대사 속도 차이</div>
+        </div>
+        </div>
+      </div>
+
 
     </div>
   </section>
@@ -251,58 +404,6 @@ ul.findings li::before { content: counter(f, decimal-leading-zero); position: ab
   </footer>
 </article>
 
-
-<script>
-const CHARTS = [{"type": "bar", "title": "카페인 커피 최고 vs. 최저 섭취군 치매 위험비 비교", "x_labels": ["최저 섭취군 (기준)", "최고 섭취군 (~4.5컵/일·여성, ~2.5컵/일·남성)"], "y_label": "치매 위험비 (HR)", "values": [1.0, 0.82], "unit": "HR"}, {"type": "bar", "title": "카페인 커피 섭취군별 주관적 인지 저하 유병률", "x_labels": ["최고 섭취군", "최저 섭취군"], "y_label": "주관적 인지 저하 유병률", "values": [7.8, 9.5], "unit": "%"}];
-function renderBarChart(chart) {
-  const W = 520, H = 280;
-  const PAD_L = 50, PAD_R = 16, PAD_T = 18, PAD_B = 56;
-  const plotW = W - PAD_L - PAD_R;
-  const plotH = H - PAD_T - PAD_B;
-  const max = Math.max(...chart.values);
-  const min = Math.min(...chart.values, 0);
-  const yMax = max + (max - min) * 0.12;
-  const yMin = min < 0 ? min : 0;
-  const yRange = yMax - yMin || 1;
-  const n = chart.values.length;
-  const slot = plotW / n;
-  const barW = Math.min(slot * 0.6, 80);
-  function yFor(v) { return PAD_T + plotH - ((v - yMin) / yRange) * plotH; }
-  const ticks = 4;
-  let gridSvg = "";
-  for (let i = 0; i <= ticks; i++) {
-    const v = yMin + (yRange / ticks) * i;
-    const y = yFor(v);
-    gridSvg += `<line class="axis-line" x1="${PAD_L}" y1="${y}" x2="${PAD_L + plotW}" y2="${y}"/>`;
-    gridSvg += `<text class="axis-label" x="${PAD_L - 8}" y="${y + 4}" text-anchor="end">${Number(v.toFixed(1))}</text>`;
-  }
-  const maxIdx = chart.values.indexOf(max);
-  let barsSvg = "";
-  for (let i = 0; i < n; i++) {
-    const v = chart.values[i];
-    const x = PAD_L + slot * i + (slot - barW) / 2;
-    const y = yFor(v);
-    const h = (PAD_T + plotH) - y;
-    const cls = i === maxIdx ? "bar highlight" : "bar";
-    barsSvg += `<rect class="${cls}" x="${x}" y="${y}" width="${barW}" height="${h}" rx="3"/>`;
-    barsSvg += `<text class="value-label" x="${x + barW / 2}" y="${y - 6}" text-anchor="middle">${v}${chart.unit || ""}</text>`;
-    const label = String(chart.x_labels[i] || "");
-    barsSvg += `<text class="axis-label" x="${x + barW / 2}" y="${PAD_T + plotH + 18}" text-anchor="middle">${label}</text>`;
-  }
-  const yTitle = chart.y_label ? `<text class="y-label" x="${PAD_L}" y="${PAD_T - 6}">${chart.y_label}${chart.unit ? " (" + chart.unit + ")" : ""}</text>` : "";
-  return `<svg class="chart-svg" viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid meet" role="img" aria-label="${chart.title}">${yTitle}${gridSvg}${barsSvg}</svg>`;
-}
-(function () {
-  const grid = document.getElementById("charts-grid");
-  if (!grid) return;
-  CHARTS.forEach(function (c) {
-    const card = document.createElement("div");
-    card.className = "chart-card";
-    card.innerHTML = `<div class="chart-title">${c.title}</div>` + (c.type === "bar" ? renderBarChart(c) : "");
-    grid.appendChild(card);
-  });
-})();
-</script>
 
 
 </body>
