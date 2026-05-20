@@ -1,7 +1,24 @@
 {
   "version": 1,
-  "updated_at": "2026-05-19T12:00:17Z",
+  "updated_at": "2026-05-20T12:00:27Z",
   "items": [
+    {
+      "id": "2026-05-20-coffee-tea-dementia-cognitive-cohort",
+      "date": "2026-05-20",
+      "title_ko": "커피·차 섭취와 치매 위험 및 인지 기능: 43년 대규모 코호트 연구",
+      "one_liner": "하루 2~3잔 카페인 커피, 치매 위험 18% 감소 — 43년 추적 13만 명 코호트",
+      "categories_primary": [
+        "건강/영양"
+      ],
+      "categories_secondary": [
+        "역학·코호트",
+        "인지과학"
+      ],
+      "hero_image": "/static/img/insights/hero/health.svg",
+      "journal": "JAMA (Journal of the American Medical Association)",
+      "pub_date": "2026-02-09",
+      "source_basis": "abstract_only"
+    },
     {
       "id": "2026-05-19-biomimetic-fermentation-roasting-maillard-flavor",
       "date": "2026-05-19",

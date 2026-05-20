@@ -1,0 +1,105 @@
+{
+  "version": 1,
+  "id": "2026-05-20-coffee-tea-dementia-cognitive-cohort",
+  "date": "2026-05-20",
+  "slug": "coffee-tea-dementia-cognitive-cohort",
+  "title_ko": "커피·차 섭취와 치매 위험 및 인지 기능: 43년 대규모 코호트 연구",
+  "title_original": "Coffee and Tea Intake, Dementia Risk, and Cognitive Function",
+  "one_liner": "하루 2~3잔 카페인 커피, 치매 위험 18% 감소 — 43년 추적 13만 명 코호트",
+  "authors": "Yu Zhang, Yuxi Liu, Yanping Li, Yuhan Li, Xiao Gu, Jae H. Kang, A. Heather Eliassen, Molin Wang, Eric B. Rimm, Walter C. Willett, Frank B. Hu, Meir J. Stampfer, Dong D. Wang",
+  "journal": "JAMA (Journal of the American Medical Association)",
+  "pub_date": "2026-02-09",
+  "doi": "10.1001/jama.2025.27259",
+  "categories_primary": [
+    "건강/영양"
+  ],
+  "categories_secondary": [
+    "역학·코호트",
+    "인지과학"
+  ],
+  "summary": "커피는 전 세계에서 가장 많이 소비되는 음료 중 하나이며, 역학 연구들은 꾸준히 커피 섭취와 치매 위험 감소의 연관성을 제시해 왔다. Yu Zhang 등은 미국의 두 대규모 장기 추적 코호트—간호사 건강 연구(NHS, n=86,606)와 보건 전문직 추적 연구(HPFS, n=45,215)—를 결합해 역사상 가장 긴 추적 기간(최장 43년, 중앙값 36.8년)과 최대 표본(131,821명)으로 카페인 커피·디카페인 커피·차 섭취와 치매 발생 위험 및 인지 기능의 관계를 분석했다. 카페인 커피 최고 섭취군은 최저 섭취군 대비 치매 위험이 18% 낮았고(HR 0.82, 95% CI 0.76–0.89), 주관적 인지 저하 유병률도 7.8% vs. 9.5%로 낮았다. 결정적으로 디카페인 커피는 두 결과 모두에서 유의미한 연관성이 없어 카페인이 핵심 활성 성분임을 시사한다. 카페인은 뇌의 아데노신 A1/A2A 수용체를 경쟁적으로 차단해 도파민·아세틸콜린 등 신경전달물질 방출을 유지하는 메커니즘이 유력하다.",
+  "key_findings": [
+    "카페인 커피 최고 섭취군 vs. 최저 섭취군: 치매 HR 0.82 (95% CI 0.76–0.89), 18% 위험 감소",
+    "최적 섭취량: 카페인 커피 2~3컵/일 또는 차 1~2컵/일 (비선형 용량반응)",
+    "주관적 인지 저하 유병률: 최고 섭취군 7.8% vs. 최저 섭취군 9.5%",
+    "디카페인 커피: 치매 위험 감소 및 인지 기능 향상과 무관 → 카페인이 핵심",
+    "차(tea) 섭취도 유사한 인지 보호 연관성 — 1~2컵/일 최적",
+    "NHS 코호트: 카페인 커피 높은 섭취군이 객관적 인지 기능 검사에서도 더 좋은 수행"
+  ],
+  "methodology": "NHS(여성 86,606명, 1980~2023) + HPFS(남성 45,215명, 1986~2023) 두 전향적 코호트 병렬 분석. 총 131,821명, 최장 43년 추적(중앙값 36.8년), 치매 11,033건. 식이 노출은 2~4년마다 검증된 FFQ 반복 측정·누적 평균. Cox 비례위험 모델 + 제한 3차 스플라인으로 비선형 용량반응 평가. 주요 교란 변수 다변수 보정.",
+  "implications": {
+    "농가/가공장": "해당 없음 (역학·임상 연구로 재배·가공 단계와 직접 관련 없음)",
+    "로스터/큐그레이더": "카페인 커피의 인지 보호 효과 증거가 강화되어 카페인 커피 가치를 강조하는 마케팅 내러티브 근거로 활용 가능. 하루 2~3잔 최적 섭취량을 고객 안내 자료에 인용 가능. 로스팅 정도·추출 방식에 따른 카페인 함량 변이 정보를 함께 제공하는 것이 권장됨.",
+    "R&D": "아데노신 A1/A2A 수용체 차단 기전 확인으로 후속 과제 명확화. 로스팅 정도별 카페인 잔존량과 신경보호 효과 상관 분석, CYP1A2 유전 다형성 기반 개인 맞춤 최적 섭취량 연구, 카페인 이외 커피 성분(클로로젠산·카웨올·카페스톨)과 아데노신 경로 상호작용 기전 규명이 핵심 후속 과제."
+  },
+  "limitations": "관찰 연구로 인과관계 확립 불가(역인과성 가능성). FFQ에서 커피 종류·컵 크기·카페인 농도 개별 포착 한계. 고학력 백인 미국인 코호트 편중으로 일반화 제한. 디카페인 처리 시 다른 생리활성 성분도 변화해 카페인만의 독립 효과 단정 어려움. 객관적 인지 검사가 NHS 일부에서만 수행.",
+  "glossary": [
+    {
+      "term": "Hazard Ratio (HR)",
+      "ko": "위험비 — 생존 분석에서 노출군 대 비노출군의 사건 발생 순간 위험 비율"
+    },
+    {
+      "term": "Adenosine A1/A2A Receptors",
+      "ko": "아데노신 A1/A2A 수용체 — 뇌에서 신경 활성 억제 및 신경전달물질 방출 감소를 매개; 카페인이 경쟁적으로 차단"
+    },
+    {
+      "term": "FFQ (Food Frequency Questionnaire)",
+      "ko": "식품 빈도 설문지 — 역학 연구 표준 식이 측정 도구"
+    },
+    {
+      "term": "Cumulative Average",
+      "ko": "누적 평균 — 반복 측정값을 시간 경과에 따라 업데이트한 평균"
+    },
+    {
+      "term": "Subjective Cognitive Decline",
+      "ko": "주관적 인지 저하(SCD) — 본인이 인식하나 객관 검사 정상; 치매 전구 지표"
+    },
+    {
+      "term": "Restricted Cubic Spline",
+      "ko": "제한 3차 스플라인 — 비선형 용량반응 관계 모델링 통계 기법"
+    },
+    {
+      "term": "CYP1A2",
+      "ko": "카페인 주요 대사 효소; 유전 다형성에 따라 개인별 카페인 대사 속도 차이"
+    }
+  ],
+  "citation_apa": "Zhang, Y., Liu, Y., Li, Y., Li, Y., Gu, X., Kang, J. H., Eliassen, A. H., Wang, M., Rimm, E. B., Willett, W. C., Hu, F. B., Stampfer, M. J., & Wang, D. D. (2026). Coffee and tea intake, dementia risk, and cognitive function. JAMA, 335(11), 961. https://doi.org/10.1001/jama.2025.27259",
+  "links": {
+    "doi": "https://doi.org/10.1001/jama.2025.27259",
+    "oa_pdf": "",
+    "journal_homepage": "https://jamanetwork.com/journals/jama"
+  },
+  "source_basis": "abstract_only",
+  "data_charts": [
+    {
+      "type": "bar",
+      "title": "카페인 커피 최고 vs. 최저 섭취군 치매 위험비 비교",
+      "x_labels": [
+        "최저 섭취군 (기준)",
+        "최고 섭취군 (~4.5컵/일·여성, ~2.5컵/일·남성)"
+      ],
+      "y_label": "치매 위험비 (HR)",
+      "values": [
+        1.0,
+        0.82
+      ],
+      "unit": "HR"
+    },
+    {
+      "type": "bar",
+      "title": "카페인 커피 섭취군별 주관적 인지 저하 유병률",
+      "x_labels": [
+        "최고 섭취군",
+        "최저 섭취군"
+      ],
+      "y_label": "주관적 인지 저하 유병률",
+      "values": [
+        7.8,
+        9.5
+      ],
+      "unit": "%"
+    }
+  ],
+  "drive_doc_url": "https://docs.google.com/document/d/1Vs2e8cLyUQ7zgQzuJNSKDaniuC2kdV95md8INsgHXaM/edit",
+  "hero_image": "/static/img/insights/hero/health.svg"
+}

@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>커피·차 섭취와 치매 위험 및 인지 기능: 43년 대규모 코호트 연구 — 92°C ROASTERY</title>
+<meta name="description" content="하루 2~3잔 카페인 커피, 치매 위험 18% 감소 — 43년 추적 13만 명 코호트">
+<link rel="icon" type="image/png" href="/static/img/logo-92black.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --canvas: #FFFFFF; --canvas-warm: #FAF7F2; --canvas-stone: #F2ECE3;
+  --ink: #1A1410; --ink-mute: #4A3F36; --ink-soft: #6B5E52;
+  --espresso: #6F4E37; --caramel: #C9986A; --copper: #B5703D;
+  --line: #E8E0D5; --line-soft: #F0E9DD;
+  --font-display: "Cormorant Garamond", "Pretendard", serif;
+  --font-body: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  --r-sm: 6px; --r-md: 12px; --r-pill: 999px;
+}
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color: transparent; }
+html { scroll-behavior: smooth; }
+body { font-family: var(--font-body); color: var(--ink); background: var(--canvas); font-feature-settings: "kern","ss01"; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+a { color: var(--copper); text-decoration: none; border-bottom: 1px solid transparent; transition: border-color .2s; }
+a:hover { border-bottom-color: var(--copper); }
+img { display: block; max-width: 100%; height: auto; }
+.container { max-width: 860px; margin: 0 auto; padding: 0 32px; }
+@media (max-width: 720px) { .container { padding: 0 20px; } }
+@media (max-width: 480px) { .container { padding: 0 16px; } }
+.site-nav { position: sticky; top: 0; z-index: 50; background: rgba(255,255,255,0.9); backdrop-filter: saturate(140%) blur(14px); -webkit-backdrop-filter: saturate(140%) blur(14px); border-bottom: 1px solid var(--line-soft); }
+.nav-inner { max-width: 1200px; margin: 0 auto; padding: 16px 32px; display: flex; align-items: center; justify-content: space-between; }
+.brand { font-family: var(--font-display); font-size: 1.3rem; font-weight: 700; color: var(--ink); display: inline-flex; align-items: center; gap: 4px; border-bottom: none; }
+.brand:hover { border-bottom: none; }
+.brand-mark { display: inline-flex; align-items: flex-start; font-family: "Pretendard", sans-serif; font-weight: 900; letter-spacing: -0.04em; line-height: 1; color: inherit; }
+.temp-mark { display: flex; flex-direction: column; line-height: .82; margin: 0 .05em 0 .04em; }
+.temp-mark .temp-deg { font-size: .42em; letter-spacing: -.04em; }
+.temp-mark .temp-c { font-size: .58em; letter-spacing: -.05em; margin-top: -.05em; }
+.nav-back { font-family: var(--font-mono); font-size: .75rem; letter-spacing: .18em; color: var(--ink-mute); border-bottom: none; }
+.nav-back:hover { color: var(--copper); border-bottom: none; }
+.article-hero { padding: 56px 0 48px; border-bottom: 1px solid var(--line-soft); }
+.eyebrow { font-family: var(--font-mono); font-size: .72rem; letter-spacing: .28em; color: var(--copper); margin-bottom: 18px; display: flex; align-items: center; gap: 12px; }
+.eyebrow::before { content: ""; display: inline-block; width: 28px; height: 1px; background: var(--copper); }
+.article-title { font-family: var(--font-display); font-weight: 500; font-size: clamp(2rem, 4.5vw, 3.2rem); line-height: 1.15; letter-spacing: -0.02em; color: var(--ink); margin-bottom: 20px; }
+.article-title em { font-style: italic; color: var(--espresso); font-weight: 600; }
+.article-one-liner { font-family: var(--font-display); font-style: italic; font-size: 1.3rem; line-height: 1.5; color: var(--espresso); margin-bottom: 28px; padding-left: 20px; border-left: 3px solid var(--caramel); }
+.article-meta { display: flex; gap: 24px; flex-wrap: wrap; font-family: var(--font-mono); font-size: .75rem; letter-spacing: .12em; color: var(--ink-soft); padding-top: 20px; border-top: 1px solid var(--line-soft); }
+.article-meta span { display: inline-flex; align-items: center; gap: 6px; }
+.article-meta span::before { content: "■"; color: var(--caramel); font-size: .55rem; }
+.hero-image { margin: 32px 0 0; border-radius: var(--r-md); overflow: hidden; border: 1px solid var(--line); }
+.hero-image img { width: 100%; }
+.article-body { padding: 56px 0 80px; }
+.section-block { margin-bottom: 56px; }
+.section-block:last-child { margin-bottom: 0; }
+.section-block h2 { font-family: var(--font-display); font-weight: 600; font-size: 1.85rem; line-height: 1.2; letter-spacing: -0.01em; color: var(--ink); margin-bottom: 18px; display: flex; align-items: baseline; gap: 14px; }
+.section-block h2::before { content: ""; display: inline-block; width: 10px; height: 10px; background: var(--caramel); border-radius: 2px; }
+.section-block p { font-size: 1.04rem; color: var(--ink-mute); line-height: 1.85; margin-bottom: 18px; }
+.section-block p:last-child { margin-bottom: 0; }
+ul.findings { list-style: none; padding: 0; counter-reset: f; }
+ul.findings li { position: relative; padding: 16px 18px 16px 56px; font-size: 1rem; color: var(--ink-mute); line-height: 1.75; background: var(--canvas-warm); border: 1px solid var(--line); border-radius: var(--r-sm); margin-bottom: 12px; counter-increment: f; }
+ul.findings li::before { content: counter(f, decimal-leading-zero); position: absolute; left: 18px; top: 18px; font-family: var(--font-mono); font-size: .85rem; font-weight: 600; color: var(--copper); letter-spacing: .04em; }
+.implications-grid { display: grid; gap: 18px; grid-template-columns: 1fr; }
+.implication-card { padding: 22px 24px; background: var(--canvas-warm); border: 1px solid var(--line); border-radius: var(--r-md); border-left: 3px solid var(--caramel); }
+.implication-card h3 { font-family: var(--font-mono); font-size: .8rem; letter-spacing: .18em; color: var(--copper); margin-bottom: 10px; font-weight: 600; }
+.implication-card p { font-size: 1rem; color: var(--ink-mute); line-height: 1.75; }
+.glossary-list { list-style: none; padding: 0; }
+.glossary-list li { padding: 16px 0; border-bottom: 1px solid var(--line-soft); display: grid; grid-template-columns: 220px 1fr; gap: 24px; font-size: 1rem; line-height: 1.7; }
+.glossary-list li:last-child { border-bottom: none; }
+.glossary-list dt { font-family: var(--font-display); font-style: italic; font-size: 1.05rem; color: var(--espresso); font-weight: 600; }
+.glossary-list dd { color: var(--ink-mute); }
+@media (max-width: 600px) { .glossary-list li { grid-template-columns: 1fr; gap: 4px; } }
+.citation-block { margin-top: 12px; padding: 22px 24px; background: var(--canvas-warm); border: 1px solid var(--line); border-radius: var(--r-md); font-family: var(--font-mono); font-size: .85rem; color: var(--ink-mute); line-height: 1.7; word-break: break-word; }
+.links-row { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 18px; }
+.link-pill { display: inline-flex; align-items: center; gap: 8px; padding: 9px 16px; background: var(--canvas-warm); border: 1px solid var(--line); border-radius: var(--r-pill); font-family: var(--font-mono); font-size: .78rem; letter-spacing: .08em; color: var(--ink-mute); border-bottom: 1px solid var(--line); transition: border-color .2s, color .2s; }
+.link-pill:hover { color: var(--copper); border-color: var(--copper); }
+.charts-grid { display: grid; gap: 28px; grid-template-columns: 1fr; }
+@media (min-width: 720px) { .charts-grid { grid-template-columns: 1fr 1fr; } }
+.chart-card { padding: 24px 24px 18px; background: var(--canvas); border: 1px solid var(--line); border-radius: var(--r-md); }
+.chart-title { font-family: var(--font-display); font-size: 1.1rem; font-weight: 600; color: var(--ink); margin-bottom: 14px; line-height: 1.3; }
+.chart-svg { width: 100%; height: auto; display: block; }
+.chart-svg .bar { fill: var(--caramel); transition: fill .2s; }
+.chart-svg .bar.highlight { fill: var(--copper); }
+.chart-svg .axis-line { stroke: var(--line); stroke-width: 1; }
+.chart-svg .axis-label { font-family: var(--font-mono); font-size: 11px; fill: var(--ink-soft); }
+.chart-svg .value-label { font-family: var(--font-mono); font-size: 11px; font-weight: 600; fill: var(--espresso); }
+.chart-svg .y-label { font-family: var(--font-mono); font-size: 10px; fill: var(--ink-soft); letter-spacing: .1em; }
+.figures-grid { display: flex; flex-direction: column; gap: 24px; }
+.figure-card { border: 1px solid var(--line); border-radius: var(--r-md); overflow: hidden; }
+.figure-card img { width: 100%; }
+.figure-caption { padding: 14px 18px; font-size: .9rem; color: var(--ink-soft); font-family: var(--font-body); line-height: 1.6; background: var(--canvas-warm); border-top: 1px solid var(--line); }
+.source-basis { display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; background: rgba(201,152,106,.18); border: 1px solid rgba(181,112,61,.35); border-radius: var(--r-pill); font-family: var(--font-mono); font-size: .72rem; letter-spacing: .12em; color: var(--espresso); font-weight: 500; }
+.source-basis.abstract { background: rgba(107,94,82,.1); border-color: rgba(107,94,82,.3); color: var(--ink-soft); }
+.article-footer { padding: 36px 0 56px; border-top: 1px solid var(--line-soft); text-align: center; font-family: var(--font-mono); font-size: .75rem; letter-spacing: .14em; color: var(--ink-soft); }
+.article-footer a { color: var(--ink-mute); border-bottom: 1px solid transparent; }
+.article-footer a:hover { color: var(--copper); border-bottom-color: var(--copper); }
+@media (max-width: 720px) {
+  .article-hero { padding: 36px 0 32px; }
+  .article-body { padding: 36px 0 56px; }
+  .section-block { margin-bottom: 40px; }
+  .section-block h2 { font-size: 1.5rem; }
+  .article-meta { gap: 12px 18px; font-size: .68rem; }
+}
+</style>
+</head>
+<body>
+
+<header class="site-nav">
+  <div class="nav-inner">
+    <a class="brand" href="/">
+      <span class="brand-mark">92<span class="temp-mark"><span class="temp-deg">°</span><span class="temp-c">C</span></span></span>ROASTERY
+    </a>
+    <a class="nav-back" href="/insight">← INSIGHTS</a>
+  </div>
+</header>
+
+<article>
+  <section class="article-hero">
+    <div class="container">
+      <div class="eyebrow">— COFFEE INSIGHT · 2026.05.20</div>
+      <h1 class="article-title">커피·차 섭취와 치매 위험 및 인지 기능: 43년 대규모 코호트 연구</h1>
+      <p class="article-one-liner">하루 2~3잔 카페인 커피, 치매 위험 18% 감소 — 43년 추적 13만 명 코호트</p>
+      <div class="article-meta">
+        <span>JAMA (JOURNAL OF THE AMERICAN MEDICAL ASSOCIATION)</span>
+        <span>2026-02-09</span>
+        <span>DOI 10.1001/JAMA.2025.27259</span>
+        <span>건강/영양 · 역학·코호트 · 인지과학</span>
+      </div>
+      
+      <div class="hero-image">
+        <img src="/static/img/insights/hero/health.svg" alt="커피·차 섭취와 치매 위험 및 인지 기능: 43년 대규모 코호트 연구">
+      </div>
+      
+    </div>
+  </section>
+
+  <section class="article-body">
+    <div class="container">
+
+      
+      <div class="section-block">
+        <h2>요약</h2>
+        <p>커피는 전 세계에서 가장 많이 소비되는 음료 중 하나이며, 역학 연구들은 꾸준히 커피 섭취와 치매 위험 감소의 연관성을 제시해 왔다. Yu Zhang 등은 미국의 두 대규모 장기 추적 코호트—간호사 건강 연구(NHS, n=86,606)와 보건 전문직 추적 연구(HPFS, n=45,215)—를 결합해 역사상 가장 긴 추적 기간(최장 43년, 중앙값 36.8년)과 최대 표본(131,821명)으로 카페인 커피·디카페인 커피·차 섭취와 치매 발생 위험 및 인지 기능의 관계를 분석했다. 카페인 커피 최고 섭취군은 최저 섭취군 대비 치매 위험이 18% 낮았고(HR 0.82, 95% CI 0.76–0.89), 주관적 인지 저하 유병률도 7.8% vs. 9.5%로 낮았다. 결정적으로 디카페인 커피는 두 결과 모두에서 유의미한 연관성이 없어 카페인이 핵심 활성 성분임을 시사한다. 카페인은 뇌의 아데노신 A1/A2A 수용체를 경쟁적으로 차단해 도파민·아세틸콜린 등 신경전달물질 방출을 유지하는 메커니즘이 유력하다.</p>
+      </div>
+      
+
+      
+      <div class="section-block">
+        <h2>핵심 발견</h2>
+        <ul class="findings">
+          <li>카페인 커피 최고 섭취군 vs. 최저 섭취군: 치매 HR 0.82 (95% CI 0.76–0.89), 18% 위험 감소</li><li>최적 섭취량: 카페인 커피 2~3컵/일 또는 차 1~2컵/일 (비선형 용량반응)</li><li>주관적 인지 저하 유병률: 최고 섭취군 7.8% vs. 최저 섭취군 9.5%</li><li>디카페인 커피: 치매 위험 감소 및 인지 기능 향상과 무관 → 카페인이 핵심</li><li>차(tea) 섭취도 유사한 인지 보호 연관성 — 1~2컵/일 최적</li><li>NHS 코호트: 카페인 커피 높은 섭취군이 객관적 인지 기능 검사에서도 더 좋은 수행</li>
+        </ul>
+      </div>
+      
+
+      
+
+      
+      <div class="section-block">
+        <h2>데이터로 보기</h2>
+        <div class="charts-grid" id="charts-grid"></div>
+      </div>
+      
+
+      
+      <div class="section-block">
+        <h2>방법론</h2>
+        <p>NHS(여성 86,606명, 1980~2023) + HPFS(남성 45,215명, 1986~2023) 두 전향적 코호트 병렬 분석. 총 131,821명, 최장 43년 추적(중앙값 36.8년), 치매 11,033건. 식이 노출은 2~4년마다 검증된 FFQ 반복 측정·누적 평균. Cox 비례위험 모델 + 제한 3차 스플라인으로 비선형 용량반응 평가. 주요 교란 변수 다변수 보정.</p>
+      </div>
+      
+
+      
+      <div class="section-block">
+        <h2>시사점</h2>
+        <div class="implications-grid">
+          
+          <div class="implication-card">
+            <h3>농가 · 가공장</h3>
+            <p>해당 없음 (역학·임상 연구로 재배·가공 단계와 직접 관련 없음)</p>
+          </div>
+          
+          <div class="implication-card">
+            <h3>로스터 · 큐그레이더</h3>
+            <p>카페인 커피의 인지 보호 효과 증거가 강화되어 카페인 커피 가치를 강조하는 마케팅 내러티브 근거로 활용 가능. 하루 2~3잔 최적 섭취량을 고객 안내 자료에 인용 가능. 로스팅 정도·추출 방식에 따른 카페인 함량 변이 정보를 함께 제공하는 것이 권장됨.</p>
+          </div>
+          
+          <div class="implication-card">
+            <h3>R&amp;D</h3>
+            <p>아데노신 A1/A2A 수용체 차단 기전 확인으로 후속 과제 명확화. 로스팅 정도별 카페인 잔존량과 신경보호 효과 상관 분석, CYP1A2 유전 다형성 기반 개인 맞춤 최적 섭취량 연구, 카페인 이외 커피 성분(클로로젠산·카웨올·카페스톨)과 아데노신 경로 상호작용 기전 규명이 핵심 후속 과제.</p>
+          </div>
+          
+        </div>
+      </div>
+      
+
+      
+      <div class="section-block">
+        <h2>한계</h2>
+        <p>관찰 연구로 인과관계 확립 불가(역인과성 가능성). FFQ에서 커피 종류·컵 크기·카페인 농도 개별 포착 한계. 고학력 백인 미국인 코호트 편중으로 일반화 제한. 디카페인 처리 시 다른 생리활성 성분도 변화해 카페인만의 독립 효과 단정 어려움. 객관적 인지 검사가 NHS 일부에서만 수행.</p>
+      </div>
+      
+
+      
+      <div class="section-block">
+        <h2>용어집</h2>
+        <ul class="glossary-list">
+          
+          <li><dt>Hazard Ratio (HR)</dt><dd>위험비 — 생존 분석에서 노출군 대 비노출군의 사건 발생 순간 위험 비율</dd></li>
+          
+          <li><dt>Adenosine A1/A2A Receptors</dt><dd>아데노신 A1/A2A 수용체 — 뇌에서 신경 활성 억제 및 신경전달물질 방출 감소를 매개; 카페인이 경쟁적으로 차단</dd></li>
+          
+          <li><dt>FFQ (Food Frequency Questionnaire)</dt><dd>식품 빈도 설문지 — 역학 연구 표준 식이 측정 도구</dd></li>
+          
+          <li><dt>Cumulative Average</dt><dd>누적 평균 — 반복 측정값을 시간 경과에 따라 업데이트한 평균</dd></li>
+          
+          <li><dt>Subjective Cognitive Decline</dt><dd>주관적 인지 저하(SCD) — 본인이 인식하나 객관 검사 정상; 치매 전구 지표</dd></li>
+          
+          <li><dt>Restricted Cubic Spline</dt><dd>제한 3차 스플라인 — 비선형 용량반응 관계 모델링 통계 기법</dd></li>
+          
+          <li><dt>CYP1A2</dt><dd>카페인 주요 대사 효소; 유전 다형성에 따라 개인별 카페인 대사 속도 차이</dd></li>
+          
+        </ul>
+      </div>
+      
+
+      <div class="section-block">
+        <h2>인용 · 링크</h2>
+        <div class="citation-block">Zhang, Y., Liu, Y., Li, Y., Li, Y., Gu, X., Kang, J. H., Eliassen, A. H., Wang, M., Rimm, E. B., Willett, W. C., Hu, F. B., Stampfer, M. J., &amp; Wang, D. D. (2026). Coffee and tea intake, dementia risk, and cognitive function. JAMA, 335(11), 961. https://doi.org/10.1001/jama.2025.27259</div>
+        <div class="links-row">
+          <a class="link-pill" href="https://doi.org/10.1001/jama.2025.27259" target="_blank" rel="noopener noreferrer">DOI →</a>
+          
+          <a class="link-pill" href="https://jamanetwork.com/journals/jama" target="_blank" rel="noopener noreferrer">JOURNAL HOMEPAGE →</a>
+        </div>
+        <div style="margin-top: 18px;">
+          
+          <span class="source-basis abstract">ABSTRACT BASIS</span>
+          
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <footer class="article-footer">
+    <div class="container">
+      <a href="/insight">← BACK TO INSIGHTS</a>
+      <span style="margin: 0 16px;">·</span>
+      <a href="/">HOME</a>
+    </div>
+  </footer>
+</article>
+
+
+<script>
+const CHARTS = [{"type": "bar", "title": "카페인 커피 최고 vs. 최저 섭취군 치매 위험비 비교", "x_labels": ["최저 섭취군 (기준)", "최고 섭취군 (~4.5컵/일·여성, ~2.5컵/일·남성)"], "y_label": "치매 위험비 (HR)", "values": [1.0, 0.82], "unit": "HR"}, {"type": "bar", "title": "카페인 커피 섭취군별 주관적 인지 저하 유병률", "x_labels": ["최고 섭취군", "최저 섭취군"], "y_label": "주관적 인지 저하 유병률", "values": [7.8, 9.5], "unit": "%"}];
+function renderBarChart(chart) {
+  const W = 520, H = 280;
+  const PAD_L = 50, PAD_R = 16, PAD_T = 18, PAD_B = 56;
+  const plotW = W - PAD_L - PAD_R;
+  const plotH = H - PAD_T - PAD_B;
+  const max = Math.max(...chart.values);
+  const min = Math.min(...chart.values, 0);
+  const yMax = max + (max - min) * 0.12;
+  const yMin = min < 0 ? min : 0;
+  const yRange = yMax - yMin || 1;
+  const n = chart.values.length;
+  const slot = plotW / n;
+  const barW = Math.min(slot * 0.6, 80);
+  function yFor(v) { return PAD_T + plotH - ((v - yMin) / yRange) * plotH; }
+  const ticks = 4;
+  let gridSvg = "";
+  for (let i = 0; i <= ticks; i++) {
+    const v = yMin + (yRange / ticks) * i;
+    const y = yFor(v);
+    gridSvg += `<line class="axis-line" x1="${PAD_L}" y1="${y}" x2="${PAD_L + plotW}" y2="${y}"/>`;
+    gridSvg += `<text class="axis-label" x="${PAD_L - 8}" y="${y + 4}" text-anchor="end">${Number(v.toFixed(1))}</text>`;
+  }
+  const maxIdx = chart.values.indexOf(max);
+  let barsSvg = "";
+  for (let i = 0; i < n; i++) {
+    const v = chart.values[i];
+    const x = PAD_L + slot * i + (slot - barW) / 2;
+    const y = yFor(v);
+    const h = (PAD_T + plotH) - y;
+    const cls = i === maxIdx ? "bar highlight" : "bar";
+    barsSvg += `<rect class="${cls}" x="${x}" y="${y}" width="${barW}" height="${h}" rx="3"/>`;
+    barsSvg += `<text class="value-label" x="${x + barW / 2}" y="${y - 6}" text-anchor="middle">${v}${chart.unit || ""}</text>`;
+    const label = String(chart.x_labels[i] || "");
+    barsSvg += `<text class="axis-label" x="${x + barW / 2}" y="${PAD_T + plotH + 18}" text-anchor="middle">${label}</text>`;
+  }
+  const yTitle = chart.y_label ? `<text class="y-label" x="${PAD_L}" y="${PAD_T - 6}">${chart.y_label}${chart.unit ? " (" + chart.unit + ")" : ""}</text>` : "";
+  return `<svg class="chart-svg" viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid meet" role="img" aria-label="${chart.title}">${yTitle}${gridSvg}${barsSvg}</svg>`;
+}
+(function () {
+  const grid = document.getElementById("charts-grid");
+  if (!grid) return;
+  CHARTS.forEach(function (c) {
+    const card = document.createElement("div");
+    card.className = "chart-card";
+    card.innerHTML = `<div class="chart-title">${c.title}</div>` + (c.type === "bar" ? renderBarChart(c) : "");
+    grid.appendChild(card);
+  });
+})();
+</script>
+
+
+</body>
+</html>
