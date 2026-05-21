@@ -115,7 +115,42 @@
 .fb-textarea { resize: vertical; min-height: 80px; }
 .fb-hint { font-size: 0.78rem; color: #999; margin-top: 4px; }
 
-/* 별점 */
+/* 3단계 평가 — 좋아요/중간/싫어요 */
+.fb-choices {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-top: 20px;
+}
+.fb-choice {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 20px 8px;
+    background: #fffdfa;
+    border: 2px solid #e2d5c0;
+    border-radius: 14px;
+    cursor: pointer;
+    font-family: inherit;
+    color: #4a3a2a;
+    transition: transform 0.12s ease, border-color 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
+    -webkit-tap-highlight-color: transparent;
+}
+.fb-choice:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(111,78,55,0.15);
+}
+.fb-choice:active { transform: translateY(0); }
+.fb-choice:disabled { opacity: 0.45; cursor: not-allowed; transform: none; box-shadow: none; }
+.fb-choice-emoji { font-size: 2.4rem; line-height: 1; }
+.fb-choice-label { font-size: 0.92rem; font-weight: 700; letter-spacing: 0.2px; }
+.fb-choice-good:hover { border-color: #2E7D32; background: #E8F5E9; color: #1B5E20; }
+.fb-choice-mid:hover  { border-color: #F9A825; background: #FFF8E1; color: #E65100; }
+.fb-choice-bad:hover  { border-color: #c62828; background: #FFEBEE; color: #B71C1C; }
+
+/* (사용 안 함) 5점 별점 — 다른 페이지가 참조할 가능성 대비 보존 */
 .fb-stars { display: flex; gap: 4px; }
 .fb-star {
     font-size: 2rem; cursor: pointer; color: #d5cabe;
@@ -189,4 +224,8 @@
     .fb-modal-content { padding: 20px 16px 16px; margin-top: 2vh; }
     .fb-modal-title { font-size: 1.1rem; }
     .fb-star { font-size: 1.7rem; }
+    .fb-choices { gap: 8px; margin-top: 16px; }
+    .fb-choice { padding: 16px 4px; gap: 6px; }
+    .fb-choice-emoji { font-size: 2rem; }
+    .fb-choice-label { font-size: 0.82rem; }
 }

@@ -1728,11 +1728,19 @@
 
                 let bodyHtml;
                 if (soldOut) {
+                    if (soldOut.id) {
+                        window.coffeeTodayMap = window.coffeeTodayMap || {};
+                        window.coffeeTodayMap[soldOut.id] = soldOut;
+                    }
+                    const fbBtn = soldOut.id
+                        ? `<button class="feedback-btn" type="button" onclick="openFeedbackModalById(${soldOut.id})">💬 피드백</button>`
+                        : '';
                     const tomorrowLine = tomorrowCoffee
                         ? `<div style="margin-top: 14px; opacity: 0.85; font-size: 0.98rem;">내일은 <strong>${tomorrowCoffee.커피}</strong> 커피를 준비할 예정입니다.</div>`
                         : '';
                     bodyHtml = `
                         <div class="coffee-card" style="text-align:center; padding: 36px 28px;">
+                            ${fbBtn}
                             <div style="font-size: 2.6rem; margin-bottom: 12px; opacity: 0.7;">☕</div>
                             <div class="coffee-card-title" style="font-size: 1.4rem; margin-bottom: 6px;">${soldOut.커피}</div>
                             ${soldOut.컵노트 ? `<div style="opacity: 0.75; font-size: 0.95rem; margin-bottom: 14px;">${soldOut.컵노트}</div>` : ''}

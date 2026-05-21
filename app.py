@@ -431,11 +431,16 @@ def api_feedback_create():
     item = db.get_by_id(coffee_id)
     if item is None:
         return jsonify({"success": False, "error": "coffee not found"}), 404
-    # 피드백은 지금 제공 중인 커피에만. 과거(완료)/미래(예정) 커피는 차단.
-    if item.get("상태") != "진행 중":
+    # 피드백 허용 조건: 진행 중 OR 오늘 제공된 완료(=품절). 미래 예정/과거 완료는 차단.
+    status = item.get("상태")
+    serve = item.get("제공일") or {}
+    serve_start = serve.get("start") if isinstance(serve, dict) else None
+    today_str = date.today().isoformat()
+    allowed = (status == "진행 중") or (status == "완료" and serve_start == today_str)
+    if not allowed:
         return jsonify({
             "success": False, "error": "not_serving",
-            "message": "지금 제공 중인 커피에만 피드백을 남길 수 있어요",
+            "message": "오늘 제공된 커피에만 피드백을 남길 수 있어요",
         }), 403
 
     nickname = (data.get("nickname") or "").strip()[:FEEDBACK_NICKNAME_MAX]
