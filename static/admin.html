@@ -1801,11 +1801,11 @@ async function loadFeedback() {
       body.innerHTML = '<div class="fb-empty">아직 받은 피드백이 없습니다.</div>';
       return;
     }
-    // coffee_id 기준 그룹핑
+    // 원두 이름 기준 그룹핑 — 재입고/복제로 새 row 가 생겨도 같은 원두 피드백이 한 카드에 모임
     const groups = {};
     for (const it of items) {
-      const key = it.coffee_id;
-      if (!groups[key]) groups[key] = { name: it.coffee_name || `#${key}`, items: [] };
+      const key = (it.coffee_name && it.coffee_name.trim()) || `#${it.coffee_id}`;
+      if (!groups[key]) groups[key] = { name: key, items: [] };
       groups[key].items.push(it);
     }
     const groupKeys = Object.keys(groups).sort((a, b) => {

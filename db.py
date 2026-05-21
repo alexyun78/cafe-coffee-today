@@ -66,6 +66,7 @@ CREATE INDEX IF NOT EXISTS idx_visits_visitor ON visits(visitor_id);
 CREATE TABLE IF NOT EXISTS feedback (
     id              INTEGER PRIMARY KEY AUTOINCREMENT,
     coffee_id       INTEGER NOT NULL REFERENCES coffees(id) ON DELETE CASCADE,
+    coffee_name     TEXT,                -- 제출 시점의 원두 이름 스냅샷 (재입고/복제 후에도 묶이도록)
     nickname        TEXT,
     rating          INTEGER NOT NULL,
     cup_notes_json  TEXT,                -- JSON array, 최대 3개
@@ -74,6 +75,7 @@ CREATE TABLE IF NOT EXISTS feedback (
     created_at      TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now'))
 );
 CREATE INDEX IF NOT EXISTS idx_feedback_coffee ON feedback(coffee_id, created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_feedback_name ON feedback(coffee_name, created_at DESC);
 CREATE INDEX IF NOT EXISTS idx_feedback_ip ON feedback(ip_hash, created_at);
 """
 
@@ -124,6 +126,15 @@ def init_schema():
             conn.execute(
                 "INSERT INTO migrations (name) VALUES (?)", ("roastery_92cafe_default",)
             )
+        # feedback.coffee_name 컬럼 보장 + 기존 행 백필
+        fb_cols = {r["name"] for r in conn.execute("PRAGMA table_info(feedback)").fetchall()}
+        if "coffee_name" not in fb_cols:
+            conn.execute("ALTER TABLE feedback ADD COLUMN coffee_name TEXT")
+        conn.execute(
+            "UPDATE feedback "
+            "SET coffee_name = (SELECT name FROM coffees WHERE coffees.id = feedback.coffee_id) "
+            "WHERE coffee_name IS NULL OR coffee_name = ''"
+        )
 
 
 # ---------- PIN brute-force 카운터 (워커 공유 영속) ----------
@@ -542,13 +553,25 @@ def feedback_recent_count_by_ip(ip_hash: str, window_sec: int) -> int:
 
 
 def create_feedback(coffee_id: int, nickname: str, rating: int,
-                    cup_notes_json: str, comment: str, ip_hash: str) -> int:
+                    cup_notes_json: str, comment: str, ip_hash: str,
+                    coffee_name: Optional[str] = None) -> int:
+    """피드백 1건 저장.
+
+    coffee_name 은 제출 시점의 원두 이름 스냅샷. 재입고/복제 등으로 새 row 가
+    생겨도 같은 이름의 모든 row 에서 피드백을 함께 조회/참조 가능.
+    호출자가 명시하지 않으면 coffee_id 로 찾아서 채운다.
+    """
     with connect() as conn:
+        if not coffee_name:
+            row = conn.execute(
+                "SELECT name FROM coffees WHERE id=?", (coffee_id,)
+            ).fetchone()
+            coffee_name = row["name"] if row else None
         cur = conn.execute(
             "INSERT INTO feedback "
-            "(coffee_id, nickname, rating, cup_notes_json, comment, ip_hash) "
-            "VALUES (?,?,?,?,?,?)",
-            (coffee_id, nickname or None, rating,
+            "(coffee_id, coffee_name, nickname, rating, cup_notes_json, comment, ip_hash) "
+            "VALUES (?,?,?,?,?,?,?)",
+            (coffee_id, coffee_name or None, nickname or None, rating,
              cup_notes_json or None, comment or None, ip_hash or None),
         )
         return cur.lastrowid
@@ -576,23 +599,44 @@ def _feedback_row_to_dict(row: sqlite3.Row) -> dict:
     }
 
 
+def _resolve_coffee_name(conn, coffee_id: int) -> Optional[str]:
+    row = conn.execute("SELECT name FROM coffees WHERE id=?", (coffee_id,)).fetchone()
+    return row["name"] if row else None
+
+
 def list_feedback_for_coffee(coffee_id: int, limit: int = 100) -> list:
-    """공개 노출용. ip_hash 는 응답에 포함하지 않음."""
+    """공개 노출용. ip_hash 는 응답에 포함하지 않음.
+
+    피드백은 원두 이름 기준으로 묶인다 — 같은 이름의 다른 row 에 달린 피드백도
+    함께 반환. (재입고/복제로 새 row 가 만들어져도 과거 피드백을 계속 보여주기 위함)
+    """
     with connect() as conn:
-        rows = conn.execute(
-            "SELECT id, coffee_id, nickname, rating, cup_notes_json, comment, created_at "
-            "FROM feedback WHERE coffee_id=? ORDER BY created_at DESC LIMIT ?",
-            (coffee_id, limit),
-        ).fetchall()
+        name = _resolve_coffee_name(conn, coffee_id)
+        if name:
+            rows = conn.execute(
+                "SELECT id, coffee_id, coffee_name, nickname, rating, cup_notes_json, "
+                "       comment, created_at FROM feedback "
+                "WHERE coffee_name = ? OR coffee_id = ? "
+                "ORDER BY created_at DESC LIMIT ?",
+                (name, coffee_id, limit),
+            ).fetchall()
+        else:
+            rows = conn.execute(
+                "SELECT id, coffee_id, coffee_name, nickname, rating, cup_notes_json, "
+                "       comment, created_at FROM feedback "
+                "WHERE coffee_id=? ORDER BY created_at DESC LIMIT ?",
+                (coffee_id, limit),
+            ).fetchall()
     return [_feedback_row_to_dict(r) for r in rows]
 
 
 def list_feedback_all(limit: int = 500) -> list:
-    """관리자용. 커피 이름 조인."""
+    """관리자용. coffee_name 은 스냅샷 우선, 없으면 현재 커피 이름으로 채움."""
     with connect() as conn:
         rows = conn.execute(
             "SELECT f.id, f.coffee_id, f.nickname, f.rating, f.cup_notes_json, "
-            "       f.comment, f.created_at, c.name AS coffee_name "
+            "       f.comment, f.created_at, "
+            "       COALESCE(f.coffee_name, c.name) AS coffee_name "
             "FROM feedback f "
             "LEFT JOIN coffees c ON c.id = f.coffee_id "
             "ORDER BY f.created_at DESC LIMIT ?",
@@ -629,20 +673,29 @@ def popular_cup_notes(limit: int = 20) -> list:
 
 
 def feedback_summary_for_coffee(coffee_id: int) -> dict:
-    """공개 노출용 요약 — 평균 별점, 건수, 가장 많이 선택된 컵노트 top 5."""
+    """공개 노출용 요약 — 평균 별점, 건수, 가장 많이 선택된 컵노트 top 5.
+
+    동일 원두 이름의 모든 row 에 달린 피드백을 합산.
+    """
     import json as _json
     with connect() as conn:
+        name = _resolve_coffee_name(conn, coffee_id)
+        if name:
+            where_sql = "WHERE coffee_name = ? OR coffee_id = ?"
+            where_args: tuple = (name, coffee_id)
+        else:
+            where_sql = "WHERE coffee_id = ?"
+            where_args = (coffee_id,)
         row = conn.execute(
-            "SELECT COUNT(*) AS c, AVG(rating) AS avg_rating "
-            "FROM feedback WHERE coffee_id=?",
-            (coffee_id,),
+            f"SELECT COUNT(*) AS c, AVG(rating) AS avg_rating FROM feedback {where_sql}",
+            where_args,
         ).fetchone()
         count = row["c"] if row else 0
         avg = float(row["avg_rating"]) if row and row["avg_rating"] is not None else 0.0
         rows = conn.execute(
-            "SELECT cup_notes_json FROM feedback WHERE coffee_id=? "
+            f"SELECT cup_notes_json FROM feedback {where_sql} "
             "AND cup_notes_json IS NOT NULL",
-            (coffee_id,),
+            where_args,
         ).fetchall()
     tallies: dict[str, int] = {}
     for r in rows:

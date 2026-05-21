@@ -456,6 +456,7 @@ def api_feedback_create():
 
     new_id = db.create_feedback(
         coffee_id=coffee_id,
+        coffee_name=item.get("커피"),
         nickname=nickname,
         rating=rating,
         cup_notes_json=json.dumps(notes, ensure_ascii=False) if notes else "",
