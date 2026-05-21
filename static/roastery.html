@@ -642,6 +642,18 @@
             color: var(--ink-mute);
             font-size: 1.3rem;
         }
+        .now-empty-next {
+            margin-top: 14px;
+            text-align: center;
+            padding: 20px 28px;
+            background: var(--canvas-warm);
+            border: 1px solid var(--line);
+            border-radius: var(--r-md);
+            color: var(--ink);
+            font-size: 1.05rem;
+            line-height: 1.5;
+        }
+        .now-empty-next strong { color: var(--copper); font-weight: 700; }
         @media (max-width: 900px) {
             .now-card { grid-template-columns: 1fr; gap: 32px; padding: 36px 24px; }
         }
@@ -701,6 +713,11 @@
             background: var(--canvas-warm);
             padding: 4px 10px;
             border-radius: var(--r-pill);
+        }
+        .upcoming-serve.is-closed {
+            color: #c62828;
+            background: rgba(198, 40, 40, 0.08);
+            font-weight: 700;
         }
         .upcoming-title {
             font-family: var(--font-display);
@@ -1448,6 +1465,49 @@
         return parseInt(m[2], 10) + '월 ' + parseInt(m[3], 10) + '일';
     }
 
+    // 한국 공휴일 (2026~2027) — 카페는 OPEN 365 · CLOSED ON HOLIDAYS 정책
+    var KR_HOLIDAYS = {
+        // 2026
+        '2026-01-01': true,
+        '2026-02-16': true, '2026-02-17': true, '2026-02-18': true,
+        '2026-03-01': true, '2026-03-02': true,
+        '2026-05-05': true,
+        '2026-05-24': true, '2026-05-25': true,
+        '2026-06-06': true,
+        '2026-08-15': true, '2026-08-17': true,
+        '2026-09-24': true, '2026-09-25': true, '2026-09-26': true, '2026-09-28': true,
+        '2026-10-03': true, '2026-10-05': true,
+        '2026-10-09': true,
+        '2026-12-25': true,
+        // 2027
+        '2027-01-01': true,
+        '2027-02-05': true, '2027-02-06': true, '2027-02-07': true, '2027-02-08': true,
+        '2027-03-01': true,
+        '2027-05-05': true, '2027-05-13': true,
+        '2027-06-06': true, '2027-06-07': true,
+        '2027-08-15': true, '2027-08-16': true,
+        '2027-09-14': true, '2027-09-15': true, '2027-09-16': true,
+        '2027-10-03': true, '2027-10-04': true,
+        '2027-10-09': true, '2027-10-11': true,
+        '2027-12-25': true,
+    };
+    var DOW_KO = ['일', '월', '화', '수', '목', '금', '토'];
+
+    // 제공일 표시용 — { html: "5월 22일 (금)", isClosed: bool }
+    function fmtServeWithDow(d) {
+        if (!d) return { html: '', isClosed: false };
+        if (typeof d === 'object' && d.start) d = d.start;
+        if (typeof d !== 'string') return { html: '', isClosed: false };
+        var m = d.match(/^(\d{4})-(\d{2})-(\d{2})/);
+        if (!m) return { html: escapeHtml(d), isClosed: false };
+        var dt = new Date(parseInt(m[1], 10), parseInt(m[2], 10) - 1, parseInt(m[3], 10));
+        var dow = dt.getDay();
+        // 휴일/쉬는 날 = 일요일 OR 공휴일 (이 카페는 평소 365일 영업, 공휴일만 휴무)
+        var isClosed = (dow === 0) || !!KR_HOLIDAYS[d.slice(0, 10)];
+        var html = parseInt(m[2], 10) + '월 ' + parseInt(m[3], 10) + '일 (' + DOW_KO[dow] + ')';
+        return { html: html, isClosed: isClosed };
+    }
+
     // ---------- 영업시간 안내 ----------
     function updateHoursStatus() {
         var now = new Date();
@@ -1587,7 +1647,17 @@
 
         // Now serving — 진행 중 첫 항목
         var now = all.find(function (x) { return x['상태'] === '진행 중'; }) || today[0];
-        renderNowServing(now);
+
+        // 품절 감지 — now 가 없고, 오늘 날짜에 '완료' 항목이 있으면 품절로 본다.
+        var todayStr = isoToday();
+        var soldOutToday = null;
+        if (!now) {
+            soldOutToday = all.filter(function (x) {
+                if (x['상태'] !== '완료') return false;
+                var s = x['제공일'] && x['제공일'].start;
+                return s === todayStr;
+            }).sort(function (a, b) { return (b.id || 0) - (a.id || 0); })[0] || null;
+        }
 
         // Upcoming — 예정 (서버 정렬: serve_date ASC). 오늘 ~ 일주일 이내, 날짜 있는 것만.
         var todayStart = new Date(); todayStart.setHours(0, 0, 0, 0);
@@ -1599,14 +1669,48 @@
             var d = new Date(serve);
             return !isNaN(d.getTime()) && d >= todayStart && d <= weekEnd;
         });
+
+        // 내일 커피 — 품절 안내용으로 별도 추출
+        var tomorrowStr = isoOffset(1);
+        var tomorrowCoffee = all.filter(function (x) {
+            if (x['상태'] !== '예정') return false;
+            var s = x['제공일'] && x['제공일'].start;
+            return s === tomorrowStr;
+        }).sort(function (a, b) { return (a.id || 0) - (b.id || 0); })[0] || null;
+
+        renderNowServing(now, soldOutToday, tomorrowCoffee);
         renderUpcoming(upcoming);
     }
 
+    function isoToday() {
+        var d = new Date();
+        return d.getFullYear() + '-' +
+            String(d.getMonth() + 1).padStart(2, '0') + '-' +
+            String(d.getDate()).padStart(2, '0');
+    }
+    function isoOffset(days) {
+        var d = new Date();
+        d.setDate(d.getDate() + days);
+        return d.getFullYear() + '-' +
+            String(d.getMonth() + 1).padStart(2, '0') + '-' +
+            String(d.getDate()).padStart(2, '0');
+    }
+
     // ---------- Now Serving 렌더 ----------
-    function renderNowServing(c) {
+    function renderNowServing(c, soldOut, tomorrow) {
         var el = document.getElementById('now-content');
         if (!c) {
-            el.innerHTML = '<div class="now-empty">오늘은 잠시 쉬어가는 중입니다.<br><span style="font-size:0.85rem; font-style:normal; opacity:0.7;">다음 한 잔을 곧 준비할게요.</span></div>';
+            if (soldOut) {
+                var tomorrowLine = tomorrow
+                    ? '<div class="now-empty-next">내일은 <strong>' + escapeHtml(tomorrow['커피'] || '') + '</strong> 커피를 준비할 예정입니다.</div>'
+                    : '';
+                el.innerHTML =
+                    '<div class="now-empty">오늘의 커피는 품절되었습니다.' +
+                        '<br><span style="font-size:0.85rem; font-style:normal; opacity:0.7;">다음 한 잔을 곧 준비할게요.</span>' +
+                    '</div>' + tomorrowLine;
+            } else {
+                el.innerHTML = '<div class="now-empty">오늘은 잠시 쉬어가는 중입니다.<br><span style="font-size:0.85rem; font-style:normal; opacity:0.7;">다음 한 잔을 곧 준비할게요.</span></div>';
+            }
             return;
         }
         var notes = notesArr(c['컵노트']);
@@ -1659,12 +1763,12 @@
             var key = String(c.id != null ? c.id : ('idx-' + idx));
             upcomingByKey[key] = c;
             var notes = notesArr(c['컵노트']);
-            var serve = (c['제공일'] && c['제공일'].start) ? fmtServe(c['제공일']) : '';
+            var serveInfo = (c['제공일'] && c['제공일'].start) ? fmtServeWithDow(c['제공일']) : { html: '', isClosed: false };
             return '' +
                 '<article class="upcoming-card" data-key="' + escapeHtml(key) + '" tabindex="0" role="button" aria-label="자세히 보기">' +
                     '<div class="upcoming-head">' +
                         '<span class="upcoming-process">' + escapeHtml(c['프로세싱'] || 'COMING') + '</span>' +
-                        (serve ? '<span class="upcoming-serve">' + escapeHtml(serve) + '</span>' : '') +
+                        (serveInfo.html ? '<span class="upcoming-serve' + (serveInfo.isClosed ? ' is-closed' : '') + '">' + serveInfo.html + '</span>' : '') +
                     '</div>' +
                     '<h4 class="upcoming-title">' + escapeHtml(c['커피'] || '') + '</h4>' +
                     (notes.length ? '<div class="upcoming-notes">' + notes.slice(0, 5).map(escapeHtml).join(' · ') + '</div>' : '') +
