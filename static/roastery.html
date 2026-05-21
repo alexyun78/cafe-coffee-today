@@ -632,6 +632,7 @@
             letter-spacing: 0.04em;
         }
         .now-empty {
+            position: relative;
             text-align: center;
             padding: 80px 40px;
             background: var(--canvas-warm);
@@ -1701,11 +1702,19 @@
         var el = document.getElementById('now-content');
         if (!c) {
             if (soldOut) {
+                // 품절 커피에도 피드백 받을 수 있도록 전역 맵에 등록
+                window.coffeeTodayMap = window.coffeeTodayMap || {};
+                if (soldOut.id != null) window.coffeeTodayMap[soldOut.id] = soldOut;
+                var fbBtnSold = (soldOut.id != null)
+                    ? '<button class="feedback-btn feedback-btn--dark" type="button" onclick="openFeedbackModalById(' + soldOut.id + ')">💬 피드백</button>'
+                    : '';
                 var tomorrowLine = tomorrow
                     ? '<div class="now-empty-next">내일은 <strong>' + escapeHtml(tomorrow['커피'] || '') + '</strong> 커피를 준비할 예정입니다.</div>'
                     : '';
                 el.innerHTML =
-                    '<div class="now-empty">오늘의 커피는 품절되었습니다.' +
+                    '<div class="now-empty">' +
+                        fbBtnSold +
+                        '오늘의 커피는 품절되었습니다.' +
                         '<br><span style="font-size:0.85rem; font-style:normal; opacity:0.7;">다음 한 잔을 곧 준비할게요.</span>' +
                     '</div>' + tomorrowLine;
             } else {

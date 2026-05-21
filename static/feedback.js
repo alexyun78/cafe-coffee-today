@@ -23,9 +23,9 @@
     window.coffeeTodayMap = window.coffeeTodayMap || {};
 
     const CHOICES = [
-        { rating: 1, emoji: '😞', label: '싫어요', cls: 'fb-choice-bad' },
-        { rating: 3, emoji: '😐', label: '중간',   cls: 'fb-choice-mid' },
         { rating: 5, emoji: '😍', label: '좋아요', cls: 'fb-choice-good' },
+        { rating: 3, emoji: '😐', label: '중간',   cls: 'fb-choice-mid' },
+        { rating: 1, emoji: '😞', label: '싫어요', cls: 'fb-choice-bad' },
     ];
 
     const state = {
