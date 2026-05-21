@@ -331,7 +331,7 @@
   }
   .list-items { display: flex; flex-direction: column; gap: 8px; }
   .list-item {
-    display: flex; justify-content: space-between; align-items: center;
+    display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center;
     padding: 12px 14px; background: #faf8f5; border-radius: 8px;
     border-left: 3px solid var(--accent); cursor: pointer;
     transition: background 0.15s;
@@ -393,6 +393,44 @@
     text-decoration: line-through; opacity: 0.65;
   }
   .list-item.sold-out .list-item-meta { opacity: 0.55; }
+
+  /* 리스트 항목 인라인 피드백 */
+  .list-item-feedback {
+    flex-basis: 100%;
+    margin-top: 10px; padding-top: 10px;
+    border-top: 1px dashed var(--border);
+    display: flex; flex-direction: column; gap: 6px;
+  }
+  .li-fb-summary {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 0.8rem; color: var(--coffee-dark); font-weight: 600;
+    flex-wrap: wrap;
+  }
+  .li-fb-tally {
+    display: inline-flex; align-items: center; gap: 3px;
+    padding: 2px 8px; border-radius: 999px;
+    font-size: 0.78rem; font-weight: 700;
+  }
+  .li-fb-tally-good { background: #E8F5E9; color: #1B5E20; }
+  .li-fb-tally-mid  { background: #FFF8E1; color: #E65100; }
+  .li-fb-tally-bad  { background: #FFEBEE; color: #B71C1C; }
+  .li-fb-tally-zero { opacity: 0.45; }
+  .li-fb-total { color: var(--muted); font-weight: 500; font-size: 0.75rem; }
+  .li-fb-list {
+    display: flex; flex-direction: column; gap: 3px;
+    font-size: 0.78rem; color: #5a4730;
+  }
+  .li-fb-row {
+    display: flex; gap: 8px; align-items: baseline; flex-wrap: wrap;
+    padding: 2px 0;
+  }
+  .li-fb-row-tier { font-weight: 700; white-space: nowrap; }
+  .li-fb-row-tier-good { color: #1B5E20; }
+  .li-fb-row-tier-mid  { color: #E65100; }
+  .li-fb-row-tier-bad  { color: #B71C1C; }
+  .li-fb-row-date { color: var(--muted); font-size: 0.72rem; white-space: nowrap; }
+  .li-fb-row-comment { color: #4a3a2a; font-style: italic; }
+  .li-fb-more { color: var(--muted); font-size: 0.74rem; padding-top: 2px; }
 
   /* 고정 로스터리 표시 (입력 불가) */
   .roastery-fixed {
@@ -599,10 +637,10 @@
     </div>
   </section>
 
-  <!-- 피드백 -->
+  <!-- 피드백 (오늘 제공된 커피만) -->
   <section id="feedback-view" class="card stats-card" style="display:none;">
     <h2>
-      💬 사용자 피드백
+      💬 오늘의 커피 피드백
       <span class="stats-date" id="fb-count"></span>
       <button type="button" class="stats-refresh" id="fb-refresh" aria-label="새로고침">↻</button>
     </h2>
@@ -920,11 +958,28 @@ $("#pin-input").addEventListener("keydown", (e) => {
   if (e.key === "Enter") $("#pin-submit").click();
 });
 
+// ---------- 공유 캐시 (리스트 + 피드백) ----------
+let _coffeesCache = [];
+let _feedbackCache = [];
+let _fbByName = {};
+
+function rebuildFbIndex() {
+  _fbByName = {};
+  for (const fb of _feedbackCache) {
+    const name = (fb.coffee_name && fb.coffee_name.trim()) || `#${fb.coffee_id}`;
+    if (!_fbByName[name]) _fbByName[name] = [];
+    _fbByName[name].push(fb);
+  }
+}
+
 // ---------- 리스트 ----------
 async function loadList() {
   try {
     const data = await api("GET", "/api/coffee/all");
-    renderList(data.items || []);
+    _coffeesCache = data.items || [];
+    renderList(_coffeesCache);
+    // 오늘의 커피 피드백 섹션은 _coffeesCache 의 제공일을 보고 필터링하므로 같이 재렌더
+    renderFeedbackSection();
   } catch (e) {
     if (e.message !== "unauthorized") showBanner("목록을 불러오지 못했습니다: " + e.message, "error");
   }
@@ -972,6 +1027,7 @@ function renderList(items) {
     if (roast) dateParts.push("🫘 " + roast);
     if (serve) dateParts.push("☕ " + serve);
     const dateStr = dateParts.join(" · ");
+    const fbBlock = renderInlineFeedback(it["커피"] || "");
     return `
       <div class="list-item ${isSold ? 'sold-out' : ''}" data-id="${it.id}">
         <div class="list-item-main">
@@ -986,6 +1042,7 @@ function renderList(items) {
           ${imgBtn}
           ${dupBtn}
         </div>
+        ${fbBlock}
       </div>
     `;
   }).join("");
@@ -1776,6 +1833,43 @@ function tallyByTier(items) {
   return t;
 }
 
+// 리스트 항목의 인라인 피드백 HTML — _fbByName 사용
+const LI_FB_LATEST = 3; // 인라인에 노출할 최근 피드백 건수
+function renderInlineFeedback(coffeeName) {
+  if (!coffeeName) return '';
+  const items = _fbByName[coffeeName.trim()] || [];
+  if (!items.length) return '';
+  const t = tallyByTier(items);
+  const cls = (k) => `li-fb-tally li-fb-tally-${k}${t[k] === 0 ? ' li-fb-tally-zero' : ''}`;
+  const TIER_LABEL = { good: '좋아요', mid: '중간', bad: '싫어요' };
+  const TIER_EMOJI = { good: '😍', mid: '😐', bad: '😞' };
+  // items 는 created_at DESC 정렬되어 오므로 그대로 최근 N 개
+  const latest = items.slice(0, LI_FB_LATEST).map((it) => {
+    const k = ratingTier(it.rating);
+    return `
+      <div class="li-fb-row">
+        <span class="li-fb-row-tier li-fb-row-tier-${k}">${TIER_EMOJI[k]} ${TIER_LABEL[k]}</span>
+        <span class="li-fb-row-date">${formatFbDate(it.created_at)}</span>
+        ${it.comment ? `<span class="li-fb-row-comment">"${escapeHtml(it.comment)}"</span>` : ''}
+      </div>
+    `;
+  }).join('');
+  const more = items.length > LI_FB_LATEST
+    ? `<div class="li-fb-more">+${items.length - LI_FB_LATEST}건 더 (사용자 피드백 섹션에서 전체 확인)</div>`
+    : '';
+  return `
+    <div class="list-item-feedback">
+      <div class="li-fb-summary">
+        <span class="${cls('good')}">😍 ${t.good}</span>
+        <span class="${cls('mid')}">😐 ${t.mid}</span>
+        <span class="${cls('bad')}">😞 ${t.bad}</span>
+        <span class="li-fb-total">총 ${items.length}건</span>
+      </div>
+      <div class="li-fb-list">${latest}${more}</div>
+    </div>
+  `;
+}
+
 function formatFbDate(iso) {
   try {
     const d = new Date(iso);
@@ -1787,86 +1881,106 @@ function formatFbDate(iso) {
 
 async function loadFeedback() {
   const refreshBtn = document.getElementById("fb-refresh");
-  const view = document.getElementById("feedback-view");
   const body = document.getElementById("fb-body");
-  const countEl = document.getElementById("fb-count");
-  if (!view) return;
-  view.style.display = "";
   if (refreshBtn) refreshBtn.disabled = true;
   try {
     const r = await api("GET", "/api/feedback");
-    const items = r.items || [];
-    if (countEl) countEl.textContent = `${items.length}건`;
-    if (!items.length) {
-      body.innerHTML = '<div class="fb-empty">아직 받은 피드백이 없습니다.</div>';
-      return;
-    }
-    // 원두 이름 기준 그룹핑 — 재입고/복제로 새 row 가 생겨도 같은 원두 피드백이 한 카드에 모임
-    const groups = {};
-    for (const it of items) {
-      const key = (it.coffee_name && it.coffee_name.trim()) || `#${it.coffee_id}`;
-      if (!groups[key]) groups[key] = { name: key, items: [] };
-      groups[key].items.push(it);
-    }
-    const groupKeys = Object.keys(groups).sort((a, b) => {
-      const da = groups[a].items[0]?.created_at || '';
-      const db = groups[b].items[0]?.created_at || '';
-      return db.localeCompare(da);
-    });
-    body.innerHTML = groupKeys.map(k => {
-      const g = groups[k];
-      const t = tallyByTier(g.items);
-      return `
-        <div class="fb-coffee-group">
-          <div class="fb-coffee-name">${escapeHtml(g.name)}</div>
-          <div class="fb-coffee-meta">
-            ${g.items.length}건
-            <span class="fb-coffee-tally">
-              <span>😍 ${t.good}</span><span>😐 ${t.mid}</span><span>😞 ${t.bad}</span>
-            </span>
-          </div>
-          ${g.items.map(it => `
-            <div class="fb-item" data-id="${it.id}">
-              <button class="fb-item-delete" type="button" title="삭제" aria-label="삭제">🗑</button>
-              <div class="fb-item-head">
-                <div>
-                  ${renderRating(it.rating)}
-                  ${it.nickname ? `<span class="fb-item-nick" style="margin-left:8px;">${escapeHtml(it.nickname)}</span>` : ''}
-                </div>
-                <span class="fb-item-date">${formatFbDate(it.created_at)}</span>
-              </div>
-              ${(it.cup_notes && it.cup_notes.length) ? `
-                <div class="fb-item-notes">
-                  ${it.cup_notes.map(n => `<span class="fb-item-note">${escapeHtml(n)}</span>`).join('')}
-                </div>` : ''}
-              ${it.comment ? `<div class="fb-item-comment">${escapeHtml(it.comment)}</div>` : ''}
-            </div>
-          `).join('')}
-        </div>
-      `;
-    }).join('');
-
-    body.querySelectorAll('.fb-item-delete').forEach(btn => {
-      btn.addEventListener('click', async (e) => {
-        e.stopPropagation();
-        const itemEl = btn.closest('.fb-item');
-        const id = itemEl?.dataset.id;
-        if (!id) return;
-        if (!confirm('이 피드백을 삭제할까요?')) return;
-        try {
-          await api("DELETE", `/api/feedback/${id}`);
-          showToast('삭제됨');
-          loadFeedback();
-        } catch (err) {
-          showBanner('삭제 실패: ' + (err.message || err), 'error');
-        }
-      });
-    });
+    _feedbackCache = r.items || [];
+    rebuildFbIndex();
+    renderFeedbackSection();
+    // 리스트도 이미 그려져 있다면 인라인 피드백 갱신을 위해 다시 그림
+    if (_coffeesCache.length) renderList(_coffeesCache);
   } catch (e) {
-    body.innerHTML = '<div class="fb-empty">불러오기 실패</div>';
+    if (body) body.innerHTML = '<div class="fb-empty">불러오기 실패</div>';
   } finally {
     if (refreshBtn) refreshBtn.disabled = false;
   }
+}
+
+// 오늘 제공된 커피의 피드백만 추려서 섹션에 렌더 (다른 커피 피드백은 DB 에는 있지만 여기서는 숨김)
+function renderFeedbackSection() {
+  const view = document.getElementById("feedback-view");
+  const body = document.getElementById("fb-body");
+  const countEl = document.getElementById("fb-count");
+  if (!view || !body) return;
+  view.style.display = "";
+
+  const today = ymdLocal(new Date());
+  const todayNames = new Set();
+  for (const c of _coffeesCache) {
+    const serve = c["제공일"]?.start || "";
+    if (serve === today && c["커피"]) todayNames.add(c["커피"].trim());
+  }
+
+  const items = _feedbackCache.filter(fb => todayNames.has((fb.coffee_name || "").trim()));
+  if (countEl) countEl.textContent = `${items.length}건`;
+  if (!items.length) {
+    body.innerHTML = todayNames.size
+      ? '<div class="fb-empty">오늘 제공된 커피에 대한 피드백이 아직 없습니다.</div>'
+      : '<div class="fb-empty">오늘 제공된 커피가 없습니다.</div>';
+    return;
+  }
+  // 원두 이름 기준 그룹핑 (오늘 커피만)
+  const groups = {};
+  for (const it of items) {
+    const key = (it.coffee_name && it.coffee_name.trim()) || `#${it.coffee_id}`;
+    if (!groups[key]) groups[key] = { name: key, items: [] };
+    groups[key].items.push(it);
+  }
+  const groupKeys = Object.keys(groups).sort((a, b) => {
+    const da = groups[a].items[0]?.created_at || '';
+    const db = groups[b].items[0]?.created_at || '';
+    return db.localeCompare(da);
+  });
+  body.innerHTML = groupKeys.map(k => {
+    const g = groups[k];
+    const t = tallyByTier(g.items);
+    return `
+      <div class="fb-coffee-group">
+        <div class="fb-coffee-name">${escapeHtml(g.name)}</div>
+        <div class="fb-coffee-meta">
+          ${g.items.length}건
+          <span class="fb-coffee-tally">
+            <span>😍 ${t.good}</span><span>😐 ${t.mid}</span><span>😞 ${t.bad}</span>
+          </span>
+        </div>
+        ${g.items.map(it => `
+          <div class="fb-item" data-id="${it.id}">
+            <button class="fb-item-delete" type="button" title="삭제" aria-label="삭제">🗑</button>
+            <div class="fb-item-head">
+              <div>
+                ${renderRating(it.rating)}
+                ${it.nickname ? `<span class="fb-item-nick" style="margin-left:8px;">${escapeHtml(it.nickname)}</span>` : ''}
+              </div>
+              <span class="fb-item-date">${formatFbDate(it.created_at)}</span>
+            </div>
+            ${(it.cup_notes && it.cup_notes.length) ? `
+              <div class="fb-item-notes">
+                ${it.cup_notes.map(n => `<span class="fb-item-note">${escapeHtml(n)}</span>`).join('')}
+              </div>` : ''}
+            ${it.comment ? `<div class="fb-item-comment">${escapeHtml(it.comment)}</div>` : ''}
+          </div>
+        `).join('')}
+      </div>
+    `;
+  }).join('');
+
+  body.querySelectorAll('.fb-item-delete').forEach(btn => {
+    btn.addEventListener('click', async (e) => {
+      e.stopPropagation();
+      const itemEl = btn.closest('.fb-item');
+      const id = itemEl?.dataset.id;
+      if (!id) return;
+      if (!confirm('이 피드백을 삭제할까요?')) return;
+      try {
+        await api("DELETE", `/api/feedback/${id}`);
+        showToast('삭제됨');
+        loadFeedback();
+      } catch (err) {
+        showBanner('삭제 실패: ' + (err.message || err), 'error');
+      }
+    });
+  });
 }
 
 document.getElementById("fb-refresh")?.addEventListener("click", loadFeedback);
