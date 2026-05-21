@@ -490,6 +490,29 @@ def api_feedback_delete(feedback_id):
     return jsonify({"success": True})
 
 
+@app.put("/api/feedback/<int:feedback_id>")
+@require_pin
+def api_feedback_update(feedback_id):
+    data = request.get_json(silent=True) or {}
+    rating = data.get("rating")
+    if rating is not None:
+        try:
+            rating = int(rating)
+        except (TypeError, ValueError):
+            return jsonify({"success": False, "error": "rating은 정수"}), 400
+        if not (1 <= rating <= 5):
+            return jsonify({"success": False, "error": "rating은 1~5"}), 400
+    comment = data.get("comment")
+    if comment is not None:
+        comment = str(comment).strip()[:FEEDBACK_COMMENT_MAX]
+    nickname = data.get("nickname")
+    if nickname is not None:
+        nickname = str(nickname).strip()[:FEEDBACK_NICKNAME_MAX]
+    if not db.update_feedback(feedback_id, rating=rating, comment=comment, nickname=nickname):
+        return jsonify({"success": False, "error": "not found or no changes"}), 404
+    return jsonify({"success": True})
+
+
 @app.get("/api/feedback/summary/<int:coffee_id>")
 def api_feedback_summary(coffee_id):
     """공개 — 카드에 평균 별점/건수 표시할 때 사용."""

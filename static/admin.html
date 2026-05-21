@@ -186,6 +186,63 @@
     font-size: 0.78rem; color: var(--muted);
   }
   .fb-coffee-tally span { white-space: nowrap; }
+
+  /* 피드백 관리 모달 내부 */
+  .fbm-empty { color: var(--muted); text-align: center; padding: 20px 0; }
+  .fbm-row {
+    background: #fbf6ec; border-radius: 10px;
+    padding: 12px 14px; margin-bottom: 8px;
+    border: 1px solid transparent;
+  }
+  .fbm-row.editing { border-color: #D2691E; background: #fff8f0; }
+  .fbm-row-head {
+    display: flex; justify-content: space-between; align-items: center;
+    gap: 8px; flex-wrap: wrap;
+    margin-bottom: 6px;
+  }
+  .fbm-row-meta { display: inline-flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  .fbm-row-date { font-size: 0.72rem; color: var(--muted); white-space: nowrap; }
+  .fbm-row-nick { font-size: 0.82rem; color: var(--coffee-dark); font-weight: 600; }
+  .fbm-row-comment {
+    margin-top: 6px; font-size: 0.9rem; color: #4a3a2a;
+    line-height: 1.5; white-space: pre-wrap; word-break: break-word;
+  }
+  .fbm-row-actions { display: inline-flex; gap: 6px; flex-shrink: 0; }
+  .fbm-btn {
+    border: none; background: #f0ebe4; color: var(--coffee-dark);
+    padding: 5px 10px; border-radius: 6px; font-size: 0.78rem;
+    cursor: pointer; font-family: inherit; font-weight: 600;
+  }
+  .fbm-btn:hover { background: #e6ddd0; }
+  .fbm-btn-delete { background: #FFEBEE; color: #c0392b; }
+  .fbm-btn-delete:hover { background: #ffcdd2; }
+  .fbm-btn-save { background: #6F4E37; color: #fff; }
+  .fbm-btn-save:hover { background: #5a4030; }
+
+  /* 인라인 수정 폼 */
+  .fbm-edit { display: none; margin-top: 10px; }
+  .fbm-row.editing .fbm-edit { display: block; }
+  .fbm-edit-label {
+    display: block; font-size: 0.78rem; color: var(--coffee-dark);
+    font-weight: 600; margin: 8px 0 6px;
+  }
+  .fbm-edit-choices { display: flex; gap: 6px; flex-wrap: wrap; }
+  .fbm-edit-choice {
+    border: 2px solid #e2d5c0; background: #fff;
+    padding: 6px 12px; border-radius: 999px;
+    font-size: 0.85rem; font-weight: 700;
+    cursor: pointer; font-family: inherit;
+  }
+  .fbm-edit-choice.active.good { border-color: #2E7D32; background: #E8F5E9; color: #1B5E20; }
+  .fbm-edit-choice.active.mid  { border-color: #F9A825; background: #FFF8E1; color: #E65100; }
+  .fbm-edit-choice.active.bad  { border-color: #c62828; background: #FFEBEE; color: #B71C1C; }
+  .fbm-edit-textarea {
+    width: 100%; min-height: 72px; padding: 8px 10px;
+    border: 1px solid #d5cabe; border-radius: 8px;
+    font-family: inherit; font-size: 0.9rem; resize: vertical;
+    box-sizing: border-box;
+  }
+  .fbm-edit-bar { display: flex; gap: 8px; justify-content: flex-end; margin-top: 10px; }
   .fb-item-notes {
     display: flex; flex-wrap: wrap; gap: 4px;
     margin-top: 6px;
@@ -406,6 +463,22 @@
     font-size: 0.8rem; color: var(--coffee-dark); font-weight: 600;
     flex-wrap: wrap;
   }
+  .li-fb-manage-btn {
+    background: transparent; border: 1px dashed transparent;
+    padding: 4px 8px; border-radius: 6px;
+    width: 100%; text-align: left;
+    cursor: pointer; font-family: inherit;
+    transition: background 0.15s, border-color 0.15s;
+  }
+  .li-fb-manage-btn:hover {
+    background: #fff5e6; border-color: #e6ddd0;
+  }
+  .li-fb-manage-icon {
+    margin-left: auto;
+    color: var(--muted); font-size: 0.95rem;
+    opacity: 0.7;
+  }
+  .li-fb-manage-btn:hover .li-fb-manage-icon { opacity: 1; color: var(--coffee-dark); }
   .li-fb-tally {
     display: inline-flex; align-items: center; gap: 3px;
     padding: 2px 8px; border-radius: 999px;
@@ -807,6 +880,17 @@
   </div>
 </div>
 
+<!-- 피드백 관리 모달 (특정 원두의 모든 피드백을 수정/삭제) -->
+<div class="modal-backdrop hidden" id="fb-manage-modal">
+  <div class="modal" style="max-width: 640px;">
+    <div style="display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:12px;">
+      <h2 id="fb-manage-title">피드백 관리</h2>
+      <button type="button" class="btn btn-secondary" id="fb-manage-close" style="min-width:auto; padding:6px 12px;">✕</button>
+    </div>
+    <div id="fb-manage-body" style="max-height:60vh; overflow-y:auto;"></div>
+  </div>
+</div>
+
 <!-- PIN 모달 -->
 <div class="modal-backdrop" id="pin-modal">
   <div class="modal">
@@ -1051,7 +1135,14 @@ function renderList(items) {
       if (e.target.closest(".btn-duplicate")) return;
       if (e.target.closest(".btn-availability")) return;
       if (e.target.closest(".btn-image")) return;
+      if (e.target.closest(".li-fb-manage-btn")) return;
       openEdit(parseInt(row.dataset.id, 10));
+    });
+  });
+  $$(".li-fb-manage-btn").forEach((btn) => {
+    btn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      openFeedbackManageModal(btn.dataset.coffeeName || "");
     });
   });
   $$(".btn-duplicate").forEach((btn) => {
@@ -1833,21 +1924,23 @@ function tallyByTier(items) {
   return t;
 }
 
-// 리스트 항목의 인라인 피드백 — 총 개수 요약만 (개별 항목은 '오늘의 커피 피드백' 섹션에서 확인)
+// 리스트 항목의 인라인 피드백 — 총 개수 요약만. 클릭하면 관리 모달 오픈.
 function renderInlineFeedback(coffeeName) {
   if (!coffeeName) return '';
   const items = _fbByName[coffeeName.trim()] || [];
   if (!items.length) return '';
   const t = tallyByTier(items);
   const cls = (k) => `li-fb-tally li-fb-tally-${k}${t[k] === 0 ? ' li-fb-tally-zero' : ''}`;
+  const nameAttr = escapeAttr(coffeeName);
   return `
     <div class="list-item-feedback">
-      <div class="li-fb-summary">
+      <button type="button" class="li-fb-summary li-fb-manage-btn" data-coffee-name="${nameAttr}" aria-label="피드백 관리">
         <span class="${cls('good')}">좋아요 ${t.good}</span>
         <span class="${cls('mid')}">중간 ${t.mid}</span>
         <span class="${cls('bad')}">싫어요 ${t.bad}</span>
         <span class="li-fb-total">총 ${items.length}건</span>
-      </div>
+        <span class="li-fb-manage-icon" aria-hidden="true">✎</span>
+      </button>
     </div>
   `;
 }
@@ -1966,6 +2059,120 @@ function renderFeedbackSection() {
 }
 
 document.getElementById("fb-refresh")?.addEventListener("click", loadFeedback);
+
+// ---------- 피드백 관리 모달 (특정 원두) ----------
+let _fbManageCoffeeName = "";
+function openFeedbackManageModal(coffeeName) {
+  _fbManageCoffeeName = coffeeName || "";
+  document.getElementById("fb-manage-title").textContent =
+    `💬 ${_fbManageCoffeeName || ""} 피드백 관리`;
+  document.getElementById("fb-manage-modal").classList.remove("hidden");
+  renderFeedbackManageBody();
+}
+function closeFeedbackManageModal() {
+  document.getElementById("fb-manage-modal").classList.add("hidden");
+  _fbManageCoffeeName = "";
+}
+document.getElementById("fb-manage-close")?.addEventListener("click", closeFeedbackManageModal);
+document.getElementById("fb-manage-modal")?.addEventListener("click", (e) => {
+  if (e.target.id === "fb-manage-modal") closeFeedbackManageModal();
+});
+
+function renderFeedbackManageBody() {
+  const body = document.getElementById("fb-manage-body");
+  if (!body) return;
+  const items = (_fbByName[_fbManageCoffeeName.trim()] || []).slice();
+  if (!items.length) {
+    body.innerHTML = '<div class="fbm-empty">남아 있는 피드백이 없습니다.</div>';
+    return;
+  }
+  const TIER_LABEL = { good: '😍 좋아요', mid: '😐 중간', bad: '😞 싫어요' };
+  body.innerHTML = items.map((it) => {
+    const k = ratingTier(it.rating);
+    const notesHtml = (it.cup_notes && it.cup_notes.length)
+      ? `<div class="fb-item-notes">${it.cup_notes.map(n => `<span class="fb-item-note">${escapeHtml(n)}</span>`).join('')}</div>`
+      : '';
+    return `
+      <div class="fbm-row" data-id="${it.id}" data-rating="${it.rating}">
+        <div class="fbm-row-head">
+          <div class="fbm-row-meta">
+            ${renderRating(it.rating)}
+            ${it.nickname ? `<span class="fbm-row-nick">${escapeHtml(it.nickname)}</span>` : ''}
+            <span class="fbm-row-date">${formatFbDate(it.created_at)}</span>
+          </div>
+          <div class="fbm-row-actions">
+            <button type="button" class="fbm-btn fbm-edit-btn">수정</button>
+            <button type="button" class="fbm-btn fbm-btn-delete fbm-delete-btn">삭제</button>
+          </div>
+        </div>
+        ${notesHtml}
+        ${it.comment ? `<div class="fbm-row-comment">${escapeHtml(it.comment)}</div>` : ''}
+        <div class="fbm-edit">
+          <label class="fbm-edit-label">평가</label>
+          <div class="fbm-edit-choices">
+            ${['good','mid','bad'].map(tk => `
+              <button type="button" class="fbm-edit-choice ${tk} ${tk===k?'active':''}" data-tier="${tk}">${TIER_LABEL[tk]}</button>
+            `).join('')}
+          </div>
+          <label class="fbm-edit-label">코멘트</label>
+          <textarea class="fbm-edit-textarea" maxlength="500">${escapeHtml(it.comment || '')}</textarea>
+          <div class="fbm-edit-bar">
+            <button type="button" class="fbm-btn fbm-cancel-btn">취소</button>
+            <button type="button" class="fbm-btn fbm-btn-save fbm-save-btn">저장</button>
+          </div>
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  // 핸들러 바인딩
+  const TIER_TO_RATING = { good: 5, mid: 3, bad: 1 };
+  body.querySelectorAll('.fbm-row').forEach((rowEl) => {
+    const id = parseInt(rowEl.dataset.id, 10);
+    rowEl.querySelector('.fbm-edit-btn').addEventListener('click', () => {
+      // 다른 row 의 편집은 닫기 (동시 1개만 편집)
+      body.querySelectorAll('.fbm-row.editing').forEach(r => r.classList.remove('editing'));
+      rowEl.classList.add('editing');
+    });
+    rowEl.querySelector('.fbm-cancel-btn').addEventListener('click', () => {
+      rowEl.classList.remove('editing');
+    });
+    rowEl.querySelectorAll('.fbm-edit-choice').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        rowEl.querySelectorAll('.fbm-edit-choice').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+      });
+    });
+    rowEl.querySelector('.fbm-save-btn').addEventListener('click', async () => {
+      const tierBtn = rowEl.querySelector('.fbm-edit-choice.active');
+      const tier = tierBtn ? tierBtn.dataset.tier : null;
+      const comment = rowEl.querySelector('.fbm-edit-textarea').value;
+      if (!tier) { showToast('평가를 선택하세요'); return; }
+      try {
+        await api("PUT", "/api/feedback/" + id, {
+          rating: TIER_TO_RATING[tier],
+          comment: comment,
+        });
+        showToast('수정됨');
+        await loadFeedback(); // 캐시 갱신 → 리스트/섹션/관리모달 모두 갱신
+        renderFeedbackManageBody();
+      } catch (err) {
+        showBanner('수정 실패: ' + (err.message || err), 'error');
+      }
+    });
+    rowEl.querySelector('.fbm-delete-btn').addEventListener('click', async () => {
+      if (!confirm('이 피드백을 삭제할까요?')) return;
+      try {
+        await api("DELETE", "/api/feedback/" + id);
+        showToast('삭제됨');
+        await loadFeedback();
+        renderFeedbackManageBody();
+      } catch (err) {
+        showBanner('삭제 실패: ' + (err.message || err), 'error');
+      }
+    });
+  });
+}
 
 // ---------- init ----------
 async function init() {

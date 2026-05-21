@@ -654,6 +654,31 @@ def delete_feedback(feedback_id: int) -> bool:
         return cur.rowcount > 0
 
 
+def update_feedback(feedback_id: int, rating: Optional[int] = None,
+                    comment: Optional[str] = None,
+                    nickname: Optional[str] = None) -> bool:
+    """관리자용 — rating/comment/nickname 수정. None 은 변경 안 함."""
+    sets = []
+    values: list = []
+    if rating is not None:
+        sets.append("rating=?")
+        values.append(int(rating))
+    if comment is not None:
+        sets.append("comment=?")
+        values.append(comment or None)
+    if nickname is not None:
+        sets.append("nickname=?")
+        values.append(nickname or None)
+    if not sets:
+        return False
+    values.append(feedback_id)
+    with connect() as conn:
+        cur = conn.execute(
+            f"UPDATE feedback SET {','.join(sets)} WHERE id=?", values
+        )
+        return cur.rowcount > 0
+
+
 def popular_cup_notes(limit: int = 20) -> list:
     """coffees.cup_notes 전체에서 개별 향미를 빈도 내림차순으로 반환.
 
