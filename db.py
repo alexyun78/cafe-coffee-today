@@ -75,7 +75,6 @@ CREATE TABLE IF NOT EXISTS feedback (
     created_at      TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now'))
 );
 CREATE INDEX IF NOT EXISTS idx_feedback_coffee ON feedback(coffee_id, created_at DESC);
-CREATE INDEX IF NOT EXISTS idx_feedback_name ON feedback(coffee_name, created_at DESC);
 CREATE INDEX IF NOT EXISTS idx_feedback_ip ON feedback(ip_hash, created_at);
 """
 
@@ -126,7 +125,7 @@ def init_schema():
             conn.execute(
                 "INSERT INTO migrations (name) VALUES (?)", ("roastery_92cafe_default",)
             )
-        # feedback.coffee_name 컬럼 보장 + 기존 행 백필
+        # feedback.coffee_name 컬럼 보장 + 기존 행 백필 + 인덱스
         fb_cols = {r["name"] for r in conn.execute("PRAGMA table_info(feedback)").fetchall()}
         if "coffee_name" not in fb_cols:
             conn.execute("ALTER TABLE feedback ADD COLUMN coffee_name TEXT")
@@ -134,6 +133,10 @@ def init_schema():
             "UPDATE feedback "
             "SET coffee_name = (SELECT name FROM coffees WHERE coffees.id = feedback.coffee_id) "
             "WHERE coffee_name IS NULL OR coffee_name = ''"
+        )
+        conn.execute(
+            "CREATE INDEX IF NOT EXISTS idx_feedback_name "
+            "ON feedback(coffee_name, created_at DESC)"
         )
 
 
@@ -681,7 +684,7 @@ def feedback_summary_for_coffee(coffee_id: int) -> dict:
     with connect() as conn:
         name = _resolve_coffee_name(conn, coffee_id)
         if name:
-            where_sql = "WHERE coffee_name = ? OR coffee_id = ?"
+            where_sql = "WHERE (coffee_name = ? OR coffee_id = ?)"
             where_args: tuple = (name, coffee_id)
         else:
             where_sql = "WHERE coffee_id = ?"
