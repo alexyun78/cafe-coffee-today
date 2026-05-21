@@ -1833,39 +1833,21 @@ function tallyByTier(items) {
   return t;
 }
 
-// 리스트 항목의 인라인 피드백 HTML — _fbByName 사용
-const LI_FB_LATEST = 3; // 인라인에 노출할 최근 피드백 건수
+// 리스트 항목의 인라인 피드백 — 총 개수 요약만 (개별 항목은 '오늘의 커피 피드백' 섹션에서 확인)
 function renderInlineFeedback(coffeeName) {
   if (!coffeeName) return '';
   const items = _fbByName[coffeeName.trim()] || [];
   if (!items.length) return '';
   const t = tallyByTier(items);
   const cls = (k) => `li-fb-tally li-fb-tally-${k}${t[k] === 0 ? ' li-fb-tally-zero' : ''}`;
-  const TIER_LABEL = { good: '좋아요', mid: '중간', bad: '싫어요' };
-  const TIER_EMOJI = { good: '😍', mid: '😐', bad: '😞' };
-  // items 는 created_at DESC 정렬되어 오므로 그대로 최근 N 개
-  const latest = items.slice(0, LI_FB_LATEST).map((it) => {
-    const k = ratingTier(it.rating);
-    return `
-      <div class="li-fb-row">
-        <span class="li-fb-row-tier li-fb-row-tier-${k}">${TIER_EMOJI[k]} ${TIER_LABEL[k]}</span>
-        <span class="li-fb-row-date">${formatFbDate(it.created_at)}</span>
-        ${it.comment ? `<span class="li-fb-row-comment">"${escapeHtml(it.comment)}"</span>` : ''}
-      </div>
-    `;
-  }).join('');
-  const more = items.length > LI_FB_LATEST
-    ? `<div class="li-fb-more">+${items.length - LI_FB_LATEST}건 더 (사용자 피드백 섹션에서 전체 확인)</div>`
-    : '';
   return `
     <div class="list-item-feedback">
       <div class="li-fb-summary">
-        <span class="${cls('good')}">😍 ${t.good}</span>
-        <span class="${cls('mid')}">😐 ${t.mid}</span>
-        <span class="${cls('bad')}">😞 ${t.bad}</span>
+        <span class="${cls('good')}">좋아요 ${t.good}</span>
+        <span class="${cls('mid')}">중간 ${t.mid}</span>
+        <span class="${cls('bad')}">싫어요 ${t.bad}</span>
         <span class="li-fb-total">총 ${items.length}건</span>
       </div>
-      <div class="li-fb-list">${latest}${more}</div>
     </div>
   `;
 }
