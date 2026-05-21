@@ -163,11 +163,29 @@
   .fb-item-head {
     display: flex; justify-content: space-between; align-items: center;
     margin-bottom: 6px; gap: 8px;
+    padding-right: 36px; /* 삭제 아이콘과 날짜 겹침 방지 */
   }
   .fb-item-stars { color: #f5b400; font-size: 0.95rem; letter-spacing: 1px; }
   .fb-item-stars .dim { color: #d5cabe; }
   .fb-item-nick { font-size: 0.85rem; color: var(--coffee-dark); font-weight: 600; }
-  .fb-item-date { font-size: 0.72rem; color: var(--muted); }
+  .fb-item-date { font-size: 0.72rem; color: var(--muted); white-space: nowrap; }
+
+  /* 3단계 평가 뱃지 (좋아요/중간/싫어요) */
+  .fb-rating {
+    display: inline-flex; align-items: center; gap: 4px;
+    padding: 3px 10px; border-radius: 999px;
+    font-size: 0.82rem; font-weight: 700;
+    border: 1px solid transparent;
+    white-space: nowrap;
+  }
+  .fb-rating-good { background: #E8F5E9; color: #1B5E20; border-color: #C8E6C9; }
+  .fb-rating-mid  { background: #FFF8E1; color: #E65100; border-color: #FFE082; }
+  .fb-rating-bad  { background: #FFEBEE; color: #B71C1C; border-color: #FFCDD2; }
+  .fb-coffee-tally {
+    display: inline-flex; gap: 8px; margin-left: 4px;
+    font-size: 0.78rem; color: var(--muted);
+  }
+  .fb-coffee-tally span { white-space: nowrap; }
   .fb-item-notes {
     display: flex; flex-wrap: wrap; gap: 4px;
     margin-top: 6px;
@@ -1740,13 +1758,22 @@ async function loadStats() {
 document.getElementById("stats-refresh")?.addEventListener("click", loadStats);
 
 // ---------- 피드백 ----------
-function renderStars(n) {
-  const max = 5;
-  const full = Math.max(0, Math.min(max, Math.floor(n)));
-  return '<span class="fb-item-stars">' +
-    '★'.repeat(full) +
-    '<span class="dim">' + '★'.repeat(max - full) + '</span>' +
-    '</span>';
+// rating 1-5 정수를 3단계로 버킷팅: >=4 좋아요, ==3 중간, <=2 싫어요
+function ratingTier(n) {
+  const r = Math.round(Number(n) || 0);
+  if (r >= 4) return 'good';
+  if (r === 3) return 'mid';
+  return 'bad';
+}
+function renderRating(n) {
+  const t = ratingTier(n);
+  const meta = { good: ['😍', '좋아요'], mid: ['😐', '중간'], bad: ['😞', '싫어요'] }[t];
+  return `<span class="fb-rating fb-rating-${t}">${meta[0]} ${meta[1]}</span>`;
+}
+function tallyByTier(items) {
+  const t = { good: 0, mid: 0, bad: 0 };
+  for (const it of items) t[ratingTier(it.rating)]++;
+  return t;
 }
 
 function formatFbDate(iso) {
@@ -1788,17 +1815,22 @@ async function loadFeedback() {
     });
     body.innerHTML = groupKeys.map(k => {
       const g = groups[k];
-      const avg = g.items.reduce((s, x) => s + (x.rating || 0), 0) / g.items.length;
+      const t = tallyByTier(g.items);
       return `
         <div class="fb-coffee-group">
           <div class="fb-coffee-name">${escapeHtml(g.name)}</div>
-          <div class="fb-coffee-meta">${g.items.length}건 · 평균 ${avg.toFixed(1)} ★</div>
+          <div class="fb-coffee-meta">
+            ${g.items.length}건
+            <span class="fb-coffee-tally">
+              <span>😍 ${t.good}</span><span>😐 ${t.mid}</span><span>😞 ${t.bad}</span>
+            </span>
+          </div>
           ${g.items.map(it => `
             <div class="fb-item" data-id="${it.id}">
               <button class="fb-item-delete" type="button" title="삭제" aria-label="삭제">🗑</button>
               <div class="fb-item-head">
                 <div>
-                  ${renderStars(it.rating)}
+                  ${renderRating(it.rating)}
                   ${it.nickname ? `<span class="fb-item-nick" style="margin-left:8px;">${escapeHtml(it.nickname)}</span>` : ''}
                 </div>
                 <span class="fb-item-date">${formatFbDate(it.created_at)}</span>
