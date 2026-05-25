@@ -200,10 +200,11 @@ img { display: block; max-width: 100%; height: auto; }
       <div class="ez-section">
         <h2>📊 숫자로 보기</h2>
         {% for chart in data_charts %}
-          {% set _max = chart.values|map('float')|max %}
+          {# chart.values 는 jinja 가 dict.values 메서드로 잡으므로 반드시 chart['values'] subscript 사용 #}
+          {% set _max = chart['values']|map('float')|max %}
           <div class="ez-chart-card">
             <div class="ez-chart-title">{{ chart.title|e }}</div>
-            {% for v in chart.values %}
+            {% for v in chart['values'] %}
               {% set _pct = (v / _max * 100) if _max > 0 else 0 %}
               <div class="ez-bar-row">
                 <div class="ez-bar-label">{{ chart.x_labels[loop.index0]|e }}</div>
