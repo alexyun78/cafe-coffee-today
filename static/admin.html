@@ -1345,7 +1345,9 @@ async function openDuplicate(id) {
     form.reset();
     $("#field-id").value = "";
     $("#field-name").value = it["커피"] || "";
-    $("#field-roast-date").value = (it["로스팅"] && it["로스팅"].start) || "";
+    const today = new Date();
+    const todayStr = today.getFullYear() + "-" + String(today.getMonth() + 1).padStart(2, "0") + "-" + String(today.getDate()).padStart(2, "0");
+    $("#field-roast-date").value = todayStr;
     $("#field-process").value = it["프로세싱"] || "";
     $("#field-cup-notes").value = it["컵노트"] || "";
     $("#field-comment").value = it["감상"] || "";
@@ -1364,9 +1366,9 @@ async function openDuplicate(id) {
     listView.style.display = "none";
     formView.style.display = "";
     form.classList.add("active");
-    $("#field-serve-date").focus();
+    $("#field-roast-date").focus();
     loadSuggestions();
-    showToast("복제 — 제공일을 입력하세요");
+    showToast("복제 — 로스팅일을 확인하세요");
   } catch (e) {
     if (e.message !== "unauthorized") showBanner("복제 실패: " + e.message, "error");
   }
