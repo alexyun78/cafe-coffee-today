@@ -1,7 +1,24 @@
 {
   "version": 1,
-  "updated_at": "2026-05-25T01:12:03Z",
+  "updated_at": "2026-05-25T12:00:45Z",
   "items": [
+    {
+      "id": "2026-05-25-coffee-gut-microbiome-cognition-trial",
+      "date": "2026-05-25",
+      "title_ko": "커피 습관이 장내 미생물군을 재편하고 인지 기능을 바꾼다: 마이크로바이오타-장-뇌 축의 최초 인간 임상 실증",
+      "one_liner": "하루 3~5잔 커피가 Cryptobacterium·Eggerthella 증가·GABA·IPA 감소로 인지 기능을 바꾼다",
+      "categories_primary": [
+        "미생물학"
+      ],
+      "categories_secondary": [
+        "건강/영양",
+        "인지과학"
+      ],
+      "hero_image": "/static/img/insights/hero/microbiology.svg",
+      "journal": "Nature Communications",
+      "pub_date": "2026-04-21",
+      "source_basis": "abstract_only"
+    },
     {
       "id": "2026-05-23-coffee-chlorogenic-acid-mir-mlp",
       "date": "2026-05-23",

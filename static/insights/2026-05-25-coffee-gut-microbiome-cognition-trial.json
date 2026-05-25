@@ -1,0 +1,82 @@
+{
+  "version": 1,
+  "id": "2026-05-25-coffee-gut-microbiome-cognition-trial",
+  "date": "2026-05-25",
+  "slug": "coffee-gut-microbiome-cognition-trial",
+  "title_ko": "커피 습관이 장내 미생물군을 재편하고 인지 기능을 바꾼다: 마이크로바이오타-장-뇌 축의 최초 인간 임상 실증",
+  "title_original": "Habitual coffee intake shapes the gut microbiome and modifies host physiology and cognition",
+  "one_liner": "하루 3~5잔 커피가 Cryptobacterium·Eggerthella 증가·GABA·IPA 감소로 인지 기능을 바꾼다",
+  "authors": "Serena Boscaini, Thomaz F. S. Bastiaanssen, Gerard M. Moloney, Federica Bergamo, 외 20인 (APC Microbiome Ireland, University College Cork / Università degli Studi di Parma)",
+  "journal": "Nature Communications",
+  "pub_date": "2026-04-21",
+  "doi": "10.1038/s41467-026-71264-8",
+  "categories_primary": [
+    "미생물학"
+  ],
+  "categories_secondary": [
+    "건강/영양",
+    "인지과학"
+  ],
+  "summary": "커피 습관자 31명과 비음용자 31명을 대상으로 한 아일랜드 병렬 임상시험(NCT05927038·NCT05927103). 장내 미생물군·대사체·인지 기능을 동시에 추적한 최초 인간 수준 연구. 커피 음용자에서 Cryptobacterium curtum과 Eggerthella spp. 상대 풍부도 높고 GABA·IPA·인돌-3-카르복시알데히드 감소됨. 통합 모델에서 테오필린·카페인·페놀산 포함 9개 대사체가 미생물 종 및 인지 지표에 동시 연결. 커피 음용자에서 충동성·감정 반응성 상승, 비음용자에서 기억력 우수. 2주 금단 후 일부 변화 가역. 디카페인 재음용에서도 동일 미생물군 변화 재현 → 카페인 외 폴리페놀 등이 장-뇌 축 조절에 관여함을 입증.",
+  "key_findings": [
+    "커피 음용자: Cryptobacterium curtum, Eggerthella spp.(CAG:209, CAG 51_9) 상대 풍부도 유의미하게 높음",
+    "비음용자: Veillonella parvula, Veillonella sp. ACP1 더 높음",
+    "커피 음용자 대변 내 IPA·인돌-3-카르복시알데히드·GABA 감소",
+    "9개 핵심 대사체(테오필린·카페인·페놀산 포함)가 미생물 종-인지 지표 네트워크에 강하게 연결",
+    "커피 음용자: 충동성·감정 반응성 높음; 비음용자: 기억력 수행 우수",
+    "2주 금단 → 커피 음용자에서 주의력 향상, 충동성·감정 반응성 감소",
+    "카페인 및 디카페인 재음용 모두에서 Veillonella sp. ACP1 급증 → 카페인-독립적 미생물군 조절 효과 인간 수준 최초 입증",
+    "일부 대사체 변화 2주 금단 후 가역성 확인"
+  ],
+  "methodology": "62명 아일랜드 건강 성인(30~50세; 커피 음용자 31명, 비음용자 31명) 병렬 임상시험. 2주 금단 후 카페인/디카페인 커피 재음용 교차 설계. 대변·소변 16S rRNA 메타바코딩(장내 미생물군) + LC-MS/MS 대사체학 + 전산화 인지 배터리(충동성·기억력·주의력·감정 반응성). 다층 네트워크 통합 모델로 미생물-대사체-인지 연결 도출.",
+  "implications": {
+    "농가/가공장": "커피의 장-뇌 효과가 카페인 외 폴리페놀(페놀산 계열)에 의해서도 구동됨. 고폴리페놀 생두 생산하는 가공 방식(워시드 vs 내추럴 비교)이 장 건강 효과로 연결될 수 있으며, 이를 제품 차별화의 근거로 활용 가능.",
+    "로스터/큐그레이더": "라이트·미디엄 로스팅이 클로로젠산·페놀산 보존율 높아 미생물군 조절 측면에서 유리. 디카페인 커피에서도 동일 효과 확인되어, 카페인 민감 소비자에게 디카페인 스페셜티 커피의 장 건강 이점을 제시하는 근거 제공.",
+    "R&D": "어떤 폴리페놀 분획이 Cryptobacterium/Eggerthella vs Veillonella 변화를 주도하는지 정제 실험, 로스팅 정도·추출 방식별 폴리페놀 차이와 미생물군 효과 비교, Veillonella의 폴리페놀 대사 효소 경로 규명이 직접 후속 과제."
+  },
+  "limitations": "소표본(n=62), 단일 지역(아일랜드), 2주 금단은 장기 효과 미반영, 커피 종류·로스팅 정도 미통제, 무작위 배정 없이 관찰 비교, GABA·IPA 감소의 임상적 유의성 추가 검증 필요",
+  "glossary": [
+    {
+      "term": "Microbiota-Gut-Brain Axis",
+      "ko": "마이크로바이오타-장-뇌 축"
+    },
+    {
+      "term": "Cryptobacterium curtum",
+      "ko": "혐기성 그람양성 장내 세균; 아미노산 발효 관여"
+    },
+    {
+      "term": "Eggerthella spp.",
+      "ko": "폴리페놀 및 담즙산 대사 혐기성 균; 클로로젠산 대사 관여"
+    },
+    {
+      "term": "Veillonella",
+      "ko": "젖산→프로피온산 전환 혐기성 구균; 단쇄지방산 생성 기여"
+    },
+    {
+      "term": "Indole-3-Propionic Acid (IPA)",
+      "ko": "인돌-3-프로피온산; 신경보호·혈액뇌장벽 강화 대사체"
+    },
+    {
+      "term": "GABA",
+      "ko": "γ-아미노부티르산; 억제성 신경전달물질; 장내 세균이 생성 가능"
+    },
+    {
+      "term": "Theophylline",
+      "ko": "테오필린; 카페인 대사산물, 아데노신 수용체 길항제"
+    },
+    {
+      "term": "APC Microbiome Ireland",
+      "ko": "코크대학 세계 선도 마이크로바이옴 연구소"
+    }
+  ],
+  "citation_apa": "Boscaini, S., Bastiaanssen, T. F. S., Moloney, G. M., Bergamo, F., Zeraik, L., O'Leary, C., Ferri, A., Irfan, M., van der Rhee, M., Lindemann, T. I. F., Schneider, E., Chinna Meyyappan, A., Berding Harold, K., Long-Smith, C. M., Carbia, C., O'Riordan, K. J., Rinaldi de Alvarenga, J. F., Tosi, N., Del Rio, D., Rosi, A., Bresciani, L., Mena, P., Clarke, G., & Cryan, J. F. (2026). Habitual coffee intake shapes the gut microbiome and modifies host physiology and cognition. Nature Communications, 17, 3439. https://doi.org/10.1038/s41467-026-71264-8",
+  "links": {
+    "doi": "https://doi.org/10.1038/s41467-026-71264-8",
+    "oa_pdf": "https://www.nature.com/articles/s41467-026-71264-8.pdf",
+    "journal_homepage": "https://www.nature.com/ncomms/"
+  },
+  "source_basis": "abstract_only",
+  "data_charts": [],
+  "drive_doc_url": "https://docs.google.com/document/d/18B1tbCbN3WbkdxqxrnT7N9E_idDo51jbFs49Xje1h8U/edit",
+  "hero_image": "/static/img/insights/hero/microbiology.svg"
+}
