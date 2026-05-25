@@ -1314,15 +1314,15 @@
         </div>
         <div class="hours-grid">
             <div class="hours-card hours-card--main">
-                <div class="hours-day-en">MON · TUE · THU · FRI · SAT · SUN</div>
-                <div class="hours-day-ko">월 · 화 · 목 · 금 · 토 · 일</div>
+                <div class="hours-day-en">MON · TUE · THU · FRI · SAT</div>
+                <div class="hours-day-ko">월 · 화 · 목 · 금 · 토</div>
                 <div class="hours-time">08:30 — 22:00</div>
                 <div class="hours-note">매일 오전 8시 30분 첫 잔부터, 밤 10시 마지막 잔까지.</div>
             </div>
             <div class="hours-card hours-card--early">
                 <span class="early-badge">EARLY CLOSE</span>
-                <div class="hours-day-en">WED</div>
-                <div class="hours-day-ko">수요일</div>
+                <div class="hours-day-en">WED · SUN</div>
+                <div class="hours-day-ko">수요일 · 일요일</div>
                 <div class="hours-time">08:30 — <em>18:00</em></div>
                 <div class="hours-note">좋은 컨디션으로 서비스를 제공하기 위해서 단축 근무를 진행합니다.</div>
             </div>
@@ -1354,7 +1354,7 @@
             <div class="footer-cols">
                 <div class="footer-col">
                     <h4>HOURS</h4>
-                    <p>매일 08:30 — 22:00<br>수요일 08:30 — 18:00<br>(조기 마감)</p>
+                    <p>매일 08:30 — 22:00<br>수요일 · 일요일 08:30 — 18:00<br>(조기 마감)</p>
                 </div>
                 <div class="footer-col">
                     <h4>VISIT</h4>
@@ -1517,7 +1517,7 @@
         var mn = now.getMinutes();
         var t = hr * 60 + mn;
         var open = 8 * 60 + 30;
-        var close = (dow === 3) ? 18 * 60 : 22 * 60; // 수요일만 18시 조기 마감, 그 외 22시
+        var close = (dow === 3 || dow === 0) ? 18 * 60 : 22 * 60; // 수요일·일요일 18시 조기 마감, 그 외 22시
         var status = document.getElementById('hours-now-status');
         if (!status) return;
         if (t >= open && t < close) {
