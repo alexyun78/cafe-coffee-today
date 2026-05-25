@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-05-25T01:08:41Z",
+  "updated_at": "2026-05-25T01:12:03Z",
   "items": [
     {
       "id": "2026-05-23-coffee-chlorogenic-acid-mir-mlp",
@@ -16,6 +16,23 @@
       "hero_image": "/static/img/insights/hero/chemistry.svg",
       "journal": "Chemie Ingenieur Technik",
       "pub_date": "2026-03",
+      "source_basis": "abstract_only"
+    },
+    {
+      "id": "2026-05-22-coffee-xai-origin-volatile-sensory",
+      "date": "2026-05-22",
+      "title_ko": "커피 품질 관리를 위한 설명 가능 인공지능: 산지 판별에서 향미 강도 예측까지",
+      "one_liner": "GC-MS 휘발성 프로파일링과 XAI로 5개 산지 커피를 SVM 91% 정확도 분류, 향미 강도 R²=0.88 예측",
+      "categories_primary": [
+        "향미/관능"
+      ],
+      "categories_secondary": [
+        "장비/공학",
+        "분석화학"
+      ],
+      "hero_image": "/static/img/insights/hero/flavor.svg",
+      "journal": "Foods (MDPI)",
+      "pub_date": "2026-04-29",
       "source_basis": "abstract_only"
     },
     {

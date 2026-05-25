@@ -1,0 +1,90 @@
+{
+  "version": 1,
+  "id": "2026-05-22-coffee-xai-origin-volatile-sensory",
+  "date": "2026-05-22",
+  "slug": "coffee-xai-origin-volatile-sensory",
+  "title_ko": "커피 품질 관리를 위한 설명 가능 인공지능: 산지 판별에서 향미 강도 예측까지",
+  "title_original": "Explainable Artificial Intelligence for Coffee Quality Control: From Coffee Origins to Aroma Intensity",
+  "one_liner": "GC-MS 휘발성 프로파일링과 XAI로 5개 산지 커피를 SVM 91% 정확도 분류, 향미 강도 R²=0.88 예측",
+  "authors": "Giorgio Felizzato, Eloisa Bagnulo, Giorgia Botta, Giulia Tapparo, Chiara Cordero, Luciano Navarini, Cecilia Cagliero, Erica Liberto, Andrea Caratti",
+  "journal": "Foods (MDPI)",
+  "pub_date": "2026-04-29",
+  "doi": "10.3390/foods15091543",
+  "categories_primary": [
+    "향미/관능"
+  ],
+  "categories_secondary": [
+    "장비/공학",
+    "분석화학"
+  ],
+  "summary": "토리노 대학교와 illycaffè 연구팀이 HS-SPME/GC-MS 휘발성 프로파일링과 설명 가능 AI(XAI)를 통합한 커피 품질 관리 프레임워크를 제시했다. 5개 단일 산지 커피를 SVM으로 91% 정확도로 분류하고, Ridge Regression으로 전문가 패널 향미 강도를 R²=0.88, RMSE=0.38로 예측했으며, SHAP으로 각 휘발성 화합물의 기여도를 정량화해 블랙박스 ML을 해석 가능 모델로 전환했다. 산지 진위성 검증 및 데이터 기반 커피 품질 관리를 위한 실용적 프로토타입을 확립한 연구다.",
+  "key_findings": [
+    "5개 단일 산지 커피 HS-SPME/GC-MS 프로파일 → SVM 분류 91% 정확도",
+    "전문가 패널 향미 강도 Ridge Regression 예측: R²=0.88, RMSE=0.38",
+    "SHAP으로 산지 분류·강도 예측 핵심 기여 휘발성 화합물 개별 정량화",
+    "GC-MS + SVM + Ridge Regression + SHAP 4단계 XAI 프레임워크 커피 품질 관리 최초 적용",
+    "산지 진위성 검증·데이터 기반 의사결정 지원 시스템 프로토타입 확립"
+  ],
+  "methodology": "5개 산지 로스팅·분쇄 완료 단일 산지 아라비카 커피 샘플에 HS-SPME로 휘발성 화합물 추출 후 GC-MS 프로파일 구축. SVM(서포트 벡터 머신)으로 산지 분류, Ridge Regression(L2 정규화 선형 회귀)으로 관능 강도 예측, SHAP(샤플리 가산 설명)으로 기여 화합물 해석. Foodomics strategies 특별 이슈 게재.",
+  "implications": {
+    "농가/가공장": "수확 후 가공 조건과 최종 관능 품질의 분자적 연결고리를 GC-MS 데이터로 평가하는 경로 제공. SHAP 핵심 화합물이 어떤 가공 단계에서 형성되는지 역추적 연구와 결합 시 가공 최적화 피드백 루프 구성 가능.",
+    "로스터/큐그레이더": "SVM 91% 모델로 생두 원산지 진위성 객관 검증 가능. SHAP 판별 화합물 목록이 산지별 화학적 지문으로 활용 가능하며, 큐그레이더 관능 평가와 분자 데이터를 연결하는 참조 가이드로 쓸 수 있음.",
+    "R&D": "4단계 XAI 프레임워크를 로스팅 결함 검출·로스트 정도 예측·생두 결함 분류로 확장 가능. 더 많은 산지·품종 DB 구축 시 상업용 원산지 인증 시스템 핵심 기술화 가능. 전자코·NIR 분광법과 멀티모달 XAI 결합 방향 유망."
+  },
+  "limitations": "5개 산지에 국한, 더 많은 산지·품종·로스팅 정도에 대한 일반화 필요. 실험실 환경 기반으로 현장 실시간 적용 별도 검증 필요. 관능 점수가 전문가 패널 기반으로 소비자 기호도 상관관계 미검증. 핵심 SHAP 기여 화합물 상세는 본문 확인 필요.",
+  "glossary": [
+    {
+      "term": "HS-SPME",
+      "ko": "헤드스페이스 고체상 마이크로 추출 — 커피 분말 상부 기상의 휘발성 화합물을 흡착 섬유에 포집하는 GC-MS 전처리 기법"
+    },
+    {
+      "term": "GC-MS",
+      "ko": "가스 크로마토그래피-질량분석 — 휘발성 혼합물을 분리·동정하는 커피 아로마 분석 표준 기술"
+    },
+    {
+      "term": "SVM",
+      "ko": "서포트 벡터 머신 — 고차원 특징 공간에서 최적 초평면으로 클래스를 구분하는 분류 알고리즘"
+    },
+    {
+      "term": "SHAP",
+      "ko": "샤플리 가산 설명 — 게임 이론 기반으로 각 특징(화합물)의 모델 예측 기여도를 정량화하는 XAI 기법"
+    },
+    {
+      "term": "Ridge Regression",
+      "ko": "능선 회귀 — L2 정규화 선형 회귀, 화학 프로파일과 관능 점수 간 예측 모델 구축에 적합"
+    },
+    {
+      "term": "XAI",
+      "ko": "설명 가능 인공지능 — AI 모델 예측 결과에 인간이 이해 가능한 설명을 제공하는 기술 분야"
+    },
+    {
+      "term": "테루아르 (Terroir)",
+      "ko": "토양·기후·고도·미생물 환경 등 산지 자연환경 요인의 총합이 제품 품질에 미치는 영향"
+    }
+  ],
+  "citation_apa": "Felizzato, G., Bagnulo, E., Botta, G., Tapparo, G., Cordero, C., Navarini, L., Cagliero, C., Liberto, E., & Caratti, A. (2026). Explainable Artificial Intelligence for Coffee Quality Control: From Coffee Origins to Aroma Intensity. Foods, 15(9), 1543. https://doi.org/10.3390/foods15091543",
+  "links": {
+    "doi": "https://doi.org/10.3390/foods15091543",
+    "oa_pdf": "https://www.mdpi.com/2304-8158/15/9/1543/pdf",
+    "journal_homepage": "https://www.mdpi.com/journal/foods"
+  },
+  "source_basis": "abstract_only",
+  "data_charts": [
+    {
+      "type": "bar",
+      "title": "XAI 모델 핵심 성능 지표",
+      "x_labels": [
+        "SVM 산지 분류 정확도(%)",
+        "Ridge Regression R²(×100)"
+      ],
+      "y_label": "성능 점수",
+      "values": [
+        91,
+        88
+      ],
+      "unit": "%"
+    }
+  ],
+  "drive_doc_url": "https://docs.google.com/document/d/1f9wTZ_Z2G4K13wKybRhrnZE1z3WfVG9cPHzuSEdDEK0/edit",
+  "hero_image": "/static/img/insights/hero/flavor.svg"
+}
