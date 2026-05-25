@@ -1,0 +1,70 @@
+{
+  "version": 1,
+  "id": "2026-05-23-coffee-chlorogenic-acid-mir-mlp",
+  "date": "2026-05-23",
+  "slug": "coffee-chlorogenic-acid-mir-mlp",
+  "title_ko": "커피 로스팅 중 클로로젠산 실시간 정량화: 미드 인프라레드 분광법과 다층 퍼셉트론의 융합",
+  "title_original": "Mid-Infrared Spectroscopy and Machine Learning for Chlorogenic Acid Quantification in Coffee",
+  "one_liner": "MIR 분광법과 다층 퍼셉트론(MLP) 회귀로 140~220°C 로스팅 범위에서 CGA 농도를 HPLC-DAD 수준으로 비파괴 예측",
+  "authors": "Deborah Herdt, Felix Wühler, Thomas Kunz, Victoria Schiwek, Sarah Kühnemuth, Brian Gibson, Matthias Rädle",
+  "journal": "Chemie Ingenieur Technik",
+  "pub_date": "2026-03",
+  "doi": "10.1002/cite.70049",
+  "categories_primary": [
+    "화학/분석화학"
+  ],
+  "categories_secondary": [
+    "장비/공학"
+  ],
+  "summary": "클로로젠산(CGA)은 커피 생두 건물량의 4~10%를 차지하는 주요 폴리페놀로, 항산화 활성·쓴맛·산미에 관여하며 로스팅 중 열분해된다. 현재 표준 정량법인 HPLC는 파괴적·시간 소모적이어서 실시간 공정 모니터링에 부적합하다. 만하임 응용과학대학교 CeMOS 연구팀은 MIR 분광법과 MLP 회귀 모델을 결합한 비파괴 CGA 정량 프레임워크를 개발하여, 140~220°C 로스팅 구간 44개 샘플 및 미로스팅 대조군에 적용했다. MLP 알고리즘은 스펙트럼 전처리와 CGA 특이적 파수 영역 자동 선택을 수행했으며, HPLC-DAD 대비 높은 예측 정확도와 일반화 능력을 달성했다. MIR은 NIR 대비 분자 진동 민감도가 높아 CGA 이성질체 구별에 더 유리하며, 이 연구는 분광-머신러닝 결합 모델의 커피 품질 모니터링 패러다임을 제시한다.",
+  "key_findings": [
+    "MIR 분광법 + MLP 회귀로 140~220°C 로스팅 구간 45개 샘플에서 CGA 농도 예측 — HPLC-DAD 대비 높은 정확도 및 우수한 일반화 능력 확인",
+    "MLP 알고리즘이 스펙트럼 전처리와 CGA 특이적 파수 영역 자동 선택 수행 — 분석가 의존적 설정 최소화",
+    "비파괴·비용매·단시간 MIR 기반 CGA 정량 프레임워크의 커피 로스팅 공정 적용 가능성 최초 실증",
+    "와전류 로스터 환경에서 수집된 실제 공정 조건 데이터 사용",
+    "동일 연구팀 Raman 분광법 선행 연구 대비 MIR의 CGA 분자 진동 민감도 우위 적용"
+  ],
+  "methodology": "와전류 로스터로 140~220°C 44개 샘플 + 미로스팅 대조군 1개를 건열 처리 후 분쇄하여 MIR 스펙트럼 획득. MLP 회귀 알고리즘이 스펙트럼 전처리와 파수 영역 자동 선택을 수행하여 CGA 농도 예측. HPLC-DAD를 참조 방법으로 검증.",
+  "implications": {
+    "농가/가공장": "로스팅 공정 분석 도구 연구로 재배·수확후 처리와 직접 관련 없음. 향후 MIR CGA 모니터링 상용화 시 생두 품질(CGA 초기 함량)과 로스팅 후 잔존량 관계의 정량적 추적 인프라 구축에 간접 기여 가능.",
+    "로스터/큐그레이더": "CGA 함량의 실시간 추적으로 원하는 CGA 잔존 범위에서 정확히 로스팅을 중단·전환하는 정밀 공정 제어 가능. 라이트 로스트에서 항산화 특성 극대화, 미디엄 로스트에서 배치 간 산미 일관성 확보 시나리오 구현 가능.",
+    "R&D": "MIR+MLP 프레임워크를 카페인·트리고넬린·멜라노이딘 등 다른 로스팅 지표 물질로 확장 가능. 드럼·유동층 로스터 등 상업 장비로 모델 전이 검증, 인라인 MIR 탐침 결합을 통한 실시간 자동화 연구가 다음 단계."
+  },
+  "limitations": "와전류 로스터 특이적 결과로 상업용 드럼·유동층 로스터에서 모델 재보정 필요. 데이터셋 45개 샘플로 상대적으로 소규모. 단일 품종/산지 가능성(초록 미공개). 실험실 MIR 장비의 현장 이식성 미검증. 모델 성능 수치(R², RMSE) 초록 수준 미공개.",
+  "glossary": [
+    {
+      "term": "CGA (Chlorogenic Acid)",
+      "ko": "클로로젠산 — 커피 생두 주요 폴리페놀(건물 기준 4~10%). 항산화·항염 활성. 로스팅 중 열분해"
+    },
+    {
+      "term": "MIR (Mid-Infrared Spectroscopy)",
+      "ko": "미드 인프라레드 분광법 — 4,000~400 cm⁻¹ 파장대로 분자 진동 직접 측정. NIR 대비 구조 정보 풍부"
+    },
+    {
+      "term": "MLP (Multilayer Perceptron)",
+      "ko": "다층 퍼셉트론 — 완전 연결 인공신경망. 비선형 회귀에 강점"
+    },
+    {
+      "term": "HPLC-DAD",
+      "ko": "고성능 액체 크로마토그래피-다이오드 어레이 검출기 — CGA 정량 참조 표준 방법"
+    },
+    {
+      "term": "Eddy Current Roaster",
+      "ko": "와전류 로스터 — 전자기 유도로 금속 용기를 직접 가열. 균일·빠른 가열"
+    },
+    {
+      "term": "Wavenumber Region Selection",
+      "ko": "파수 영역 선택 — CGA 특성 흡수 파수 구간을 알고리즘으로 자동 선별"
+    }
+  ],
+  "citation_apa": "Herdt, D., Wühler, F., Kunz, T., Schiwek, V., Kühnemuth, S., Gibson, B., & Rädle, M. (2026). Mid-Infrared Spectroscopy and Machine Learning for Chlorogenic Acid Quantification in Coffee. Chemie Ingenieur Technik, 98, 85–97. https://doi.org/10.1002/cite.70049",
+  "links": {
+    "doi": "https://doi.org/10.1002/cite.70049",
+    "oa_pdf": "",
+    "journal_homepage": "https://onlinelibrary.wiley.com/journal/15222640"
+  },
+  "source_basis": "abstract_only",
+  "data_charts": [],
+  "drive_doc_url": "https://docs.google.com/document/d/1kuEqSt1xUKel43wOPdGcwHiWw7w7AgbuoeG6UNYCe6Q/edit",
+  "hero_image": "/static/img/insights/hero/chemistry.svg"
+}

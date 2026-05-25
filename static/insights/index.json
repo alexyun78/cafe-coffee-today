@@ -1,7 +1,23 @@
 {
   "version": 1,
-  "updated_at": "2026-05-20T12:00:27Z",
+  "updated_at": "2026-05-25T01:08:41Z",
   "items": [
+    {
+      "id": "2026-05-23-coffee-chlorogenic-acid-mir-mlp",
+      "date": "2026-05-23",
+      "title_ko": "커피 로스팅 중 클로로젠산 실시간 정량화: 미드 인프라레드 분광법과 다층 퍼셉트론의 융합",
+      "one_liner": "MIR 분광법과 다층 퍼셉트론(MLP) 회귀로 140~220°C 로스팅 범위에서 CGA 농도를 HPLC-DAD 수준으로 비파괴 예측",
+      "categories_primary": [
+        "화학/분석화학"
+      ],
+      "categories_secondary": [
+        "장비/공학"
+      ],
+      "hero_image": "/static/img/insights/hero/chemistry.svg",
+      "journal": "Chemie Ingenieur Technik",
+      "pub_date": "2026-03",
+      "source_basis": "abstract_only"
+    },
     {
       "id": "2026-05-20-coffee-tea-dementia-cognitive-cohort",
       "date": "2026-05-20",

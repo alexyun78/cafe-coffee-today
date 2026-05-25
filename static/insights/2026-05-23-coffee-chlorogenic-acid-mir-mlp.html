@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>커피 로스팅 중 클로로젠산 실시간 정량화: 미드 인프라레드 분광법과 다층 퍼셉트론의 융합 — 92°C ROASTERY</title>
+<meta name="description" content="MIR 분광법과 다층 퍼셉트론(MLP) 회귀로 140~220°C 로스팅 범위에서 CGA 농도를 HPLC-DAD 수준으로 비파괴 예측">
+<link rel="icon" type="image/png" href="/static/img/logo-92black.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --canvas: #FFFFFF; --canvas-warm: #FAF7F2; --canvas-stone: #F2ECE3;
+  --ink: #1A1410; --ink-mute: #4A3F36; --ink-soft: #6B5E52;
+  --espresso: #6F4E37; --caramel: #C9986A; --copper: #B5703D;
+  --line: #E8E0D5; --line-soft: #F0E9DD;
+  --font-display: "Cormorant Garamond", "Pretendard", serif;
+  --font-body: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  --r-sm: 6px; --r-md: 12px; --r-pill: 999px;
+}
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color: transparent; }
+html { scroll-behavior: smooth; }
+body { font-family: var(--font-body); color: var(--ink); background: var(--canvas); font-feature-settings: "kern","ss01","lnum"; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+a { color: var(--copper); text-decoration: none; border-bottom: 1px solid transparent; transition: border-color .2s; }
+a:hover { border-bottom-color: var(--copper); }
+img { display: block; max-width: 100%; height: auto; }
+.container { max-width: 860px; margin: 0 auto; padding: 0 32px; }
+@media (max-width: 720px) { .container { padding: 0 20px; } }
+@media (max-width: 480px) { .container { padding: 0 16px; } }
+.site-nav { position: sticky; top: 0; z-index: 50; background: rgba(255,255,255,0.9); backdrop-filter: saturate(140%) blur(14px); -webkit-backdrop-filter: saturate(140%) blur(14px); border-bottom: 1px solid var(--line-soft); }
+.nav-inner { max-width: 1200px; margin: 0 auto; padding: 16px 32px; display: flex; align-items: center; justify-content: space-between; }
+.brand { font-family: var(--font-display); font-size: 1.3rem; font-weight: 700; color: var(--ink); display: inline-flex; align-items: center; gap: 4px; border-bottom: none; }
+.brand:hover { border-bottom: none; }
+.brand-mark { display: inline-flex; align-items: flex-start; font-family: "Pretendard", sans-serif; font-weight: 900; letter-spacing: -0.04em; line-height: 1; color: inherit; }
+.temp-mark { display: flex; flex-direction: column; line-height: .82; margin: 0 .05em 0 .04em; }
+.temp-mark .temp-deg { font-size: .42em; letter-spacing: -.04em; }
+.temp-mark .temp-c { font-size: .58em; letter-spacing: -.05em; margin-top: -.05em; }
+.nav-back { font-family: var(--font-mono); font-size: .75rem; letter-spacing: .18em; color: var(--ink-mute); border-bottom: none; }
+.nav-back:hover { color: var(--copper); border-bottom: none; }
+.article-hero { padding: 56px 0 48px; border-bottom: 1px solid var(--line-soft); }
+.eyebrow { font-family: var(--font-mono); font-size: .72rem; letter-spacing: .28em; color: var(--copper); margin-bottom: 18px; display: flex; align-items: center; gap: 12px; }
+.eyebrow::before { content: ""; display: inline-block; width: 28px; height: 1px; background: var(--copper); }
+.article-title { font-family: var(--font-display); font-weight: 500; font-size: clamp(2rem, 4.5vw, 3.2rem); line-height: 1.15; letter-spacing: -0.02em; color: var(--ink); margin-bottom: 20px; }
+.article-title em { font-style: italic; color: var(--espresso); font-weight: 600; }
+.article-one-liner { font-family: var(--font-display); font-style: italic; font-size: 1.3rem; line-height: 1.5; color: var(--espresso); margin-bottom: 28px; padding-left: 20px; border-left: 3px solid var(--caramel); }
+.article-meta { display: flex; gap: 24px; flex-wrap: wrap; font-family: var(--font-mono); font-size: .75rem; letter-spacing: .12em; color: var(--ink-soft); padding-top: 20px; border-top: 1px solid var(--line-soft); }
+.article-meta span { display: inline-flex; align-items: center; gap: 6px; }
+.article-meta span::before { content: "■"; color: var(--caramel); font-size: .55rem; }
+.hero-image { margin: 32px 0 0; border-radius: var(--r-md); overflow: hidden; border: 1px solid var(--line); }
+.hero-image img { width: 100%; }
+.article-body { padding: 56px 0 80px; }
+.article-footer { padding: 36px 0 56px; border-top: 1px solid var(--line-soft); text-align: center; font-family: var(--font-mono); font-size: .75rem; letter-spacing: .14em; color: var(--ink-soft); }
+.article-footer a { color: var(--ink-mute); border-bottom: 1px solid transparent; }
+.article-footer a:hover { color: var(--copper); border-bottom-color: var(--copper); }
+.source-basis { display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; background: rgba(201,152,106,.18); border: 1px solid rgba(181,112,61,.35); border-radius: var(--r-pill); font-family: var(--font-mono); font-size: .72rem; letter-spacing: .12em; color: var(--espresso); font-weight: 500; }
+.source-basis.abstract { background: rgba(107,94,82,.1); border-color: rgba(107,94,82,.3); color: var(--ink-soft); }
+.links-row { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 18px; }
+.link-pill { display: inline-flex; align-items: center; gap: 8px; padding: 9px 16px; background: var(--canvas-warm); border: 1px solid var(--line); border-radius: var(--r-pill); font-family: var(--font-mono); font-size: .78rem; letter-spacing: .08em; color: var(--ink-mute); border-bottom: 1px solid var(--line); transition: border-color .2s, color .2s; }
+.link-pill:hover { color: var(--copper); border-color: var(--copper); }
+
+/* ===== EZ: 쉬운 설명 스타일 ===== */
+.ez-hero { text-align: center; padding: 8px 0 32px; }
+.ez-hero-emoji { font-size: 3.4rem; line-height: 1; }
+.ez-hero-title { font-family: var(--font-display); font-size: clamp(1.6rem, 3.5vw, 2.2rem); font-weight: 600; color: var(--ink); margin-top: 14px; line-height: 1.3; }
+.ez-section { margin-bottom: 52px; }
+.ez-section h2 { font-family: var(--font-body); font-size: 1.5rem; font-weight: 700; color: var(--ink); margin-bottom: 18px; letter-spacing: -0.01em; }
+.ez-section h3 { font-size: 1.08rem; font-weight: 600; color: var(--espresso); margin: 22px 0 10px; }
+.ez-section p { font-size: 1.04rem; line-height: 1.85; color: var(--ink-mute); margin-bottom: 14px; }
+.ez-section p:last-child { margin-bottom: 0; }
+.ez-section ul { padding-left: 22px; margin-bottom: 14px; }
+.ez-section li { font-size: 1.02rem; line-height: 1.8; color: var(--ink-mute); margin-bottom: 8px; }
+.ez-callout { margin: 14px 0; padding: 14px 18px; background: var(--canvas-warm); border-left: 3px solid var(--caramel); border-radius: 4px; font-size: 0.98rem; color: var(--espresso); line-height: 1.75; }
+.ez-callout strong { color: var(--copper); }
+.ez-findings { list-style: none; padding: 0; }
+.ez-findings > li { padding: 18px 22px; margin-bottom: 14px; background: var(--canvas-warm); border: 1px solid var(--line); border-radius: 10px; font-size: 1.02rem; line-height: 1.7; color: var(--ink-mute); }
+.ez-findings > li strong { color: var(--ink); display: block; margin-bottom: 4px; font-size: 1.06rem; }
+.ez-findings > li.gold { background: linear-gradient(135deg, #FFF8E7, #FFEFCD); border-color: #F0D67A; }
+.ez-findings > li.silver { background: linear-gradient(135deg, #F6F6F6, #ECECEC); border-color: #C7C7C7; }
+.ez-findings > li.bronze { background: linear-gradient(135deg, #FFEEDD, #FFDCC0); border-color: #E4B07F; }
+.ez-findings > li.medal { background: linear-gradient(135deg, #F0E6FF, #E1D2FF); border-color: #BDA8E5; }
+.ez-table { width: 100%; border-collapse: collapse; margin: 16px 0 8px; font-size: 0.96rem; }
+.ez-table th, .ez-table td { padding: 11px 14px; border: 1px solid var(--line); text-align: left; vertical-align: top; }
+.ez-table thead th { background: var(--ink); color: #fff; font-weight: 600; letter-spacing: .02em; }
+.ez-table tbody th { background: var(--canvas-warm); color: var(--ink); font-weight: 600; }
+.ez-table tbody tr:nth-child(even) td { background: rgba(250, 247, 242, .55); }
+.ez-summary { padding: 26px 30px; background: linear-gradient(135deg, #FAF0E0, #F3E1C5); border-radius: 14px; font-size: 1.13rem; line-height: 1.75; font-weight: 500; color: var(--ink); border: 1px solid #E5C99B; }
+.ez-summary strong { color: var(--espresso); }
+.ez-citation { margin-top: 24px; padding: 18px 22px; background: var(--canvas-warm); border-radius: 8px; font-family: var(--font-mono); font-size: 0.82rem; color: var(--ink-soft); line-height: 1.7; }
+.ez-citation p { margin: 4px 0; }
+.ez-chart-card { padding: 22px 24px 18px; background: var(--canvas); border: 1px solid var(--line); border-radius: 12px; margin: 16px 0; }
+.ez-chart-card .ez-chart-title { font-size: 1rem; font-weight: 600; color: var(--ink); margin-bottom: 14px; }
+.ez-bar-row { display: flex; align-items: center; margin: 10px 0; font-size: 0.95rem; gap: 14px; }
+.ez-bar-label { width: 180px; flex-shrink: 0; color: var(--ink-mute); font-weight: 500; }
+.ez-bar-track { flex: 1; height: 32px; background: var(--canvas-warm); border-radius: 6px; overflow: hidden; position: relative; border: 1px solid var(--line); }
+.ez-bar-fill { height: 100%; background: linear-gradient(90deg, var(--caramel), var(--copper)); display: flex; align-items: center; justify-content: flex-end; padding: 0 12px; color: white; font-weight: 700; font-size: 0.92rem; min-width: 56px; }
+.ez-bar-fill.alt { background: linear-gradient(90deg, #6F4E37, #4A3F36); }
+.ez-glossary { display: grid; gap: 12px; }
+.ez-glossary-item { padding: 16px 20px; background: var(--canvas-warm); border: 1px solid var(--line); border-radius: 10px; border-left: 3px solid var(--caramel); }
+.ez-glossary-term { font-family: var(--font-display); font-style: italic; font-size: 1.1rem; font-weight: 600; color: var(--espresso); margin-bottom: 6px; }
+.ez-glossary-def { font-size: 0.98rem; color: var(--ink-mute); line-height: 1.7; }
+@media (max-width: 720px) {
+  .article-hero { padding: 36px 0 32px; }
+  .article-body { padding: 36px 0 56px; }
+  .ez-section { margin-bottom: 40px; }
+  .ez-section h2 { font-size: 1.3rem; }
+  .ez-bar-label { width: 100%; margin-bottom: 4px; }
+  .ez-bar-row { flex-direction: column; align-items: stretch; }
+  .article-meta { gap: 12px 18px; font-size: .68rem; }
+}
+</style>
+</head>
+<body>
+
+<header class="site-nav">
+  <div class="nav-inner">
+    <a class="brand" href="/">
+      <span class="brand-mark">92<span class="temp-mark"><span class="temp-deg">°</span><span class="temp-c">C</span></span></span>ROASTERY
+    </a>
+    <a class="nav-back" href="/insight">← INSIGHTS</a>
+  </div>
+</header>
+
+<article>
+  <section class="article-hero">
+    <div class="container">
+      <div class="eyebrow">— COFFEE INSIGHT · 2026.05.23</div>
+      <h1 class="article-title">커피 로스팅 중 클로로젠산 실시간 정량화: 미드 인프라레드 분광법과 다층 퍼셉트론의 융합</h1>
+      <p class="article-one-liner">MIR 분광법과 다층 퍼셉트론(MLP) 회귀로 140~220°C 로스팅 범위에서 CGA 농도를 HPLC-DAD 수준으로 비파괴 예측</p>
+      <div class="article-meta">
+        <span>CHEMIE INGENIEUR TECHNIK</span>
+        <span>2026-03</span>
+        <span>DOI 10.1002/CITE.70049</span>
+        <span>화학/분석화학 · 장비/공학</span>
+      </div>
+      
+      <div class="hero-image">
+        <img src="/static/img/insights/hero/chemistry.svg" alt="커피 로스팅 중 클로로젠산 실시간 정량화: 미드 인프라레드 분광법과 다층 퍼셉트론의 융합">
+      </div>
+      
+    </div>
+  </section>
+
+  <section class="article-body">
+    <div class="container">
+
+      
+      <div class="ez-hero">
+        <div class="ez-hero-emoji"></div>
+        <div class="ez-hero-title">MIR 분광법과 다층 퍼셉트론(MLP) 회귀로 140~220°C 로스팅 범위에서 CGA 농도를 HPLC-DAD 수준으로 비파괴 예측</div>
+      </div>
+
+      
+      <div class="ez-section">
+        <h2>🤔 무슨 연구야?</h2>
+        
+          <p>클로로젠산(CGA)은 커피 생두 건물량의 4~10%를 차지하는 주요 폴리페놀로, 항산화 활성·쓴맛·산미에 관여하며 로스팅 중 열분해된다. 현재 표준 정량법인 HPLC는 파괴적·시간 소모적이어서 실시간 공정 모니터링에 부적합하다. 만하임 응용과학대학교 CeMOS 연구팀은 MIR 분광법과 MLP 회귀 모델을 결합한 비파괴 CGA 정량 프레임워크를 개발하여, 140~220°C 로스팅 구간 44개 샘플 및 미로스팅 대조군에 적용했다. MLP 알고리즘은 스펙트럼 전처리와 CGA 특이적 파수 영역 자동 선택을 수행했으며, HPLC-DAD 대비 높은 예측 정확도와 일반화 능력을 달성했다. MIR은 NIR 대비 분자 진동 민감도가 높아 CGA 이성질체 구별에 더 유리하며, 이 연구는 분광-머신러닝 결합 모델의 커피 품질 모니터링 패러다임을 제시한다.</p>
+        
+      </div>
+
+      
+      
+
+      
+      
+      <div class="ez-section">
+        <h2>🎯 핵심 발견</h2>
+        <ul class="ez-findings">
+          
+          
+            
+              <li class="gold">MIR 분광법 + MLP 회귀로 140~220°C 로스팅 구간 45개 샘플에서 CGA 농도 예측 — HPLC-DAD 대비 높은 정확도 및 우수한 일반화 능력 확인</li>
+            
+              <li class="silver">MLP 알고리즘이 스펙트럼 전처리와 CGA 특이적 파수 영역 자동 선택 수행 — 분석가 의존적 설정 최소화</li>
+            
+              <li class="bronze">비파괴·비용매·단시간 MIR 기반 CGA 정량 프레임워크의 커피 로스팅 공정 적용 가능성 최초 실증</li>
+            
+              <li class="medal">와전류 로스터 환경에서 수집된 실제 공정 조건 데이터 사용</li>
+            
+              <li class="gold">동일 연구팀 Raman 분광법 선행 연구 대비 MIR의 CGA 분자 진동 민감도 우위 적용</li>
+            
+          
+        </ul>
+      </div>
+      
+
+      
+      
+
+      
+      
+
+      
+      
+      <div class="ez-section">
+        <h2>💼 누구한테 의미가 있을까?</h2>
+        <table class="ez-table">
+          <thead><tr><th>대상</th><th>의미</th></tr></thead>
+          <tbody>
+            
+              <tr><th>농가 · 가공장</th><td>로스팅 공정 분석 도구 연구로 재배·수확후 처리와 직접 관련 없음. 향후 MIR CGA 모니터링 상용화 시 생두 품질(CGA 초기 함량)과 로스팅 후 잔존량 관계의 정량적 추적 인프라 구축에 간접 기여 가능.</td></tr>
+            
+              <tr><th>로스터 · 큐그레이더</th><td>CGA 함량의 실시간 추적으로 원하는 CGA 잔존 범위에서 정확히 로스팅을 중단·전환하는 정밀 공정 제어 가능. 라이트 로스트에서 항산화 특성 극대화, 미디엄 로스트에서 배치 간 산미 일관성 확보 시나리오 구현 가능.</td></tr>
+            
+              <tr><th>R&amp;D</th><td>MIR+MLP 프레임워크를 카페인·트리고넬린·멜라노이딘 등 다른 로스팅 지표 물질로 확장 가능. 드럼·유동층 로스터 등 상업 장비로 모델 전이 검증, 인라인 MIR 탐침 결합을 통한 실시간 자동화 연구가 다음 단계.</td></tr>
+            
+          </tbody>
+        </table>
+      </div>
+      
+
+      
+      
+      <div class="ez-section">
+        <h2>⚠️ 한계도 있어</h2>
+        <p>와전류 로스터 특이적 결과로 상업용 드럼·유동층 로스터에서 모델 재보정 필요. 데이터셋 45개 샘플로 상대적으로 소규모. 단일 품종/산지 가능성(초록 미공개). 실험실 MIR 장비의 현장 이식성 미검증. 모델 성능 수치(R², RMSE) 초록 수준 미공개.</p>
+      </div>
+      
+
+      
+      
+      <div class="ez-section">
+        <div class="ez-summary">💡 <strong>한 줄 요약</strong> — MIR 분광법과 다층 퍼셉트론(MLP) 회귀로 140~220°C 로스팅 범위에서 CGA 농도를 HPLC-DAD 수준으로 비파괴 예측</div>
+      </div>
+      
+
+      
+      <div class="ez-section">
+        <h2>📚 원문 정보</h2>
+        <div class="ez-citation">
+          <p><strong>📄 논문</strong> — Mid-Infrared Spectroscopy and Machine Learning for Chlorogenic Acid Quantification in Coffee</p>
+          <p><strong>📰 저널</strong> — Chemie Ingenieur Technik (2026-03)</p>
+          <p><strong>👥 저자</strong> — Deborah Herdt, Felix Wühler, Thomas Kunz, Victoria Schiwek, Sarah Kühnemuth, Brian Gibson, Matthias Rädle</p>
+          <p><strong>🔗 DOI</strong> — <a href="https://doi.org/10.1002/cite.70049" target="_blank" rel="noopener noreferrer" style="color: var(--copper);">10.1002/cite.70049</a></p>
+        </div>
+        <div class="links-row">
+          <a class="link-pill" href="https://doi.org/10.1002/cite.70049" target="_blank" rel="noopener noreferrer">DOI →</a>
+          
+          <a class="link-pill" href="https://onlinelibrary.wiley.com/journal/15222640" target="_blank" rel="noopener noreferrer">JOURNAL HOMEPAGE →</a>
+        </div>
+        <div style="margin-top: 18px;">
+          
+          <span class="source-basis abstract">ABSTRACT BASIS</span>
+          
+        </div>
+      </div>
+
+      
+      
+      <div class="ez-section">
+        <h2>📖 어려운 말 풀이 사전</h2>
+        <p>이 글에 나온 어려운 약어와 용어를 한 번에 정리했어. 의미만 알면 본문이 훨씬 쉬워져!</p>
+        <div class="ez-glossary">
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">CGA (Chlorogenic Acid)</div>
+            <div class="ez-glossary-def">클로로젠산 — 커피 생두 주요 폴리페놀(건물 기준 4~10%). 항산화·항염 활성. 로스팅 중 열분해</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">MIR (Mid-Infrared Spectroscopy)</div>
+            <div class="ez-glossary-def">미드 인프라레드 분광법 — 4,000~400 cm⁻¹ 파장대로 분자 진동 직접 측정. NIR 대비 구조 정보 풍부</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">MLP (Multilayer Perceptron)</div>
+            <div class="ez-glossary-def">다층 퍼셉트론 — 완전 연결 인공신경망. 비선형 회귀에 강점</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">HPLC-DAD</div>
+            <div class="ez-glossary-def">고성능 액체 크로마토그래피-다이오드 어레이 검출기 — CGA 정량 참조 표준 방법</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">Eddy Current Roaster</div>
+            <div class="ez-glossary-def">와전류 로스터 — 전자기 유도로 금속 용기를 직접 가열. 균일·빠른 가열</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">Wavenumber Region Selection</div>
+            <div class="ez-glossary-def">파수 영역 선택 — CGA 특성 흡수 파수 구간을 알고리즘으로 자동 선별</div>
+          </div>
+          
+        </div>
+      </div>
+      
+
+    </div>
+  </section>
+
+  <footer class="article-footer">
+    <div class="container">
+      <a href="/insight">← BACK TO INSIGHTS</a>
+      <span style="margin: 0 16px;">·</span>
+      <a href="/">HOME</a>
+    </div>
+  </footer>
+</article>
+
+</body>
+</html>
