@@ -241,6 +241,27 @@ def split_paragraphs(text: str) -> list[str]:
     return [p.strip() for p in parts if p.strip()]
 
 
+def _sanitize_charts(charts: list) -> list[dict]:
+    """data_charts 중 values 가 숫자 리스트로 강제 가능한 항목만 통과시킨다.
+    잘못된 chart 가 끼면 jinja 의 chart.values 가 dict.values 메서드로 잡혀 전체 렌더가 죽는다.
+    """
+    out: list[dict] = []
+    for c in charts:
+        if not isinstance(c, dict):
+            continue
+        vals = c.get("values")
+        if not isinstance(vals, (list, tuple)) or not vals:
+            continue
+        try:
+            nums = [float(v) for v in vals]
+        except (TypeError, ValueError):
+            continue
+        clean = dict(c)
+        clean["values"] = nums
+        out.append(clean)
+    return out
+
+
 def render_html(payload: dict, env: Environment) -> str:
     tpl = env.get_template("insight_template.html.j2")
     categories_primary = payload.get("categories_primary") or []
@@ -264,7 +285,7 @@ def render_html(payload: dict, env: Environment) -> str:
         if m:
             date_display = f"{m.group(1)}.{m.group(2)}.{m.group(3)}"
 
-    data_charts = payload.get("data_charts") or []
+    data_charts = _sanitize_charts(payload.get("data_charts") or [])
 
     return tpl.render(
         title_ko=payload.get("title_ko", ""),
@@ -412,7 +433,11 @@ def main() -> int:
             continue
 
         log(f"신규 인사이트: {payload_id}")
-        summary = process_one(payload, env)
+        try:
+            summary = process_one(payload, env)
+        except Exception as e:
+            err(f"{payload_id} 처리 실패: {e!r} — 건너뜀")
+            continue
         if summary:
             items = index.setdefault("items", [])
             items.append(summary)
