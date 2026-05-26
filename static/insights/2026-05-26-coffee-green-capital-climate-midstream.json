@@ -1,0 +1,76 @@
+{
+  "version": 1,
+  "id": "2026-05-26-coffee-green-capital-climate-midstream",
+  "date": "2026-05-26",
+  "slug": "coffee-green-capital-climate-midstream",
+  "title_ko": "커피 가치사슬의 그린 자본 축적: 기후변화 비즈니스의 비용·이익 비대칭과 미드스트림 거래상의 부상",
+  "title_original": "The business of climate change: changing sources of green capital accumulation in the coffee sector",
+  "one_liner": "기후변화 비용은 농가가, 탄소 시장 이익은 미드스트림 거래상이 선점",
+  "authors": "Janina Grabs (University of Münster / University of Basel), Stefano Ponte (Copenhagen Business School), Marc Castellón-Durán (Oregon State University)",
+  "journal": "New Political Economy (Taylor & Francis)",
+  "pub_date": "2026-01-13",
+  "doi": "10.1080/13563467.2026.2614691",
+  "categories_primary": [
+    "지속가능성/경제"
+  ],
+  "categories_secondary": [
+    "커피 가치사슬",
+    "정치경제학",
+    "탄소시장"
+  ],
+  "summary": "기후변화의 물리적 비용과 리스크는 대부분 농가가 부담하나, 기후 파이낸싱과 기업 넷제로 수요에서 발생하는 비즈니스 기회는 미드스트림 거래상과 다운스트림 기업이 선점하고 있음을 커피 섹터를 사례로 규명한 정치경제학 연구. 미드스트림 거래상이 단순 상품 중개자에서 기후 완화 서비스 제공자로 역할 전환하며, 탄소 인세팅이 새로운 그린 자본 축적 수단으로 구조화되고 있다. 기후변화는 기업에게 장기 생존 위협이자 동시에 단기 이익 기회라는 역설이 가치사슬 구조 재편을 추동한다.",
+  "key_findings": [
+    "기후변화의 비용·리스크는 커피 농가에 집중되나, 기후 파이낸싱·넷제로 수요 기회는 미드스트림·다운스트림 기업이 선점",
+    "미드스트림 거래상이 단순 상품 중개자에서 기후 완화 서비스 제공자 및 지속가능성 인증자로 역할 전환",
+    "탄소 인세팅(공급망 내 직접 탄소 감축 투자)이 중간 거래상의 신규 그린 자본 축적 수단으로 구조화",
+    "그린 자본 축적의 원천이 전통적 상품 거래 이윤 → 기후 시장 파생 이윤으로 재편",
+    "역설: 기후변화는 커피 기업에 장기 생존 위협이자 단기 이익 기회 — 이 긴장이 가치사슬 구조 변화를 추동"
+  ],
+  "methodology": "정치경제학 이론 틀에서 커피 섹터를 사례 연구로 삼는 질적 분석. 가치사슬 거버넌스 이론을 결합해 기업의 기후 시장 내 전략적 재편을 분석. 탄소 오프세팅·인세팅 비즈니스 모델, 기후 파이낸싱 흐름, 미드스트림 기업의 지속가능성 서비스 확장에 관한 문헌 및 사례 검토.",
+  "implications": {
+    "농가/가공장": "탄소 인세팅 프로그램 참여 시 추가 소득 가능성이 있으나 이익이 거래상에 전유될 위험. 농가·협동조합의 직접 탄소 크레딧 발행 채널 구축과 인세팅 계약 조건 검토 필요.",
+    "로스터/큐그레이더": "넷제로 공약 이행을 위해 탄소 인세팅 파트너십이 사실상 구매 조건화될 가능성. 미드스트림 거래상이 패키지화하는 인세팅 서비스의 실질 탄소 감축 효과를 독립적으로 검증하는 능력이 ESG 신뢰성과 직결.",
+    "R&D": "탄소 인세팅 이익 분배 공정성 측정 연구, 블록체인 기반 탄소 크레딧 추적 시스템, CBAM·CSDDD 등 규제 변화가 커피 가치사슬 탄소 전략에 미치는 영향 추적 연구 필요."
+  },
+  "limitations": "단일 섹터 사례 연구로 일반화 제한; 초록 수준 분석으로 정량 데이터 미확인; 급변하는 자발적 탄소 시장 규제 반영에 시간 지연.",
+  "glossary": [
+    {
+      "term": "Green Capital Accumulation",
+      "ko": "그린 자본 축적 — 기후변화 대응 시장에서 기업이 새로운 이윤을 창출하는 메커니즘"
+    },
+    {
+      "term": "Carbon Offsetting",
+      "ko": "탄소 오프세팅 — 외부 탄소 감축 프로젝트 크레딧 구매로 넷제로 달성"
+    },
+    {
+      "term": "Carbon Insetting",
+      "ko": "탄소 인세팅 — 자사 공급망 내 직접 탄소 감축 투자로 크레딧 생성"
+    },
+    {
+      "term": "Midstream Trading Companies",
+      "ko": "미드스트림 거래상 — 생산국 수출~소비국 수입 사이의 중간 거래 기업"
+    },
+    {
+      "term": "Net-Zero",
+      "ko": "넷제로 — 온실가스 순 배출량을 0으로 만드는 기후 목표"
+    },
+    {
+      "term": "CBAM",
+      "ko": "탄소국경조정메커니즘 — EU의 탄소 비용 미반영 수입품 탄소세 정책"
+    },
+    {
+      "term": "Agroforestry",
+      "ko": "아그로포레스트리(농업임업) — 재배지 내 나무 식재로 탄소 격리·토양 보전 달성"
+    }
+  ],
+  "citation_apa": "Grabs, J., Ponte, S., & Castellón-Durán, M. (2026). The business of climate change: Changing sources of green capital accumulation in the coffee sector. New Political Economy. Advance online publication. https://doi.org/10.1080/13563467.2026.2614691",
+  "links": {
+    "doi": "https://doi.org/10.1080/13563467.2026.2614691",
+    "oa_pdf": "",
+    "journal_homepage": "https://www.tandfonline.com/journals/cnpe20"
+  },
+  "source_basis": "abstract_only",
+  "data_charts": [],
+  "drive_doc_url": "https://docs.google.com/document/d/15VKYk0g_lJrGIyoneV4RGEs-9AfA24hqNpZIqNGjetY/edit",
+  "hero_image": "/static/img/insights/hero/sustainability.svg"
+}

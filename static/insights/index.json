@@ -1,7 +1,25 @@
 {
   "version": 1,
-  "updated_at": "2026-05-25T12:00:45Z",
+  "updated_at": "2026-05-26T12:00:27Z",
   "items": [
+    {
+      "id": "2026-05-26-coffee-green-capital-climate-midstream",
+      "date": "2026-05-26",
+      "title_ko": "커피 가치사슬의 그린 자본 축적: 기후변화 비즈니스의 비용·이익 비대칭과 미드스트림 거래상의 부상",
+      "one_liner": "기후변화 비용은 농가가, 탄소 시장 이익은 미드스트림 거래상이 선점",
+      "categories_primary": [
+        "지속가능성/경제"
+      ],
+      "categories_secondary": [
+        "커피 가치사슬",
+        "정치경제학",
+        "탄소시장"
+      ],
+      "hero_image": "/static/img/insights/hero/sustainability.svg",
+      "journal": "New Political Economy (Taylor & Francis)",
+      "pub_date": "2026-01-13",
+      "source_basis": "abstract_only"
+    },
     {
       "id": "2026-05-25-coffee-gut-microbiome-cognition-trial",
       "date": "2026-05-25",
