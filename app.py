@@ -563,9 +563,32 @@ def api_feedback_note_options():
     })
 
 
-@app.get("/api/coffee/<int:coffee_id>/card.png")
+CARD_TOKEN_SALT = "card-download-v1"
+CARD_TOKEN_TTL = 120
+_card_serializer = URLSafeTimedSerializer(FLASK_SECRET, salt=CARD_TOKEN_SALT)
+
+
+@app.post("/api/coffee/<int:coffee_id>/card-token")
 @require_pin
+def api_card_token(coffee_id):
+    """1회용 다운로드 토큰 발급 (APK WebView용 — DownloadManager에 쿠키 전달 불가 대응)."""
+    token = _card_serializer.dumps({"cid": coffee_id})
+    return jsonify({"success": True, "token": token,
+                    "url": f"/api/coffee/{coffee_id}/card.png?t={token}"})
+
+
+@app.get("/api/coffee/<int:coffee_id>/card.png")
 def api_card_png(coffee_id):
+    token = request.args.get("t")
+    if token:
+        try:
+            data = _card_serializer.loads(token, max_age=CARD_TOKEN_TTL)
+            if data.get("cid") != coffee_id:
+                return jsonify({"success": False, "error": "invalid token"}), 403
+        except (BadSignature, SignatureExpired):
+            return jsonify({"success": False, "error": "expired or invalid token"}), 403
+    elif not _is_admin_authed():
+        return jsonify({"success": False, "error": "unauthorized"}), 401
     item = db.get_by_id(coffee_id)
     if not item:
         return jsonify({"success": False, "error": "not found"}), 404

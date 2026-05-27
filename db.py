@@ -1216,19 +1216,23 @@ def delete_roasting_log(rid: int) -> bool:
 # ---------- 재고 (computed) ----------
 
 def inventory_list() -> list:
+    """재고 목록. 정렬: 재고>0인 것 먼저 (최근 구매일→재고 많은 순), 재고≤0은 아래로.
+    각 항목에 last_purchase_date, is_stale(재고0+구매1년이상) 포함."""
     sql = """
         SELECT gb.id, gb.name, gb.process, gb.grade, gb.is_decaf, gb.status,
             s.name AS supplier_name, s.short_name AS supplier_short,
             COALESCE(p_sum.purchased_kg, 0) AS purchased_kg,
             COALESCE(r_sum.used_kg, 0) AS used_kg,
             COALESCE(p_sum.purchased_kg, 0) - COALESCE(r_sum.used_kg, 0) AS remaining_kg,
-            COALESCE(p_sum.avg_unit_price, 0) AS avg_unit_price
+            COALESCE(p_sum.avg_unit_price, 0) AS avg_unit_price,
+            p_sum.last_purchase_date
         FROM green_beans gb
         LEFT JOIN suppliers s ON s.id = gb.supplier_id
         LEFT JOIN (
             SELECT green_bean_id,
                    SUM(quantity_kg) AS purchased_kg,
-                   ROUND(CAST(SUM(total_price) AS REAL) / NULLIF(SUM(quantity_kg), 0)) AS avg_unit_price
+                   ROUND(CAST(SUM(total_price) AS REAL) / NULLIF(SUM(quantity_kg), 0)) AS avg_unit_price,
+                   MAX(purchase_date) AS last_purchase_date
             FROM purchases GROUP BY green_bean_id
         ) p_sum ON p_sum.green_bean_id = gb.id
         LEFT JOIN (
@@ -1236,11 +1240,21 @@ def inventory_list() -> list:
             FROM roasting_logs GROUP BY green_bean_id
         ) r_sum ON r_sum.green_bean_id = gb.id
         WHERE gb.status = '활성'
-        ORDER BY remaining_kg ASC, gb.name
+        ORDER BY
+            CASE WHEN (COALESCE(p_sum.purchased_kg,0) - COALESCE(r_sum.used_kg,0)) > 0 THEN 0 ELSE 1 END,
+            p_sum.last_purchase_date DESC,
+            (COALESCE(p_sum.purchased_kg,0) - COALESCE(r_sum.used_kg,0)) DESC
     """
+    cutoff = _months_ago_iso(12)
     with connect() as conn:
         rows = conn.execute(sql).fetchall()
-    return [dict(r) for r in rows]
+    result = []
+    for r in rows:
+        d = dict(r)
+        lpd = d.get("last_purchase_date") or ""
+        d["is_stale"] = 1 if (d["remaining_kg"] <= 0 and lpd < cutoff) else 0
+        result.append(d)
+    return result
 
 
 # ---------- 가격 ----------

@@ -1655,20 +1655,27 @@ function renderList(items) {
       btn.disabled = true;
       btn.innerHTML = '<span class="spinner" style="border-color:rgba(230,81,0,0.3);border-top-color:#E65100;"></span>';
       try {
-        // APK v1.0.6+: 네이티브 DownloadListener 사용 (시스템 다운로드 폴더에 직접 저장)
-        if (isAndroidWebView() && appVersionAtLeast("1.0.6")) {
-          downloadViaNativeListener(`/api/coffee/${id}/card.png`);
-          showToast("📥 다운로드 시작");
-          return;
+        const safe = name.replace(/[\\/:*?"<>|]/g, "").replace(/\s+/g, "_") || "card";
+        // APK WebView: 토큰 발급 → DownloadListener (인증 쿠키 불필요)
+        if (isAndroidWebView()) {
+          const tokenRes = await fetch(`/api/coffee/${id}/card-token`, {
+            method: "POST", credentials: "include", headers: authHeaders(),
+          });
+          if (tokenRes.status === 401) { showPinModal(); return; }
+          const tokenData = await tokenRes.json();
+          if (tokenData.success && tokenData.url) {
+            downloadViaNativeListener(tokenData.url);
+            showToast("📥 다운로드 시작");
+            return;
+          }
         }
-        const res = await fetch(`/api/coffee/${id}/card.png`, { credentials: "include" });
+        const res = await fetch(`/api/coffee/${id}/card.png`, { credentials: "include", headers: authHeaders() });
         if (res.status === 401) { showPinModal(); return; }
         if (!res.ok) {
           const err = await res.json().catch(() => ({}));
           throw new Error(err.error || `HTTP ${res.status}`);
         }
         const blob = await res.blob();
-        const safe = name.replace(/[\\/:*?"<>|]/g, "").replace(/\s+/g, "_") || "card";
         await saveOrShareImage(blob, `${safe}.png`);
       } catch (err) {
         showBanner("이미지 생성 실패: " + err.message, "error");
@@ -3282,49 +3289,87 @@ async function loadInventory() {
   }
 }
 
+const INV_PAGE_SIZE = 30;
+
 function renderInventory(items) {
   const body = document.getElementById("inv-body");
   if (!items.length) {
     body.innerHTML = '<div class="empty">재고 데이터가 없습니다.</div>';
     return;
   }
-  body.innerHTML = `
-    <table class="inv-table">
-      <thead>
-        <tr>
-          <th>생두명</th>
-          <th>가공</th>
-          <th class="num">구매(kg)</th>
-          <th class="num">사용(kg)</th>
-          <th class="num">잔여(kg)</th>
-          <th class="num">평균단가</th>
-        </tr>
-      </thead>
-      <tbody>
-        ${items.map(it => {
-          const prefix = it.supplier_short ? `[${escapeHtml(it.supplier_short)}] ` : "";
-          const remaining = Number(it.remaining_kg) || 0;
-          let cls = "bean-stock-ok";
-          if (remaining <= 0) cls = remaining < 0 ? "bean-stock-negative" : "bean-stock-zero";
-          else if (remaining < 2) cls = "bean-stock-low";
-          const avgPrice = Number(it.avg_unit_price) || 0;
-          return `
-            <tr>
-              <td>
-                ${prefix}${escapeHtml(it.name || "")}
-                ${it.is_decaf ? '<span class="bean-decaf-badge">디카페인</span>' : ""}
-              </td>
-              <td>${escapeHtml(it.process || "")}</td>
-              <td class="num">${Number(it.purchased_kg).toFixed(1)}</td>
-              <td class="num">${Number(it.used_kg).toFixed(1)}</td>
-              <td class="num"><span class="inv-remaining ${cls}">${remaining.toFixed(1)}</span></td>
-              <td class="num">${avgPrice > 0 ? "₩" + avgPrice.toLocaleString() : "—"}</td>
-            </tr>
-          `;
-        }).join("")}
-      </tbody>
-    </table>
-  `;
+  const active = items.filter(it => !it.is_stale);
+  const stale = items.filter(it => it.is_stale);
+  const visibleCount = Math.min(active.length, INV_PAGE_SIZE);
+  const hasMore = active.length > INV_PAGE_SIZE;
+
+  function renderRow(it) {
+    const prefix = it.supplier_short ? `[${escapeHtml(it.supplier_short)}] ` : "";
+    const remaining = Number(it.remaining_kg) || 0;
+    let cls = "bean-stock-ok";
+    if (remaining <= 0) cls = remaining < 0 ? "bean-stock-negative" : "bean-stock-zero";
+    else if (remaining < 2) cls = "bean-stock-low";
+    const avgPrice = Number(it.avg_unit_price) || 0;
+    const lpd = it.last_purchase_date || "";
+    const lpdShort = lpd ? lpd.slice(2, 7).replace("-", "/") : "";
+    return `<tr>
+      <td>${prefix}${escapeHtml(it.name || "")}${it.is_decaf ? ' <span class="bean-decaf-badge">디카페인</span>' : ""}</td>
+      <td>${escapeHtml(it.process || "")}</td>
+      <td class="num">${Number(it.purchased_kg).toFixed(1)}</td>
+      <td class="num">${Number(it.used_kg).toFixed(1)}</td>
+      <td class="num"><span class="inv-remaining ${cls}">${remaining.toFixed(1)}</span></td>
+      <td class="num">${avgPrice > 0 ? "₩" + avgPrice.toLocaleString() : "—"}</td>
+      <td class="num" style="font-size:0.75rem;color:#999;">${lpdShort}</td>
+    </tr>`;
+  }
+
+  let html = `<table class="inv-table"><thead><tr>
+    <th>생두명</th><th>가공</th>
+    <th class="num">구매</th><th class="num">사용</th>
+    <th class="num">잔여</th><th class="num">단가</th><th class="num">최근구매</th>
+  </tr></thead><tbody>`;
+  for (let i = 0; i < visibleCount; i++) html += renderRow(active[i]);
+  html += `</tbody></table>`;
+
+  if (hasMore) {
+    html += `<div style="text-align:center;margin:12px 0;">
+      <button type="button" class="btn-text" id="btn-inv-more">
+        ▼ 더 보기 (${active.length - INV_PAGE_SIZE}건)
+      </button></div>`;
+  }
+
+  if (stale.length) {
+    html += `<div style="text-align:center;margin:18px 0 8px;">
+      <button type="button" class="btn-text" id="btn-inv-stale" style="color:#999;font-size:0.82rem;">
+        ▼ 재고 없음 · 1년 이상 미구매 (${stale.length}건)
+      </button></div>
+      <div id="inv-stale-wrap" style="display:none;">
+        <table class="inv-table"><thead><tr>
+          <th>생두명</th><th>가공</th>
+          <th class="num">구매</th><th class="num">사용</th>
+          <th class="num">잔여</th><th class="num">단가</th><th class="num">최근구매</th>
+        </tr></thead><tbody>${stale.map(renderRow).join("")}</tbody></table>
+      </div>`;
+  }
+
+  body.innerHTML = html;
+
+  if (hasMore) {
+    document.getElementById("btn-inv-more").addEventListener("click", function() {
+      const tbody = body.querySelector("tbody");
+      for (let i = INV_PAGE_SIZE; i < active.length; i++) {
+        tbody.insertAdjacentHTML("beforeend", renderRow(active[i]));
+      }
+      this.parentElement.remove();
+    });
+  }
+  if (stale.length) {
+    document.getElementById("btn-inv-stale").addEventListener("click", function() {
+      const wrap = document.getElementById("inv-stale-wrap");
+      const shown = wrap.style.display !== "none";
+      wrap.style.display = shown ? "none" : "";
+      this.textContent = (shown ? "▼" : "▲") + ` 재고 없음 · 1년 이상 미구매 (${stale.length}건)`;
+    });
+  }
 }
 
 document.getElementById("btn-inv-refresh").addEventListener("click", loadInventory);
