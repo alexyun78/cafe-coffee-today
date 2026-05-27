@@ -458,6 +458,19 @@
             flex: 1; display: flex; align-items: center; justify-content: center;
             color: #d6cdc0; font-size: 1.6rem;
         }
+        .hcal-wcell-closed {
+            border-color: #ef9a9a;
+            background: #fff5f5;
+        }
+        .hcal-wclosed-badge {
+            font-size: 0.72rem;
+            color: #c62828;
+            font-weight: 700;
+            padding: 2px 8px;
+            background: rgba(198,40,40,0.08);
+            border-radius: 6px;
+            margin-left: auto;
+        }
 
         /* 8번째 셀: 로고 (+ 5초 슬라이드쇼: 로고 ↔ 메뉴 사진) */
         .hcal-wlogo {
@@ -563,6 +576,7 @@
             .hcal-week-nav button { width: 36px; height: 36px; font-size: 1.15rem; }
             .hcal-wlogo-caption { font-size: 0.66rem; letter-spacing: 1px; }
             .hcal-wlogo-label { font-size: 0.82rem; top: 6px; right: 8px; }
+            .hcal-wclosed-badge { font-size: 0.6rem; padding: 1px 5px; }
         }
 
         /* 데스크톱용 테이블 */
@@ -1503,6 +1517,13 @@
 
 
     <script>
+        // 둘째·넷째 월요일 판별
+        function isNthMonday(dt) {
+            if (dt.getDay() !== 1) return false;
+            var nth = Math.ceil(dt.getDate() / 7);
+            return nth === 2 || nth === 4;
+        }
+
         async function loadCoffeeData() {
             try {
                 const response = await fetch('/api/coffee');
@@ -2044,13 +2065,18 @@
                 cur.setDate(weekStart.getDate() + offset);
                 const ymd = ymdLocalCal(cur);
                 const isToday = (ymd === today);
+                const isClosed = isNthMonday(cur);
                 const items = byDate[ymd] || [];
                 const dow = cur.getDay();
-                let cell = `<div class="hcal-wcell ${isToday ? 'hcal-wcell-today' : ''}">`;
+                let cellCls = 'hcal-wcell';
+                if (isToday) cellCls += ' hcal-wcell-today';
+                if (isClosed) cellCls += ' hcal-wcell-closed';
+                let cell = `<div class="${cellCls}">`;
                 cell += `
                     <div class="hcal-wcell-header">
                         <span class="hcal-wcell-date ${dayClsAll[dow]}">${cur.getDate()}</span>
                         <span class="hcal-wcell-day ${dayClsAll[dow]}">${dayLabelsAll[dow]}</span>
+                        ${isClosed ? '<span class="hcal-wclosed-badge">휴무</span>' : ''}
                     </div>
                 `;
                 if (items.length) {

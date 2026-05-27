@@ -948,6 +948,35 @@
             border-radius: var(--r-pill);
             background: var(--canvas);
         }
+        .hours-closed-row {
+            margin-top: 16px;
+        }
+        .hours-card--closed {
+            background: var(--canvas-warm);
+            border-color: #c62828;
+        }
+        .hours-card--closed .hours-day-en { color: #c62828; opacity: 1; }
+        .hours-card--closed .hours-day-ko { color: #c62828; }
+        .hours-card--closed .hours-note { color: var(--ink-mute); opacity: 1; }
+        .closed-badge {
+            position: absolute;
+            top: 28px; right: 28px;
+            font-family: var(--font-mono);
+            font-size: 0.66rem;
+            letter-spacing: 0.22em;
+            color: #c62828;
+            border: 1px solid #c62828;
+            padding: 5px 12px;
+            border-radius: var(--r-pill);
+            background: var(--canvas);
+        }
+        .hours-next-closed {
+            margin-top: 14px;
+            font-family: var(--font-mono);
+            font-size: 0.78rem;
+            color: var(--ink-soft);
+            letter-spacing: 0.06em;
+        }
         .hours-foot {
             margin-top: 48px;
             padding-top: 32px;
@@ -969,7 +998,7 @@
             .hours-day-ko { font-size: 1.25rem; margin-bottom: 18px; }
             .hours-time { font-size: 2.2rem; margin-bottom: 16px; }
             .hours-note { font-size: 0.85rem; line-height: 1.55; }
-            .early-badge { top: 18px; right: 18px; font-size: 0.6rem; padding: 4px 10px; letter-spacing: 0.18em; }
+            .early-badge, .closed-badge { top: 18px; right: 18px; font-size: 0.6rem; padding: 4px 10px; letter-spacing: 0.18em; }
             .hours-foot { margin-top: 32px; padding-top: 24px; font-size: 0.68rem; gap: 8px 14px; }
         }
 
@@ -1327,8 +1356,17 @@
                 <div class="hours-note">좋은 컨디션으로 서비스를 제공하기 위해서 단축 근무를 진행합니다.</div>
             </div>
         </div>
+        <div class="hours-closed-row">
+            <div class="hours-card hours-card--closed">
+                <span class="closed-badge">CLOSED</span>
+                <div class="hours-day-en">2ND · 4TH MONDAY</div>
+                <div class="hours-day-ko">둘째 · 넷째 월요일</div>
+                <div class="hours-note">정기휴무일입니다. 공휴일에도 쉽니다.</div>
+                <div class="hours-next-closed" id="hours-next-closed"></div>
+            </div>
+        </div>
         <div class="hours-foot">
-            <span>OPEN 365 · CLOSED ON HOLIDAYS</span>
+            <span>정기휴무 — 둘째·넷째 월요일 · 공휴일</span>
             <span id="hours-now-status">— 오늘의 영업시간 확인 중</span>
         </div>
     </div>
@@ -1494,6 +1532,18 @@
     };
     var DOW_KO = ['일', '월', '화', '수', '목', '금', '토'];
 
+    // 둘째·넷째 월요일 판별 (n번째 요일 = Math.ceil(day/7))
+    function isNthMonday(dt) {
+        if (dt.getDay() !== 1) return false;
+        var nth = Math.ceil(dt.getDate() / 7);
+        return nth === 2 || nth === 4;
+    }
+
+    // 휴무일 판별 — 공휴일 OR 둘째·넷째 월요일
+    function isDayOff(dt, ymd) {
+        return !!KR_HOLIDAYS[ymd] || isNthMonday(dt);
+    }
+
     // 제공일 표시용 — { html: "5월 22일 (금)", isClosed: bool }
     function fmtServeWithDow(d) {
         if (!d) return { html: '', isClosed: false };
@@ -1503,8 +1553,7 @@
         if (!m) return { html: escapeHtml(d), isClosed: false };
         var dt = new Date(parseInt(m[1], 10), parseInt(m[2], 10) - 1, parseInt(m[3], 10));
         var dow = dt.getDay();
-        // 휴일/쉬는 날 = 일요일 OR 공휴일 (이 카페는 평소 365일 영업, 공휴일만 휴무)
-        var isClosed = (dow === 0) || !!KR_HOLIDAYS[d.slice(0, 10)];
+        var isClosed = isDayOff(dt, d.slice(0, 10));
         var html = parseInt(m[2], 10) + '월 ' + parseInt(m[3], 10) + '일 (' + DOW_KO[dow] + ')';
         return { html: html, isClosed: isClosed };
     }
@@ -1513,13 +1562,21 @@
     function updateHoursStatus() {
         var now = new Date();
         var dow = now.getDay(); // 0=Sun..6=Sat
+        var ymd = now.getFullYear() + '-' +
+            String(now.getMonth() + 1).padStart(2, '0') + '-' +
+            String(now.getDate()).padStart(2, '0');
+        var status = document.getElementById('hours-now-status');
+        if (!status) return;
+        if (isDayOff(now, ymd)) {
+            status.textContent = '○ 오늘은 휴무일입니다';
+            status.style.color = '#c62828';
+            return;
+        }
         var hr = now.getHours();
         var mn = now.getMinutes();
         var t = hr * 60 + mn;
         var open = 8 * 60 + 30;
         var close = (dow === 3 || dow === 0) ? 18 * 60 : 22 * 60; // 수요일·일요일 18시 조기 마감, 그 외 22시
-        var status = document.getElementById('hours-now-status');
-        if (!status) return;
         if (t >= open && t < close) {
             var rem = close - t;
             var h = Math.floor(rem / 60), m = rem % 60;
@@ -1531,6 +1588,23 @@
     }
     updateHoursStatus();
     setInterval(updateHoursStatus, 60000);
+
+    // 다음 정기휴무(둘째·넷째 월요일) 표시
+    (function showNextClosed() {
+        var el = document.getElementById('hours-next-closed');
+        if (!el) return;
+        var d = new Date();
+        for (var i = 1; i <= 60; i++) {
+            d.setDate(d.getDate() + 1);
+            if (isNthMonday(d)) {
+                var nth = Math.ceil(d.getDate() / 7);
+                el.textContent = '다음 휴무 → ' +
+                    (d.getMonth() + 1) + '월 ' + d.getDate() + '일 (' +
+                    (nth === 2 ? '둘째' : '넷째') + ' 월요일)';
+                return;
+            }
+        }
+    })();
 
     // ---------- 데이터 로드 (지연) ----------
     var dataLoaded = false;
