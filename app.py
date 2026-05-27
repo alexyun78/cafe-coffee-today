@@ -589,6 +589,213 @@ def api_card_png(coffee_id):
     )
 
 
+# ---------- 생두 관리 ----------
+
+# --- Suppliers ---
+
+@app.get("/api/suppliers")
+@require_pin
+def api_suppliers_list():
+    return jsonify({"success": True, "items": db.list_suppliers()})
+
+@app.post("/api/suppliers")
+@require_pin
+def api_supplier_create():
+    data = request.get_json(silent=True) or {}
+    if not data.get("name"):
+        return jsonify({"success": False, "error": "name 필수"}), 400
+    new_id = db.create_supplier(data)
+    return jsonify({"success": True, "id": new_id})
+
+@app.put("/api/suppliers/<int:sid>")
+@require_pin
+def api_supplier_update(sid):
+    data = request.get_json(silent=True) or {}
+    if not db.update_supplier(sid, data):
+        return jsonify({"success": False, "error": "not found"}), 404
+    return jsonify({"success": True})
+
+@app.delete("/api/suppliers/<int:sid>")
+@require_pin
+def api_supplier_delete(sid):
+    if not db.delete_supplier(sid):
+        return jsonify({"success": False, "error": "not found"}), 404
+    return jsonify({"success": True})
+
+# --- Green Beans ---
+
+@app.get("/api/green-beans")
+@require_pin
+def api_green_beans_list():
+    include_inactive = request.args.get("all") == "1"
+    return jsonify({"success": True, "items": db.list_green_beans(include_inactive)})
+
+@app.get("/api/green-beans/<int:gb_id>")
+@require_pin
+def api_green_bean_get(gb_id):
+    item = db.get_green_bean(gb_id)
+    if not item:
+        return jsonify({"success": False, "error": "not found"}), 404
+    item["purchases"] = db.list_purchases(gb_id, limit=50)
+    item["roasting_logs"] = db.list_roasting_logs(gb_id, limit=50)
+    return jsonify({"success": True, "item": item})
+
+@app.post("/api/green-beans")
+@require_pin
+def api_green_bean_create():
+    data = request.get_json(silent=True) or {}
+    if not data.get("name") or not data.get("process"):
+        return jsonify({"success": False, "error": "name, process 필수"}), 400
+    new_id = db.create_green_bean(data)
+    return jsonify({"success": True, "id": new_id, "item": db.get_green_bean(new_id)})
+
+@app.put("/api/green-beans/<int:gb_id>")
+@require_pin
+def api_green_bean_update(gb_id):
+    data = request.get_json(silent=True) or {}
+    if not db.update_green_bean(gb_id, data):
+        return jsonify({"success": False, "error": "not found"}), 404
+    return jsonify({"success": True, "item": db.get_green_bean(gb_id)})
+
+@app.delete("/api/green-beans/<int:gb_id>")
+@require_pin
+def api_green_bean_delete(gb_id):
+    if not db.delete_green_bean(gb_id):
+        return jsonify({"success": False, "error": "not found"}), 404
+    return jsonify({"success": True})
+
+@app.get("/api/green-beans/suggestions")
+@require_pin
+def api_green_bean_suggestions():
+    return jsonify({"success": True, **db.green_bean_suggestions()})
+
+@app.get("/api/green-beans/<int:gb_id>/for-coffee")
+@require_pin
+def api_green_bean_for_coffee(gb_id):
+    item = db.get_green_bean(gb_id)
+    if not item:
+        return jsonify({"success": False, "error": "not found"}), 404
+    prefix = f"[{item['supplier_short']}] " if item.get("supplier_short") else ""
+    return jsonify({
+        "success": True,
+        "name": prefix + item["name"],
+        "process": item["process"],
+        "cup_notes": item.get("cup_notes") or "",
+    })
+
+# --- Purchases ---
+
+@app.get("/api/purchases")
+@require_pin
+def api_purchases_list():
+    gb_id = request.args.get("green_bean_id")
+    gb_id = int(gb_id) if gb_id else None
+    return jsonify({"success": True, "items": db.list_purchases(gb_id)})
+
+@app.post("/api/purchases")
+@require_pin
+def api_purchase_create():
+    data = request.get_json(silent=True) or {}
+    required = ("green_bean_id", "purchase_date", "quantity_kg", "unit_price")
+    for k in required:
+        if not data.get(k):
+            return jsonify({"success": False, "error": f"{k} 필수"}), 400
+    new_id = db.create_purchase(data)
+    return jsonify({"success": True, "id": new_id})
+
+@app.put("/api/purchases/<int:pid>")
+@require_pin
+def api_purchase_update(pid):
+    data = request.get_json(silent=True) or {}
+    if not db.update_purchase(pid, data):
+        return jsonify({"success": False, "error": "not found"}), 404
+    return jsonify({"success": True})
+
+@app.delete("/api/purchases/<int:pid>")
+@require_pin
+def api_purchase_delete(pid):
+    if not db.delete_purchase(pid):
+        return jsonify({"success": False, "error": "not found"}), 404
+    return jsonify({"success": True})
+
+# --- Roasting Logs ---
+
+@app.get("/api/roasting-logs")
+@require_pin
+def api_roasting_logs_list():
+    gb_id = request.args.get("green_bean_id")
+    gb_id = int(gb_id) if gb_id else None
+    return jsonify({"success": True, "items": db.list_roasting_logs(gb_id)})
+
+@app.post("/api/roasting-logs")
+@require_pin
+def api_roasting_log_create():
+    data = request.get_json(silent=True) or {}
+    required = ("green_bean_id", "roast_date", "input_weight_g")
+    for k in required:
+        if not data.get(k):
+            return jsonify({"success": False, "error": f"{k} 필수"}), 400
+    new_id = db.create_roasting_log(data)
+    return jsonify({"success": True, "id": new_id})
+
+@app.put("/api/roasting-logs/<int:rid>")
+@require_pin
+def api_roasting_log_update(rid):
+    data = request.get_json(silent=True) or {}
+    if not db.update_roasting_log(rid, data):
+        return jsonify({"success": False, "error": "not found"}), 404
+    return jsonify({"success": True})
+
+@app.delete("/api/roasting-logs/<int:rid>")
+@require_pin
+def api_roasting_log_delete(rid):
+    if not db.delete_roasting_log(rid):
+        return jsonify({"success": False, "error": "not found"}), 404
+    return jsonify({"success": True})
+
+# --- Inventory ---
+
+@app.get("/api/inventory")
+@require_pin
+def api_inventory():
+    return jsonify({"success": True, "items": db.inventory_list()})
+
+# --- Pricing ---
+
+@app.get("/api/pricing")
+@require_pin
+def api_pricing_list():
+    gb_id = request.args.get("green_bean_id")
+    gb_id = int(gb_id) if gb_id else None
+    return jsonify({"success": True, "items": db.list_pricing(gb_id)})
+
+@app.post("/api/pricing")
+@require_pin
+def api_pricing_upsert():
+    data = request.get_json(silent=True) or {}
+    required = ("green_bean_id", "weight_g", "retail_price")
+    for k in required:
+        if not data.get(k):
+            return jsonify({"success": False, "error": f"{k} 필수"}), 400
+    pid = db.upsert_pricing(data)
+    return jsonify({"success": True, "id": pid})
+
+@app.delete("/api/pricing/<int:pid>")
+@require_pin
+def api_pricing_delete(pid):
+    if not db.delete_pricing(pid):
+        return jsonify({"success": False, "error": "not found"}), 404
+    return jsonify({"success": True})
+
+@app.get("/api/pricing/cost-analysis/<int:gb_id>")
+@require_pin
+def api_cost_analysis(gb_id):
+    result = db.cost_analysis(gb_id)
+    if not result:
+        return jsonify({"success": False, "error": "not found"}), 404
+    return jsonify({"success": True, **result})
+
+
 # ---------- 정적 페이지 ----------
 
 @app.get("/")
