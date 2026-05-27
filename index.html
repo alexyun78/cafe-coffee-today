@@ -458,6 +458,25 @@
             flex: 1; display: flex; align-items: center; justify-content: center;
             color: #d6cdc0; font-size: 1.6rem;
         }
+        .next-closed-banner {
+            background: linear-gradient(135deg, #fff5f5 0%, #ffe8e8 100%);
+            border: 1.5px solid #ef9a9a;
+            border-radius: 14px;
+            padding: 14px 20px;
+            margin-bottom: 14px;
+            text-align: center;
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: #c62828;
+            line-height: 1.4;
+        }
+        .next-closed-banner .closed-date {
+            font-size: 1.15rem;
+        }
+        @media (max-width: 480px) {
+            .next-closed-banner { padding: 10px 14px; font-size: 0.85rem; }
+            .next-closed-banner .closed-date { font-size: 1rem; }
+        }
         .hcal-wcell-closed {
             border-color: #ef9a9a;
             background: #fff5f5;
@@ -1424,6 +1443,9 @@
             <p class="subtitle">매일 다른 92도씨 로스터리 커피를 만나보세요</p>
         </div>
 
+        <!-- 다음 휴무 안내 배너 -->
+        <div id="next-closed-banner" class="next-closed-banner" style="display:none;"></div>
+
         <!-- 탭 네비게이션 -->
         <div class="tab-bar">
             <button class="tab-btn active" data-tab="coffee" onclick="switchTab('coffee')">☕ 오늘의커피</button>
@@ -1523,6 +1545,31 @@
             var nth = Math.ceil(dt.getDate() / 7);
             return nth === 2 || nth === 4;
         }
+
+        (function showNextClosedBanner() {
+            var el = document.getElementById('next-closed-banner');
+            if (!el) return;
+            var d = new Date();
+            if (isNthMonday(d)) {
+                el.innerHTML = '🚫 오늘은 <span class="closed-date">정기휴무</span>입니다';
+                el.style.display = '';
+                return;
+            }
+            for (var i = 1; i <= 30; i++) {
+                d.setDate(d.getDate() + 1);
+                if (isNthMonday(d)) {
+                    var nth = Math.ceil(d.getDate() / 7);
+                    var diff = i;
+                    var label = diff <= 3 ? (diff + '일 뒤') : '';
+                    el.innerHTML = '📅 다음 휴무 <span class="closed-date">' +
+                        (d.getMonth() + 1) + '월 ' + d.getDate() + '일 (' +
+                        (nth === 2 ? '둘째' : '넷째') + ' 월요일)</span>' +
+                        (label ? ' — ' + label : '');
+                    el.style.display = '';
+                    return;
+                }
+            }
+        })();
 
         async function loadCoffeeData() {
             try {

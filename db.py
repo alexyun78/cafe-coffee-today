@@ -235,6 +235,20 @@ def init_schema():
             "CREATE INDEX IF NOT EXISTS idx_feedback_name "
             "ON feedback(coffee_name, created_at DESC)"
         )
+        # 생두 관리 초기 데이터 시드 (스프레드시트 마이그레이션 — 1회만)
+        if not conn.execute(
+            "SELECT 1 FROM migrations WHERE name=?", ("seed_green_beans_v1",)
+        ).fetchone():
+            seed_path = os.path.join(
+                os.path.dirname(os.path.abspath(__file__)), "scripts", "seed_green_beans.sql"
+            )
+            if os.path.isfile(seed_path):
+                with open(seed_path, "r", encoding="utf-8") as f:
+                    sql = f.read()
+                conn.executescript(sql)
+                conn.execute(
+                    "INSERT INTO migrations (name) VALUES (?)", ("seed_green_beans_v1",)
+                )
 
 
 # ---------- PIN brute-force 카운터 (워커 공유 영속) ----------

@@ -971,11 +971,16 @@
             background: var(--canvas);
         }
         .hours-next-closed {
-            margin-top: 14px;
-            font-family: var(--font-mono);
-            font-size: 0.78rem;
-            color: var(--ink-soft);
-            letter-spacing: 0.06em;
+            margin-top: 16px;
+            padding: 10px 16px;
+            background: rgba(198, 40, 40, 0.06);
+            border: 1px solid rgba(198, 40, 40, 0.15);
+            border-radius: var(--r-md);
+            font-family: var(--font-body);
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #c62828;
+            letter-spacing: 0.02em;
         }
         .hours-foot {
             margin-top: 48px;
@@ -1361,7 +1366,7 @@
                 <span class="closed-badge">CLOSED</span>
                 <div class="hours-day-en">2ND · 4TH MONDAY</div>
                 <div class="hours-day-ko">둘째 · 넷째 월요일</div>
-                <div class="hours-note">정기휴무일입니다. 공휴일에도 쉽니다.</div>
+                <div class="hours-note">정기휴무일입니다.</div>
                 <div class="hours-next-closed" id="hours-next-closed"></div>
             </div>
         </div>
