@@ -692,6 +692,211 @@
     .spinner { animation: none; }
     .toast { transition: none; }
   }
+
+  /* ===== 관리 탭 바 ===== */
+  .admin-tabs {
+    display: flex; gap: 0;
+    background: var(--card); border-radius: var(--radius);
+    box-shadow: 0 4px 20px rgba(111,78,55,0.08);
+    margin-bottom: 16px; overflow: hidden;
+    border: 1px solid var(--border);
+  }
+  .admin-tab-btn {
+    flex: 1; padding: 14px 8px; border: none; background: transparent;
+    font-size: 0.9rem; font-family: inherit; cursor: pointer;
+    color: var(--muted); font-weight: 500; min-height: 48px;
+    border-bottom: 3px solid transparent;
+    transition: color 0.15s, border-color 0.15s, background 0.15s;
+    white-space: nowrap;
+  }
+  .admin-tab-btn:hover { background: #faf6f0; color: var(--coffee-dark); }
+  .admin-tab-btn.active {
+    color: var(--coffee-dark); font-weight: 700;
+    border-bottom-color: var(--accent);
+    background: #faf6f0;
+  }
+  .admin-tab-panel { display: none; }
+  .admin-tab-panel.active { display: block; }
+
+  /* ===== 생두 관리: 서브탭 ===== */
+  .bean-sub-tabs {
+    display: flex; gap: 6px; margin-bottom: 16px; flex-wrap: wrap;
+  }
+  .bean-sub-btn {
+    padding: 10px 16px; border: 1.5px solid var(--border); border-radius: 20px;
+    background: white; color: var(--coffee-mid); font-size: 0.85rem;
+    font-weight: 600; cursor: pointer; font-family: inherit;
+    min-height: 44px; transition: all 0.15s;
+  }
+  .bean-sub-btn:hover { border-color: var(--coffee-mid); color: var(--coffee-dark); }
+  .bean-sub-btn.active {
+    background: var(--coffee-dark); color: white;
+    border-color: var(--coffee-dark);
+  }
+  .bean-sub-panel { display: none; }
+  .bean-sub-panel.active { display: block; }
+
+  /* ===== 생두 목록 카드 ===== */
+  .bean-list-items { display: flex; flex-direction: column; gap: 8px; }
+  .bean-card {
+    display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center;
+    padding: 14px 16px; background: #faf8f5; border-radius: 8px;
+    border-left: 3px solid var(--accent); cursor: pointer;
+    transition: background 0.15s;
+  }
+  .bean-card:hover { background: #f3efe8; }
+  .bean-card-main { flex: 1; min-width: 0; }
+  .bean-card-name {
+    font-weight: 600; color: var(--coffee-dark); font-size: 0.95rem;
+    overflow: hidden; text-overflow: ellipsis;
+  }
+  .bean-card-meta { font-size: 0.8rem; color: var(--muted); margin-top: 3px; }
+  .bean-card-right { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+  .bean-card-stock {
+    font-size: 0.85rem; font-weight: 700; padding: 4px 12px;
+    border-radius: 14px; white-space: nowrap;
+  }
+  .bean-stock-ok { background: #e8f5e9; color: #2e7d32; }
+  .bean-stock-low { background: #fff3e0; color: #e65100; }
+  .bean-stock-zero { background: #ffebee; color: #c62828; }
+  .bean-stock-negative { background: #fce4ec; color: #880e4f; }
+  .bean-card-actions { display: flex; gap: 6px; }
+  .bean-card-btn {
+    background: #f0ebe4; color: var(--coffee-dark); border: none;
+    padding: 6px 10px; border-radius: 14px; font-size: 0.75rem;
+    font-weight: 600; cursor: pointer; font-family: inherit;
+    min-height: 36px;
+  }
+  .bean-card-btn:hover { background: #e6ddd0; }
+  .bean-card-btn.delete { background: #FFEBEE; color: #c62828; }
+  .bean-card-btn.delete:hover { background: #ffcdd2; }
+  .bean-decaf-badge {
+    display: inline-block; padding: 2px 8px; border-radius: 10px;
+    background: #e3f2fd; color: #0d47a1; font-size: 0.7rem;
+    font-weight: 700; margin-left: 6px; vertical-align: middle;
+  }
+
+  /* ===== 생두 폼 ===== */
+  .bean-form-wrap { display: none; }
+  .bean-form-wrap.active { display: block; }
+  .bean-form-section-title {
+    font-size: 1.05rem; color: var(--coffee-dark); font-weight: 700;
+    margin-bottom: 16px; padding-bottom: 8px;
+    border-bottom: 2px solid var(--border);
+  }
+
+  /* 세그먼트: 가공방식·등급 (가변 컬럼) */
+  .segmented-flex {
+    display: flex; flex-wrap: wrap; gap: 6px;
+  }
+  .segmented-flex button {
+    padding: 10px 14px; border: 1.5px solid var(--border); border-radius: 8px;
+    background: white; font-size: 0.88rem; font-family: inherit;
+    cursor: pointer; color: var(--muted); font-weight: 500; min-height: 44px;
+    transition: all 0.15s;
+  }
+  .segmented-flex button.active {
+    background: var(--coffee-dark); color: white; border-color: var(--coffee-dark);
+    font-weight: 600;
+  }
+  .segmented-flex button:hover:not(.active) {
+    border-color: var(--coffee-mid); color: var(--coffee-dark);
+  }
+
+  /* 토글 스위치 */
+  .toggle-switch {
+    display: inline-flex; align-items: center; gap: 10px; cursor: pointer;
+    font-size: 0.9rem; color: var(--text); min-height: 44px;
+  }
+  .toggle-switch input { display: none; }
+  .toggle-track {
+    width: 48px; height: 26px; border-radius: 13px;
+    background: #d5cabe; position: relative; transition: background 0.2s;
+  }
+  .toggle-track::after {
+    content: ''; position: absolute; top: 3px; left: 3px;
+    width: 20px; height: 20px; border-radius: 50%;
+    background: white; transition: transform 0.2s;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+  }
+  .toggle-switch input:checked + .toggle-track {
+    background: var(--accent);
+  }
+  .toggle-switch input:checked + .toggle-track::after {
+    transform: translateX(22px);
+  }
+
+  /* ===== 구매·로스팅 기록 리스트 ===== */
+  .record-list { display: flex; flex-direction: column; gap: 8px; }
+  .record-row {
+    padding: 12px 14px; background: #faf8f5; border-radius: 8px;
+    border-left: 3px solid var(--coffee-mid);
+  }
+  .record-row-top {
+    display: flex; justify-content: space-between; align-items: center;
+    gap: 8px; flex-wrap: wrap;
+  }
+  .record-row-name { font-weight: 600; color: var(--coffee-dark); font-size: 0.9rem; }
+  .record-row-date { font-size: 0.78rem; color: var(--muted); }
+  .record-row-detail { font-size: 0.82rem; color: var(--text); margin-top: 4px; }
+  .record-row-detail span { margin-right: 12px; white-space: nowrap; }
+  .record-row-actions { display: flex; gap: 6px; margin-top: 8px; }
+  .record-row-actions button {
+    background: #f0ebe4; color: var(--coffee-dark); border: none;
+    padding: 5px 10px; border-radius: 6px; font-size: 0.75rem;
+    cursor: pointer; font-family: inherit; font-weight: 600;
+  }
+  .record-row-actions button.delete { background: #FFEBEE; color: #c62828; }
+  .record-row-actions button:hover { opacity: 0.8; }
+
+  /* 실시간 총액 표시 */
+  .calc-total {
+    font-size: 1.1rem; font-weight: 700; color: var(--accent);
+    padding: 12px 0; text-align: right;
+  }
+
+  /* 수분손실 자동계산 */
+  .auto-calc {
+    font-size: 0.85rem; color: var(--muted); padding: 6px 0;
+  }
+  .auto-calc strong { color: var(--accent); font-size: 1rem; }
+
+  /* ===== 재고 테이블 ===== */
+  .inv-table-wrap {
+    overflow-x: auto; -webkit-overflow-scrolling: touch;
+  }
+  .inv-table {
+    width: 100%; border-collapse: collapse; font-size: 0.85rem;
+  }
+  .inv-table th {
+    background: #f0ebe4; color: var(--coffee-dark); font-weight: 700;
+    padding: 10px 12px; text-align: left; white-space: nowrap;
+    border-bottom: 2px solid var(--border);
+    position: sticky; top: 0; z-index: 1;
+  }
+  .inv-table td {
+    padding: 10px 12px; border-bottom: 1px solid var(--border);
+    vertical-align: middle;
+  }
+  .inv-table tr:hover td { background: #faf6f0; }
+  .inv-table .num { text-align: right; font-family: ui-monospace, monospace; }
+  .inv-remaining {
+    font-weight: 700; padding: 2px 10px; border-radius: 10px;
+    display: inline-block; font-size: 0.82rem;
+  }
+
+  /* Quick-entry form inside card */
+  .quick-form { margin-top: 16px; }
+  .quick-form .field { margin-bottom: 14px; }
+  .quick-form label { font-size: 0.85rem; margin-bottom: 4px; }
+
+  @media (max-width: 600px) {
+    .admin-tab-btn { font-size: 0.82rem; padding: 12px 4px; }
+    .bean-card { flex-direction: column; align-items: stretch; gap: 8px; }
+    .bean-card-right { justify-content: flex-start; }
+    .inv-table { font-size: 0.78rem; }
+    .inv-table th, .inv-table td { padding: 8px 8px; }
+  }
 </style>
 </head>
 <body>
@@ -728,6 +933,16 @@
       <div class="fb-empty">불러오는 중...</div>
     </div>
   </section>
+
+  <!-- 관리 탭 바 -->
+  <nav class="admin-tabs" id="admin-tabs" role="tablist">
+    <button class="admin-tab-btn active" data-tab="coffee" role="tab" aria-selected="true">☕ 오늘의 커피</button>
+    <button class="admin-tab-btn" data-tab="beans" role="tab" aria-selected="false">🫘 생두 관리</button>
+    <button class="admin-tab-btn" data-tab="inventory" role="tab" aria-selected="false">📦 재고</button>
+  </nav>
+
+  <!-- ===== 탭 패널: 오늘의 커피 ===== -->
+  <div id="tab-panel-coffee" class="admin-tab-panel active">
 
   <!-- 기존 항목 리스트 -->
   <section id="list-view" class="card">
@@ -850,6 +1065,238 @@
       </div>
     </form>
   </section>
+
+  </div><!-- /tab-panel-coffee -->
+
+  <!-- ===== 탭 패널: 생두 관리 ===== -->
+  <div id="tab-panel-beans" class="admin-tab-panel">
+
+    <!-- 생두 서브탭 -->
+    <div class="bean-sub-tabs" id="bean-sub-tabs">
+      <button class="bean-sub-btn active" data-sub="bean-list">생두 목록</button>
+      <button class="bean-sub-btn" data-sub="purchase-list">구매 기록</button>
+      <button class="bean-sub-btn" data-sub="roasting-list">로스팅 기록</button>
+    </div>
+
+    <!-- 서브패널: 생두 목록 -->
+    <div id="bean-sub-bean-list" class="bean-sub-panel active">
+      <section class="card">
+        <div class="list-header">
+          <h2>생두 목록</h2>
+          <button class="btn-new" type="button" id="btn-bean-new">+ 추가</button>
+        </div>
+        <div id="bean-list-items" class="bean-list-items">
+          <div class="empty">불러오는 중...</div>
+        </div>
+      </section>
+
+      <!-- 생두 등록/편집 폼 -->
+      <section id="bean-form-view" class="card bean-form-wrap">
+        <div class="bean-form-section-title" id="bean-form-title">생두 등록</div>
+        <form id="bean-form" novalidate>
+          <input type="hidden" id="bean-field-id">
+
+          <div class="field">
+            <label for="bean-field-name" class="req">원두명</label>
+            <input type="text" id="bean-field-name" placeholder="예: 에티오피아 구지 우라가" autocomplete="off" required>
+            <div class="field-error">원두명을 입력하세요.</div>
+          </div>
+
+          <div class="field">
+            <label for="bean-field-supplier">공급업체</label>
+            <div class="autocomplete-wrap">
+              <select id="bean-field-supplier" style="min-height:48px;">
+                <option value="">선택 안 함</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="field">
+            <label class="req">가공방식</label>
+            <div class="segmented-flex" id="bean-process-btns" role="radiogroup" aria-label="가공방식"></div>
+            <input type="text" id="bean-field-process-custom" placeholder="직접 입력" style="margin-top:6px; display:none;" autocomplete="off">
+            <input type="hidden" id="bean-field-process">
+            <div class="field-error">가공방식을 선택하세요.</div>
+          </div>
+
+          <div class="field">
+            <label>등급</label>
+            <div class="segmented-flex" id="bean-grade-btns" role="radiogroup" aria-label="등급"></div>
+            <input type="text" id="bean-field-grade-custom" placeholder="직접 입력" style="margin-top:6px; display:none;" autocomplete="off">
+            <input type="hidden" id="bean-field-grade">
+          </div>
+
+          <div class="field">
+            <label for="bean-field-origin">원산지</label>
+            <div class="autocomplete-wrap">
+              <input type="text" id="bean-field-origin" placeholder="예: 에티오피아" autocomplete="off">
+              <div class="autocomplete-list" id="ac-bean-origin"></div>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="bean-field-cup-notes">컵노트</label>
+            <textarea id="bean-field-cup-notes" placeholder="예: 자몽, 블랙베리, 다크초콜릿"></textarea>
+          </div>
+
+          <div class="field">
+            <label>디카페인</label>
+            <label class="toggle-switch">
+              <input type="checkbox" id="bean-field-decaf">
+              <span class="toggle-track"></span>
+              디카페인 원두
+            </label>
+          </div>
+
+          <div class="field">
+            <label for="bean-field-desc">설명</label>
+            <textarea id="bean-field-desc" placeholder="메모, 특성 등"></textarea>
+          </div>
+
+          <div class="button-bar">
+            <button type="button" class="btn btn-secondary" id="btn-bean-cancel">취소</button>
+            <button type="button" class="btn btn-danger" id="btn-bean-delete" style="display:none;">삭제</button>
+            <button type="submit" class="btn btn-primary" id="btn-bean-save">저장</button>
+          </div>
+        </form>
+      </section>
+    </div>
+
+    <!-- 서브패널: 구매 기록 -->
+    <div id="bean-sub-purchase-list" class="bean-sub-panel">
+      <section class="card">
+        <div class="list-header">
+          <h2>구매 기록</h2>
+          <button class="btn-new" type="button" id="btn-purchase-new">+ 추가</button>
+        </div>
+        <div id="purchase-list-items" class="record-list">
+          <div class="empty">불러오는 중...</div>
+        </div>
+      </section>
+
+      <!-- 구매 등록 폼 -->
+      <section id="purchase-form-view" class="card bean-form-wrap">
+        <div class="bean-form-section-title">구매 등록</div>
+        <form id="purchase-form" novalidate>
+          <div class="field">
+            <label for="purchase-field-bean" class="req">생두 선택</label>
+            <select id="purchase-field-bean" style="min-height:48px;" required>
+              <option value="">-- 선택 --</option>
+            </select>
+            <div class="field-error">생두를 선택하세요.</div>
+          </div>
+
+          <div class="field">
+            <label for="purchase-field-date" class="req">날짜</label>
+            <input type="date" id="purchase-field-date" required>
+            <div class="field-error">날짜를 선택하세요.</div>
+          </div>
+
+          <div class="field">
+            <label for="purchase-field-qty" class="req">수량 (kg)</label>
+            <input type="text" id="purchase-field-qty" inputmode="decimal" placeholder="예: 5" required>
+            <div class="field-error">수량을 입력하세요.</div>
+          </div>
+
+          <div class="field">
+            <label for="purchase-field-price" class="req">단가 (원/kg)</label>
+            <input type="text" id="purchase-field-price" inputmode="numeric" placeholder="예: 30000" required>
+            <div class="field-error">단가를 입력하세요.</div>
+          </div>
+
+          <div class="field">
+            <label for="purchase-field-discount">할인 (원)</label>
+            <input type="text" id="purchase-field-discount" inputmode="numeric" placeholder="0" value="0">
+          </div>
+
+          <div class="calc-total" id="purchase-total-display">총액: ₩0</div>
+
+          <div class="button-bar">
+            <button type="button" class="btn btn-secondary" id="btn-purchase-cancel">취소</button>
+            <button type="submit" class="btn btn-primary" id="btn-purchase-save">저장</button>
+          </div>
+        </form>
+      </section>
+    </div>
+
+    <!-- 서브패널: 로스팅 기록 -->
+    <div id="bean-sub-roasting-list" class="bean-sub-panel">
+      <section class="card">
+        <div class="list-header">
+          <h2>로스팅 기록</h2>
+          <button class="btn-new" type="button" id="btn-roast-new">+ 추가</button>
+        </div>
+        <div id="roast-list-items" class="record-list">
+          <div class="empty">불러오는 중...</div>
+        </div>
+      </section>
+
+      <!-- 로스팅 등록 폼 -->
+      <section id="roast-form-view" class="card bean-form-wrap">
+        <div class="bean-form-section-title">로스팅 기록</div>
+        <form id="roast-form" novalidate>
+          <div class="field">
+            <label for="roast-field-bean" class="req">생두 선택</label>
+            <select id="roast-field-bean" style="min-height:48px;" required>
+              <option value="">-- 선택 --</option>
+            </select>
+            <div class="field-error">생두를 선택하세요.</div>
+          </div>
+
+          <div class="field">
+            <label for="roast-field-date" class="req">날짜</label>
+            <input type="date" id="roast-field-date" required>
+            <div class="field-error">날짜를 선택하세요.</div>
+          </div>
+
+          <div class="field">
+            <label for="roast-field-input" class="req">투입 (g)</label>
+            <input type="text" id="roast-field-input" inputmode="numeric" placeholder="예: 5000" required>
+            <div class="field-error">투입량을 입력하세요.</div>
+          </div>
+
+          <div class="field">
+            <label for="roast-field-output">배출 (g)</label>
+            <input type="text" id="roast-field-output" inputmode="numeric" placeholder="예: 4200">
+          </div>
+
+          <div class="auto-calc" id="roast-loss-display">수분손실: <strong>—</strong></div>
+
+          <div class="field">
+            <label for="roast-field-level">로스팅 레벨</label>
+            <input type="text" id="roast-field-level" placeholder="예: 미디엄, 하이로스트" autocomplete="off">
+          </div>
+
+          <div class="field">
+            <label for="roast-field-notes">메모</label>
+            <textarea id="roast-field-notes" placeholder="특이사항"></textarea>
+          </div>
+
+          <div class="button-bar">
+            <button type="button" class="btn btn-secondary" id="btn-roast-cancel">취소</button>
+            <button type="submit" class="btn btn-primary" id="btn-roast-save">저장</button>
+          </div>
+        </form>
+      </section>
+    </div>
+
+  </div><!-- /tab-panel-beans -->
+
+  <!-- ===== 탭 패널: 재고 ===== -->
+  <div id="tab-panel-inventory" class="admin-tab-panel">
+    <section class="card">
+      <div class="list-header">
+        <h2>📦 재고 현황</h2>
+        <button class="btn-text" type="button" id="btn-inv-refresh">↻ 새로고침</button>
+      </div>
+      <div class="inv-table-wrap">
+        <div id="inv-body">
+          <div class="empty">탭을 선택하면 불러옵니다.</div>
+        </div>
+      </div>
+    </section>
+  </div><!-- /tab-panel-inventory -->
+
 </div>
 
 <!-- 달력 모달 -->
@@ -2221,6 +2668,672 @@ async function init() {
 }
 
 init();
+
+// =========================================================================
+// ============  생두 관리 / 재고 탭 — JavaScript  ==========================
+// =========================================================================
+
+// ---------- 관리 탭 전환 ----------
+(function initAdminTabs() {
+  const tabBtns = document.querySelectorAll("#admin-tabs .admin-tab-btn");
+  tabBtns.forEach(btn => {
+    btn.addEventListener("click", () => {
+      tabBtns.forEach(b => { b.classList.remove("active"); b.setAttribute("aria-selected", "false"); });
+      btn.classList.add("active");
+      btn.setAttribute("aria-selected", "true");
+      document.querySelectorAll(".admin-tab-panel").forEach(p => p.classList.remove("active"));
+      const panel = document.getElementById("tab-panel-" + btn.dataset.tab);
+      if (panel) panel.classList.add("active");
+      // 탭 진입 시 데이터 로드
+      if (btn.dataset.tab === "beans") loadBeansTab();
+      if (btn.dataset.tab === "inventory") loadInventory();
+    });
+  });
+})();
+
+// ---------- 생두 서브탭 전환 ----------
+(function initBeanSubTabs() {
+  const subBtns = document.querySelectorAll("#bean-sub-tabs .bean-sub-btn");
+  subBtns.forEach(btn => {
+    btn.addEventListener("click", () => {
+      subBtns.forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      document.querySelectorAll(".bean-sub-panel").forEach(p => p.classList.remove("active"));
+      const panel = document.getElementById("bean-sub-" + btn.dataset.sub);
+      if (panel) panel.classList.add("active");
+      // 서브탭 진입 시 데이터 로드
+      if (btn.dataset.sub === "bean-list") loadBeanList();
+      if (btn.dataset.sub === "purchase-list") loadPurchaseList();
+      if (btn.dataset.sub === "roasting-list") loadRoastList();
+    });
+  });
+})();
+
+// ---------- 공유 캐시 ----------
+let _beanListCache = [];
+let _beanSuggestionsCache = null;
+let _suppliersCache = [];
+
+async function loadBeansTab() {
+  // 첫 진입: suggestions + list 동시 로드
+  try {
+    const [sugRes, listRes, supRes] = await Promise.all([
+      api("GET", "/api/green-beans/suggestions"),
+      api("GET", "/api/green-beans?all=1"),
+      api("GET", "/api/suppliers"),
+    ]);
+    _beanSuggestionsCache = sugRes;
+    _beanListCache = listRes.items || [];
+    _suppliersCache = supRes.items || [];
+    renderBeanList(_beanListCache);
+    populateBeanDropdowns();
+  } catch (e) {
+    if (e.message !== "unauthorized") showBanner("생두 데이터 로드 실패: " + e.message, "error");
+  }
+}
+
+// ---------- 드롭다운 채우기 ----------
+function populateBeanDropdowns() {
+  // 공급업체 셀렉트
+  const supSel = document.getElementById("bean-field-supplier");
+  if (supSel) {
+    supSel.innerHTML = '<option value="">선택 안 함</option>' +
+      _suppliersCache.map(s =>
+        `<option value="${s.id}">${escapeHtml(s.short_name || s.name)}</option>`
+      ).join("");
+  }
+  // 구매/로스팅 폼의 생두 셀렉트
+  const activeBeans = _beanListCache.filter(b => b.status === "활성");
+  const beanOptions = '<option value="">-- 선택 --</option>' +
+    activeBeans.map(b => {
+      const prefix = b.supplier_short ? `[${escapeHtml(b.supplier_short)}] ` : "";
+      return `<option value="${b.id}">${prefix}${escapeHtml(b.name)} (${escapeHtml(b.process || "")})</option>`;
+    }).join("");
+  const purchaseSel = document.getElementById("purchase-field-bean");
+  if (purchaseSel) purchaseSel.innerHTML = beanOptions;
+  const roastSel = document.getElementById("roast-field-bean");
+  if (roastSel) roastSel.innerHTML = beanOptions;
+}
+
+// ---------- 가공방식 / 등급 세그먼트 버튼 렌더 ----------
+const DEFAULT_PROCESSES = ["내추럴", "워시드", "허니", "무산소 발효"];
+const DEFAULT_GRADES = ["스페셜티", "프리미엄", "커머셜"];
+
+function renderSegmentedBtns(containerId, hiddenId, customId, defaults, fromSuggestions) {
+  const container = document.getElementById(containerId);
+  const hidden = document.getElementById(hiddenId);
+  const customInput = document.getElementById(customId);
+  if (!container) return;
+  const allVals = [...new Set([...defaults, ...(fromSuggestions || [])])];
+  container.innerHTML = allVals.map(v =>
+    `<button type="button" data-val="${escapeAttr(v)}">${escapeHtml(v)}</button>`
+  ).join("") + `<button type="button" data-val="__custom">직접 입력</button>`;
+
+  container.querySelectorAll("button").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const prev = container.querySelector("button.active");
+      const wasActive = prev === btn;
+      container.querySelectorAll("button").forEach(b => b.classList.remove("active"));
+      if (wasActive) {
+        hidden.value = "";
+        customInput.style.display = "none";
+        customInput.value = "";
+        return;
+      }
+      btn.classList.add("active");
+      if (btn.dataset.val === "__custom") {
+        customInput.style.display = "";
+        customInput.focus();
+        hidden.value = customInput.value;
+      } else {
+        customInput.style.display = "none";
+        customInput.value = "";
+        hidden.value = btn.dataset.val;
+      }
+    });
+  });
+
+  if (customInput) {
+    customInput.addEventListener("input", () => {
+      hidden.value = customInput.value;
+    });
+  }
+}
+
+function initBeanFormSegments() {
+  const procs = (_beanSuggestionsCache && _beanSuggestionsCache.processes) || [];
+  const grades = (_beanSuggestionsCache && _beanSuggestionsCache.grades) || [];
+  renderSegmentedBtns("bean-process-btns", "bean-field-process", "bean-field-process-custom", DEFAULT_PROCESSES, procs);
+  renderSegmentedBtns("bean-grade-btns", "bean-field-grade", "bean-field-grade-custom", DEFAULT_GRADES, grades);
+  // 원산지 autocomplete
+  const origins = (_beanSuggestionsCache && _beanSuggestionsCache.origins) || [];
+  setupAutocomplete("bean-field-origin", "ac-bean-origin", origins);
+}
+
+// ---------- 생두 목록 ----------
+async function loadBeanList() {
+  try {
+    const res = await api("GET", "/api/green-beans?all=1");
+    _beanListCache = res.items || [];
+    renderBeanList(_beanListCache);
+  } catch (e) {
+    if (e.message !== "unauthorized")
+      document.getElementById("bean-list-items").innerHTML = '<div class="empty">불러오기 실패</div>';
+  }
+}
+
+function renderBeanList(items) {
+  const el = document.getElementById("bean-list-items");
+  if (!items.length) {
+    el.innerHTML = '<div class="empty">등록된 생두가 없습니다.</div>';
+    return;
+  }
+  el.innerHTML = items.map(b => {
+    const prefix = b.supplier_short ? `[${escapeHtml(b.supplier_short)}] ` : "";
+    const remaining = Number(b.remaining_kg) || 0;
+    let stockCls = "bean-stock-ok";
+    if (remaining <= 0) stockCls = remaining < 0 ? "bean-stock-negative" : "bean-stock-zero";
+    else if (remaining < 2) stockCls = "bean-stock-low";
+    const isInactive = b.status !== "활성";
+    return `
+      <div class="bean-card ${isInactive ? 'sold-out' : ''}" data-id="${b.id}">
+        <div class="bean-card-main">
+          <div class="bean-card-name">
+            ${prefix}${escapeHtml(b.name)}
+            ${b.is_decaf ? '<span class="bean-decaf-badge">디카페인</span>' : ''}
+            ${isInactive ? '<span class="status-chip status-완료">' + escapeHtml(b.status) + '</span>' : ''}
+          </div>
+          <div class="bean-card-meta">
+            ${escapeHtml(b.process || "")}${b.grade ? " · " + escapeHtml(b.grade) : ""}${b.origin_country ? " · " + escapeHtml(b.origin_country) : ""}
+          </div>
+        </div>
+        <div class="bean-card-right">
+          <span class="bean-card-stock ${stockCls}">${remaining.toFixed(1)} kg</span>
+          <div class="bean-card-actions">
+            <button type="button" class="bean-card-btn bean-edit-btn" data-id="${b.id}">편집</button>
+          </div>
+        </div>
+      </div>
+    `;
+  }).join("");
+
+  el.querySelectorAll(".bean-card").forEach(card => {
+    card.addEventListener("click", (e) => {
+      if (e.target.closest(".bean-edit-btn")) return;
+      const id = parseInt(card.dataset.id, 10);
+      openBeanEdit(id);
+    });
+  });
+  el.querySelectorAll(".bean-edit-btn").forEach(btn => {
+    btn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      openBeanEdit(parseInt(btn.dataset.id, 10));
+    });
+  });
+}
+
+// ---------- 생두 폼 ----------
+let _beanEditingId = null;
+
+function showBeanForm() {
+  document.getElementById("bean-form-view").classList.add("active");
+}
+function hideBeanForm() {
+  document.getElementById("bean-form-view").classList.remove("active");
+  _beanEditingId = null;
+}
+
+document.getElementById("btn-bean-new").addEventListener("click", () => {
+  _beanEditingId = null;
+  document.getElementById("bean-form").reset();
+  document.getElementById("bean-field-id").value = "";
+  document.getElementById("bean-field-process").value = "";
+  document.getElementById("bean-field-grade").value = "";
+  document.getElementById("bean-field-decaf").checked = false;
+  document.getElementById("bean-form-title").textContent = "생두 등록";
+  document.getElementById("btn-bean-delete").style.display = "none";
+  clearBeanSegments();
+  initBeanFormSegments();
+  showBeanForm();
+  document.getElementById("bean-field-name").focus();
+});
+
+document.getElementById("btn-bean-cancel").addEventListener("click", hideBeanForm);
+
+async function openBeanEdit(id) {
+  try {
+    const res = await api("GET", "/api/green-beans/" + id);
+    const b = res.item;
+    _beanEditingId = id;
+    document.getElementById("bean-field-id").value = id;
+    document.getElementById("bean-field-name").value = b.name || "";
+    document.getElementById("bean-field-supplier").value = b.supplier_id || "";
+    document.getElementById("bean-field-origin").value = b.origin_country || "";
+    document.getElementById("bean-field-cup-notes").value = b.cup_notes || "";
+    document.getElementById("bean-field-desc").value = b.description || "";
+    document.getElementById("bean-field-decaf").checked = !!b.is_decaf;
+    document.getElementById("bean-form-title").textContent = "생두 편집";
+    document.getElementById("btn-bean-delete").style.display = "";
+    initBeanFormSegments();
+    // 가공방식 선택 동기화
+    syncSegmentedBtn("bean-process-btns", "bean-field-process", "bean-field-process-custom", b.process || "");
+    // 등급 선택 동기화
+    syncSegmentedBtn("bean-grade-btns", "bean-field-grade", "bean-field-grade-custom", b.grade || "");
+    showBeanForm();
+  } catch (e) {
+    if (e.message !== "unauthorized") showBanner("생두 로드 실패: " + e.message, "error");
+  }
+}
+
+function syncSegmentedBtn(containerId, hiddenId, customId, value) {
+  const container = document.getElementById(containerId);
+  const hidden = document.getElementById(hiddenId);
+  const customInput = document.getElementById(customId);
+  if (!container || !value) return;
+  hidden.value = value;
+  const btns = container.querySelectorAll("button");
+  btns.forEach(b => b.classList.remove("active"));
+  let matched = false;
+  btns.forEach(b => {
+    if (b.dataset.val === value) {
+      b.classList.add("active");
+      matched = true;
+    }
+  });
+  if (!matched && value) {
+    // custom
+    const customBtn = container.querySelector('button[data-val="__custom"]');
+    if (customBtn) customBtn.classList.add("active");
+    if (customInput) {
+      customInput.style.display = "";
+      customInput.value = value;
+    }
+  }
+}
+
+function clearBeanSegments() {
+  document.querySelectorAll("#bean-process-btns button, #bean-grade-btns button").forEach(b => b.classList.remove("active"));
+  const pc = document.getElementById("bean-field-process-custom");
+  const gc = document.getElementById("bean-field-grade-custom");
+  if (pc) { pc.style.display = "none"; pc.value = ""; }
+  if (gc) { gc.style.display = "none"; gc.value = ""; }
+}
+
+document.getElementById("bean-form").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  // 유효성 검사
+  let ok = true;
+  const nameField = document.getElementById("bean-field-name");
+  if (!nameField.value.trim()) { nameField.closest(".field").classList.add("error"); ok = false; }
+  else nameField.closest(".field").classList.remove("error");
+
+  const processVal = document.getElementById("bean-field-process").value.trim();
+  const processField = document.getElementById("bean-process-btns").closest(".field");
+  if (!processVal) { processField.classList.add("error"); ok = false; }
+  else processField.classList.remove("error");
+
+  if (!ok) return;
+
+  const saveBtn = document.getElementById("btn-bean-save");
+  saveBtn.disabled = true;
+  saveBtn.innerHTML = '<span class="spinner"></span>저장 중...';
+
+  const payload = {
+    name: nameField.value.trim(),
+    supplier_id: document.getElementById("bean-field-supplier").value || null,
+    process: processVal,
+    grade: document.getElementById("bean-field-grade").value.trim() || null,
+    origin_country: document.getElementById("bean-field-origin").value.trim() || null,
+    cup_notes: document.getElementById("bean-field-cup-notes").value.trim() || null,
+    description: document.getElementById("bean-field-desc").value.trim() || null,
+    is_decaf: document.getElementById("bean-field-decaf").checked ? 1 : 0,
+  };
+
+  try {
+    if (_beanEditingId) {
+      await api("PUT", "/api/green-beans/" + _beanEditingId, payload);
+    } else {
+      await api("POST", "/api/green-beans", payload);
+    }
+    showToast(_beanEditingId ? "수정되었습니다" : "등록되었습니다");
+    hideBeanForm();
+    await loadBeanList();
+    populateBeanDropdowns();
+  } catch (err) {
+    if (err.message !== "unauthorized") showBanner("저장 실패: " + err.message, "error");
+  } finally {
+    saveBtn.disabled = false;
+    saveBtn.textContent = "저장";
+  }
+});
+
+document.getElementById("btn-bean-delete").addEventListener("click", async () => {
+  if (!_beanEditingId) return;
+  if (!confirm("이 생두를 단종 처리하시겠습니까?")) return;
+  try {
+    await api("DELETE", "/api/green-beans/" + _beanEditingId);
+    showToast("단종 처리되었습니다");
+    hideBeanForm();
+    await loadBeanList();
+    populateBeanDropdowns();
+  } catch (err) {
+    if (err.message !== "unauthorized") showBanner("삭제 실패: " + err.message, "error");
+  }
+});
+
+// ---------- 구매 기록 ----------
+async function loadPurchaseList() {
+  const el = document.getElementById("purchase-list-items");
+  try {
+    const res = await api("GET", "/api/purchases");
+    renderPurchaseList(res.items || []);
+  } catch (e) {
+    if (e.message !== "unauthorized") el.innerHTML = '<div class="empty">불러오기 실패</div>';
+  }
+}
+
+function renderPurchaseList(items) {
+  const el = document.getElementById("purchase-list-items");
+  if (!items.length) {
+    el.innerHTML = '<div class="empty">구매 기록이 없습니다.</div>';
+    return;
+  }
+  el.innerHTML = items.map(p => {
+    const prefix = p.supplier_short ? `[${escapeHtml(p.supplier_short)}] ` : "";
+    const total = Number(p.total_price) || 0;
+    const discount = Number(p.discount) || 0;
+    return `
+      <div class="record-row" data-id="${p.id}">
+        <div class="record-row-top">
+          <span class="record-row-name">${prefix}${escapeHtml(p.bean_name || "")}</span>
+          <span class="record-row-date">${escapeHtml(p.purchase_date || "")}</span>
+        </div>
+        <div class="record-row-detail">
+          <span>${Number(p.quantity_kg).toFixed(1)} kg</span>
+          <span>₩${Number(p.unit_price).toLocaleString()}/kg</span>
+          ${discount > 0 ? `<span style="color:var(--danger);">-₩${discount.toLocaleString()}</span>` : ""}
+          <span style="font-weight:700; color:var(--accent);">= ₩${total.toLocaleString()}</span>
+        </div>
+        <div class="record-row-actions">
+          <button type="button" class="delete" data-id="${p.id}">삭제</button>
+        </div>
+      </div>
+    `;
+  }).join("");
+
+  el.querySelectorAll(".record-row-actions .delete").forEach(btn => {
+    btn.addEventListener("click", async () => {
+      if (!confirm("이 구매 기록을 삭제할까요?")) return;
+      try {
+        await api("DELETE", "/api/purchases/" + btn.dataset.id);
+        showToast("삭제됨");
+        loadPurchaseList();
+      } catch (err) {
+        if (err.message !== "unauthorized") showBanner("삭제 실패: " + err.message, "error");
+      }
+    });
+  });
+}
+
+// 구매 폼 열기/닫기
+document.getElementById("btn-purchase-new").addEventListener("click", () => {
+  document.getElementById("purchase-form").reset();
+  document.getElementById("purchase-field-date").value = todayStr();
+  document.getElementById("purchase-field-discount").value = "0";
+  updatePurchaseTotal();
+  document.getElementById("purchase-form-view").classList.add("active");
+  document.getElementById("purchase-field-bean").focus();
+});
+document.getElementById("btn-purchase-cancel").addEventListener("click", () => {
+  document.getElementById("purchase-form-view").classList.remove("active");
+});
+
+// 실시간 총액 계산
+function updatePurchaseTotal() {
+  const qty = parseFloat(document.getElementById("purchase-field-qty").value) || 0;
+  const price = parseInt(document.getElementById("purchase-field-price").value) || 0;
+  const discount = parseInt(document.getElementById("purchase-field-discount").value) || 0;
+  const total = Math.max(0, Math.round(qty * price) - discount);
+  document.getElementById("purchase-total-display").textContent = "총액: ₩" + total.toLocaleString();
+}
+["purchase-field-qty", "purchase-field-price", "purchase-field-discount"].forEach(id => {
+  document.getElementById(id).addEventListener("input", updatePurchaseTotal);
+});
+
+document.getElementById("purchase-form").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  let ok = true;
+  const beanSel = document.getElementById("purchase-field-bean");
+  if (!beanSel.value) { beanSel.closest(".field").classList.add("error"); ok = false; }
+  else beanSel.closest(".field").classList.remove("error");
+
+  const dateVal = document.getElementById("purchase-field-date").value;
+  if (!dateVal) { document.getElementById("purchase-field-date").closest(".field").classList.add("error"); ok = false; }
+  else document.getElementById("purchase-field-date").closest(".field").classList.remove("error");
+
+  const qtyVal = parseFloat(document.getElementById("purchase-field-qty").value);
+  if (!qtyVal || qtyVal <= 0) { document.getElementById("purchase-field-qty").closest(".field").classList.add("error"); ok = false; }
+  else document.getElementById("purchase-field-qty").closest(".field").classList.remove("error");
+
+  const priceVal = parseInt(document.getElementById("purchase-field-price").value);
+  if (!priceVal || priceVal <= 0) { document.getElementById("purchase-field-price").closest(".field").classList.add("error"); ok = false; }
+  else document.getElementById("purchase-field-price").closest(".field").classList.remove("error");
+
+  if (!ok) return;
+
+  const saveBtn = document.getElementById("btn-purchase-save");
+  saveBtn.disabled = true;
+  saveBtn.innerHTML = '<span class="spinner"></span>저장 중...';
+
+  try {
+    await api("POST", "/api/purchases", {
+      green_bean_id: parseInt(beanSel.value),
+      purchase_date: dateVal,
+      quantity_kg: qtyVal,
+      unit_price: priceVal,
+      discount: parseInt(document.getElementById("purchase-field-discount").value) || 0,
+    });
+    showToast("구매 기록 추가됨");
+    document.getElementById("purchase-form-view").classList.remove("active");
+    loadPurchaseList();
+  } catch (err) {
+    if (err.message !== "unauthorized") showBanner("저장 실패: " + err.message, "error");
+  } finally {
+    saveBtn.disabled = false;
+    saveBtn.textContent = "저장";
+  }
+});
+
+// ---------- 로스팅 기록 ----------
+async function loadRoastList() {
+  const el = document.getElementById("roast-list-items");
+  try {
+    const res = await api("GET", "/api/roasting-logs");
+    renderRoastList(res.items || []);
+  } catch (e) {
+    if (e.message !== "unauthorized") el.innerHTML = '<div class="empty">불러오기 실패</div>';
+  }
+}
+
+function renderRoastList(items) {
+  const el = document.getElementById("roast-list-items");
+  if (!items.length) {
+    el.innerHTML = '<div class="empty">로스팅 기록이 없습니다.</div>';
+    return;
+  }
+  el.innerHTML = items.map(r => {
+    const prefix = r.supplier_short ? `[${escapeHtml(r.supplier_short)}] ` : "";
+    const input = Number(r.input_weight_g) || 0;
+    const output = r.output_weight_g != null ? Number(r.output_weight_g) : null;
+    const loss = r.moisture_loss_pct != null ? Number(r.moisture_loss_pct).toFixed(1) + "%" : "—";
+    return `
+      <div class="record-row" data-id="${r.id}" style="border-left-color: var(--accent);">
+        <div class="record-row-top">
+          <span class="record-row-name">${prefix}${escapeHtml(r.bean_name || "")}</span>
+          <span class="record-row-date">${escapeHtml(r.roast_date || "")}</span>
+        </div>
+        <div class="record-row-detail">
+          <span>투입 ${input.toLocaleString()}g</span>
+          ${output != null ? `<span>배출 ${output.toLocaleString()}g</span>` : ""}
+          <span style="font-weight:700; color:var(--accent);">손실 ${loss}</span>
+          ${r.roast_level ? `<span>${escapeHtml(r.roast_level)}</span>` : ""}
+        </div>
+        ${r.notes ? `<div style="font-size:0.8rem; color:var(--muted); margin-top:4px;">${escapeHtml(r.notes)}</div>` : ""}
+        <div class="record-row-actions">
+          <button type="button" class="delete" data-id="${r.id}">삭제</button>
+        </div>
+      </div>
+    `;
+  }).join("");
+
+  el.querySelectorAll(".record-row-actions .delete").forEach(btn => {
+    btn.addEventListener("click", async () => {
+      if (!confirm("이 로스팅 기록을 삭제할까요?")) return;
+      try {
+        await api("DELETE", "/api/roasting-logs/" + btn.dataset.id);
+        showToast("삭제됨");
+        loadRoastList();
+      } catch (err) {
+        if (err.message !== "unauthorized") showBanner("삭제 실패: " + err.message, "error");
+      }
+    });
+  });
+}
+
+// 로스팅 폼 열기/닫기
+document.getElementById("btn-roast-new").addEventListener("click", () => {
+  document.getElementById("roast-form").reset();
+  document.getElementById("roast-field-date").value = todayStr();
+  updateRoastLoss();
+  document.getElementById("roast-form-view").classList.add("active");
+  document.getElementById("roast-field-bean").focus();
+});
+document.getElementById("btn-roast-cancel").addEventListener("click", () => {
+  document.getElementById("roast-form-view").classList.remove("active");
+});
+
+// 수분손실 자동계산
+function updateRoastLoss() {
+  const input = parseFloat(document.getElementById("roast-field-input").value) || 0;
+  const output = parseFloat(document.getElementById("roast-field-output").value) || 0;
+  const display = document.getElementById("roast-loss-display");
+  if (input > 0 && output > 0) {
+    const loss = ((1 - output / input) * 100).toFixed(1);
+    display.innerHTML = `수분손실: <strong>${loss}%</strong>`;
+  } else {
+    display.innerHTML = "수분손실: <strong>—</strong>";
+  }
+}
+document.getElementById("roast-field-input").addEventListener("input", updateRoastLoss);
+document.getElementById("roast-field-output").addEventListener("input", updateRoastLoss);
+
+document.getElementById("roast-form").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  let ok = true;
+  const beanSel = document.getElementById("roast-field-bean");
+  if (!beanSel.value) { beanSel.closest(".field").classList.add("error"); ok = false; }
+  else beanSel.closest(".field").classList.remove("error");
+
+  const dateVal = document.getElementById("roast-field-date").value;
+  if (!dateVal) { document.getElementById("roast-field-date").closest(".field").classList.add("error"); ok = false; }
+  else document.getElementById("roast-field-date").closest(".field").classList.remove("error");
+
+  const inputVal = parseFloat(document.getElementById("roast-field-input").value);
+  if (!inputVal || inputVal <= 0) { document.getElementById("roast-field-input").closest(".field").classList.add("error"); ok = false; }
+  else document.getElementById("roast-field-input").closest(".field").classList.remove("error");
+
+  if (!ok) return;
+
+  const saveBtn = document.getElementById("btn-roast-save");
+  saveBtn.disabled = true;
+  saveBtn.innerHTML = '<span class="spinner"></span>저장 중...';
+
+  const payload = {
+    green_bean_id: parseInt(beanSel.value),
+    roast_date: dateVal,
+    input_weight_g: inputVal,
+    output_weight_g: parseFloat(document.getElementById("roast-field-output").value) || null,
+    roast_level: document.getElementById("roast-field-level").value.trim() || null,
+    notes: document.getElementById("roast-field-notes").value.trim() || null,
+  };
+
+  try {
+    await api("POST", "/api/roasting-logs", payload);
+    showToast("로스팅 기록 추가됨");
+    document.getElementById("roast-form-view").classList.remove("active");
+    loadRoastList();
+  } catch (err) {
+    if (err.message !== "unauthorized") showBanner("저장 실패: " + err.message, "error");
+  } finally {
+    saveBtn.disabled = false;
+    saveBtn.textContent = "저장";
+  }
+});
+
+// ---------- 재고 ----------
+async function loadInventory() {
+  const body = document.getElementById("inv-body");
+  body.innerHTML = '<div class="empty">불러오는 중...</div>';
+  try {
+    const res = await api("GET", "/api/inventory");
+    renderInventory(res.items || []);
+  } catch (e) {
+    if (e.message !== "unauthorized") body.innerHTML = '<div class="empty">불러오기 실패</div>';
+  }
+}
+
+function renderInventory(items) {
+  const body = document.getElementById("inv-body");
+  if (!items.length) {
+    body.innerHTML = '<div class="empty">재고 데이터가 없습니다.</div>';
+    return;
+  }
+  body.innerHTML = `
+    <table class="inv-table">
+      <thead>
+        <tr>
+          <th>생두명</th>
+          <th>가공</th>
+          <th class="num">구매(kg)</th>
+          <th class="num">사용(kg)</th>
+          <th class="num">잔여(kg)</th>
+          <th class="num">평균단가</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${items.map(it => {
+          const prefix = it.supplier_short ? `[${escapeHtml(it.supplier_short)}] ` : "";
+          const remaining = Number(it.remaining_kg) || 0;
+          let cls = "bean-stock-ok";
+          if (remaining <= 0) cls = remaining < 0 ? "bean-stock-negative" : "bean-stock-zero";
+          else if (remaining < 2) cls = "bean-stock-low";
+          const avgPrice = Number(it.avg_unit_price) || 0;
+          return `
+            <tr>
+              <td>
+                ${prefix}${escapeHtml(it.name || "")}
+                ${it.is_decaf ? '<span class="bean-decaf-badge">디카페인</span>' : ""}
+              </td>
+              <td>${escapeHtml(it.process || "")}</td>
+              <td class="num">${Number(it.purchased_kg).toFixed(1)}</td>
+              <td class="num">${Number(it.used_kg).toFixed(1)}</td>
+              <td class="num"><span class="inv-remaining ${cls}">${remaining.toFixed(1)}</span></td>
+              <td class="num">${avgPrice > 0 ? "₩" + avgPrice.toLocaleString() : "—"}</td>
+            </tr>
+          `;
+        }).join("")}
+      </tbody>
+    </table>
+  `;
+}
+
+document.getElementById("btn-inv-refresh").addEventListener("click", loadInventory);
+
+// ---------- 유틸 ----------
+function todayStr() {
+  const d = new Date();
+  return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
+}
 </script>
 
 </body>

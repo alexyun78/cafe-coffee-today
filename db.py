@@ -3,6 +3,13 @@
 스키마:
     coffees(id, name, roastery, roast_date, process, status,
             cup_notes, comment, serve_date, notion_id, created_at, updated_at)
+    suppliers(id, name, short_name, contact, notes)
+    green_beans(id, name, supplier_id, origin_country, origin_region, process,
+                grade, cup_notes, description, is_decaf, status)
+    purchases(id, green_bean_id, purchase_date, quantity_kg, unit_price, ...)
+    roasting_logs(id, green_bean_id, roast_date, input_weight_g, output_weight_g, ...)
+    pricing(id, green_bean_id, weight_g, retail_price, wholesale_price)
+    blends(id, name, description) + blend_components(blend_id, green_bean_id, ratio_pct)
     pin_attempts(ip, count, window_start, locked_until)
 
 API 응답은 기존 Notion 스키마와 호환되도록 한글 키(`커피`, `로스팅` 등)로
@@ -78,11 +85,100 @@ CREATE INDEX IF NOT EXISTS idx_feedback_coffee ON feedback(coffee_id, created_at
 CREATE INDEX IF NOT EXISTS idx_feedback_ip ON feedback(ip_hash, created_at);
 """
 
+GREEN_BEAN_SCHEMA = """
+CREATE TABLE IF NOT EXISTS suppliers (
+    id          INTEGER PRIMARY KEY AUTOINCREMENT,
+    name        TEXT NOT NULL UNIQUE,
+    short_name  TEXT,
+    contact     TEXT,
+    notes       TEXT,
+    created_at  TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now')),
+    updated_at  TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now'))
+);
+
+CREATE TABLE IF NOT EXISTS green_beans (
+    id              INTEGER PRIMARY KEY AUTOINCREMENT,
+    name            TEXT NOT NULL,
+    supplier_id     INTEGER REFERENCES suppliers(id),
+    origin_country  TEXT,
+    origin_region   TEXT,
+    process         TEXT NOT NULL,
+    grade           TEXT,
+    cup_notes       TEXT,
+    description     TEXT,
+    is_decaf        INTEGER DEFAULT 0,
+    status          TEXT DEFAULT '활성',
+    created_at      TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now')),
+    updated_at      TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now')),
+    UNIQUE(name, supplier_id, process)
+);
+CREATE INDEX IF NOT EXISTS idx_green_beans_name ON green_beans(name);
+CREATE INDEX IF NOT EXISTS idx_green_beans_supplier ON green_beans(supplier_id);
+
+CREATE TABLE IF NOT EXISTS purchases (
+    id              INTEGER PRIMARY KEY AUTOINCREMENT,
+    green_bean_id   INTEGER NOT NULL REFERENCES green_beans(id),
+    purchase_date   TEXT NOT NULL,
+    quantity_kg     REAL NOT NULL,
+    unit_price      INTEGER NOT NULL,
+    discount        INTEGER DEFAULT 0,
+    total_price     INTEGER,
+    lot_number      TEXT,
+    notes           TEXT,
+    created_at      TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now'))
+);
+CREATE INDEX IF NOT EXISTS idx_purchases_bean ON purchases(green_bean_id);
+CREATE INDEX IF NOT EXISTS idx_purchases_date ON purchases(purchase_date DESC);
+
+CREATE TABLE IF NOT EXISTS roasting_logs (
+    id                INTEGER PRIMARY KEY AUTOINCREMENT,
+    green_bean_id     INTEGER NOT NULL REFERENCES green_beans(id),
+    roast_date        TEXT NOT NULL,
+    input_weight_g    REAL NOT NULL,
+    output_weight_g   REAL,
+    moisture_loss_pct REAL,
+    roast_level       TEXT,
+    notes             TEXT,
+    coffee_id         INTEGER REFERENCES coffees(id),
+    created_at        TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now'))
+);
+CREATE INDEX IF NOT EXISTS idx_roasting_bean ON roasting_logs(green_bean_id);
+CREATE INDEX IF NOT EXISTS idx_roasting_date ON roasting_logs(roast_date DESC);
+
+CREATE TABLE IF NOT EXISTS pricing (
+    id              INTEGER PRIMARY KEY AUTOINCREMENT,
+    green_bean_id   INTEGER NOT NULL REFERENCES green_beans(id),
+    weight_g        INTEGER NOT NULL,
+    retail_price    INTEGER NOT NULL,
+    wholesale_price INTEGER,
+    is_active       INTEGER DEFAULT 1,
+    updated_at      TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now')),
+    UNIQUE(green_bean_id, weight_g)
+);
+
+CREATE TABLE IF NOT EXISTS blends (
+    id          INTEGER PRIMARY KEY AUTOINCREMENT,
+    name        TEXT NOT NULL UNIQUE,
+    description TEXT,
+    is_active   INTEGER DEFAULT 1,
+    created_at  TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now'))
+);
+
+CREATE TABLE IF NOT EXISTS blend_components (
+    id              INTEGER PRIMARY KEY AUTOINCREMENT,
+    blend_id        INTEGER NOT NULL REFERENCES blends(id) ON DELETE CASCADE,
+    green_bean_id   INTEGER NOT NULL REFERENCES green_beans(id),
+    ratio_pct       REAL NOT NULL,
+    UNIQUE(blend_id, green_bean_id)
+);
+"""
+
 _EXTRA_COLUMNS = (
     ("category", "TEXT"),
     ("brewed_at", "INTEGER"),
     ("roast_point", "INTEGER"),
     ("availability", "TEXT DEFAULT '운영'"),
+    ("green_bean_id", "INTEGER REFERENCES green_beans(id)"),
 )
 
 
@@ -108,6 +204,7 @@ def connect():
 def init_schema():
     with connect() as conn:
         conn.executescript(SCHEMA)
+        conn.executescript(GREEN_BEAN_SCHEMA)
         existing = {r["name"] for r in conn.execute("PRAGMA table_info(coffees)").fetchall()}
         for col, ctype in _EXTRA_COLUMNS:
             if col not in existing:
@@ -782,4 +879,414 @@ def suggestions() -> dict:
         "process": distinct("process"),
         "cup_notes": individual_notes,
         "last_cup_notes": last_cup_notes,
+    }
+
+
+# ---------- 공급업체 ----------
+
+def list_suppliers() -> list:
+    with connect() as conn:
+        rows = conn.execute("SELECT * FROM suppliers ORDER BY name").fetchall()
+    return [dict(r) for r in rows]
+
+
+def get_supplier(sid: int) -> Optional[dict]:
+    with connect() as conn:
+        row = conn.execute("SELECT * FROM suppliers WHERE id=?", (sid,)).fetchone()
+    return dict(row) if row else None
+
+
+def create_supplier(data: dict) -> int:
+    with connect() as conn:
+        cur = conn.execute(
+            "INSERT INTO suppliers (name, short_name, contact, notes) VALUES (?,?,?,?)",
+            (data["name"], data.get("short_name"), data.get("contact"), data.get("notes")),
+        )
+        return cur.lastrowid
+
+
+def update_supplier(sid: int, data: dict) -> bool:
+    sets, vals = [], []
+    for k in ("name", "short_name", "contact", "notes"):
+        if k in data:
+            sets.append(f"{k}=?")
+            vals.append(data[k])
+    if not sets:
+        return False
+    sets.append("updated_at=strftime('%Y-%m-%dT%H:%M:%SZ','now')")
+    vals.append(sid)
+    with connect() as conn:
+        cur = conn.execute(f"UPDATE suppliers SET {','.join(sets)} WHERE id=?", vals)
+        return cur.rowcount > 0
+
+
+def delete_supplier(sid: int) -> bool:
+    with connect() as conn:
+        cur = conn.execute("DELETE FROM suppliers WHERE id=?", (sid,))
+        return cur.rowcount > 0
+
+
+# ---------- 생두 마스터 ----------
+
+def _gb_row_to_dict(row: sqlite3.Row) -> dict:
+    d = dict(row)
+    d["display_name"] = d["name"]
+    return d
+
+
+def list_green_beans(include_inactive: bool = False) -> list:
+    where = "" if include_inactive else "WHERE gb.status='활성'"
+    sql = f"""
+        SELECT gb.*, s.name AS supplier_name, s.short_name AS supplier_short,
+            COALESCE(p_sum.purchased_kg, 0) AS purchased_kg,
+            COALESCE(r_sum.used_kg, 0) AS used_kg,
+            COALESCE(p_sum.purchased_kg, 0) - COALESCE(r_sum.used_kg, 0) AS remaining_kg,
+            COALESCE(p_sum.avg_unit_price, 0) AS avg_unit_price
+        FROM green_beans gb
+        LEFT JOIN suppliers s ON s.id = gb.supplier_id
+        LEFT JOIN (
+            SELECT green_bean_id,
+                   SUM(quantity_kg) AS purchased_kg,
+                   ROUND(CAST(SUM(total_price) AS REAL) / NULLIF(SUM(quantity_kg), 0)) AS avg_unit_price
+            FROM purchases GROUP BY green_bean_id
+        ) p_sum ON p_sum.green_bean_id = gb.id
+        LEFT JOIN (
+            SELECT green_bean_id, SUM(input_weight_g) / 1000.0 AS used_kg
+            FROM roasting_logs GROUP BY green_bean_id
+        ) r_sum ON r_sum.green_bean_id = gb.id
+        {where}
+        ORDER BY remaining_kg DESC, gb.name
+    """
+    with connect() as conn:
+        rows = conn.execute(sql).fetchall()
+    return [dict(r) for r in rows]
+
+
+def get_green_bean(gb_id: int) -> Optional[dict]:
+    sql = """
+        SELECT gb.*, s.name AS supplier_name, s.short_name AS supplier_short,
+            COALESCE(p_sum.purchased_kg, 0) AS purchased_kg,
+            COALESCE(r_sum.used_kg, 0) AS used_kg,
+            COALESCE(p_sum.purchased_kg, 0) - COALESCE(r_sum.used_kg, 0) AS remaining_kg,
+            COALESCE(p_sum.avg_unit_price, 0) AS avg_unit_price,
+            COALESCE(r_sum.avg_loss_pct, 0) AS avg_loss_pct
+        FROM green_beans gb
+        LEFT JOIN suppliers s ON s.id = gb.supplier_id
+        LEFT JOIN (
+            SELECT green_bean_id,
+                   SUM(quantity_kg) AS purchased_kg,
+                   ROUND(CAST(SUM(total_price) AS REAL) / NULLIF(SUM(quantity_kg), 0)) AS avg_unit_price
+            FROM purchases GROUP BY green_bean_id
+        ) p_sum ON p_sum.green_bean_id = gb.id
+        LEFT JOIN (
+            SELECT green_bean_id,
+                   SUM(input_weight_g) / 1000.0 AS used_kg,
+                   AVG(moisture_loss_pct) AS avg_loss_pct
+            FROM roasting_logs GROUP BY green_bean_id
+        ) r_sum ON r_sum.green_bean_id = gb.id
+        WHERE gb.id = ?
+    """
+    with connect() as conn:
+        row = conn.execute(sql, (gb_id,)).fetchone()
+    return dict(row) if row else None
+
+
+def create_green_bean(data: dict) -> int:
+    with connect() as conn:
+        cur = conn.execute(
+            "INSERT INTO green_beans "
+            "(name, supplier_id, origin_country, origin_region, process, grade, "
+            " cup_notes, description, is_decaf, status) "
+            "VALUES (?,?,?,?,?,?,?,?,?,?)",
+            (
+                data["name"], data.get("supplier_id"), data.get("origin_country"),
+                data.get("origin_region"), data["process"], data.get("grade"),
+                data.get("cup_notes"), data.get("description"),
+                data.get("is_decaf", 0), data.get("status", "활성"),
+            ),
+        )
+        return cur.lastrowid
+
+
+def update_green_bean(gb_id: int, data: dict) -> bool:
+    allowed = ("name", "supplier_id", "origin_country", "origin_region",
+               "process", "grade", "cup_notes", "description", "is_decaf", "status")
+    sets, vals = [], []
+    for k in allowed:
+        if k in data:
+            sets.append(f"{k}=?")
+            vals.append(data[k])
+    if not sets:
+        return False
+    sets.append("updated_at=strftime('%Y-%m-%dT%H:%M:%SZ','now')")
+    vals.append(gb_id)
+    with connect() as conn:
+        cur = conn.execute(f"UPDATE green_beans SET {','.join(sets)} WHERE id=?", vals)
+        return cur.rowcount > 0
+
+
+def delete_green_bean(gb_id: int) -> bool:
+    with connect() as conn:
+        cur = conn.execute("UPDATE green_beans SET status='단종' WHERE id=?", (gb_id,))
+        return cur.rowcount > 0
+
+
+def green_bean_suggestions() -> dict:
+    with connect() as conn:
+        suppliers = conn.execute(
+            "SELECT id, name, short_name FROM suppliers ORDER BY name"
+        ).fetchall()
+        processes = conn.execute(
+            "SELECT DISTINCT process FROM green_beans WHERE process IS NOT NULL AND process != '' ORDER BY process"
+        ).fetchall()
+        grades = conn.execute(
+            "SELECT DISTINCT grade FROM green_beans WHERE grade IS NOT NULL AND grade != '' ORDER BY grade"
+        ).fetchall()
+        origins = conn.execute(
+            "SELECT DISTINCT origin_country FROM green_beans WHERE origin_country IS NOT NULL AND origin_country != '' ORDER BY origin_country"
+        ).fetchall()
+    return {
+        "suppliers": [dict(r) for r in suppliers],
+        "processes": [r["process"] for r in processes],
+        "grades": [r["grade"] for r in grades],
+        "origins": [r["origin_country"] for r in origins],
+    }
+
+
+# ---------- 구매 ----------
+
+def list_purchases(green_bean_id: Optional[int] = None, limit: int = 200) -> list:
+    sql = """
+        SELECT p.*, gb.name AS bean_name, s.short_name AS supplier_short
+        FROM purchases p
+        JOIN green_beans gb ON gb.id = p.green_bean_id
+        LEFT JOIN suppliers s ON s.id = gb.supplier_id
+    """
+    args: list = []
+    if green_bean_id:
+        sql += " WHERE p.green_bean_id = ?"
+        args.append(green_bean_id)
+    sql += " ORDER BY p.purchase_date DESC, p.id DESC LIMIT ?"
+    args.append(limit)
+    with connect() as conn:
+        rows = conn.execute(sql, args).fetchall()
+    return [dict(r) for r in rows]
+
+
+def create_purchase(data: dict) -> int:
+    qty = float(data["quantity_kg"])
+    price = int(data["unit_price"])
+    discount = int(data.get("discount") or 0)
+    total = int(qty * price) - discount
+    with connect() as conn:
+        cur = conn.execute(
+            "INSERT INTO purchases "
+            "(green_bean_id, purchase_date, quantity_kg, unit_price, discount, total_price, lot_number, notes) "
+            "VALUES (?,?,?,?,?,?,?,?)",
+            (
+                int(data["green_bean_id"]), data["purchase_date"],
+                qty, price, discount, total,
+                data.get("lot_number"), data.get("notes"),
+            ),
+        )
+        return cur.lastrowid
+
+
+def update_purchase(pid: int, data: dict) -> bool:
+    allowed = ("green_bean_id", "purchase_date", "quantity_kg", "unit_price",
+               "discount", "lot_number", "notes")
+    sets, vals = [], []
+    for k in allowed:
+        if k in data:
+            sets.append(f"{k}=?")
+            vals.append(data[k])
+    if "quantity_kg" in data or "unit_price" in data or "discount" in data:
+        with connect() as conn:
+            row = conn.execute("SELECT * FROM purchases WHERE id=?", (pid,)).fetchone()
+        if not row:
+            return False
+        qty = float(data.get("quantity_kg", row["quantity_kg"]))
+        price = int(data.get("unit_price", row["unit_price"]))
+        disc = int(data.get("discount", row["discount"] or 0))
+        sets.append("total_price=?")
+        vals.append(int(qty * price) - disc)
+    if not sets:
+        return False
+    vals.append(pid)
+    with connect() as conn:
+        cur = conn.execute(f"UPDATE purchases SET {','.join(sets)} WHERE id=?", vals)
+        return cur.rowcount > 0
+
+
+def delete_purchase(pid: int) -> bool:
+    with connect() as conn:
+        cur = conn.execute("DELETE FROM purchases WHERE id=?", (pid,))
+        return cur.rowcount > 0
+
+
+# ---------- 로스팅 로그 ----------
+
+def list_roasting_logs(green_bean_id: Optional[int] = None, limit: int = 200) -> list:
+    sql = """
+        SELECT r.*, gb.name AS bean_name, s.short_name AS supplier_short
+        FROM roasting_logs r
+        JOIN green_beans gb ON gb.id = r.green_bean_id
+        LEFT JOIN suppliers s ON s.id = gb.supplier_id
+    """
+    args: list = []
+    if green_bean_id:
+        sql += " WHERE r.green_bean_id = ?"
+        args.append(green_bean_id)
+    sql += " ORDER BY r.roast_date DESC, r.id DESC LIMIT ?"
+    args.append(limit)
+    with connect() as conn:
+        rows = conn.execute(sql, args).fetchall()
+    return [dict(r) for r in rows]
+
+
+def create_roasting_log(data: dict) -> int:
+    input_g = float(data["input_weight_g"])
+    output_g = float(data["output_weight_g"]) if data.get("output_weight_g") else None
+    loss = None
+    if output_g is not None and input_g > 0:
+        loss = round((1 - output_g / input_g) * 100, 2)
+    with connect() as conn:
+        cur = conn.execute(
+            "INSERT INTO roasting_logs "
+            "(green_bean_id, roast_date, input_weight_g, output_weight_g, "
+            " moisture_loss_pct, roast_level, notes, coffee_id) "
+            "VALUES (?,?,?,?,?,?,?,?)",
+            (
+                int(data["green_bean_id"]), data["roast_date"],
+                input_g, output_g, loss,
+                data.get("roast_level"), data.get("notes"),
+                data.get("coffee_id"),
+            ),
+        )
+        return cur.lastrowid
+
+
+def update_roasting_log(rid: int, data: dict) -> bool:
+    allowed = ("green_bean_id", "roast_date", "input_weight_g", "output_weight_g",
+               "roast_level", "notes", "coffee_id")
+    sets, vals = [], []
+    for k in allowed:
+        if k in data:
+            sets.append(f"{k}=?")
+            vals.append(data[k])
+    if "input_weight_g" in data or "output_weight_g" in data:
+        with connect() as conn:
+            row = conn.execute("SELECT * FROM roasting_logs WHERE id=?", (rid,)).fetchone()
+        if not row:
+            return False
+        inp = float(data.get("input_weight_g", row["input_weight_g"]))
+        out = data.get("output_weight_g", row["output_weight_g"])
+        out = float(out) if out is not None else None
+        loss = round((1 - out / inp) * 100, 2) if out is not None and inp > 0 else None
+        sets.append("moisture_loss_pct=?")
+        vals.append(loss)
+    if not sets:
+        return False
+    vals.append(rid)
+    with connect() as conn:
+        cur = conn.execute(f"UPDATE roasting_logs SET {','.join(sets)} WHERE id=?", vals)
+        return cur.rowcount > 0
+
+
+def delete_roasting_log(rid: int) -> bool:
+    with connect() as conn:
+        cur = conn.execute("DELETE FROM roasting_logs WHERE id=?", (rid,))
+        return cur.rowcount > 0
+
+
+# ---------- 재고 (computed) ----------
+
+def inventory_list() -> list:
+    sql = """
+        SELECT gb.id, gb.name, gb.process, gb.grade, gb.is_decaf, gb.status,
+            s.name AS supplier_name, s.short_name AS supplier_short,
+            COALESCE(p_sum.purchased_kg, 0) AS purchased_kg,
+            COALESCE(r_sum.used_kg, 0) AS used_kg,
+            COALESCE(p_sum.purchased_kg, 0) - COALESCE(r_sum.used_kg, 0) AS remaining_kg,
+            COALESCE(p_sum.avg_unit_price, 0) AS avg_unit_price
+        FROM green_beans gb
+        LEFT JOIN suppliers s ON s.id = gb.supplier_id
+        LEFT JOIN (
+            SELECT green_bean_id,
+                   SUM(quantity_kg) AS purchased_kg,
+                   ROUND(CAST(SUM(total_price) AS REAL) / NULLIF(SUM(quantity_kg), 0)) AS avg_unit_price
+            FROM purchases GROUP BY green_bean_id
+        ) p_sum ON p_sum.green_bean_id = gb.id
+        LEFT JOIN (
+            SELECT green_bean_id, SUM(input_weight_g) / 1000.0 AS used_kg
+            FROM roasting_logs GROUP BY green_bean_id
+        ) r_sum ON r_sum.green_bean_id = gb.id
+        WHERE gb.status = '활성'
+        ORDER BY remaining_kg ASC, gb.name
+    """
+    with connect() as conn:
+        rows = conn.execute(sql).fetchall()
+    return [dict(r) for r in rows]
+
+
+# ---------- 가격 ----------
+
+def list_pricing(green_bean_id: Optional[int] = None) -> list:
+    sql = """
+        SELECT pr.*, gb.name AS bean_name, s.short_name AS supplier_short
+        FROM pricing pr
+        JOIN green_beans gb ON gb.id = pr.green_bean_id
+        LEFT JOIN suppliers s ON s.id = gb.supplier_id
+    """
+    args: list = []
+    if green_bean_id:
+        sql += " WHERE pr.green_bean_id = ?"
+        args.append(green_bean_id)
+    sql += " ORDER BY gb.name, pr.weight_g"
+    with connect() as conn:
+        rows = conn.execute(sql, args).fetchall()
+    return [dict(r) for r in rows]
+
+
+def upsert_pricing(data: dict) -> int:
+    with connect() as conn:
+        cur = conn.execute(
+            "INSERT INTO pricing (green_bean_id, weight_g, retail_price, wholesale_price) "
+            "VALUES (?,?,?,?) "
+            "ON CONFLICT(green_bean_id, weight_g) DO UPDATE SET "
+            "retail_price=excluded.retail_price, wholesale_price=excluded.wholesale_price, "
+            "updated_at=strftime('%Y-%m-%dT%H:%M:%SZ','now')",
+            (
+                int(data["green_bean_id"]), int(data["weight_g"]),
+                int(data["retail_price"]), data.get("wholesale_price"),
+            ),
+        )
+        return cur.lastrowid
+
+
+def delete_pricing(pid: int) -> bool:
+    with connect() as conn:
+        cur = conn.execute("DELETE FROM pricing WHERE id=?", (pid,))
+        return cur.rowcount > 0
+
+
+def cost_analysis(gb_id: int) -> dict:
+    gb = get_green_bean(gb_id)
+    if not gb:
+        return {}
+    avg_price = gb.get("avg_unit_price") or 0
+    avg_loss = gb.get("avg_loss_pct") or 0
+    yield_ratio = (100 - avg_loss) / 100 if avg_loss < 100 else 0
+    roasted_cost_per_kg = int(avg_price / yield_ratio) if yield_ratio > 0 else 0
+    roasted_cost_per_g = round(roasted_cost_per_kg / 1000, 2) if roasted_cost_per_kg else 0
+    espresso_20g = round(roasted_cost_per_g * 20, 0)
+    return {
+        "green_bean": gb,
+        "avg_green_cost_per_kg": avg_price,
+        "avg_loss_pct": round(avg_loss, 2),
+        "yield_ratio": round(yield_ratio, 4),
+        "roasted_cost_per_kg": roasted_cost_per_kg,
+        "roasted_cost_per_g": roasted_cost_per_g,
+        "espresso_20g_cost": espresso_20g,
+        "pricing": list_pricing(gb_id),
     }
