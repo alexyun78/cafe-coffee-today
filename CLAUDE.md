@@ -358,6 +358,69 @@ ssh-keyscan 49.247.207.115 2>/dev/null | grep -v '^#'  # 호스트키 복사
 
 ---
 
+## 생두 관리 시스템 (2026-05-27 추가)
+
+구글 스프레드시트 기반 생두 관리를 DB + 관리자 UI로 이전. 스프레드시트는 더 이상 사용하지 않음.
+
+### 생두 관리 DB 테이블
+
+| 테이블 | 역할 | 비고 |
+|---|---|---|
+| `suppliers` | 생두 공급업체 (레햄코리아, 커피리브레 등 7곳) | `short_name`으로 UI 접두어 `[레햄]` 표시 |
+| `green_beans` | 생두 마스터 (이름, 공급처, 가공, 등급, 컵노트) | **단일 소스 of truth** — 44종 |
+| `purchases` | 구매 이력 (날짜, 수량kg, 단가, 할인, 총액) | 54건 이전됨 |
+| `roasting_logs` | 로스팅 배치 (투입g, 배출g, 수분손실%) | 202건 이전됨 |
+| `pricing` | 소매/도매 단가표 (중량별) | Phase 5 예정 |
+| `blends` + `blend_components` | 블렌드 구성비 | Phase 5 예정 |
+
+- `coffees.green_bean_id` (nullable FK → green_beans) — 오늘의커피와 생두 마스터 연결
+- **재고 = computed query**: `SUM(purchases.qty) - SUM(roasting_logs.input/1000)` — 테이블이 아님
+- 스프레드시트 데이터는 `scripts/seed_green_beans.sql`로 `init_schema()`에서 자동 시드 (서버 배포 시 수동 작업 불필요)
+
+### 생두 관리 API (모두 `@require_pin`)
+
+| 그룹 | 경로 | 메서드 |
+|---|---|---|
+| 공급업체 | `/api/suppliers[/<id>]` | GET/POST/PUT/DELETE |
+| 생두 | `/api/green-beans[/<id>]` | GET/POST/PUT/DELETE |
+| | `/api/green-beans/suggestions` | GET |
+| | `/api/green-beans/<id>/for-coffee` | GET (오늘의커피 폼 자동완성용) |
+| 구매 | `/api/purchases[/<id>]` | GET/POST/PUT/DELETE |
+| 로스팅 | `/api/roasting-logs[/<id>]` | GET/POST/PUT/DELETE |
+| 재고 | `/api/inventory` | GET |
+| 가격 | `/api/pricing[/<id>]` | GET/POST/DELETE |
+| | `/api/pricing/cost-analysis/<gb_id>` | GET |
+| 이미지 | `/api/coffee/<id>/card-token` | POST (APK용 1회용 다운로드 토큰) |
+
+### 관리자 UI 탭 구조 (admin.html)
+
+```
+[ ☕ 오늘의 커피 ] [ 🫘 생두 관리 ] [ 📦 재고 ]
+```
+
+- **오늘의 커피**: 기존 기능 그대로
+- **생두 관리**: 생두 목록(재고 색상코딩) + 등록/편집 폼 + 구매 기록 폼 + 로스팅 기록 폼
+- **재고**: 최근구매일→재고량 정렬, 30개 페이징, 1년 이상 미구매+재고0 접힘
+
+### 생두 이름 규칙
+
+DB에서 분리 저장, UI에서 조합 표시:
+- `green_beans.name` = `브라질 세하도` (순수 원두명)
+- `suppliers.short_name` = `레햄` (접두어)
+- UI 표시 = `[레햄] 브라질 세하도`
+
+### 남은 Phase
+
+| Phase | 내용 | 상태 |
+|---|---|---|
+| 1+2 | DB + API + 관리자 UI + 마이그레이션 | ✅ 완료 |
+| 3 | 재고 탭 고도화 (저재고 알림, 필터) | 미착수 |
+| 4 | 오늘의커피 폼에 "생두 선택" 드롭다운 연동 | 미착수 |
+| 5 | 가격 탭 (원가분석, 블렌드, 소매/도매) | 미착수 |
+| 6 | 대시보드 + 리포트 + CSV 내보내기 | 미착수 |
+
+---
+
 ## 주의사항
 
 - `.env`, `data/`, `__pycache__/`, `.venv/`, `node_modules/`, `cafe-coffee-apk/android/`는 gitignore 대상.
@@ -373,11 +436,15 @@ ssh-keyscan 49.247.207.115 2>/dev/null | grep -v '^#'  # 호스트키 복사
 
 | 파일 | 역할 |
 |---|---|
-| [app.py](app.py) | Flask 앱, 라우트, PIN 미들웨어 |
-| [db.py](db.py) | SQLite 래퍼, 스키마 초기화, CRUD |
+| [app.py](app.py) | Flask 앱, 라우트, PIN 미들웨어, 생두 관리 API (24개 엔드포인트) |
+| [db.py](db.py) | SQLite 래퍼, 스키마 초기화 (coffees + 생두 7테이블), CRUD |
+| [generate_bean_images.py](generate_bean_images.py) | 커피 카드 이미지 생성 (PIL) |
 | [migrate_notion.py](migrate_notion.py) | Notion → SQLite 일회성 이전 |
 | [index.html](index.html) | 탭 기반 공개 뷰 (오늘의커피 + 누가쏠까?: 손가락 게임, 룰렛) |
-| [static/admin.html](static/admin.html) | 관리 추가/편집 폼 |
+| [static/admin.html](static/admin.html) | 관리 폼 — 3탭 (오늘의커피 / 생두관리 / 재고) |
+| [static/roastery.html](static/roastery.html) | 92도씨 로스터리 메인 공개 페이지 |
+| [scripts/seed_green_beans.sql](scripts/seed_green_beans.sql) | 생두 초기 데이터 (init_schema에서 자동 실행) |
+| [scripts/migrate_spreadsheet.py](scripts/migrate_spreadsheet.py) | 구글 스프레드시트 → DB 마이그레이션 스크립트 |
 | [requirements.txt](requirements.txt) | 파이썬 의존성 |
 | [deploy.sh](deploy.sh) | 서버 자동 배포 스크립트 |
 | [systemd/](systemd/) | systemd 유닛 파일 |
