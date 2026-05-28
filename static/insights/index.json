@@ -1,7 +1,24 @@
 {
   "version": 1,
-  "updated_at": "2026-05-26T12:00:27Z",
+  "updated_at": "2026-05-28T12:00:30Z",
   "items": [
+    {
+      "id": "2026-05-28-arabica-roast-brewing-nutritional-extraction",
+      "date": "2026-05-28",
+      "title_ko": "아라비카 원두의 로스팅 정도에 따른 추출 방법이 커피 영양성분 및 관능 특성에 미치는 영향",
+      "one_liner": "라이트·미디엄 에스프레소의 당·페놀류 회수율 최고 — 로스팅도×추출법 영양 복합 최적화 첫 체계 실증",
+      "categories_primary": [
+        "추출"
+      ],
+      "categories_secondary": [
+        "화학/분석화학",
+        "건강/영양"
+      ],
+      "hero_image": "/static/img/insights/hero/extraction.svg",
+      "journal": "Food Chemistry (Elsevier)",
+      "pub_date": "2026-04-01",
+      "source_basis": "abstract_only"
+    },
     {
       "id": "2026-05-26-coffee-green-capital-climate-midstream",
       "date": "2026-05-26",

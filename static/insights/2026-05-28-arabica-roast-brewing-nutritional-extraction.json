@@ -1,0 +1,80 @@
+{
+  "version": 1,
+  "id": "2026-05-28-arabica-roast-brewing-nutritional-extraction",
+  "date": "2026-05-28",
+  "slug": "arabica-roast-brewing-nutritional-extraction",
+  "title_ko": "아라비카 원두의 로스팅 정도에 따른 추출 방법이 커피 영양성분 및 관능 특성에 미치는 영향",
+  "title_original": "Influence of brewing method on the nutritional composition and sensory attributes of coffee by Arabica beans of different roasting degrees",
+  "one_liner": "라이트·미디엄 에스프레소의 당·페놀류 회수율 최고 — 로스팅도×추출법 영양 복합 최적화 첫 체계 실증",
+  "authors": "Amna Gulshan, Mst Nushrat Yiasmin, Mustafa Zeb, Anam Mushtaq, Weichao Cao, Rongrong Lu, Xiaoxuan Li, Xiao Hua",
+  "journal": "Food Chemistry (Elsevier)",
+  "pub_date": "2026-04-01",
+  "doi": "10.1016/j.foodchem.2025.147716",
+  "categories_primary": [
+    "추출"
+  ],
+  "categories_secondary": [
+    "화학/분석화학",
+    "건강/영양"
+  ],
+  "summary": "커피의 건강 기능성과 컵 품질은 로스팅과 추출 방법의 교호작용에 의해 결정된다. 장난(Jiangnan) 대학교 연구팀은 아라비카 원두를 라이트·미디엄·다크 3가지 로스팅 수준으로 처리하고, 고온 에스프레소와 25°C 저온 에스프레소(RTD 냉커피 방식)를 비교했다. 라이트·미디엄 로스트 에스프레소가 당류 26.27%, 무기질 2.66%, 단백질 5.38%, 식이섬유 8.54%의 최고 회수율을 기록했고 페놀류·플라보노이드의 80%를 음료로 이전시켰다. 25°C 저온 추출에서도 생리활성 물질이 상당량 유지되어 RTD 냉커피 실용화 근거를 제공했으며, 전자혀(E-tongue) 분석으로 쓴맛·감칠맛·수렴성이 로스팅도×추출 온도에 따라 체계적으로 변화함이 정량화되었다.",
+  "key_findings": [
+    "라이트·미디엄 로스트 에스프레소: 당류 26.27%, 무기질 2.66%, 단백질 5.38%, 식이섬유 8.54% 최고 회수율",
+    "페놀류·플라보노이드의 80%가 라이트·미디엄 에스프레소로 이전",
+    "로스팅 정도와 추출 온도 모두 생리활성·영양 성분 방출에 유의미한 영향 — 교호작용 존재",
+    "25°C 저온 에스프레소(30초 RTD 방식)에서도 영양·생리활성 성분 상당량 유지",
+    "전자혀 분석: 쓴맛·감칠맛·풍부함·수렴성이 로스팅도×추출 온도에 따라 체계적·예측 가능하게 변화",
+    "사용한 커피 찌꺼기에 생리활성 화합물 잔존 — 부산물 재활용 가능성 지원"
+  ],
+  "methodology": "아라비카 원두 라이트·미디엄·다크 3수준 로스팅. 고온 에스프레소 vs 25°C 저온 에스프레소(30초, RTD) 비교. 5개 분석 층위: 근접 영양 분석, 항산화 활성, LC-MS 폴리페놀 프로파일링, GC-MS 휘발성 화합물 동정, 전자혀(E-tongue) 관능 분석.",
+  "implications": {
+    "농가/가공장": "라이트~미디엄 로스팅이 생리활성 물질 보존 최적 구간임이 정량 확인. 건강 기능성 포지셔닝 시 고고도 아라비카 등 페놀류 프로파일이 풍부한 품종·산지 우선 선별 전략 지지. 수확 후 가공에서 열 손상 최소화가 RTD 냉커피 시장에서도 차별화 요인.",
+    "로스터/큐그레이더": "페놀류·플라보노이드 이전율 80%는 건강 기능성 에스프레소 라인의 로스팅 프로파일 설계 기준으로 활용 가능. E-tongue 데이터는 특정 관능 프로파일 목표에 맞는 로스팅도×추출 온도 조합 예측 설계 근거 제공.",
+    "R&D": "근접 분석+LC-MS+GC-MS+E-tongue 다분석 체계의 방법론적 프레임워크 확립. 후속 연구: 연속 온도 구간 추출 동역학 모델링, 품종·산지별 페놀류 회수율 비교, in vitro bioaccessibility 실증, 커피 찌꺼기 기능성 소재 추출 최적화."
+  },
+  "limitations": "아라비카 단일 품종만 대상으로 일반화 미검증. 두 가지 추출 방법의 이분법적 비교로 중간 온도대 최적화 미수행. 생두 원산지 차이 미통제. 인체 bioaccessibility 미측정. 초록 수준 분석으로 세부 통계 정보 확인 불가.",
+  "glossary": [
+    {
+      "term": "Proximate Analysis",
+      "ko": "근접 분석 — 수분·단백질·지방·회분·탄수화물을 AOAC 표준법으로 정량하는 기본 영양 분석"
+    },
+    {
+      "term": "LC-MS",
+      "ko": "액체 크로마토그래피-질량분석 — 비휘발성 성분(클로로젠산, 카페인, 플라보노이드) 분리·정량 분석법"
+    },
+    {
+      "term": "GC-MS",
+      "ko": "가스 크로마토그래피-질량분석 — 휘발성 아로마 화합물 분리·동정 분석법"
+    },
+    {
+      "term": "E-tongue",
+      "ko": "전자혀 — 액체 센서 어레이로 쓴맛·감칠맛·수렴성 등 미각 강도를 전기화학적으로 측정하는 객관적 관능 분석 장비"
+    },
+    {
+      "term": "RTD Coffee",
+      "ko": "Ready-To-Drink 커피 — 구매 즉시 음용 가능하도록 제조·포장된 캔·병·파우치 커피"
+    },
+    {
+      "term": "Bioactive Compounds",
+      "ko": "생리활성 물질 — 항산화·항염·혈당 조절 등 건강 기능을 발휘하는 식품 성분. 커피의 경우 클로로젠산·카페인·트리고넬린 등"
+    },
+    {
+      "term": "Flavonoids",
+      "ko": "플라보노이드 — 폴리페놀 하위 계열 식물 2차 대사산물. 항산화·항염 효과"
+    },
+    {
+      "term": "Recovery Rate",
+      "ko": "회수율 — 원두 중 특정 성분이 음료(컵)로 이전된 비율. 추출 효율의 정량 지표"
+    }
+  ],
+  "citation_apa": "Gulshan, A., Yiasmin, M. N., Zeb, M., Mushtaq, A., Cao, W., Lu, R., Li, X., & Hua, X. (2026). Influence of brewing method on the nutritional composition and sensory attributes of coffee by Arabica beans of different roasting degrees. Food Chemistry, 507, 147716. https://doi.org/10.1016/j.foodchem.2025.147716",
+  "links": {
+    "doi": "https://doi.org/10.1016/j.foodchem.2025.147716",
+    "oa_pdf": "",
+    "journal_homepage": "https://www.sciencedirect.com/journal/food-chemistry"
+  },
+  "source_basis": "abstract_only",
+  "data_charts": [],
+  "drive_doc_url": "https://docs.google.com/document/d/1FEMD9Zw-v2phFiEfKk_2IwGZmQA_TBPpK1hFoNNyDwQ/edit",
+  "hero_image": "/static/img/insights/hero/extraction.svg"
+}
