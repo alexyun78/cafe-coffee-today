@@ -779,6 +779,8 @@
   /* ===== 생두 폼 ===== */
   .bean-form-wrap { display: none; }
   .bean-form-wrap.active { display: block; }
+  /* 전역 `form { display:none }`(coffee-form 전용)이 생두 폼 내부를 숨기지 않도록 */
+  .bean-form-wrap form { display: block; }
   .bean-form-section-title {
     font-size: 1.05rem; color: var(--coffee-dark); font-weight: 700;
     margin-bottom: 16px; padding-bottom: 8px;
