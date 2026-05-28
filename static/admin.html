@@ -1080,7 +1080,7 @@
 
     <!-- 서브패널: 생두 목록 -->
     <div id="bean-sub-bean-list" class="bean-sub-panel active">
-      <section class="card">
+      <section class="card" id="bean-list-view">
         <div class="list-header">
           <h2>생두 목록</h2>
           <button class="btn-new" type="button" id="btn-bean-new">+ 추가</button>
@@ -1164,7 +1164,7 @@
 
     <!-- 서브패널: 구매 기록 -->
     <div id="bean-sub-purchase-list" class="bean-sub-panel">
-      <section class="card">
+      <section class="card" id="purchase-list-view">
         <div class="list-header">
           <h2>구매 기록</h2>
           <button class="btn-new" type="button" id="btn-purchase-new">+ 추가</button>
@@ -1221,7 +1221,7 @@
 
     <!-- 서브패널: 로스팅 기록 -->
     <div id="bean-sub-roasting-list" class="bean-sub-panel">
-      <section class="card">
+      <section class="card" id="roast-list-view">
         <div class="list-header">
           <h2>로스팅 기록</h2>
           <button class="btn-new" type="button" id="btn-roast-new">+ 추가</button>
@@ -2719,6 +2719,8 @@ init();
       document.querySelectorAll(".bean-sub-panel").forEach(p => p.classList.remove("active"));
       const panel = document.getElementById("bean-sub-" + btn.dataset.sub);
       if (panel) panel.classList.add("active");
+      // 서브탭 전환 시 열려있던 폼은 닫고 목록 표시
+      hideBeanForm(); hidePurchaseForm(); hideRoastForm();
       // 서브탭 진입 시 데이터 로드
       if (btn.dataset.sub === "bean-list") loadBeanList();
       if (btn.dataset.sub === "purchase-list") loadPurchaseList();
@@ -2894,10 +2896,13 @@ function renderBeanList(items) {
 let _beanEditingId = null;
 
 function showBeanForm() {
+  document.getElementById("bean-list-view").style.display = "none";
   document.getElementById("bean-form-view").classList.add("active");
+  window.scrollTo({ top: 0 });
 }
 function hideBeanForm() {
   document.getElementById("bean-form-view").classList.remove("active");
+  document.getElementById("bean-list-view").style.display = "";
   _beanEditingId = null;
 }
 
@@ -3094,17 +3099,24 @@ function renderPurchaseList(items) {
 }
 
 // 구매 폼 열기/닫기
+function showPurchaseForm() {
+  document.getElementById("purchase-list-view").style.display = "none";
+  document.getElementById("purchase-form-view").classList.add("active");
+  window.scrollTo({ top: 0 });
+}
+function hidePurchaseForm() {
+  document.getElementById("purchase-form-view").classList.remove("active");
+  document.getElementById("purchase-list-view").style.display = "";
+}
 document.getElementById("btn-purchase-new").addEventListener("click", () => {
   document.getElementById("purchase-form").reset();
   document.getElementById("purchase-field-date").value = todayStr();
   document.getElementById("purchase-field-discount").value = "0";
   updatePurchaseTotal();
-  document.getElementById("purchase-form-view").classList.add("active");
+  showPurchaseForm();
   document.getElementById("purchase-field-bean").focus();
 });
-document.getElementById("btn-purchase-cancel").addEventListener("click", () => {
-  document.getElementById("purchase-form-view").classList.remove("active");
-});
+document.getElementById("btn-purchase-cancel").addEventListener("click", hidePurchaseForm);
 
 // 실시간 총액 계산
 function updatePurchaseTotal() {
@@ -3152,7 +3164,7 @@ document.getElementById("purchase-form").addEventListener("submit", async (e) =>
       discount: parseInt(document.getElementById("purchase-field-discount").value) || 0,
     });
     showToast("구매 기록 추가됨");
-    document.getElementById("purchase-form-view").classList.remove("active");
+    hidePurchaseForm();
     loadPurchaseList();
   } catch (err) {
     if (err.message !== "unauthorized") showBanner("저장 실패: " + err.message, "error");
@@ -3219,16 +3231,23 @@ function renderRoastList(items) {
 }
 
 // 로스팅 폼 열기/닫기
+function showRoastForm() {
+  document.getElementById("roast-list-view").style.display = "none";
+  document.getElementById("roast-form-view").classList.add("active");
+  window.scrollTo({ top: 0 });
+}
+function hideRoastForm() {
+  document.getElementById("roast-form-view").classList.remove("active");
+  document.getElementById("roast-list-view").style.display = "";
+}
 document.getElementById("btn-roast-new").addEventListener("click", () => {
   document.getElementById("roast-form").reset();
   document.getElementById("roast-field-date").value = todayStr();
   updateRoastLoss();
-  document.getElementById("roast-form-view").classList.add("active");
+  showRoastForm();
   document.getElementById("roast-field-bean").focus();
 });
-document.getElementById("btn-roast-cancel").addEventListener("click", () => {
-  document.getElementById("roast-form-view").classList.remove("active");
-});
+document.getElementById("btn-roast-cancel").addEventListener("click", hideRoastForm);
 
 // 수분손실 자동계산
 function updateRoastLoss() {
@@ -3278,7 +3297,7 @@ document.getElementById("roast-form").addEventListener("submit", async (e) => {
   try {
     await api("POST", "/api/roasting-logs", payload);
     showToast("로스팅 기록 추가됨");
-    document.getElementById("roast-form-view").classList.remove("active");
+    hideRoastForm();
     loadRoastList();
   } catch (err) {
     if (err.message !== "unauthorized") showBanner("저장 실패: " + err.message, "error");
