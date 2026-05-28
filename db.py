@@ -1005,15 +1005,37 @@ def get_green_bean(gb_id: int) -> Optional[dict]:
     return dict(row) if row else None
 
 
+def _resolve_supplier_id(conn, data: dict):
+    """supplier_id가 있으면 그대로, 없고 supplier_name(자유 텍스트)이 있으면
+    이름으로 기존 공급처를 찾고 없으면 새로 만들어 id 반환."""
+    sid = data.get("supplier_id")
+    if sid:
+        return int(sid)
+    name = (data.get("supplier_name") or "").strip()
+    if not name:
+        return None
+    row = conn.execute(
+        "SELECT id FROM suppliers WHERE name = ? COLLATE NOCASE "
+        "OR short_name = ? COLLATE NOCASE", (name, name),
+    ).fetchone()
+    if row:
+        return row["id"]
+    cur = conn.execute(
+        "INSERT INTO suppliers (name, short_name) VALUES (?,?)", (name, name),
+    )
+    return cur.lastrowid
+
+
 def create_green_bean(data: dict) -> int:
     with connect() as conn:
+        supplier_id = _resolve_supplier_id(conn, data)
         cur = conn.execute(
             "INSERT INTO green_beans "
             "(name, supplier_id, origin_country, origin_region, process, grade, "
             " cup_notes, description, is_decaf, status) "
             "VALUES (?,?,?,?,?,?,?,?,?,?)",
             (
-                data["name"], data.get("supplier_id"), data.get("origin_country"),
+                data["name"], supplier_id, data.get("origin_country"),
                 data.get("origin_region"), data["process"], data.get("grade"),
                 data.get("cup_notes"), data.get("description"),
                 data.get("is_decaf", 0), data.get("status", "활성"),
@@ -1025,16 +1047,18 @@ def create_green_bean(data: dict) -> int:
 def update_green_bean(gb_id: int, data: dict) -> bool:
     allowed = ("name", "supplier_id", "origin_country", "origin_region",
                "process", "grade", "cup_notes", "description", "is_decaf", "status")
-    sets, vals = [], []
-    for k in allowed:
-        if k in data:
-            sets.append(f"{k}=?")
-            vals.append(data[k])
-    if not sets:
-        return False
-    sets.append("updated_at=strftime('%Y-%m-%dT%H:%M:%SZ','now')")
-    vals.append(gb_id)
     with connect() as conn:
+        if "supplier_name" in data and not data.get("supplier_id"):
+            data = {**data, "supplier_id": _resolve_supplier_id(conn, data)}
+        sets, vals = [], []
+        for k in allowed:
+            if k in data:
+                sets.append(f"{k}=?")
+                vals.append(data[k])
+        if not sets:
+            return False
+        sets.append("updated_at=strftime('%Y-%m-%dT%H:%M:%SZ','now')")
+        vals.append(gb_id)
         cur = conn.execute(f"UPDATE green_beans SET {','.join(sets)} WHERE id=?", vals)
         return cur.rowcount > 0
 
@@ -1059,11 +1083,24 @@ def green_bean_suggestions() -> dict:
         origins = conn.execute(
             "SELECT DISTINCT origin_country FROM green_beans WHERE origin_country IS NOT NULL AND origin_country != '' ORDER BY origin_country"
         ).fetchall()
+        # 공급처별 원두명 (이전 등록 데이터 재활용용)
+        gb_rows = conn.execute(
+            "SELECT s.name AS supplier_name, gb.name AS bean_name "
+            "FROM green_beans gb JOIN suppliers s ON s.id = gb.supplier_id "
+            "WHERE gb.name IS NOT NULL AND gb.name != '' "
+            "ORDER BY s.name, gb.name"
+        ).fetchall()
+    beans_by_supplier: dict = {}
+    for r in gb_rows:
+        lst = beans_by_supplier.setdefault(r["supplier_name"], [])
+        if r["bean_name"] not in lst:
+            lst.append(r["bean_name"])
     return {
         "suppliers": [dict(r) for r in suppliers],
         "processes": [r["process"] for r in processes],
         "grades": [r["grade"] for r in grades],
         "origins": [r["origin_country"] for r in origins],
+        "beans_by_supplier": beans_by_supplier,
     }
 
 

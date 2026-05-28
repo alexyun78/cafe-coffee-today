@@ -1099,18 +1099,21 @@
           <input type="hidden" id="bean-field-id">
 
           <div class="field">
-            <label for="bean-field-name" class="req">원두명</label>
-            <input type="text" id="bean-field-name" placeholder="예: 에티오피아 구지 우라가" autocomplete="off" required>
-            <div class="field-error">원두명을 입력하세요.</div>
+            <label for="bean-field-supplier">공급업체</label>
+            <div class="autocomplete-wrap">
+              <input type="text" id="bean-field-supplier" placeholder="선택 또는 직접 입력" autocomplete="off">
+              <div class="autocomplete-list" id="ac-bean-supplier"></div>
+            </div>
+            <div class="field-hint" style="font-size:0.78rem;color:var(--muted);margin-top:4px;">공급처를 고르면 그 곳에서 등록했던 원두가 원두명에 추천됩니다.</div>
           </div>
 
           <div class="field">
-            <label for="bean-field-supplier">공급업체</label>
+            <label for="bean-field-name" class="req">원두명</label>
             <div class="autocomplete-wrap">
-              <select id="bean-field-supplier" style="min-height:48px;">
-                <option value="">선택 안 함</option>
-              </select>
+              <input type="text" id="bean-field-name" placeholder="예: 에티오피아 구지 우라가" autocomplete="off" required>
+              <div class="autocomplete-list" id="ac-bean-name"></div>
             </div>
+            <div class="field-error">원두명을 입력하세요.</div>
           </div>
 
           <div class="field">
@@ -1712,7 +1715,7 @@ async function loadSuggestions() {
   }
 }
 
-function setupAutocomplete(inputId, listId, items) {
+function setupAutocomplete(inputId, listId, items, onSelect) {
   const input = document.getElementById(inputId);
   const list = document.getElementById(listId);
   if (!input || !list) return;
@@ -1722,12 +1725,20 @@ function setupAutocomplete(inputId, listId, items) {
   input.parentNode.replaceChild(newInput, input);
 
   let highlighted = -1;
+  // items 는 배열 또는 () => 배열 (동적 소스 지원)
+  const getItems = () => (typeof items === "function" ? (items() || []) : items);
+  const choose = (val) => {
+    newInput.value = val;
+    list.classList.remove("open");
+    if (onSelect) onSelect(val);
+  };
 
   function render(filter) {
+    const all = getItems();
     const q = (filter || "").toLowerCase();
     const filtered = q
-      ? items.filter(v => v.toLowerCase().includes(q))
-      : items;
+      ? all.filter(v => v.toLowerCase().includes(q))
+      : all;
     if (!filtered.length) { list.classList.remove("open"); return; }
     list.innerHTML = filtered.map((v, i) =>
       `<div class="autocomplete-item" data-idx="${i}">${escapeHtml(v)}</div>`
@@ -1737,8 +1748,7 @@ function setupAutocomplete(inputId, listId, items) {
     list.querySelectorAll(".autocomplete-item").forEach(el => {
       el.addEventListener("mousedown", (e) => {
         e.preventDefault();
-        newInput.value = el.textContent;
-        list.classList.remove("open");
+        choose(el.textContent);
       });
     });
   }
@@ -1761,8 +1771,7 @@ function setupAutocomplete(inputId, listId, items) {
       visible.forEach((el, i) => el.classList.toggle("highlight", i === highlighted));
     } else if (e.key === "Enter" && highlighted >= 0) {
       e.preventDefault();
-      newInput.value = visible[highlighted].textContent;
-      list.classList.remove("open");
+      choose(visible[highlighted].textContent);
     }
   });
 }
@@ -2735,6 +2744,7 @@ init();
 let _beanListCache = [];
 let _beanSuggestionsCache = null;
 let _suppliersCache = [];
+let _beansBySupplier = {};   // { 공급처명: [원두명, ...] }
 
 async function loadBeansTab() {
   // 첫 진입: suggestions + list 동시 로드
@@ -2747,6 +2757,7 @@ async function loadBeansTab() {
     _beanSuggestionsCache = sugRes;
     _beanListCache = listRes.items || [];
     _suppliersCache = supRes.items || [];
+    _beansBySupplier = sugRes.beans_by_supplier || {};
     renderBeanList(_beanListCache);
     populateBeanDropdowns();
     // 기본 활성 서브탭(로스팅 기록) 데이터 로드
@@ -2758,14 +2769,7 @@ async function loadBeansTab() {
 
 // ---------- 드롭다운 채우기 ----------
 function populateBeanDropdowns() {
-  // 공급업체 셀렉트
-  const supSel = document.getElementById("bean-field-supplier");
-  if (supSel) {
-    supSel.innerHTML = '<option value="">선택 안 함</option>' +
-      _suppliersCache.map(s =>
-        `<option value="${s.id}">${escapeHtml(s.short_name || s.name)}</option>`
-      ).join("");
-  }
+  // (공급업체는 입력+자동완성 — initBeanFormSegments에서 설정)
   // 구매/로스팅 폼의 생두 셀렉트
   const activeBeans = _beanListCache.filter(b => b.status === "활성");
   const beanOptions = '<option value="">-- 선택 --</option>' +
@@ -2832,6 +2836,29 @@ function initBeanFormSegments() {
   // 원산지 autocomplete
   const origins = (_beanSuggestionsCache && _beanSuggestionsCache.origins) || [];
   setupAutocomplete("bean-field-origin", "ac-bean-origin", origins);
+
+  // 공급업체 autocomplete (선택 또는 직접 입력)
+  const supplierNames = (_suppliersCache || []).map(s => s.name).filter(Boolean);
+  setupAutocomplete("bean-field-supplier", "ac-bean-supplier", supplierNames);
+
+  // 원두명 autocomplete — 선택된 공급처의 이전 원두 우선, 없으면 전체 원두명
+  setupAutocomplete("bean-field-name", "ac-bean-name", beanNameItemsForSupplier);
+}
+
+// 현재 입력된 공급처 기준 원두명 추천 목록
+function beanNameItemsForSupplier() {
+  const supEl = document.getElementById("bean-field-supplier");
+  const sup = supEl ? supEl.value.trim() : "";
+  if (sup) {
+    // 공급처명 정확/부분 일치 우선
+    if (_beansBySupplier[sup]) return _beansBySupplier[sup];
+    const key = Object.keys(_beansBySupplier).find(
+      k => k.toLowerCase() === sup.toLowerCase()
+    );
+    if (key) return _beansBySupplier[key];
+  }
+  // 공급처 미선택/미일치 → 전체 원두명 (중복 제거)
+  return [...new Set((_beanListCache || []).map(b => b.name).filter(Boolean))];
 }
 
 // ---------- 생두 목록 ----------
@@ -2932,16 +2959,17 @@ async function openBeanEdit(id) {
     const res = await api("GET", "/api/green-beans/" + id);
     const b = res.item;
     _beanEditingId = id;
+    // autocomplete 설정(입력 clone)을 먼저 하고, 그 뒤에 값을 채워야 값이 보존됨
+    initBeanFormSegments();
     document.getElementById("bean-field-id").value = id;
     document.getElementById("bean-field-name").value = b.name || "";
-    document.getElementById("bean-field-supplier").value = b.supplier_id || "";
+    document.getElementById("bean-field-supplier").value = b.supplier_name || "";
     document.getElementById("bean-field-origin").value = b.origin_country || "";
     document.getElementById("bean-field-cup-notes").value = b.cup_notes || "";
     document.getElementById("bean-field-desc").value = b.description || "";
     document.getElementById("bean-field-decaf").checked = !!b.is_decaf;
     document.getElementById("bean-form-title").textContent = "생두 편집";
     document.getElementById("btn-bean-delete").style.display = "";
-    initBeanFormSegments();
     // 가공방식 선택 동기화
     syncSegmentedBtn("bean-process-btns", "bean-field-process", "bean-field-process-custom", b.process || "");
     // 등급 선택 동기화
@@ -3007,7 +3035,7 @@ document.getElementById("bean-form").addEventListener("submit", async (e) => {
 
   const payload = {
     name: nameField.value.trim(),
-    supplier_id: document.getElementById("bean-field-supplier").value || null,
+    supplier_name: document.getElementById("bean-field-supplier").value.trim() || null,
     process: processVal,
     grade: document.getElementById("bean-field-grade").value.trim() || null,
     origin_country: document.getElementById("bean-field-origin").value.trim() || null,
