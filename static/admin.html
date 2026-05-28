@@ -2200,12 +2200,17 @@ function appVersionAtLeast(want) {
 }
 
 function downloadViaNativeListener(url) {
-  // APK v1.0.6+: MainActivity의 DownloadListener가 DownloadManager로 저장
-  const iframe = document.createElement("iframe");
-  iframe.style.display = "none";
-  iframe.src = url;
-  document.body.appendChild(iframe);
-  setTimeout(() => iframe.remove(), 30000);
+  // APK v1.0.6+: MainActivity의 DownloadListener가 DownloadManager로 저장.
+  // iframe(서브프레임) 다운로드는 WebView가 onDownloadStart로 전달하지 않으므로
+  // 메인 프레임 앵커 클릭으로 트리거한다. (상대경로는 문서 base로 정상 해석됨)
+  const abs = new URL(url, location.href).href;
+  const a = document.createElement("a");
+  a.href = abs;
+  a.download = "";
+  a.style.display = "none";
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(() => a.remove(), 1000);
 }
 
 async function saveOrShareImage(blob, filename) {
