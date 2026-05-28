@@ -1075,13 +1075,13 @@
 
     <!-- 생두 서브탭 -->
     <div class="bean-sub-tabs" id="bean-sub-tabs">
-      <button class="bean-sub-btn active" data-sub="bean-list">생두 목록</button>
+      <button class="bean-sub-btn active" data-sub="roasting-list">로스팅 기록</button>
+      <button class="bean-sub-btn" data-sub="bean-list">생두 목록</button>
       <button class="bean-sub-btn" data-sub="purchase-list">구매 기록</button>
-      <button class="bean-sub-btn" data-sub="roasting-list">로스팅 기록</button>
     </div>
 
     <!-- 서브패널: 생두 목록 -->
-    <div id="bean-sub-bean-list" class="bean-sub-panel active">
+    <div id="bean-sub-bean-list" class="bean-sub-panel">
       <section class="card" id="bean-list-view">
         <div class="list-header">
           <h2>생두 목록</h2>
@@ -1222,7 +1222,7 @@
     </div>
 
     <!-- 서브패널: 로스팅 기록 -->
-    <div id="bean-sub-roasting-list" class="bean-sub-panel">
+    <div id="bean-sub-roasting-list" class="bean-sub-panel active">
       <section class="card" id="roast-list-view">
         <div class="list-header">
           <h2>로스팅 기록</h2>
@@ -2749,6 +2749,8 @@ async function loadBeansTab() {
     _suppliersCache = supRes.items || [];
     renderBeanList(_beanListCache);
     populateBeanDropdowns();
+    // 기본 활성 서브탭(로스팅 기록) 데이터 로드
+    loadRoastList();
   } catch (e) {
     if (e.message !== "unauthorized") showBanner("생두 데이터 로드 실패: " + e.message, "error");
   }
