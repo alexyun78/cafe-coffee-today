@@ -683,6 +683,21 @@ def api_green_bean_update(gb_id):
 @app.delete("/api/green-beans/<int:gb_id>")
 @require_pin
 def api_green_bean_delete(gb_id):
+    # hard=1: 생두 + 연결 기록을 완전히 삭제. 잔여 재고가 있으면 거부(재고에 영향 방지).
+    if request.args.get("hard") == "1":
+        item = db.get_green_bean(gb_id)
+        if not item:
+            return jsonify({"success": False, "error": "not found"}), 404
+        remaining = float(item.get("remaining_kg") or 0)
+        if remaining > 0.05:
+            return jsonify({
+                "success": False,
+                "error": f"재고가 {remaining:.1f}kg 남아 있어 삭제할 수 없습니다. 먼저 숨김 처리하세요.",
+            }), 400
+        if not db.hard_delete_green_bean(gb_id):
+            return jsonify({"success": False, "error": "not found"}), 404
+        return jsonify({"success": True})
+    # 기본: 소프트 삭제(단종 처리)
     if not db.delete_green_bean(gb_id):
         return jsonify({"success": False, "error": "not found"}), 404
     return jsonify({"success": True})

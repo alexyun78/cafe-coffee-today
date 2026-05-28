@@ -108,6 +108,7 @@ CREATE TABLE IF NOT EXISTS green_beans (
     description     TEXT,
     is_decaf        INTEGER DEFAULT 0,
     status          TEXT DEFAULT '활성',
+    hidden          INTEGER NOT NULL DEFAULT 0,
     created_at      TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now')),
     updated_at      TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now')),
     UNIQUE(name, supplier_id, process)
@@ -181,6 +182,11 @@ _EXTRA_COLUMNS = (
     ("green_bean_id", "INTEGER REFERENCES green_beans(id)"),
 )
 
+# 이미 생성된 green_beans 테이블에 나중에 추가된 컬럼 (기존 서버 DB 마이그레이션용)
+_GB_EXTRA_COLUMNS = (
+    ("hidden", "INTEGER NOT NULL DEFAULT 0"),
+)
+
 
 def _ensure_dir():
     d = os.path.dirname(DB_PATH)
@@ -209,6 +215,10 @@ def init_schema():
         for col, ctype in _EXTRA_COLUMNS:
             if col not in existing:
                 conn.execute(f"ALTER TABLE coffees ADD COLUMN {col} {ctype}")
+        gb_existing = {r["name"] for r in conn.execute("PRAGMA table_info(green_beans)").fetchall()}
+        for col, ctype in _GB_EXTRA_COLUMNS:
+            if col not in gb_existing:
+                conn.execute(f"ALTER TABLE green_beans ADD COLUMN {col} {ctype}")
         conn.execute(
             "UPDATE coffees SET availability='운영' WHERE availability IS NULL OR availability=''"
         )
@@ -1049,7 +1059,7 @@ def create_green_bean(data: dict) -> int:
 
 def update_green_bean(gb_id: int, data: dict) -> bool:
     allowed = ("name", "supplier_id", "origin_country", "origin_region",
-               "process", "grade", "cup_notes", "description", "is_decaf", "status")
+               "process", "grade", "cup_notes", "description", "is_decaf", "status", "hidden")
     with connect() as conn:
         if "supplier_name" in data and not data.get("supplier_id"):
             data = {**data, "supplier_id": _resolve_supplier_id(conn, data)}
@@ -1069,6 +1079,36 @@ def update_green_bean(gb_id: int, data: dict) -> bool:
 def delete_green_bean(gb_id: int) -> bool:
     with connect() as conn:
         cur = conn.execute("UPDATE green_beans SET status='단종' WHERE id=?", (gb_id,))
+        return cur.rowcount > 0
+
+
+def set_green_bean_hidden(gb_id: int, hidden: bool) -> bool:
+    with connect() as conn:
+        cur = conn.execute(
+            "UPDATE green_beans SET hidden=?, "
+            "updated_at=strftime('%Y-%m-%dT%H:%M:%SZ','now') WHERE id=?",
+            (1 if hidden else 0, gb_id),
+        )
+        return cur.rowcount > 0
+
+
+def hard_delete_green_bean(gb_id: int) -> bool:
+    """생두 마스터와 연결된 구매/로스팅/가격/블렌드 구성요소를 모두 삭제한다.
+    coffees.green_bean_id 참조는 NULL 로 끊는다.
+
+    재고는 생두별로 독립 계산되므로(SUM(구매) - SUM(로스팅 투입)) 한 생두를 지워도
+    다른 생두의 재고에는 영향이 없다. 호출자(app.py)에서 잔여 재고 > 0 이면 막아
+    '현재 재고에 영향 없음'을 보장한다.
+    """
+    with connect() as conn:
+        conn.execute("BEGIN IMMEDIATE")
+        conn.execute("UPDATE coffees SET green_bean_id=NULL WHERE green_bean_id=?", (gb_id,))
+        conn.execute("DELETE FROM blend_components WHERE green_bean_id=?", (gb_id,))
+        conn.execute("DELETE FROM pricing WHERE green_bean_id=?", (gb_id,))
+        conn.execute("DELETE FROM roasting_logs WHERE green_bean_id=?", (gb_id,))
+        conn.execute("DELETE FROM purchases WHERE green_bean_id=?", (gb_id,))
+        cur = conn.execute("DELETE FROM green_beans WHERE id=?", (gb_id,))
+        conn.execute("COMMIT")
         return cur.rowcount > 0
 
 

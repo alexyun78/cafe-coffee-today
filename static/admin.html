@@ -852,6 +852,79 @@
   .record-row-actions button.dup { background: #FFF3E0; color: #E65100; }
   .record-row-actions button:hover { opacity: 0.8; }
 
+  /* ===== 커스텀 생두 선택 드롭다운 ===== */
+  .bean-select { position: relative; }
+  .bean-select-trigger {
+    width: 100%; min-height: 48px; padding: 12px 14px;
+    border: 1.5px solid var(--border); border-radius: 8px; background: white;
+    font-size: 1rem; font-family: inherit; color: var(--text); cursor: pointer;
+    display: flex; align-items: center; justify-content: space-between; gap: 10px;
+    text-align: left;
+  }
+  .bean-select-trigger .bean-select-text {
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex: 1;
+  }
+  .bean-select-trigger .bean-select-text.placeholder { color: var(--muted); }
+  .bean-select-caret { color: var(--muted); font-size: 0.8rem; transition: transform 0.15s; }
+  .bean-select.open .bean-select-caret { transform: rotate(180deg); }
+  .bean-select.open .bean-select-trigger {
+    border-color: var(--accent); box-shadow: 0 0 0 3px rgba(210,105,30,0.15);
+  }
+  .field.error .bean-select-trigger { border-color: var(--danger); }
+
+  .bean-select-dropdown {
+    position: absolute; top: calc(100% + 4px); left: 0; right: 0; z-index: 30;
+    background: white; border: 1.5px solid var(--border); border-radius: 10px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.14); overflow: hidden;
+  }
+  .bean-select-dropdown[hidden] { display: none; }
+  .bean-select-head {
+    display: flex; gap: 8px; padding: 8px; align-items: center;
+    border-bottom: 1px solid var(--border); background: #faf8f5;
+  }
+  .bean-select-search {
+    flex: 1; min-height: 40px !important; padding: 8px 12px !important;
+    font-size: 0.9rem !important; border-radius: 7px !important;
+  }
+  .bean-select-mode {
+    flex-shrink: 0; padding: 8px 10px; border: 1px solid var(--border);
+    border-radius: 7px; background: white; color: var(--muted);
+    font-size: 0.74rem; font-weight: 600; font-family: inherit; cursor: pointer;
+    white-space: nowrap; min-height: 40px;
+  }
+  .bean-select-mode.on { background: var(--coffee-dark); color: white; border-color: var(--coffee-dark); }
+
+  .bean-select-list { max-height: 46vh; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+  .bean-opt {
+    display: flex; align-items: center; gap: 8px; padding: 4px 8px 4px 12px;
+    border-bottom: 1px solid #f1ece4;
+  }
+  .bean-opt:last-child { border-bottom: none; }
+  .bean-opt-label {
+    flex: 1; min-height: 42px; display: flex; align-items: center;
+    font-size: 0.92rem; color: var(--text); cursor: pointer; line-height: 1.3;
+    background: none; border: none; font-family: inherit; text-align: left; padding: 6px 0;
+  }
+  .bean-opt-label:hover { color: var(--coffee-dark); }
+  .bean-opt.selected .bean-opt-label { font-weight: 700; color: var(--coffee-dark); }
+  .bean-opt-sub { color: var(--muted); font-weight: 400; font-size: 0.82rem; }
+  .bean-opt-btn {
+    flex-shrink: 0; padding: 6px 9px; border: none; border-radius: 6px;
+    font-size: 0.72rem; font-weight: 600; font-family: inherit; cursor: pointer;
+    background: #f0ebe4; color: var(--coffee-dark); min-height: 34px;
+  }
+  .bean-opt-btn:hover { opacity: 0.82; }
+  .bean-opt-btn.hide { background: #f0ebe4; color: var(--muted); }
+  .bean-opt-btn.unhide { background: #FFF3E0; color: #E65100; }
+  .bean-opt-btn.del { background: #FFEBEE; color: var(--danger); }
+  .bean-select-empty { padding: 18px 12px; text-align: center; color: var(--muted); font-size: 0.86rem; }
+
+  .bean-hidden-badge {
+    display: inline-block; padding: 2px 8px; border-radius: 10px;
+    background: #f0ebe4; color: var(--muted); font-size: 0.7rem;
+    font-weight: 700; margin-left: 6px; vertical-align: middle;
+  }
+
   /* 실시간 총액 표시 */
   .calc-total {
     font-size: 1.1rem; font-weight: 700; color: var(--accent);
@@ -1186,9 +1259,20 @@
         <form id="purchase-form" novalidate>
           <div class="field">
             <label for="purchase-field-bean" class="req">생두 선택</label>
-            <select id="purchase-field-bean" style="min-height:48px;" required>
-              <option value="">-- 선택 --</option>
-            </select>
+            <div class="bean-select" data-target="purchase-field-bean">
+              <button type="button" class="bean-select-trigger" aria-haspopup="listbox" aria-expanded="false">
+                <span class="bean-select-text">-- 선택 --</span>
+                <span class="bean-select-caret">▾</span>
+              </button>
+              <input type="hidden" id="purchase-field-bean">
+              <div class="bean-select-dropdown" hidden>
+                <div class="bean-select-head">
+                  <input type="text" class="bean-select-search" placeholder="원두 검색…" autocomplete="off">
+                  <button type="button" class="bean-select-mode" data-mode="active">숨김 보기</button>
+                </div>
+                <div class="bean-select-list"></div>
+              </div>
+            </div>
             <div class="field-error">생두를 선택하세요.</div>
           </div>
 
@@ -1243,9 +1327,20 @@
         <form id="roast-form" novalidate>
           <div class="field">
             <label for="roast-field-bean" class="req">생두 선택</label>
-            <select id="roast-field-bean" style="min-height:48px;" required>
-              <option value="">-- 선택 --</option>
-            </select>
+            <div class="bean-select" data-target="roast-field-bean">
+              <button type="button" class="bean-select-trigger" aria-haspopup="listbox" aria-expanded="false">
+                <span class="bean-select-text">-- 선택 --</span>
+                <span class="bean-select-caret">▾</span>
+              </button>
+              <input type="hidden" id="roast-field-bean">
+              <div class="bean-select-dropdown" hidden>
+                <div class="bean-select-head">
+                  <input type="text" class="bean-select-search" placeholder="원두 검색…" autocomplete="off">
+                  <button type="button" class="bean-select-mode" data-mode="active">숨김 보기</button>
+                </div>
+                <div class="bean-select-list"></div>
+              </div>
+            </div>
             <div class="field-error">생두를 선택하세요.</div>
           </div>
 
@@ -2784,21 +2879,185 @@ function sortBeansForSelect(beans) {
   });
 }
 
+// ---------- 커스텀 생두 선택 드롭다운 ----------
+// 네이티브 <select> 대신 직접 만든 드롭다운. 각 원두 옆에 숨기기 버튼,
+// 상단에 "숨김 보기" 토글, 숨김 보기에서는 보이기/삭제 버튼을 제공한다.
+const _beanSelects = {};   // targetId -> controller
+
+function initBeanSelects() {
+  document.querySelectorAll(".bean-select").forEach(root => {
+    if (root._inited) return;
+    root._inited = true;
+    _beanSelects[root.dataset.target] = createBeanSelect(root);
+  });
+  if (!initBeanSelects._docBound) {
+    initBeanSelects._docBound = true;
+    document.addEventListener("click", (e) => {
+      if (e.target.closest(".bean-select")) return;
+      Object.values(_beanSelects).forEach(c => c.close());
+    });
+  }
+}
+
+function createBeanSelect(root) {
+  const targetId = root.dataset.target;
+  const hidden = root.querySelector('input[type="hidden"]');
+  const trigger = root.querySelector(".bean-select-trigger");
+  const textEl = root.querySelector(".bean-select-text");
+  const dropdown = root.querySelector(".bean-select-dropdown");
+  const searchEl = root.querySelector(".bean-select-search");
+  const modeBtn = root.querySelector(".bean-select-mode");
+  const listEl = root.querySelector(".bean-select-list");
+  let viewHidden = false;
+
+  function updateText() {
+    const id = hidden.value ? parseInt(hidden.value, 10) : null;
+    const b = id ? _beanListCache.find(x => x.id === id) : null;
+    if (b) {
+      const prefix = b.supplier_short ? `[${b.supplier_short}] ` : "";
+      textEl.textContent = prefix + b.name + (b.process ? ` (${b.process})` : "");
+      textEl.classList.remove("placeholder");
+    } else {
+      textEl.textContent = "-- 선택 --";
+      textEl.classList.add("placeholder");
+    }
+  }
+
+  function renderList() {
+    const q = (searchEl.value || "").trim().toLowerCase();
+    const selId = hidden.value ? parseInt(hidden.value, 10) : null;
+    let beans = _beanListCache.filter(b =>
+      b.status === "활성" && (viewHidden ? b.hidden : !b.hidden));
+    if (q) {
+      beans = beans.filter(b => {
+        const hay = ((b.supplier_short || "") + " " + (b.name || "") + " " + (b.process || "")).toLowerCase();
+        return hay.includes(q);
+      });
+    }
+    beans = viewHidden
+      ? beans.slice().sort((a, b) => String(a.name || "").localeCompare(String(b.name || "")))
+      : sortBeansForSelect(beans);
+    if (!beans.length) {
+      listEl.innerHTML = `<div class="bean-select-empty">${
+        viewHidden ? "숨긴 원두가 없습니다." : (q ? "검색 결과 없음" : "원두가 없습니다.")
+      }</div>`;
+      return;
+    }
+    listEl.innerHTML = beans.map(b => {
+      const prefix = b.supplier_short ? `[${escapeHtml(b.supplier_short)}] ` : "";
+      const label = `${prefix}${escapeHtml(b.name)} <span class="bean-opt-sub">${escapeHtml(b.process || "")}</span>`;
+      const btns = viewHidden
+        ? `<button type="button" class="bean-opt-btn unhide" data-act="unhide" data-id="${b.id}">보이기</button>
+           <button type="button" class="bean-opt-btn del" data-act="del" data-id="${b.id}">삭제</button>`
+        : `<button type="button" class="bean-opt-btn hide" data-act="hide" data-id="${b.id}">숨기기</button>`;
+      return `<div class="bean-opt ${b.id === selId ? "selected" : ""}" data-id="${b.id}">
+        <button type="button" class="bean-opt-label" data-act="pick" data-id="${b.id}">${label}</button>
+        ${btns}
+      </div>`;
+    }).join("");
+  }
+
+  function resetView() {
+    viewHidden = false;
+    modeBtn.classList.remove("on");
+    modeBtn.textContent = "숨김 보기";
+    searchEl.value = "";
+  }
+
+  function open() {
+    Object.entries(_beanSelects).forEach(([k, c]) => { if (k !== targetId) c.close(); });
+    dropdown.hidden = false;
+    root.classList.add("open");
+    trigger.setAttribute("aria-expanded", "true");
+    renderList();
+  }
+  function close() {
+    if (dropdown.hidden) return;
+    dropdown.hidden = true;
+    root.classList.remove("open");
+    trigger.setAttribute("aria-expanded", "false");
+    resetView();
+  }
+  function isOpen() { return !dropdown.hidden; }
+
+  function setValue(id) {
+    hidden.value = id ? String(id) : "";
+    updateText();
+    const field = root.closest(".field");
+    if (field && hidden.value) field.classList.remove("error");
+  }
+  function clearIfDeleted(deletedId) {
+    if (hidden.value && parseInt(hidden.value, 10) === deletedId) setValue("");
+  }
+
+  trigger.addEventListener("click", (e) => { e.stopPropagation(); isOpen() ? close() : open(); });
+  searchEl.addEventListener("input", renderList);
+  searchEl.addEventListener("click", (e) => e.stopPropagation());
+  modeBtn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    viewHidden = !viewHidden;
+    modeBtn.classList.toggle("on", viewHidden);
+    modeBtn.textContent = viewHidden ? "← 목록으로" : "숨김 보기";
+    renderList();
+  });
+
+  listEl.addEventListener("click", async (e) => {
+    const btn = e.target.closest("[data-act]");
+    if (!btn) return;
+    e.stopPropagation();
+    const id = parseInt(btn.dataset.id, 10);
+    const act = btn.dataset.act;
+    if (act === "pick") { setValue(id); close(); return; }
+    if (act === "hide" || act === "unhide") {
+      const wantHidden = act === "hide";
+      try {
+        await api("PUT", "/api/green-beans/" + id, { hidden: wantHidden ? 1 : 0 });
+        const b = _beanListCache.find(x => x.id === id);
+        if (b) b.hidden = wantHidden ? 1 : 0;
+        showToast(wantHidden ? "숨김 처리됨" : "다시 표시됨");
+        renderAllBeanSelects();
+        renderBeanList(_beanListCache);
+      } catch (err) {
+        if (err.message !== "unauthorized") showBanner("변경 실패: " + err.message, "error");
+      }
+      return;
+    }
+    if (act === "del") {
+      const b = _beanListCache.find(x => x.id === id);
+      const nm = b ? b.name : "이 생두";
+      if (!confirm(`'${nm}'를 완전히 삭제할까요?\n관련 구매·로스팅 기록도 함께 삭제됩니다.\n(다른 생두의 재고에는 영향이 없습니다.)`)) return;
+      try {
+        await api("DELETE", "/api/green-beans/" + id + "?hard=1");
+        const idx = _beanListCache.findIndex(x => x.id === id);
+        if (idx >= 0) _beanListCache.splice(idx, 1);
+        Object.values(_beanSelects).forEach(c => c.clearIfDeleted(id));
+        showToast("삭제됨");
+        renderAllBeanSelects();
+        renderBeanList(_beanListCache);
+      } catch (err) {
+        if (err.message !== "unauthorized") showBanner(err.message, "error");
+      }
+      return;
+    }
+  });
+
+  updateText();
+  return { open, close, isOpen, setValue, render: renderList, updateText, clearIfDeleted };
+}
+
+function renderAllBeanSelects() {
+  Object.values(_beanSelects).forEach(c => { c.updateText(); if (c.isOpen()) c.render(); });
+}
+
 // ---------- 드롭다운 채우기 ----------
 function populateBeanDropdowns() {
   // (공급업체는 입력+자동완성 — initBeanFormSegments에서 설정)
-  // 구매/로스팅 폼의 생두 셀렉트 (로스팅 빈도+최근 순 정렬)
-  const activeBeans = sortBeansForSelect(_beanListCache.filter(b => b.status === "활성"));
-  const beanOptions = '<option value="">-- 선택 --</option>' +
-    activeBeans.map(b => {
-      const prefix = b.supplier_short ? `[${escapeHtml(b.supplier_short)}] ` : "";
-      return `<option value="${b.id}">${prefix}${escapeHtml(b.name)} (${escapeHtml(b.process || "")})</option>`;
-    }).join("");
-  const purchaseSel = document.getElementById("purchase-field-bean");
-  if (purchaseSel) purchaseSel.innerHTML = beanOptions;
-  const roastSel = document.getElementById("roast-field-bean");
-  if (roastSel) roastSel.innerHTML = beanOptions;
+  initBeanSelects();
+  renderAllBeanSelects();
 }
+
+// 폼이 비동기 데이터 로드 전에 열려도 컨트롤러가 존재하도록 즉시 1회 초기화
+initBeanSelects();
 
 // ---------- 가공방식 / 등급 세그먼트 버튼 렌더 ----------
 const DEFAULT_PROCESSES = ["내추럴", "워시드", "허니", "무산소 발효"];
@@ -2910,6 +3169,7 @@ function renderBeanList(items) {
             ${prefix}${escapeHtml(b.name)}
             ${b.is_decaf ? '<span class="bean-decaf-badge">디카페인</span>' : ''}
             ${isInactive ? '<span class="status-chip status-완료">' + escapeHtml(b.status) + '</span>' : ''}
+            ${b.hidden ? '<span class="bean-hidden-badge">숨김</span>' : ''}
           </div>
           <div class="bean-card-meta">
             ${escapeHtml(b.process || "")}${b.grade ? " · " + escapeHtml(b.grade) : ""}${b.origin_country ? " · " + escapeHtml(b.origin_country) : ""}
@@ -3201,11 +3461,11 @@ function hidePurchaseForm() {
 }
 document.getElementById("btn-purchase-new").addEventListener("click", () => {
   document.getElementById("purchase-form").reset();
+  _beanSelects["purchase-field-bean"].setValue("");
   document.getElementById("purchase-field-date").value = todayStr();
   document.getElementById("purchase-field-discount").value = "0";
   updatePurchaseTotal();
   showPurchaseForm();
-  document.getElementById("purchase-field-bean").focus();
 });
 document.getElementById("btn-purchase-cancel").addEventListener("click", hidePurchaseForm);
 
@@ -3331,7 +3591,7 @@ function openRoastDuplicate(id) {
   const r = _roastListCache.find(x => x.id === id);
   if (!r) return;
   document.getElementById("roast-form").reset();
-  document.getElementById("roast-field-bean").value = r.green_bean_id || "";
+  _beanSelects["roast-field-bean"].setValue(r.green_bean_id || "");
   document.getElementById("roast-field-date").value = todayStr();
   document.getElementById("roast-field-input").value = r.input_weight_g != null ? r.input_weight_g : "";
   document.getElementById("roast-field-output").value = r.output_weight_g != null ? r.output_weight_g : "";
@@ -3359,10 +3619,10 @@ function hideRoastForm() {
 }
 document.getElementById("btn-roast-new").addEventListener("click", () => {
   document.getElementById("roast-form").reset();
+  _beanSelects["roast-field-bean"].setValue("");
   document.getElementById("roast-field-date").value = todayStr();
   updateRoastLoss();
   showRoastForm();
-  document.getElementById("roast-field-bean").focus();
 });
 document.getElementById("btn-roast-cancel").addEventListener("click", hideRoastForm);
 
