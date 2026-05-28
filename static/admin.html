@@ -1414,6 +1414,12 @@ async function api(method, path, body) {
   return data;
 }
 
+// fetch() 직접 호출용 인증 헤더 (api() 를 거치지 않는 다운로드 등)
+function authHeaders() {
+  const tok = _getAdminToken();
+  return tok ? { "Authorization": "Bearer " + tok } : {};
+}
+
 // ---------- PIN ----------
 function showPinModal() { pinModal.classList.remove("hidden"); $("#pin-input").focus(); }
 function hidePinModal() { pinModal.classList.add("hidden"); }
