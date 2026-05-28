@@ -849,6 +849,7 @@
     cursor: pointer; font-family: inherit; font-weight: 600;
   }
   .record-row-actions button.delete { background: #FFEBEE; color: #c62828; }
+  .record-row-actions button.dup { background: #FFF3E0; color: #E65100; }
   .record-row-actions button:hover { opacity: 0.8; }
 
   /* 실시간 총액 표시 */
@@ -2745,6 +2746,7 @@ let _beanListCache = [];
 let _beanSuggestionsCache = null;
 let _suppliersCache = [];
 let _beansBySupplier = {};   // { 공급처명: [원두명, ...] }
+let _roastListCache = [];    // 로스팅 기록 (복제용)
 
 async function loadBeansTab() {
   // 첫 진입: suggestions + list 동시 로드
@@ -2767,11 +2769,26 @@ async function loadBeansTab() {
   }
 }
 
+// 생두 셀렉트 정렬: 로스팅 많은 순 + 최근 로스팅 순의 50:50 결합
+function sortBeansForSelect(beans) {
+  const byCount = [...beans].sort((a, b) => (b.roast_count || 0) - (a.roast_count || 0));
+  const byRecent = [...beans].sort((a, b) =>
+    String(b.last_roast_date || "").localeCompare(String(a.last_roast_date || "")));
+  const countRank = new Map(byCount.map((b, i) => [b.id, i]));
+  const recentRank = new Map(byRecent.map((b, i) => [b.id, i]));
+  return [...beans].sort((a, b) => {
+    const sa = 0.5 * countRank.get(a.id) + 0.5 * recentRank.get(a.id);
+    const sb = 0.5 * countRank.get(b.id) + 0.5 * recentRank.get(b.id);
+    if (sa !== sb) return sa - sb;
+    return String(a.name || "").localeCompare(String(b.name || ""));
+  });
+}
+
 // ---------- 드롭다운 채우기 ----------
 function populateBeanDropdowns() {
   // (공급업체는 입력+자동완성 — initBeanFormSegments에서 설정)
-  // 구매/로스팅 폼의 생두 셀렉트
-  const activeBeans = _beanListCache.filter(b => b.status === "활성");
+  // 구매/로스팅 폼의 생두 셀렉트 (로스팅 빈도+최근 순 정렬)
+  const activeBeans = sortBeansForSelect(_beanListCache.filter(b => b.status === "활성"));
   const beanOptions = '<option value="">-- 선택 --</option>' +
     activeBeans.map(b => {
       const prefix = b.supplier_short ? `[${escapeHtml(b.supplier_short)}] ` : "";
@@ -2923,6 +2940,44 @@ function renderBeanList(items) {
   });
 }
 
+// ---------- 관리자 폼 뒤로가기(Android back) 처리 ----------
+// 생두/구매/로스팅 폼이 열려 있으면 back키가 관리자 모드를 벗어나지 않고
+// 폼만 닫고 목록으로 돌아가도록 한다 (History API).
+let _adminBackArmed = false;
+let _adminBackClosingViaPop = false;
+
+function isBeanFormOpen() {
+  return document.getElementById("bean-form-view").classList.contains("active")
+    || document.getElementById("purchase-form-view").classList.contains("active")
+    || document.getElementById("roast-form-view").classList.contains("active");
+}
+function armAdminBack() {
+  if (!_adminBackArmed) {
+    history.pushState({ adminForm: true }, "");
+    _adminBackArmed = true;
+  }
+}
+function disarmAdminBack() {
+  if (!_adminBackArmed) return;
+  _adminBackArmed = false;
+  // 버튼으로 닫은 경우엔 우리가 추가한 history 항목을 제거 (back로 닫힌 경우는 이미 pop됨)
+  if (!_adminBackClosingViaPop) history.back();
+}
+function closeOpenBeanForm() {
+  if (document.getElementById("bean-form-view").classList.contains("active")) hideBeanForm();
+  else if (document.getElementById("purchase-form-view").classList.contains("active")) hidePurchaseForm();
+  else if (document.getElementById("roast-form-view").classList.contains("active")) hideRoastForm();
+}
+window.addEventListener("popstate", () => {
+  if (_adminBackArmed && isBeanFormOpen()) {
+    _adminBackClosingViaPop = true;
+    closeOpenBeanForm();   // disarmAdminBack 안에서 history.back 호출 안 함
+    _adminBackClosingViaPop = false;
+  } else {
+    _adminBackArmed = false;
+  }
+});
+
 // ---------- 생두 폼 ----------
 let _beanEditingId = null;
 
@@ -2930,11 +2985,13 @@ function showBeanForm() {
   document.getElementById("bean-list-view").style.display = "none";
   document.getElementById("bean-form-view").classList.add("active");
   window.scrollTo({ top: 0 });
+  armAdminBack();
 }
 function hideBeanForm() {
   document.getElementById("bean-form-view").classList.remove("active");
   document.getElementById("bean-list-view").style.display = "";
   _beanEditingId = null;
+  disarmAdminBack();
 }
 
 document.getElementById("btn-bean-new").addEventListener("click", () => {
@@ -3135,10 +3192,12 @@ function showPurchaseForm() {
   document.getElementById("purchase-list-view").style.display = "none";
   document.getElementById("purchase-form-view").classList.add("active");
   window.scrollTo({ top: 0 });
+  armAdminBack();
 }
 function hidePurchaseForm() {
   document.getElementById("purchase-form-view").classList.remove("active");
   document.getElementById("purchase-list-view").style.display = "";
+  disarmAdminBack();
 }
 document.getElementById("btn-purchase-new").addEventListener("click", () => {
   document.getElementById("purchase-form").reset();
@@ -3218,6 +3277,7 @@ async function loadRoastList() {
 }
 
 function renderRoastList(items) {
+  _roastListCache = items || [];
   const el = document.getElementById("roast-list-items");
   if (!items.length) {
     el.innerHTML = '<div class="empty">로스팅 기록이 없습니다.</div>';
@@ -3242,12 +3302,16 @@ function renderRoastList(items) {
         </div>
         ${r.notes ? `<div style="font-size:0.8rem; color:var(--muted); margin-top:4px;">${escapeHtml(r.notes)}</div>` : ""}
         <div class="record-row-actions">
+          <button type="button" class="dup" data-id="${r.id}">복제</button>
           <button type="button" class="delete" data-id="${r.id}">삭제</button>
         </div>
       </div>
     `;
   }).join("");
 
+  el.querySelectorAll(".record-row-actions .dup").forEach(btn => {
+    btn.addEventListener("click", () => openRoastDuplicate(parseInt(btn.dataset.id, 10)));
+  });
   el.querySelectorAll(".record-row-actions .delete").forEach(btn => {
     btn.addEventListener("click", async () => {
       if (!confirm("이 로스팅 기록을 삭제할까요?")) return;
@@ -3262,15 +3326,36 @@ function renderRoastList(items) {
   });
 }
 
+// 로스팅 복제 — 기존 기록을 폼에 채우고 투입/배출만 바꿔 새 기록으로 저장
+function openRoastDuplicate(id) {
+  const r = _roastListCache.find(x => x.id === id);
+  if (!r) return;
+  document.getElementById("roast-form").reset();
+  document.getElementById("roast-field-bean").value = r.green_bean_id || "";
+  document.getElementById("roast-field-date").value = todayStr();
+  document.getElementById("roast-field-input").value = r.input_weight_g != null ? r.input_weight_g : "";
+  document.getElementById("roast-field-output").value = r.output_weight_g != null ? r.output_weight_g : "";
+  document.getElementById("roast-field-level").value = r.roast_level || "";
+  document.getElementById("roast-field-notes").value = r.notes || "";
+  updateRoastLoss();
+  showRoastForm();
+  const inp = document.getElementById("roast-field-input");
+  inp.focus();
+  inp.select();
+  showToast("복제 — 투입/배출량을 확인하세요");
+}
+
 // 로스팅 폼 열기/닫기
 function showRoastForm() {
   document.getElementById("roast-list-view").style.display = "none";
   document.getElementById("roast-form-view").classList.add("active");
   window.scrollTo({ top: 0 });
+  armAdminBack();
 }
 function hideRoastForm() {
   document.getElementById("roast-form-view").classList.remove("active");
   document.getElementById("roast-list-view").style.display = "";
+  disarmAdminBack();
 }
 document.getElementById("btn-roast-new").addEventListener("click", () => {
   document.getElementById("roast-form").reset();

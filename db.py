@@ -955,7 +955,9 @@ def list_green_beans(include_inactive: bool = False) -> list:
             COALESCE(p_sum.purchased_kg, 0) AS purchased_kg,
             COALESCE(r_sum.used_kg, 0) AS used_kg,
             COALESCE(p_sum.purchased_kg, 0) - COALESCE(r_sum.used_kg, 0) AS remaining_kg,
-            COALESCE(p_sum.avg_unit_price, 0) AS avg_unit_price
+            COALESCE(p_sum.avg_unit_price, 0) AS avg_unit_price,
+            COALESCE(r_sum.roast_count, 0) AS roast_count,
+            r_sum.last_roast_date AS last_roast_date
         FROM green_beans gb
         LEFT JOIN suppliers s ON s.id = gb.supplier_id
         LEFT JOIN (
@@ -965,7 +967,8 @@ def list_green_beans(include_inactive: bool = False) -> list:
             FROM purchases GROUP BY green_bean_id
         ) p_sum ON p_sum.green_bean_id = gb.id
         LEFT JOIN (
-            SELECT green_bean_id, SUM(input_weight_g) / 1000.0 AS used_kg
+            SELECT green_bean_id, SUM(input_weight_g) / 1000.0 AS used_kg,
+                   COUNT(*) AS roast_count, MAX(roast_date) AS last_roast_date
             FROM roasting_logs GROUP BY green_bean_id
         ) r_sum ON r_sum.green_bean_id = gb.id
         {where}
