@@ -1299,7 +1299,7 @@ def inventory_list() -> list:
     """재고 목록. 정렬: 재고>0인 것 먼저 (최근 구매일→재고 많은 순), 재고≤0은 아래로.
     각 항목에 last_purchase_date, is_stale(재고0+구매1년이상) 포함."""
     sql = """
-        SELECT gb.id, gb.name, gb.process, gb.grade, gb.is_decaf, gb.status,
+        SELECT gb.id, gb.name, gb.process, gb.grade, gb.is_decaf, gb.status, gb.hidden,
             s.name AS supplier_name, s.short_name AS supplier_short,
             COALESCE(p_sum.purchased_kg, 0) AS purchased_kg,
             COALESCE(r_sum.used_kg, 0) AS used_kg,
