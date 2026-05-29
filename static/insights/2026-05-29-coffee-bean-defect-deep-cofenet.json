@@ -1,0 +1,106 @@
+{
+  "version": 1,
+  "id": "2026-05-29-coffee-bean-defect-deep-cofenet",
+  "date": "2026-05-29",
+  "slug": "coffee-bean-defect-deep-cofenet",
+  "title_ko": "커피 원두 결함 자동 분류를 위한 이중 주의 MobileNet 딥러닝 프레임워크: Deep-CofeNet",
+  "title_original": "Deep-CofeNet: Deep Learning Based Dual Attention MobileNet for Classification of Coffee Bean Defects",
+  "one_liner": "CBI-GAN 다중시점 생성+DA-MobileNet으로 커피 원두 결함 5종을 98.96% 정확도로 분류",
+  "authors": "M. Sandhya, W. Aisha Banu, Leninisha Shanmugam et al.",
+  "journal": "International Journal of Computational Intelligence Systems (Springer)",
+  "pub_date": "2026",
+  "doi": "10.1007/s44196-026-01377-x",
+  "categories_primary": [
+    "장비/공학"
+  ],
+  "categories_secondary": [
+    "머신러닝",
+    "품질관리",
+    "생두"
+  ],
+  "summary": "인도 VIT 첸나이·BSA Crescent 연구팀이 커피 원두 결함 자동 분류를 위한 Deep-CofeNet 딥러닝 파이프라인을 개발했다. CBI-GAN으로 정면 단일 이미지에서 좌·우·후면 3개 시점을 자동 생성하고, TSS 블록으로 특징을 결합한 후, DA-MobileNet으로 5종 결함(good, sour, immature, insect bite, withered)을 분류한다. SCAA 결함 표준 기반 공개 데이터셋에서 98.96% 정확도를 달성하며 기존 전이학습 대비 +12.05%p 향상을 기록했다. 경량 MobileNet 기반 설계로 엣지 디바이스 현장 배포 가능성이 높다.",
+  "key_findings": [
+    "Deep-CofeNet 정확도 98.96% — 전이학습 대비 +12.05%p, CNN 대비 +5.68%p, ML 모델 대비 +1.93%p, 멀티스케일 모델 대비 +0.87%p 향상",
+    "CBI-GAN: 정면 단일 이미지로 좌·우·후면 3개 가상 시점 자동 생성 — 단일 카메라 다중 시점 증강 최초 실증",
+    "TSS 블록: 좌·우·정면 시점 특징 결합으로 후면 뷰 표현 생성, 훈련 샘플 수 증가",
+    "DA-MobileNet 이중 주의(채널+공간)로 5종 결함 분류에서 경량성·정확도 균형 달성",
+    "SCAA 결함 표준 기반 공개 데이터셋 활용 — 산업 표준과의 정합성 확보",
+    "6개 지표(정확도·특이도·정밀도·F1·재현율·원형 일관성 손실)로 다각 검증"
+  ],
+  "methodology": "SCAA 결함 표준 기반 공개 커피 원두 이미지 데이터셋(5종 클래스) 사용. 3단계 파이프라인: (1) CBI-GAN으로 정면→삼면 가상 시점 생성, (2) CSAB 필터링 전처리 + TSS 블록 특징 결합, (3) DA-MobileNet으로 결함 분류. 비교 기준선: 멀티스케일 모델, ML 모델, 전이학습 네트워크, 기본 CNN.",
+  "implications": {
+    "농가/가공장": "단일 카메라 기반 CBI-GAN 방식으로 설비 비용을 낮추어 소규모 농장·협동조합 수준 가공 시설에서도 도입 가능. 수확 후 생두 선별 공정에 컨베이어 연계 비전 시스템으로 즉시 적용 가능.",
+    "로스터/큐그레이더": "입고 단계 자동 결함 선별로 로트 간 원두 품질 일관성 향상. 충해두·미숙두(이취 주요 원인) 사전 제거로 컵 품질 재현성 개선. 경량 모델로 태블릿·임베디드 시스템에서 구동 가능.",
+    "R&D": "CBI-GAN 다중 시점 프레임워크를 카카오·견과류·곡류 등 타 농산물로 확장 가능. 후속 과제: ① 실시간 FPS 검증, ② 품종·처리 방식별 모델 견고성 평가, ③ 결함 심각도 가중치 시스템 개발, ④ 엣지 AI 경량화 최적화."
+  },
+  "limitations": "추론 속도·모델 파라미터 등 실시간 배포 지표 미공개. 데이터셋 품종·산지 미특정으로 일반화 우려. 5종 결함 클래스 한정(확장 결함 목록 미포함). 실제 공장 환경 검증 부재.",
+  "glossary": [
+    {
+      "term": "CBI-GAN",
+      "ko": "원형 경계 인페인팅 GAN — 정면 이미지에서 다중 시점을 생성하는 생성적 적대 신경망"
+    },
+    {
+      "term": "DA-MobileNet",
+      "ko": "이중 주의 MobileNet — 채널·공간 주의를 결합한 경량 분류 신경망"
+    },
+    {
+      "term": "TSS",
+      "ko": "삼면 샘플링 블록 — 좌·우·정면 시점 특징 결합으로 후면 뷰 생성"
+    },
+    {
+      "term": "CSAB filtering",
+      "ko": "대비 신장 적응형 양방향 필터링 — 노이즈 제거 및 결함 영역 대비 향상 전처리"
+    },
+    {
+      "term": "Insect Bite Bean",
+      "ko": "충해두 — 커피 체리 천공충이 원두를 뚫어 발생하는 결함"
+    },
+    {
+      "term": "Sour Bean",
+      "ko": "시어 원두 — 발효 과다로 강한 신맛·식초취가 발생한 결함 원두"
+    },
+    {
+      "term": "SCAA Defect Standard",
+      "ko": "스페셜티 커피 협회 생두 결함 분류 및 등급 체계"
+    },
+    {
+      "term": "Circular Consistency Loss",
+      "ko": "원형 일관성 손실 — GAN 다중 시점 이미지의 기하학적 일관성 측정 손실 함수"
+    },
+    {
+      "term": "Inpainting",
+      "ko": "인페인팅 — 이미지 누락·훼손 영역을 주변 맥락으로 채워 넣는 기법"
+    }
+  ],
+  "citation_apa": "Sandhya, M., Aisha Banu, W., & Shanmugam, L. (2026). Deep-CofeNet: Deep Learning Based Dual Attention MobileNet for Classification of Coffee Bean Defects. International Journal of Computational Intelligence Systems, 19. https://doi.org/10.1007/s44196-026-01377-x",
+  "links": {
+    "doi": "https://doi.org/10.1007/s44196-026-01377-x",
+    "oa_pdf": "",
+    "journal_homepage": "https://link.springer.com/journal/44196"
+  },
+  "source_basis": "abstract_only",
+  "data_charts": [
+    {
+      "type": "bar",
+      "title": "결함 분류 정확도 비교 — Deep-CofeNet vs 기준 모델",
+      "x_labels": [
+        "Deep-CofeNet",
+        "Multiscale 모델",
+        "Machine Learning",
+        "CNN",
+        "전이학습"
+      ],
+      "y_label": "정확도 (%)",
+      "values": [
+        98.96,
+        98.09,
+        97.03,
+        93.28,
+        86.91
+      ],
+      "unit": "%"
+    }
+  ],
+  "drive_doc_url": "https://docs.google.com/document/d/130pqURpnP5H4jT5rDZBmGNqGTS55fGo6e8Ev8me6URk/edit",
+  "hero_image": "/static/img/insights/hero/equipment.svg"
+}

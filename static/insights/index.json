@@ -1,7 +1,25 @@
 {
   "version": 1,
-  "updated_at": "2026-05-28T12:00:30Z",
+  "updated_at": "2026-05-29T12:00:48Z",
   "items": [
+    {
+      "id": "2026-05-29-coffee-bean-defect-deep-cofenet",
+      "date": "2026-05-29",
+      "title_ko": "커피 원두 결함 자동 분류를 위한 이중 주의 MobileNet 딥러닝 프레임워크: Deep-CofeNet",
+      "one_liner": "CBI-GAN 다중시점 생성+DA-MobileNet으로 커피 원두 결함 5종을 98.96% 정확도로 분류",
+      "categories_primary": [
+        "장비/공학"
+      ],
+      "categories_secondary": [
+        "머신러닝",
+        "품질관리",
+        "생두"
+      ],
+      "hero_image": "/static/img/insights/hero/equipment.svg",
+      "journal": "International Journal of Computational Intelligence Systems (Springer)",
+      "pub_date": "2026",
+      "source_basis": "abstract_only"
+    },
     {
       "id": "2026-05-28-arabica-roast-brewing-nutritional-extraction",
       "date": "2026-05-28",
