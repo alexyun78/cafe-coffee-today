@@ -219,11 +219,126 @@ def migrate_purchases(table) -> int:
     return count
 
 
+def _xlsx_date(v) -> str:
+    """openpyxl 셀 값(datetime/date/str) → 'YYYY-MM-DD'."""
+    import datetime
+    if isinstance(v, (datetime.datetime, datetime.date)):
+        return v.strftime("%Y-%m-%d")
+    return parse_date(str(v)) if v is not None else ""
+
+
+def _cell(row, idx):
+    return row[idx].value if idx < len(row) else None
+
+
+def migrate_roasting_xlsx(ws) -> int:
+    """로스팅 탭: 2줄 헤더(투입/배출 병합), 데이터 3행부터.
+    A=날짜 B=로스팅생두 C=구매처 D=가공방식 E=등급 J=투입(g) K=배출(g)."""
+    count = 0
+    for row in ws.iter_rows(min_row=3):
+        date_v = _cell(row, 0)
+        if not date_v:
+            continue
+        raw_name = str(_cell(row, 1) or "").strip()
+        supplier_name = str(_cell(row, 2) or "").strip()
+        process = str(_cell(row, 3) or "").strip()
+        grade = str(_cell(row, 4) or "").strip()
+        input_g = parse_number(str(_cell(row, 9) if _cell(row, 9) is not None else ""))
+        out_v = _cell(row, 10)
+        output_g = parse_number(str(out_v)) if out_v is not None else 0
+        if not supplier_name or not raw_name or input_g == 0:
+            continue
+        gbid = _resolve_bean(raw_name, supplier_name, process, grade)
+        db.create_roasting_log({
+            "green_bean_id": gbid,
+            "roast_date": _xlsx_date(date_v),
+            "input_weight_g": input_g,
+            "output_weight_g": output_g if output_g > 0 else None,
+        })
+        count += 1
+    print(f"  로스팅 기록: {count}건 적재")
+    return count
+
+
+def migrate_purchases_xlsx(ws) -> int:
+    """구입 탭: 1줄 헤더, 데이터 2행부터.
+    A=구입일 B=원두명 C=구입처 D=가공방식 E=등급 F=단가 G=수량(Kg) I=구매액."""
+    count = 0
+    for row in ws.iter_rows(min_row=2):
+        date_v = _cell(row, 0)
+        if not date_v:
+            continue
+        raw_name = str(_cell(row, 1) or "").strip()
+        supplier_name = str(_cell(row, 2) or "").strip()
+        process = str(_cell(row, 3) or "").strip()
+        grade = str(_cell(row, 4) or "").strip()
+        unit_price = int(parse_number(str(_cell(row, 5) if _cell(row, 5) is not None else "")))
+        qty = parse_number(str(_cell(row, 6) if _cell(row, 6) is not None else ""))
+        total_raw = int(parse_number(str(_cell(row, 8) if _cell(row, 8) is not None else "")))
+        if not supplier_name or not raw_name or qty == 0:
+            continue
+        gbid = _resolve_bean(raw_name, supplier_name, process, grade)
+        computed = int(qty * unit_price)
+        discount = computed - total_raw if (total_raw and total_raw < computed) else 0
+        db.create_purchase({
+            "green_bean_id": gbid,
+            "purchase_date": _xlsx_date(date_v),
+            "quantity_kg": qty,
+            "unit_price": unit_price,
+            "discount": discount,
+        })
+        count += 1
+    print(f"  구매 기록: {count}건 적재")
+    return count
+
+
+def run_xlsx(path: str, reload: bool):
+    """XLSX(download_file_content export)를 직접 읽어 적재.
+    read_file_content 텍스트 export 는 큰 시트를 절삭하므로 XLSX 경로를 권장."""
+    import openpyxl
+    wb = openpyxl.load_workbook(path, data_only=True)
+    if "로스팅" not in wb.sheetnames or "구입" not in wb.sheetnames:
+        print(f"필요한 탭이 없습니다. 발견: {wb.sheetnames}"); sys.exit(1)
+    roast_ws, buy_ws = wb["로스팅"], wb["구입"]
+    print(f"  로스팅 탭: {roast_ws.max_row}행, 구입 탭: {buy_ws.max_row}행")
+
+    db.init_schema()
+    if reload:
+        with db.connect() as conn:
+            conn.execute("DELETE FROM roasting_logs")
+            conn.execute("DELETE FROM purchases")
+        print("[--reload] roasting_logs, purchases 비움")
+    else:
+        with db.connect() as conn:
+            existing = conn.execute("SELECT COUNT(*) AS c FROM purchases").fetchone()["c"]
+        if existing > 0:
+            print(f"이미 {existing}건의 구매 기록이 있습니다. --reload 로 전체 교체하세요.")
+            return
+
+    print("\n구매 기록 적재 중...")
+    p_count = migrate_purchases_xlsx(buy_ws)
+    print("\n로스팅 기록 적재 중...")
+    r_count = migrate_roasting_xlsx(roast_ws)
+    _report(p_count, r_count)
+
+
+def _report(p_count, r_count):
+    print("\n재고 확인 (상위 일부):")
+    for item in db.inventory_list()[:15]:
+        remaining = item["remaining_kg"]
+        label = (f"[{item.get('supplier_short')}] " if item.get("supplier_short") else "") + item["name"]
+        status = "OK" if remaining > 5 else "LOW" if remaining > 0 else "ZERO"
+        print(f"  [{status}] {label}: {remaining:.1f}kg (구매 {item['purchased_kg']:.1f} - 사용 {item['used_kg']:.1f})")
+    print(f"\n완료: 공급업체 {len(db.list_suppliers())}곳, "
+          f"생두 {len(db.list_green_beans(True))}종, "
+          f"구매 {p_count}건, 로스팅 {r_count}건")
+
+
 def main():
     args = [a for a in sys.argv[1:] if not a.startswith("--")]
     reload = "--reload" in sys.argv
     if not args:
-        print("Usage: python scripts/migrate_spreadsheet.py <export_file> [--reload]")
+        print("Usage: python scripts/migrate_spreadsheet.py <export_file|.xlsx> [--reload]")
         sys.exit(1)
     path = args[0]
     if not os.path.exists(path):
@@ -231,6 +346,10 @@ def main():
         sys.exit(1)
 
     print(f"소스: {path}")
+    if path.lower().endswith(".xlsx"):
+        run_xlsx(path, reload)
+        return
+
     content = load_content(path)
     lines = content.split("\n")
     tables = find_tables(lines)
