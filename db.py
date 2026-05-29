@@ -110,6 +110,7 @@ CREATE TABLE IF NOT EXISTS green_beans (
     is_decaf        INTEGER DEFAULT 0,
     status          TEXT DEFAULT '활성',
     hidden          INTEGER NOT NULL DEFAULT 0,
+    stock_adjustment_kg REAL NOT NULL DEFAULT 0,
     created_at      TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now')),
     updated_at      TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now')),
     UNIQUE(name, supplier_id, process)
@@ -186,6 +187,7 @@ _EXTRA_COLUMNS = (
 # 이미 생성된 green_beans 테이블에 나중에 추가된 컬럼 (기존 서버 DB 마이그레이션용)
 _GB_EXTRA_COLUMNS = (
     ("hidden", "INTEGER NOT NULL DEFAULT 0"),
+    ("stock_adjustment_kg", "REAL NOT NULL DEFAULT 0"),
 )
 
 
@@ -979,7 +981,8 @@ def list_green_beans(include_inactive: bool = False) -> list:
         SELECT gb.*, s.name AS supplier_name, s.short_name AS supplier_short,
             COALESCE(p_sum.purchased_kg, 0) AS purchased_kg,
             COALESCE(r_sum.used_kg, 0) AS used_kg,
-            COALESCE(p_sum.purchased_kg, 0) - COALESCE(r_sum.used_kg, 0) AS remaining_kg,
+            COALESCE(p_sum.purchased_kg, 0) - COALESCE(r_sum.used_kg, 0)
+                + COALESCE(gb.stock_adjustment_kg, 0) AS remaining_kg,
             COALESCE(p_sum.avg_unit_price, 0) AS avg_unit_price,
             COALESCE(r_sum.roast_count, 0) AS roast_count,
             r_sum.last_roast_date AS last_roast_date
@@ -1009,7 +1012,8 @@ def get_green_bean(gb_id: int) -> Optional[dict]:
         SELECT gb.*, s.name AS supplier_name, s.short_name AS supplier_short,
             COALESCE(p_sum.purchased_kg, 0) AS purchased_kg,
             COALESCE(r_sum.used_kg, 0) AS used_kg,
-            COALESCE(p_sum.purchased_kg, 0) - COALESCE(r_sum.used_kg, 0) AS remaining_kg,
+            COALESCE(p_sum.purchased_kg, 0) - COALESCE(r_sum.used_kg, 0)
+                + COALESCE(gb.stock_adjustment_kg, 0) AS remaining_kg,
             COALESCE(p_sum.avg_unit_price, 0) AS avg_unit_price,
             COALESCE(r_sum.avg_loss_pct, 0) AS avg_loss_pct
         FROM green_beans gb
@@ -1105,6 +1109,39 @@ def set_green_bean_hidden(gb_id: int, hidden: bool) -> bool:
             (1 if hidden else 0, gb_id),
         )
         return cur.rowcount > 0
+
+
+def set_green_bean_remaining(gb_id: int, target_kg: float) -> Optional[float]:
+    """현재 재고(잔여 수량)를 target_kg 로 직접 맞춘다.
+
+    재고는 computed (SUM(구매) - SUM(로스팅 투입) + stock_adjustment_kg) 이므로,
+    구매/로스팅 합계는 그대로 두고 보정값 stock_adjustment_kg 만 갱신한다:
+        adjustment = target - (purchased - used)
+    이후의 구매(+)·로스팅(-)은 합계에 자연히 반영되어 재고가 올바르게 증감한다.
+
+    성공 시 새 stock_adjustment_kg 를 반환, 생두가 없으면 None.
+    """
+    with connect() as conn:
+        row = conn.execute(
+            """
+            SELECT COALESCE((SELECT SUM(quantity_kg) FROM purchases
+                             WHERE green_bean_id=gb.id), 0) AS purchased_kg,
+                   COALESCE((SELECT SUM(input_weight_g)/1000.0 FROM roasting_logs
+                             WHERE green_bean_id=gb.id), 0) AS used_kg
+            FROM green_beans gb WHERE gb.id=?
+            """,
+            (gb_id,),
+        ).fetchone()
+        if not row:
+            return None
+        adjustment = float(target_kg) - (float(row["purchased_kg"]) - float(row["used_kg"]))
+        adjustment = round(adjustment, 3)
+        conn.execute(
+            "UPDATE green_beans SET stock_adjustment_kg=?, "
+            "updated_at=strftime('%Y-%m-%dT%H:%M:%SZ','now') WHERE id=?",
+            (adjustment, gb_id),
+        )
+        return adjustment
 
 
 def hard_delete_green_bean(gb_id: int) -> bool:
@@ -1335,7 +1372,8 @@ def inventory_list() -> list:
             s.name AS supplier_name, s.short_name AS supplier_short,
             COALESCE(p_sum.purchased_kg, 0) AS purchased_kg,
             COALESCE(r_sum.used_kg, 0) AS used_kg,
-            COALESCE(p_sum.purchased_kg, 0) - COALESCE(r_sum.used_kg, 0) AS remaining_kg,
+            COALESCE(p_sum.purchased_kg, 0) - COALESCE(r_sum.used_kg, 0)
+                + COALESCE(gb.stock_adjustment_kg, 0) AS remaining_kg,
             COALESCE(p_sum.avg_unit_price, 0) AS avg_unit_price,
             p_sum.last_purchase_date
         FROM green_beans gb
@@ -1353,9 +1391,11 @@ def inventory_list() -> list:
         ) r_sum ON r_sum.green_bean_id = gb.id
         WHERE gb.status = '활성'
         ORDER BY
-            CASE WHEN (COALESCE(p_sum.purchased_kg,0) - COALESCE(r_sum.used_kg,0)) > 0 THEN 0 ELSE 1 END,
+            CASE WHEN (COALESCE(p_sum.purchased_kg,0) - COALESCE(r_sum.used_kg,0)
+                + COALESCE(gb.stock_adjustment_kg,0)) > 0 THEN 0 ELSE 1 END,
             p_sum.last_purchase_date DESC,
-            (COALESCE(p_sum.purchased_kg,0) - COALESCE(r_sum.used_kg,0)) DESC
+            (COALESCE(p_sum.purchased_kg,0) - COALESCE(r_sum.used_kg,0)
+                + COALESCE(gb.stock_adjustment_kg,0)) DESC
     """
     cutoff = _months_ago_iso(12)
     with connect() as conn:

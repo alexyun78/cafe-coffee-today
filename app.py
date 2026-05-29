@@ -680,6 +680,22 @@ def api_green_bean_update(gb_id):
         return jsonify({"success": False, "error": "not found"}), 404
     return jsonify({"success": True, "item": db.get_green_bean(gb_id)})
 
+@app.put("/api/green-beans/<int:gb_id>/stock")
+@require_pin
+def api_green_bean_set_stock(gb_id):
+    """현재 재고(잔여 수량 kg)를 직접 설정. 보정값만 갱신하므로 이후 구매/로스팅은 정상 증감."""
+    data = request.get_json(silent=True) or {}
+    if "remaining_kg" not in data or data.get("remaining_kg") in (None, ""):
+        return jsonify({"success": False, "error": "remaining_kg 필수"}), 400
+    try:
+        target = float(data["remaining_kg"])
+    except (TypeError, ValueError):
+        return jsonify({"success": False, "error": "잘못된 수량"}), 400
+    adj = db.set_green_bean_remaining(gb_id, target)
+    if adj is None:
+        return jsonify({"success": False, "error": "not found"}), 404
+    return jsonify({"success": True, "item": db.get_green_bean(gb_id)})
+
 @app.delete("/api/green-beans/<int:gb_id>")
 @require_pin
 def api_green_bean_delete(gb_id):

@@ -815,6 +815,12 @@
     font-size: 0.85rem; font-weight: 700; padding: 4px 12px;
     border-radius: 14px; white-space: nowrap;
   }
+  button.bean-card-stock {
+    border: none; font-family: inherit; cursor: pointer;
+    display: inline-flex; align-items: center; gap: 4px; min-height: 32px;
+  }
+  button.bean-card-stock:hover { filter: brightness(0.96); }
+  .bean-stock-pencil { font-size: 0.72rem; opacity: 0.6; }
   .bean-stock-ok { background: #e8f5e9; color: #2e7d32; }
   .bean-stock-low { background: #fff3e0; color: #e65100; }
   .bean-stock-zero { background: #ffebee; color: #c62828; }
@@ -3393,7 +3399,7 @@ function renderBeanList(items) {
           </div>
         </div>
         <div class="bean-card-right">
-          <span class="bean-card-stock ${stockCls}">${remaining.toFixed(1)} kg</span>
+          <button type="button" class="bean-card-stock ${stockCls} bean-stock-btn" data-id="${b.id}" title="탭하여 재고 수정">${remaining.toFixed(1)} kg<span class="bean-stock-pencil">✎</span></button>
           <div class="bean-card-actions">
             ${actionBtns}
           </div>
@@ -3412,6 +3418,12 @@ function renderBeanList(items) {
     btn.addEventListener("click", (e) => {
       e.stopPropagation();
       openBeanEdit(parseInt(btn.dataset.id, 10));
+    });
+  });
+  el.querySelectorAll(".bean-stock-btn").forEach(btn => {
+    btn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      openStockEdit(parseInt(btn.dataset.id, 10));
     });
   });
   el.querySelectorAll(".bean-hide-btn, .bean-unhide-btn").forEach(btn => {
@@ -3433,6 +3445,28 @@ document.getElementById("btn-bean-hidden-toggle").addEventListener("click", () =
   _beanShowHidden = !_beanShowHidden;
   renderBeanList(_beanListCache);
 });
+
+// 생두 목록에서 현재 재고(잔여 수량)를 직접 설정. 구매·로스팅 합계는 그대로 두고
+// 보정값만 갱신하므로 이후 구매(+)·로스팅(-)이 정상적으로 증감한다.
+async function openStockEdit(id) {
+  const b = (_beanListCache || []).find(x => x.id === id);
+  if (!b) return;
+  const cur = Number(b.remaining_kg) || 0;
+  const input = window.prompt(
+    `'${b.name}' 현재 재고(kg)\n구매·로스팅 합계는 그대로 두고 잔여 수량만 보정합니다.\n이후 구매·로스팅은 정상 반영됩니다.`,
+    cur.toFixed(1),
+  );
+  if (input === null) return;
+  const val = parseFloat(String(input).replace(",", "."));
+  if (isNaN(val)) { showBanner("숫자를 입력하세요.", "error"); return; }
+  try {
+    await api("PUT", "/api/green-beans/" + id + "/stock", { remaining_kg: val });
+    showToast(`재고가 ${val.toFixed(1)}kg 로 수정되었습니다`);
+    await loadBeanList();
+  } catch (err) {
+    if (err.message !== "unauthorized") showBanner("수정 실패: " + err.message, "error");
+  }
+}
 
 // ---------- 관리자 폼 뒤로가기(Android back) 처리 ----------
 // 생두/구매/로스팅 폼이 열려 있으면 back키가 관리자 모드를 벗어나지 않고

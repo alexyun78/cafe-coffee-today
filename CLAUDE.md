@@ -374,7 +374,7 @@ ssh-keyscan 49.247.207.115 2>/dev/null | grep -v '^#'  # 호스트키 복사
 | `blends` + `blend_components` | 블렌드 구성비 | Phase 5 예정 |
 
 - `coffees.green_bean_id` (nullable FK → green_beans) — 오늘의커피와 생두 마스터 연결
-- **재고 = computed query**: `SUM(purchases.qty) - SUM(roasting_logs.input/1000)` — 테이블이 아님
+- **재고 = computed query**: `SUM(purchases.qty) - SUM(roasting_logs.input/1000) + green_beans.stock_adjustment_kg` — 테이블이 아님. `stock_adjustment_kg`는 생두 목록에서 "최종 수량"을 직접 설정할 때만 갱신되는 보정값(`PUT /api/green-beans/<id>/stock`). 보정 후에도 구매(+)·로스팅(-)은 합계에 자연히 반영됨.
 - 스프레드시트 데이터는 `scripts/seed_green_beans.sql`로 `init_schema()`에서 자동 시드 (서버 배포 시 수동 작업 불필요)
 
 ### 생두 관리 API (모두 `@require_pin`)
@@ -385,6 +385,7 @@ ssh-keyscan 49.247.207.115 2>/dev/null | grep -v '^#'  # 호스트키 복사
 | 생두 | `/api/green-beans[/<id>]` | GET/POST/PUT/DELETE |
 | | `/api/green-beans/suggestions` | GET |
 | | `/api/green-beans/<id>/for-coffee` | GET (오늘의커피 폼 자동완성용) |
+| | `/api/green-beans/<id>/stock` | PUT (최종 수량 직접 설정 → stock_adjustment_kg 보정) |
 | 구매 | `/api/purchases[/<id>]` | GET/POST/PUT/DELETE |
 | 로스팅 | `/api/roasting-logs[/<id>]` | GET/POST/PUT/DELETE |
 | 재고 | `/api/inventory` | GET |
