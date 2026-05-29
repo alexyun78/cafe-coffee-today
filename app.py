@@ -765,6 +765,30 @@ def api_roasting_logs_list():
     gb_id = int(gb_id) if gb_id else None
     return jsonify({"success": True, "items": db.list_roasting_logs(gb_id)})
 
+def _ensure_scheduled_coffee(green_bean_id, roast_date):
+    """로스팅한 생두를 '오늘의 커피 예정'으로 등록. 같은 이름의 활성(예정/진행 중)
+    커피가 이미 있으면 중복 생성하지 않는다 (배치 로스팅 대비)."""
+    bean = db.get_green_bean(int(green_bean_id))
+    if not bean:
+        return None
+    name = (bean.get("name") or "").strip()
+    if not name:
+        return None
+    existing = db.find_active_by_name(name)
+    if existing:
+        return {"created": False, "id": existing["id"], "name": name}
+    cid = db.create({
+        "name": name,
+        "roastery": "92도씨 로스터리",
+        "roast_date": roast_date,
+        "process": bean.get("process"),
+        "cup_notes": bean.get("cup_notes"),
+        "status": "예정",
+        "green_bean_id": int(green_bean_id),
+    })
+    return {"created": True, "id": cid, "name": name}
+
+
 @app.post("/api/roasting-logs")
 @require_pin
 def api_roasting_log_create():
@@ -774,7 +798,10 @@ def api_roasting_log_create():
         if not data.get(k):
             return jsonify({"success": False, "error": f"{k} 필수"}), 400
     new_id = db.create_roasting_log(data)
-    return jsonify({"success": True, "id": new_id})
+    coffee = None
+    if data.get("create_coffee"):
+        coffee = _ensure_scheduled_coffee(data["green_bean_id"], data["roast_date"])
+    return jsonify({"success": True, "id": new_id, "coffee": coffee})
 
 @app.put("/api/roasting-logs/<int:rid>")
 @require_pin

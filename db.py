@@ -473,6 +473,7 @@ def create(data: dict) -> int:
         "roast_point",
         "availability",
         "notion_id",
+        "green_bean_id",
     )
     values = [data.get(f) for f in fields]
     with connect() as conn:
@@ -508,6 +509,19 @@ def update(coffee_id: int, data: dict) -> bool:
             f"UPDATE coffees SET {','.join(sets)} WHERE id=?", values
         )
         return cur.rowcount > 0
+
+
+def find_active_by_name(name: str) -> Optional[dict]:
+    """같은 이름의 '예정'/'진행 중' 커피가 있으면 반환 (중복 등록 방지용)."""
+    if not name:
+        return None
+    with connect() as conn:
+        row = conn.execute(
+            "SELECT * FROM coffees WHERE name=? AND status IN ('예정','진행 중') "
+            "ORDER BY id DESC LIMIT 1",
+            (name,),
+        ).fetchone()
+    return dict(row) if row else None
 
 
 def set_availability_by_name(name: str, value: str) -> int:

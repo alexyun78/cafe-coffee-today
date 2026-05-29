@@ -1443,6 +1443,15 @@
             <textarea id="roast-field-notes" placeholder="특이사항"></textarea>
           </div>
 
+          <div class="field">
+            <label>오늘의 커피 연동</label>
+            <label class="toggle-switch">
+              <input type="checkbox" id="roast-field-make-coffee" checked>
+              <span class="toggle-track"></span>
+              오늘의 커피 '예정'으로 등록
+            </label>
+          </div>
+
           <div class="button-bar">
             <button type="button" class="btn btn-secondary" id="btn-roast-cancel">취소</button>
             <button type="submit" class="btn btn-primary" id="btn-roast-save">저장</button>
@@ -3918,11 +3927,15 @@ document.getElementById("roast-form").addEventListener("submit", async (e) => {
     output_weight_g: parseFloat(document.getElementById("roast-field-output").value) || null,
     roast_level: document.getElementById("roast-field-level").value.trim() || null,
     notes: document.getElementById("roast-field-notes").value.trim() || null,
+    create_coffee: document.getElementById("roast-field-make-coffee").checked,
   };
 
   try {
-    await api("POST", "/api/roasting-logs", payload);
-    showToast("로스팅 기록 추가됨");
+    const res = await api("POST", "/api/roasting-logs", payload);
+    const c = res && res.coffee;
+    if (c && c.created) showToast(`로스팅 기록 추가 — '${c.name}' 오늘의 커피 예정 등록`);
+    else if (c && !c.created) showToast(`로스팅 기록 추가 — '${c.name}' 이미 예정 등록됨`);
+    else showToast("로스팅 기록 추가됨");
     hideRoastForm();
     loadRoastList();
   } catch (err) {
