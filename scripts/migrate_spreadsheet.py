@@ -1,12 +1,17 @@
-"""스프레드시트 데이터 → DB 마이그레이션.
+"""스프레드시트(로스팅기록_2026) → DB 마이그레이션.
 
-Google Drive MCP 에서 내보낸 파일을 파싱하여
+Google Drive MCP `read_file_content` 가 내보낸 파일(JSON {fileContent})을 파싱하여
 suppliers, green_beans, purchases, roasting_logs 테이블에 적재.
 
-Usage:
-    python scripts/migrate_spreadsheet.py [export_file_path]
+내보낸 내용은 여러 탭이 파이프(|) 구분 마크다운 표로 이어붙여져 있다.
+표는 헤더 다음 줄의 `:-:` 구분선으로 식별하고, 컬럼은 헤더 이름으로 매핑한다
+(행 위치 하드코딩 X — 시트가 늘어나도 안전).
 
-export_file_path 를 생략하면 기본 경로에서 읽음.
+Usage:
+    python scripts/migrate_spreadsheet.py <export_file_path> [--reload]
+
+    --reload : 적재 전에 roasting_logs, purchases 테이블을 비운다 (전체 교체).
+               (suppliers/green_beans 는 유지하고 없는 항목만 추가)
 """
 import json
 import os
@@ -15,13 +20,6 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import db
-
-DEFAULT_EXPORT = os.path.join(
-    os.path.expanduser("~"),
-    ".claude", "projects", "D--python-92-cafe-today-coffee",
-    "feeb080c-5ae4-40e1-8fed-ec0b444a824b", "tool-results",
-    "mcp-claude_ai_Google_Drive-read_file_content-1779889746473.txt",
-)
 
 SUPPLIER_MAP = {
     "레햄코리아": "레햄",
@@ -41,8 +39,7 @@ def load_content(path: str) -> str:
 
 
 def parse_cells(line: str) -> list:
-    cells = line.split("|")
-    cells = [c.strip() for c in cells]
+    cells = [c.strip() for c in line.split("|")]
     if cells and cells[0] == "":
         cells = cells[1:]
     if cells and cells[-1] == "":
@@ -50,15 +47,42 @@ def parse_cells(line: str) -> list:
     return cells
 
 
+def is_separator(line: str) -> bool:
+    return bool(re.search(r":-+:", line)) and "|" in line
+
+
+def find_tables(lines: list) -> list:
+    """[(header_cells, [row_cells,...]), ...]. 헤더는 :-: 구분선 바로 위 줄."""
+    sep_idx = [i for i in range(1, len(lines)) if is_separator(lines[i])]
+    headers = [s - 1 for s in sep_idx]
+    tables = []
+    for k, h in enumerate(headers):
+        start = h + 2
+        end = headers[k + 1] if k + 1 < len(headers) else len(lines)
+        rows = [parse_cells(lines[x]) for x in range(start, end)]
+        tables.append((parse_cells(lines[h]), rows))
+    return tables
+
+
+def _norm_header(s: str) -> str:
+    return re.sub(r"&#\d+;", " ", s).replace("\\", "").strip()
+
+
+def find_col(header: list, *keywords, exclude=()) -> int:
+    for idx, name in enumerate(header):
+        n = _norm_header(name)
+        if all(k in n for k in keywords) and not any(e in n for e in exclude):
+            return idx
+    return -1
+
+
 def clean_name(raw: str) -> tuple:
     raw = raw.replace("\\[", "[").replace("\\]", "]").strip()
     m = re.match(r"^\[([^\]]+)\]\s*(.+)$", raw)
     if m:
-        prefix = m.group(1).strip()
-        name = m.group(2).strip()
+        prefix, name = m.group(1).strip(), m.group(2).strip()
     else:
-        prefix = ""
-        name = raw
+        prefix, name = "", raw
     cup_match = re.search(r"\(([^)]+)\)$", name)
     cup_notes = cup_match.group(1).strip() if cup_match else ""
     if cup_match:
@@ -68,14 +92,14 @@ def clean_name(raw: str) -> tuple:
 
 def parse_date(d: str) -> str:
     d = d.replace("\\.", ".").strip()
-    m = re.match(r"(\d{4})\.\s*(\d{2})\.\s*(\d{2})", d)
+    m = re.match(r"(\d{4})\.\s*(\d{1,2})\.\s*(\d{1,2})", d)
     if m:
-        return f"{m.group(1)}-{m.group(2)}-{m.group(3)}"
+        return f"{int(m.group(1)):04d}-{int(m.group(2)):02d}-{int(m.group(3)):02d}"
     return d
 
 
 def parse_number(s: str) -> float:
-    s = s.replace(",", "").strip()
+    s = (s or "").replace(",", "").replace("\\", "").strip()
     try:
         return float(s)
     except ValueError:
@@ -91,9 +115,7 @@ def ensure_supplier(name: str) -> int:
     return db.create_supplier({"name": name, "short_name": short})
 
 
-def ensure_green_bean(name: str, supplier_id: int, process: str,
-                      grade: str = "", cup_notes: str = "",
-                      is_decaf: int = 0) -> int:
+def ensure_green_bean(name, supplier_id, process, grade="", cup_notes="", is_decaf=0) -> int:
     with db.connect() as conn:
         row = conn.execute(
             "SELECT id FROM green_beans WHERE name=? AND supplier_id=? AND process=?",
@@ -107,103 +129,103 @@ def ensure_green_bean(name: str, supplier_id: int, process: str,
                 )
             return row["id"]
     return db.create_green_bean({
-        "name": name,
-        "supplier_id": supplier_id,
-        "process": process,
-        "grade": grade,
-        "cup_notes": cup_notes,
-        "is_decaf": is_decaf,
+        "name": name, "supplier_id": supplier_id, "process": process,
+        "grade": grade, "cup_notes": cup_notes, "is_decaf": is_decaf,
     })
 
 
-def migrate_purchases(lines: list):
-    count = 0
-    for i in range(306, min(len(lines), 380)):
-        line = lines[i].strip()
-        if not line or "| :-:" in line:
-            continue
-        cells = parse_cells(line)
-        if len(cells) < 9:
-            continue
-        date_str = cells[0]
-        if not re.search(r"\d{4}", date_str):
-            continue
-        date = parse_date(date_str)
-        raw_name = cells[1]
-        supplier_name = cells[2].strip()
-        process = cells[3].strip()
-        grade = cells[4].strip()
-        unit_price = int(parse_number(cells[5]))
-        qty = parse_number(cells[6])
-        discount_raw = parse_number(cells[7])
-        total_raw = int(parse_number(cells[8]))
+def _resolve_bean(raw_name, supplier_name, process, grade):
+    prefix, bean_name, cup_notes = clean_name(raw_name)
+    is_decaf = 1 if ("디카페인" in process or "디카페인" in bean_name) else 0
+    sid = ensure_supplier(supplier_name)
+    gbid = ensure_green_bean(bean_name, sid, process, grade, cup_notes, is_decaf)
+    return gbid
 
+
+def migrate_roasting(table) -> int:
+    header, rows = table
+    c_date = find_col(header, "날짜")
+    c_name = find_col(header, "생두")
+    c_sup = find_col(header, "구매처")
+    c_proc = find_col(header, "가공")
+    c_grade = find_col(header, "등급")
+    c_in = find_col(header, "투입", exclude=("배출", "수분"))
+    c_out = find_col(header, "배출")
+    count = 0
+    for cells in rows:
+        if max(c_date, c_name, c_sup, c_proc, c_in, c_out) >= len(cells):
+            continue
+        if not re.search(r"\d{4}", cells[c_date]):
+            continue
+        raw_name = cells[c_name].strip()
+        supplier_name = cells[c_sup].strip()
+        process = cells[c_proc].strip()
+        grade = cells[c_grade].strip() if 0 <= c_grade < len(cells) else ""
+        input_g = parse_number(cells[c_in])
+        output_g = parse_number(cells[c_out])
+        if not supplier_name or not raw_name or input_g == 0:
+            continue
+        gbid = _resolve_bean(raw_name, supplier_name, process, grade)
+        db.create_roasting_log({
+            "green_bean_id": gbid,
+            "roast_date": parse_date(cells[c_date]),
+            "input_weight_g": input_g,
+            "output_weight_g": output_g if output_g > 0 else None,
+        })
+        count += 1
+    print(f"  로스팅 기록: {count}건 적재")
+    return count
+
+
+def migrate_purchases(table) -> int:
+    header, rows = table
+    c_date = find_col(header, "구입일")
+    if c_date < 0:
+        c_date = find_col(header, "날짜")
+    c_name = find_col(header, "원두명")
+    c_sup = find_col(header, "구입처")
+    c_proc = find_col(header, "가공")
+    c_grade = find_col(header, "등급")
+    c_price = find_col(header, "단가")
+    c_qty = find_col(header, "수량")
+    c_total = find_col(header, "구매액")
+    count = 0
+    for cells in rows:
+        if max(c_date, c_name, c_sup, c_price, c_qty, c_total) >= len(cells):
+            continue
+        if not re.search(r"\d{4}", cells[c_date]):
+            continue
+        raw_name = cells[c_name].strip()
+        supplier_name = cells[c_sup].strip()
+        process = cells[c_proc].strip() if 0 <= c_proc < len(cells) else ""
+        grade = cells[c_grade].strip() if 0 <= c_grade < len(cells) else ""
+        unit_price = int(parse_number(cells[c_price]))
+        qty = parse_number(cells[c_qty])
+        total_raw = int(parse_number(cells[c_total]))
         if not supplier_name or not raw_name or qty == 0:
             continue
-
-        prefix, bean_name, cup_notes = clean_name(raw_name)
-        is_decaf = 1 if "디카페인" in process or "디카페인" in bean_name else 0
-        sid = ensure_supplier(supplier_name)
-        gbid = ensure_green_bean(bean_name, sid, process, grade, cup_notes, is_decaf)
-
-        computed_total = int(qty * unit_price)
-        discount = computed_total - total_raw if total_raw < computed_total else 0
-
+        gbid = _resolve_bean(raw_name, supplier_name, process, grade)
+        computed = int(qty * unit_price)
+        discount = computed - total_raw if (total_raw and total_raw < computed) else 0
         db.create_purchase({
             "green_bean_id": gbid,
-            "purchase_date": date,
+            "purchase_date": parse_date(cells[c_date]),
             "quantity_kg": qty,
             "unit_price": unit_price,
             "discount": discount,
         })
         count += 1
-    print(f"  구매 기록: {count}건 이전")
-    return count
-
-
-def migrate_roasting(lines: list):
-    count = 0
-    for i in range(2, 210):
-        line = lines[i].strip()
-        if not line or "| :-:" in line:
-            continue
-        cells = parse_cells(line)
-        if len(cells) < 11:
-            continue
-        date_str = cells[0]
-        if not re.search(r"\d{4}", date_str):
-            continue
-        date = parse_date(date_str)
-        raw_name = cells[1]
-        supplier_name = cells[2].strip()
-        process = cells[3].strip()
-        grade = cells[4].strip()
-        unit_price = int(parse_number(cells[5]))
-        loss_pct = parse_number(cells[8])
-        input_g = parse_number(cells[9])
-        output_g = parse_number(cells[10])
-
-        if not supplier_name or not raw_name or input_g == 0:
-            continue
-
-        prefix, bean_name, cup_notes = clean_name(raw_name)
-        is_decaf = 1 if "디카페인" in process or "디카페인" in bean_name else 0
-        sid = ensure_supplier(supplier_name)
-        gbid = ensure_green_bean(bean_name, sid, process, grade, cup_notes, is_decaf)
-
-        db.create_roasting_log({
-            "green_bean_id": gbid,
-            "roast_date": date,
-            "input_weight_g": input_g,
-            "output_weight_g": output_g if output_g > 0 else None,
-        })
-        count += 1
-    print(f"  로스팅 기록: {count}건 이전")
+    print(f"  구매 기록: {count}건 적재")
     return count
 
 
 def main():
-    path = sys.argv[1] if len(sys.argv) > 1 else DEFAULT_EXPORT
+    args = [a for a in sys.argv[1:] if not a.startswith("--")]
+    reload = "--reload" in sys.argv
+    if not args:
+        print("Usage: python scripts/migrate_spreadsheet.py <export_file> [--reload]")
+        sys.exit(1)
+    path = args[0]
     if not os.path.exists(path):
         print(f"파일을 찾을 수 없습니다: {path}")
         sys.exit(1)
@@ -211,32 +233,45 @@ def main():
     print(f"소스: {path}")
     content = load_content(path)
     lines = content.split("\n")
-    print(f"총 {len(lines)}줄 파싱")
+    tables = find_tables(lines)
+    print(f"총 {len(lines)}줄, 표 {len(tables)}개 발견")
+
+    roast_tbl = next((t for t in tables if find_col(t[0], "생두") >= 0
+                      and find_col(t[0], "배출") >= 0), None)
+    purchase_tbl = next((t for t in tables if find_col(t[0], "구매액") >= 0), None)
+    if not roast_tbl:
+        print("로스팅 표를 찾지 못했습니다."); sys.exit(1)
+    if not purchase_tbl:
+        print("구매 표를 찾지 못했습니다."); sys.exit(1)
+    print(f"  로스팅 표: 컬럼 {len(roast_tbl[0])}, 행 {len(roast_tbl[1])}")
+    print(f"  구매 표: 컬럼 {len(purchase_tbl[0])}, 행 {len(purchase_tbl[1])}")
 
     db.init_schema()
 
-    with db.connect() as conn:
-        existing = conn.execute("SELECT COUNT(*) AS c FROM purchases").fetchone()["c"]
+    if reload:
+        with db.connect() as conn:
+            conn.execute("DELETE FROM roasting_logs")
+            conn.execute("DELETE FROM purchases")
+        print("[--reload] roasting_logs, purchases 비움")
+    else:
+        with db.connect() as conn:
+            existing = conn.execute("SELECT COUNT(*) AS c FROM purchases").fetchone()["c"]
         if existing > 0:
-            print(f"이미 {existing}건의 구매 기록이 있습니다. 중복 방지를 위해 건너뜁니다.")
-            print("초기화하려면 purchases, roasting_logs 테이블을 비우고 다시 실행하세요.")
+            print(f"이미 {existing}건의 구매 기록이 있습니다. --reload 로 전체 교체하세요.")
             return
 
-    print("\n구매 기록 이전 중...")
-    p_count = migrate_purchases(lines)
+    print("\n구매 기록 적재 중...")
+    p_count = migrate_purchases(purchase_tbl)
+    print("\n로스팅 기록 적재 중...")
+    r_count = migrate_roasting(roast_tbl)
 
-    print("\n로스팅 기록 이전 중...")
-    r_count = migrate_roasting(lines)
-
-    print("\n재고 확인:")
+    print("\n재고 확인 (상위 일부):")
     inv = db.inventory_list()
-    for item in inv:
+    for item in inv[:15]:
         remaining = item["remaining_kg"]
-        name = item["name"]
-        short = item.get("supplier_short") or ""
-        label = f"[{short}] {name}" if short else name
-        status = "✅" if remaining > 5 else "⚠️" if remaining > 0 else "❌"
-        print(f"  {status} {label}: {remaining:.1f}kg (구매 {item['purchased_kg']:.1f}kg - 사용 {item['used_kg']:.1f}kg)")
+        label = (f"[{item.get('supplier_short')}] " if item.get("supplier_short") else "") + item["name"]
+        status = "OK" if remaining > 5 else "LOW" if remaining > 0 else "ZERO"
+        print(f"  [{status}] {label}: {remaining:.1f}kg (구매 {item['purchased_kg']:.1f} - 사용 {item['used_kg']:.1f})")
 
     print(f"\n완료: 공급업체 {len(db.list_suppliers())}곳, "
           f"생두 {len(db.list_green_beans(True))}종, "
