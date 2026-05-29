@@ -750,17 +750,29 @@ def api_purchases_list():
 @require_pin
 def api_purchase_create():
     data = request.get_json(silent=True) or {}
-    required = ("green_bean_id", "purchase_date", "quantity_kg", "unit_price")
-    for k in required:
+    for k in ("purchase_date", "quantity_kg", "unit_price"):
         if not data.get(k):
             return jsonify({"success": False, "error": f"{k} 필수"}), 400
-    new_id = db.create_purchase(data)
-    return jsonify({"success": True, "id": new_id})
+    # 생두는 green_bean_id 로 지정하거나, 생두 정보(name+process)로 찾기/생성
+    if not data.get("green_bean_id") and (not data.get("name") or not data.get("process")):
+        return jsonify({"success": False, "error": "생두 선택 또는 원두명+가공방식 필수"}), 400
+    try:
+        gb_id = db.find_or_create_green_bean(data)
+    except ValueError as e:
+        return jsonify({"success": False, "error": str(e)}), 400
+    new_id = db.create_purchase({**data, "green_bean_id": gb_id})
+    return jsonify({"success": True, "id": new_id, "green_bean_id": gb_id})
 
 @app.put("/api/purchases/<int:pid>")
 @require_pin
 def api_purchase_update(pid):
     data = request.get_json(silent=True) or {}
+    # 생두 정보가 함께 오면 찾기/생성 후 그 id 로 연결
+    if data.get("green_bean_id") or (data.get("name") and data.get("process")):
+        try:
+            data = {**data, "green_bean_id": db.find_or_create_green_bean(data)}
+        except ValueError as e:
+            return jsonify({"success": False, "error": str(e)}), 400
     if not db.update_purchase(pid, data):
         return jsonify({"success": False, "error": "not found"}), 404
     return jsonify({"success": True})

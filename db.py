@@ -1076,6 +1076,69 @@ def create_green_bean(data: dict) -> int:
         return cur.lastrowid
 
 
+def find_or_create_green_bean(data: dict) -> int:
+    """구매 폼 등에서 받은 생두 정보로 기존 생두를 찾거나 새로 만든다.
+
+    - green_bean_id 가 주어지면 그 생두를 사용.
+    - 아니면 (name, supplier_id, process) 로 기존 생두를 찾음 (green_beans UNIQUE 키와 동일).
+    - 찾으면 제공된 설명 필드(공급처·원산지·등급·컵노트·가공)를 비어있지 않은 값으로 보강.
+    - 없으면 새로 생성.
+
+    반환: green_bean_id. process 가 비어 신규 생성이 불가능하면 ValueError.
+    """
+    with connect() as conn:
+        supplier_id = _resolve_supplier_id(conn, data)
+        name = (data.get("name") or "").strip()
+        process = (data.get("process") or "").strip()
+        gid = data.get("green_bean_id")
+        gid = int(gid) if gid else None
+
+        if gid is None and name:
+            if supplier_id is None:
+                row = conn.execute(
+                    "SELECT id FROM green_beans WHERE name=? AND process=? AND supplier_id IS NULL",
+                    (name, process),
+                ).fetchone()
+            else:
+                row = conn.execute(
+                    "SELECT id FROM green_beans WHERE name=? AND process=? AND supplier_id=?",
+                    (name, process, supplier_id),
+                ).fetchone()
+            gid = row["id"] if row else None
+
+        if gid is not None:
+            # 제공된 값으로 설명 필드 보강 (빈 값은 건드리지 않음)
+            sets, vals = [], []
+            if supplier_id is not None:
+                sets.append("supplier_id=?"); vals.append(supplier_id)
+            for col in ("name", "process", "origin_country", "grade", "cup_notes"):
+                v = data.get(col)
+                if v is not None and str(v).strip() != "":
+                    sets.append(f"{col}=?"); vals.append(str(v).strip())
+            if "is_decaf" in data:
+                sets.append("is_decaf=?"); vals.append(1 if data.get("is_decaf") else 0)
+            if sets:
+                sets.append("updated_at=strftime('%Y-%m-%dT%H:%M:%SZ','now')")
+                vals.append(gid)
+                conn.execute(f"UPDATE green_beans SET {','.join(sets)} WHERE id=?", vals)
+            return gid
+
+        # 신규 생성 — process 는 NOT NULL
+        if not process:
+            raise ValueError("가공방식(process)은 필수입니다.")
+        cur = conn.execute(
+            "INSERT INTO green_beans "
+            "(name, supplier_id, origin_country, process, grade, cup_notes, is_decaf, status) "
+            "VALUES (?,?,?,?,?,?,?,?)",
+            (
+                name, supplier_id, data.get("origin_country"), process,
+                data.get("grade"), data.get("cup_notes"),
+                1 if data.get("is_decaf") else 0, "활성",
+            ),
+        )
+        return cur.lastrowid
+
+
 def update_green_bean(gb_id: int, data: dict) -> bool:
     allowed = ("name", "supplier_id", "origin_country", "origin_region",
                "process", "grade", "cup_notes", "description", "is_decaf", "status", "hidden")

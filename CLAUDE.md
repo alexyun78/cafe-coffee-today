@@ -387,6 +387,7 @@ ssh-keyscan 49.247.207.115 2>/dev/null | grep -v '^#'  # 호스트키 복사
 | | `/api/green-beans/<id>/for-coffee` | GET (오늘의커피 폼 자동완성용) |
 | | `/api/green-beans/<id>/stock` | PUT (최종 수량 직접 설정 → stock_adjustment_kg 보정) |
 | 구매 | `/api/purchases[/<id>]` | GET/POST/PUT/DELETE |
+| | ↳ POST/PUT 은 `green_bean_id` 대신 생두 정보(name+process+supplier_name+origin_country+grade+cup_notes)를 보내면 `db.find_or_create_green_bean()`으로 생두를 찾거나 새로 만든 뒤 연결 | |
 | 로스팅 | `/api/roasting-logs[/<id>]` | GET/POST/PUT/DELETE |
 | 재고 | `/api/inventory` | GET |
 | 가격 | `/api/pricing[/<id>]` | GET/POST/DELETE |
@@ -401,6 +402,7 @@ ssh-keyscan 49.247.207.115 2>/dev/null | grep -v '^#'  # 호스트키 복사
 
 - **오늘의 커피**: 기존 기능 그대로
 - **생두 관리**: 생두 목록(재고 색상코딩) + 등록/편집 폼 + 구매 기록 폼 + 로스팅 기록 폼
+  - **구매 폼은 생두 입력 폼을 겸함**: 공급업체·원두명·원산지·가공방식·등급·컵노트를 직접 입력하고 구입일·수량·단가·할인을 함께 기록. 저장 시 (name+supplier+process) 기준으로 기존 생두를 찾거나 새로 만들어 연결 → 생두 목록·재고·로스팅 드롭다운에 즉시 반영. 원두명 자동완성에서 기존 원두를 고르면 정보 자동 입력
 - **재고**: 최근구매일→재고량 정렬, 30개 페이징, 1년 이상 미구매+재고0 접힘
 
 ### 생두 이름 규칙
