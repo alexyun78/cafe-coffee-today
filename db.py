@@ -93,6 +93,7 @@ CREATE TABLE IF NOT EXISTS suppliers (
     short_name  TEXT,
     contact     TEXT,
     notes       TEXT,
+    hidden      INTEGER NOT NULL DEFAULT 0,
     created_at  TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now')),
     updated_at  TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now'))
 );
@@ -190,6 +191,11 @@ _GB_EXTRA_COLUMNS = (
     ("stock_adjustment_kg", "REAL NOT NULL DEFAULT 0"),
 )
 
+# 이미 생성된 suppliers 테이블에 나중에 추가된 컬럼 (기존 서버 DB 마이그레이션용)
+_SUP_EXTRA_COLUMNS = (
+    ("hidden", "INTEGER NOT NULL DEFAULT 0"),
+)
+
 
 def _ensure_dir():
     d = os.path.dirname(DB_PATH)
@@ -222,6 +228,10 @@ def init_schema():
         for col, ctype in _GB_EXTRA_COLUMNS:
             if col not in gb_existing:
                 conn.execute(f"ALTER TABLE green_beans ADD COLUMN {col} {ctype}")
+        sup_existing = {r["name"] for r in conn.execute("PRAGMA table_info(suppliers)").fetchall()}
+        for col, ctype in _SUP_EXTRA_COLUMNS:
+            if col not in sup_existing:
+                conn.execute(f"ALTER TABLE suppliers ADD COLUMN {col} {ctype}")
         conn.execute(
             "UPDATE coffees SET availability='운영' WHERE availability IS NULL OR availability=''"
         )
@@ -948,7 +958,7 @@ def create_supplier(data: dict) -> int:
 
 def update_supplier(sid: int, data: dict) -> bool:
     sets, vals = [], []
-    for k in ("name", "short_name", "contact", "notes"):
+    for k in ("name", "short_name", "contact", "notes", "hidden"):
         if k in data:
             sets.append(f"{k}=?")
             vals.append(data[k])

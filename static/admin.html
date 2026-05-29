@@ -985,6 +985,16 @@
   .bean-opt-btn.del { background: #FFEBEE; color: var(--danger); }
   .bean-select-empty { padding: 18px 12px; text-align: center; color: var(--muted); font-size: 0.86rem; }
 
+  /* ===== 공용 콤보 드롭다운 (.combo-select) — bean-select 내부 스타일 재사용 ===== */
+  .combo-select { position: relative; }
+  .combo-select.open .bean-select-caret { transform: rotate(180deg); }
+  .combo-select.open .bean-select-trigger {
+    border-color: var(--accent); box-shadow: 0 0 0 3px rgba(210,105,30,0.15);
+  }
+  .field.error .combo-select .bean-select-trigger { border-color: var(--danger); }
+  .combo-custom-opt { background: #fff8f0; }
+  .combo-custom-opt .bean-opt-label { color: var(--accent); font-weight: 700; }
+
   .bean-hidden-badge {
     display: inline-block; padding: 2px 8px; border-radius: 10px;
     background: #f0ebe4; color: var(--muted); font-size: 0.7rem;
@@ -1247,19 +1257,39 @@
           <input type="hidden" id="bean-field-id">
 
           <div class="field">
-            <label for="bean-field-supplier">공급업체</label>
-            <div class="autocomplete-wrap">
-              <input type="text" id="bean-field-supplier" placeholder="선택 또는 직접 입력" autocomplete="off">
-              <div class="autocomplete-list" id="ac-bean-supplier"></div>
+            <label>공급업체</label>
+            <div class="combo-select" data-target="bean-field-supplier">
+              <button type="button" class="bean-select-trigger" aria-haspopup="listbox" aria-expanded="false">
+                <span class="bean-select-text placeholder">-- 선택 또는 직접 입력 --</span>
+                <span class="bean-select-caret">▾</span>
+              </button>
+              <input type="hidden" id="bean-field-supplier">
+              <div class="bean-select-dropdown" hidden>
+                <div class="bean-select-head">
+                  <input type="text" class="bean-select-search" placeholder="검색 또는 새 공급처 입력…" autocomplete="off">
+                  <button type="button" class="bean-select-mode">숨김 보기</button>
+                </div>
+                <div class="bean-select-list"></div>
+              </div>
             </div>
             <div class="field-hint" style="font-size:0.78rem;color:var(--muted);margin-top:4px;">공급처를 고르면 그 곳에서 등록했던 원두가 원두명에 추천됩니다.</div>
           </div>
 
           <div class="field">
-            <label for="bean-field-name" class="req">원두명</label>
-            <div class="autocomplete-wrap">
-              <input type="text" id="bean-field-name" placeholder="예: 에티오피아 구지 우라가" autocomplete="off" required>
-              <div class="autocomplete-list" id="ac-bean-name"></div>
+            <label class="req">원두명</label>
+            <div class="combo-select" data-target="bean-field-name">
+              <button type="button" class="bean-select-trigger" aria-haspopup="listbox" aria-expanded="false">
+                <span class="bean-select-text placeholder">-- 선택 또는 직접 입력 --</span>
+                <span class="bean-select-caret">▾</span>
+              </button>
+              <input type="hidden" id="bean-field-name">
+              <div class="bean-select-dropdown" hidden>
+                <div class="bean-select-head">
+                  <input type="text" class="bean-select-search" placeholder="검색 또는 새 원두명 입력…" autocomplete="off">
+                  <button type="button" class="bean-select-mode">숨김 보기</button>
+                </div>
+                <div class="bean-select-list"></div>
+              </div>
             </div>
             <div class="field-error">원두명을 입력하세요.</div>
           </div>
@@ -1337,18 +1367,38 @@
           <input type="hidden" id="purchase-field-gbid">
 
           <div class="field">
-            <label for="purchase-field-supplier">공급업체</label>
-            <div class="autocomplete-wrap">
-              <input type="text" id="purchase-field-supplier" placeholder="선택 또는 직접 입력" autocomplete="off">
-              <div class="autocomplete-list" id="ac-purchase-supplier"></div>
+            <label>공급업체</label>
+            <div class="combo-select" data-target="purchase-field-supplier">
+              <button type="button" class="bean-select-trigger" aria-haspopup="listbox" aria-expanded="false">
+                <span class="bean-select-text placeholder">-- 선택 또는 직접 입력 --</span>
+                <span class="bean-select-caret">▾</span>
+              </button>
+              <input type="hidden" id="purchase-field-supplier">
+              <div class="bean-select-dropdown" hidden>
+                <div class="bean-select-head">
+                  <input type="text" class="bean-select-search" placeholder="검색 또는 새 공급처 입력…" autocomplete="off">
+                  <button type="button" class="bean-select-mode">숨김 보기</button>
+                </div>
+                <div class="bean-select-list"></div>
+              </div>
             </div>
           </div>
 
           <div class="field">
-            <label for="purchase-field-name" class="req">원두명</label>
-            <div class="autocomplete-wrap">
-              <input type="text" id="purchase-field-name" placeholder="기존 원두 선택 또는 새 원두 입력" autocomplete="off" required>
-              <div class="autocomplete-list" id="ac-purchase-name"></div>
+            <label class="req">원두명</label>
+            <div class="combo-select" data-target="purchase-field-name">
+              <button type="button" class="bean-select-trigger" aria-haspopup="listbox" aria-expanded="false">
+                <span class="bean-select-text placeholder">-- 선택 또는 직접 입력 --</span>
+                <span class="bean-select-caret">▾</span>
+              </button>
+              <input type="hidden" id="purchase-field-name">
+              <div class="bean-select-dropdown" hidden>
+                <div class="bean-select-head">
+                  <input type="text" class="bean-select-search" placeholder="검색 또는 새 원두명 입력…" autocomplete="off">
+                  <button type="button" class="bean-select-mode">숨김 보기</button>
+                </div>
+                <div class="bean-select-list"></div>
+              </div>
             </div>
             <div class="field-hint" style="font-size:0.78rem;color:var(--muted);margin-top:4px;">기존 원두를 고르면 정보가 자동 입력됩니다. 새 원두면 그대로 등록돼 생두 목록에 추가됩니다.</div>
             <div class="field-error">원두명을 입력하세요.</div>
@@ -3076,6 +3126,18 @@ async function setBeanHidden(id, hidden) {
   showToast(hidden ? "숨김 처리됨" : "다시 표시됨");
   refreshAllBeanViews();
 }
+// 공급처 숨김/표시 — suppliers.hidden 플래그. 캐시도 갱신.
+async function setSupplierHidden(id, hidden) {
+  await api("PUT", "/api/suppliers/" + id, { hidden: hidden ? 1 : 0 });
+  const s = (_suppliersCache || []).find(x => x.id === parseInt(id, 10));
+  if (s) s.hidden = hidden ? 1 : 0;
+  showToast(hidden ? "공급처 숨김 처리됨" : "공급처 다시 표시됨");
+}
+// 새 공급처가 생겼을 수 있을 때 캐시 갱신 (콤보 드롭다운 즉시 반영)
+async function refreshSuppliers() {
+  try { const r = await api("GET", "/api/suppliers"); _suppliersCache = r.items || []; }
+  catch (e) { /* 무시 — 다음 탭 진입 시 갱신됨 */ }
+}
 async function hardDeleteBean(id) {
   await api("DELETE", "/api/green-beans/" + id + "?hard=1");
   const i = _beanListCache.findIndex(x => x.id === parseInt(id, 10));
@@ -3297,6 +3359,176 @@ function populateBeanDropdowns() {
 // 폼이 비동기 데이터 로드 전에 열려도 컨트롤러가 존재하도록 즉시 1회 초기화
 initBeanSelects();
 
+// ---------- 공용 콤보 드롭다운 (기존 목록 + 숨김 + 직접 입력) ----------
+// 텍스트 값을 다루는 재사용 드롭다운. 공급업체·원두명처럼 "기존에서 고르거나 새로
+// 입력하고, 안 쓰는 건 숨기는" 항목에 공통으로 쓴다. .bean-select-* 내부 스타일 재사용.
+// cfg: {
+//   getItems(): [{value,label,hidden,id?,sub?}],
+//   placeholder, searchPlaceholder,
+//   onToggleHide(item, hidden)  // 있으면 숨김 보기 토글 + 항목별 숨기기/보이기 노출
+//   onChange(value, item|null)  // 선택/직접입력 시
+//   allowCustom (기본 true)
+// }
+const _comboSelects = {};   // targetId -> controller
+
+function createComboSelect(root, cfg) {
+  const targetId = root.dataset.target;
+  const hidden = root.querySelector('input[type="hidden"]');
+  const trigger = root.querySelector(".bean-select-trigger");
+  const textEl = root.querySelector(".bean-select-text");
+  const dropdown = root.querySelector(".bean-select-dropdown");
+  const searchEl = root.querySelector(".bean-select-search");
+  const modeBtn = root.querySelector(".bean-select-mode");
+  const listEl = root.querySelector(".bean-select-list");
+  const placeholder = cfg.placeholder || "-- 선택 또는 직접 입력 --";
+  const allowCustom = cfg.allowCustom !== false;
+  const hideable = typeof cfg.onToggleHide === "function";
+  let viewHidden = false;
+
+  if (!hideable && modeBtn) modeBtn.style.display = "none";
+  if (cfg.searchPlaceholder) searchEl.placeholder = cfg.searchPlaceholder;
+
+  const items = () => (cfg.getItems ? (cfg.getItems() || []) : []);
+  const findItem = (val) => items().find(it => String(it.value) === String(val)) || null;
+
+  function updateText() {
+    const v = hidden.value;
+    if (v) {
+      const it = findItem(v);
+      textEl.textContent = it ? (it.label || it.value) : v;
+      textEl.classList.remove("placeholder");
+    } else {
+      textEl.textContent = placeholder;
+      textEl.classList.add("placeholder");
+    }
+  }
+
+  function renderList() {
+    const q = (searchEl.value || "").trim();
+    const ql = q.toLowerCase();
+    let list = items();
+    if (hideable) list = list.filter(it => !!it.hidden === viewHidden);
+    if (ql) list = list.filter(it => (it.label || it.value || "").toLowerCase().includes(ql));
+    const selVal = hidden.value;
+    const rows = [];
+    if (allowCustom && !viewHidden && q &&
+        !items().some(it => String(it.value).toLowerCase() === ql)) {
+      rows.push(`<div class="bean-opt combo-custom-opt">
+        <button type="button" class="bean-opt-label" data-act="custom">직접 입력: “${escapeHtml(q)}”</button>
+      </div>`);
+    }
+    rows.push(...list.map(it => {
+      const sub = it.sub ? ` <span class="bean-opt-sub">${escapeHtml(it.sub)}</span>` : "";
+      const btns = hideable
+        ? (viewHidden
+            ? `<button type="button" class="bean-opt-btn unhide" data-act="unhide" data-id="${escapeAttr(String(it.id))}">보이기</button>`
+            : `<button type="button" class="bean-opt-btn hide" data-act="hide" data-id="${escapeAttr(String(it.id))}">숨기기</button>`)
+        : "";
+      const idAttr = it.id != null ? ` data-id="${escapeAttr(String(it.id))}"` : "";
+      return `<div class="bean-opt ${String(it.value) === String(selVal) ? "selected" : ""}">
+        <button type="button" class="bean-opt-label" data-act="pick" data-val="${escapeAttr(String(it.value))}"${idAttr}>${escapeHtml(it.label || it.value)}${sub}</button>
+        ${btns}
+      </div>`;
+    }));
+    if (!rows.length) {
+      listEl.innerHTML = `<div class="bean-select-empty">${
+        viewHidden ? "숨긴 항목이 없습니다." : (q ? "검색 결과 없음" : "항목이 없습니다.")
+      }</div>`;
+      return;
+    }
+    listEl.innerHTML = rows.join("");
+  }
+
+  function resetView() {
+    viewHidden = false;
+    if (modeBtn) { modeBtn.classList.remove("on"); modeBtn.textContent = "숨김 보기"; }
+    searchEl.value = "";
+  }
+  function open() {
+    Object.entries(_comboSelects).forEach(([k, c]) => { if (k !== targetId) c.close(); });
+    dropdown.hidden = false;
+    root.classList.add("open");
+    trigger.setAttribute("aria-expanded", "true");
+    renderList();
+    setTimeout(() => searchEl.focus(), 0);
+  }
+  function close() {
+    if (dropdown.hidden) return;
+    dropdown.hidden = true;
+    root.classList.remove("open");
+    trigger.setAttribute("aria-expanded", "false");
+    resetView();
+  }
+  function isOpen() { return !dropdown.hidden; }
+
+  // explicitItem: pick 시 클릭한 정확한 항목 (동명이종 대비). 없으면 value 로 조회.
+  function setValue(val, fireChange, explicitItem) {
+    hidden.value = (val == null) ? "" : String(val);
+    updateText();
+    const field = root.closest(".field");
+    if (field && hidden.value) field.classList.remove("error");
+    if (fireChange && cfg.onChange) cfg.onChange(hidden.value, explicitItem || findItem(hidden.value));
+  }
+  const getValue = () => hidden.value;
+
+  trigger.addEventListener("click", (e) => { e.stopPropagation(); isOpen() ? close() : open(); });
+  searchEl.addEventListener("click", (e) => e.stopPropagation());
+  searchEl.addEventListener("input", renderList);
+  searchEl.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      const q = searchEl.value.trim();
+      if (allowCustom && q) { setValue(q, true); close(); }
+    }
+  });
+  if (modeBtn) modeBtn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    viewHidden = !viewHidden;
+    modeBtn.classList.toggle("on", viewHidden);
+    modeBtn.textContent = viewHidden ? "← 목록으로" : "숨김 보기";
+    renderList();
+  });
+  listEl.addEventListener("click", async (e) => {
+    const btn = e.target.closest("[data-act]");
+    if (!btn) return;
+    e.stopPropagation();
+    const act = btn.dataset.act;
+    if (act === "pick") {
+      const itemId = btn.dataset.id;
+      const it = itemId ? items().find(x => String(x.id) === itemId) : null;
+      setValue(it ? it.value : btn.dataset.val, true, it);
+      close();
+      return;
+    }
+    if (act === "custom") { setValue(searchEl.value.trim(), true, null); close(); return; }
+    if (act === "hide" || act === "unhide") {
+      const it = items().find(x => String(x.id) === btn.dataset.id);
+      if (!it) return;
+      try { await cfg.onToggleHide(it, act === "hide"); renderList(); }
+      catch (err) { if (err.message !== "unauthorized") showBanner("변경 실패: " + err.message, "error"); }
+      return;
+    }
+  });
+
+  updateText();
+  const ctrl = { open, close, isOpen, setValue, getValue, render: renderList, updateText };
+  _comboSelects[targetId] = ctrl;
+  return ctrl;
+}
+
+// 콤보 컨트롤러를 1회만 생성 (closure 가 DOM/캐시를 동적으로 읽으므로 재생성 불필요)
+function ensureCombo(targetId, cfg) {
+  if (_comboSelects[targetId]) return _comboSelects[targetId];
+  const root = document.querySelector(`.combo-select[data-target="${targetId}"]`);
+  if (!root) return null;
+  return createComboSelect(root, cfg);
+}
+// 바깥 클릭 시 모든 콤보 닫기 (1회 바인딩)
+document.addEventListener("click", (e) => {
+  if (e.target.closest(".combo-select")) return;
+  Object.values(_comboSelects).forEach(c => c.close());
+});
+
 // ---------- 가공방식 / 등급 세그먼트 버튼 렌더 ----------
 const DEFAULT_PROCESSES = ["내추럴", "워시드", "허니", "무산소 발효"];
 const DEFAULT_GRADES = ["스페셜티", "프리미엄", "커머셜"];
@@ -3350,35 +3582,20 @@ function initBeanFormSegments() {
   // 원산지 autocomplete
   const origins = (_beanSuggestionsCache && _beanSuggestionsCache.origins) || [];
   setupAutocomplete("bean-field-origin", "ac-bean-origin", origins);
-
-  // 공급업체 autocomplete (선택 또는 직접 입력)
-  const supplierNames = (_suppliersCache || []).map(s => s.name).filter(Boolean);
-  setupAutocomplete("bean-field-supplier", "ac-bean-supplier", supplierNames);
-
-  // 원두명 autocomplete — 선택된 공급처의 이전 원두 우선, 없으면 전체 원두명.
-  // hideable: 각 추천에 숨기기/보이기 + 숨김 보기 토글 (공용 hidden 플래그 기반)
-  setupAutocomplete("bean-field-name", "ac-bean-name", beanNameAcItems, null, { hideable: true });
-}
-
-// 현재 입력된 공급처 기준 원두명 추천 — {label,id,hidden} 객체 배열
-function beanNameAcItems() {
-  const supEl = document.getElementById("bean-field-supplier");
-  const sup = (supEl ? supEl.value.trim() : "").toLowerCase();
-  let beans = _beanListCache || [];
-  if (sup) {
-    const matched = beans.filter(b =>
-      (b.supplier_name || "").toLowerCase() === sup ||
-      (b.supplier_short || "").toLowerCase() === sup);
-    if (matched.length) beans = matched;
-  }
-  const seen = new Set();
-  const out = [];
-  for (const b of beans) {
-    if (!b.name || seen.has(b.id)) continue;
-    seen.add(b.id);
-    out.push({ label: b.name, id: b.id, hidden: !!b.hidden });
-  }
-  return out;
+  // 공급업체·원두명 공용 콤보 (기존 목록 + 숨김 + 직접 입력)
+  ensureCombo("bean-field-supplier", {
+    placeholder: "-- 선택 또는 직접 입력 --",
+    searchPlaceholder: "검색 또는 새 공급처 입력…",
+    getItems: supplierComboItems,
+    onToggleHide: (it, hide) => setSupplierHidden(it.id, hide),
+    onChange: () => { const n = _comboSelects["bean-field-name"]; if (n && n.isOpen()) n.render(); },
+  });
+  ensureCombo("bean-field-name", {
+    placeholder: "-- 선택 또는 직접 입력 --",
+    searchPlaceholder: "검색 또는 새 원두명 입력…",
+    getItems: () => beanComboItems(_comboSelects["bean-field-supplier"]),
+    onToggleHide: (it, hide) => setBeanHidden(it.id, hide),
+  });
 }
 
 // ---------- 생두 목록 ----------
@@ -3562,8 +3779,9 @@ document.getElementById("btn-bean-new").addEventListener("click", () => {
   document.getElementById("btn-bean-delete").style.display = "none";
   clearBeanSegments();
   initBeanFormSegments();
+  if (_comboSelects["bean-field-supplier"]) _comboSelects["bean-field-supplier"].setValue("");
+  if (_comboSelects["bean-field-name"]) _comboSelects["bean-field-name"].setValue("");
   showBeanForm();
-  document.getElementById("bean-field-name").focus();
 });
 
 document.getElementById("btn-bean-cancel").addEventListener("click", hideBeanForm);
@@ -3576,8 +3794,8 @@ async function openBeanEdit(id) {
     // autocomplete 설정(입력 clone)을 먼저 하고, 그 뒤에 값을 채워야 값이 보존됨
     initBeanFormSegments();
     document.getElementById("bean-field-id").value = id;
-    document.getElementById("bean-field-name").value = b.name || "";
-    document.getElementById("bean-field-supplier").value = b.supplier_name || "";
+    if (_comboSelects["bean-field-supplier"]) _comboSelects["bean-field-supplier"].setValue(b.supplier_name || "");
+    if (_comboSelects["bean-field-name"]) _comboSelects["bean-field-name"].setValue(b.name || "");
     document.getElementById("bean-field-origin").value = b.origin_country || "";
     document.getElementById("bean-field-cup-notes").value = b.cup_notes || "";
     document.getElementById("bean-field-desc").value = b.description || "";
@@ -3666,7 +3884,7 @@ document.getElementById("bean-form").addEventListener("submit", async (e) => {
     }
     showToast(_beanEditingId ? "수정되었습니다" : "등록되었습니다");
     hideBeanForm();
-    await loadBeanList();
+    await Promise.all([loadBeanList(), refreshSuppliers()]);
     populateBeanDropdowns();
   } catch (err) {
     if (err.message !== "unauthorized") showBanner("저장 실패: " + err.message, "error");
@@ -3763,8 +3981,40 @@ function renderPurchaseList(items) {
   });
 }
 
-// 구매 폼의 생두 입력 영역 초기화 — 가공/등급 세그먼트 + 공급처/원두명/원산지 자동완성.
-// 원두명 자동완성에서 기존 원두를 고르면 그 생두 정보를 폼에 자동 입력한다.
+// ---- 공용 콤보 옵션 소스 (공급업체 / 원두명) ----
+// 공급처 콤보 옵션: 기존 공급처 + 숨김 플래그
+function supplierComboItems() {
+  return (_suppliersCache || [])
+    .filter(s => s.name)
+    .map(s => ({
+      value: s.name,
+      label: s.short_name ? `${s.name} [${s.short_name}]` : s.name,
+      id: s.id,
+      hidden: !!s.hidden,
+    }));
+}
+// 원두명 콤보 옵션: 주어진 공급처 콤보의 값으로 필터된 활성 생두
+function beanComboItems(supplierCtrl) {
+  const sup = ((supplierCtrl && supplierCtrl.getValue()) || "").toLowerCase();
+  let beans = (_beanListCache || []).filter(b => b.status === "활성");
+  if (sup) {
+    const m = beans.filter(b =>
+      (b.supplier_name || "").toLowerCase() === sup ||
+      (b.supplier_short || "").toLowerCase() === sup);
+    if (m.length) beans = m;
+  }
+  const seen = new Set();
+  const out = [];
+  for (const b of beans) {
+    if (!b.name || seen.has(b.id)) continue;
+    seen.add(b.id);
+    out.push({ value: b.name, label: b.name, id: b.id, hidden: !!b.hidden, sub: b.process || "" });
+  }
+  return out;
+}
+
+// 구매 폼의 생두 입력 영역 초기화 — 가공/등급 세그먼트 + 원산지 자동완성 +
+// 공급업체·원두명 공용 콤보(기존 목록 + 숨김 + 직접 입력).
 function initPurchaseFormSegments() {
   const procs = (_beanSuggestionsCache && _beanSuggestionsCache.processes) || [];
   const grades = (_beanSuggestionsCache && _beanSuggestionsCache.grades) || [];
@@ -3772,46 +4022,27 @@ function initPurchaseFormSegments() {
   renderSegmentedBtns("purchase-grade-btns", "purchase-field-grade", "purchase-field-grade-custom", DEFAULT_GRADES, grades);
   const origins = (_beanSuggestionsCache && _beanSuggestionsCache.origins) || [];
   setupAutocomplete("purchase-field-origin", "ac-purchase-origin", origins);
-  const supplierNames = (_suppliersCache || []).map(s => s.name).filter(Boolean);
-  setupAutocomplete("purchase-field-supplier", "ac-purchase-supplier", supplierNames);
-  setupAutocomplete("purchase-field-name", "ac-purchase-name", purchaseBeanNameAcItems, onPurchaseNamePick, { hideable: true });
-  // 원두명을 직접 타이핑하면 기존 생두 연결을 해제 (새 원두로 간주)
-  const nameEl = document.getElementById("purchase-field-name");
-  if (nameEl) nameEl.addEventListener("input", () => {
-    document.getElementById("purchase-field-gbid").value = "";
+  ensureCombo("purchase-field-supplier", {
+    placeholder: "-- 선택 또는 직접 입력 --",
+    searchPlaceholder: "검색 또는 새 공급처 입력…",
+    getItems: supplierComboItems,
+    onToggleHide: (it, hide) => setSupplierHidden(it.id, hide),
+    onChange: () => { const n = _comboSelects["purchase-field-name"]; if (n && n.isOpen()) n.render(); },
   });
-}
-
-// 현재 입력된 공급처 기준 원두명 추천 — {label,id,hidden} 배열 (구매 폼 전용)
-function purchaseBeanNameAcItems() {
-  const supEl = document.getElementById("purchase-field-supplier");
-  const sup = (supEl ? supEl.value.trim() : "").toLowerCase();
-  let beans = _beanListCache || [];
-  if (sup) {
-    const matched = beans.filter(b =>
-      (b.supplier_name || "").toLowerCase() === sup ||
-      (b.supplier_short || "").toLowerCase() === sup);
-    if (matched.length) beans = matched;
-  }
-  const seen = new Set();
-  const out = [];
-  for (const b of beans) {
-    if (!b.name || seen.has(b.id)) continue;
-    seen.add(b.id);
-    out.push({ label: b.name, id: b.id, hidden: !!b.hidden });
-  }
-  return out;
-}
-
-// 원두명 자동완성에서 기존 원두 선택 → 그 생두 정보 자동 입력
-function onPurchaseNamePick(name) {
-  const supEl = document.getElementById("purchase-field-supplier");
-  const sup = (supEl ? supEl.value.trim() : "").toLowerCase();
-  const cands = (_beanListCache || []).filter(b => (b.name || "") === name);
-  const b = cands.find(x => sup &&
-      ((x.supplier_name || "").toLowerCase() === sup || (x.supplier_short || "").toLowerCase() === sup))
-    || cands[0];
-  if (b) fillPurchaseBeanFields(b);
+  ensureCombo("purchase-field-name", {
+    placeholder: "-- 선택 또는 직접 입력 --",
+    searchPlaceholder: "검색 또는 새 원두명 입력…",
+    getItems: () => beanComboItems(_comboSelects["purchase-field-supplier"]),
+    onToggleHide: (it, hide) => setBeanHidden(it.id, hide),
+    onChange: (value, item) => {
+      if (item) {
+        const b = (_beanListCache || []).find(x => x.id === item.id);
+        if (b) fillPurchaseBeanFields(b);
+      } else {
+        document.getElementById("purchase-field-gbid").value = "";   // 새 원두로 간주
+      }
+    },
+  });
 }
 
 function clearPurchaseSegments() {
@@ -3827,8 +4058,8 @@ function clearPurchaseSegments() {
 
 function fillPurchaseBeanFields(b) {
   document.getElementById("purchase-field-gbid").value = b.id || "";
-  document.getElementById("purchase-field-supplier").value = b.supplier_name || "";
-  document.getElementById("purchase-field-name").value = b.name || "";
+  if (_comboSelects["purchase-field-supplier"]) _comboSelects["purchase-field-supplier"].setValue(b.supplier_name || "");
+  if (_comboSelects["purchase-field-name"]) _comboSelects["purchase-field-name"].setValue(b.name || "");
   document.getElementById("purchase-field-origin").value = b.origin_country || "";
   document.getElementById("purchase-field-cupnotes").value = b.cup_notes || "";
   clearPurchaseSegments();
@@ -3849,7 +4080,7 @@ function openPurchaseEdit(id) {
     fillPurchaseBeanFields(b);
   } else {
     document.getElementById("purchase-field-gbid").value = p.green_bean_id || "";
-    document.getElementById("purchase-field-name").value = p.bean_name || "";
+    if (_comboSelects["purchase-field-name"]) _comboSelects["purchase-field-name"].setValue(p.bean_name || "");
   }
   document.getElementById("purchase-field-date").value = p.purchase_date || todayStr();
   document.getElementById("purchase-field-qty").value = p.quantity_kg != null ? p.quantity_kg : "";
@@ -3891,12 +4122,13 @@ document.getElementById("btn-purchase-new").addEventListener("click", () => {
   document.getElementById("purchase-field-gbid").value = "";
   initPurchaseFormSegments();
   clearPurchaseSegments();
+  if (_comboSelects["purchase-field-supplier"]) _comboSelects["purchase-field-supplier"].setValue("");
+  if (_comboSelects["purchase-field-name"]) _comboSelects["purchase-field-name"].setValue("");
   document.getElementById("purchase-field-date").value = todayStr();
   document.getElementById("purchase-field-discount").value = "0";
   document.getElementById("purchase-form-title").textContent = "구매 등록";
   updatePurchaseTotal();
   showPurchaseForm();
-  document.getElementById("purchase-field-name").focus();
 });
 document.getElementById("btn-purchase-cancel").addEventListener("click", hidePurchaseForm);
 
@@ -3967,8 +4199,8 @@ document.getElementById("purchase-form").addEventListener("submit", async (e) =>
       showToast("구매 기록 추가됨");
     }
     hidePurchaseForm();
-    // 새 생두가 생기거나 정보가 바뀌었을 수 있으니 생두 목록·드롭다운·구매 목록 갱신
-    await loadBeanList();
+    // 새 생두·공급처가 생기거나 정보가 바뀌었을 수 있으니 캐시·목록 갱신
+    await Promise.all([loadBeanList(), refreshSuppliers()]);
     populateBeanDropdowns();
     loadPurchaseList();
   } catch (err) {
