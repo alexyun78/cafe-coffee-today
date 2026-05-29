@@ -909,6 +909,7 @@
   }
   .record-row-actions button.delete { background: #FFEBEE; color: #c62828; }
   .record-row-actions button.dup { background: #FFF3E0; color: #E65100; }
+  .record-row-actions button.edit { background: #E8F0FE; color: #1565C0; }
   .record-row-actions button:hover { opacity: 0.8; }
 
   /* ===== 커스텀 생두 선택 드롭다운 ===== */
@@ -1325,7 +1326,7 @@
 
       <!-- 구매 등록 폼 -->
       <section id="purchase-form-view" class="card bean-form-wrap">
-        <div class="bean-form-section-title">구매 등록</div>
+        <div class="bean-form-section-title" id="purchase-form-title">구매 등록</div>
         <form id="purchase-form" novalidate>
           <div class="field">
             <label for="purchase-field-bean" class="req">생두 선택</label>
@@ -1393,7 +1394,7 @@
 
       <!-- 로스팅 등록 폼 -->
       <section id="roast-form-view" class="card bean-form-wrap">
-        <div class="bean-form-section-title">로스팅 기록</div>
+        <div class="bean-form-section-title" id="roast-form-title">로스팅 기록</div>
         <form id="roast-form" novalidate>
           <div class="field">
             <label for="roast-field-bean" class="req">생두 선택</label>
@@ -1443,7 +1444,7 @@
             <textarea id="roast-field-notes" placeholder="특이사항"></textarea>
           </div>
 
-          <div class="field">
+          <div class="field" id="roast-make-coffee-field">
             <label>오늘의 커피 연동</label>
             <label class="toggle-switch">
               <input type="checkbox" id="roast-field-make-coffee" checked>
@@ -3011,6 +3012,8 @@ let _suppliersCache = [];
 let _beansBySupplier = {};   // { 공급처명: [원두명, ...] }
 let _roastListCache = [];    // 로스팅 기록 (복제용)
 let _purchaseListCache = []; // 구매 기록 (숨김 토글 재렌더용)
+let _purchaseEditingId = null; // 구매 기록 편집 중 id (null이면 신규)
+let _roastEditingId = null;    // 로스팅 기록 편집 중 id (null이면 신규)
 let _invItemsCache = [];     // 재고 (숨김 토글 재렌더용)
 
 // 각 리스트의 "숨김 보기" 상태
@@ -3666,6 +3669,7 @@ function renderPurchaseList(items) {
           <span style="font-weight:700; color:var(--accent);">= ₩${total.toLocaleString()}</span>
         </div>
         <div class="record-row-actions">
+          <button type="button" class="edit" data-id="${p.id}">편집</button>
           ${hideBtn}
           <button type="button" class="delete" data-id="${p.id}">삭제</button>
         </div>
@@ -3673,6 +3677,9 @@ function renderPurchaseList(items) {
     `;
   }).join("");
 
+  el.querySelectorAll(".record-row-actions .edit").forEach(btn => {
+    btn.addEventListener("click", () => openPurchaseEdit(parseInt(btn.dataset.id, 10)));
+  });
   el.querySelectorAll(".record-row-actions .hide, .record-row-actions .unhide").forEach(btn => {
     btn.addEventListener("click", async () => {
       try { await setBeanHidden(btn.dataset.bean, btn.classList.contains("hide")); }
@@ -3691,6 +3698,22 @@ function renderPurchaseList(items) {
       }
     });
   });
+}
+
+// 구매 기록 편집 — 캐시의 기록을 폼에 채우고 PUT 으로 저장
+function openPurchaseEdit(id) {
+  const p = _purchaseListCache.find(x => x.id === id);
+  if (!p) return;
+  _purchaseEditingId = id;
+  document.getElementById("purchase-form").reset();
+  _beanSelects["purchase-field-bean"].setValue(p.green_bean_id || "");
+  document.getElementById("purchase-field-date").value = p.purchase_date || todayStr();
+  document.getElementById("purchase-field-qty").value = p.quantity_kg != null ? p.quantity_kg : "";
+  document.getElementById("purchase-field-price").value = p.unit_price != null ? p.unit_price : "";
+  document.getElementById("purchase-field-discount").value = p.discount != null ? p.discount : "0";
+  document.getElementById("purchase-form-title").textContent = "구매 편집";
+  updatePurchaseTotal();
+  showPurchaseForm();
 }
 
 // 숨김 보기 토글 버튼 상태 동기화 (공용)
@@ -3715,13 +3738,16 @@ function showPurchaseForm() {
 function hidePurchaseForm() {
   document.getElementById("purchase-form-view").classList.remove("active");
   document.getElementById("purchase-list-view").style.display = "";
+  _purchaseEditingId = null;
   disarmAdminBack();
 }
 document.getElementById("btn-purchase-new").addEventListener("click", () => {
+  _purchaseEditingId = null;
   document.getElementById("purchase-form").reset();
   _beanSelects["purchase-field-bean"].setValue("");
   document.getElementById("purchase-field-date").value = todayStr();
   document.getElementById("purchase-field-discount").value = "0";
+  document.getElementById("purchase-form-title").textContent = "구매 등록";
   updatePurchaseTotal();
   showPurchaseForm();
 });
@@ -3764,15 +3790,22 @@ document.getElementById("purchase-form").addEventListener("submit", async (e) =>
   saveBtn.disabled = true;
   saveBtn.innerHTML = '<span class="spinner"></span>저장 중...';
 
+  const payload = {
+    green_bean_id: parseInt(beanSel.value),
+    purchase_date: dateVal,
+    quantity_kg: qtyVal,
+    unit_price: priceVal,
+    discount: parseInt(document.getElementById("purchase-field-discount").value) || 0,
+  };
+
   try {
-    await api("POST", "/api/purchases", {
-      green_bean_id: parseInt(beanSel.value),
-      purchase_date: dateVal,
-      quantity_kg: qtyVal,
-      unit_price: priceVal,
-      discount: parseInt(document.getElementById("purchase-field-discount").value) || 0,
-    });
-    showToast("구매 기록 추가됨");
+    if (_purchaseEditingId) {
+      await api("PUT", "/api/purchases/" + _purchaseEditingId, payload);
+      showToast("구매 기록 수정됨");
+    } else {
+      await api("POST", "/api/purchases", payload);
+      showToast("구매 기록 추가됨");
+    }
     hidePurchaseForm();
     loadPurchaseList();
   } catch (err) {
@@ -3820,6 +3853,7 @@ function renderRoastList(items) {
         </div>
         ${r.notes ? `<div style="font-size:0.8rem; color:var(--muted); margin-top:4px;">${escapeHtml(r.notes)}</div>` : ""}
         <div class="record-row-actions">
+          <button type="button" class="edit" data-id="${r.id}">편집</button>
           <button type="button" class="dup" data-id="${r.id}">복제</button>
           <button type="button" class="delete" data-id="${r.id}">삭제</button>
         </div>
@@ -3827,6 +3861,9 @@ function renderRoastList(items) {
     `;
   }).join("");
 
+  el.querySelectorAll(".record-row-actions .edit").forEach(btn => {
+    btn.addEventListener("click", () => openRoastEdit(parseInt(btn.dataset.id, 10)));
+  });
   el.querySelectorAll(".record-row-actions .dup").forEach(btn => {
     btn.addEventListener("click", () => openRoastDuplicate(parseInt(btn.dataset.id, 10)));
   });
@@ -3848,6 +3885,7 @@ function renderRoastList(items) {
 function openRoastDuplicate(id) {
   const r = _roastListCache.find(x => x.id === id);
   if (!r) return;
+  _roastEditingId = null;
   document.getElementById("roast-form").reset();
   _beanSelects["roast-field-bean"].setValue(r.green_bean_id || "");
   document.getElementById("roast-field-date").value = todayStr();
@@ -3855,12 +3893,32 @@ function openRoastDuplicate(id) {
   document.getElementById("roast-field-output").value = r.output_weight_g != null ? r.output_weight_g : "";
   document.getElementById("roast-field-level").value = r.roast_level || "";
   document.getElementById("roast-field-notes").value = r.notes || "";
+  document.getElementById("roast-form-title").textContent = "로스팅 기록";
+  document.getElementById("roast-make-coffee-field").style.display = "";
   updateRoastLoss();
   showRoastForm();
   const inp = document.getElementById("roast-field-input");
   inp.focus();
   inp.select();
   showToast("복제 — 투입/배출량을 확인하세요");
+}
+
+// 로스팅 편집 — 캐시의 기록을 폼에 채우고 PUT 으로 저장 (오늘의 커피 연동 토글 숨김)
+function openRoastEdit(id) {
+  const r = _roastListCache.find(x => x.id === id);
+  if (!r) return;
+  _roastEditingId = id;
+  document.getElementById("roast-form").reset();
+  _beanSelects["roast-field-bean"].setValue(r.green_bean_id || "");
+  document.getElementById("roast-field-date").value = r.roast_date || todayStr();
+  document.getElementById("roast-field-input").value = r.input_weight_g != null ? r.input_weight_g : "";
+  document.getElementById("roast-field-output").value = r.output_weight_g != null ? r.output_weight_g : "";
+  document.getElementById("roast-field-level").value = r.roast_level || "";
+  document.getElementById("roast-field-notes").value = r.notes || "";
+  document.getElementById("roast-form-title").textContent = "로스팅 편집";
+  document.getElementById("roast-make-coffee-field").style.display = "none";
+  updateRoastLoss();
+  showRoastForm();
 }
 
 // 로스팅 폼 열기/닫기
@@ -3873,12 +3931,16 @@ function showRoastForm() {
 function hideRoastForm() {
   document.getElementById("roast-form-view").classList.remove("active");
   document.getElementById("roast-list-view").style.display = "";
+  _roastEditingId = null;
   disarmAdminBack();
 }
 document.getElementById("btn-roast-new").addEventListener("click", () => {
+  _roastEditingId = null;
   document.getElementById("roast-form").reset();
   _beanSelects["roast-field-bean"].setValue("");
   document.getElementById("roast-field-date").value = todayStr();
+  document.getElementById("roast-form-title").textContent = "로스팅 기록";
+  document.getElementById("roast-make-coffee-field").style.display = "";
   updateRoastLoss();
   showRoastForm();
 });
@@ -3931,11 +3993,16 @@ document.getElementById("roast-form").addEventListener("submit", async (e) => {
   };
 
   try {
-    const res = await api("POST", "/api/roasting-logs", payload);
-    const c = res && res.coffee;
-    if (c && c.created) showToast(`로스팅 기록 추가 — '${c.name}' 오늘의 커피 예정 등록`);
-    else if (c && !c.created) showToast(`로스팅 기록 추가 — '${c.name}' 이미 예정 등록됨`);
-    else showToast("로스팅 기록 추가됨");
+    if (_roastEditingId) {
+      await api("PUT", "/api/roasting-logs/" + _roastEditingId, payload);
+      showToast("로스팅 기록 수정됨");
+    } else {
+      const res = await api("POST", "/api/roasting-logs", payload);
+      const c = res && res.coffee;
+      if (c && c.created) showToast(`로스팅 기록 추가 — '${c.name}' 오늘의 커피 예정 등록`);
+      else if (c && !c.created) showToast(`로스팅 기록 추가 — '${c.name}' 이미 예정 등록됨`);
+      else showToast("로스팅 기록 추가됨");
+    }
     hideRoastForm();
     loadRoastList();
   } catch (err) {
