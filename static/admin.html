@@ -907,6 +907,10 @@
   .record-row-date { font-size: 0.78rem; color: var(--muted); }
   .record-row-detail { font-size: 0.82rem; color: var(--text); margin-top: 4px; }
   .record-row-detail span { margin-right: 12px; white-space: nowrap; }
+  .record-row-cupnotes {
+    margin-top: 5px; font-size: 0.82rem; line-height: 1.4;
+    color: var(--coffee-dark); font-weight: 500;
+  }
   .record-row-meta {
     display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-top: 6px;
   }
@@ -4357,6 +4361,10 @@ function renderRoastList(items) {
           stock ? `<span class="record-row-stock${stock.low ? " low" : ""}">현재 재고 ${stock.text}</span>` : ""
         }${priceHtml}</div>`
       : "";
+    const cup = (r.cup_notes || "").trim();
+    const cupHtml = cup
+      ? `<div class="record-row-cupnotes" title="오늘의 커피 기준 컵노트">☕ ${escapeHtml(cup)}</div>`
+      : "";
     return `
       <div class="record-row" data-id="${r.id}" style="border-left-color: var(--accent);">
         <div class="record-row-top">
@@ -4369,6 +4377,7 @@ function renderRoastList(items) {
           <span style="font-weight:700; color:var(--accent);">손실 ${loss}</span>
           ${r.roast_level ? `<span>${escapeHtml(r.roast_level)}</span>` : ""}
         </div>
+        ${cupHtml}
         ${stockHtml}
         ${r.notes ? `<div style="font-size:0.8rem; color:var(--muted); margin-top:4px;">${escapeHtml(r.notes)}</div>` : ""}
         <div class="record-row-actions">

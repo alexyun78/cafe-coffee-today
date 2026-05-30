@@ -361,6 +361,9 @@ def api_update(coffee_id):
         parsed["serve_date"] = date.today().isoformat()
     if not db.update(coffee_id, parsed):
         return jsonify({"success": False, "error": "not found or no changes"}), 404
+    # 오늘의 커피를 컵노트 기준으로: 편집된 컵노트를 연결된 생두 마스터로 동기화
+    if "cup_notes" in parsed:
+        db.sync_bean_cup_notes_from_coffee(coffee_id, parsed["cup_notes"])
     if parsed.get("status") == "진행 중":
         db.complete_other_in_progress(coffee_id)
     cascaded = 0

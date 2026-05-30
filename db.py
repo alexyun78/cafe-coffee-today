@@ -282,6 +282,24 @@ def init_schema():
                 conn.execute(
                     "INSERT INTO migrations (name) VALUES (?)", ("seed_green_beans_v1",)
                 )
+        # 컵노트 기준 통일: 연결된 '오늘의 커피'의 컵노트를 생두 마스터로 1회 싱크업
+        # (이후로는 오늘의 커피 편집 시 sync_bean_cup_notes_from_coffee 로 실시간 동기화)
+        if not conn.execute(
+            "SELECT 1 FROM migrations WHERE name=?", ("sync_cup_notes_from_coffee_v1",)
+        ).fetchone():
+            conn.execute(
+                "UPDATE green_beans SET "
+                "cup_notes = (SELECT c.cup_notes FROM coffees c "
+                "             WHERE c.green_bean_id = green_beans.id "
+                "               AND c.cup_notes IS NOT NULL AND TRIM(c.cup_notes) != '' "
+                "             ORDER BY c.id DESC LIMIT 1) "
+                "WHERE EXISTS (SELECT 1 FROM coffees c "
+                "              WHERE c.green_bean_id = green_beans.id "
+                "                AND c.cup_notes IS NOT NULL AND TRIM(c.cup_notes) != '')"
+            )
+            conn.execute(
+                "INSERT INTO migrations (name) VALUES (?)", ("sync_cup_notes_from_coffee_v1",)
+            )
 
 
 # ---------- PIN brute-force 카운터 (워커 공유 영속) ----------
@@ -531,6 +549,24 @@ def update(coffee_id: int, data: dict) -> bool:
             f"UPDATE coffees SET {','.join(sets)} WHERE id=?", values
         )
         return cur.rowcount > 0
+
+
+def sync_bean_cup_notes_from_coffee(coffee_id: int, cup_notes) -> bool:
+    """오늘의 커피에서 편집된 컵노트를 연결된 생두 마스터(green_beans)로 동기화.
+    오늘의 커피를 컵노트의 단일 기준(source of truth)으로 삼는다.
+    해당 커피에 green_bean_id 연결이 없으면 아무 일도 하지 않는다."""
+    with connect() as conn:
+        row = conn.execute(
+            "SELECT green_bean_id FROM coffees WHERE id=?", (coffee_id,)
+        ).fetchone()
+        if not row or not row["green_bean_id"]:
+            return False
+        conn.execute(
+            "UPDATE green_beans SET cup_notes=?, "
+            "updated_at=strftime('%Y-%m-%dT%H:%M:%SZ','now') WHERE id=?",
+            (cup_notes, row["green_bean_id"]),
+        )
+        return True
 
 
 def find_active_by_name(name: str) -> Optional[dict]:
@@ -1371,7 +1407,8 @@ def _norm_ymd(d):
 
 def list_roasting_logs(green_bean_id: Optional[int] = None, limit: int = 1000) -> list:
     sql = """
-        SELECT r.*, gb.name AS bean_name, s.short_name AS supplier_short
+        SELECT r.*, gb.name AS bean_name, gb.cup_notes AS cup_notes,
+               s.short_name AS supplier_short
         FROM roasting_logs r
         JOIN green_beans gb ON gb.id = r.green_bean_id
         LEFT JOIN suppliers s ON s.id = gb.supplier_id
