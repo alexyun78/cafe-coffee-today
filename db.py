@@ -145,6 +145,7 @@ CREATE TABLE IF NOT EXISTS roasting_logs (
     notes             TEXT,
     coffee_id         INTEGER REFERENCES coffees(id),
     make_coffee       INTEGER NOT NULL DEFAULT 1,
+    output_at         TEXT,
     created_at        TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now'))
 );
 CREATE INDEX IF NOT EXISTS idx_roasting_bean ON roasting_logs(green_bean_id);
@@ -200,6 +201,7 @@ _SUP_EXTRA_COLUMNS = (
 # 이미 생성된 roasting_logs 테이블에 나중에 추가된 컬럼 (기존 서버 DB 마이그레이션용)
 _RL_EXTRA_COLUMNS = (
     ("make_coffee", "INTEGER NOT NULL DEFAULT 1"),
+    ("output_at", "TEXT"),   # 배출량 기입(저장) 시점 타임스탬프 (UTC ISO)
 )
 
 
@@ -426,6 +428,11 @@ def _months_ago_iso(months: int) -> str:
         except ValueError:
             continue
     return date(y, m, 1).isoformat()
+
+
+def _utc_now_iso() -> str:
+    """현재 UTC 시각을 created_at 과 같은 'YYYY-MM-DDTHH:MM:SSZ' 형식으로 반환."""
+    return datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ")
 
 
 def list_today_and_history():
@@ -1435,17 +1442,19 @@ def create_roasting_log(data: dict) -> int:
         loss = round((1 - output_g / input_g) * 100, 2)
     # '오늘의 커피 연동' 토글 상태를 기록(복제 시 그대로 복사하기 위함). 기본 1(ON).
     make_coffee = 1 if data.get("create_coffee", True) else 0
+    # 배출량이 있으면 그 기입(저장) 시점을 기록 (로스팅 완료 시각)
+    output_at = _utc_now_iso() if output_g is not None else None
     with connect() as conn:
         cur = conn.execute(
             "INSERT INTO roasting_logs "
             "(green_bean_id, roast_date, input_weight_g, output_weight_g, "
-            " moisture_loss_pct, roast_level, notes, coffee_id, make_coffee) "
-            "VALUES (?,?,?,?,?,?,?,?,?)",
+            " moisture_loss_pct, roast_level, notes, coffee_id, make_coffee, output_at) "
+            "VALUES (?,?,?,?,?,?,?,?,?,?)",
             (
                 int(data["green_bean_id"]), data["roast_date"],
                 input_g, output_g, loss,
                 data.get("roast_level"), data.get("notes"),
-                data.get("coffee_id"), make_coffee,
+                data.get("coffee_id"), make_coffee, output_at,
             ),
         )
         return cur.lastrowid
@@ -1470,6 +1479,15 @@ def update_roasting_log(rid: int, data: dict) -> bool:
         loss = round((1 - out / inp) * 100, 2) if out is not None and inp > 0 else None
         sets.append("moisture_loss_pct=?")
         vals.append(loss)
+        # 배출량이 처음 기입(빈 값 → 값)되는 저장 시점을 로스팅 완료 시각으로 기록.
+        # 이미 기록돼 있으면 최초 시각을 유지하고, 배출량을 비우면 시각도 지운다.
+        if "output_weight_g" in data:
+            if out is None:
+                sets.append("output_at=?")
+                vals.append(None)
+            elif not row["output_at"]:
+                sets.append("output_at=?")
+                vals.append(_utc_now_iso())
     if not sets:
         return False
     vals.append(rid)

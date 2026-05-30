@@ -905,6 +905,7 @@
   }
   .record-row-name { font-weight: 600; color: var(--coffee-dark); font-size: 0.9rem; }
   .record-row-date { font-size: 0.78rem; color: var(--muted); }
+  .record-row-date .rr-time { color: var(--accent); font-weight: 700; margin-left: 2px; }
   .record-row-detail { font-size: 0.82rem; color: var(--text); margin-top: 4px; }
   .record-row-detail span { margin-right: 12px; white-space: nowrap; }
   .record-row-losscmp {
@@ -4361,6 +4362,25 @@ function fmtStockKg(kg) {
   return { text: n.toFixed(1) + "kg", low: n < 5 };
 }
 
+// UTC ISO 타임스탬프 → KST 시:분 (배출량 기입 시각 표시용)
+function fmtKstTime(iso) {
+  if (!iso) return "";
+  const d = new Date(iso);
+  if (isNaN(d.getTime())) return "";
+  return d.toLocaleTimeString("ko-KR", {
+    timeZone: "Asia/Seoul", hour: "2-digit", minute: "2-digit", hour12: false,
+  });
+}
+function fmtKstDateTime(iso) {
+  if (!iso) return "";
+  const d = new Date(iso);
+  if (isNaN(d.getTime())) return "";
+  return d.toLocaleString("ko-KR", {
+    timeZone: "Asia/Seoul", year: "numeric", month: "2-digit", day: "2-digit",
+    hour: "2-digit", minute: "2-digit", hour12: false,
+  });
+}
+
 // 로스팅 시점의 구입 단가: 로스팅 일자 이전(이하)의 가장 최근 구입분을 사용.
 // 이전 구입이 없으면 가장 빠른 구입분으로 대체. {price, date} 또는 null 반환.
 function priceForRoast(gid, roastDate) {
@@ -4428,7 +4448,9 @@ function renderRoastList(items) {
       <div class="record-row" data-id="${r.id}" style="border-left-color: var(--accent);">
         <div class="record-row-top">
           <span class="record-row-name">${prefix}${escapeHtml(r.bean_name || "")}</span>
-          <span class="record-row-date">${escapeHtml(r.roast_date || "")}</span>
+          <span class="record-row-date">${escapeHtml(r.roast_date || "")}${
+            r.output_at ? ` <span class="rr-time" title="배출량 기입 ${escapeHtml(fmtKstDateTime(r.output_at))}">🕒 ${escapeHtml(fmtKstTime(r.output_at))}</span>` : ""
+          }</span>
         </div>
         <div class="record-row-detail">
           <span>투입 ${input.toLocaleString()}g</span>
