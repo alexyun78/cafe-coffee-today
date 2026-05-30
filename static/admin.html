@@ -907,6 +907,10 @@
   .record-row-date { font-size: 0.78rem; color: var(--muted); }
   .record-row-detail { font-size: 0.82rem; color: var(--text); margin-top: 4px; }
   .record-row-detail span { margin-right: 12px; white-space: nowrap; }
+  .record-row-losscmp {
+    margin-top: 3px; font-size: 0.8rem; font-weight: 600; color: var(--muted);
+  }
+  .record-row-losscmp.warn { color: #E65100; }
   .record-row-cupnotes {
     margin-top: 5px; font-size: 0.82rem; line-height: 1.4;
     color: var(--coffee-dark); font-weight: 500;
@@ -4378,11 +4382,31 @@ function renderRoastList(items) {
     el.innerHTML = '<div class="empty">로스팅 기록이 없습니다.</div>';
     return;
   }
-  el.innerHTML = items.map(r => {
+  el.innerHTML = items.map((r, idx) => {
     const prefix = r.supplier_short ? `[${escapeHtml(r.supplier_short)}] ` : "";
     const input = Number(r.input_weight_g) || 0;
     const output = r.output_weight_g != null ? Number(r.output_weight_g) : null;
     const loss = r.moisture_loss_pct != null ? Number(r.moisture_loss_pct).toFixed(1) + "%" : "—";
+    // 직전 로스팅 손실 대조: 같은 원두의 바로 이전(더 오래된) 기록과 비교.
+    // items는 최신순 정렬이므로 idx 뒤쪽이 더 오래된 기록.
+    let lossCmpHtml = "";
+    let prevLoss = null;
+    for (let j = idx + 1; j < items.length; j++) {
+      if (items[j].green_bean_id === r.green_bean_id && items[j].moisture_loss_pct != null) {
+        prevLoss = Number(items[j].moisture_loss_pct);
+        break;
+      }
+    }
+    if (prevLoss != null) {
+      const cur = r.moisture_loss_pct != null ? Number(r.moisture_loss_pct) : null;
+      let deltaTxt = "", warnCls = "";
+      if (cur != null) {
+        const d = cur - prevLoss;
+        deltaTxt = ` (Δ ${d >= 0 ? "+" : ""}${d.toFixed(1)}%p)`;
+        if (Math.abs(d) >= 2) warnCls = " warn";   // 2%p 이상 차이면 일관성 주의
+      }
+      lossCmpHtml = `<div class="record-row-losscmp${warnCls}">직전 ${prevLoss.toFixed(1)}%${deltaTxt}</div>`;
+    }
     const stock = fmtStockKg(_roastStockMap[r.green_bean_id]);
     const pr = priceForRoast(r.green_bean_id, r.roast_date || "");
     const priceHtml = pr
@@ -4412,6 +4436,7 @@ function renderRoastList(items) {
           <span style="font-weight:700; color:var(--accent);">손실 ${loss}</span>
           ${r.roast_level ? `<span>${escapeHtml(r.roast_level)}</span>` : ""}
         </div>
+        ${lossCmpHtml}
         ${cupHtml}
         ${stockHtml}
         ${r.notes ? `<div style="font-size:0.8rem; color:var(--muted); margin-top:4px;">${escapeHtml(r.notes)}</div>` : ""}
