@@ -980,6 +980,13 @@
   .bean-opt-label:hover { color: var(--coffee-dark); }
   .bean-opt.selected .bean-opt-label { font-weight: 700; color: var(--coffee-dark); }
   .bean-opt-sub { color: var(--muted); font-weight: 400; font-size: 0.82rem; }
+  .bean-opt-label.with-roast {
+    flex-direction: column; align-items: flex-start; justify-content: center; gap: 2px;
+  }
+  .bean-opt-main { display: block; }
+  .bean-opt-roast { font-size: 0.76rem; font-weight: 600; color: #2e7d32; }
+  .bean-opt-roast.stale { color: #E65100; }
+  .bean-opt-roast.none { color: #E65100; font-weight: 700; }
   .bean-opt-btn {
     flex-shrink: 0; padding: 6px 9px; border: none; border-radius: 6px;
     font-size: 0.72rem; font-weight: 600; font-family: inherit; cursor: pointer;
@@ -3212,6 +3219,37 @@ function sortBeansForSelect(beans) {
 // 상단에 "숨김 보기" 토글, 숨김 보기에서는 보이기/삭제 버튼을 제공한다.
 const _beanSelects = {};   // targetId -> controller
 
+// 로스팅 폼 드롭다운용: 생두별 최근 로스팅 일자 맵 (YYYY-MM-DD)
+function buildLastRoastMap() {
+  const m = {};
+  (_roastListCache || []).forEach(r => {
+    const gid = r.green_bean_id;
+    const d = r.roast_date || "";
+    if (gid == null || !d) return;
+    if (!m[gid] || d > m[gid]) m[gid] = d;   // YYYY-MM-DD 문자열 비교로 최신 선택
+  });
+  return m;
+}
+
+// 최근 로스팅 일자 → 드롭다운 표시용 {text, cls}. 14일 이상/이력 없음은 강조(stale).
+function fmtLastRoast(dateStr) {
+  if (!dateStr) return { text: "로스팅 이력 없음 — 지금 로스팅?", cls: "none" };
+  let days = null;
+  const d0 = new Date(dateStr + "T00:00:00");
+  if (!isNaN(d0.getTime())) {
+    const d1 = new Date(todayStr() + "T00:00:00");
+    days = Math.round((d1 - d0) / 86400000);
+  }
+  let ago = "";
+  if (days != null) {
+    if (days <= 0) ago = " (오늘)";
+    else if (days === 1) ago = " (어제)";
+    else ago = ` (${days}일 전)`;
+  }
+  const cls = (days == null || days >= 14) ? "stale" : "";
+  return { text: `최근 로스팅 ${dateStr}${ago}`, cls };
+}
+
 function initBeanSelects() {
   document.querySelectorAll(".bean-select").forEach(root => {
     if (root._inited) return;
@@ -3271,15 +3309,25 @@ function createBeanSelect(root) {
       }</div>`;
       return;
     }
+    // 로스팅 기록 작성용 드롭다운에서는 생두별 최근 로스팅 일자를 함께 표기
+    const showRoast = targetId === "roast-field-bean";
+    const lastRoast = showRoast ? buildLastRoastMap() : null;
     listEl.innerHTML = beans.map(b => {
       const prefix = b.supplier_short ? `[${escapeHtml(b.supplier_short)}] ` : "";
-      const label = `${prefix}${escapeHtml(b.name)} <span class="bean-opt-sub">${escapeHtml(b.process || "")}</span>`;
+      const main = `${prefix}${escapeHtml(b.name)} <span class="bean-opt-sub">${escapeHtml(b.process || "")}</span>`;
+      let labelCls = "bean-opt-label", labelInner = main;
+      if (showRoast) {
+        const lr = fmtLastRoast(lastRoast[b.id]);
+        labelCls += " with-roast";
+        labelInner = `<span class="bean-opt-main">${main}</span>` +
+          `<span class="bean-opt-roast ${lr.cls}">🫘 ${escapeHtml(lr.text)}</span>`;
+      }
       const btns = viewHidden
         ? `<button type="button" class="bean-opt-btn unhide" data-act="unhide" data-id="${b.id}">보이기</button>
            <button type="button" class="bean-opt-btn del" data-act="del" data-id="${b.id}">삭제</button>`
         : `<button type="button" class="bean-opt-btn hide" data-act="hide" data-id="${b.id}">숨기기</button>`;
       return `<div class="bean-opt ${b.id === selId ? "selected" : ""}" data-id="${b.id}">
-        <button type="button" class="bean-opt-label" data-act="pick" data-id="${b.id}">${label}</button>
+        <button type="button" class="${labelCls}" data-act="pick" data-id="${b.id}">${labelInner}</button>
         ${btns}
       </div>`;
     }).join("");
