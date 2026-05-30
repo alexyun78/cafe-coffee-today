@@ -1,7 +1,24 @@
 {
   "version": 1,
-  "updated_at": "2026-05-29T12:00:48Z",
+  "updated_at": "2026-05-30T12:00:28Z",
   "items": [
+    {
+      "id": "2026-05-30-arabica-green-bean-geographic-provenance",
+      "date": "2026-05-30",
+      "title_ko": "아라비카 생두의 식물화학적 조성에 영향을 미치는 지리적 원산지와 환경적 재배 조건",
+      "one_liner": "브라질·에티오피아 등 6개 산지 생두 폴리페놀·폴리아민·아미노산 다변수 분석 — 환경 스트레스 이력이 생두 화학 지문에 각인됨을 첫 실증",
+      "categories_primary": [
+        "생두"
+      ],
+      "categories_secondary": [
+        "화학/분석화학",
+        "환경·기후"
+      ],
+      "hero_image": "/static/img/insights/hero/green-bean.svg",
+      "journal": "Plant Biology (Wiley)",
+      "pub_date": "2026-03-01",
+      "source_basis": "abstract_only"
+    },
     {
       "id": "2026-05-29-coffee-bean-defect-deep-cofenet",
       "date": "2026-05-29",

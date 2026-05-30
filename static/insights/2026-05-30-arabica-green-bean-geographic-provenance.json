@@ -1,0 +1,72 @@
+{
+  "version": 1,
+  "id": "2026-05-30-arabica-green-bean-geographic-provenance",
+  "date": "2026-05-30",
+  "slug": "arabica-green-bean-geographic-provenance",
+  "title_ko": "아라비카 생두의 식물화학적 조성에 영향을 미치는 지리적 원산지와 환경적 재배 조건",
+  "title_original": "Geographic provenance and environmental growing conditions as factors influencing phytochemical composition of Arabica green coffee beans",
+  "one_liner": "브라질·에티오피아 등 6개 산지 생두 폴리페놀·폴리아민·아미노산 다변수 분석 — 환경 스트레스 이력이 생두 화학 지문에 각인됨을 첫 실증",
+  "authors": "I. Pettazzoni, G. Benati, S. Monari, E. De Angelis, L. Navarini, M. Ferri, A. Tassoni",
+  "journal": "Plant Biology (Wiley)",
+  "pub_date": "2026-03-01",
+  "doi": "10.1111/plb.70136",
+  "categories_primary": [
+    "생두"
+  ],
+  "categories_secondary": [
+    "화학/분석화학",
+    "환경·기후"
+  ],
+  "summary": "볼로냐 대학교 × illycaffè Aromalab 산학협력 연구. 6개 주요 아라비카 생산국 생두의 바이오제닉 아민, 카페인, 트리고넬린, 수크로스, 유리 아미노산, 페놀류를 동시 분석하고 PCA로 산지 간 다변수 클러스터링을 수행했다. 총폴리페놀 함량 44.8–70.7 mg GAeq g⁻¹ FW (브라질산 최고), 풋트레신 0.02–1.9 μg g⁻¹ FW의 광범위한 산지 간 변이가 확인되었다. PCA에서 에티오피아산은 고수크로스·저카페인 패턴으로 독립 군집을 이루고, 브라질산은 폴리아민·트리고넬린·아미노산 조성에서 뚜렷하게 분리되었다. 브라질 기상·환경 데이터 대조 분석에서 열·건조 스트레스가 폴리아민↑ 및 삼투 보호 아미노산 축적과 유의한 상관을 보였다. 생두 화학 지문이 유전자형 외 재배 환경의 스트레스 이력을 반영함을 실증했다.",
+  "key_findings": [
+    "총폴리페놀 함량 44.8–70.7 mg GAeq g⁻¹ FW (산지 간 최대 ~1.6배 차이) — 브라질산 최고",
+    "풋트레신(가장 풍부한 폴리아민): 0.02–1.9 μg g⁻¹ FW 광범위한 산지 간 변이",
+    "PCA: 에티오피아산 = 고수크로스·저카페인으로 독립 군집 형성",
+    "PCA: 브라질산 = 풋트레신·트리고넬린·아미노산 조성 기반 뚜렷한 군집, 브라질 내 지역 간 변이 존재",
+    "브라질 기상 데이터 대조: 열·건조 스트레스 → 폴리아민↑, 삼투 보호 아미노산 축적과 유의 상관",
+    "생두 화학 프로파일이 유전자형 외 환경 스트레스 이력을 반영함을 다변수 통계로 실증"
+  ],
+  "methodology": "Coffea arabica L. 6개 주요 생산국 생두 샘플 수집. HPLC 기반 바이오제닉 아민·폴리아민 정량, 카페인·트리고넬린·수크로스 HPLC 분석, 유리 아미노산 HPLC 분석, Folin-Ciocalteu 및 HPLC/LC-MS 기반 총폴리페놀·페놀류 분석. PCA(주성분 분석)로 다변수 군집화. 브라질 샘플에 대해 기상·환경 데이터와 화학 성분 간 상관 분석 추가 수행.",
+  "implications": {
+    "농가/가공장": "폴리아민 수준이 열·가뭄 스트레스와 상관됨에 따라 관개·그늘 재배 도입이 일관된 생두 화학 조성 유지에 기여할 것으로 기대됨. 생두 화학 지문 기반 원산지 인증 대비 수확 후 샘플 보관 조건 표준화 필요.",
+    "로스터/큐그레이더": "에티오피아산 고수크로스·저카페인 → 라이트 로스팅 시 마이야르 반응 전구체 풍부로 플로럴·과일향 형성에 유리. 브라질산 고폴리페놀·다양한 아미노산 → 미디엄 로스팅 뉘트·캐러멜 계열 복합도 연결. 산지별 생두 화학 특성 사전 참조로 로스팅 프로파일 설계 정량화 가능.",
+    "R&D": "생두 화학 지문(폴리아민·아미노산·폴리페놀 조합) 기반 원산지 인증 머신러닝 모델 개발 가능. 기후변화 맥락에서 스트레스 환경 변화에 따른 생두 화학 프로파일 시계열 모니터링 필요. 바이오제닉 아민 수준의 가공 방식별 변화 및 로스팅 후 아로마 전구체 전환 경로 후속 연구 필요."
+  },
+  "limitations": "6개 생산국 샘플이나 각국 내 구체적 농장·고도·품종 정보 일부 미특정; 브라질 대상 환경 상관 분석만 수행 — 다른 5개 산지 대상 분석 미수행으로 일반화 제한; 횡단면 설계로 환경 스트레스-화학 변화 인과관계 추론 한계; 폴리아민의 로스팅 후 변화 및 컵 품질·생리활성 연계 미검토.",
+  "glossary": [
+    {
+      "term": "Biogenic Amines",
+      "ko": "바이오제닉 아민 — 아미노산 탈카복실화 등으로 생성되는 질소 함유 화합물"
+    },
+    {
+      "term": "Putrescine",
+      "ko": "풋트레신 — 식물의 기본 폴리아민, 열·가뭄 스트레스 내성 관여"
+    },
+    {
+      "term": "Trigonelline",
+      "ko": "트리고넬린 — 커피 생두 주요 알칼로이드, 로스팅 시 아로마 전구체"
+    },
+    {
+      "term": "TPC (Total Polyphenol Content)",
+      "ko": "총폴리페놀 함량 — Folin-Ciocalteu법으로 측정"
+    },
+    {
+      "term": "PCA",
+      "ko": "주성분 분석 — 다변수 데이터 군집화 통계 기법"
+    },
+    {
+      "term": "Osmotic Stress",
+      "ko": "삼투 스트레스 — 건조·고온 환경에서 식물 세포 수분 부족 상태"
+    }
+  ],
+  "citation_apa": "Pettazzoni, I., Benati, G., Monari, S., De Angelis, E., Navarini, L., Ferri, M., & Tassoni, A. (2026). Geographic provenance and environmental growing conditions as factors influencing phytochemical composition of Arabica green coffee beans. Plant Biology, 28, 520–534. https://doi.org/10.1111/plb.70136",
+  "links": {
+    "doi": "https://doi.org/10.1111/plb.70136",
+    "oa_pdf": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC12884032/",
+    "journal_homepage": "https://onlinelibrary.wiley.com/journal/14388677"
+  },
+  "source_basis": "abstract_only",
+  "data_charts": [],
+  "drive_doc_url": "https://docs.google.com/document/d/1IFaKahUE5109n6Qdu8pySZHgVNsNkRki9kqLMyiXmIg/edit",
+  "hero_image": "/static/img/insights/hero/green-bean.svg"
+}
