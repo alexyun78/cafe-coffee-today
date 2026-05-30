@@ -926,6 +926,35 @@
     background: #EFEBE9; padding: 3px 9px; border-radius: 999px;
   }
   .record-row-price .rp-date { font-weight: 400; opacity: 0.75; font-size: 0.74rem; }
+
+  /* ===== 로스팅 폼: 현재 재고 힌트(말풍선) ===== */
+  .roast-stock-hint {
+    position: relative; margin: 2px 0 14px; padding: 10px 13px;
+    border-radius: 10px; font-size: 0.86rem; line-height: 1.5;
+    background: #E8F5E9; color: #1b5e20; border: 1px solid #c8e6c9;
+    display: flex; flex-wrap: wrap; gap: 3px 12px; align-items: center;
+  }
+  .roast-stock-hint[hidden] { display: none; }
+  .roast-stock-hint::after {
+    content: ""; position: absolute; bottom: -7px; left: 20px;
+    width: 12px; height: 12px; background: inherit;
+    border-right: inherit; border-bottom: inherit; transform: rotate(45deg);
+  }
+  .roast-stock-hint .rsh-main strong { font-size: 0.98rem; }
+  .roast-stock-hint.low { background: #FFF3E0; color: #E65100; border-color: #ffe0b2; }
+  .roast-stock-hint.critical, .roast-stock-hint.out {
+    background: #FFEBEE; color: #b71c1c; border-color: #ffcdd2;
+    animation: rshPulse 1.3s ease-in-out infinite;
+  }
+  .roast-stock-hint.info { background: #f0ebe4; color: var(--muted); border-color: var(--border); }
+  .roast-stock-hint .rsh-warn { font-weight: 700; }
+  .roast-stock-hint .rsh-warn.soft { font-weight: 600; }
+  .roast-stock-hint .rsh-proj { font-weight: 600; opacity: 0.95; }
+  .roast-stock-hint .rsh-proj.over { color: #b71c1c; font-weight: 700; }
+  @keyframes rshPulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(183,28,28,0); }
+    50% { box-shadow: 0 0 0 4px rgba(183,28,28,0.13); }
+  }
   .record-row-actions { display: flex; gap: 6px; margin-top: 8px; }
   .record-row-actions button {
     background: #f0ebe4; color: var(--coffee-dark); border: none;
@@ -1531,6 +1560,9 @@
             <input type="date" id="roast-field-date" required>
             <div class="field-error">날짜를 선택하세요.</div>
           </div>
+
+          <!-- 선택한 생두의 현재 재고 (투입칸 위) — 품절 임박 경고 -->
+          <div id="roast-stock-hint" class="roast-stock-hint" hidden></div>
 
           <div class="field">
             <label for="roast-field-input" class="req">투입 (g)</label>
@@ -3375,6 +3407,9 @@ function createBeanSelect(root) {
     updateText();
     const field = root.closest(".field");
     if (field && hidden.value) field.classList.remove("error");
+    // 로스팅 폼: 생두를 고르면 현재 재고 힌트 갱신
+    if (targetId === "roast-field-bean" && typeof updateRoastStockHint === "function")
+      updateRoastStockHint();
   }
   function clearIfDeleted(deletedId) {
     if (hidden.value && parseInt(hidden.value, 10) === deletedId) setValue("");
@@ -4426,6 +4461,7 @@ function openRoastDuplicate(id) {
   document.getElementById("roast-form-title").textContent = "로스팅 기록";
   document.getElementById("roast-make-coffee-field").style.display = "";
   updateRoastLoss();
+  updateRoastStockHint();   // 미리 채워진 투입량 기준으로 잔여 재고 예측 표시
   showRoastForm();
   const inp = document.getElementById("roast-field-input");
   inp.focus();
@@ -4490,7 +4526,52 @@ function updateRoastLoss() {
     display.innerHTML = "수분손실: <strong>—</strong>";
   }
 }
-document.getElementById("roast-field-input").addEventListener("input", updateRoastLoss);
+// 선택한 생두의 현재 재고를 투입칸 위에 표시. 2kg 미만이면 품절 임박 경고(말풍선).
+// 투입량을 입력하면 로스팅 후 잔여 재고를 예측해 재고 초과를 막는다.
+function updateRoastStockHint() {
+  const hint = document.getElementById("roast-stock-hint");
+  if (!hint) return;
+  const beanId = parseInt(document.getElementById("roast-field-bean").value, 10);
+  if (!beanId) { hint.hidden = true; hint.className = "roast-stock-hint"; return; }
+  hint.hidden = false;
+  const raw = _roastStockMap[beanId];
+  if (raw == null) {
+    hint.className = "roast-stock-hint info";
+    hint.innerHTML = `<span class="rsh-main">현재 재고 정보 없음</span>`;
+    return;
+  }
+  const kg = Number(raw) || 0;
+  const inputG = parseFloat(document.getElementById("roast-field-input").value) || 0;
+  let level = "ok";
+  if (kg <= 0) level = "out";
+  else if (kg < 2) level = "critical";
+  else if (kg < 5) level = "low";
+  const kgText = kg <= 0 ? "0kg (소진)" : kg.toFixed(1) + "kg";
+
+  let warn = "";
+  if (level === "out") warn = `<span class="rsh-warn">⚠️ 재고 소진 — 보충이 필요해요</span>`;
+  else if (level === "critical") warn = `<span class="rsh-warn">⚠️ 품절 임박! 재고 2kg 미만 — 보충을 준비하세요</span>`;
+  else if (level === "low") warn = `<span class="rsh-warn soft">🟠 재고가 얼마 남지 않았어요 (5kg 미만)</span>`;
+
+  // 예측은 신규/복제(아직 재고에 미반영)일 때만. 편집은 이미 재고에 반영돼 있어 제외.
+  let proj = "";
+  if (inputG > 0 && !_roastEditingId) {
+    const after = kg - inputG / 1000;
+    if (after < 0) {
+      proj = `<span class="rsh-proj over">→ 로스팅 후 ${after.toFixed(1)}kg · 재고 초과! ${Math.abs(after).toFixed(1)}kg 부족</span>`;
+    } else {
+      proj = `<span class="rsh-proj">→ 로스팅 후 ${after.toFixed(1)}kg 남음${after < 2 ? " · 이후 품절 임박" : ""}</span>`;
+    }
+  }
+
+  hint.className = "roast-stock-hint " + level;
+  hint.innerHTML = `<span class="rsh-main">현재 재고 <strong>${kgText}</strong></span>${warn}${proj}`;
+}
+
+document.getElementById("roast-field-input").addEventListener("input", () => {
+  updateRoastLoss();
+  updateRoastStockHint();
+});
 document.getElementById("roast-field-output").addEventListener("input", updateRoastLoss);
 
 document.getElementById("roast-form").addEventListener("submit", async (e) => {
