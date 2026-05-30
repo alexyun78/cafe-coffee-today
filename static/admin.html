@@ -4288,6 +4288,8 @@ function openRoastDuplicate(id) {
   document.getElementById("roast-field-output").value = r.output_weight_g != null ? r.output_weight_g : "";
   document.getElementById("roast-field-level").value = r.roast_level || "";
   document.getElementById("roast-field-notes").value = r.notes || "";
+  // 오늘의 커피 연동 토글도 원본 상태 그대로 복제 (꺼져 있으면 꺼진 채로)
+  document.getElementById("roast-field-make-coffee").checked = r.make_coffee != 0;
   document.getElementById("roast-form-title").textContent = "로스팅 기록";
   document.getElementById("roast-make-coffee-field").style.display = "";
   updateRoastLoss();
@@ -4310,6 +4312,8 @@ function openRoastEdit(id) {
   document.getElementById("roast-field-output").value = r.output_weight_g != null ? r.output_weight_g : "";
   document.getElementById("roast-field-level").value = r.roast_level || "";
   document.getElementById("roast-field-notes").value = r.notes || "";
+  // 편집 폼에선 토글이 숨겨지지만, 저장 시 값이 유지되도록 원본 상태를 반영
+  document.getElementById("roast-field-make-coffee").checked = r.make_coffee != 0;
   document.getElementById("roast-form-title").textContent = "로스팅 편집";
   document.getElementById("roast-make-coffee-field").style.display = "none";
   updateRoastLoss();
@@ -4385,6 +4389,7 @@ document.getElementById("roast-form").addEventListener("submit", async (e) => {
     roast_level: document.getElementById("roast-field-level").value.trim() || null,
     notes: document.getElementById("roast-field-notes").value.trim() || null,
     create_coffee: document.getElementById("roast-field-make-coffee").checked,
+    make_coffee: document.getElementById("roast-field-make-coffee").checked,
   };
 
   try {

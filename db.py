@@ -144,6 +144,7 @@ CREATE TABLE IF NOT EXISTS roasting_logs (
     roast_level       TEXT,
     notes             TEXT,
     coffee_id         INTEGER REFERENCES coffees(id),
+    make_coffee       INTEGER NOT NULL DEFAULT 1,
     created_at        TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now'))
 );
 CREATE INDEX IF NOT EXISTS idx_roasting_bean ON roasting_logs(green_bean_id);
@@ -196,6 +197,11 @@ _SUP_EXTRA_COLUMNS = (
     ("hidden", "INTEGER NOT NULL DEFAULT 0"),
 )
 
+# 이미 생성된 roasting_logs 테이블에 나중에 추가된 컬럼 (기존 서버 DB 마이그레이션용)
+_RL_EXTRA_COLUMNS = (
+    ("make_coffee", "INTEGER NOT NULL DEFAULT 1"),
+)
+
 
 def _ensure_dir():
     d = os.path.dirname(DB_PATH)
@@ -232,6 +238,10 @@ def init_schema():
         for col, ctype in _SUP_EXTRA_COLUMNS:
             if col not in sup_existing:
                 conn.execute(f"ALTER TABLE suppliers ADD COLUMN {col} {ctype}")
+        rl_existing = {r["name"] for r in conn.execute("PRAGMA table_info(roasting_logs)").fetchall()}
+        for col, ctype in _RL_EXTRA_COLUMNS:
+            if col not in rl_existing:
+                conn.execute(f"ALTER TABLE roasting_logs ADD COLUMN {col} {ctype}")
         conn.execute(
             "UPDATE coffees SET availability='운영' WHERE availability IS NULL OR availability=''"
         )
@@ -1386,17 +1396,19 @@ def create_roasting_log(data: dict) -> int:
     loss = None
     if output_g is not None and input_g > 0:
         loss = round((1 - output_g / input_g) * 100, 2)
+    # '오늘의 커피 연동' 토글 상태를 기록(복제 시 그대로 복사하기 위함). 기본 1(ON).
+    make_coffee = 1 if data.get("create_coffee", True) else 0
     with connect() as conn:
         cur = conn.execute(
             "INSERT INTO roasting_logs "
             "(green_bean_id, roast_date, input_weight_g, output_weight_g, "
-            " moisture_loss_pct, roast_level, notes, coffee_id) "
-            "VALUES (?,?,?,?,?,?,?,?)",
+            " moisture_loss_pct, roast_level, notes, coffee_id, make_coffee) "
+            "VALUES (?,?,?,?,?,?,?,?,?)",
             (
                 int(data["green_bean_id"]), data["roast_date"],
                 input_g, output_g, loss,
                 data.get("roast_level"), data.get("notes"),
-                data.get("coffee_id"),
+                data.get("coffee_id"), make_coffee,
             ),
         )
         return cur.lastrowid
@@ -1404,7 +1416,7 @@ def create_roasting_log(data: dict) -> int:
 
 def update_roasting_log(rid: int, data: dict) -> bool:
     allowed = ("green_bean_id", "roast_date", "input_weight_g", "output_weight_g",
-               "roast_level", "notes", "coffee_id")
+               "roast_level", "notes", "coffee_id", "make_coffee")
     sets, vals = [], []
     for k in allowed:
         if k in data:
