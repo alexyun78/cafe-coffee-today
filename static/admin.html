@@ -907,12 +907,21 @@
   .record-row-date { font-size: 0.78rem; color: var(--muted); }
   .record-row-detail { font-size: 0.82rem; color: var(--text); margin-top: 4px; }
   .record-row-detail span { margin-right: 12px; white-space: nowrap; }
+  .record-row-meta {
+    display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-top: 6px;
+  }
   .record-row-stock {
-    display: inline-block; margin-top: 6px;
+    display: inline-block;
     font-size: 0.8rem; font-weight: 700; color: #2e7d32;
     background: #E8F5E9; padding: 3px 9px; border-radius: 999px;
   }
   .record-row-stock.low { color: #c62828; background: #FFEBEE; }
+  .record-row-price {
+    display: inline-block;
+    font-size: 0.8rem; font-weight: 700; color: #5d4037;
+    background: #EFEBE9; padding: 3px 9px; border-radius: 999px;
+  }
+  .record-row-price .rp-date { font-weight: 400; opacity: 0.75; font-size: 0.74rem; }
   .record-row-actions { display: flex; gap: 6px; margin-top: 8px; }
   .record-row-actions button {
     background: #f0ebe4; color: var(--coffee-dark); border: none;
@@ -3110,6 +3119,7 @@ let _suppliersCache = [];
 let _beansBySupplier = {};   // { 공급처명: [원두명, ...] }
 let _roastListCache = [];    // 로스팅 기록 (복제용)
 let _roastStockMap = {};     // green_bean_id -> 현재 재고(kg) (로스팅 목록 실시간 표시용)
+let _roastPurchaseMap = {};  // green_bean_id -> [{date, price}] 구입일 오름차순 (시기별 단가)
 let _purchaseListCache = []; // 구매 기록 (숨김 토글 재렌더용)
 let _purchaseEditingId = null; // 구매 기록 편집 중 id (null이면 신규)
 let _roastEditingId = null;    // 로스팅 기록 편집 중 id (null이면 신규)
@@ -4270,14 +4280,28 @@ document.getElementById("purchase-form").addEventListener("submit", async (e) =>
 async function loadRoastList() {
   const el = document.getElementById("roast-list-items");
   try {
-    // 로스팅 기록과 현재 재고를 함께 불러와 행마다 실시간 재고를 표시
-    const [res, inv] = await Promise.all([
+    // 로스팅 기록 + 현재 재고 + 구입 이력을 함께 불러와 행마다 실시간 표시
+    const [res, inv, pur] = await Promise.all([
       api("GET", "/api/roasting-logs"),
       api("GET", "/api/inventory").catch(() => null),
+      api("GET", "/api/purchases").catch(() => null),
     ]);
     _roastStockMap = {};
     if (inv && inv.items) {
       inv.items.forEach(it => { _roastStockMap[it.id] = it.remaining_kg; });
+    }
+    // 같은 생두라도 구입 시기별로 단가가 다르므로, 생두별 구입 단가를 날짜순으로 보관
+    _roastPurchaseMap = {};
+    if (pur && pur.items) {
+      pur.items.forEach(p => {
+        const gid = p.green_bean_id, price = Number(p.unit_price) || 0;
+        if (gid == null || price <= 0) return;
+        (_roastPurchaseMap[gid] = _roastPurchaseMap[gid] || []).push({
+          date: p.purchase_date || "", price,
+        });
+      });
+      Object.values(_roastPurchaseMap).forEach(arr =>
+        arr.sort((a, b) => (a.date < b.date ? -1 : a.date > b.date ? 1 : 0)));
     }
     renderRoastList(res.items || []);
   } catch (e) {
@@ -4294,6 +4318,20 @@ function fmtStockKg(kg) {
   return { text: n.toFixed(1) + "kg", low: n < 5 };
 }
 
+// 로스팅 시점의 구입 단가: 로스팅 일자 이전(이하)의 가장 최근 구입분을 사용.
+// 이전 구입이 없으면 가장 빠른 구입분으로 대체. {price, date} 또는 null 반환.
+function priceForRoast(gid, roastDate) {
+  const arr = _roastPurchaseMap[gid];
+  if (!arr || !arr.length) return null;
+  let chosen = null;
+  for (const p of arr) {                 // 날짜 오름차순
+    if (!roastDate || p.date <= roastDate) chosen = p;
+    else break;
+  }
+  if (!chosen) chosen = arr[0];           // 로스팅일 이전 구입이 없으면 최초 구입가
+  return chosen;
+}
+
 function renderRoastList(items) {
   _roastListCache = items || [];
   const el = document.getElementById("roast-list-items");
@@ -4307,8 +4345,17 @@ function renderRoastList(items) {
     const output = r.output_weight_g != null ? Number(r.output_weight_g) : null;
     const loss = r.moisture_loss_pct != null ? Number(r.moisture_loss_pct).toFixed(1) + "%" : "—";
     const stock = fmtStockKg(_roastStockMap[r.green_bean_id]);
-    const stockHtml = stock
-      ? `<div class="record-row-stock${stock.low ? " low" : ""}">현재 재고 ${stock.text}</div>`
+    const pr = priceForRoast(r.green_bean_id, r.roast_date || "");
+    const priceHtml = pr
+      ? `<span class="record-row-price" title="${escapeHtml(pr.date)} 구입 단가 기준">`
+        + `구입가 ${pr.price.toLocaleString()}원/kg`
+        + `${pr.date ? ` <span class="rp-date">(${escapeHtml(pr.date.slice(2))} 구입)</span>` : ""}`
+        + `</span>`
+      : "";
+    const stockHtml = (stock || priceHtml)
+      ? `<div class="record-row-meta">${
+          stock ? `<span class="record-row-stock${stock.low ? " low" : ""}">현재 재고 ${stock.text}</span>` : ""
+        }${priceHtml}</div>`
       : "";
     return `
       <div class="record-row" data-id="${r.id}" style="border-left-color: var(--accent);">
