@@ -4478,7 +4478,7 @@ function openRoastDuplicate(id) {
   _beanSelects["roast-field-bean"].setValue(r.green_bean_id || "");
   document.getElementById("roast-field-date").value = todayStr();
   document.getElementById("roast-field-input").value = r.input_weight_g != null ? r.input_weight_g : "";
-  document.getElementById("roast-field-output").value = r.output_weight_g != null ? r.output_weight_g : "";
+  document.getElementById("roast-field-output").value = "";   // 배출량은 빈 값으로 복제 (로스팅 후 입력)
   document.getElementById("roast-field-level").value = r.roast_level || "";
   document.getElementById("roast-field-notes").value = r.notes || "";
   // 오늘의 커피 연동 토글도 원본 상태 그대로 복제 (꺼져 있으면 꺼진 채로)
@@ -4491,7 +4491,7 @@ function openRoastDuplicate(id) {
   const inp = document.getElementById("roast-field-input");
   inp.focus();
   inp.select();
-  showToast("복제 — 투입/배출량을 확인하세요");
+  showToast("복제 — 배출량을 입력하세요");
 }
 
 // 로스팅 편집 — 캐시의 기록을 폼에 채우고 PUT 으로 저장 (오늘의 커피 연동 토글 숨김)
