@@ -139,6 +139,7 @@ CREATE TABLE IF NOT EXISTS roasting_logs (
     green_bean_id     INTEGER NOT NULL REFERENCES green_beans(id),
     roast_date        TEXT NOT NULL,
     input_weight_g    REAL NOT NULL,
+    actual_input_weight_g REAL,
     output_weight_g   REAL,
     moisture_loss_pct REAL,
     roast_level       TEXT,
@@ -202,6 +203,7 @@ _SUP_EXTRA_COLUMNS = (
 _RL_EXTRA_COLUMNS = (
     ("make_coffee", "INTEGER NOT NULL DEFAULT 1"),
     ("output_at", "TEXT"),   # 배출량 기입(저장) 시점 타임스탬프 (UTC ISO)
+    ("actual_input_weight_g", "REAL"),   # 실제 로스팅 투입량(재고용 투입량과 다를 때만)
 )
 
 
@@ -1434,12 +1436,20 @@ def list_roasting_logs(green_bean_id: Optional[int] = None, limit: int = 1000) -
     return rows[:limit]
 
 
+def _opt_float(v):
+    """빈 값('', None)은 None, 그 외는 float."""
+    return float(v) if v not in (None, "") else None
+
+
 def create_roasting_log(data: dict) -> int:
     input_g = float(data["input_weight_g"])
-    output_g = float(data["output_weight_g"]) if data.get("output_weight_g") else None
+    actual_g = _opt_float(data.get("actual_input_weight_g"))
+    output_g = _opt_float(data.get("output_weight_g"))
+    # 수분손실은 실제로 로스터에 투입된 양 기준 (실제 투입량이 있으면 그것, 없으면 재고용 투입량)
+    eff_in = actual_g if actual_g is not None else input_g
     loss = None
-    if output_g is not None and input_g > 0:
-        loss = round((1 - output_g / input_g) * 100, 2)
+    if output_g is not None and eff_in and eff_in > 0:
+        loss = round((1 - output_g / eff_in) * 100, 2)
     # '오늘의 커피 연동' 토글 상태를 기록(복제 시 그대로 복사하기 위함). 기본 1(ON).
     make_coffee = 1 if data.get("create_coffee", True) else 0
     # 배출량이 있으면 그 기입(저장) 시점을 기록 (로스팅 완료 시각)
@@ -1447,12 +1457,13 @@ def create_roasting_log(data: dict) -> int:
     with connect() as conn:
         cur = conn.execute(
             "INSERT INTO roasting_logs "
-            "(green_bean_id, roast_date, input_weight_g, output_weight_g, "
-            " moisture_loss_pct, roast_level, notes, coffee_id, make_coffee, output_at) "
-            "VALUES (?,?,?,?,?,?,?,?,?,?)",
+            "(green_bean_id, roast_date, input_weight_g, actual_input_weight_g, "
+            " output_weight_g, moisture_loss_pct, roast_level, notes, coffee_id, "
+            " make_coffee, output_at) "
+            "VALUES (?,?,?,?,?,?,?,?,?,?,?)",
             (
                 int(data["green_bean_id"]), data["roast_date"],
-                input_g, output_g, loss,
+                input_g, actual_g, output_g, loss,
                 data.get("roast_level"), data.get("notes"),
                 data.get("coffee_id"), make_coffee, output_at,
             ),
@@ -1468,15 +1479,25 @@ def update_roasting_log(rid: int, data: dict) -> bool:
         if k in data:
             sets.append(f"{k}=?")
             vals.append(data[k])
-    if "input_weight_g" in data or "output_weight_g" in data:
+    if ("input_weight_g" in data or "output_weight_g" in data
+            or "actual_input_weight_g" in data):
         with connect() as conn:
             row = conn.execute("SELECT * FROM roasting_logs WHERE id=?", (rid,)).fetchone()
         if not row:
             return False
         inp = float(data.get("input_weight_g", row["input_weight_g"]))
+        # 실제 투입량: 데이터에 있으면 갱신, 없으면 기존 값 유지
+        if "actual_input_weight_g" in data:
+            actual = _opt_float(data.get("actual_input_weight_g"))
+            sets.append("actual_input_weight_g=?")
+            vals.append(actual)
+        else:
+            actual = row["actual_input_weight_g"]
+        # 손실은 실제 투입량 기준(없으면 재고용 투입량)
+        eff = actual if actual is not None else inp
         out = data.get("output_weight_g", row["output_weight_g"])
         out = float(out) if out is not None else None
-        loss = round((1 - out / inp) * 100, 2) if out is not None and inp > 0 else None
+        loss = round((1 - out / eff) * 100, 2) if out is not None and eff and eff > 0 else None
         sets.append("moisture_loss_pct=?")
         vals.append(loss)
         # 배출량이 처음 기입(빈 값 → 값)되는 저장 시점을 로스팅 완료 시각으로 기록.

@@ -932,6 +932,13 @@
   }
   .record-row-price .rp-date { font-weight: 400; opacity: 0.75; font-size: 0.74rem; }
 
+  /* ===== 로스팅 폼: 실제 투입량 토글 ===== */
+  .roast-actual-toggle {
+    display: flex; align-items: center; gap: 7px; margin-top: 8px;
+    font-size: 0.84rem; color: var(--text); cursor: pointer; font-weight: 500;
+  }
+  .roast-actual-toggle input { width: 17px; height: 17px; accent-color: var(--accent); cursor: pointer; }
+
   /* ===== 로스팅 폼: 현재 재고 힌트(말풍선) ===== */
   .roast-stock-hint {
     position: relative; margin: 2px 0 14px; padding: 10px 13px;
@@ -1570,9 +1577,19 @@
           <div id="roast-stock-hint" class="roast-stock-hint" hidden></div>
 
           <div class="field">
-            <label for="roast-field-input" class="req">투입 (g)</label>
+            <label for="roast-field-input" class="req">투입 (g) <span class="label-hint">(재고 차감 기준)</span></label>
             <input type="text" id="roast-field-input" inputmode="numeric" placeholder="예: 5000" required>
             <div class="field-error">투입량을 입력하세요.</div>
+            <label class="roast-actual-toggle">
+              <input type="checkbox" id="roast-field-actual-on">
+              실제 투입량 따로 기록 (재고용과 다를 때)
+            </label>
+          </div>
+
+          <div class="field" id="roast-actual-field" hidden>
+            <label for="roast-field-actual">실제 투입 (g) <span class="label-hint">(로스터에 실제 들어간 양)</span></label>
+            <input type="text" id="roast-field-actual" inputmode="numeric" placeholder="예: 5080">
+            <div class="auto-calc">수분손실은 실제 투입량 기준으로 계산돼요.</div>
           </div>
 
           <div class="field">
@@ -4453,7 +4470,10 @@ function renderRoastList(items) {
           }</span>
         </div>
         <div class="record-row-detail">
-          <span>투입 ${input.toLocaleString()}g</span>
+          <span>투입 ${input.toLocaleString()}g${
+            (r.actual_input_weight_g != null && Number(r.actual_input_weight_g) !== input)
+              ? ` <span style="color:var(--accent);font-weight:700;">(실제 ${Number(r.actual_input_weight_g).toLocaleString()}g)</span>` : ""
+          }</span>
           ${output != null ? `<span>배출 ${output.toLocaleString()}g</span>` : ""}
           <span style="font-weight:700; color:var(--accent);">손실 ${loss}</span>
           ${r.roast_level ? `<span>${escapeHtml(r.roast_level)}</span>` : ""}
@@ -4505,6 +4525,7 @@ function openRoastDuplicate(id) {
   document.getElementById("roast-field-notes").value = r.notes || "";
   // 오늘의 커피 연동 토글도 원본 상태 그대로 복제 (꺼져 있으면 꺼진 채로)
   document.getElementById("roast-field-make-coffee").checked = r.make_coffee != 0;
+  applyRoastActual(null);   // 실제 투입량은 배치별 실측값이라 복제하지 않음 (배출량처럼 비움)
   document.getElementById("roast-form-title").textContent = "로스팅 기록";
   document.getElementById("roast-make-coffee-field").style.display = "";
   updateRoastLoss();
@@ -4530,6 +4551,7 @@ function openRoastEdit(id) {
   document.getElementById("roast-field-notes").value = r.notes || "";
   // 편집 폼에선 토글이 숨겨지지만, 저장 시 값이 유지되도록 원본 상태를 반영
   document.getElementById("roast-field-make-coffee").checked = r.make_coffee != 0;
+  applyRoastActual(r.actual_input_weight_g != null ? r.actual_input_weight_g : null);
   document.getElementById("roast-form-title").textContent = "로스팅 편집";
   document.getElementById("roast-make-coffee-field").style.display = "none";
   updateRoastLoss();
@@ -4556,22 +4578,46 @@ document.getElementById("btn-roast-new").addEventListener("click", () => {
   document.getElementById("roast-field-date").value = todayStr();
   document.getElementById("roast-form-title").textContent = "로스팅 기록";
   document.getElementById("roast-make-coffee-field").style.display = "";
+  applyRoastActual(null);
   updateRoastLoss();
   showRoastForm();
 });
 document.getElementById("btn-roast-cancel").addEventListener("click", hideRoastForm);
 
-// 수분손실 자동계산
+// 수분손실 자동계산 — 실제 투입량이 있으면 그 값을, 없으면 재고용 투입량을 기준으로
 function updateRoastLoss() {
   const input = parseFloat(document.getElementById("roast-field-input").value) || 0;
+  const actualOn = document.getElementById("roast-field-actual-on").checked;
+  const actual = parseFloat(document.getElementById("roast-field-actual").value) || 0;
+  const eff = (actualOn && actual > 0) ? actual : input;
   const output = parseFloat(document.getElementById("roast-field-output").value) || 0;
   const display = document.getElementById("roast-loss-display");
-  if (input > 0 && output > 0) {
-    const loss = ((1 - output / input) * 100).toFixed(1);
-    display.innerHTML = `수분손실: <strong>${loss}%</strong>`;
+  if (eff > 0 && output > 0) {
+    const loss = ((1 - output / eff) * 100).toFixed(1);
+    const basis = (actualOn && actual > 0)
+      ? ` <span style="font-size:0.8rem;color:var(--muted);font-weight:600;">(실제 ${actual.toLocaleString()}g 기준)</span>` : "";
+    display.innerHTML = `수분손실: <strong>${loss}%</strong>${basis}`;
   } else {
     display.innerHTML = "수분손실: <strong>—</strong>";
   }
+}
+
+// 실제 투입량 체크박스 → 입력칸 표시/숨김. 끄면 값 비움.
+function syncRoastActualField() {
+  const on = document.getElementById("roast-field-actual-on").checked;
+  document.getElementById("roast-actual-field").hidden = !on;
+  if (!on) document.getElementById("roast-field-actual").value = "";
+  updateRoastLoss();
+}
+document.getElementById("roast-field-actual-on").addEventListener("change", syncRoastActualField);
+document.getElementById("roast-field-actual").addEventListener("input", updateRoastLoss);
+
+// 폼 열 때 실제 투입량 상태 적용 (값 있으면 체크+표시, 없으면 해제+숨김)
+function applyRoastActual(actualVal) {
+  const on = actualVal != null && actualVal !== "";
+  document.getElementById("roast-field-actual-on").checked = on;
+  document.getElementById("roast-field-actual").value = on ? actualVal : "";
+  document.getElementById("roast-actual-field").hidden = !on;
 }
 // 선택한 생두의 현재 재고를 투입칸 위에 표시. 2kg 미만이면 품절 임박 경고(말풍선).
 // 투입량을 입력하면 로스팅 후 잔여 재고를 예측해 재고 초과를 막는다.
@@ -4642,10 +4688,13 @@ document.getElementById("roast-form").addEventListener("submit", async (e) => {
   saveBtn.disabled = true;
   saveBtn.innerHTML = '<span class="spinner"></span>저장 중...';
 
+  const actualOn = document.getElementById("roast-field-actual-on").checked;
+  const actualVal = parseFloat(document.getElementById("roast-field-actual").value);
   const payload = {
     green_bean_id: parseInt(beanSel.value),
     roast_date: dateVal,
     input_weight_g: inputVal,
+    actual_input_weight_g: (actualOn && actualVal > 0) ? actualVal : null,
     output_weight_g: parseFloat(document.getElementById("roast-field-output").value) || null,
     roast_level: document.getElementById("roast-field-level").value.trim() || null,
     notes: document.getElementById("roast-field-notes").value.trim() || null,
