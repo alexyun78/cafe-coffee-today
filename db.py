@@ -304,6 +304,46 @@ def init_schema():
             conn.execute(
                 "INSERT INTO migrations (name) VALUES (?)", ("sync_cup_notes_from_coffee_v1",)
             )
+        # 컵노트 한글화: 시드 기본값(공급사 영문 스펙)으로 들어간 생두 컵노트를
+        # 기존 한글 컵노트로 되돌린다. 이력이 없던 5종은 새로 번역.
+        # 영어가 남아있는 행만 GLOB 로 골라 멱등 처리.
+        if not conn.execute(
+            "SELECT 1 FROM migrations WHERE name=?", ("cup_notes_korean_v1",)
+        ).fetchone():
+            korean_notes = {
+                "에티오피아 예가체프 G2": "살구, 티, 자스민, 레몬",
+                "에티오피아 시다모 벤사 봄베 G1": "말린 망고, 과일의 산미, 블루베리",
+                "에티오피아 콩가 내추럴 G1": "블루베리, 구아바, 초코렛, 과일의 산미",
+                "디카페인 브라질 NY2 17/18 커피": "부드러운 초콜릿, 균형감",
+                "르완다 인조브 워시드 수프림": "밀크, 흑설탕, 블랙베리",
+                "브라질 BSCA 옐로우버본 술데미나스": "아몬드, 호두, 토피, 체리, 메이플, 밀크초콜릿, 깔끔한 단맛",
+                "아바야 게이샤": "라즈베리, 블루베리, 가벼운 단맛",
+                "에티오피아 첼베사 워시드": "베르가못, 라일락, 흰설탕",
+                "에티오피아 코케 허니 내추럴": "복숭아, 자두, 장미, 딸기, 꿀, 부드러운 바디, 단 여운",
+                "예가체프 게뎁 방코 애너러빅 내추럴 G1": "자스민, 블루베리, 적포도, 파인애플, 복숭아, 자두, 카라멜, 균형감",
+                "케냐 AB 니에리": "묵직한 바디, 라임, 시트러스, 블랙커런트, 베리, 와인향, 초콜릿",
+                "코스타리카 SHB 팬시 따라주 라파스토라 프리메라": "초콜릿, 아몬드, 구운 토스트",
+                "파푸아 뉴기니 시그리A": "호박엿, 군밤, 구운토스트",
+                "에티오피아 구지 모모라 내추럴 G1": "베리, 피치, 바닐라, 과일의 산미",
+            }
+            for nm, kn in korean_notes.items():
+                # 영어가 남은 해당 생두만 한글로 교체 (빈 값/이미 한글인 행은 건드리지 않음)
+                conn.execute(
+                    "UPDATE green_beans SET cup_notes=?, "
+                    "updated_at=strftime('%Y-%m-%dT%H:%M:%SZ','now') "
+                    "WHERE name=? AND cup_notes GLOB '*[A-Za-z]*'",
+                    (kn, nm),
+                )
+            # 영어가 남은 오늘의 커피는 연결된 생두(이제 한글)의 컵노트로 교체
+            conn.execute(
+                "UPDATE coffees SET "
+                "cup_notes=(SELECT cup_notes FROM green_beans WHERE id=coffees.green_bean_id), "
+                "updated_at=strftime('%Y-%m-%dT%H:%M:%SZ','now') "
+                "WHERE green_bean_id IS NOT NULL AND cup_notes GLOB '*[A-Za-z]*'"
+            )
+            conn.execute(
+                "INSERT INTO migrations (name) VALUES (?)", ("cup_notes_korean_v1",)
+            )
 
 
 # ---------- PIN brute-force 카운터 (워커 공유 영속) ----------
@@ -560,9 +600,36 @@ def update(coffee_id: int, data: dict) -> bool:
         return cur.rowcount > 0
 
 
+def _propagate_cup_notes(conn, green_bean_id: int, cup_notes, except_coffee_id=None) -> None:
+    """컵노트 단일 소스 전파: 생두 마스터(green_beans)와 그 생두에 연결된
+    모든 오늘의 커피(coffees)의 cup_notes 를 동일하게 맞춘다.
+
+    컵노트는 '생두 1종 = 컵노트 1개' 모델이라, 어느 화면(구매/생두/오늘의커피)에서
+    바꾸든 같은 생두를 가리키는 모든 곳이 함께 바뀐다.
+    except_coffee_id 는 호출자가 이미 갱신한 커피 행으로, 중복 UPDATE 를 피하기 위함."""
+    conn.execute(
+        "UPDATE green_beans SET cup_notes=?, "
+        "updated_at=strftime('%Y-%m-%dT%H:%M:%SZ','now') WHERE id=?",
+        (cup_notes, green_bean_id),
+    )
+    if except_coffee_id is None:
+        conn.execute(
+            "UPDATE coffees SET cup_notes=?, "
+            "updated_at=strftime('%Y-%m-%dT%H:%M:%SZ','now') WHERE green_bean_id=?",
+            (cup_notes, green_bean_id),
+        )
+    else:
+        conn.execute(
+            "UPDATE coffees SET cup_notes=?, "
+            "updated_at=strftime('%Y-%m-%dT%H:%M:%SZ','now') "
+            "WHERE green_bean_id=? AND id<>?",
+            (cup_notes, green_bean_id, except_coffee_id),
+        )
+
+
 def sync_bean_cup_notes_from_coffee(coffee_id: int, cup_notes) -> bool:
-    """오늘의 커피에서 편집된 컵노트를 연결된 생두 마스터(green_beans)로 동기화.
-    오늘의 커피를 컵노트의 단일 기준(source of truth)으로 삼는다.
+    """오늘의 커피에서 편집된 컵노트를 단일 소스로 전파.
+    연결된 생두 마스터(green_beans)와 같은 생두의 다른 오늘의 커피까지 모두 동기화.
     해당 커피에 green_bean_id 연결이 없으면 아무 일도 하지 않는다."""
     with connect() as conn:
         row = conn.execute(
@@ -570,11 +637,17 @@ def sync_bean_cup_notes_from_coffee(coffee_id: int, cup_notes) -> bool:
         ).fetchone()
         if not row or not row["green_bean_id"]:
             return False
-        conn.execute(
-            "UPDATE green_beans SET cup_notes=?, "
-            "updated_at=strftime('%Y-%m-%dT%H:%M:%SZ','now') WHERE id=?",
-            (cup_notes, row["green_bean_id"]),
-        )
+        _propagate_cup_notes(conn, row["green_bean_id"], cup_notes,
+                             except_coffee_id=coffee_id)
+        return True
+
+
+def propagate_bean_cup_notes(green_bean_id: int, cup_notes) -> bool:
+    """생두(구매 폼 등)에서 컵노트가 바뀌었을 때 연결된 모든 오늘의 커피로 전파."""
+    if not green_bean_id:
+        return False
+    with connect() as conn:
+        _propagate_cup_notes(conn, int(green_bean_id), cup_notes)
         return True
 
 
@@ -1186,6 +1259,15 @@ def find_or_create_green_bean(data: dict) -> int:
                 sets.append("updated_at=strftime('%Y-%m-%dT%H:%M:%SZ','now')")
                 vals.append(gid)
                 conn.execute(f"UPDATE green_beans SET {','.join(sets)} WHERE id=?", vals)
+                # 컵노트 단일 소스: 구매 폼에서 컵노트를 바꾸면 연결된 오늘의 커피도 함께
+                cn = data.get("cup_notes")
+                if cn is not None and str(cn).strip() != "":
+                    conn.execute(
+                        "UPDATE coffees SET cup_notes=?, "
+                        "updated_at=strftime('%Y-%m-%dT%H:%M:%SZ','now') "
+                        "WHERE green_bean_id=?",
+                        (str(cn).strip(), gid),
+                    )
             return gid
 
         # 신규 생성 — process 는 NOT NULL
