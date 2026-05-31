@@ -600,54 +600,29 @@ def update(coffee_id: int, data: dict) -> bool:
         return cur.rowcount > 0
 
 
-def _propagate_cup_notes(conn, green_bean_id: int, cup_notes, except_coffee_id=None) -> None:
-    """컵노트 단일 소스 전파: 생두 마스터(green_beans)와 그 생두에 연결된
-    모든 오늘의 커피(coffees)의 cup_notes 를 동일하게 맞춘다.
-
-    컵노트는 '생두 1종 = 컵노트 1개' 모델이라, 어느 화면(구매/생두/오늘의커피)에서
-    바꾸든 같은 생두를 가리키는 모든 곳이 함께 바뀐다.
-    except_coffee_id 는 호출자가 이미 갱신한 커피 행으로, 중복 UPDATE 를 피하기 위함."""
-    conn.execute(
-        "UPDATE green_beans SET cup_notes=?, "
-        "updated_at=strftime('%Y-%m-%dT%H:%M:%SZ','now') WHERE id=?",
-        (cup_notes, green_bean_id),
-    )
-    if except_coffee_id is None:
-        conn.execute(
-            "UPDATE coffees SET cup_notes=?, "
-            "updated_at=strftime('%Y-%m-%dT%H:%M:%SZ','now') WHERE green_bean_id=?",
-            (cup_notes, green_bean_id),
-        )
-    else:
-        conn.execute(
-            "UPDATE coffees SET cup_notes=?, "
-            "updated_at=strftime('%Y-%m-%dT%H:%M:%SZ','now') "
-            "WHERE green_bean_id=? AND id<>?",
-            (cup_notes, green_bean_id, except_coffee_id),
-        )
-
-
 def sync_bean_cup_notes_from_coffee(coffee_id: int, cup_notes) -> bool:
-    """오늘의 커피에서 편집된 컵노트를 단일 소스로 전파.
-    연결된 생두 마스터(green_beans)와 같은 생두의 다른 오늘의 커피까지 모두 동기화.
-    해당 커피에 green_bean_id 연결이 없으면 아무 일도 하지 않는다."""
+    """오늘의 커피에서 편집한 컵노트를 생두 마스터(green_beans)의 '최신' 컵노트로 갱신.
+
+    컵노트 모델 — 스냅샷 + 최신 포인터:
+      * coffees.cup_notes : 그 제공 시점의 스냅샷. 한 번 기록되면 보존되며,
+        해당 커피 행을 직접 편집할 때만 바뀐다 (다른/과거 커피는 건드리지 않음).
+      * green_beans.cup_notes : 그 생두의 '최신' 컵노트 포인터. 새 로스팅으로 만든
+        오늘의 커피와 새 구매가 이 값을 시작값으로 물려받는다.
+
+    따라서 여기서는 편집된 커피 행(이미 db.update 로 갱신됨) 외에 다른 커피는
+    절대 덮어쓰지 않고, 생두의 최신 포인터만 앞당긴다.
+    연결된 green_bean_id 가 없으면 아무 일도 하지 않는다."""
     with connect() as conn:
         row = conn.execute(
             "SELECT green_bean_id FROM coffees WHERE id=?", (coffee_id,)
         ).fetchone()
         if not row or not row["green_bean_id"]:
             return False
-        _propagate_cup_notes(conn, row["green_bean_id"], cup_notes,
-                             except_coffee_id=coffee_id)
-        return True
-
-
-def propagate_bean_cup_notes(green_bean_id: int, cup_notes) -> bool:
-    """생두(구매 폼 등)에서 컵노트가 바뀌었을 때 연결된 모든 오늘의 커피로 전파."""
-    if not green_bean_id:
-        return False
-    with connect() as conn:
-        _propagate_cup_notes(conn, int(green_bean_id), cup_notes)
+        conn.execute(
+            "UPDATE green_beans SET cup_notes=?, "
+            "updated_at=strftime('%Y-%m-%dT%H:%M:%SZ','now') WHERE id=?",
+            (cup_notes, row["green_bean_id"]),
+        )
         return True
 
 
@@ -1259,15 +1234,8 @@ def find_or_create_green_bean(data: dict) -> int:
                 sets.append("updated_at=strftime('%Y-%m-%dT%H:%M:%SZ','now')")
                 vals.append(gid)
                 conn.execute(f"UPDATE green_beans SET {','.join(sets)} WHERE id=?", vals)
-                # 컵노트 단일 소스: 구매 폼에서 컵노트를 바꾸면 연결된 오늘의 커피도 함께
-                cn = data.get("cup_notes")
-                if cn is not None and str(cn).strip() != "":
-                    conn.execute(
-                        "UPDATE coffees SET cup_notes=?, "
-                        "updated_at=strftime('%Y-%m-%dT%H:%M:%SZ','now') "
-                        "WHERE green_bean_id=?",
-                        (str(cn).strip(), gid),
-                    )
+                # 구매 폼에서 받은 컵노트는 생두의 '최신' 포인터만 갱신한다.
+                # 과거 오늘의 커피 스냅샷은 보존 — 새 로스팅으로 만들 커피가 이 최신값을 물려받음.
             return gid
 
         # 신규 생성 — process 는 NOT NULL
