@@ -1365,14 +1365,14 @@
         <div class="hours-closed-row">
             <div class="hours-card hours-card--closed">
                 <span class="closed-badge">CLOSED</span>
-                <div class="hours-day-en">2ND · 4TH MONDAY</div>
-                <div class="hours-day-ko">둘째 · 넷째 월요일</div>
-                <div class="hours-note">정기휴무일입니다.</div>
+                <div class="hours-day-en">MONTHLY CLOSURE</div>
+                <div class="hours-day-ko">이달의 휴무일</div>
+                <div class="hours-note">매월 휴무일은 별도로 지정됩니다.</div>
                 <div class="hours-next-closed" id="hours-next-closed"></div>
             </div>
         </div>
         <div class="hours-foot">
-            <span>정기휴무 — 둘째·넷째 월요일 · 공휴일</span>
+            <span>정기휴무 — 매월 지정 휴무일 · 공휴일</span>
             <span id="hours-now-status">— 오늘의 영업시간 확인 중</span>
         </div>
     </div>
@@ -1538,16 +1538,14 @@
     };
     var DOW_KO = ['일', '월', '화', '수', '목', '금', '토'];
 
-    // 둘째·넷째 월요일 판별 (n번째 요일 = Math.ceil(day/7))
-    function isNthMonday(dt) {
-        if (dt.getDay() !== 1) return false;
-        var nth = Math.ceil(dt.getDate() / 7);
-        return nth === 2 || nth === 4;
-    }
+    // 월별 지정 휴무일 — 매월 랜덤으로 직접 지정 (요일 규칙 없음)
+    var CLOSED_DAYS = {
+        '2026-06-22': true, // 6월 휴무일 (월)
+    };
 
-    // 휴무일 판별 — 공휴일 OR 둘째·넷째 월요일
+    // 휴무일 판별 — 공휴일 OR 월별 지정 휴무일
     function isDayOff(dt, ymd) {
-        return !!KR_HOLIDAYS[ymd] || isNthMonday(dt);
+        return !!KR_HOLIDAYS[ymd] || !!CLOSED_DAYS[ymd];
     }
 
     // 제공일 표시용 — { html: "5월 22일 (금)", isClosed: bool }
@@ -1595,21 +1593,24 @@
     updateHoursStatus();
     setInterval(updateHoursStatus, 60000);
 
-    // 다음 정기휴무(둘째·넷째 월요일) 표시
+    // 다음 지정 휴무일 표시
     (function showNextClosed() {
         var el = document.getElementById('hours-next-closed');
         if (!el) return;
         var d = new Date();
-        for (var i = 1; i <= 60; i++) {
-            d.setDate(d.getDate() + 1);
-            if (isNthMonday(d)) {
-                var nth = Math.ceil(d.getDate() / 7);
+        for (var i = 0; i <= 366; i++) {
+            var ymd = d.getFullYear() + '-' +
+                String(d.getMonth() + 1).padStart(2, '0') + '-' +
+                String(d.getDate()).padStart(2, '0');
+            if (CLOSED_DAYS[ymd]) {
                 el.textContent = '다음 휴무 → ' +
                     (d.getMonth() + 1) + '월 ' + d.getDate() + '일 (' +
-                    (nth === 2 ? '둘째' : '넷째') + ' 월요일)';
+                    DOW_KO[d.getDay()] + ')';
                 return;
             }
+            d.setDate(d.getDate() + 1);
         }
+        el.textContent = '예정된 휴무일이 없습니다';
     })();
 
     // ---------- 데이터 로드 (지연) ----------

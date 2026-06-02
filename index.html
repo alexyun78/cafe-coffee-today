@@ -1539,31 +1539,39 @@
 
 
     <script>
-        // 둘째·넷째 월요일 판별
-        function isNthMonday(dt) {
-            if (dt.getDay() !== 1) return false;
-            var nth = Math.ceil(dt.getDate() / 7);
-            return nth === 2 || nth === 4;
+        // 월별 지정 휴무일 — 매월 랜덤으로 직접 지정 (요일 규칙 없음)
+        var CLOSED_DAYS = {
+            '2026-06-22': true, // 6월 휴무일 (월)
+        };
+        var DOW_KO_IDX = ['일', '월', '화', '수', '목', '금', '토'];
+
+        function ymdLocal(dt) {
+            return dt.getFullYear() + '-' +
+                String(dt.getMonth() + 1).padStart(2, '0') + '-' +
+                String(dt.getDate()).padStart(2, '0');
+        }
+
+        // 휴무일 판별 — 월별 지정 휴무일
+        function isClosedDay(dt) {
+            return !!CLOSED_DAYS[ymdLocal(dt)];
         }
 
         (function showNextClosedBanner() {
             var el = document.getElementById('next-closed-banner');
             if (!el) return;
             var d = new Date();
-            if (isNthMonday(d)) {
+            if (isClosedDay(d)) {
                 el.innerHTML = '🚫 오늘은 <span class="closed-date">정기휴무</span>입니다';
                 el.style.display = '';
                 return;
             }
-            for (var i = 1; i <= 30; i++) {
+            for (var i = 1; i <= 366; i++) {
                 d.setDate(d.getDate() + 1);
-                if (isNthMonday(d)) {
-                    var nth = Math.ceil(d.getDate() / 7);
-                    var diff = i;
-                    var label = diff <= 3 ? (diff + '일 뒤') : '';
+                if (isClosedDay(d)) {
+                    var label = i <= 3 ? (i + '일 뒤') : '';
                     el.innerHTML = '📅 다음 휴무 <span class="closed-date">' +
                         (d.getMonth() + 1) + '월 ' + d.getDate() + '일 (' +
-                        (nth === 2 ? '둘째' : '넷째') + ' 월요일)</span>' +
+                        DOW_KO_IDX[d.getDay()] + ')</span>' +
                         (label ? ' — ' + label : '');
                     el.style.display = '';
                     return;
@@ -2112,7 +2120,7 @@
                 cur.setDate(weekStart.getDate() + offset);
                 const ymd = ymdLocalCal(cur);
                 const isToday = (ymd === today);
-                const isClosed = isNthMonday(cur);
+                const isClosed = isClosedDay(cur);
                 const items = byDate[ymd] || [];
                 const dow = cur.getDay();
                 let cellCls = 'hcal-wcell';
