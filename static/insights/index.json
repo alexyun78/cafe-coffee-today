@@ -1,7 +1,24 @@
 {
   "version": 1,
-  "updated_at": "2026-05-30T12:00:28Z",
+  "updated_at": "2026-06-02T12:00:31Z",
   "items": [
+    {
+      "id": "2026-06-02-coffee-maturity-fermentation-mycotoxin-safety",
+      "date": "2026-06-02",
+      "title_ko": "성숙도·수확 후 처리 지연·점액질 발효 시간이 커피 마이코톡신 수준에 미치는 영향",
+      "one_liner": "성숙도보다 고온·장시간 발효가 OTA EU 한계치 초과의 핵심 인자 — 온도·시간 관리의 결정적 중요성 실증",
+      "categories_primary": [
+        "건강/영양"
+      ],
+      "categories_secondary": [
+        "생두",
+        "미생물학"
+      ],
+      "hero_image": "/static/img/insights/hero/health.svg",
+      "journal": "Frontiers in Plant Science",
+      "pub_date": "2026-02-02",
+      "source_basis": "abstract_only"
+    },
     {
       "id": "2026-05-30-arabica-green-bean-geographic-provenance",
       "date": "2026-05-30",

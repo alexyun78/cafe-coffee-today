@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>성숙도·수확 후 처리 지연·점액질 발효 시간이 커피 마이코톡신 수준에 미치는 영향 — 92°C ROASTERY</title>
+<meta name="description" content="성숙도보다 고온·장시간 발효가 OTA EU 한계치 초과의 핵심 인자 — 온도·시간 관리의 결정적 중요성 실증">
+<link rel="icon" type="image/png" href="/static/img/logo-92black.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --canvas: #FFFFFF; --canvas-warm: #FAF7F2; --canvas-stone: #F2ECE3;
+  --ink: #1A1410; --ink-mute: #4A3F36; --ink-soft: #6B5E52;
+  --espresso: #6F4E37; --caramel: #C9986A; --copper: #B5703D;
+  --line: #E8E0D5; --line-soft: #F0E9DD;
+  --font-display: "Cormorant Garamond", "Pretendard", serif;
+  --font-body: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  --r-sm: 6px; --r-md: 12px; --r-pill: 999px;
+}
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color: transparent; }
+html { scroll-behavior: smooth; }
+body { font-family: var(--font-body); color: var(--ink); background: var(--canvas); font-feature-settings: "kern","ss01","lnum"; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+a { color: var(--copper); text-decoration: none; border-bottom: 1px solid transparent; transition: border-color .2s; }
+a:hover { border-bottom-color: var(--copper); }
+img { display: block; max-width: 100%; height: auto; }
+.container { max-width: 860px; margin: 0 auto; padding: 0 32px; }
+@media (max-width: 720px) { .container { padding: 0 20px; } }
+@media (max-width: 480px) { .container { padding: 0 16px; } }
+.site-nav { position: sticky; top: 0; z-index: 50; background: rgba(255,255,255,0.9); backdrop-filter: saturate(140%) blur(14px); -webkit-backdrop-filter: saturate(140%) blur(14px); border-bottom: 1px solid var(--line-soft); }
+.nav-inner { max-width: 1200px; margin: 0 auto; padding: 16px 32px; display: flex; align-items: center; justify-content: space-between; }
+.brand { font-family: var(--font-display); font-size: 1.3rem; font-weight: 700; color: var(--ink); display: inline-flex; align-items: center; gap: 4px; border-bottom: none; }
+.brand:hover { border-bottom: none; }
+.brand-mark { display: inline-flex; align-items: flex-start; font-family: "Pretendard", sans-serif; font-weight: 900; letter-spacing: -0.04em; line-height: 1; color: inherit; }
+.temp-mark { display: flex; flex-direction: column; line-height: .82; margin: 0 .05em 0 .04em; }
+.temp-mark .temp-deg { font-size: .42em; letter-spacing: -.04em; }
+.temp-mark .temp-c { font-size: .58em; letter-spacing: -.05em; margin-top: -.05em; }
+.nav-back { font-family: var(--font-mono); font-size: .75rem; letter-spacing: .18em; color: var(--ink-mute); border-bottom: none; }
+.nav-back:hover { color: var(--copper); border-bottom: none; }
+.article-hero { padding: 56px 0 48px; border-bottom: 1px solid var(--line-soft); }
+.eyebrow { font-family: var(--font-mono); font-size: .72rem; letter-spacing: .28em; color: var(--copper); margin-bottom: 18px; display: flex; align-items: center; gap: 12px; }
+.eyebrow::before { content: ""; display: inline-block; width: 28px; height: 1px; background: var(--copper); }
+.article-title { font-family: var(--font-display); font-weight: 500; font-size: clamp(2rem, 4.5vw, 3.2rem); line-height: 1.15; letter-spacing: -0.02em; color: var(--ink); margin-bottom: 20px; }
+.article-title em { font-style: italic; color: var(--espresso); font-weight: 600; }
+.article-one-liner { font-family: var(--font-display); font-style: italic; font-size: 1.3rem; line-height: 1.5; color: var(--espresso); margin-bottom: 28px; padding-left: 20px; border-left: 3px solid var(--caramel); }
+.article-meta { display: flex; gap: 24px; flex-wrap: wrap; font-family: var(--font-mono); font-size: .75rem; letter-spacing: .12em; color: var(--ink-soft); padding-top: 20px; border-top: 1px solid var(--line-soft); }
+.article-meta span { display: inline-flex; align-items: center; gap: 6px; }
+.article-meta span::before { content: "■"; color: var(--caramel); font-size: .55rem; }
+.hero-image { margin: 32px 0 0; border-radius: var(--r-md); overflow: hidden; border: 1px solid var(--line); }
+.hero-image img { width: 100%; }
+.article-body { padding: 56px 0 80px; }
+.article-footer { padding: 36px 0 56px; border-top: 1px solid var(--line-soft); text-align: center; font-family: var(--font-mono); font-size: .75rem; letter-spacing: .14em; color: var(--ink-soft); }
+.article-footer a { color: var(--ink-mute); border-bottom: 1px solid transparent; }
+.article-footer a:hover { color: var(--copper); border-bottom-color: var(--copper); }
+.source-basis { display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; background: rgba(201,152,106,.18); border: 1px solid rgba(181,112,61,.35); border-radius: var(--r-pill); font-family: var(--font-mono); font-size: .72rem; letter-spacing: .12em; color: var(--espresso); font-weight: 500; }
+.source-basis.abstract { background: rgba(107,94,82,.1); border-color: rgba(107,94,82,.3); color: var(--ink-soft); }
+.links-row { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 18px; }
+.link-pill { display: inline-flex; align-items: center; gap: 8px; padding: 9px 16px; background: var(--canvas-warm); border: 1px solid var(--line); border-radius: var(--r-pill); font-family: var(--font-mono); font-size: .78rem; letter-spacing: .08em; color: var(--ink-mute); border-bottom: 1px solid var(--line); transition: border-color .2s, color .2s; }
+.link-pill:hover { color: var(--copper); border-color: var(--copper); }
+
+/* ===== EZ: 쉬운 설명 스타일 ===== */
+.ez-hero { text-align: center; padding: 8px 0 32px; }
+.ez-hero-emoji { font-size: 3.4rem; line-height: 1; }
+.ez-hero-title { font-family: var(--font-display); font-size: clamp(1.6rem, 3.5vw, 2.2rem); font-weight: 600; color: var(--ink); margin-top: 14px; line-height: 1.3; }
+.ez-section { margin-bottom: 52px; }
+.ez-section h2 { font-family: var(--font-body); font-size: 1.5rem; font-weight: 700; color: var(--ink); margin-bottom: 18px; letter-spacing: -0.01em; }
+.ez-section h3 { font-size: 1.08rem; font-weight: 600; color: var(--espresso); margin: 22px 0 10px; }
+.ez-section p { font-size: 1.04rem; line-height: 1.85; color: var(--ink-mute); margin-bottom: 14px; }
+.ez-section p:last-child { margin-bottom: 0; }
+.ez-section ul { padding-left: 22px; margin-bottom: 14px; }
+.ez-section li { font-size: 1.02rem; line-height: 1.8; color: var(--ink-mute); margin-bottom: 8px; }
+.ez-callout { margin: 14px 0; padding: 14px 18px; background: var(--canvas-warm); border-left: 3px solid var(--caramel); border-radius: 4px; font-size: 0.98rem; color: var(--espresso); line-height: 1.75; }
+.ez-callout strong { color: var(--copper); }
+.ez-findings { list-style: none; padding: 0; }
+.ez-findings > li { padding: 18px 22px; margin-bottom: 14px; background: var(--canvas-warm); border: 1px solid var(--line); border-radius: 10px; font-size: 1.02rem; line-height: 1.7; color: var(--ink-mute); }
+.ez-findings > li strong { color: var(--ink); display: block; margin-bottom: 4px; font-size: 1.06rem; }
+.ez-findings > li.gold { background: linear-gradient(135deg, #FFF8E7, #FFEFCD); border-color: #F0D67A; }
+.ez-findings > li.silver { background: linear-gradient(135deg, #F6F6F6, #ECECEC); border-color: #C7C7C7; }
+.ez-findings > li.bronze { background: linear-gradient(135deg, #FFEEDD, #FFDCC0); border-color: #E4B07F; }
+.ez-findings > li.medal { background: linear-gradient(135deg, #F0E6FF, #E1D2FF); border-color: #BDA8E5; }
+.ez-table { width: 100%; border-collapse: collapse; margin: 16px 0 8px; font-size: 0.96rem; }
+.ez-table th, .ez-table td { padding: 11px 14px; border: 1px solid var(--line); text-align: left; vertical-align: top; }
+.ez-table thead th { background: var(--ink); color: #fff; font-weight: 600; letter-spacing: .02em; }
+.ez-table tbody th { background: var(--canvas-warm); color: var(--ink); font-weight: 600; }
+.ez-table tbody tr:nth-child(even) td { background: rgba(250, 247, 242, .55); }
+.ez-summary { padding: 26px 30px; background: linear-gradient(135deg, #FAF0E0, #F3E1C5); border-radius: 14px; font-size: 1.13rem; line-height: 1.75; font-weight: 500; color: var(--ink); border: 1px solid #E5C99B; }
+.ez-summary strong { color: var(--espresso); }
+.ez-citation { margin-top: 24px; padding: 18px 22px; background: var(--canvas-warm); border-radius: 8px; font-family: var(--font-mono); font-size: 0.82rem; color: var(--ink-soft); line-height: 1.7; }
+.ez-citation p { margin: 4px 0; }
+.ez-chart-card { padding: 22px 24px 18px; background: var(--canvas); border: 1px solid var(--line); border-radius: 12px; margin: 16px 0; }
+.ez-chart-card .ez-chart-title { font-size: 1rem; font-weight: 600; color: var(--ink); margin-bottom: 14px; }
+.ez-bar-row { display: flex; align-items: center; margin: 10px 0; font-size: 0.95rem; gap: 14px; }
+.ez-bar-label { width: 180px; flex-shrink: 0; color: var(--ink-mute); font-weight: 500; }
+.ez-bar-track { flex: 1; height: 32px; background: var(--canvas-warm); border-radius: 6px; overflow: hidden; position: relative; border: 1px solid var(--line); }
+.ez-bar-fill { height: 100%; background: linear-gradient(90deg, var(--caramel), var(--copper)); display: flex; align-items: center; justify-content: flex-end; padding: 0 12px; color: white; font-weight: 700; font-size: 0.92rem; min-width: 56px; }
+.ez-bar-fill.alt { background: linear-gradient(90deg, #6F4E37, #4A3F36); }
+.ez-glossary { display: grid; gap: 12px; }
+.ez-glossary-item { padding: 16px 20px; background: var(--canvas-warm); border: 1px solid var(--line); border-radius: 10px; border-left: 3px solid var(--caramel); }
+.ez-glossary-term { font-family: var(--font-display); font-style: italic; font-size: 1.1rem; font-weight: 600; color: var(--espresso); margin-bottom: 6px; }
+.ez-glossary-def { font-size: 0.98rem; color: var(--ink-mute); line-height: 1.7; }
+@media (max-width: 720px) {
+  .article-hero { padding: 36px 0 32px; }
+  .article-body { padding: 36px 0 56px; }
+  .ez-section { margin-bottom: 40px; }
+  .ez-section h2 { font-size: 1.3rem; }
+  .ez-bar-label { width: 100%; margin-bottom: 4px; }
+  .ez-bar-row { flex-direction: column; align-items: stretch; }
+  .article-meta { gap: 12px 18px; font-size: .68rem; }
+}
+</style>
+</head>
+<body>
+
+<header class="site-nav">
+  <div class="nav-inner">
+    <a class="brand" href="/">
+      <span class="brand-mark">92<span class="temp-mark"><span class="temp-deg">°</span><span class="temp-c">C</span></span></span>ROASTERY
+    </a>
+    <a class="nav-back" href="/insight">← INSIGHTS</a>
+  </div>
+</header>
+
+<article>
+  <section class="article-hero">
+    <div class="container">
+      <div class="eyebrow">— COFFEE INSIGHT · 2026.06.02</div>
+      <h1 class="article-title">성숙도·수확 후 처리 지연·점액질 발효 시간이 커피 마이코톡신 수준에 미치는 영향</h1>
+      <p class="article-one-liner">성숙도보다 고온·장시간 발효가 OTA EU 한계치 초과의 핵심 인자 — 온도·시간 관리의 결정적 중요성 실증</p>
+      <div class="article-meta">
+        <span>FRONTIERS IN PLANT SCIENCE</span>
+        <span>2026-02-02</span>
+        <span>DOI 10.3389/FPLS.2026.1734522</span>
+        <span>건강/영양 · 생두 · 미생물학</span>
+      </div>
+      
+      <div class="hero-image">
+        <img src="/static/img/insights/hero/health.svg" alt="성숙도·수확 후 처리 지연·점액질 발효 시간이 커피 마이코톡신 수준에 미치는 영향">
+      </div>
+      
+    </div>
+  </section>
+
+  <section class="article-body">
+    <div class="container">
+
+      
+      <div class="ez-hero">
+        <div class="ez-hero-emoji"></div>
+        <div class="ez-hero-title">성숙도보다 고온·장시간 발효가 OTA EU 한계치 초과의 핵심 인자 — 온도·시간 관리의 결정적 중요성 실증</div>
+      </div>
+
+      
+      <div class="ez-section">
+        <h2>🤔 무슨 연구야?</h2>
+        
+          <p>커피 오크라톡신 A(OTA)는 수확 후 가공 중 진균이 생성하는 독성 물질로 EU 규정 1370/2022에서 로스팅 커피 3 μg/kg 이하로 규제된다. 콜롬비아 국립커피연구소(Cenicafé)와 NC State 대학교 연구팀은 성숙 3단계(MS1·MS2·MS3) × 온도 2수준(15/20°C) × 과실 보관·연장 발효 시간 조합이 OTA 및 아플라톡신 수준에 미치는 영향을 정량 분석했다. 성숙도 자체에 따른 OTA 차이는 통계적으로 유의하지 않았으나(2.89–3.03 μg/kg), 20°C 조건의 과실 보관 48h에서 최대 3.31 μg/kg, 연장 발효 20h에서 최대 3.51 μg/kg으로 EU 한계치를 초과했다. 또한 고온 연장 발효는 관능 품질도 동시에 저하시켜, 마이코톡신 안전과 컵 품질 양쪽이 동일한 처리 조건 관리를 요구함을 이중으로 실증했다.</p>
+        
+      </div>
+
+      
+      
+
+      
+      
+      <div class="ez-section">
+        <h2>🎯 핵심 발견</h2>
+        <ul class="ez-findings">
+          
+          
+            
+              <li class="gold">OTA 평균 수준: MS1 2.89, MS2 2.98, MS3 3.03 μg/kg — 성숙도 3단계 간 통계적 유의 차이 없음</li>
+            
+              <li class="silver">아플라톡신 평균: MS1 0.13, MS2 0.14, MS3 0.15 μg/kg — 성숙도 간 차이 미미</li>
+            
+              <li class="bronze">과실 보관 최대값: MS3·20°C·48h → OTA 3.31 μg/kg (EU 한계치 초과)</li>
+            
+              <li class="medal">연장 발효 최대값: MS2·20°C·20h → OTA 3.51 μg/kg (EU 한계치 17% 초과)</li>
+            
+              <li class="gold">15°C 조건은 동일 시간 처리에서 OTA 상승 유의하게 낮음 — 온도가 독립적 위험 인자</li>
+            
+              <li class="silver">20°C 연장 발효(MS3)에서 향/아로마·여운·산미·밸런스·테이스터 점수 관능 저하 동반</li>
+            
+          
+        </ul>
+      </div>
+      
+
+      
+      
+      <div class="ez-section">
+        <h2>📊 숫자로 보기</h2>
+        
+          
+          
+          <div class="ez-chart-card">
+            <div class="ez-chart-title">성숙 단계별 오크라톡신 A (OTA) 평균 함량</div>
+            
+              
+              <div class="ez-bar-row">
+                <div class="ez-bar-label">MS1 (미숙)</div>
+                <div class="ez-bar-track"><div class="ez-bar-fill" style="width: 95.4%;">2.89μg/kg</div></div>
+              </div>
+            
+              
+              <div class="ez-bar-row">
+                <div class="ez-bar-label">MS2 (성숙)</div>
+                <div class="ez-bar-track"><div class="ez-bar-fill" style="width: 98.3%;">2.98μg/kg</div></div>
+              </div>
+            
+              
+              <div class="ez-bar-row">
+                <div class="ez-bar-label">MS3 (과숙)</div>
+                <div class="ez-bar-track"><div class="ez-bar-fill" style="width: 100.0%;">3.03μg/kg</div></div>
+              </div>
+            
+          </div>
+        
+          
+          
+          <div class="ez-chart-card">
+            <div class="ez-chart-title">처리 조건별 최대 OTA 함량 vs EU 한계치</div>
+            
+              
+              <div class="ez-bar-row">
+                <div class="ez-bar-label">성숙도 평균</div>
+                <div class="ez-bar-track"><div class="ez-bar-fill" style="width: 84.6%;">2.97μg/kg</div></div>
+              </div>
+            
+              
+              <div class="ez-bar-row">
+                <div class="ez-bar-label">과실 보관 최대
+(MS3·20°C·48h)</div>
+                <div class="ez-bar-track"><div class="ez-bar-fill" style="width: 94.3%;">3.31μg/kg</div></div>
+              </div>
+            
+              
+              <div class="ez-bar-row">
+                <div class="ez-bar-label">연장 발효 최대
+(MS2·20°C·20h)</div>
+                <div class="ez-bar-track"><div class="ez-bar-fill" style="width: 100.0%;">3.51μg/kg</div></div>
+              </div>
+            
+              
+              <div class="ez-bar-row">
+                <div class="ez-bar-label">EU 한계치</div>
+                <div class="ez-bar-track"><div class="ez-bar-fill" style="width: 85.5%;">3.0μg/kg</div></div>
+              </div>
+            
+          </div>
+        
+      </div>
+      
+
+      
+      
+
+      
+      
+      <div class="ez-section">
+        <h2>💼 누구한테 의미가 있을까?</h2>
+        <table class="ez-table">
+          <thead><tr><th>대상</th><th>의미</th></tr></thead>
+          <tbody>
+            
+              <tr><th>농가 · 가공장</th><td>수확 직후 신속한 펄핑(24~48h 이내)과 발효 온도 15°C 이하 유지, 발효 시간 20h 미만 준수가 EU OTA 기준 준수를 위한 핵심 현장 지침. 고온 저고도 산지 및 기후변화 영향 지역에서 냉각 발효조·그늘 처리장 도입 시급.</td></tr>
+            
+              <tr><th>로스터 · 큐그레이더</th><td>협력 농가·수출상의 가공 온도·발효 시간 기록 데이터를 바이어 기준에 포함하는 근거 확보. 고온 지역 발 워시드 커피 또는 연장 발효 로트에 OTA 입고 검사(HPLC 또는 ELISA 키트) 추가 권장.</td></tr>
+            
+              <tr><th>R&amp;D</th><td>내추럴·허니 공법에서 동일 조건의 OTA 생성 패턴 비교 연구, 발효 스타터 컬처의 마이코톡신 생성 균주 억제 가능성 탐색, 기후변화로 인한 가공 환경 온도 상승의 장기적 OTA 위험 영향 모델링 필요.</td></tr>
+            
+          </tbody>
+        </table>
+      </div>
+      
+
+      
+      
+      <div class="ez-section">
+        <h2>⚠️ 한계도 있어</h2>
+        <p>콜롬비아 단일 생산국 워시드 가공 조건만 다룸 — 내추럴·허니 공법 및 타 생산국으로 일반화 제한. OTA·아플라톡신만 분석 — 기타 마이코톡신 미검토. 로스팅 후 OTA 잔존량 미측정. 실험 통제 조건과 현장 현실 간 차이 존재.</p>
+      </div>
+      
+
+      
+      
+      <div class="ez-section">
+        <div class="ez-summary">💡 <strong>한 줄 요약</strong> — 성숙도보다 고온·장시간 발효가 OTA EU 한계치 초과의 핵심 인자 — 온도·시간 관리의 결정적 중요성 실증</div>
+      </div>
+      
+
+      
+      <div class="ez-section">
+        <h2>📚 원문 정보</h2>
+        <div class="ez-citation">
+          <p><strong>📄 논문</strong> — Impact of maturity stage and prolongation of post-harvest processing and mucilage fermentation time on mycotoxin levels in coffee</p>
+          <p><strong>📰 저널</strong> — Frontiers in Plant Science (2026-02-02)</p>
+          <p><strong>👥 저자</strong> — Valentina Osorio, Esther Cecilia Montoya, Lina María Rayo-Mendez, Gabriel Keith Harris</p>
+          <p><strong>🔗 DOI</strong> — <a href="https://doi.org/10.3389/fpls.2026.1734522" target="_blank" rel="noopener noreferrer" style="color: var(--copper);">10.3389/fpls.2026.1734522</a></p>
+        </div>
+        <div class="links-row">
+          <a class="link-pill" href="https://doi.org/10.3389/fpls.2026.1734522" target="_blank" rel="noopener noreferrer">DOI →</a>
+          <a class="link-pill" href="https://www.frontiersin.org/journals/plant-science/articles/10.3389/fpls.2026.1734522/full" target="_blank" rel="noopener noreferrer">OA PDF →</a>
+          <a class="link-pill" href="https://www.frontiersin.org/journals/plant-science" target="_blank" rel="noopener noreferrer">JOURNAL HOMEPAGE →</a>
+        </div>
+        <div style="margin-top: 18px;">
+          
+          <span class="source-basis abstract">ABSTRACT BASIS</span>
+          
+        </div>
+      </div>
+
+      
+      
+      <div class="ez-section">
+        <h2>📖 어려운 말 풀이 사전</h2>
+        <p>이 글에 나온 어려운 약어와 용어를 한 번에 정리했어. 의미만 알면 본문이 훨씬 쉬워져!</p>
+        <div class="ez-glossary">
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">Ochratoxin A (OTA)</div>
+            <div class="ez-glossary-def">오크라톡신 A — Aspergillus 속 진균 생성 마이코톡신, 신장독성·발암성(IARC 2B), EU 로스팅 커피 한계치 3 μg/kg</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">Aflatoxin</div>
+            <div class="ez-glossary-def">아플라톡신 — A. flavus 등 생성, 간독성·강발암성(IARC Group 1)</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">Maturity Stage (MS)</div>
+            <div class="ez-glossary-def">성숙 단계 — MS1 미숙(초록), MS2 성숙(빨강), MS3 과숙(진빨강~검정)</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">Fruit Reserve</div>
+            <div class="ez-glossary-def">과실 보관 — 수확 후 펄핑 전 과실 상태 대기 시간</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">Prolonged Fermentation</div>
+            <div class="ez-glossary-def">연장 발효 — 표준 발효 완료 시점 이후 추가 발효</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">Immunoaffinity Column (IAC)</div>
+            <div class="ez-glossary-def">면역친화성 컬럼 — 마이코톡신 특이 항체 컬럼, HPLC 전 정제</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">Washed Processing</div>
+            <div class="ez-glossary-def">워시드 가공 — 과육 제거·발효·수세 방식의 습식 커피 가공</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">EU Reg. 1370/2022</div>
+            <div class="ez-glossary-def">EU 마이코톡신 허용치 개정 규정(2023년 발효) — 로스팅 커피 OTA 3 μg/kg</div>
+          </div>
+          
+        </div>
+      </div>
+      
+
+    </div>
+  </section>
+
+  <footer class="article-footer">
+    <div class="container">
+      <a href="/insight">← BACK TO INSIGHTS</a>
+      <span style="margin: 0 16px;">·</span>
+      <a href="/">HOME</a>
+    </div>
+  </footer>
+</article>
+
+</body>
+</html>

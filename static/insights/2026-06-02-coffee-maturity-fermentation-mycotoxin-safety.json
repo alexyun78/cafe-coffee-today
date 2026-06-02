@@ -1,0 +1,115 @@
+{
+  "version": 1,
+  "id": "2026-06-02-coffee-maturity-fermentation-mycotoxin-safety",
+  "date": "2026-06-02",
+  "slug": "coffee-maturity-fermentation-mycotoxin-safety",
+  "title_ko": "성숙도·수확 후 처리 지연·점액질 발효 시간이 커피 마이코톡신 수준에 미치는 영향",
+  "title_original": "Impact of maturity stage and prolongation of post-harvest processing and mucilage fermentation time on mycotoxin levels in coffee",
+  "one_liner": "성숙도보다 고온·장시간 발효가 OTA EU 한계치 초과의 핵심 인자 — 온도·시간 관리의 결정적 중요성 실증",
+  "authors": "Valentina Osorio, Esther Cecilia Montoya, Lina María Rayo-Mendez, Gabriel Keith Harris",
+  "journal": "Frontiers in Plant Science",
+  "pub_date": "2026-02-02",
+  "doi": "10.3389/fpls.2026.1734522",
+  "categories_primary": [
+    "건강/영양"
+  ],
+  "categories_secondary": [
+    "생두",
+    "미생물학"
+  ],
+  "summary": "커피 오크라톡신 A(OTA)는 수확 후 가공 중 진균이 생성하는 독성 물질로 EU 규정 1370/2022에서 로스팅 커피 3 μg/kg 이하로 규제된다. 콜롬비아 국립커피연구소(Cenicafé)와 NC State 대학교 연구팀은 성숙 3단계(MS1·MS2·MS3) × 온도 2수준(15/20°C) × 과실 보관·연장 발효 시간 조합이 OTA 및 아플라톡신 수준에 미치는 영향을 정량 분석했다. 성숙도 자체에 따른 OTA 차이는 통계적으로 유의하지 않았으나(2.89–3.03 μg/kg), 20°C 조건의 과실 보관 48h에서 최대 3.31 μg/kg, 연장 발효 20h에서 최대 3.51 μg/kg으로 EU 한계치를 초과했다. 또한 고온 연장 발효는 관능 품질도 동시에 저하시켜, 마이코톡신 안전과 컵 품질 양쪽이 동일한 처리 조건 관리를 요구함을 이중으로 실증했다.",
+  "key_findings": [
+    "OTA 평균 수준: MS1 2.89, MS2 2.98, MS3 3.03 μg/kg — 성숙도 3단계 간 통계적 유의 차이 없음",
+    "아플라톡신 평균: MS1 0.13, MS2 0.14, MS3 0.15 μg/kg — 성숙도 간 차이 미미",
+    "과실 보관 최대값: MS3·20°C·48h → OTA 3.31 μg/kg (EU 한계치 초과)",
+    "연장 발효 최대값: MS2·20°C·20h → OTA 3.51 μg/kg (EU 한계치 17% 초과)",
+    "15°C 조건은 동일 시간 처리에서 OTA 상승 유의하게 낮음 — 온도가 독립적 위험 인자",
+    "20°C 연장 발효(MS3)에서 향/아로마·여운·산미·밸런스·테이스터 점수 관능 저하 동반"
+  ],
+  "methodology": "콜롬비아산 Coffea arabica를 성숙 3단계(MS1/MS2/MS3)로 분류. 처리 요인: 온도 2수준(15/20°C) × 과실 보관 시간(최대 48h) + 연장 발효 시간(최대 20h). 마이코톡신: 면역친화성 컬럼(IAC) 정제 후 HPLC-형광검출기(FLD)로 OTA·아플라톡신 정량. 관능: SCA 커핑 프로토콜. 통계: ANOVA 및 다중 비교. Cenicafé × NC State University 산학협력.",
+  "implications": {
+    "농가/가공장": "수확 직후 신속한 펄핑(24~48h 이내)과 발효 온도 15°C 이하 유지, 발효 시간 20h 미만 준수가 EU OTA 기준 준수를 위한 핵심 현장 지침. 고온 저고도 산지 및 기후변화 영향 지역에서 냉각 발효조·그늘 처리장 도입 시급.",
+    "로스터/큐그레이더": "협력 농가·수출상의 가공 온도·발효 시간 기록 데이터를 바이어 기준에 포함하는 근거 확보. 고온 지역 발 워시드 커피 또는 연장 발효 로트에 OTA 입고 검사(HPLC 또는 ELISA 키트) 추가 권장.",
+    "R&D": "내추럴·허니 공법에서 동일 조건의 OTA 생성 패턴 비교 연구, 발효 스타터 컬처의 마이코톡신 생성 균주 억제 가능성 탐색, 기후변화로 인한 가공 환경 온도 상승의 장기적 OTA 위험 영향 모델링 필요."
+  },
+  "limitations": "콜롬비아 단일 생산국 워시드 가공 조건만 다룸 — 내추럴·허니 공법 및 타 생산국으로 일반화 제한. OTA·아플라톡신만 분석 — 기타 마이코톡신 미검토. 로스팅 후 OTA 잔존량 미측정. 실험 통제 조건과 현장 현실 간 차이 존재.",
+  "glossary": [
+    {
+      "term": "Ochratoxin A (OTA)",
+      "ko": "오크라톡신 A — Aspergillus 속 진균 생성 마이코톡신, 신장독성·발암성(IARC 2B), EU 로스팅 커피 한계치 3 μg/kg"
+    },
+    {
+      "term": "Aflatoxin",
+      "ko": "아플라톡신 — A. flavus 등 생성, 간독성·강발암성(IARC Group 1)"
+    },
+    {
+      "term": "Maturity Stage (MS)",
+      "ko": "성숙 단계 — MS1 미숙(초록), MS2 성숙(빨강), MS3 과숙(진빨강~검정)"
+    },
+    {
+      "term": "Fruit Reserve",
+      "ko": "과실 보관 — 수확 후 펄핑 전 과실 상태 대기 시간"
+    },
+    {
+      "term": "Prolonged Fermentation",
+      "ko": "연장 발효 — 표준 발효 완료 시점 이후 추가 발효"
+    },
+    {
+      "term": "Immunoaffinity Column (IAC)",
+      "ko": "면역친화성 컬럼 — 마이코톡신 특이 항체 컬럼, HPLC 전 정제"
+    },
+    {
+      "term": "Washed Processing",
+      "ko": "워시드 가공 — 과육 제거·발효·수세 방식의 습식 커피 가공"
+    },
+    {
+      "term": "EU Reg. 1370/2022",
+      "ko": "EU 마이코톡신 허용치 개정 규정(2023년 발효) — 로스팅 커피 OTA 3 μg/kg"
+    }
+  ],
+  "citation_apa": "Osorio, V., Montoya, E. C., Rayo-Mendez, L. M., & Harris, G. K. (2026). Impact of maturity stage and prolongation of post-harvest processing and mucilage fermentation time on mycotoxin levels in coffee. Frontiers in Plant Science, 17, 1734522. https://doi.org/10.3389/fpls.2026.1734522",
+  "links": {
+    "doi": "https://doi.org/10.3389/fpls.2026.1734522",
+    "oa_pdf": "https://www.frontiersin.org/journals/plant-science/articles/10.3389/fpls.2026.1734522/full",
+    "journal_homepage": "https://www.frontiersin.org/journals/plant-science"
+  },
+  "source_basis": "abstract_only",
+  "data_charts": [
+    {
+      "type": "bar",
+      "title": "성숙 단계별 오크라톡신 A (OTA) 평균 함량",
+      "x_labels": [
+        "MS1 (미숙)",
+        "MS2 (성숙)",
+        "MS3 (과숙)"
+      ],
+      "y_label": "OTA 함량",
+      "values": [
+        2.89,
+        2.98,
+        3.03
+      ],
+      "unit": "μg/kg"
+    },
+    {
+      "type": "bar",
+      "title": "처리 조건별 최대 OTA 함량 vs EU 한계치",
+      "x_labels": [
+        "성숙도 평균",
+        "과실 보관 최대\n(MS3·20°C·48h)",
+        "연장 발효 최대\n(MS2·20°C·20h)",
+        "EU 한계치"
+      ],
+      "y_label": "OTA 함량",
+      "values": [
+        2.97,
+        3.31,
+        3.51,
+        3.0
+      ],
+      "unit": "μg/kg"
+    }
+  ],
+  "drive_doc_url": "https://docs.google.com/document/d/1Ba-EBDC6QG0MSvCDGSaPvJYoWJCuQuWXV12W8JMYQfw/edit",
+  "hero_image": "/static/img/insights/hero/health.svg"
+}
