@@ -1,7 +1,24 @@
 {
   "version": 1,
-  "updated_at": "2026-06-02T12:00:31Z",
+  "updated_at": "2026-06-03T12:00:32Z",
   "items": [
+    {
+      "id": "2026-06-03-monosaccharide-pretreatment-coffee-volatile-aroma",
+      "date": "2026-06-03",
+      "title_ko": "생두 단당류 전처리가 커피 로스팅 후 휘발성 향기 프로파일에 미치는 영향: SPME-GC-MS 분석",
+      "one_liner": "아라비노스 침지 전처리 후 로스팅 시 퓨란 향미↑ 연기향 페놀↓ — 단당류로 마이야르 반응 방향 제어 첫 실증",
+      "categories_primary": [
+        "향미/관능"
+      ],
+      "categories_secondary": [
+        "로스팅",
+        "화학/분석화학"
+      ],
+      "hero_image": "/static/img/insights/hero/flavor.svg",
+      "journal": "Journal of Food Science (Wiley-Blackwell / IFT)",
+      "pub_date": "2026-04-19",
+      "source_basis": "abstract_only"
+    },
     {
       "id": "2026-06-02-coffee-maturity-fermentation-mycotoxin-safety",
       "date": "2026-06-02",

@@ -1,0 +1,71 @@
+{
+  "version": 1,
+  "id": "2026-06-03-monosaccharide-pretreatment-coffee-volatile-aroma",
+  "date": "2026-06-03",
+  "slug": "monosaccharide-pretreatment-coffee-volatile-aroma",
+  "title_ko": "생두 단당류 전처리가 커피 로스팅 후 휘발성 향기 프로파일에 미치는 영향: SPME-GC-MS 분석",
+  "title_original": "Monosaccharide Pretreatment on the Volatile Profile of Coffee Using SPME-GC-MS",
+  "one_liner": "아라비노스 침지 전처리 후 로스팅 시 퓨란 향미↑ 연기향 페놀↓ — 단당류로 마이야르 반응 방향 제어 첫 실증",
+  "authors": "Yu et al.",
+  "journal": "Journal of Food Science (Wiley-Blackwell / IFT)",
+  "pub_date": "2026-04-19",
+  "doi": "10.1111/1750-3841.71036",
+  "categories_primary": [
+    "향미/관능"
+  ],
+  "categories_secondary": [
+    "로스팅",
+    "화학/분석화학"
+  ],
+  "summary": "카티모르 아라비카 생두를 아라비노스·포도당·갈락토스·만노스 4종 단당류 용액(4%, 8% w/w)에 침지 전처리 후 로스팅하여 SPME-GC-MS로 35종 휘발성 화합물 분석. 퓨란류가 지배적 계열이며, 단당류 전처리가 통계적으로 유의하게(p<0.05) 휘발성 조성 변화를 유발함. 원하는 아로마(2-퓨란메탄올, 5-메틸-2-퓨란카르복스알데히드) 증가, 연기향 페놀 화합물 감소. 4종 중 아라비노스(오탄당)가 가장 강한 효과.",
+  "key_findings": [
+    "35종 휘발성 화합물 동정 — 퓨란류가 가장 우세한 계열",
+    "단당류 전처리(4%, 8% w/w)가 휘발성 조성에 통계적 유의 영향(p < 0.05)",
+    "원하는 아로마 화합물(2-퓨란메탄올, 5-메틸-2-퓨란카르복스알데히드) 증가",
+    "연기향 관련 페놀 화합물 감소",
+    "아라비노스: 4가지 단당류 중 원하는 아로마 향상 효과 최고"
+  ],
+  "methodology": "카티모르 아라비카 생두 → 4종 단당류 용액(아라비노스·포도당·갈락토스·만노스, 4%/8% w/w) 침지 → 로스팅 → SPME-GC-MS 휘발성 화합물 35종 동정·정량 + SCA 커핑 관능 평가. 통계 유의 수준 p < 0.05.",
+  "implications": {
+    "농가/가공장": "가공 방식(워시드·내추럴·허니)에 따른 생두 단당류 조성 변화가 로스팅 향미 프로파일에 결정적 영향. 가공 방식이 향미 전구체 조절 수단임을 시사.",
+    "로스터/큐그레이더": "단당류 전처리로 연기향 페놀 억제 가능성 확인. 산지별 단당류 조성 차이가 동일 로스팅 커브에서 다른 아로마 결과를 내는 메커니즘 설명에 활용 가능.",
+    "R&D": "아라비노스 최적 농도·침지 시간, 다양한 품종·산지 검증, 로스팅 커브와 단당류 교호작용 연구가 후속 과제."
+  },
+  "limitations": "단일 품종(카티모르)만 대상; 침지 농도 2수준만 실험; 로스팅 프로파일 단일 조건 가능성; 상업적 스케일업 미검토; 관능 점수와 기기 분석 상관 미보고.",
+  "glossary": [
+    {
+      "term": "SPME",
+      "ko": "고체상 미세추출 — 헤드스페이스 휘발성 화합물을 흡착 섬유로 농축하는 GC-MS 전처리 기술"
+    },
+    {
+      "term": "GC-MS",
+      "ko": "가스 크로마토그래피-질량분석 — 휘발성 화합물 분리·동정·정량 표준 분석 기술"
+    },
+    {
+      "term": "Furans (퓨란류)",
+      "ko": "마이야르 반응·캐러멜화 산물. 달콤·견과류·캐러멜 향 기여"
+    },
+    {
+      "term": "Maillard Reaction (마이야르 반응)",
+      "ko": "환원당+아미노산 가열 반응 → 갈변·향미 화합물 생성. 커피 로스팅 아로마 핵심 기전"
+    },
+    {
+      "term": "Catimor (카티모르)",
+      "ko": "아라비카×로부스타 교배 하이브리드 품종. 병 저항성 높고 아시아권 재배 많음"
+    },
+    {
+      "term": "Pentose (오탄당)",
+      "ko": "탄소 5개 단당류(아라비노스 등). 마이야르 반응성이 육탄당보다 높음"
+    }
+  ],
+  "citation_apa": "Yu [et al.] (2026). Monosaccharide pretreatment on the volatile profile of coffee using SPME-GC-MS. Journal of Food Science, e71036. https://doi.org/10.1111/1750-3841.71036",
+  "links": {
+    "doi": "https://doi.org/10.1111/1750-3841.71036",
+    "oa_pdf": "",
+    "journal_homepage": "https://ift.onlinelibrary.wiley.com/journal/17503841"
+  },
+  "source_basis": "abstract_only",
+  "data_charts": [],
+  "drive_doc_url": "https://docs.google.com/document/d/1iXSElFFtXKUvxkzqKw2_8b4b_3F2BU5mki2pXMzQqzQ/edit",
+  "hero_image": "/static/img/insights/hero/flavor.svg"
+}
