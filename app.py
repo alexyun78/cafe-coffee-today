@@ -9,6 +9,7 @@ import json
 import os
 import re
 import secrets
+import subprocess
 import time
 from datetime import date, datetime, timezone
 from functools import wraps
@@ -61,6 +62,35 @@ else:
     CORS(app, supports_credentials=True)
 
 db.init_schema()
+
+
+# ---------- 빌드 리비전 (git 기반, 수정 시 자동 증가) ----------
+# 커밋 수 = 단조 증가하는 빌드 번호. 어떤 소스 수정이든 커밋 1개 = rev +1 이므로
+# "수정하면 버전이 무조건 올라간다"가 자동으로 보장됨 (수동 관리 불필요).
+_BUILD_REV_CACHE = None
+
+
+def _build_revision():
+    global _BUILD_REV_CACHE
+    if _BUILD_REV_CACHE is not None:
+        return _BUILD_REV_CACHE
+    info = {"rev": None, "hash": None, "date": None}
+    root = os.path.dirname(os.path.abspath(__file__))
+
+    def _git(*args):
+        return subprocess.check_output(
+            ["git", *args], cwd=root, stderr=subprocess.DEVNULL, text=True
+        ).strip()
+
+    try:
+        info["rev"] = int(_git("rev-list", "--count", "HEAD"))
+        info["hash"] = _git("rev-parse", "--short", "HEAD")
+        info["date"] = _git("log", "-1", "--format=%cd", "--date=format:%Y-%m-%d %H:%M")
+    except Exception:
+        pass
+    _BUILD_REV_CACHE = info
+    return info
+
 
 
 # ---------- 방문자 추적 ----------
@@ -1133,10 +1163,13 @@ def game_apk_page():
 
 @app.get("/api/app-version")
 def api_app_version():
+    payload = {"version": None, "build": _build_revision()}
     try:
-        return send_file("cafe-coffee-apk/www/version.json")
+        with open("cafe-coffee-apk/www/version.json", encoding="utf-8") as f:
+            payload.update(json.load(f))
     except Exception:
-        return jsonify({"version": None}), 404
+        pass
+    return jsonify(payload)
 
 
 @app.get("/downloads/<path:name>")

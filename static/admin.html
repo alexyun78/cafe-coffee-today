@@ -2730,20 +2730,30 @@ function escapeHtml(s) {
 }
 function escapeAttr(s) { return escapeHtml(s); }
 
-// ---------- 앱 버전 (APK 전용 표시) ----------
+// ---------- 빌드 리비전 + 앱 버전 표시 ----------
+// 서버 git 커밋 수를 수정버전(rev)으로 항상 표시 → 어떤 수정이든 자동 증가.
+// APK(WebView)에서는 설치된 APK 버전도 함께 노출.
 (async function showAppVersion() {
-  const ua = navigator.userAgent;
-  if (!/Android.*wv\)|; wv\)/.test(ua)) return;
-  // 설치된 APK 버전 (User-Agent에 빌드 시 주입)
-  const m = ua.match(/CafeCoffeeApp\/([\d.]+)/);
-  const installed = m ? m[1] : null;
   const el = document.getElementById("app-version");
-  if (installed) {
-    el.textContent = "v" + installed;
-    el.classList.add("show");
-  } else {
-    // 구버전 APK (User-Agent 미주입)
-    el.textContent = "v?";
+  if (!el) return;
+  const ua = navigator.userAgent;
+  const m = ua.match(/CafeCoffeeApp\/([\d.]+)/);
+  const apkVer = m ? m[1] : null;
+  let label = "";
+  try {
+    const res = await fetch("/api/app-version", { cache: "no-store" });
+    const info = await res.json();
+    const b = info && info.build;
+    if (b && b.rev != null) {
+      label = "rev " + b.rev + (b.hash ? " · " + b.hash : "");
+      if (b.date) el.title = "최종 수정: " + b.date;
+    }
+    if (apkVer) label = (label ? label + " · " : "") + "APK v" + apkVer;
+  } catch (e) {
+    if (apkVer) label = "APK v" + apkVer;
+  }
+  if (label) {
+    el.textContent = label;
     el.classList.add("show");
   }
 })();

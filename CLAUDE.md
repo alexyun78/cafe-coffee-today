@@ -16,6 +16,7 @@
 - 커밋 메시지는 기존 스타일(`feat:`, `fix:`, `chore:` + 한국어 요약) 유지.
 - **예외**: 파괴적 작업(`git reset --hard`, `push --force`, 브랜치 삭제 등)은 여전히 사전 확인.
 - `version.json`을 올릴지 여부는 사용자가 명시하지 않으면 올리지 않는다. WebView는 서버 URL을 로드하므로 일반 수정은 APK 재빌드 없이도 반영됨. (업데이트 배너를 띄워야 할 때만 `cafe-coffee-apk/www/version.json` 증가)
+- **수정버전(빌드 rev)은 자동**: 관리자 헤더에 표시되는 `rev N · <hash>`는 `app.py`의 `_build_revision()`이 `git rev-list --count HEAD`로 산출. 어떤 수정이든 커밋 1개 = rev +1 이므로 별도 버전 관리 불필요. (`/api/app-version`의 `build` 필드)
 
 ---
 
