@@ -1602,11 +1602,9 @@ def inventory_list() -> list:
         ) r_sum ON r_sum.green_bean_id = gb.id
         WHERE gb.status = '활성'
         ORDER BY
-            CASE WHEN (COALESCE(p_sum.purchased_kg,0) - COALESCE(r_sum.used_kg,0)
-                + COALESCE(gb.stock_adjustment_kg,0)) > 0 THEN 0 ELSE 1 END,
-            p_sum.last_purchase_date DESC,
             (COALESCE(p_sum.purchased_kg,0) - COALESCE(r_sum.used_kg,0)
-                + COALESCE(gb.stock_adjustment_kg,0)) DESC
+                + COALESCE(gb.stock_adjustment_kg,0)) ASC,
+            p_sum.last_purchase_date DESC
     """
     cutoff = _months_ago_iso(12)
     with connect() as conn:
