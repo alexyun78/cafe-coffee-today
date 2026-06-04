@@ -1616,6 +1616,8 @@ def inventory_list() -> list:
         d = dict(r)
         lpd = d.get("last_purchase_date") or ""
         d["is_stale"] = 1 if (d["remaining_kg"] <= 0 and lpd < cutoff) else 0
+        if d["remaining_kg"] < 0:
+            d["remaining_kg"] = 0
         result.append(d)
     return result
 
