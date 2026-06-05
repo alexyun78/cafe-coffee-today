@@ -1381,7 +1381,8 @@ def green_bean_suggestions() -> dict:
 
 def list_purchases(green_bean_id: Optional[int] = None, limit: int = 200) -> list:
     sql = """
-        SELECT p.*, gb.name AS bean_name, s.short_name AS supplier_short
+        SELECT p.*, gb.name AS bean_name, gb.process AS process,
+               gb.origin_country AS origin_country, s.short_name AS supplier_short
         FROM purchases p
         JOIN green_beans gb ON gb.id = p.green_bean_id
         LEFT JOIN suppliers s ON s.id = gb.supplier_id

@@ -910,6 +910,10 @@
   .record-row-date .rr-time { color: var(--accent); font-weight: 700; margin-left: 2px; }
   .record-row-detail { font-size: 0.82rem; color: var(--text); margin-top: 4px; }
   .record-row-detail span { margin-right: 12px; white-space: nowrap; }
+  .record-row-detail span.record-row-proc {
+    margin-right: 12px; padding: 1px 8px; border-radius: 8px;
+    background: #f0ebe4; color: var(--coffee-dark); font-weight: 600; font-size: 0.76rem;
+  }
   .record-row-losscmp {
     margin-top: 3px; font-size: 0.8rem; font-weight: 600; color: var(--muted);
   }
@@ -4138,6 +4142,7 @@ function renderPurchaseList(items) {
           <span class="record-row-date">${escapeHtml(p.purchase_date || "")}</span>
         </div>
         <div class="record-row-detail">
+          ${p.process ? `<span class="record-row-proc">${escapeHtml(p.process)}</span>` : ""}
           <span>${Number(p.quantity_kg).toFixed(1)} kg</span>
           <span>₩${Number(p.unit_price).toLocaleString()}/kg</span>
           ${discount > 0 ? `<span style="text-decoration:line-through; opacity:0.6;">₩${(total + discount).toLocaleString()}</span><span style="color:var(--danger);">-₩${discount.toLocaleString()}</span>` : ""}
