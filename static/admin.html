@@ -3523,6 +3523,7 @@ function createComboSelect(root, cfg) {
   const listEl = root.querySelector(".bean-select-list");
   const placeholder = cfg.placeholder || "-- 선택 또는 직접 입력 --";
   const allowCustom = cfg.allowCustom !== false;
+  const prefillOnOpen = !!cfg.prefillOnOpen;
   const hideable = typeof cfg.onToggleHide === "function";
   let viewHidden = false;
 
@@ -3590,8 +3591,10 @@ function createComboSelect(root, cfg) {
     dropdown.hidden = false;
     root.classList.add("open");
     trigger.setAttribute("aria-expanded", "true");
+    // 현재 값이 있으면 검색창에 채워서 그 자리에서 바로 수정 가능하게 (이름 편집)
+    if (prefillOnOpen && allowCustom && hidden.value) searchEl.value = hidden.value;
     renderList();
-    setTimeout(() => searchEl.focus(), 0);
+    setTimeout(() => { searchEl.focus(); searchEl.select(); }, 0);
   }
   function close() {
     if (dropdown.hidden) return;
@@ -3736,6 +3739,7 @@ function initBeanFormSegments() {
     searchPlaceholder: "검색 또는 새 원두명 입력…",
     getItems: () => beanComboItems(_comboSelects["bean-field-supplier"]),
     onToggleHide: (it, hide) => setBeanHidden(it.id, hide),
+    prefillOnOpen: true,
   });
 }
 
@@ -4183,6 +4187,7 @@ function initPurchaseFormSegments() {
         document.getElementById("purchase-field-gbid").value = "";   // 새 원두로 간주
       }
     },
+    prefillOnOpen: true,
   });
 }
 
