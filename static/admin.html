@@ -1379,10 +1379,19 @@
           </div>
 
           <div class="field">
-            <label for="bean-field-origin">원산지</label>
-            <div class="autocomplete-wrap">
-              <input type="text" id="bean-field-origin" placeholder="예: 에티오피아" autocomplete="off">
-              <div class="autocomplete-list" id="ac-bean-origin"></div>
+            <label>원산지</label>
+            <div class="combo-select" data-target="bean-field-origin">
+              <button type="button" class="bean-select-trigger" aria-haspopup="listbox" aria-expanded="false">
+                <span class="bean-select-text placeholder">-- 선택 또는 직접 입력 --</span>
+                <span class="bean-select-caret">▾</span>
+              </button>
+              <input type="hidden" id="bean-field-origin">
+              <div class="bean-select-dropdown" hidden>
+                <div class="bean-select-head">
+                  <input type="text" class="bean-select-search" placeholder="검색 또는 새 원산지 입력…" autocomplete="off">
+                </div>
+                <div class="bean-select-list"></div>
+              </div>
             </div>
           </div>
 
@@ -1489,10 +1498,19 @@
           </div>
 
           <div class="field">
-            <label for="purchase-field-origin">원산지</label>
-            <div class="autocomplete-wrap">
-              <input type="text" id="purchase-field-origin" placeholder="예: 에티오피아" autocomplete="off">
-              <div class="autocomplete-list" id="ac-purchase-origin"></div>
+            <label>원산지</label>
+            <div class="combo-select" data-target="purchase-field-origin">
+              <button type="button" class="bean-select-trigger" aria-haspopup="listbox" aria-expanded="false">
+                <span class="bean-select-text placeholder">-- 선택 또는 직접 입력 --</span>
+                <span class="bean-select-caret">▾</span>
+              </button>
+              <input type="hidden" id="purchase-field-origin">
+              <div class="bean-select-dropdown" hidden>
+                <div class="bean-select-head">
+                  <input type="text" class="bean-select-search" placeholder="검색 또는 새 원산지 입력…" autocomplete="off">
+                </div>
+                <div class="bean-select-list"></div>
+              </div>
             </div>
           </div>
 
@@ -3723,9 +3741,13 @@ function initBeanFormSegments() {
   const grades = (_beanSuggestionsCache && _beanSuggestionsCache.grades) || [];
   renderSegmentedBtns("bean-process-btns", "bean-field-process", "bean-field-process-custom", DEFAULT_PROCESSES, procs);
   renderSegmentedBtns("bean-grade-btns", "bean-field-grade", "bean-field-grade-custom", DEFAULT_GRADES, grades);
-  // 원산지 autocomplete
-  const origins = (_beanSuggestionsCache && _beanSuggestionsCache.origins) || [];
-  setupAutocomplete("bean-field-origin", "ac-bean-origin", origins);
+  // 원산지 콤보 (기존 기록된 나라 목록 + 직접 입력)
+  ensureCombo("bean-field-origin", {
+    placeholder: "-- 선택 또는 직접 입력 --",
+    searchPlaceholder: "검색 또는 새 원산지 입력…",
+    getItems: originComboItems,
+    prefillOnOpen: true,
+  });
   // 공급업체·원두명 공용 콤보 (기존 목록 + 숨김 + 직접 입력)
   ensureCombo("bean-field-supplier", {
     placeholder: "-- 선택 또는 직접 입력 --",
@@ -3926,6 +3948,7 @@ document.getElementById("btn-bean-new").addEventListener("click", () => {
   initBeanFormSegments();
   if (_comboSelects["bean-field-supplier"]) _comboSelects["bean-field-supplier"].setValue("");
   if (_comboSelects["bean-field-name"]) _comboSelects["bean-field-name"].setValue("");
+  if (_comboSelects["bean-field-origin"]) _comboSelects["bean-field-origin"].setValue("");
   showBeanForm();
 });
 
@@ -3941,7 +3964,7 @@ async function openBeanEdit(id) {
     document.getElementById("bean-field-id").value = id;
     if (_comboSelects["bean-field-supplier"]) _comboSelects["bean-field-supplier"].setValue(b.supplier_name || "");
     if (_comboSelects["bean-field-name"]) _comboSelects["bean-field-name"].setValue(b.name || "");
-    document.getElementById("bean-field-origin").value = b.origin_country || "";
+    if (_comboSelects["bean-field-origin"]) _comboSelects["bean-field-origin"].setValue(b.origin_country || "");
     document.getElementById("bean-field-cup-notes").value = b.cup_notes || "";
     document.getElementById("bean-field-desc").value = b.description || "";
     document.getElementById("bean-field-decaf").checked = !!b.is_decaf;
@@ -4128,6 +4151,12 @@ function renderPurchaseList(items) {
 
 // ---- 공용 콤보 옵션 소스 (공급업체 / 원두명) ----
 // 공급처 콤보 옵션: 기존 공급처 + 숨김 플래그
+// 원산지 콤보 옵션: 기존에 기록된 나라(DISTINCT). 숨김/삭제 없음 — 단순 문자열 추천.
+function originComboItems() {
+  const origins = (_beanSuggestionsCache && _beanSuggestionsCache.origins) || [];
+  return origins.filter(Boolean).map(o => ({ value: o, label: o }));
+}
+
 function supplierComboItems() {
   return (_suppliersCache || [])
     .filter(s => s.name)
@@ -4165,8 +4194,12 @@ function initPurchaseFormSegments() {
   const grades = (_beanSuggestionsCache && _beanSuggestionsCache.grades) || [];
   renderSegmentedBtns("purchase-process-btns", "purchase-field-process", "purchase-field-process-custom", DEFAULT_PROCESSES, procs);
   renderSegmentedBtns("purchase-grade-btns", "purchase-field-grade", "purchase-field-grade-custom", DEFAULT_GRADES, grades);
-  const origins = (_beanSuggestionsCache && _beanSuggestionsCache.origins) || [];
-  setupAutocomplete("purchase-field-origin", "ac-purchase-origin", origins);
+  ensureCombo("purchase-field-origin", {
+    placeholder: "-- 선택 또는 직접 입력 --",
+    searchPlaceholder: "검색 또는 새 원산지 입력…",
+    getItems: originComboItems,
+    prefillOnOpen: true,
+  });
   ensureCombo("purchase-field-supplier", {
     placeholder: "-- 선택 또는 직접 입력 --",
     searchPlaceholder: "검색 또는 새 공급처 입력…",
@@ -4206,7 +4239,7 @@ function fillPurchaseBeanFields(b) {
   document.getElementById("purchase-field-gbid").value = b.id || "";
   if (_comboSelects["purchase-field-supplier"]) _comboSelects["purchase-field-supplier"].setValue(b.supplier_name || "");
   if (_comboSelects["purchase-field-name"]) _comboSelects["purchase-field-name"].setValue(b.name || "");
-  document.getElementById("purchase-field-origin").value = b.origin_country || "";
+  if (_comboSelects["purchase-field-origin"]) _comboSelects["purchase-field-origin"].setValue(b.origin_country || "");
   document.getElementById("purchase-field-cupnotes").value = b.cup_notes || "";
   clearPurchaseSegments();
   syncSegmentedBtn("purchase-process-btns", "purchase-field-process", "purchase-field-process-custom", b.process || "");
@@ -4221,12 +4254,14 @@ function openPurchaseEdit(id) {
   document.getElementById("purchase-form").reset();
   initPurchaseFormSegments();
   clearPurchaseSegments();
+  if (_comboSelects["purchase-field-origin"]) _comboSelects["purchase-field-origin"].setValue("");
   const b = (_beanListCache || []).find(x => x.id === p.green_bean_id);
   if (b) {
     fillPurchaseBeanFields(b);
   } else {
     document.getElementById("purchase-field-gbid").value = p.green_bean_id || "";
     if (_comboSelects["purchase-field-name"]) _comboSelects["purchase-field-name"].setValue(p.bean_name || "");
+    if (_comboSelects["purchase-field-origin"]) _comboSelects["purchase-field-origin"].setValue(p.origin_country || "");
   }
   document.getElementById("purchase-field-date").value = p.purchase_date || todayStr();
   document.getElementById("purchase-field-qty").value = p.quantity_kg != null ? p.quantity_kg : "";
@@ -4271,6 +4306,7 @@ document.getElementById("btn-purchase-new").addEventListener("click", () => {
   clearPurchaseSegments();
   if (_comboSelects["purchase-field-supplier"]) _comboSelects["purchase-field-supplier"].setValue("");
   if (_comboSelects["purchase-field-name"]) _comboSelects["purchase-field-name"].setValue("");
+  if (_comboSelects["purchase-field-origin"]) _comboSelects["purchase-field-origin"].setValue("");
   document.getElementById("purchase-field-date").value = todayStr();
   document.getElementById("purchase-field-discount").value = "";
   document.getElementById("purchase-form-title").textContent = "구매 등록";
