@@ -1520,8 +1520,8 @@
           </div>
 
           <div class="field">
-            <label for="purchase-field-discount">할인 (원)</label>
-            <input type="text" id="purchase-field-discount" inputmode="numeric" placeholder="0" value="0">
+            <label for="purchase-field-discount">할인가 (할인 후 결제액, 원)</label>
+            <input type="text" id="purchase-field-discount" inputmode="numeric" placeholder="할인 없으면 비워두세요">
           </div>
 
           <div class="calc-total" id="purchase-total-display">총액: ₩0</div>
@@ -4087,7 +4087,7 @@ function renderPurchaseList(items) {
         <div class="record-row-detail">
           <span>${Number(p.quantity_kg).toFixed(1)} kg</span>
           <span>₩${Number(p.unit_price).toLocaleString()}/kg</span>
-          ${discount > 0 ? `<span style="color:var(--danger);">-₩${discount.toLocaleString()}</span>` : ""}
+          ${discount > 0 ? `<span style="text-decoration:line-through; opacity:0.6;">₩${(total + discount).toLocaleString()}</span><span style="color:var(--danger);">-₩${discount.toLocaleString()}</span>` : ""}
           <span style="font-weight:700; color:var(--accent);">= ₩${total.toLocaleString()}</span>
         </div>
         <div class="record-row-actions">
@@ -4226,7 +4226,8 @@ function openPurchaseEdit(id) {
   document.getElementById("purchase-field-date").value = p.purchase_date || todayStr();
   document.getElementById("purchase-field-qty").value = p.quantity_kg != null ? p.quantity_kg : "";
   document.getElementById("purchase-field-price").value = p.unit_price != null ? p.unit_price : "";
-  document.getElementById("purchase-field-discount").value = p.discount != null ? p.discount : "0";
+  document.getElementById("purchase-field-discount").value =
+    (Number(p.discount) || 0) > 0 && p.total_price != null ? p.total_price : "";
   document.getElementById("purchase-form-title").textContent = "구매 편집";
   updatePurchaseTotal();
   showPurchaseForm();
@@ -4266,7 +4267,7 @@ document.getElementById("btn-purchase-new").addEventListener("click", () => {
   if (_comboSelects["purchase-field-supplier"]) _comboSelects["purchase-field-supplier"].setValue("");
   if (_comboSelects["purchase-field-name"]) _comboSelects["purchase-field-name"].setValue("");
   document.getElementById("purchase-field-date").value = todayStr();
-  document.getElementById("purchase-field-discount").value = "0";
+  document.getElementById("purchase-field-discount").value = "";
   document.getElementById("purchase-form-title").textContent = "구매 등록";
   updatePurchaseTotal();
   showPurchaseForm();
@@ -4277,9 +4278,17 @@ document.getElementById("btn-purchase-cancel").addEventListener("click", hidePur
 function updatePurchaseTotal() {
   const qty = parseFloat(document.getElementById("purchase-field-qty").value) || 0;
   const price = parseInt(document.getElementById("purchase-field-price").value) || 0;
-  const discount = parseInt(document.getElementById("purchase-field-discount").value) || 0;
-  const total = Math.max(0, Math.round(qty * price) - discount);
-  document.getElementById("purchase-total-display").textContent = "총액: ₩" + total.toLocaleString();
+  const original = Math.round(qty * price);
+  const raw = document.getElementById("purchase-field-discount").value.trim();
+  const finalAmt = raw === "" ? original : Math.max(0, parseInt(raw) || 0);
+  const discount = Math.max(0, original - finalAmt);
+  const disp = document.getElementById("purchase-total-display");
+  if (discount > 0) {
+    disp.innerHTML = `정가 ₩${original.toLocaleString()} → 결제 <strong>₩${finalAmt.toLocaleString()}</strong> ` +
+      `<span style="color:var(--danger);">(할인 ₩${discount.toLocaleString()})</span>`;
+  } else {
+    disp.textContent = "총액: ₩" + original.toLocaleString();
+  }
 }
 ["purchase-field-qty", "purchase-field-price", "purchase-field-discount"].forEach(id => {
   document.getElementById(id).addEventListener("input", updatePurchaseTotal);
@@ -4328,7 +4337,12 @@ document.getElementById("purchase-form").addEventListener("submit", async (e) =>
     purchase_date: dateVal,
     quantity_kg: qtyVal,
     unit_price: priceVal,
-    discount: parseInt(document.getElementById("purchase-field-discount").value) || 0,
+    discount: (() => {
+      const original = Math.round(qtyVal * priceVal);
+      const raw = document.getElementById("purchase-field-discount").value.trim();
+      const finalAmt = raw === "" ? original : Math.max(0, parseInt(raw) || 0);
+      return Math.max(0, original - finalAmt);
+    })(),
   };
 
   try {
