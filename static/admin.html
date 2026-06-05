@@ -1022,7 +1022,7 @@
   }
   .bean-select-mode.on { background: var(--coffee-dark); color: white; border-color: var(--coffee-dark); }
 
-  .bean-select-list { max-height: 46vh; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+  .bean-select-list { max-height: 46vh; overflow-y: auto; -webkit-overflow-scrolling: touch; overscroll-behavior: contain; }
   .bean-opt {
     display: flex; align-items: center; gap: 8px; padding: 4px 8px 4px 12px;
     border-bottom: 1px solid #f1ece4;
@@ -3604,6 +3604,26 @@ function createComboSelect(root, cfg) {
     if (modeBtn) { modeBtn.classList.remove("on"); modeBtn.textContent = "숨김 보기"; }
     searchEl.value = "";
   }
+  // 화면 아래 공간이 부족하면 위로 펼치고, 긴 목록은 가용 높이에 맞춰 스크롤되게 캡.
+  function positionDropdown() {
+    const rect = trigger.getBoundingClientRect();
+    const vh = window.innerHeight || document.documentElement.clientHeight;
+    const margin = 12;
+    const headH = 56;            // 검색창 영역 대략 높이
+    const cap = vh * 0.5;        // 최대 절반 화면
+    const spaceBelow = vh - rect.bottom - margin;
+    const spaceAbove = rect.top - margin;
+    if (spaceBelow < 200 && spaceAbove > spaceBelow) {
+      // 위로 펼치기
+      dropdown.style.top = "auto";
+      dropdown.style.bottom = "calc(100% + 4px)";
+      listEl.style.maxHeight = Math.max(140, Math.min(cap, spaceAbove - headH)) + "px";
+    } else {
+      dropdown.style.bottom = "auto";
+      dropdown.style.top = "calc(100% + 4px)";
+      listEl.style.maxHeight = Math.max(140, Math.min(cap, spaceBelow - headH)) + "px";
+    }
+  }
   function open() {
     Object.entries(_comboSelects).forEach(([k, c]) => { if (k !== targetId) c.close(); });
     dropdown.hidden = false;
@@ -3612,13 +3632,18 @@ function createComboSelect(root, cfg) {
     // 현재 값이 있으면 검색창에 채워서 그 자리에서 바로 수정 가능하게 (이름 편집)
     if (prefillOnOpen && allowCustom && hidden.value) searchEl.value = hidden.value;
     renderList();
-    setTimeout(() => { searchEl.focus(); searchEl.select(); }, 0);
+    positionDropdown();
+    // 모바일(터치)에선 자동 포커스 시 키보드가 목록 하단을 가리므로 데스크톱에서만 포커스.
+    const coarse = window.matchMedia && window.matchMedia("(pointer: coarse)").matches;
+    if (!coarse) setTimeout(() => { searchEl.focus(); searchEl.select(); }, 0);
   }
   function close() {
     if (dropdown.hidden) return;
     dropdown.hidden = true;
     root.classList.remove("open");
     trigger.setAttribute("aria-expanded", "false");
+    // 위치/높이 보정값 초기화 — 다음 열기에서 다시 계산
+    dropdown.style.top = ""; dropdown.style.bottom = ""; listEl.style.maxHeight = "";
     resetView();
   }
   function isOpen() { return !dropdown.hidden; }
