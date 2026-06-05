@@ -3755,6 +3755,7 @@ function initBeanFormSegments() {
     getItems: supplierComboItems,
     onToggleHide: (it, hide) => setSupplierHidden(it.id, hide),
     onChange: () => { const n = _comboSelects["bean-field-name"]; if (n && n.isOpen()) n.render(); },
+    prefillOnOpen: true,
   });
   ensureCombo("bean-field-name", {
     placeholder: "-- 선택 또는 직접 입력 --",
@@ -4206,6 +4207,7 @@ function initPurchaseFormSegments() {
     getItems: supplierComboItems,
     onToggleHide: (it, hide) => setSupplierHidden(it.id, hide),
     onChange: () => { const n = _comboSelects["purchase-field-name"]; if (n && n.isOpen()) n.render(); },
+    prefillOnOpen: true,
   });
   ensureCombo("purchase-field-name", {
     placeholder: "-- 선택 또는 직접 입력 --",
