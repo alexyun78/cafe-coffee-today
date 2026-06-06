@@ -1004,6 +1004,9 @@
   .record-row-actions button.dup { background: #FFF3E0; color: #E65100; }
   .record-row-actions button.edit { background: #E8F0FE; color: #1565C0; }
   .record-row-actions button.makecoffee { background: #E8F5E9; color: #2E7D32; }
+  .record-row-actions button.makecoffee.done {
+    background: #ececec; color: #9e9e9e; opacity: 1; cursor: default;
+  }
   .record-row-actions button:disabled { opacity: 0.5; cursor: default; }
   .record-row-actions button:hover { opacity: 0.8; }
 
@@ -4622,7 +4625,9 @@ function renderRoastList(items) {
         <div class="record-row-actions">
           <button type="button" class="edit" data-id="${r.id}">편집</button>
           <button type="button" class="dup" data-id="${r.id}">복제</button>
-          ${!Number(r.has_active_coffee) ? `<button type="button" class="makecoffee" data-id="${r.id}">☕ 예정 등록</button>` : ""}
+          ${Number(r.has_active_coffee)
+            ? `<button type="button" class="makecoffee done" disabled title="같은 이름의 커피가 이미 예정/진행 중">☕ 등록됨</button>`
+            : `<button type="button" class="makecoffee" data-id="${r.id}">☕ 예정 등록</button>`}
           <button type="button" class="delete" data-id="${r.id}">삭제</button>
         </div>
       </div>
@@ -4635,8 +4640,8 @@ function renderRoastList(items) {
   el.querySelectorAll(".record-row-actions .dup").forEach(btn => {
     btn.addEventListener("click", () => openRoastDuplicate(parseInt(btn.dataset.id, 10)));
   });
-  // 나중 등록 — 활성(예정/진행 중) 커피가 없는 기록만 버튼 표시. 서버가 이름 기준 중복 방지.
-  el.querySelectorAll(".record-row-actions .makecoffee").forEach(btn => {
+  // 나중 등록 — 활성(예정/진행 중) 커피가 있으면 회색 '등록됨', 없으면 '예정 등록' 버튼.
+  el.querySelectorAll(".record-row-actions .makecoffee:not(.done)").forEach(btn => {
     btn.addEventListener("click", async () => {
       btn.disabled = true;
       try {
