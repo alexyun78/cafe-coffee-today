@@ -1184,6 +1184,7 @@
 
   /* ===== 공용 콤보 드롭다운 (.combo-select) — bean-select 내부 스타일 재사용 ===== */
   .combo-select { position: relative; }
+  .combo-clear-opt .bean-opt-label { color: #c62828; font-weight: 600; }
   .combo-select.open .bean-select-caret { transform: rotate(180deg); }
   .combo-select.open .bean-select-trigger {
     border-color: var(--accent); box-shadow: 0 0 0 3px rgba(210,105,30,0.15);
@@ -4034,6 +4035,12 @@ function createComboSelect(root, cfg) {
     if (ql) list = list.filter(it => (it.label || it.value || "").toLowerCase().includes(ql));
     const selVal = hidden.value;
     const rows = [];
+    // clearable: 값이 있을 때 '선택 지우기' 행 — 잘못 입력한 선택값을 비울 수 있게
+    if (cfg.clearable && !viewHidden && hidden.value) {
+      rows.push(`<div class="bean-opt combo-clear-opt">
+        <button type="button" class="bean-opt-label" data-act="clear">✕ 선택 지우기</button>
+      </div>`);
+    }
     if (allowCustom && !viewHidden && q &&
         !items().some(it => String(it.value).toLowerCase() === ql)) {
       rows.push(`<div class="bean-opt combo-custom-opt">
@@ -4151,6 +4158,7 @@ function createComboSelect(root, cfg) {
       return;
     }
     if (act === "custom") { setValue(searchEl.value.trim(), true, null); close(); return; }
+    if (act === "clear") { setValue("", true, null); close(); return; }
     if (act === "hide" || act === "unhide") {
       const it = items().find(x => String(x.id) === btn.dataset.id);
       if (!it) return;
@@ -4235,6 +4243,7 @@ function initBeanFormSegments() {
     searchPlaceholder: "검색 또는 새 원산지 입력…",
     getItems: originComboItems,
     prefillOnOpen: true,
+    clearable: true,   // 선택 지우기 — 잘못 입력한 원산지 비우기
   });
   // 공급업체·원두명 공용 콤보 (기존 목록 + 숨김 + 직접 입력)
   ensureCombo("bean-field-supplier", {
@@ -4244,6 +4253,7 @@ function initBeanFormSegments() {
     onToggleHide: (it, hide) => setSupplierHidden(it.id, hide),
     onChange: () => { const n = _comboSelects["bean-field-name"]; if (n && n.isOpen()) n.render(); },
     prefillOnOpen: true,
+    clearable: true,
   });
   ensureCombo("bean-field-name", {
     placeholder: "-- 선택 또는 직접 입력 --",
@@ -4689,6 +4699,7 @@ function initPurchaseFormSegments() {
     searchPlaceholder: "검색 또는 새 원산지 입력…",
     getItems: originComboItems,
     prefillOnOpen: true,
+    clearable: true,   // 선택 지우기 — 잘못 입력한 원산지 비우기
   });
   ensureCombo("purchase-field-supplier", {
     placeholder: "-- 선택 또는 직접 입력 --",
@@ -4697,6 +4708,7 @@ function initPurchaseFormSegments() {
     onToggleHide: (it, hide) => setSupplierHidden(it.id, hide),
     onChange: () => { const n = _comboSelects["purchase-field-name"]; if (n && n.isOpen()) n.render(); },
     prefillOnOpen: true,
+    clearable: true,
   });
   ensureCombo("purchase-field-name", {
     placeholder: "-- 선택 또는 직접 입력 --",
