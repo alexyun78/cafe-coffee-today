@@ -127,6 +127,23 @@
             white-space: nowrap;
         }
 
+        /* 태블릿 이하 — 여백·글자 한 단계 축소 */
+        @media (max-width: 768px) {
+            .decaf-banner { margin-top: 12px; padding: 13px 16px; gap: 12px; border-radius: 14px; }
+            .decaf-banner-icon { font-size: 1.5rem; }
+            .decaf-banner-title { font-size: 0.98rem; }
+            .decaf-banner-notes { font-size: 0.84rem; }
+        }
+
+        /* 소형 모바일(앱 WebView 포함) — 컴팩트, 긴 컵노트도 줄바꿈으로 수용 */
+        @media (max-width: 480px) {
+            .decaf-banner { padding: 12px 13px; gap: 10px; }
+            .decaf-banner-icon { font-size: 1.35rem; }
+            .decaf-banner-title { font-size: 0.92rem; line-height: 1.35; }
+            .decaf-banner-notes { font-size: 0.8rem; margin-top: 3px; line-height: 1.4; }
+            .decaf-banner-badge { font-size: 0.6rem; padding: 3px 8px; letter-spacing: 1px; }
+        }
+
         .coffee-card {
             background: linear-gradient(145deg, #6F4E37 0%, #8B6F47 40%, #A0845C 100%);
             border-radius: 20px;
@@ -1814,12 +1831,14 @@
             if (data.decaf) {
                 const d = data.decaf;
                 const shortName = String(d.name || '').replace(/^디카페인\s*/, '');
+                // 컵노트 우선, 생두에 컵노트가 없으면 가공방식으로 폴백
+                const notes = String(d.cup_notes || '').trim() || String(d.process || '').trim();
                 decafHtml = `
                     <div class="decaf-banner">
                         <div class="decaf-banner-icon">🌿</div>
                         <div class="decaf-banner-body">
                             <div class="decaf-banner-title">오늘의 디카페인은 <strong>${shortName}</strong></div>
-                            ${d.cup_notes ? `<div class="decaf-banner-notes">☕ ${d.cup_notes}</div>` : ''}
+                            ${notes ? `<div class="decaf-banner-notes">☕ ${notes}</div>` : ''}
                         </div>
                         <div class="decaf-banner-badge">DECAF</div>
                     </div>
