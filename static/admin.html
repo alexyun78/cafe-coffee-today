@@ -548,6 +548,27 @@
   }
   .field.error .field-error { display: block; }
 
+  /* 복제 수량 스테퍼 — 숫자 입력 + 옆에 ▲▼ 화살표 */
+  .dup-count-stepper { display: flex; width: 150px; }
+  .dup-count-stepper input {
+    width: 100%; padding: 12px 8px; border: 1.5px solid var(--border);
+    border-right: none; border-radius: 8px 0 0 8px;
+    font-size: 1.15rem; font-family: inherit; font-weight: 700;
+    text-align: center; background: white; color: var(--text); min-height: 48px;
+    -moz-appearance: textfield; appearance: textfield;
+  }
+  .dup-count-stepper input::-webkit-outer-spin-button,
+  .dup-count-stepper input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+  .dup-count-arrows { display: flex; flex-direction: column; width: 46px; }
+  .dup-count-arrows button {
+    flex: 1; border: 1.5px solid var(--border); background: #f5efe6;
+    font-size: 0.7rem; color: var(--coffee-dark); cursor: pointer;
+    padding: 0; line-height: 1; font-family: inherit;
+  }
+  .dup-count-arrows button:first-child { border-radius: 0 8px 0 0; border-bottom-width: 0.75px; }
+  .dup-count-arrows button:last-child { border-radius: 0 0 8px 0; border-top-width: 0.75px; }
+  .dup-count-arrows button:active { background: var(--coffee-dark); color: white; }
+
   /* 세그먼트 (상태) */
   .segmented {
     display: grid; grid-template-columns: repeat(3, 1fr);
@@ -1640,6 +1661,18 @@
               <span class="toggle-track"></span>
               오늘의 커피 '예정'으로 등록
             </label>
+          </div>
+
+          <!-- 복제 모드에서만 표시 — 같은 내용으로 N건 한꺼번에 저장 -->
+          <div class="field" id="roast-dup-count-field" hidden>
+            <label for="roast-field-dup-count">복제 수량 <span class="label-hint">(같은 내용으로 여러 건 저장)</span></label>
+            <div class="dup-count-stepper">
+              <input type="number" id="roast-field-dup-count" min="1" max="20" step="1" value="1" inputmode="numeric">
+              <div class="dup-count-arrows">
+                <button type="button" id="roast-dup-count-up" aria-label="복제 수량 늘리기">▲</button>
+                <button type="button" id="roast-dup-count-down" aria-label="복제 수량 줄이기">▼</button>
+              </div>
+            </div>
           </div>
 
           <div class="button-bar">
@@ -4630,6 +4663,8 @@ function openRoastDuplicate(id) {
   applyRoastActual(null);   // 실제 투입량은 배치별 실측값이라 복제하지 않음 (배출량처럼 비움)
   document.getElementById("roast-form-title").textContent = "로스팅 기록";
   document.getElementById("roast-make-coffee-field").style.display = "";
+  document.getElementById("roast-dup-count-field").hidden = false;   // 복제 모드에서만 수량 스테퍼 표시
+  document.getElementById("roast-field-dup-count").value = "1";
   updateRoastLoss();
   updateRoastStockHint();   // 미리 채워진 투입량 기준으로 잔여 재고 예측 표시
   showRoastForm();
@@ -4656,6 +4691,7 @@ function openRoastEdit(id) {
   applyRoastActual(r.actual_input_weight_g != null ? r.actual_input_weight_g : null);
   document.getElementById("roast-form-title").textContent = "로스팅 편집";
   document.getElementById("roast-make-coffee-field").style.display = "none";
+  document.getElementById("roast-dup-count-field").hidden = true;
   updateRoastLoss();
   showRoastForm();
 }
@@ -4680,6 +4716,7 @@ document.getElementById("btn-roast-new").addEventListener("click", () => {
   document.getElementById("roast-field-date").value = todayStr();
   document.getElementById("roast-form-title").textContent = "로스팅 기록";
   document.getElementById("roast-make-coffee-field").style.display = "";
+  document.getElementById("roast-dup-count-field").hidden = true;
   applyRoastActual(null);
   updateRoastLoss();
   showRoastForm();
@@ -4749,13 +4786,16 @@ function updateRoastStockHint() {
   else if (level === "low") warn = `<span class="rsh-warn soft">🟠 재고가 얼마 남지 않았어요 (5kg 미만)</span>`;
 
   // 예측은 신규/복제(아직 재고에 미반영)일 때만. 편집은 이미 재고에 반영돼 있어 제외.
+  // 복제 수량이 N이면 N배치 전체(투입×N) 기준으로 예측.
   let proj = "";
   if (inputG > 0 && !_roastEditingId) {
-    const after = kg - inputG / 1000;
+    const count = getRoastDupCount();
+    const after = kg - (inputG * count) / 1000;
+    const batchTag = count > 1 ? `${count}배치 ` : "";
     if (after < 0) {
-      proj = `<span class="rsh-proj over">→ 로스팅 후 ${after.toFixed(1)}kg · 재고 초과! ${Math.abs(after).toFixed(1)}kg 부족</span>`;
+      proj = `<span class="rsh-proj over">→ ${batchTag}로스팅 후 ${after.toFixed(1)}kg · 재고 초과! ${Math.abs(after).toFixed(1)}kg 부족</span>`;
     } else {
-      proj = `<span class="rsh-proj">→ 로스팅 후 ${after.toFixed(1)}kg 남음${after < 2 ? " · 이후 품절 임박" : ""}</span>`;
+      proj = `<span class="rsh-proj">→ ${batchTag}로스팅 후 ${after.toFixed(1)}kg 남음${after < 2 ? " · 이후 품절 임박" : ""}</span>`;
     }
   }
 
@@ -4768,6 +4808,21 @@ document.getElementById("roast-field-input").addEventListener("input", () => {
   updateRoastStockHint();
 });
 document.getElementById("roast-field-output").addEventListener("input", updateRoastLoss);
+
+// 복제 수량 — 필드가 보일 때만 유효, 1~20 클램프
+function getRoastDupCount() {
+  if (document.getElementById("roast-dup-count-field").hidden) return 1;
+  const v = parseInt(document.getElementById("roast-field-dup-count").value, 10) || 1;
+  return Math.min(20, Math.max(1, v));
+}
+// 복제 수량 스테퍼 — ▲▼ 버튼으로 1~20 사이 조절
+function stepRoastDupCount(delta) {
+  document.getElementById("roast-field-dup-count").value = Math.min(20, Math.max(1, getRoastDupCount() + delta));
+  updateRoastStockHint();   // 수량이 바뀌면 N배치 기준 재고 예측 갱신
+}
+document.getElementById("roast-dup-count-up").addEventListener("click", () => stepRoastDupCount(1));
+document.getElementById("roast-dup-count-down").addEventListener("click", () => stepRoastDupCount(-1));
+document.getElementById("roast-field-dup-count").addEventListener("input", updateRoastStockHint);
 
 document.getElementById("roast-form").addEventListener("submit", async (e) => {
   e.preventDefault();
@@ -4809,11 +4864,18 @@ document.getElementById("roast-form").addEventListener("submit", async (e) => {
       await api("PUT", "/api/roasting-logs/" + _roastEditingId, payload);
       showToast("로스팅 기록 수정됨");
     } else {
-      const res = await api("POST", "/api/roasting-logs", payload);
-      const c = res && res.coffee;
-      if (c && c.created) showToast(`로스팅 기록 추가 — '${c.name}' 오늘의 커피 예정 등록`);
-      else if (c && !c.created) showToast(`로스팅 기록 추가 — '${c.name}' 이미 예정 등록됨`);
-      else showToast("로스팅 기록 추가됨");
+      // 복제 모드면 입력한 수량만큼 같은 내용으로 반복 저장
+      const count = getRoastDupCount();
+      let coffeeMsg = null;
+      for (let i = 0; i < count; i++) {
+        const res = await api("POST", "/api/roasting-logs", payload);
+        const c = res && res.coffee;
+        if (c && !coffeeMsg) {
+          coffeeMsg = c.created ? `'${c.name}' 오늘의 커피 예정 등록` : `'${c.name}' 이미 예정 등록됨`;
+        }
+      }
+      const head = count > 1 ? `로스팅 기록 ${count}건 추가` : "로스팅 기록 추가";
+      showToast(coffeeMsg ? `${head} — ${coffeeMsg}` : `${head}됨`);
     }
     hideRoastForm();
     loadRoastList();
