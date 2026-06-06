@@ -307,7 +307,10 @@ def admin_stats():
 def get_coffee():
     try:
         today, history = db.list_today_and_history()
-        return jsonify({"success": True, "today": today, "history": history})
+        return jsonify({
+            "success": True, "today": today, "history": history,
+            "decaf": db.get_current_decaf(),   # 제공 중 디카페인 (없으면 null)
+        })
     except Exception as e:
         import traceback
         traceback.print_exc()
@@ -905,6 +908,36 @@ def api_roasting_log_delete(rid):
     if not db.delete_roasting_log(rid):
         return jsonify({"success": False, "error": "not found"}), 404
     return jsonify({"success": True})
+
+# --- 디카페인 (제공 중 선택) ---
+
+@app.get("/api/decaf/options")
+@require_pin
+def api_decaf_options():
+    """관리자 드롭다운용: 디카페인 생두 목록 + 현재 선택."""
+    cur = db.get_current_decaf()
+    return jsonify({
+        "success": True,
+        "items": db.list_decaf_beans(),
+        "current_id": cur["id"] if cur else None,
+    })
+
+
+@app.put("/api/decaf/current")
+@require_pin
+def api_decaf_set_current():
+    """제공 중 디카페인 설정. green_bean_id=null 이면 제공 안 함."""
+    data = request.get_json(silent=True) or {}
+    gb_id = data.get("green_bean_id")
+    if gb_id in (None, "", 0):
+        db.set_setting(db.DECAF_SETTING_KEY, None)
+        return jsonify({"success": True, "current": None})
+    bean = db.get_green_bean(int(gb_id))
+    if not bean or not bean.get("is_decaf"):
+        return jsonify({"success": False, "error": "디카페인 생두가 아닙니다"}), 400
+    db.set_setting(db.DECAF_SETTING_KEY, int(gb_id))
+    return jsonify({"success": True, "current": db.get_current_decaf()})
+
 
 # --- Inventory ---
 

@@ -95,6 +95,38 @@
             gap: 20px;
         }
 
+        /* 디카페인 안내 배너 — 메뉴와 항시 같이 표시 */
+        .decaf-banner {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-top: 16px;
+            padding: 16px 20px;
+            background: linear-gradient(145deg, #3e5d40 0%, #4e7350 60%, #5d8460 100%);
+            border-radius: 16px;
+            color: white;
+            box-shadow: 0 6px 24px rgba(62, 93, 64, 0.3);
+        }
+        .decaf-banner-icon { font-size: 1.8rem; }
+        .decaf-banner-body { flex: 1; min-width: 0; }
+        .decaf-banner-title { font-size: 1.05rem; }
+        .decaf-banner-title strong { font-weight: 700; }
+        .decaf-banner-notes {
+            opacity: 0.85;
+            font-size: 0.88rem;
+            margin-top: 4px;
+        }
+        .decaf-banner-badge {
+            font-size: 0.68rem;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+            border: 1.5px solid rgba(255,255,255,0.55);
+            border-radius: 999px;
+            padding: 4px 10px;
+            opacity: 0.9;
+            white-space: nowrap;
+        }
+
         .coffee-card {
             background: linear-gradient(145deg, #6F4E37 0%, #8B6F47 40%, #A0845C 100%);
             border-radius: 20px;
@@ -1774,8 +1806,25 @@
 
         function renderContent(data) {
             const { today, history } = data;
-            
+
             let html = '';
+
+            // 디카페인 안내 — 관리자가 선택한 제공 중 디카페인을 메뉴와 항시 같이 표시
+            let decafHtml = '';
+            if (data.decaf) {
+                const d = data.decaf;
+                const shortName = String(d.name || '').replace(/^디카페인\s*/, '');
+                decafHtml = `
+                    <div class="decaf-banner">
+                        <div class="decaf-banner-icon">🌿</div>
+                        <div class="decaf-banner-body">
+                            <div class="decaf-banner-title">오늘의 디카페인은 <strong>${shortName}</strong></div>
+                            ${d.cup_notes ? `<div class="decaf-banner-notes">☕ ${d.cup_notes}</div>` : ''}
+                        </div>
+                        <div class="decaf-banner-badge">DECAF</div>
+                    </div>
+                `;
+            }
 
             // 오늘의 커피 섹션
             if (today && today.length > 0) {
@@ -1785,6 +1834,7 @@
                         <div class="coffee-cards">
                             ${today.map(coffee => renderCoffeeCard(coffee)).join('')}
                         </div>
+                        ${decafHtml}
                     </div>
                 `;
             } else {
@@ -1847,6 +1897,7 @@
                         <div class="coffee-cards">
                             ${bodyHtml}
                         </div>
+                        ${decafHtml}
                     </div>
                 `;
             }

@@ -548,6 +548,21 @@
   }
   .field.error .field-error { display: block; }
 
+  /* 제공 중 디카페인 선택 행 */
+  .decaf-admin-row {
+    display: flex; align-items: center; gap: 10px; margin: 0 0 12px;
+    padding: 10px 12px; background: #f0f7f0; border: 1.5px solid #cde3cd;
+    border-radius: 10px;
+  }
+  .decaf-admin-label {
+    font-size: 0.88rem; font-weight: 700; color: #2E7D32; white-space: nowrap;
+  }
+  .decaf-admin-row select {
+    flex: 1; min-width: 0; width: auto; padding: 8px 10px; min-height: 42px;
+    border: 1.5px solid var(--border); border-radius: 8px; font-size: 0.9rem;
+    font-family: inherit; background: white;
+  }
+
   /* 커피 목록 필터 바 */
   .list-filters { display: flex; flex-direction: column; gap: 8px; margin: 0 0 14px; }
   .filter-row { display: flex; gap: 8px; align-items: flex-end; }
@@ -1285,6 +1300,13 @@
         <button class="btn-text" type="button" id="btn-text">📋 텍스트</button>
         <button class="btn-new" type="button" id="btn-new">+ 새로 추가</button>
       </div>
+    </div>
+    <!-- 제공 중 디카페인 — 여기서 선택된 디카페인이 공개 페이지에 항시 표시됨 -->
+    <div class="decaf-admin-row">
+      <span class="decaf-admin-label">🌿 제공 중 디카페인</span>
+      <select id="decaf-select" aria-label="제공 중 디카페인 선택">
+        <option value="">선택 안 함</option>
+      </select>
     </div>
     <div class="list-search-wrap">
       <input type="search" id="coffee-search" class="list-search"
@@ -2085,10 +2107,38 @@ async function loadList() {
     renderList(_coffeesCache);
     // 오늘의 커피 피드백 섹션은 _coffeesCache 의 제공일을 보고 필터링하므로 같이 재렌더
     renderFeedbackSection();
+    loadDecafRow();   // 제공 중 디카페인 드롭다운 갱신 (비동기, 실패 무시)
   } catch (e) {
     if (e.message !== "unauthorized") showBanner("목록을 불러오지 못했습니다: " + e.message, "error");
   }
 }
+
+// ---------- 제공 중 디카페인 ----------
+async function loadDecafRow() {
+  try {
+    const res = await api("GET", "/api/decaf/options");
+    const sel = $("#decaf-select");
+    sel.innerHTML = '<option value="">선택 안 함</option>' +
+      (res.items || []).map(b =>
+        `<option value="${b.id}">${escapeHtml(b.name)}${b.process ? ` (${escapeHtml(b.process)})` : ""}</option>`
+      ).join("");
+    sel.value = res.current_id != null ? String(res.current_id) : "";
+  } catch (e) { /* 드롭다운 로드 실패는 조용히 — 목록 기능에 영향 없음 */ }
+}
+
+$("#decaf-select").addEventListener("change", async () => {
+  const sel = $("#decaf-select");
+  const v = sel.value ? parseInt(sel.value, 10) : null;
+  try {
+    const res = await api("PUT", "/api/decaf/current", { green_bean_id: v });
+    showToast(res.current
+      ? `디카페인 '${res.current.name}' 제공 중으로 설정`
+      : "디카페인 제공 안 함으로 설정");
+  } catch (e) {
+    if (e.message !== "unauthorized") showBanner("디카페인 설정 실패: " + e.message, "error");
+    loadDecafRow();   // 실패 시 서버 상태로 되돌림
+  }
+});
 
 function sortAdminItems(items) {
   const today = ymdLocal(new Date());

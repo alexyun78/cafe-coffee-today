@@ -251,6 +251,8 @@ def init_schema():
         )
         # 일회성 마이그레이션 기록 테이블
         conn.execute("CREATE TABLE IF NOT EXISTS migrations (name TEXT PRIMARY KEY)")
+        # 키-값 설정 테이블 (예: 제공 중 디카페인 선택)
+        conn.execute("CREATE TABLE IF NOT EXISTS settings (key TEXT PRIMARY KEY, value TEXT)")
         # 모든 행의 로스터리를 '92도씨 로스터리'로 통일 (1회만 실행)
         if not conn.execute(
             "SELECT 1 FROM migrations WHERE name=?", ("roastery_92cafe_default",)
@@ -1653,6 +1655,61 @@ def inventory_list() -> list:
             d["remaining_kg"] = 0
         result.append(d)
     return result
+
+
+# ---------- 설정 (key-value) ----------
+
+def get_setting(key: str) -> Optional[str]:
+    with connect() as conn:
+        row = conn.execute("SELECT value FROM settings WHERE key=?", (key,)).fetchone()
+    return row["value"] if row else None
+
+
+def set_setting(key: str, value) -> None:
+    """value=None 이면 키 삭제."""
+    with connect() as conn:
+        if value is None:
+            conn.execute("DELETE FROM settings WHERE key=?", (key,))
+        else:
+            conn.execute(
+                "INSERT OR REPLACE INTO settings (key, value) VALUES (?, ?)",
+                (key, str(value)),
+            )
+
+
+# ---------- 디카페인 (제공 중 표시) ----------
+
+DECAF_SETTING_KEY = "current_decaf_gb_id"
+
+
+def list_decaf_beans() -> list:
+    """디카페인 생두 목록 (관리자 드롭다운용). 숨김 여부와 무관하게 활성만."""
+    with connect() as conn:
+        rows = conn.execute(
+            "SELECT id, name, process, cup_notes FROM green_beans "
+            "WHERE is_decaf=1 AND status='활성' ORDER BY name"
+        ).fetchall()
+    return [dict(r) for r in rows]
+
+
+def get_current_decaf() -> Optional[dict]:
+    """제공 중으로 선택된 디카페인 생두 (공개 페이지 표시용)."""
+    raw = get_setting(DECAF_SETTING_KEY)
+    if not raw:
+        return None
+    try:
+        gb_id = int(raw)
+    except ValueError:
+        return None
+    bean = get_green_bean(gb_id)
+    if not bean or not bean.get("is_decaf"):
+        return None
+    return {
+        "id": bean["id"],
+        "name": bean["name"],
+        "process": bean.get("process"),
+        "cup_notes": bean.get("cup_notes"),
+    }
 
 
 # ---------- 가격 ----------
