@@ -1286,7 +1286,7 @@
     </div>
     <div class="list-search-wrap">
       <input type="search" id="coffee-search" class="list-search"
-             placeholder="🔍 원두명·로스터리·컵노트·감상 검색" autocomplete="off">
+             placeholder="🔍 원두명·로스터리·컵노트·감상 검색" autocomplete="placehold">
       <button type="button" class="list-search-clear" id="coffee-search-clear" aria-label="검색 지우기" hidden>✕</button>
     </div>
     <!-- 필터: 상태 / 나라 / 프로세싱 / 로스팅일 / 제공일 -->
@@ -1331,7 +1331,7 @@
         <label for="field-name" class="req">원두 이름</label>
         <div class="autocomplete-wrap">
           <input type="text" id="field-name" name="name"
-                 placeholder="예: 에티오피아 예가체프" autocomplete="off"
+                 placeholder="예: 에티오피아 예가체프" autocomplete="placehold"
                  aria-required="true" required>
           <div class="autocomplete-list" id="ac-name"></div>
         </div>
@@ -1354,7 +1354,7 @@
         <label for="field-process" class="req">프로세싱</label>
         <div class="autocomplete-wrap">
           <input type="text" id="field-process" name="process"
-                 placeholder="예: 내추럴, 워시드" autocomplete="off"
+                 placeholder="예: 내추럴, 워시드" autocomplete="placehold"
                  aria-required="true" required>
           <div class="autocomplete-list" id="ac-process"></div>
         </div>
@@ -1419,7 +1419,7 @@
       <div class="field">
         <label for="field-serve-date">제공일 <span class="label-hint"><span class="serve-dot"></span> 이미 제공일로 등록된 날</span></label>
         <div class="serve-cal-wrap">
-          <input type="text" id="field-serve-date" name="serve_date" readonly placeholder="날짜 선택" autocomplete="off">
+          <input type="text" id="field-serve-date" name="serve_date" readonly placeholder="날짜 선택" autocomplete="placehold">
           <span class="serve-cal-icon">📅</span>
           <div class="serve-cal" id="serve-cal" hidden>
             <div class="serve-cal-head">
@@ -1487,7 +1487,7 @@
               <input type="hidden" id="bean-field-supplier">
               <div class="bean-select-dropdown" hidden>
                 <div class="bean-select-head">
-                  <input type="text" class="bean-select-search" placeholder="검색 또는 새 공급처 입력…" autocomplete="off">
+                  <input type="text" class="bean-select-search" placeholder="검색 또는 새 공급처 입력…" autocomplete="placehold">
                   <button type="button" class="bean-select-mode">숨김 보기</button>
                 </div>
                 <div class="bean-select-list"></div>
@@ -1506,7 +1506,7 @@
               <input type="hidden" id="bean-field-name">
               <div class="bean-select-dropdown" hidden>
                 <div class="bean-select-head">
-                  <input type="text" class="bean-select-search" placeholder="검색 또는 새 원두명 입력…" autocomplete="off">
+                  <input type="text" class="bean-select-search" placeholder="검색 또는 새 원두명 입력…" autocomplete="placehold">
                   <button type="button" class="bean-select-mode">숨김 보기</button>
                 </div>
                 <div class="bean-select-list"></div>
@@ -1518,7 +1518,7 @@
           <div class="field">
             <label class="req">가공방식</label>
             <div class="segmented-flex" id="bean-process-btns" role="radiogroup" aria-label="가공방식"></div>
-            <input type="text" id="bean-field-process-custom" placeholder="직접 입력" style="margin-top:6px; display:none;" autocomplete="off">
+            <input type="text" id="bean-field-process-custom" placeholder="직접 입력" style="margin-top:6px; display:none;" autocomplete="placehold">
             <input type="hidden" id="bean-field-process">
             <div class="field-error">가공방식을 선택하세요.</div>
           </div>
@@ -1526,7 +1526,7 @@
           <div class="field">
             <label>등급</label>
             <div class="segmented-flex" id="bean-grade-btns" role="radiogroup" aria-label="등급"></div>
-            <input type="text" id="bean-field-grade-custom" placeholder="직접 입력" style="margin-top:6px; display:none;" autocomplete="off">
+            <input type="text" id="bean-field-grade-custom" placeholder="직접 입력" style="margin-top:6px; display:none;" autocomplete="placehold">
             <input type="hidden" id="bean-field-grade">
           </div>
 
@@ -1540,7 +1540,7 @@
               <input type="hidden" id="bean-field-origin">
               <div class="bean-select-dropdown" hidden>
                 <div class="bean-select-head">
-                  <input type="text" class="bean-select-search" placeholder="검색 또는 새 원산지 입력…" autocomplete="off">
+                  <input type="text" class="bean-select-search" placeholder="검색 또는 새 원산지 입력…" autocomplete="placehold">
                 </div>
                 <div class="bean-select-list"></div>
               </div>
@@ -1606,7 +1606,7 @@
               <input type="hidden" id="purchase-field-supplier">
               <div class="bean-select-dropdown" hidden>
                 <div class="bean-select-head">
-                  <input type="text" class="bean-select-search" placeholder="검색 또는 새 공급처 입력…" autocomplete="off">
+                  <input type="text" class="bean-select-search" placeholder="검색 또는 새 공급처 입력…" autocomplete="placehold">
                   <button type="button" class="bean-select-mode">숨김 보기</button>
                 </div>
                 <div class="bean-select-list"></div>
@@ -1624,7 +1624,7 @@
               <input type="hidden" id="purchase-field-name">
               <div class="bean-select-dropdown" hidden>
                 <div class="bean-select-head">
-                  <input type="text" class="bean-select-search" placeholder="검색 또는 새 원두명 입력…" autocomplete="off">
+                  <input type="text" class="bean-select-search" placeholder="검색 또는 새 원두명 입력…" autocomplete="placehold">
                   <button type="button" class="bean-select-mode">숨김 보기</button>
                 </div>
                 <div class="bean-select-list"></div>
@@ -1637,7 +1637,7 @@
           <div class="field">
             <label class="req">가공방식</label>
             <div class="segmented-flex" id="purchase-process-btns" role="radiogroup" aria-label="가공방식"></div>
-            <input type="text" id="purchase-field-process-custom" placeholder="직접 입력" style="margin-top:6px; display:none;" autocomplete="off">
+            <input type="text" id="purchase-field-process-custom" placeholder="직접 입력" style="margin-top:6px; display:none;" autocomplete="placehold">
             <input type="hidden" id="purchase-field-process">
             <div class="field-error">가공방식을 선택하세요.</div>
           </div>
@@ -1645,7 +1645,7 @@
           <div class="field">
             <label>등급</label>
             <div class="segmented-flex" id="purchase-grade-btns" role="radiogroup" aria-label="등급"></div>
-            <input type="text" id="purchase-field-grade-custom" placeholder="직접 입력" style="margin-top:6px; display:none;" autocomplete="off">
+            <input type="text" id="purchase-field-grade-custom" placeholder="직접 입력" style="margin-top:6px; display:none;" autocomplete="placehold">
             <input type="hidden" id="purchase-field-grade">
           </div>
 
@@ -1659,7 +1659,7 @@
               <input type="hidden" id="purchase-field-origin">
               <div class="bean-select-dropdown" hidden>
                 <div class="bean-select-head">
-                  <input type="text" class="bean-select-search" placeholder="검색 또는 새 원산지 입력…" autocomplete="off">
+                  <input type="text" class="bean-select-search" placeholder="검색 또는 새 원산지 입력…" autocomplete="placehold">
                 </div>
                 <div class="bean-select-list"></div>
               </div>
@@ -1730,7 +1730,7 @@
               <input type="hidden" id="roast-field-bean">
               <div class="bean-select-dropdown" hidden>
                 <div class="bean-select-head">
-                  <input type="text" class="bean-select-search" placeholder="원두 검색…" autocomplete="off">
+                  <input type="text" class="bean-select-search" placeholder="원두 검색…" autocomplete="placehold">
                   <button type="button" class="bean-select-mode" data-mode="active">숨김 보기</button>
                 </div>
                 <div class="bean-select-list"></div>
@@ -1750,7 +1750,7 @@
 
           <div class="field">
             <label for="roast-field-input" class="req">투입 (g) <span class="label-hint">(재고 차감 기준)</span></label>
-            <input type="number" id="roast-field-input" inputmode="decimal" min="0" step="any" placeholder="예: 5000" autocomplete="off" required>
+            <input type="number" id="roast-field-input" inputmode="decimal" min="0" step="any" placeholder="예: 5000" autocomplete="placehold" required>
             <div class="field-error">투입량을 입력하세요.</div>
             <label class="roast-actual-toggle">
               <input type="checkbox" id="roast-field-actual-on">
@@ -1760,20 +1760,20 @@
 
           <div class="field" id="roast-actual-field" hidden>
             <label for="roast-field-actual">실제 투입 (g) <span class="label-hint">(로스터에 실제 들어간 양)</span></label>
-            <input type="number" id="roast-field-actual" inputmode="decimal" min="0" step="any" placeholder="예: 5080" autocomplete="off">
+            <input type="number" id="roast-field-actual" inputmode="decimal" min="0" step="any" placeholder="예: 5080" autocomplete="placehold">
             <div class="auto-calc">수분손실은 실제 투입량 기준으로 계산돼요.</div>
           </div>
 
           <div class="field">
             <label for="roast-field-output">배출 (g)</label>
-            <input type="number" id="roast-field-output" inputmode="decimal" min="0" step="any" placeholder="예: 4200" autocomplete="off">
+            <input type="number" id="roast-field-output" inputmode="decimal" min="0" step="any" placeholder="예: 4200" autocomplete="placehold">
           </div>
 
           <div class="auto-calc" id="roast-loss-display">수분손실: <strong>—</strong></div>
 
           <div class="field">
             <label for="roast-field-level">로스팅 레벨</label>
-            <input type="text" id="roast-field-level" placeholder="예: 미디엄, 하이로스트" autocomplete="off">
+            <input type="text" id="roast-field-level" placeholder="예: 미디엄, 하이로스트" autocomplete="placehold">
           </div>
 
           <div class="field">
@@ -1907,7 +1907,7 @@
     <h2>관리자 인증</h2>
     <p>PIN을 입력하세요.</p>
     <input type="password" inputmode="numeric" pattern="[0-9]*"
-           id="pin-input" maxlength="8" autocomplete="off">
+           id="pin-input" maxlength="8" autocomplete="placehold">
     <div id="pin-error" style="color:var(--danger); font-size:0.85rem; margin-top:8px; display:none;">
       PIN이 올바르지 않습니다.
     </div>
@@ -4936,7 +4936,7 @@ function renderRoastList(items) {
         </div>
         ${output == null ? `
         <div class="roast-inline-output" data-id="${r.id}">
-          <input type="number" class="rio-input" inputmode="decimal" min="0" step="any" placeholder="배출량 (g) 바로 입력" autocomplete="off">
+          <input type="number" class="rio-input" inputmode="decimal" min="0" step="any" placeholder="배출량 (g) 바로 입력" autocomplete="placehold">
           <button type="button" class="rio-save">기록</button>
         </div>` : ""}
         ${lossCmpHtml}
