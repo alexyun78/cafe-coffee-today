@@ -860,7 +860,8 @@ def api_roasting_log_create():
             return jsonify({"success": False, "error": f"{k} 필수"}), 400
     new_id = db.create_roasting_log(data)
     coffee = None
-    if data.get("create_coffee"):
+    # 배출량 측정 전에는 오늘의 커피 등록 보류 — 배출량이 기입되는 시점(PUT)에 등록
+    if data.get("create_coffee") and data.get("output_weight_g") not in (None, ""):
         coffee = _ensure_scheduled_coffee(data["green_bean_id"], data["roast_date"])
     return jsonify({"success": True, "id": new_id, "coffee": coffee})
 
@@ -883,9 +884,20 @@ def api_roasting_log_make_coffee(rid):
 @require_pin
 def api_roasting_log_update(rid):
     data = request.get_json(silent=True) or {}
+    prev = db.get_roasting_log(rid)
+    if not prev:
+        return jsonify({"success": False, "error": "not found"}), 404
     if not db.update_roasting_log(rid, data):
         return jsonify({"success": False, "error": "not found"}), 404
-    return jsonify({"success": True})
+    # 배출량이 '처음' 기입되는 시점에 오늘의 커피 예정 자동 등록 (연동 ON 기록만).
+    # 이미 배출량이 있던 기록의 일반 편집에서는 재등록하지 않음.
+    coffee = None
+    if (prev.get("output_weight_g") is None
+            and data.get("output_weight_g") not in (None, "")):
+        log = db.get_roasting_log(rid)
+        if log and log.get("make_coffee"):
+            coffee = _ensure_scheduled_coffee(log["green_bean_id"], log["roast_date"])
+    return jsonify({"success": True, "coffee": coffee})
 
 @app.delete("/api/roasting-logs/<int:rid>")
 @require_pin

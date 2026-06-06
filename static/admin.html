@@ -4974,8 +4974,10 @@ function renderRoastList(items) {
       if (!v || v <= 0) { inp.focus(); return; }
       btn.disabled = true;
       try {
-        await api("PUT", "/api/roasting-logs/" + wrap.dataset.id, { output_weight_g: v });
-        showToast("배출량 기록됨");
+        const res = await api("PUT", "/api/roasting-logs/" + wrap.dataset.id, { output_weight_g: v });
+        const c = res && res.coffee;
+        if (c && c.created) showToast(`배출량 기록 — '${c.name}' 오늘의 커피 예정 등록`);
+        else showToast("배출량 기록됨");
         loadRoastList();
       } catch (err) {
         if (err.message !== "unauthorized") showBanner("저장 실패: " + err.message, "error");
@@ -5229,8 +5231,10 @@ document.getElementById("roast-form").addEventListener("submit", async (e) => {
 
   try {
     if (_roastEditingId) {
-      await api("PUT", "/api/roasting-logs/" + _roastEditingId, payload);
-      showToast("로스팅 기록 수정됨");
+      const res = await api("PUT", "/api/roasting-logs/" + _roastEditingId, payload);
+      const c = res && res.coffee;
+      if (c && c.created) showToast(`로스팅 기록 수정 — '${c.name}' 오늘의 커피 예정 등록`);
+      else showToast("로스팅 기록 수정됨");
     } else {
       // 복제 모드면 입력한 수량만큼 같은 내용으로 반복 저장
       const count = getRoastDupCount();
@@ -5243,7 +5247,11 @@ document.getElementById("roast-form").addEventListener("submit", async (e) => {
         }
       }
       const head = count > 1 ? `로스팅 기록 ${count}건 추가` : "로스팅 기록 추가";
-      showToast(coffeeMsg ? `${head} — ${coffeeMsg}` : `${head}됨`);
+      // 배출량 측정 전에는 오늘의 커피 등록이 보류됨을 안내
+      const deferred = payload.create_coffee && payload.output_weight_g == null;
+      if (coffeeMsg) showToast(`${head} — ${coffeeMsg}`);
+      else if (deferred) showToast(`${head} — 배출량 기입 시 오늘의 커피로 등록돼요`);
+      else showToast(`${head}됨`);
     }
     hideRoastForm();
     loadRoastList();
