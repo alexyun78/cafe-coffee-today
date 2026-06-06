@@ -391,6 +391,8 @@ ssh-keyscan 49.247.207.115 2>/dev/null | grep -v '^#'  # 호스트키 복사
 | | ↳ POST/PUT 은 `green_bean_id` 대신 생두 정보(name+process+supplier_name+origin_country+grade+cup_notes)를 보내면 `db.find_or_create_green_bean()`으로 생두를 찾거나 새로 만든 뒤 연결 | |
 | 로스팅 | `/api/roasting-logs[/<id>]` | GET/POST/PUT/DELETE |
 | 재고 | `/api/inventory` | GET |
+| 디카페인 | `/api/decaf/options` | GET (드롭다운용 목록 + 현재 선택) |
+| | `/api/decaf/current` | PUT (제공 중 디카페인 설정, null=해제 → 공개 `/api/coffee`의 `decaf` 필드) |
 | 가격 | `/api/pricing[/<id>]` | GET/POST/DELETE |
 | | `/api/pricing/cost-analysis/<gb_id>` | GET |
 | 이미지 | `/api/coffee/<id>/card-token` | POST (APK용 1회용 다운로드 토큰) |
