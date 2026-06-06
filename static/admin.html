@@ -5499,6 +5499,14 @@ document.getElementById("btn-inv-hidden-toggle").addEventListener("click", () =>
 });
 
 // ---------- 유틸 ----------
+// number 입력에 포커스 둔 채 휠/터치패드 스크롤하면 크롬이 값을 1씩 증감시키는
+// 동작 차단 (투입량 550 입력 → 스크롤 → 549 저장 같은 사고 방지).
+// 휠이 감지되면 포커스를 풀어 값은 그대로 두고 페이지만 스크롤되게 한다.
+document.addEventListener("wheel", () => {
+  const el = document.activeElement;
+  if (el && el.tagName === "INPUT" && el.type === "number") el.blur();
+}, { passive: true });
+
 function todayStr() {
   const d = new Date();
   return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
