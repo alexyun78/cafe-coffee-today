@@ -1466,9 +1466,15 @@ def _norm_ymd(d):
 
 
 def list_roasting_logs(green_bean_id: Optional[int] = None, limit: int = 1000) -> list:
+    # has_active_coffee: 같은 이름의 '예정'/'진행 중' 커피 존재 여부
+    # (관리 UI에서 "☕ 예정 등록" 버튼 표시 판단용 — 없을 때만 나중 등록 가능)
     sql = """
         SELECT r.*, gb.name AS bean_name, gb.cup_notes AS cup_notes,
-               s.short_name AS supplier_short
+               s.short_name AS supplier_short,
+               EXISTS(
+                   SELECT 1 FROM coffees c
+                   WHERE c.name = gb.name AND c.status IN ('예정','진행 중')
+               ) AS has_active_coffee
         FROM roasting_logs r
         JOIN green_beans gb ON gb.id = r.green_bean_id
         LEFT JOIN suppliers s ON s.id = gb.supplier_id
@@ -1485,6 +1491,16 @@ def list_roasting_logs(green_bean_id: Optional[int] = None, limit: int = 1000) -
         r["roast_date"] = _norm_ymd(r.get("roast_date"))
     rows.sort(key=lambda r: (_parse_ymd(r.get("roast_date")), r.get("id") or 0), reverse=True)
     return rows[:limit]
+
+
+def get_roasting_log(rid: int) -> Optional[dict]:
+    with connect() as conn:
+        row = conn.execute("SELECT * FROM roasting_logs WHERE id=?", (rid,)).fetchone()
+    if not row:
+        return None
+    r = dict(row)
+    r["roast_date"] = _norm_ymd(r.get("roast_date"))   # 마이그레이션 잔재 형식 정규화
+    return r
 
 
 def _opt_float(v):

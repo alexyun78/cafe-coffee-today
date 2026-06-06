@@ -1003,6 +1003,8 @@
   .record-row-actions button.delete { background: #FFEBEE; color: #c62828; }
   .record-row-actions button.dup { background: #FFF3E0; color: #E65100; }
   .record-row-actions button.edit { background: #E8F0FE; color: #1565C0; }
+  .record-row-actions button.makecoffee { background: #E8F5E9; color: #2E7D32; }
+  .record-row-actions button:disabled { opacity: 0.5; cursor: default; }
   .record-row-actions button:hover { opacity: 0.8; }
 
   /* ===== 커스텀 생두 선택 드롭다운 ===== */
@@ -4620,6 +4622,7 @@ function renderRoastList(items) {
         <div class="record-row-actions">
           <button type="button" class="edit" data-id="${r.id}">편집</button>
           <button type="button" class="dup" data-id="${r.id}">복제</button>
+          ${!Number(r.has_active_coffee) ? `<button type="button" class="makecoffee" data-id="${r.id}">☕ 예정 등록</button>` : ""}
           <button type="button" class="delete" data-id="${r.id}">삭제</button>
         </div>
       </div>
@@ -4631,6 +4634,21 @@ function renderRoastList(items) {
   });
   el.querySelectorAll(".record-row-actions .dup").forEach(btn => {
     btn.addEventListener("click", () => openRoastDuplicate(parseInt(btn.dataset.id, 10)));
+  });
+  // 나중 등록 — 활성(예정/진행 중) 커피가 없는 기록만 버튼 표시. 서버가 이름 기준 중복 방지.
+  el.querySelectorAll(".record-row-actions .makecoffee").forEach(btn => {
+    btn.addEventListener("click", async () => {
+      btn.disabled = true;
+      try {
+        const res = await api("POST", `/api/roasting-logs/${btn.dataset.id}/make-coffee`);
+        const c = res.coffee;
+        showToast(c.created ? `'${c.name}' 오늘의 커피 예정 등록` : `'${c.name}' 이미 예정 등록됨`);
+        loadRoastList();   // 같은 생두의 다른 기록에서도 버튼이 사라지도록 갱신
+      } catch (err) {
+        if (err.message !== "unauthorized") showBanner("등록 실패: " + err.message, "error");
+        btn.disabled = false;
+      }
+    });
   });
   el.querySelectorAll(".record-row-actions .delete").forEach(btn => {
     btn.addEventListener("click", async () => {

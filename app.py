@@ -864,6 +864,21 @@ def api_roasting_log_create():
         coffee = _ensure_scheduled_coffee(data["green_bean_id"], data["roast_date"])
     return jsonify({"success": True, "id": new_id, "coffee": coffee})
 
+@app.post("/api/roasting-logs/<int:rid>/make-coffee")
+@require_pin
+def api_roasting_log_make_coffee(rid):
+    """기존 로스팅 기록을 나중에 '오늘의 커피 예정'으로 등록.
+    같은 이름의 활성(예정/진행 중) 커피가 이미 있으면 중복 생성하지 않는다
+    (같은 생두를 여러 배치 볶았어도 커피는 하나만)."""
+    log = db.get_roasting_log(rid)
+    if not log:
+        return jsonify({"success": False, "error": "not found"}), 404
+    coffee = _ensure_scheduled_coffee(log["green_bean_id"], log["roast_date"])
+    if not coffee:
+        return jsonify({"success": False, "error": "생두 정보를 찾을 수 없음"}), 400
+    db.update_roasting_log(rid, {"make_coffee": 1})
+    return jsonify({"success": True, "coffee": coffee})
+
 @app.put("/api/roasting-logs/<int:rid>")
 @require_pin
 def api_roasting_log_update(rid):
