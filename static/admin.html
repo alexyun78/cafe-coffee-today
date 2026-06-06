@@ -811,6 +811,8 @@
     text-align: center; letter-spacing: 4px; font-size: 1.3rem;
     font-weight: 600;
   }
+  /* PIN 마스킹 — type=text 이지만 ● 로 표시 (type=password 는 크롬 비번 자동완성을 유발) */
+  #pin-input { -webkit-text-security: disc; text-security: disc; }
   .modal .button-bar {
     position: static; margin: 16px 0 0; padding: 0; border: none;
   }
@@ -1906,7 +1908,9 @@
   <div class="modal">
     <h2>관리자 인증</h2>
     <p>PIN을 입력하세요.</p>
-    <input type="password" inputmode="numeric" pattern="[0-9]*"
+    <!-- type=password 를 쓰면 크롬 비밀번호 관리자가 페이지의 다른 입력칸을
+         아이디 칸으로 추측해 계정 자동완성을 띄움 → text + CSS 마스킹으로 회피 -->
+    <input type="text" inputmode="numeric" pattern="[0-9]*"
            id="pin-input" maxlength="8" autocomplete="placehold">
     <div id="pin-error" style="color:var(--danger); font-size:0.85rem; margin-top:8px; display:none;">
       PIN이 올바르지 않습니다.
