@@ -557,10 +557,12 @@
   .decaf-admin-label {
     font-size: 0.88rem; font-weight: 700; color: #2E7D32; white-space: nowrap;
   }
-  .decaf-admin-row select {
-    flex: 1; min-width: 0; width: auto; padding: 8px 10px; min-height: 42px;
-    border: 1.5px solid var(--border); border-radius: 8px; font-size: 0.9rem;
-    font-family: inherit; background: white;
+  .decaf-admin-row .bean-select { flex: 1; min-width: 0; }
+  .decaf-admin-row .bean-select-trigger { min-height: 42px; padding: 8px 12px; font-size: 0.9rem; }
+  #decaf-clear {
+    border: none; border-radius: 8px; background: #f0ebe4; color: var(--coffee-dark);
+    font-family: inherit; font-weight: 600; font-size: 0.82rem; cursor: pointer;
+    padding: 0 12px; min-height: 42px; white-space: nowrap;
   }
 
   /* 커피 목록 필터 바 */
@@ -1304,9 +1306,21 @@
     <!-- 제공 중 디카페인 — 여기서 선택된 디카페인이 공개 페이지에 항시 표시됨 -->
     <div class="decaf-admin-row">
       <span class="decaf-admin-label">🌿 제공 중 디카페인</span>
-      <select id="decaf-select" aria-label="제공 중 디카페인 선택">
-        <option value="">선택 안 함</option>
-      </select>
+      <div class="bean-select" data-target="decaf-select">
+        <button type="button" class="bean-select-trigger" aria-haspopup="listbox" aria-expanded="false">
+          <span class="bean-select-text">선택 안 함</span>
+          <span class="bean-select-caret">▾</span>
+        </button>
+        <input type="hidden" id="decaf-select">
+        <div class="bean-select-dropdown" hidden>
+          <div class="bean-select-head">
+            <input type="text" class="bean-select-search" placeholder="디카페인 검색…" autocomplete="placehold">
+            <button type="button" class="bean-select-mode" data-mode="active">숨김 보기</button>
+          </div>
+          <div class="bean-select-list"></div>
+        </div>
+      </div>
+      <button type="button" id="decaf-clear" hidden>해제</button>
     </div>
     <div class="list-search-wrap">
       <input type="search" id="coffee-search" class="list-search"
@@ -2114,29 +2128,66 @@ async function loadList() {
 }
 
 // ---------- 제공 중 디카페인 ----------
+// 공용 콤보(createComboSelect) 사용 — 항목별 숨기기/숨김 보기 토글 지원.
+let _decafItems = [];
+
+async function _setCurrentDecaf(gbId) {
+  const res = await api("PUT", "/api/decaf/current", { green_bean_id: gbId });
+  showToast(res.current
+    ? `디카페인 '${res.current.name}' 제공 중으로 설정`
+    : "디카페인 제공 안 함으로 설정");
+  $("#decaf-clear").hidden = !res.current;
+}
+
+let _decafCombo = null;
+
+// createComboSelect/_comboSelects 는 스크립트 후반에 정의되므로 (const TDZ)
+// 첫 사용 시점(인증 후 loadDecafRow)에 지연 생성한다.
+function _ensureDecafCombo() {
+  if (_decafCombo) return _decafCombo;
+  _decafCombo = createComboSelect(
+    document.querySelector('.bean-select[data-target="decaf-select"]'), {
+      placeholder: "선택 안 함",
+      allowCustom: false,
+      searchPlaceholder: "디카페인 검색…",
+      getItems: () => _decafItems,
+      onChange: async (val) => {
+        try {
+          await _setCurrentDecaf(val ? parseInt(val, 10) : null);
+        } catch (e) {
+          if (e.message !== "unauthorized") showBanner("디카페인 설정 실패: " + e.message, "error");
+          loadDecafRow();   // 실패 시 서버 상태로 되돌림
+        }
+      },
+      onToggleHide: async (it, hide) => {
+        await setBeanHidden(it.id, hide);   // green_beans.hidden 공유 — 다른 콤보/재고와 동기화
+        it.hidden = !!hide;
+      },
+    });
+  return _decafCombo;
+}
+
 async function loadDecafRow() {
   try {
+    const combo = _ensureDecafCombo();
     const res = await api("GET", "/api/decaf/options");
-    const sel = $("#decaf-select");
-    sel.innerHTML = '<option value="">선택 안 함</option>' +
-      (res.items || []).map(b =>
-        `<option value="${b.id}">${escapeHtml(b.name)}${b.process ? ` (${escapeHtml(b.process)})` : ""}</option>`
-      ).join("");
-    sel.value = res.current_id != null ? String(res.current_id) : "";
+    _decafItems = (res.items || []).map(b => ({
+      id: b.id, value: String(b.id), label: b.name,
+      sub: b.process || "", hidden: !!b.hidden,
+    }));
+    const cur = res.current_id != null ? String(res.current_id) : "";
+    combo.setValue(cur);
+    $("#decaf-clear").hidden = !cur;
+    if (combo.isOpen()) combo.render();
   } catch (e) { /* 드롭다운 로드 실패는 조용히 — 목록 기능에 영향 없음 */ }
 }
 
-$("#decaf-select").addEventListener("change", async () => {
-  const sel = $("#decaf-select");
-  const v = sel.value ? parseInt(sel.value, 10) : null;
+$("#decaf-clear").addEventListener("click", async () => {
   try {
-    const res = await api("PUT", "/api/decaf/current", { green_bean_id: v });
-    showToast(res.current
-      ? `디카페인 '${res.current.name}' 제공 중으로 설정`
-      : "디카페인 제공 안 함으로 설정");
+    await _setCurrentDecaf(null);
+    _ensureDecafCombo().setValue("");
   } catch (e) {
     if (e.message !== "unauthorized") showBanner("디카페인 설정 실패: " + e.message, "error");
-    loadDecafRow();   // 실패 시 서버 상태로 되돌림
   }
 });
 

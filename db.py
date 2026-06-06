@@ -1683,10 +1683,11 @@ DECAF_SETTING_KEY = "current_decaf_gb_id"
 
 
 def list_decaf_beans() -> list:
-    """디카페인 생두 목록 (관리자 드롭다운용). 숨김 여부와 무관하게 활성만."""
+    """디카페인 생두 목록 (관리자 드롭다운용). hidden 포함 — 드롭다운의
+    숨김 보기 토글이 처리하므로 활성이면 모두 반환."""
     with connect() as conn:
         rows = conn.execute(
-            "SELECT id, name, process, cup_notes FROM green_beans "
+            "SELECT id, name, process, cup_notes, hidden FROM green_beans "
             "WHERE is_decaf=1 AND status='활성' ORDER BY name"
         ).fetchall()
     return [dict(r) for r in rows]
