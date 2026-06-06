@@ -1498,7 +1498,16 @@ def list_roasting_logs(green_bean_id: Optional[int] = None, limit: int = 1000) -
     # 파이썬에서 정규화 후 정렬 (SQL 문자열 정렬은 'YYYY-M-D' 같은 값에서 어긋남)
     for r in rows:
         r["roast_date"] = _norm_ymd(r.get("roast_date"))
-    rows.sort(key=lambda r: (_parse_ymd(r.get("roast_date")), r.get("id") or 0), reverse=True)
+    # 정렬: 로스팅일 최신 → 배출량 미기입 먼저(작업 중 배치가 위) → 배출 기입 시각 최신
+    rows.sort(
+        key=lambda r: (
+            _parse_ymd(r.get("roast_date")),
+            1 if r.get("output_weight_g") is None else 0,
+            r.get("output_at") or "",
+            r.get("id") or 0,
+        ),
+        reverse=True,
+    )
     return rows[:limit]
 
 
