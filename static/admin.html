@@ -528,7 +528,7 @@
     font-weight: 400; font-size: 0.78rem; color: var(--muted);
     margin-left: 4px;
   }
-  input[type="text"], input[type="date"], input[type="password"], textarea, select {
+  input[type="text"], input[type="date"], input[type="password"], input[type="number"], textarea, select {
     width: 100%; padding: 12px 14px; border: 1.5px solid var(--border);
     border-radius: 8px; font-size: 1rem; font-family: inherit;
     background: white; color: var(--text);
@@ -562,7 +562,7 @@
   .filter-item { flex: 1; display: flex; flex-direction: column; gap: 3px; min-width: 0; }
   .filter-item .fl { font-size: 0.7rem; color: var(--muted); font-weight: 600; }
   .filter-item input[type="date"] { width: 100%; }
-  #coffee-filter-reset {
+  #coffee-filter-reset, #inv-filter-reset {
     border: none; border-radius: 8px; background: #f0ebe4; color: var(--coffee-dark);
     font-family: inherit; font-weight: 600; font-size: 0.85rem; cursor: pointer;
     padding: 0 14px; min-height: 42px; white-space: nowrap;
@@ -1750,7 +1750,7 @@
 
           <div class="field">
             <label for="roast-field-input" class="req">투입 (g) <span class="label-hint">(재고 차감 기준)</span></label>
-            <input type="text" id="roast-field-input" inputmode="numeric" placeholder="예: 5000" required>
+            <input type="number" id="roast-field-input" inputmode="decimal" min="0" step="any" placeholder="예: 5000" autocomplete="off" required>
             <div class="field-error">투입량을 입력하세요.</div>
             <label class="roast-actual-toggle">
               <input type="checkbox" id="roast-field-actual-on">
@@ -1760,13 +1760,13 @@
 
           <div class="field" id="roast-actual-field" hidden>
             <label for="roast-field-actual">실제 투입 (g) <span class="label-hint">(로스터에 실제 들어간 양)</span></label>
-            <input type="text" id="roast-field-actual" inputmode="numeric" placeholder="예: 5080">
+            <input type="number" id="roast-field-actual" inputmode="decimal" min="0" step="any" placeholder="예: 5080" autocomplete="off">
             <div class="auto-calc">수분손실은 실제 투입량 기준으로 계산돼요.</div>
           </div>
 
           <div class="field">
             <label for="roast-field-output">배출 (g)</label>
-            <input type="text" id="roast-field-output" inputmode="numeric" placeholder="예: 4200">
+            <input type="number" id="roast-field-output" inputmode="decimal" min="0" step="any" placeholder="예: 4200" autocomplete="off">
           </div>
 
           <div class="auto-calc" id="roast-loss-display">수분손실: <strong>—</strong></div>
@@ -1820,6 +1820,29 @@
         <div class="header-actions">
           <button class="btn-hidden-toggle" type="button" id="btn-inv-hidden-toggle">숨김 보기</button>
           <button class="btn-text" type="button" id="btn-inv-refresh">↻ 새로고침</button>
+        </div>
+      </div>
+      <!-- 필터: 공급처 / 나라 / 가공 / 재고 상태 -->
+      <div class="list-filters" id="inv-filters">
+        <div class="filter-row">
+          <select id="inv-filter-supplier" aria-label="공급처 필터">
+            <option value="">공급처 전체</option>
+          </select>
+          <select id="inv-filter-country" aria-label="나라 필터">
+            <option value="">나라 전체</option>
+          </select>
+        </div>
+        <div class="filter-row">
+          <select id="inv-filter-process" aria-label="가공 필터">
+            <option value="">가공 전체</option>
+          </select>
+          <select id="inv-filter-stock" aria-label="재고 상태 필터">
+            <option value="">재고 전체</option>
+            <option value="ok">충분 (2kg 이상)</option>
+            <option value="low">저재고 (2kg 미만)</option>
+            <option value="zero">재고 없음</option>
+          </select>
+          <button type="button" id="inv-filter-reset" hidden>초기화 ✕</button>
         </div>
       </div>
       <div class="inv-table-wrap">
@@ -4913,7 +4936,7 @@ function renderRoastList(items) {
         </div>
         ${output == null ? `
         <div class="roast-inline-output" data-id="${r.id}">
-          <input type="text" class="rio-input" inputmode="numeric" placeholder="배출량 (g) 바로 입력" autocomplete="off">
+          <input type="number" class="rio-input" inputmode="decimal" min="0" step="any" placeholder="배출량 (g) 바로 입력" autocomplete="off">
           <button type="button" class="rio-save">기록</button>
         </div>` : ""}
         ${lossCmpHtml}
@@ -5235,6 +5258,7 @@ async function loadInventory() {
   try {
     const res = await api("GET", "/api/inventory");
     _invItemsCache = res.items || [];
+    rebuildInvFilterOptions();   // 공급처/나라/가공 필터 옵션 갱신
     renderInventory(_invItemsCache);
   } catch (e) {
     if (e.message !== "unauthorized") body.innerHTML = '<div class="empty">불러오기 실패</div>';
@@ -5242,6 +5266,73 @@ async function loadInventory() {
 }
 
 const INV_PAGE_SIZE = 30;
+
+// ---------- 재고 필터 (공급처/나라/가공/재고 상태) ----------
+const _invFilters = { supplier: "", country: "", process: "", stock: "" };
+
+function anyInvFilterActive() {
+  const f = _invFilters;
+  return !!(f.supplier || f.country || f.process || f.stock);
+}
+
+function invMatchesFilters(it) {
+  const f = _invFilters;
+  if (f.supplier && (it.supplier_short || "") !== f.supplier) return false;
+  if (f.country && coffeeCountry(it.name || "") !== f.country) return false;
+  if (f.process && (it.process || "").trim() !== f.process) return false;
+  if (f.stock) {
+    const r = Number(it.remaining_kg) || 0;
+    if (f.stock === "ok" && r < 2) return false;
+    if (f.stock === "low" && (r <= 0 || r >= 2)) return false;
+    if (f.stock === "zero" && r > 0) return false;
+  }
+  return true;
+}
+
+// 공급처/나라/가공 옵션을 재고 캐시에서 다시 구성 (현재 선택은 가능하면 유지)
+function rebuildInvFilterOptions() {
+  const suppliers = new Set(), countries = new Set(), processes = new Set();
+  for (const it of _invItemsCache) {
+    if (it.supplier_short) suppliers.add(it.supplier_short);
+    countries.add(coffeeCountry(it.name || ""));
+    const p = (it.process || "").trim();
+    if (p) processes.add(p);
+  }
+  const fill = (sel, values, allLabel) => {
+    const cur = sel.value;
+    sel.innerHTML = `<option value="">${allLabel}</option>` +
+      values.map(v => `<option value="${escapeAttr(v)}">${escapeHtml(v)}</option>`).join("");
+    sel.value = values.includes(cur) ? cur : "";
+  };
+  const sortKo = (arr) => [...arr].sort((a, b) => a.localeCompare(b, "ko"));
+  fill($("#inv-filter-supplier"), sortKo(suppliers), "공급처 전체");
+  fill($("#inv-filter-country"), sortKo(countries), "나라 전체");
+  fill($("#inv-filter-process"), sortKo(processes), "가공 전체");
+  syncInvFiltersFromDom(false);
+}
+
+function syncInvFiltersFromDom(rerender = true) {
+  _invFilters.supplier = $("#inv-filter-supplier").value;
+  _invFilters.country = $("#inv-filter-country").value;
+  _invFilters.process = $("#inv-filter-process").value;
+  _invFilters.stock = $("#inv-filter-stock").value;
+  ["#inv-filter-supplier", "#inv-filter-country", "#inv-filter-process", "#inv-filter-stock"]
+    .forEach((id) => $(id).classList.toggle("filter-on", !!$(id).value));
+  $("#inv-filter-reset").hidden = !anyInvFilterActive();
+  if (rerender) renderInventory(_invItemsCache);
+}
+
+(function initInvFilters() {
+  ["inv-filter-supplier", "inv-filter-country", "inv-filter-process", "inv-filter-stock"]
+    .forEach((id) => {
+      document.getElementById(id).addEventListener("change", () => syncInvFiltersFromDom());
+    });
+  document.getElementById("inv-filter-reset").addEventListener("click", () => {
+    ["inv-filter-supplier", "inv-filter-country", "inv-filter-process", "inv-filter-stock"]
+      .forEach((id) => { document.getElementById(id).value = ""; });
+    syncInvFiltersFromDom();
+  });
+})();
 
 // 재고 1건 — 2줄 카드: 1줄 생두명 / 2줄 가공·구매·사용·잔여
 function invRowHtml(it) {
@@ -5275,9 +5366,14 @@ function renderInventory(items) {
   _invItemsCache = items || [];
   const body = document.getElementById("inv-body");
   syncHiddenToggleBtn("btn-inv-hidden-toggle", _invShowHidden);
-  const pool = (items || []).filter(it => !!it.hidden === _invShowHidden);
+  const filterActive = anyInvFilterActive();
+  const pool = (items || [])
+    .filter(it => !!it.hidden === _invShowHidden)
+    .filter(invMatchesFilters);
   if (!pool.length) {
-    body.innerHTML = `<div class="empty">${_invShowHidden ? "숨긴 생두가 없습니다." : "재고 데이터가 없습니다."}</div>`;
+    body.innerHTML = `<div class="empty">${
+      filterActive ? "필터 조건에 맞는 생두가 없습니다."
+        : _invShowHidden ? "숨긴 생두가 없습니다." : "재고 데이터가 없습니다."}</div>`;
     return;
   }
   const active = pool.filter(it => !it.is_stale);
@@ -5285,7 +5381,9 @@ function renderInventory(items) {
   const visibleCount = Math.min(active.length, INV_PAGE_SIZE);
   const hasMore = active.length > INV_PAGE_SIZE;
 
-  let html = '<div class="record-list">';
+  let html = filterActive
+    ? `<div class="filter-result-count">필터 결과 ${pool.length}개</div>` : "";
+  html += '<div class="record-list">';
   for (let i = 0; i < visibleCount; i++) html += invRowHtml(active[i]);
   html += "</div>";
 
