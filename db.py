@@ -1477,6 +1477,7 @@ def list_roasting_logs(green_bean_id: Optional[int] = None, limit: int = 1000) -
     # find_active_by_name 과 같은 기준: 제공일이 지난 항목은 활성으로 치지 않음.
     sql = """
         SELECT r.*, gb.name AS bean_name, gb.cup_notes AS cup_notes,
+               gb.process AS bean_process,
                s.short_name AS supplier_short,
                EXISTS(
                    SELECT 1 FROM coffees c

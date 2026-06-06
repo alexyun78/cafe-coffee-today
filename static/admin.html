@@ -4930,6 +4930,7 @@ function renderRoastList(items) {
           }</span>
         </div>
         <div class="record-row-detail">
+          ${r.bean_process ? `<span style="color:var(--muted);">${escapeHtml(r.bean_process)}</span>` : ""}
           <span>투입 ${input.toLocaleString()}g${
             (r.actual_input_weight_g != null && Number(r.actual_input_weight_g) !== input)
               ? ` <span style="color:var(--accent);font-weight:700;">(실제 ${Number(r.actual_input_weight_g).toLocaleString()}g)</span>` : ""
