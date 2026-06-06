@@ -548,6 +548,72 @@
   }
   .field.error .field-error { display: block; }
 
+  /* 커피 목록 필터 바 */
+  .list-filters { display: flex; flex-direction: column; gap: 8px; margin: 0 0 14px; }
+  .filter-row { display: flex; gap: 8px; align-items: flex-end; }
+  .filter-row select, .filter-row input[type="date"] {
+    flex: 1; min-width: 0; width: auto; padding: 8px 10px; min-height: 42px;
+    border: 1.5px solid var(--border); border-radius: 8px; font-size: 0.88rem;
+    font-family: inherit; background: #faf8f5; color: var(--text);
+  }
+  .filter-row select.filter-on, .filter-row input.filter-on {
+    border-color: var(--accent); background: #FFF3E0; font-weight: 600;
+  }
+  .filter-item { flex: 1; display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+  .filter-item .fl { font-size: 0.7rem; color: var(--muted); font-weight: 600; }
+  .filter-item input[type="date"] { width: 100%; }
+  #coffee-filter-reset {
+    border: none; border-radius: 8px; background: #f0ebe4; color: var(--coffee-dark);
+    font-family: inherit; font-weight: 600; font-size: 0.85rem; cursor: pointer;
+    padding: 0 14px; min-height: 42px; white-space: nowrap;
+  }
+  .filter-result-count { font-size: 0.8rem; color: var(--muted); margin: -6px 0 10px; }
+
+  /* 제공일 커스텀 달력 — 이미 등록된 제공일은 초록 원 표시 */
+  .serve-dot {
+    display: inline-block; width: 10px; height: 10px; border-radius: 50%;
+    border: 2px solid #2E7D32; vertical-align: -1px; margin-right: 2px;
+  }
+  .serve-cal-wrap { position: relative; }
+  .serve-cal-wrap input { cursor: pointer; }
+  .serve-cal-icon {
+    position: absolute; right: 14px; top: 12px; pointer-events: none; font-size: 1.1rem;
+  }
+  .serve-cal {
+    margin-top: 8px; border: 1.5px solid var(--border); border-radius: 10px;
+    background: white; padding: 10px 12px 12px; max-width: 360px;
+  }
+  .serve-cal-head {
+    display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;
+  }
+  .serve-cal-title { font-weight: 700; color: var(--coffee-dark); }
+  .serve-cal-nav {
+    border: none; background: #f0ebe4; border-radius: 6px; width: 36px; height: 36px;
+    cursor: pointer; font-size: 0.8rem; color: var(--coffee-dark); font-family: inherit;
+  }
+  .serve-cal-grid {
+    display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; text-align: center;
+  }
+  .serve-cal-dow { font-size: 0.7rem; color: var(--muted); padding: 4px 0; font-weight: 600; }
+  .serve-cal-day {
+    border: none; background: none; font-family: inherit; font-size: 0.9rem; color: var(--text);
+    width: 38px; height: 38px; max-width: 100%; margin: 0 auto; border-radius: 50%;
+    cursor: pointer; display: flex; align-items: center; justify-content: center;
+  }
+  .serve-cal-day.today { font-weight: 800; color: var(--accent); }
+  .serve-cal-day.taken {
+    box-shadow: inset 0 0 0 2px #2E7D32; color: #2E7D32; font-weight: 700;
+  }
+  .serve-cal-day.sel {
+    background: var(--accent); color: white; box-shadow: none; font-weight: 800;
+  }
+  .serve-cal-foot { display: flex; gap: 8px; margin-top: 10px; }
+  .serve-cal-foot button {
+    flex: 1; border: none; border-radius: 8px; padding: 9px 0; font-family: inherit;
+    font-weight: 600; cursor: pointer; background: #f0ebe4; color: var(--coffee-dark);
+    min-height: 40px;
+  }
+
   /* 복제 수량 스테퍼 — 숫자 입력 + 옆에 ▲▼ 화살표 */
   .dup-count-stepper { display: flex; width: 150px; }
   .dup-count-stepper input {
@@ -1004,6 +1070,19 @@
   .record-row-actions button.dup { background: #FFF3E0; color: #E65100; }
   .record-row-actions button.edit { background: #E8F0FE; color: #1565C0; }
   .record-row-actions button.makecoffee { background: #E8F5E9; color: #2E7D32; }
+  /* 배출량 인라인 입력 (배출 미기입 기록) */
+  .roast-inline-output { display: flex; gap: 6px; margin-top: 6px; }
+  .roast-inline-output .rio-input {
+    flex: 1; min-width: 0; width: auto; padding: 8px 10px; min-height: 40px;
+    border: 1.5px solid var(--border); border-radius: 8px;
+    font-size: 0.9rem; font-family: inherit; background: white;
+  }
+  .roast-inline-output .rio-save {
+    border: none; border-radius: 8px; background: var(--accent); color: white;
+    font-weight: 700; font-family: inherit; font-size: 0.85rem;
+    padding: 0 16px; min-height: 40px; cursor: pointer;
+  }
+  .roast-inline-output .rio-save:disabled { opacity: 0.5; }
   .record-row-actions button.makecoffee.done {
     background: #ececec; color: #9e9e9e; opacity: 1; cursor: default;
   }
@@ -1210,6 +1289,34 @@
              placeholder="🔍 원두명·로스터리·컵노트·감상 검색" autocomplete="off">
       <button type="button" class="list-search-clear" id="coffee-search-clear" aria-label="검색 지우기" hidden>✕</button>
     </div>
+    <!-- 필터: 상태 / 나라 / 프로세싱 / 로스팅일 / 제공일 -->
+    <div class="list-filters" id="coffee-filters">
+      <div class="filter-row">
+        <select id="filter-status" aria-label="상태 필터">
+          <option value="">상태 전체</option>
+          <option value="예정">예정</option>
+          <option value="진행 중">진행 중</option>
+          <option value="완료">완료</option>
+        </select>
+        <select id="filter-country" aria-label="나라 필터">
+          <option value="">나라 전체</option>
+        </select>
+        <select id="filter-process" aria-label="프로세싱 필터">
+          <option value="">프로세싱 전체</option>
+        </select>
+      </div>
+      <div class="filter-row">
+        <div class="filter-item">
+          <span class="fl">🫘 로스팅일</span>
+          <input type="date" id="filter-roast-date" aria-label="로스팅일 필터">
+        </div>
+        <div class="filter-item">
+          <span class="fl">☕ 제공일</span>
+          <input type="date" id="filter-serve-date" aria-label="제공일 필터">
+        </div>
+        <button type="button" id="coffee-filter-reset" hidden>초기화 ✕</button>
+      </div>
+    </div>
     <div id="list-items" class="list-items">
       <div class="empty">불러오는 중...</div>
     </div>
@@ -1310,8 +1417,23 @@
       </div>
 
       <div class="field">
-        <label for="field-serve-date">제공일</label>
-        <input type="date" id="field-serve-date" name="serve_date">
+        <label for="field-serve-date">제공일 <span class="label-hint"><span class="serve-dot"></span> 이미 제공일로 등록된 날</span></label>
+        <div class="serve-cal-wrap">
+          <input type="text" id="field-serve-date" name="serve_date" readonly placeholder="날짜 선택" autocomplete="off">
+          <span class="serve-cal-icon">📅</span>
+          <div class="serve-cal" id="serve-cal" hidden>
+            <div class="serve-cal-head">
+              <button type="button" class="serve-cal-nav" id="serve-cal-prev" aria-label="이전 달">◀</button>
+              <span class="serve-cal-title" id="serve-cal-title"></span>
+              <button type="button" class="serve-cal-nav" id="serve-cal-next" aria-label="다음 달">▶</button>
+            </div>
+            <div class="serve-cal-grid" id="serve-cal-grid"></div>
+            <div class="serve-cal-foot">
+              <button type="button" id="serve-cal-today">오늘</button>
+              <button type="button" id="serve-cal-clear">지우기</button>
+            </div>
+          </div>
+        </div>
       </div>
 
       <div class="button-bar">
@@ -1932,6 +2054,7 @@ async function loadList() {
   try {
     const data = await api("GET", "/api/coffee/all");
     _coffeesCache = data.items || [];
+    rebuildCoffeeFilterOptions();   // 나라/프로세싱 필터 옵션 갱신
     renderList(_coffeesCache);
     // 오늘의 커피 피드백 섹션은 _coffeesCache 의 제공일을 보고 필터링하므로 같이 재렌더
     renderFeedbackSection();
@@ -1992,13 +2115,97 @@ function coffeeMatchesQuery(it, q) {
   return q.split(/\s+/).filter(Boolean).every(tok => hay.includes(tok));
 }
 
+// ---------- 커피 목록 필터 (상태/나라/프로세싱/로스팅일/제공일) ----------
+const COFFEE_COUNTRIES = [
+  "에티오피아", "콜롬비아", "브라질", "케냐", "코스타리카", "과테말라", "페루",
+  "온두라스", "파나마", "인도네시아", "예멘", "르완다", "부룬디", "엘살바도르",
+  "니카라과", "볼리비아", "에콰도르", "인도", "베트남", "멕시코", "자메이카",
+  "탄자니아", "우간다", "파푸아뉴기니", "하와이", "중국", "태국", "라오스",
+  "미얀마", "동티모르", "쿠바", "도미니카", "말라위", "잠비아",
+];
+const _coffeeFilters = { status: "", country: "", process: "", roast: "", serve: "" };
+
+// 커피 이름에서 원산지 나라 추출 — 알려진 나라명이 포함되면 그 나라, 없으면 '기타'
+function coffeeCountry(name) {
+  for (const c of COFFEE_COUNTRIES) if ((name || "").includes(c)) return c;
+  return "기타";
+}
+
+function anyCoffeeFilterActive() {
+  const f = _coffeeFilters;
+  return !!(f.status || f.country || f.process || f.roast || f.serve);
+}
+
+function coffeeMatchesFilters(it) {
+  const f = _coffeeFilters;
+  if (f.status && (it["상태"] || "") !== f.status) return false;
+  if (f.country && coffeeCountry(it["커피"] || "") !== f.country) return false;
+  if (f.process && (it["프로세싱"] || "").trim() !== f.process) return false;
+  if (f.roast && (it["로스팅"]?.start || "") !== f.roast) return false;
+  if (f.serve && (it["제공일"]?.start || "") !== f.serve) return false;
+  return true;
+}
+
+// 나라/프로세싱 옵션을 캐시에서 다시 구성 (현재 선택은 가능하면 유지)
+function rebuildCoffeeFilterOptions() {
+  const countries = new Set(), processes = new Set();
+  for (const it of _coffeesCache) {
+    countries.add(coffeeCountry(it["커피"] || ""));
+    const p = (it["프로세싱"] || "").trim();
+    if (p) processes.add(p);
+  }
+  const fill = (sel, values, allLabel) => {
+    const cur = sel.value;
+    sel.innerHTML = `<option value="">${allLabel}</option>` +
+      values.map(v => `<option value="${escapeAttr(v)}">${escapeHtml(v)}</option>`).join("");
+    sel.value = values.includes(cur) ? cur : "";
+  };
+  const sortKo = (arr) => [...arr].sort((a, b) => a.localeCompare(b, "ko"));
+  fill($("#filter-country"), sortKo(countries), "나라 전체");
+  fill($("#filter-process"), sortKo(processes), "프로세싱 전체");
+  syncCoffeeFiltersFromDom(false);
+}
+
+function syncCoffeeFiltersFromDom(rerender = true) {
+  _coffeeFilters.status = $("#filter-status").value;
+  _coffeeFilters.country = $("#filter-country").value;
+  _coffeeFilters.process = $("#filter-process").value;
+  _coffeeFilters.roast = $("#filter-roast-date").value;
+  _coffeeFilters.serve = $("#filter-serve-date").value;
+  ["#filter-status", "#filter-country", "#filter-process",
+   "#filter-roast-date", "#filter-serve-date"].forEach((id) => {
+    $(id).classList.toggle("filter-on", !!$(id).value);
+  });
+  $("#coffee-filter-reset").hidden = !anyCoffeeFilterActive();
+  if (rerender) renderList(_coffeesCache);
+}
+
+(function initCoffeeFilters() {
+  ["filter-status", "filter-country", "filter-process",
+   "filter-roast-date", "filter-serve-date"].forEach((id) => {
+    document.getElementById(id).addEventListener("change", () => syncCoffeeFiltersFromDom());
+  });
+  document.getElementById("coffee-filter-reset").addEventListener("click", () => {
+    ["filter-status", "filter-country", "filter-process",
+     "filter-roast-date", "filter-serve-date"].forEach((id) => {
+      document.getElementById(id).value = "";
+    });
+    syncCoffeeFiltersFromDom();
+  });
+})();
+
 function renderList(items) {
   const el = $("#list-items");
   if (!items.length) {
     el.innerHTML = '<div class="empty">기록된 커피가 없습니다. "새로 추가"를 눌러 시작하세요.</div>';
     return;
   }
-  items = sortAdminItems(items);
+  items = sortAdminItems(items).filter(coffeeMatchesFilters);
+  const filterActive = anyCoffeeFilterActive();
+  if (filterActive && !items.length) {
+    el.innerHTML = '<div class="empty">필터 조건에 맞는 커피가 없습니다.</div>';
+    return;
+  }
 
   const q = (_coffeeSearchQuery || "").trim().toLowerCase();
   let visibleItems, hiddenCount;
@@ -2010,6 +2217,10 @@ function renderList(items) {
       el.innerHTML = `<div class="empty">'${escapeHtml(_coffeeSearchQuery.trim())}' 검색 결과가 없습니다.</div>`;
       return;
     }
+  } else if (filterActive) {
+    // 필터 중: 기간 cutoff 무시, 전체 기록에서 매칭
+    visibleItems = items;
+    hiddenCount = 0;
   } else {
     // 제공일 cutoff: 오늘 - visibleMonths 개월. 제공일이 cutoff 이전인 과거 기록은 숨김.
     // 제공일이 없거나 cutoff 이후(=오늘 포함 최근 + 예정)는 항상 표시.
@@ -2023,7 +2234,9 @@ function renderList(items) {
     hiddenCount = items.length - visibleItems.length;
   }
 
-  el.innerHTML = visibleItems.map((it) => {
+  el.innerHTML = (filterActive && !q
+    ? `<div class="filter-result-count">필터 결과 ${visibleItems.length}개</div>` : ""
+  ) + visibleItems.map((it) => {
     const roast = it["로스팅"]?.start || "";
     const serve = it["제공일"]?.start || "";
     const status = it["상태"] || "";
@@ -2306,6 +2519,7 @@ function showList() {
   formView.style.display = "none";
   form.classList.remove("active");
   editingId = null;
+  closeServeCal();
 }
 
 function openNew() {
@@ -2322,6 +2536,7 @@ function openNew() {
   syncAvailability("운영");
   $("#btn-delete").style.display = "none";
   $("#field-serve-date").value = "";
+  closeServeCal();
   clearErrors();
   listView.style.display = "none";
   formView.style.display = "";
@@ -2354,6 +2569,7 @@ async function openDuplicate(id) {
     $("#field-availability").value = "운영";
     syncAvailability("운영");
     $("#field-serve-date").value = "";
+    closeServeCal();
     $("#btn-delete").style.display = "none";
     clearErrors();
     listView.style.display = "none";
@@ -2391,6 +2607,7 @@ async function openEdit(id) {
     $("#field-availability").value = editAv;
     syncAvailability(editAv);
     $("#field-serve-date").value = (it["제공일"] && it["제공일"].start) || "";
+    closeServeCal();
     $("#btn-delete").style.display = "";
     clearErrors();
     listView.style.display = "none";
@@ -2417,6 +2634,82 @@ $$(".segmented button[data-status]").forEach((b) => {
       $("#field-serve-date").value = new Date().toISOString().slice(0, 10);
     }
   });
+});
+
+// ---------- 제공일 커스텀 달력 ----------
+// 이미 다른 커피에 제공일로 등록된 날짜는 초록 원으로 표시.
+let _serveCalMonth = null;   // 표시 중인 달의 1일 Date
+
+function serveDatesTaken() {
+  // 현재 편집 중인 항목 자신의 제공일은 제외 (자기 날짜가 초록 원이면 헷갈림)
+  const s = new Set();
+  for (const c of _coffeesCache) {
+    if (editingId && c.id === editingId) continue;
+    const d = c["제공일"]?.start;
+    if (d) s.add(d);
+  }
+  return s;
+}
+
+function renderServeCal() {
+  const y = _serveCalMonth.getFullYear(), m = _serveCalMonth.getMonth();
+  $("#serve-cal-title").textContent = `${y}년 ${m + 1}월`;
+  const taken = serveDatesTaken();
+  const sel = $("#field-serve-date").value;
+  const today = todayStr();
+  const firstDow = new Date(y, m, 1).getDay();
+  const days = new Date(y, m + 1, 0).getDate();
+  let html = ["일", "월", "화", "수", "목", "금", "토"]
+    .map((d) => `<div class="serve-cal-dow">${d}</div>`).join("");
+  for (let i = 0; i < firstDow; i++) html += "<div></div>";
+  for (let d = 1; d <= days; d++) {
+    const ds = `${y}-${String(m + 1).padStart(2, "0")}-${String(d).padStart(2, "0")}`;
+    const cls = ["serve-cal-day",
+      taken.has(ds) && "taken",
+      ds === sel && "sel",
+      ds === today && "today"].filter(Boolean).join(" ");
+    html += `<button type="button" class="${cls}" data-date="${ds}">${d}</button>`;
+  }
+  $("#serve-cal-grid").innerHTML = html;
+  $$("#serve-cal-grid .serve-cal-day").forEach((b) => {
+    b.addEventListener("click", () => {
+      $("#field-serve-date").value = b.dataset.date;
+      closeServeCal();
+    });
+  });
+}
+
+function openServeCal() {
+  const v = $("#field-serve-date").value;
+  const base = v ? new Date(v + "T00:00:00") : new Date();
+  _serveCalMonth = new Date(base.getFullYear(), base.getMonth(), 1);
+  renderServeCal();
+  $("#serve-cal").hidden = false;
+}
+
+function closeServeCal() {
+  $("#serve-cal").hidden = true;
+}
+
+$("#field-serve-date").addEventListener("click", () => {
+  if ($("#serve-cal").hidden) openServeCal();
+  else closeServeCal();
+});
+$("#serve-cal-prev").addEventListener("click", () => {
+  _serveCalMonth = new Date(_serveCalMonth.getFullYear(), _serveCalMonth.getMonth() - 1, 1);
+  renderServeCal();
+});
+$("#serve-cal-next").addEventListener("click", () => {
+  _serveCalMonth = new Date(_serveCalMonth.getFullYear(), _serveCalMonth.getMonth() + 1, 1);
+  renderServeCal();
+});
+$("#serve-cal-today").addEventListener("click", () => {
+  $("#field-serve-date").value = todayStr();
+  closeServeCal();
+});
+$("#serve-cal-clear").addEventListener("click", () => {
+  $("#field-serve-date").value = "";
+  closeServeCal();
 });
 
 function syncCategory(cat) {
@@ -4618,6 +4911,11 @@ function renderRoastList(items) {
           <span style="font-weight:700; color:var(--accent);">손실 ${loss}</span>
           ${r.roast_level ? `<span>${escapeHtml(r.roast_level)}</span>` : ""}
         </div>
+        ${output == null ? `
+        <div class="roast-inline-output" data-id="${r.id}">
+          <input type="text" class="rio-input" inputmode="numeric" placeholder="배출량 (g) 바로 입력" autocomplete="off">
+          <button type="button" class="rio-save">기록</button>
+        </div>` : ""}
         ${lossCmpHtml}
         ${cupHtml}
         ${stockHtml}
@@ -4639,6 +4937,26 @@ function renderRoastList(items) {
   });
   el.querySelectorAll(".record-row-actions .dup").forEach(btn => {
     btn.addEventListener("click", () => openRoastDuplicate(parseInt(btn.dataset.id, 10)));
+  });
+  // 배출량 인라인 입력 — 배출이 비어 있는 기록은 편집 없이 목록에서 바로 기록
+  el.querySelectorAll(".roast-inline-output").forEach(wrap => {
+    const inp = wrap.querySelector(".rio-input");
+    const btn = wrap.querySelector(".rio-save");
+    const save = async () => {
+      const v = parseFloat(inp.value);
+      if (!v || v <= 0) { inp.focus(); return; }
+      btn.disabled = true;
+      try {
+        await api("PUT", "/api/roasting-logs/" + wrap.dataset.id, { output_weight_g: v });
+        showToast("배출량 기록됨");
+        loadRoastList();
+      } catch (err) {
+        if (err.message !== "unauthorized") showBanner("저장 실패: " + err.message, "error");
+        btn.disabled = false;
+      }
+    };
+    btn.addEventListener("click", save);
+    inp.addEventListener("keydown", (e) => { if (e.key === "Enter") { e.preventDefault(); save(); } });
   });
   // 나중 등록 — 활성(예정/진행 중) 커피가 있으면 회색 '등록됨', 없으면 '예정 등록' 버튼.
   el.querySelectorAll(".record-row-actions .makecoffee:not(.done)").forEach(btn => {
