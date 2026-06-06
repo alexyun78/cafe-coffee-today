@@ -627,14 +627,20 @@ def sync_bean_cup_notes_from_coffee(coffee_id: int, cup_notes) -> bool:
 
 
 def find_active_by_name(name: str) -> Optional[dict]:
-    """같은 이름의 '예정'/'진행 중' 커피가 있으면 반환 (중복 등록 방지용)."""
+    """같은 이름의 '실질 활성' 커피가 있으면 반환 (중복 등록 방지용).
+
+    raw 상태가 '예정'/'진행 중'이어도 제공일이 이미 지났으면 화면에서는 완료로
+    표시되므로(_compute_display_status) 활성으로 치지 않는다 — 상태 갱신 없이
+    남은 과거 항목이 새 로스팅의 커피 등록을 막는 일 방지."""
     if not name:
         return None
+    today = date.today().isoformat()
     with connect() as conn:
         row = conn.execute(
             "SELECT * FROM coffees WHERE name=? AND status IN ('예정','진행 중') "
+            "AND (serve_date IS NULL OR serve_date='' OR serve_date >= ?) "
             "ORDER BY id DESC LIMIT 1",
-            (name,),
+            (name, today),
         ).fetchone()
     return dict(row) if row else None
 
@@ -1466,20 +1472,22 @@ def _norm_ymd(d):
 
 
 def list_roasting_logs(green_bean_id: Optional[int] = None, limit: int = 1000) -> list:
-    # has_active_coffee: 같은 이름의 '예정'/'진행 중' 커피 존재 여부
+    # has_active_coffee: 같은 이름의 '실질 활성' 커피 존재 여부
     # (관리 UI에서 "☕ 예정 등록" 버튼 표시 판단용 — 없을 때만 나중 등록 가능)
+    # find_active_by_name 과 같은 기준: 제공일이 지난 항목은 활성으로 치지 않음.
     sql = """
         SELECT r.*, gb.name AS bean_name, gb.cup_notes AS cup_notes,
                s.short_name AS supplier_short,
                EXISTS(
                    SELECT 1 FROM coffees c
                    WHERE c.name = gb.name AND c.status IN ('예정','진행 중')
+                     AND (c.serve_date IS NULL OR c.serve_date='' OR c.serve_date >= ?)
                ) AS has_active_coffee
         FROM roasting_logs r
         JOIN green_beans gb ON gb.id = r.green_bean_id
         LEFT JOIN suppliers s ON s.id = gb.supplier_id
     """
-    args: list = []
+    args: list = [date.today().isoformat()]
     if green_bean_id:
         sql += " WHERE r.green_bean_id = ?"
         args.append(green_bean_id)
