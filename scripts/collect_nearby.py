@@ -142,6 +142,9 @@ def fetch_shop(session, place_id: str):
     r = session.get(url, headers=HEADERS, timeout=TIMEOUT, allow_redirects=True)
     if r.status_code != 200:
         return None, None, None, [], r.status_code
+    # 네이버가 Content-Type 에 charset 을 안 실어주면 requests 가 ISO-8859-1 로
+    # 잘못 디코딩해 한글이 깨진다 (mojibake 가 DB 까지 저장됐던 원인). UTF-8 강제.
+    r.encoding = "utf-8"
     html = r.text
     today = datetime.now(KST).date()
 

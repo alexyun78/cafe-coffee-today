@@ -373,6 +373,15 @@ def init_schema():
             conn.execute(
                 "INSERT INTO migrations (name) VALUES (?)", ("nearby_source_split_v1",)
             )
+        # 주변 가게: 인코딩 버그(ISO-8859-1 오디코딩)로 깨진 채 저장된 표본 리뷰 정리.
+        # 수집기 수정(UTF-8 강제) 후 재수집하면 올바른 텍스트로 복원됨 (1회만)
+        if not conn.execute(
+            "SELECT 1 FROM migrations WHERE name=?", ("nearby_utf8_fix_v1",)
+        ).fetchone():
+            conn.execute("DELETE FROM nearby_reviews")
+            conn.execute(
+                "INSERT INTO migrations (name) VALUES (?)", ("nearby_utf8_fix_v1",)
+            )
         # 컵노트 기준 통일: 연결된 '오늘의 커피'의 컵노트를 생두 마스터로 1회 싱크업
         # (이후로는 오늘의 커피 편집 시 sync_bean_cup_notes_from_coffee 로 실시간 동기화)
         if not conn.execute(
