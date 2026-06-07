@@ -1,0 +1,13 @@
+[Unit]
+Description=Cafe Today Coffee — nearby shops review collect
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=/root/92cafe/cafe-today-coffee
+EnvironmentFile=/root/92cafe/cafe-today-coffee/.env
+ExecStart=/root/92cafe/cafe-today-coffee/.venv/bin/python /root/92cafe/cafe-today-coffee/scripts/collect_nearby.py
+StandardOutput=journal
+StandardError=journal
+TimeoutStartSec=15min

@@ -180,6 +180,60 @@ CREATE TABLE IF NOT EXISTS blend_components (
 );
 """
 
+# 주변 카페·디저트 가게 리뷰 모니터링 (92도씨 기준 반경 500m)
+# - nearby_reviews: 네이버 방문자 리뷰 "최근 ~10건 표본" (전체 이력 아님 — anti-bot
+#   보호 때문에 페이지 첫 로드에 실리는 분량만 수집한다. 우회 스크래핑 안 함)
+# - nearby_review_counts: 방문자/블로그 리뷰 총 건수 일별 스냅샷 (정확한 값 — 추이 비교용)
+NEARBY_SCHEMA = """
+CREATE TABLE IF NOT EXISTS nearby_shops (
+    id           INTEGER PRIMARY KEY AUTOINCREMENT,
+    name         TEXT NOT NULL UNIQUE,
+    category     TEXT,
+    road_address TEXT,
+    dist_m       INTEGER,
+    lat          REAL,
+    lng          REAL,
+    place_id     TEXT,              -- 네이버 place id (없으면 수집 제외, 관리자 입력 가능)
+    homepage     TEXT,              -- 인스타그램/홈페이지 링크 (네이버 지역검색 link 필드)
+    is_anchor    INTEGER NOT NULL DEFAULT 0,   -- 92도씨 본인
+    hidden       INTEGER NOT NULL DEFAULT 0,
+    notes        TEXT,
+    created_at   TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now')),
+    updated_at   TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now'))
+);
+CREATE INDEX IF NOT EXISTS idx_nearby_shops_dist ON nearby_shops(dist_m);
+
+CREATE TABLE IF NOT EXISTS nearby_review_counts (
+    id            INTEGER PRIMARY KEY AUTOINCREMENT,
+    shop_id       INTEGER NOT NULL REFERENCES nearby_shops(id) ON DELETE CASCADE,
+    fetched_date  TEXT NOT NULL,    -- YYYY-MM-DD (KST)
+    visitor_count INTEGER,
+    blog_count    INTEGER,
+    UNIQUE(shop_id, fetched_date)
+);
+CREATE INDEX IF NOT EXISTS idx_nearby_counts_shop ON nearby_review_counts(shop_id, fetched_date DESC);
+
+CREATE TABLE IF NOT EXISTS nearby_reviews (
+    id            INTEGER PRIMARY KEY AUTOINCREMENT,
+    shop_id       INTEGER NOT NULL REFERENCES nearby_shops(id) ON DELETE CASCADE,
+    source        TEXT NOT NULL DEFAULT 'naver',
+    visited_date  TEXT,             -- YYYY-MM-DD (파싱 실패 시 NULL)
+    body          TEXT,
+    author        TEXT,
+    review_hash   TEXT NOT NULL UNIQUE,   -- sha1(shop_id|source|visited|body) — 중복 수집 방지
+    first_seen_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now'))
+);
+CREATE INDEX IF NOT EXISTS idx_nearby_reviews_shop ON nearby_reviews(shop_id, visited_date DESC);
+
+CREATE TABLE IF NOT EXISTS nearby_collect_runs (
+    id          INTEGER PRIMARY KEY AUTOINCREMENT,
+    started_at  TEXT NOT NULL,
+    finished_at TEXT,
+    ok          INTEGER,            -- 1 성공 / 0 실패 / NULL 진행 중
+    message     TEXT
+);
+"""
+
 _EXTRA_COLUMNS = (
     ("category", "TEXT"),
     ("brewed_at", "INTEGER"),
@@ -230,6 +284,7 @@ def init_schema():
     with connect() as conn:
         conn.executescript(SCHEMA)
         conn.executescript(GREEN_BEAN_SCHEMA)
+        conn.executescript(NEARBY_SCHEMA)
         existing = {r["name"] for r in conn.execute("PRAGMA table_info(coffees)").fetchall()}
         for col, ctype in _EXTRA_COLUMNS:
             if col not in existing:
@@ -287,6 +342,20 @@ def init_schema():
                 conn.executescript(sql)
                 conn.execute(
                     "INSERT INTO migrations (name) VALUES (?)", ("seed_green_beans_v1",)
+                )
+        # 주변 가게 초기 데이터 시드 (around_cafe 네이버 지역검색 결과 — 1회만)
+        if not conn.execute(
+            "SELECT 1 FROM migrations WHERE name=?", ("seed_nearby_shops_v1",)
+        ).fetchone():
+            seed_path = os.path.join(
+                os.path.dirname(os.path.abspath(__file__)), "scripts", "seed_nearby_shops.sql"
+            )
+            if os.path.isfile(seed_path):
+                with open(seed_path, "r", encoding="utf-8") as f:
+                    sql = f.read()
+                conn.executescript(sql)
+                conn.execute(
+                    "INSERT INTO migrations (name) VALUES (?)", ("seed_nearby_shops_v1",)
                 )
         # 컵노트 기준 통일: 연결된 '오늘의 커피'의 컵노트를 생두 마스터로 1회 싱크업
         # (이후로는 오늘의 커피 편집 시 sync_bean_cup_notes_from_coffee 로 실시간 동기화)
@@ -1774,3 +1843,152 @@ def cost_analysis(gb_id: int) -> dict:
         "espresso_20g_cost": espresso_20g,
         "pricing": list_pricing(gb_id),
     }
+
+
+# ---------- 주변 가게 리뷰 모니터링 ----------
+
+def nearby_overview(include_hidden: bool = False) -> dict:
+    """가게 목록 + 최신/직전 리뷰 총수 스냅샷 + 표본 리뷰 수 + 마지막 수집 기록."""
+    with connect() as conn:
+        where = "" if include_hidden else "WHERE s.hidden = 0"
+        shops = [dict(r) for r in conn.execute(
+            f"""
+            SELECT s.*,
+                   (SELECT COUNT(*) FROM nearby_reviews r WHERE r.shop_id = s.id) AS sample_count,
+                   (SELECT MAX(visited_date) FROM nearby_reviews r WHERE r.shop_id = s.id) AS last_review_date
+            FROM nearby_shops s {where}
+            ORDER BY s.dist_m ASC, s.name ASC
+            """
+        ).fetchall()]
+        for s in shops:
+            snaps = conn.execute(
+                "SELECT fetched_date, visitor_count, blog_count "
+                "FROM nearby_review_counts WHERE shop_id=? "
+                "ORDER BY fetched_date DESC LIMIT 2",
+                (s["id"],),
+            ).fetchall()
+            s["counts"] = dict(snaps[0]) if snaps else None
+            s["counts_prev"] = dict(snaps[1]) if len(snaps) > 1 else None
+        run = conn.execute(
+            "SELECT * FROM nearby_collect_runs ORDER BY id DESC LIMIT 1"
+        ).fetchone()
+    return {"shops": shops, "last_run": dict(run) if run else None}
+
+
+def list_nearby_reviews(shop_id: int, limit: int = 50) -> list:
+    with connect() as conn:
+        rows = conn.execute(
+            "SELECT id, source, visited_date, body, author, first_seen_at "
+            "FROM nearby_reviews WHERE shop_id=? "
+            "ORDER BY (visited_date IS NULL), visited_date DESC, id DESC LIMIT ?",
+            (shop_id, limit),
+        ).fetchall()
+    return [dict(r) for r in rows]
+
+
+def create_nearby_shop(data: dict) -> int:
+    with connect() as conn:
+        cur = conn.execute(
+            "INSERT INTO nearby_shops (name, category, road_address, dist_m, place_id, homepage, notes) "
+            "VALUES (?,?,?,?,?,?,?)",
+            (
+                data["name"].strip(), data.get("category"), data.get("road_address"),
+                data.get("dist_m"), (data.get("place_id") or "").strip() or None,
+                data.get("homepage"), data.get("notes"),
+            ),
+        )
+        return cur.lastrowid
+
+
+def update_nearby_shop(shop_id: int, data: dict) -> bool:
+    allowed = ("name", "category", "road_address", "dist_m", "place_id",
+               "homepage", "hidden", "notes")
+    sets, vals = [], []
+    for k in allowed:
+        if k in data:
+            v = data[k]
+            if k == "place_id":
+                v = (str(v).strip() or None) if v is not None else None
+            sets.append(f"{k}=?")
+            vals.append(v)
+    if not sets:
+        return False
+    sets.append("updated_at=strftime('%Y-%m-%dT%H:%M:%SZ','now')")
+    vals.append(shop_id)
+    with connect() as conn:
+        cur = conn.execute(f"UPDATE nearby_shops SET {','.join(sets)} WHERE id=?", vals)
+        return cur.rowcount > 0
+
+
+def delete_nearby_shop(shop_id: int) -> bool:
+    with connect() as conn:
+        cur = conn.execute("DELETE FROM nearby_shops WHERE id=?", (shop_id,))
+        return cur.rowcount > 0
+
+
+def nearby_shops_for_collect() -> list:
+    """수집 대상: place_id 가 있는 모든 가게 (숨김 포함 — 숨김은 표시용일 뿐)."""
+    with connect() as conn:
+        rows = conn.execute(
+            "SELECT id, name, place_id FROM nearby_shops "
+            "WHERE place_id IS NOT NULL AND TRIM(place_id) != '' ORDER BY dist_m"
+        ).fetchall()
+    return [dict(r) for r in rows]
+
+
+def nearby_record_counts(shop_id: int, fetched_date: str,
+                         visitor_count, blog_count) -> None:
+    """일별 총수 스냅샷 UPSERT (같은 날 재수집 시 최신 값으로 갱신)."""
+    with connect() as conn:
+        conn.execute(
+            "INSERT INTO nearby_review_counts (shop_id, fetched_date, visitor_count, blog_count) "
+            "VALUES (?,?,?,?) "
+            "ON CONFLICT(shop_id, fetched_date) DO UPDATE SET "
+            "visitor_count=excluded.visitor_count, blog_count=excluded.blog_count",
+            (shop_id, fetched_date, visitor_count, blog_count),
+        )
+
+
+def nearby_upsert_review(shop_id: int, source: str, visited_date,
+                         body: str, author, review_hash: str) -> bool:
+    """표본 리뷰 저장. 이미 본 리뷰(hash 동일)면 False."""
+    with connect() as conn:
+        cur = conn.execute(
+            "INSERT OR IGNORE INTO nearby_reviews "
+            "(shop_id, source, visited_date, body, author, review_hash) "
+            "VALUES (?,?,?,?,?,?)",
+            (shop_id, source, visited_date, body, author, review_hash),
+        )
+        return cur.rowcount > 0
+
+
+def nearby_run_start() -> int:
+    with connect() as conn:
+        cur = conn.execute(
+            "INSERT INTO nearby_collect_runs (started_at) "
+            "VALUES (strftime('%Y-%m-%dT%H:%M:%SZ','now'))"
+        )
+        return cur.lastrowid
+
+
+def nearby_run_finish(run_id: int, ok: bool, message: str) -> None:
+    with connect() as conn:
+        conn.execute(
+            "UPDATE nearby_collect_runs SET "
+            "finished_at=strftime('%Y-%m-%dT%H:%M:%SZ','now'), ok=?, message=? "
+            "WHERE id=?",
+            (1 if ok else 0, message, run_id),
+        )
+
+
+def nearby_run_in_progress() -> bool:
+    """30분 이내 시작됐고 아직 안 끝난 run 이 있으면 True (중복 실행 방지)."""
+    with connect() as conn:
+        row = conn.execute(
+            "SELECT 1 FROM nearby_collect_runs "
+            "WHERE finished_at IS NULL "
+            "AND started_at > strftime('%Y-%m-%dT%H:%M:%SZ','now','-30 minutes') "
+            "LIMIT 1"
+        ).fetchone()
+    return row is not None
+

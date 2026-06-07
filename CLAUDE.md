@@ -396,11 +396,16 @@ ssh-keyscan 49.247.207.115 2>/dev/null | grep -v '^#'  # 호스트키 복사
 | 가격 | `/api/pricing[/<id>]` | GET/POST/DELETE |
 | | `/api/pricing/cost-analysis/<gb_id>` | GET |
 | 이미지 | `/api/coffee/<id>/card-token` | POST (APK용 1회용 다운로드 토큰) |
+| 주변 가게 | `/api/nearby/overview` | GET (가게+총수 스냅샷+표본 수+마지막 수집) |
+| | `/api/nearby/shops` | POST (가게 수동 추가) |
+| | `/api/nearby/shops/<id>` | PUT (place_id/hidden/notes 등) / DELETE |
+| | `/api/nearby/shops/<id>/reviews` | GET (표본 리뷰 목록) |
+| | `/api/nearby/refresh` | POST (수집기 백그라운드 실행, 중복 실행 409) |
 
 ### 관리자 UI 탭 구조 (admin.html)
 
 ```
-[ ☕ 오늘의 커피 ] [ 🫘 생두 관리 ] [ 📦 재고 ]
+[ ☕ 오늘의 커피 ] [ 🫘 생두 관리 ] [ 📦 재고 ] [ 📍 주변 ]
 ```
 
 - **오늘의 커피**: 기존 기능 그대로
@@ -415,6 +420,36 @@ DB에서 분리 저장, UI에서 조합 표시:
 - `green_beans.name` = `브라질 세하도` (순수 원두명)
 - `suppliers.short_name` = `레햄` (접두어)
 - UI 표시 = `[레햄] 브라질 세하도`
+
+### 주변 가게 리뷰 모니터링 (2026-06-07 추가)
+
+92도씨 기준 반경 500m 커피·디저트 가게(30곳)의 네이버 리뷰를 관리자 **📍 주변** 탭에서 모니터링.
+원본 분석 작업: `D:/python/92/around_cafe` (네이버 지역검색 API + place id 탐색).
+
+**정직성 원칙 (변경 금지)**:
+- 네이버 anti-bot 우회 스크래핑 금지 (GraphQL 페이지네이션, 더보기 자동화 등).
+- 수집 가능한 것: ① 방문자/블로그 리뷰 **총 건수** (페이지에 그대로 실림 — 정확),
+  ② 방문자 리뷰 **최근 ~10건 표본** (첫 페이지 SSR `__APOLLO_STATE__`에 실리는 분량만).
+- UI에 "표본"임을 항상 명시. 6개월 전체 이력·기간별 통계는 만들지 않는다.
+
+**구성**:
+- 테이블: `nearby_shops`(가게 마스터, place_id·hidden·is_anchor), `nearby_review_counts`(총수 일별 스냅샷 — Δ 추이),
+  `nearby_reviews`(표본, `review_hash`로 중복 방지 — 누적되면 표본 이상의 이력이 자연히 쌓임), `nearby_collect_runs`(수집 로그)
+- 시드: [scripts/seed_nearby_shops.sql](scripts/seed_nearby_shops.sql) — `init_schema()`에서 1회 자동 실행 (place_id는 7곳만 확인됨, 나머지는 관리자 탭 "ID 입력" 버튼으로 추가)
+- 수집기: [scripts/collect_nearby.py](scripts/collect_nearby.py) — requests-only, 가게당 3~5초 간격, 429 시 전체 중단.
+  `--dry <place_id>` 로 1곳 파싱 테스트 가능. 로컬 IP가 429 차단됐던 이력 있음 → **수집은 서버에서**.
+- 자동 수집: [systemd/cafe-coffee-nearby.timer](systemd/cafe-coffee-nearby.timer) — **매일 07:30 KST** (insight ingest 21:00와 분리)
+- 수동 수집: 관리자 탭 "⟳ 리뷰 수집" 버튼 → `/api/nearby/refresh` (백그라운드 스레드, last_run 폴링)
+
+**서버 최초 1회 셋업**:
+```bash
+cd /root/92cafe/cafe-today-coffee
+cp systemd/cafe-coffee-nearby.service systemd/cafe-coffee-nearby.timer /etc/systemd/system/
+systemctl daemon-reload
+systemctl enable --now cafe-coffee-nearby.timer
+systemctl start cafe-coffee-nearby.service   # 즉시 1회 테스트
+journalctl -u cafe-coffee-nearby.service -n 50 --no-pager
+```
 
 ### 남은 Phase
 
@@ -448,7 +483,9 @@ DB에서 분리 저장, UI에서 조합 표시:
 | [generate_bean_images.py](generate_bean_images.py) | 커피 카드 이미지 생성 (PIL) |
 | [migrate_notion.py](migrate_notion.py) | Notion → SQLite 일회성 이전 |
 | [index.html](index.html) | 탭 기반 공개 뷰 (오늘의커피 + 누가쏠까?: 손가락 게임, 룰렛) |
-| [static/admin.html](static/admin.html) | 관리 폼 — 3탭 (오늘의커피 / 생두관리 / 재고) |
+| [static/admin.html](static/admin.html) | 관리 폼 — 4탭 (오늘의커피 / 생두관리 / 재고 / 주변리뷰) |
+| [scripts/collect_nearby.py](scripts/collect_nearby.py) | 주변 가게 네이버 리뷰 수집기 (requests-only) |
+| [scripts/seed_nearby_shops.sql](scripts/seed_nearby_shops.sql) | 주변 가게 초기 데이터 (init_schema에서 자동 실행) |
 | [static/roastery.html](static/roastery.html) | 92도씨 로스터리 메인 공개 페이지 |
 | [scripts/seed_green_beans.sql](scripts/seed_green_beans.sql) | 생두 초기 데이터 (init_schema에서 자동 실행) |
 | [scripts/migrate_spreadsheet.py](scripts/migrate_spreadsheet.py) | 구글 스프레드시트 → DB 마이그레이션 스크립트 |

@@ -885,6 +885,59 @@
   .admin-tab-panel { display: none; }
   .admin-tab-panel.active { display: block; }
 
+  /* ===== 주변 가게 리뷰 ===== */
+  .nearby-note {
+    background: #fff8ec; border: 1px solid #f1e0bf; border-radius: 10px;
+    padding: 10px 14px; font-size: 0.8rem; color: #6b5733; margin-bottom: 12px;
+    line-height: 1.5;
+  }
+  .nearby-lastrun { font-size: 0.78rem; color: var(--muted); margin-bottom: 12px; }
+  .nearby-item {
+    border: 1px solid var(--border); border-radius: 12px;
+    padding: 12px 14px; margin-bottom: 10px; background: #fff;
+  }
+  .nearby-item.anchor { border: 2px solid var(--accent); }
+  .nearby-item.is-hidden { opacity: 0.55; }
+  .nearby-head {
+    display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+  }
+  .nearby-head .nm { font-weight: 700; color: var(--coffee-dark); font-size: 0.95rem; }
+  .nearby-dist {
+    font-size: 0.68rem; font-weight: 700; color: #fff; background: #2f6f4f;
+    padding: 2px 7px; border-radius: 6px;
+  }
+  .nearby-dist.anchor-badge { background: var(--accent); }
+  .nearby-cat { font-size: 0.75rem; color: var(--muted); }
+  .nearby-counts {
+    display: flex; gap: 8px; flex-wrap: wrap; margin: 8px 0 2px;
+    font-size: 0.78rem;
+  }
+  .nearby-counts .cnt {
+    background: #f4ede4; color: var(--coffee-dark); border-radius: 999px;
+    padding: 3px 10px; font-weight: 600;
+  }
+  .nearby-counts .cnt .delta-up { color: #1e7d46; }
+  .nearby-counts .cnt .delta-dn { color: var(--danger, #c0392b); }
+  .nearby-counts .cnt.dim { background: #f0f0f0; color: #999; font-weight: 500; }
+  .nearby-actions {
+    display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px;
+  }
+  .nearby-actions a, .nearby-actions button {
+    font-size: 0.74rem; padding: 5px 10px; border-radius: 8px;
+    border: 1px solid var(--border); background: #faf8f5; color: var(--coffee-dark);
+    cursor: pointer; text-decoration: none; font-family: inherit;
+  }
+  .nearby-actions a.l-naver { background: #03c75a; border-color: #03c75a; color: #fff; }
+  .nearby-actions a.l-google { background: #4285f4; border-color: #4285f4; color: #fff; }
+  .nearby-actions a.l-insta { background: #d6336c; border-color: #d6336c; color: #fff; }
+  .nearby-reviews { margin-top: 10px; border-top: 1px dashed var(--border); padding-top: 8px; }
+  .nearby-review {
+    font-size: 0.8rem; line-height: 1.5; padding: 7px 4px;
+    border-bottom: 1px solid #f3eee7;
+  }
+  .nearby-review .rv-meta { color: var(--muted); font-size: 0.72rem; margin-right: 6px; }
+  .nearby-review:last-child { border-bottom: none; }
+
   /* ===== 생두 관리: 서브탭 ===== */
   .bean-sub-tabs {
     display: flex; gap: 6px; margin-bottom: 16px; flex-wrap: wrap;
@@ -1289,6 +1342,7 @@
     <button class="admin-tab-btn active" data-tab="coffee" role="tab" aria-selected="true">☕ 오늘의 커피</button>
     <button class="admin-tab-btn" data-tab="beans" role="tab" aria-selected="false">🫘 생두 관리</button>
     <button class="admin-tab-btn" data-tab="inventory" role="tab" aria-selected="false">📦 재고</button>
+    <button class="admin-tab-btn" data-tab="nearby" role="tab" aria-selected="false">📍 주변</button>
   </nav>
 
   <!-- ===== 탭 패널: 오늘의 커피 ===== -->
@@ -1891,6 +1945,29 @@
       </div>
     </section>
   </div><!-- /tab-panel-inventory -->
+
+  <!-- ===== 탭 패널: 주변 가게 리뷰 ===== -->
+  <div id="tab-panel-nearby" class="admin-tab-panel">
+    <section class="card">
+      <div class="list-header">
+        <h2>📍 주변 가게 리뷰</h2>
+        <div class="header-actions">
+          <button class="btn-hidden-toggle" type="button" id="btn-nearby-hidden-toggle">숨김 보기</button>
+          <button class="btn-text" type="button" id="btn-nearby-collect">⟳ 리뷰 수집</button>
+        </div>
+      </div>
+      <div class="nearby-note">
+        92도씨 기준 반경 500m 커피·디저트 가게의 네이버 <b>방문자 리뷰 최근 ~10건 표본</b>과
+        <b>방문자/블로그 리뷰 총수</b>(정확한 값)를 수집합니다.
+        6개월 전체 이력은 네이버 보호 정책상 수집하지 않습니다. Δ는 직전 수집 대비 총수 증감.
+        구글·인스타는 버튼으로 해당 리뷰 페이지에 바로 이동.
+      </div>
+      <div id="nearby-last-run" class="nearby-lastrun"></div>
+      <div id="nearby-body">
+        <div class="empty">탭을 선택하면 불러옵니다.</div>
+      </div>
+    </section>
+  </div><!-- /tab-panel-nearby -->
 
 </div>
 
@@ -3643,6 +3720,7 @@ init();
       // 탭 진입 시 데이터 로드
       if (btn.dataset.tab === "beans") loadBeansTab();
       if (btn.dataset.tab === "inventory") loadInventory();
+      if (btn.dataset.tab === "nearby") loadNearby();
     });
   });
 })();
@@ -5559,6 +5637,191 @@ document.getElementById("btn-inv-refresh").addEventListener("click", loadInvento
 document.getElementById("btn-inv-hidden-toggle").addEventListener("click", () => {
   _invShowHidden = !_invShowHidden;
   renderInventory(_invItemsCache);
+});
+
+// =========================================================================
+// ============  주변 가게 리뷰 탭 — JavaScript  ============================
+// =========================================================================
+
+let _nearbyShops = [];
+let _nearbyShowHidden = false;
+let _nearbyPollTimer = null;
+const _nearbyOpenReviews = new Set();   // 펼쳐진 가게 id (재렌더 시 유지)
+
+async function loadNearby() {
+  const body = document.getElementById("nearby-body");
+  try {
+    const res = await api("GET", "/api/nearby/overview" + (_nearbyShowHidden ? "?include_hidden=1" : ""));
+    _nearbyShops = res.shops || [];
+    renderNearbyLastRun(res.last_run);
+    renderNearby();
+  } catch (err) {
+    if (err.message !== "unauthorized")
+      body.innerHTML = `<div class="empty">불러오기 실패: ${escapeHtml(err.message)}</div>`;
+  }
+}
+
+function renderNearbyLastRun(run) {
+  const el = document.getElementById("nearby-last-run");
+  if (!run) { el.textContent = "아직 수집 이력이 없습니다. ⟳ 리뷰 수집을 눌러 시작하세요. (서버에서 매일 자동 수집도 가능)"; return; }
+  const when = (run.finished_at || run.started_at || "").replace("T", " ").replace("Z", " UTC");
+  if (!run.finished_at) {
+    el.innerHTML = `⏳ 수집 진행 중... (시작 ${escapeHtml(when)}) — 가게당 3~5초 간격이라 수 분 걸려요.`;
+  } else {
+    el.innerHTML = `${run.ok ? "✅" : "⚠️"} 마지막 수집 ${escapeHtml(when)} — ${escapeHtml(run.message || "")}`;
+  }
+}
+
+function _nearbyShortCat(cat) {
+  // "음식점 > 카페,디저트" → 마지막 세그먼트만
+  const seg = (cat || "").split(">").map(s => s.trim()).filter(Boolean);
+  return seg.length ? seg[seg.length - 1] : "카페";
+}
+
+function _nearbyDelta(cur, prev) {
+  if (cur == null || prev == null) return "";
+  const d = cur - prev;
+  if (!d) return "";
+  return d > 0 ? ` <span class="delta-up">▲${d}</span>` : ` <span class="delta-dn">▼${-d}</span>`;
+}
+
+function renderNearby() {
+  const body = document.getElementById("nearby-body");
+  const list = _nearbyShowHidden ? _nearbyShops : _nearbyShops.filter(s => !s.hidden);
+  if (!list.length) {
+    body.innerHTML = '<div class="empty">표시할 가게가 없습니다.</div>';
+    return;
+  }
+  body.innerHTML = list.map(s => {
+    const c = s.counts, p = s.counts_prev;
+    const cntHtml = c
+      ? `<span class="cnt">방문자 ${c.visitor_count ?? "?"}${_nearbyDelta(c.visitor_count, p && p.visitor_count)}</span>
+         <span class="cnt">블로그 ${c.blog_count ?? "?"}${_nearbyDelta(c.blog_count, p && p.blog_count)}</span>`
+      : (s.place_id ? '<span class="cnt dim">미수집</span>' : '<span class="cnt dim">place ID 없음 — 수집 제외</span>');
+    const sample = s.sample_count
+      ? `<span class="cnt">표본 ${s.sample_count}건${s.last_review_date ? " · ~" + escapeHtml(s.last_review_date) : ""}</span>` : "";
+    const naverUrl = s.place_id
+      ? `https://m.place.naver.com/restaurant/${encodeURIComponent(s.place_id)}/review/visitor`
+      : `https://map.naver.com/p/search/${encodeURIComponent("남양주 다산 " + s.name)}`;
+    const googleUrl = `https://www.google.com/maps/search/${encodeURIComponent("남양주 다산동 " + s.name)}`;
+    const insta = (s.homepage || "").includes("instagram") ? s.homepage : null;
+    return `
+      <div class="nearby-item ${s.is_anchor ? "anchor" : ""} ${s.hidden ? "is-hidden" : ""}" data-id="${s.id}">
+        <div class="nearby-head">
+          <span class="nm">${escapeHtml(s.name)}</span>
+          ${s.is_anchor ? '<span class="nearby-dist anchor-badge">기준점</span>'
+                        : `<span class="nearby-dist">${s.dist_m ?? "?"}m</span>`}
+          <span class="nearby-cat">${escapeHtml(_nearbyShortCat(s.category))}</span>
+        </div>
+        <div class="nearby-counts">${cntHtml}${sample}</div>
+        <div class="nearby-actions">
+          ${s.sample_count ? `<button type="button" class="rv-toggle" data-id="${s.id}">💬 표본 리뷰 ${_nearbyOpenReviews.has(s.id) ? "접기" : "보기"}</button>` : ""}
+          <a class="l-naver" href="${naverUrl}" target="_blank" rel="noopener">네이버</a>
+          <a class="l-google" href="${googleUrl}" target="_blank" rel="noopener">구글</a>
+          ${insta ? `<a class="l-insta" href="${escapeHtml(insta)}" target="_blank" rel="noopener">인스타</a>` : ""}
+          ${!s.place_id ? `<button type="button" class="pid-edit" data-id="${s.id}">ID 입력</button>` : ""}
+          <button type="button" class="hide-toggle" data-id="${s.id}">${s.hidden ? "다시 표시" : "숨김"}</button>
+        </div>
+        <div class="nearby-reviews" id="nearby-rv-${s.id}" style="display:${_nearbyOpenReviews.has(s.id) ? "block" : "none"};"></div>
+      </div>`;
+  }).join("");
+
+  body.querySelectorAll(".rv-toggle").forEach(btn => {
+    btn.addEventListener("click", () => toggleNearbyReviews(parseInt(btn.dataset.id, 10)));
+  });
+  body.querySelectorAll(".hide-toggle").forEach(btn => {
+    btn.addEventListener("click", async () => {
+      const id = parseInt(btn.dataset.id, 10);
+      const s = _nearbyShops.find(x => x.id === id);
+      try {
+        await api("PUT", "/api/nearby/shops/" + id, { hidden: s.hidden ? 0 : 1 });
+        s.hidden = s.hidden ? 0 : 1;
+        showToast(s.hidden ? "숨김 처리됨" : "다시 표시됨");
+        renderNearby();
+      } catch (err) {
+        if (err.message !== "unauthorized") showBanner("저장 실패: " + err.message, "error");
+      }
+    });
+  });
+  body.querySelectorAll(".pid-edit").forEach(btn => {
+    btn.addEventListener("click", async () => {
+      const id = parseInt(btn.dataset.id, 10);
+      const s = _nearbyShops.find(x => x.id === id);
+      const v = prompt(
+        `${s.name}의 네이버 place ID를 입력하세요.\n` +
+        "(네이버 지도에서 가게를 연 뒤 URL의 /place/숫자 부분)", s.place_id || "");
+      if (v === null) return;
+      try {
+        await api("PUT", "/api/nearby/shops/" + id, { place_id: v.trim() });
+        s.place_id = v.trim() || null;
+        showToast("저장됨 — 다음 수집부터 반영");
+        renderNearby();
+      } catch (err) {
+        if (err.message !== "unauthorized") showBanner("저장 실패: " + err.message, "error");
+      }
+    });
+  });
+
+  // 이미 펼쳐져 있던 리뷰 영역 다시 채우기
+  _nearbyOpenReviews.forEach(id => fillNearbyReviews(id));
+}
+
+async function fillNearbyReviews(shopId) {
+  const box = document.getElementById("nearby-rv-" + shopId);
+  if (!box) return;
+  box.innerHTML = '<div class="empty" style="padding:8px;">불러오는 중...</div>';
+  try {
+    const res = await api("GET", `/api/nearby/shops/${shopId}/reviews`);
+    const rvs = res.reviews || [];
+    box.innerHTML = rvs.length
+      ? rvs.map(r => `
+          <div class="nearby-review">
+            <span class="rv-meta">${escapeHtml(r.visited_date || "날짜 미상")}${r.author ? " · " + escapeHtml(r.author) : ""}</span>
+            ${escapeHtml(r.body || "")}
+          </div>`).join("")
+      : '<div class="empty" style="padding:8px;">수집된 표본 리뷰가 없습니다.</div>';
+  } catch (err) {
+    if (err.message !== "unauthorized")
+      box.innerHTML = `<div class="empty" style="padding:8px;">불러오기 실패: ${escapeHtml(err.message)}</div>`;
+  }
+}
+
+function toggleNearbyReviews(shopId) {
+  if (_nearbyOpenReviews.has(shopId)) _nearbyOpenReviews.delete(shopId);
+  else _nearbyOpenReviews.add(shopId);
+  renderNearby();   // 펼침 상태 기준으로 재렌더 (열린 항목은 renderNearby가 채움)
+}
+
+document.getElementById("btn-nearby-hidden-toggle").addEventListener("click", function () {
+  _nearbyShowHidden = !_nearbyShowHidden;
+  this.textContent = _nearbyShowHidden ? "숨김 감추기" : "숨김 보기";
+  loadNearby();
+});
+
+document.getElementById("btn-nearby-collect").addEventListener("click", async () => {
+  try {
+    await api("POST", "/api/nearby/refresh");
+    showToast("수집 시작 — 수 분 소요됩니다");
+    // 10초 간격 폴링으로 진행 상태 갱신 (최대 10분)
+    if (_nearbyPollTimer) clearInterval(_nearbyPollTimer);
+    let polls = 0;
+    _nearbyPollTimer = setInterval(async () => {
+      polls++;
+      try {
+        const res = await api("GET", "/api/nearby/overview" + (_nearbyShowHidden ? "?include_hidden=1" : ""));
+        renderNearbyLastRun(res.last_run);
+        if ((res.last_run && res.last_run.finished_at) || polls > 60) {
+          clearInterval(_nearbyPollTimer);
+          _nearbyPollTimer = null;
+          _nearbyShops = res.shops || [];
+          renderNearby();
+          if (res.last_run && res.last_run.finished_at) showToast("수집 완료");
+        }
+      } catch (e) { /* 폴링 실패는 조용히 */ }
+    }, 10000);
+  } catch (err) {
+    if (err.message !== "unauthorized") showBanner("수집 시작 실패: " + err.message, "error");
+  }
 });
 
 // ---------- 유틸 ----------

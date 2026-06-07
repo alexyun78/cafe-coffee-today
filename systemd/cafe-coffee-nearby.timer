@@ -1,0 +1,13 @@
+[Unit]
+Description=Cafe Today Coffee — daily nearby review collect timer (07:30 KST)
+
+[Timer]
+# 매일 아침 7시 30분 (Asia/Seoul) — 가게당 3~5초 간격, 전체 수 분 소요.
+OnCalendar=*-*-* 07:30:00 Asia/Seoul
+# 서버가 꺼져 있다가 켜졌을 때 놓친 시각이 있으면 즉시 한 번 실행
+Persistent=true
+AccuracySec=30s
+Unit=cafe-coffee-nearby.service
+
+[Install]
+WantedBy=timers.target

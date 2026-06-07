@@ -4,12 +4,14 @@
 관리 엔드포인트는 세션 기반 PIN 인증 필요.
 """
 import hashlib
+import importlib.util
 import io
 import json
 import os
 import re
 import secrets
 import subprocess
+import threading
 import time
 from datetime import date, datetime, timezone
 from functools import wraps
@@ -980,6 +982,78 @@ def api_cost_analysis(gb_id):
     if not result:
         return jsonify({"success": False, "error": "not found"}), 404
     return jsonify({"success": True, **result})
+
+
+# ---------- 주변 가게 리뷰 모니터링 ----------
+# 데이터 출처: 네이버 place 공개 페이지 (scripts/collect_nearby.py)
+# 리뷰 본문은 "최근 ~10건 표본"만 — anti-bot 우회 페이지네이션은 하지 않는다.
+
+@app.get("/api/nearby/overview")
+@require_pin
+def api_nearby_overview():
+    include_hidden = request.args.get("include_hidden") == "1"
+    data = db.nearby_overview(include_hidden=include_hidden)
+    return jsonify({"success": True, **data})
+
+
+@app.get("/api/nearby/shops/<int:shop_id>/reviews")
+@require_pin
+def api_nearby_reviews(shop_id):
+    return jsonify({"success": True, "reviews": db.list_nearby_reviews(shop_id)})
+
+
+@app.post("/api/nearby/shops")
+@require_pin
+def api_nearby_shop_create():
+    data = request.get_json(silent=True) or {}
+    if not (data.get("name") or "").strip():
+        return jsonify({"success": False, "error": "name 필수"}), 400
+    try:
+        sid = db.create_nearby_shop(data)
+    except Exception:
+        return jsonify({"success": False, "error": "이미 있는 가게 이름입니다"}), 409
+    return jsonify({"success": True, "id": sid})
+
+
+@app.put("/api/nearby/shops/<int:shop_id>")
+@require_pin
+def api_nearby_shop_update(shop_id):
+    data = request.get_json(silent=True) or {}
+    if not db.update_nearby_shop(shop_id, data):
+        return jsonify({"success": False, "error": "not found"}), 404
+    return jsonify({"success": True})
+
+
+@app.delete("/api/nearby/shops/<int:shop_id>")
+@require_pin
+def api_nearby_shop_delete(shop_id):
+    if not db.delete_nearby_shop(shop_id):
+        return jsonify({"success": False, "error": "not found"}), 404
+    return jsonify({"success": True})
+
+
+@app.post("/api/nearby/refresh")
+@require_pin
+def api_nearby_refresh():
+    """수집기를 백그라운드 스레드로 실행 (가게당 3~5초 → 전체 수 분 소요).
+    진행 상태는 /api/nearby/overview 의 last_run 으로 확인."""
+    if db.nearby_run_in_progress():
+        return jsonify({"success": False, "error": "이미 수집이 진행 중입니다"}), 409
+
+    def _bg():
+        try:
+            path = os.path.join(
+                os.path.dirname(os.path.abspath(__file__)), "scripts", "collect_nearby.py"
+            )
+            spec = importlib.util.spec_from_file_location("collect_nearby", path)
+            mod = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(mod)
+            mod.run()
+        except Exception:
+            pass  # run 기록은 collect_nearby.run() 내부에서 닫힌다
+
+    threading.Thread(target=_bg, daemon=True).start()
+    return jsonify({"success": True, "started": True})
 
 
 # ---------- 정적 페이지 ----------
