@@ -42,6 +42,7 @@
 | `DATABASE_ID` | Notion DB ID (마이그레이션용) | `.env` |
 | `ADMIN_PIN` | 관리 폼 접근 PIN | `.env` |
 | `FLASK_SECRET` | 세션 쿠키 서명 키 | `.env` |
+| `NAVER_CLIENT_ID` / `NAVER_CLIENT_SECRET` | 네이버 검색 API (주변 가게 블로그 후기 수집) | `.env` (로컬+서버) |
 | `HOST` | 배포 서버 IP | `.env` |
 | `ID` | 배포 서버 SSH 사용자 | `.env` |
 | `PASSWORD` | 배포 서버 SSH 비밀번호 | `.env` |
@@ -428,14 +429,20 @@ DB에서 분리 저장, UI에서 조합 표시:
 
 **정직성 원칙 (변경 금지)**:
 - 네이버 anti-bot 우회 스크래핑 금지 (GraphQL 페이지네이션, 더보기 자동화 등).
-- 수집 가능한 것: ① 방문자/블로그 리뷰 **총 건수** (페이지에 그대로 실림 — 정확),
-  ② 방문자 리뷰 **최근 ~10건 표본** (첫 페이지 SSR `__APOLLO_STATE__`에 실리는 분량만).
+- 수집 가능한 것: ① 방문자/블로그 리뷰 **총 건수 + ★평점 + 키워드 통계** (페이지 SSR에 그대로 실림 — 정확),
+  ② 방문자 리뷰 **최근 ~10건 표본** (첫 페이지 SSR `__APOLLO_STATE__`에 실리는 분량만),
+  ③ **블로그 글** — 페이지 내장 3건 + 네이버 공식 검색 API(blog.json, `NAVER_CLIENT_ID/SECRET`) 최신 5건/곳.
 - UI에 "표본"임을 항상 명시. 6개월 전체 이력·기간별 통계는 만들지 않는다.
+- 블로그 검색은 가게명 기반 검색 결과라 무관한 글이 섞일 수 있음 → UI에 "🔎 블로그 검색" 배지로 구분.
+- **응답 디코딩 UTF-8 강제 필수** (`r.encoding = "utf-8"`) — 네이버가 charset 헤더를 안 줘서
+  생략하면 ISO-8859-1 오디코딩으로 한글이 깨진 채 DB에 저장된다 (실제 발생했던 버그).
+- 리뷰 본문은 APOLLO `body` 필드만 사용 — 렌더링 텍스트에서 긁으면 "연인・배우자" 같은
+  방문 메타 칩이 본문에 오염된다 (around_cafe v2 스크레이퍼에서 발생했던 버그).
 
 **구성**:
 - 테이블: `nearby_shops`(가게 마스터, place_id·hidden·is_anchor), `nearby_review_counts`(총수 일별 스냅샷 — Δ 추이),
   `nearby_reviews`(표본, `review_hash`로 중복 방지 — 누적되면 표본 이상의 이력이 자연히 쌓임), `nearby_collect_runs`(수집 로그)
-- 시드: [scripts/seed_nearby_shops.sql](scripts/seed_nearby_shops.sql) — `init_schema()`에서 1회 자동 실행 (place_id는 7곳만 확인됨, 나머지는 관리자 탭 "ID 입력" 버튼으로 추가)
+- 시드: [scripts/seed_nearby_shops.sql](scripts/seed_nearby_shops.sql) — `init_schema()`에서 1회 자동 실행. place_id는 30곳 전부 마이그레이션(`nearby_place_ids_v2`)으로 채워짐. 신규 가게는 관리자 탭 "ID 입력" 버튼.
 - 수집기: [scripts/collect_nearby.py](scripts/collect_nearby.py) — requests-only, 가게당 3~5초 간격, 429 시 전체 중단.
   `--dry <place_id>` 로 1곳 파싱 테스트 가능. 로컬 IP가 429 차단됐던 이력 있음 → **수집은 서버에서**.
 - 자동 수집: [systemd/cafe-coffee-nearby.timer](systemd/cafe-coffee-nearby.timer) — **매일 07:30 KST** (insight ingest 21:00와 분리)
