@@ -209,6 +209,7 @@ CREATE TABLE IF NOT EXISTS nearby_review_counts (
     fetched_date  TEXT NOT NULL,    -- YYYY-MM-DD (KST)
     visitor_count INTEGER,
     blog_count    INTEGER,
+    visitor_score REAL,             -- 방문자 리뷰 평점 (예: 4.79)
     UNIQUE(shop_id, fetched_date)
 );
 CREATE INDEX IF NOT EXISTS idx_nearby_counts_shop ON nearby_review_counts(shop_id, fetched_date DESC);
@@ -357,6 +358,21 @@ def init_schema():
                 conn.execute(
                     "INSERT INTO migrations (name) VALUES (?)", ("seed_nearby_shops_v1",)
                 )
+        # 주변 가게: 구버전 테이블에 평점 컬럼 추가 (기존 서버 DB 마이그레이션용)
+        nc_existing = {
+            r["name"] for r in conn.execute("PRAGMA table_info(nearby_review_counts)").fetchall()
+        }
+        if "visitor_score" not in nc_existing:
+            conn.execute("ALTER TABLE nearby_review_counts ADD COLUMN visitor_score REAL")
+        # 주변 가게: 표본 리뷰 source 세분화 (visitor/blog) — 초기 수집분('naver' 통칭)은
+        # 지우고 다음 수집에서 올바른 라벨로 재수집 (hash 동일 → 자연 복원, 1회만)
+        if not conn.execute(
+            "SELECT 1 FROM migrations WHERE name=?", ("nearby_source_split_v1",)
+        ).fetchone():
+            conn.execute("DELETE FROM nearby_reviews WHERE source='naver'")
+            conn.execute(
+                "INSERT INTO migrations (name) VALUES (?)", ("nearby_source_split_v1",)
+            )
         # 컵노트 기준 통일: 연결된 '오늘의 커피'의 컵노트를 생두 마스터로 1회 싱크업
         # (이후로는 오늘의 커피 편집 시 sync_bean_cup_notes_from_coffee 로 실시간 동기화)
         if not conn.execute(
@@ -1862,7 +1878,7 @@ def nearby_overview(include_hidden: bool = False) -> dict:
         ).fetchall()]
         for s in shops:
             snaps = conn.execute(
-                "SELECT fetched_date, visitor_count, blog_count "
+                "SELECT fetched_date, visitor_count, blog_count, visitor_score "
                 "FROM nearby_review_counts WHERE shop_id=? "
                 "ORDER BY fetched_date DESC LIMIT 2",
                 (s["id"],),
@@ -1937,15 +1953,17 @@ def nearby_shops_for_collect() -> list:
 
 
 def nearby_record_counts(shop_id: int, fetched_date: str,
-                         visitor_count, blog_count) -> None:
+                         visitor_count, blog_count, visitor_score=None) -> None:
     """일별 총수 스냅샷 UPSERT (같은 날 재수집 시 최신 값으로 갱신)."""
     with connect() as conn:
         conn.execute(
-            "INSERT INTO nearby_review_counts (shop_id, fetched_date, visitor_count, blog_count) "
-            "VALUES (?,?,?,?) "
+            "INSERT INTO nearby_review_counts "
+            "(shop_id, fetched_date, visitor_count, blog_count, visitor_score) "
+            "VALUES (?,?,?,?,?) "
             "ON CONFLICT(shop_id, fetched_date) DO UPDATE SET "
-            "visitor_count=excluded.visitor_count, blog_count=excluded.blog_count",
-            (shop_id, fetched_date, visitor_count, blog_count),
+            "visitor_count=excluded.visitor_count, blog_count=excluded.blog_count, "
+            "visitor_score=excluded.visitor_score",
+            (shop_id, fetched_date, visitor_count, blog_count, visitor_score),
         )
 
 

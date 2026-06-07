@@ -5695,7 +5695,8 @@ function renderNearby() {
   body.innerHTML = list.map(s => {
     const c = s.counts, p = s.counts_prev;
     const cntHtml = c
-      ? `<span class="cnt">방문자 ${c.visitor_count ?? "?"}${_nearbyDelta(c.visitor_count, p && p.visitor_count)}</span>
+      ? `${c.visitor_score ? `<span class="cnt">★ ${c.visitor_score.toFixed(2)}</span>` : ""}
+         <span class="cnt">방문자 ${c.visitor_count ?? "?"}${_nearbyDelta(c.visitor_count, p && p.visitor_count)}</span>
          <span class="cnt">블로그 ${c.blog_count ?? "?"}${_nearbyDelta(c.blog_count, p && p.blog_count)}</span>`
       : (s.place_id ? '<span class="cnt dim">미수집</span>' : '<span class="cnt dim">place ID 없음 — 수집 제외</span>');
     const sample = s.sample_count
@@ -5776,7 +5777,7 @@ async function fillNearbyReviews(shopId) {
     box.innerHTML = rvs.length
       ? rvs.map(r => `
           <div class="nearby-review">
-            <span class="rv-meta">${escapeHtml(r.visited_date || "날짜 미상")}${r.author ? " · " + escapeHtml(r.author) : ""}</span>
+            <span class="rv-meta">${r.source === "blog" ? "📝 블로그 · " : ""}${escapeHtml(r.visited_date || "날짜 미상")}${r.author ? " · " + escapeHtml(r.author) : ""}</span>
             ${escapeHtml(r.body || "")}
           </div>`).join("")
       : '<div class="empty" style="padding:8px;">수집된 표본 리뷰가 없습니다.</div>';

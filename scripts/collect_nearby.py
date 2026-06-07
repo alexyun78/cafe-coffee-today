@@ -34,7 +34,8 @@ HEADERS = {"User-Agent": UA, "Accept-Language": "ko-KR,ko;q=0.9"}
 TIMEOUT = 15
 
 RE_VISITOR_TOTAL = re.compile(r'"visitorReviewsTotal"\s*:\s*(\d+)')
-RE_BLOG_TOTAL = re.compile(r'"fsasReviewsTotal"\s*:\s*(\d+)')
+RE_BLOG_TOTAL = re.compile(r'"cafeBlogReviewsTotal"\s*:\s*(\d+)')
+RE_VISITOR_SCORE = re.compile(r'"visitorReviewsScore"\s*:\s*([\d.]+)')
 RE_VISITOR_TEXT = re.compile(r"방문자\s*리?뷰\s*([\d,]+)")
 RE_BLOG_TEXT = re.compile(r"블로그\s*리?뷰\s*([\d,]+)")
 
@@ -104,7 +105,8 @@ def _resolve_author(state: dict, review: dict):
 
 
 def extract_reviews(state: dict, today: date) -> list:
-    """APOLLO state 에서 방문자 리뷰 객체를 방어적으로 추출."""
+    """APOLLO state 에서 리뷰 객체를 방어적으로 추출.
+    VisitorReview = 방문자 리뷰, FsasReview(type=blog) = 페이지에 같이 실리는 블로그 리뷰."""
     out = []
     for key, v in state.items():
         if not isinstance(v, dict):
@@ -116,23 +118,30 @@ def extract_reviews(state: dict, today: date) -> list:
         body = v.get("body") or v.get("contents") or v.get("content")
         if not isinstance(body, str) or not body.strip():
             continue
-        visited_raw = v.get("visited") or v.get("visitedDate") or v.get("created")
+        is_blog = tn == "FsasReview" or v.get("type") == "blog"
+        visited_raw = (v.get("visited") or v.get("visitedDate")
+                       or v.get("date") or v.get("created"))
+        author = _resolve_author(state, v)
+        if is_blog and not author:
+            nm = v.get("name")          # FsasReview 는 블로그 이름이 name 필드
+            author = str(nm) if nm else None
         out.append({
             "rid": str(v.get("id") or key),
+            "source": "blog" if is_blog else "visitor",
             "body": body.strip(),
             "visited_raw": visited_raw,
             "visited": parse_visited(visited_raw, today),
-            "author": _resolve_author(state, v),
+            "author": author,
         })
     return out
 
 
 def fetch_shop(session, place_id: str):
-    """리뷰 페이지 1회 GET → (visitor_total, blog_total, reviews, status_code)."""
+    """리뷰 페이지 1회 GET → (visitor_total, blog_total, score, reviews, status_code)."""
     url = f"https://m.place.naver.com/restaurant/{place_id}/review/visitor?reviewSort=recent"
     r = session.get(url, headers=HEADERS, timeout=TIMEOUT, allow_redirects=True)
     if r.status_code != 200:
-        return None, None, [], r.status_code
+        return None, None, None, [], r.status_code
     html = r.text
     today = datetime.now(KST).date()
 
@@ -145,12 +154,14 @@ def fetch_shop(session, place_id: str):
 
     visitor_total = _first_int(RE_VISITOR_TOTAL, RE_VISITOR_TEXT)
     blog_total = _first_int(RE_BLOG_TOTAL, RE_BLOG_TEXT)
+    m = RE_VISITOR_SCORE.search(html)
+    score = float(m.group(1)) if m else None
 
     reviews = []
     state = extract_apollo(html)
     if state:
         reviews = extract_reviews(state, today)
-    return visitor_total, blog_total, reviews, 200
+    return visitor_total, blog_total, score, reviews, 200
 
 
 def review_hash(shop_id: int, rv: dict) -> str:
@@ -174,7 +185,7 @@ def collect_all() -> str:
         if i:
             time.sleep(3 + random.uniform(0, 2))   # 가게당 3~5초 — 예의 유지
         try:
-            vt, bt, revs, status = fetch_shop(session, s["place_id"])
+            vt, bt, score, revs, status = fetch_shop(session, s["place_id"])
         except requests.RequestException as e:
             errors.append(f"{s['name']}: {str(e)[:60]}")
             continue
@@ -185,15 +196,15 @@ def collect_all() -> str:
             errors.append(f"{s['name']}: HTTP {status}")
             continue
         if vt is not None or bt is not None:
-            db.nearby_record_counts(s["id"], today_kst, vt, bt)
+            db.nearby_record_counts(s["id"], today_kst, vt, bt, score)
         for rv in revs:
             if db.nearby_upsert_review(
-                s["id"], "naver", rv["visited"], rv["body"],
+                s["id"], rv["source"], rv["visited"], rv["body"],
                 rv["author"], review_hash(s["id"], rv),
             ):
                 new_reviews += 1
         done += 1
-        print(f"  {s['name']:<22} 방문자 {vt} · 블로그 {bt} · 표본 {len(revs)}건")
+        print(f"  {s['name']:<22} 방문자 {vt} (★{score}) · 블로그 {bt} · 표본 {len(revs)}건")
     msg = f"{len(shops)}곳 중 {done}곳 수집, 신규 표본 리뷰 {new_reviews}건"
     if errors:
         msg += f" / 오류 {len(errors)}건: " + "; ".join(errors[:5])
@@ -216,10 +227,10 @@ def run() -> str:
 def main():
     if len(sys.argv) >= 3 and sys.argv[1] == "--dry":
         pid = sys.argv[2]
-        vt, bt, revs, status = fetch_shop(requests.Session(), pid)
-        print(f"HTTP {status} · 방문자 {vt} · 블로그 {bt} · 표본 {len(revs)}건")
-        for rv in revs[:10]:
-            print(f"  [{rv['visited']}] ({rv['author']}) {rv['body'][:70]}")
+        vt, bt, score, revs, status = fetch_shop(requests.Session(), pid)
+        print(f"HTTP {status} · 방문자 {vt} (★{score}) · 블로그 {bt} · 표본 {len(revs)}건")
+        for rv in revs[:15]:
+            print(f"  [{rv['source']}] [{rv['visited']}] ({rv['author']}) {rv['body'][:70]}")
         return
     db.init_schema()
     print(run())
