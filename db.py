@@ -20,7 +20,7 @@ import re
 import sqlite3
 import time
 from contextlib import contextmanager
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
 from typing import Optional
 
 DB_PATH = os.environ.get(
@@ -2074,6 +2074,85 @@ def nearby_run_finish(run_id: int, ok: bool, message: str) -> None:
             "WHERE id=?",
             (1 if ok else 0, message, run_id),
         )
+
+
+def nearby_growth() -> dict:
+    """성장 리포트 데이터 (around_cafe growth_report.py 의 서버 이식판).
+
+    가게별:
+      - 최신 스냅샷 (방문자/블로그 총수, ★평점) — 전수·정확
+      - 모멘텀: 최근 방문자 표본 ≤10건의 기간으로 주당 리뷰 속도 추정 (상대 비교용)
+      - 실측 Δ: 일별 스냅샷에서 ~7일 전 / ~30일 전 기준 증가분 (수집이 쌓이면 자동 채워짐)
+    순위 계산은 클라이언트에서.
+    """
+    with connect() as conn:
+        shops = [dict(r) for r in conn.execute(
+            "SELECT id, name, dist_m, is_anchor FROM nearby_shops "
+            "WHERE hidden=0 ORDER BY dist_m"
+        ).fetchall()]
+        out = []
+        for s in shops:
+            latest = conn.execute(
+                "SELECT fetched_date, visitor_count, blog_count, visitor_score "
+                "FROM nearby_review_counts WHERE shop_id=? "
+                "ORDER BY fetched_date DESC LIMIT 1",
+                (s["id"],),
+            ).fetchone()
+            # 모멘텀 — 최근 방문자 표본 10건의 날짜 범위
+            dates = [r["visited_date"] for r in conn.execute(
+                "SELECT visited_date FROM nearby_reviews "
+                "WHERE shop_id=? AND source='visitor' AND visited_date IS NOT NULL "
+                "ORDER BY visited_date DESC LIMIT 10",
+                (s["id"],),
+            ).fetchall()]
+            vel_week, span_days = None, None
+            if len(dates) >= 2:
+                try:
+                    d_new = date.fromisoformat(max(dates))
+                    d_old = date.fromisoformat(min(dates))
+                    span_days = (d_new - d_old).days
+                    if span_days > 0:
+                        vel_week = round((len(dates) - 1) / span_days * 7, 1)
+                except ValueError:
+                    pass
+            # 실측 Δ — latest 기준 days 일 이전(이하) 가장 가까운 스냅샷과 비교
+            def _delta(days):
+                if not latest:
+                    return None
+                target = (date.fromisoformat(latest["fetched_date"])
+                          - timedelta(days=days)).isoformat()
+                base = conn.execute(
+                    "SELECT fetched_date, visitor_count, blog_count "
+                    "FROM nearby_review_counts WHERE shop_id=? AND fetched_date<=? "
+                    "ORDER BY fetched_date DESC LIMIT 1",
+                    (s["id"], target),
+                ).fetchone()
+                if not base or base["visitor_count"] is None or latest["visitor_count"] is None:
+                    return None
+                real_days = (date.fromisoformat(latest["fetched_date"])
+                             - date.fromisoformat(base["fetched_date"])).days or 1
+                return {
+                    "base_date": base["fetched_date"],
+                    "days": real_days,
+                    "dv": latest["visitor_count"] - base["visitor_count"],
+                    "db": (latest["blog_count"] or 0) - (base["blog_count"] or 0),
+                }
+            out.append({
+                **s,
+                "fetched_date": latest["fetched_date"] if latest else None,
+                "visitor": latest["visitor_count"] if latest else None,
+                "blog": latest["blog_count"] if latest else None,
+                "rating": latest["visitor_score"] if latest else None,
+                "vel_week": vel_week,
+                "span_days": span_days,
+                "sample_n": len(dates),
+                "delta7": _delta(7),
+                "delta30": _delta(30),
+            })
+        snap_days = conn.execute(
+            "SELECT COUNT(DISTINCT fetched_date) AS n FROM nearby_review_counts"
+        ).fetchone()["n"]
+    return {"shops": out, "snapshot_days": snap_days}
 
 
 def nearby_run_in_progress() -> bool:

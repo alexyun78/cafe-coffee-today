@@ -1002,6 +1002,13 @@ def api_nearby_reviews(shop_id):
     return jsonify({"success": True, "reviews": db.list_nearby_reviews(shop_id)})
 
 
+@app.get("/api/nearby/growth")
+@require_pin
+def api_nearby_growth():
+    """성장 리포트 — 스코어카드/모멘텀/실측 Δ (일별 스냅샷 기반, 매일 자동 갱신)."""
+    return jsonify({"success": True, **db.nearby_growth()})
+
+
 @app.post("/api/nearby/shops")
 @require_pin
 def api_nearby_shop_create():

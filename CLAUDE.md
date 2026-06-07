@@ -402,6 +402,7 @@ ssh-keyscan 49.247.207.115 2>/dev/null | grep -v '^#'  # 호스트키 복사
 | | `/api/nearby/shops/<id>` | PUT (place_id/hidden/notes 등) / DELETE |
 | | `/api/nearby/shops/<id>/reviews` | GET (표본 리뷰 목록) |
 | | `/api/nearby/refresh` | POST (수집기 백그라운드 실행, 중복 실행 409) |
+| | `/api/nearby/growth` | GET (성장 리포트 — 스코어카드/모멘텀/실측 Δ) |
 
 ### 관리자 UI 탭 구조 (admin.html)
 
@@ -447,6 +448,11 @@ DB에서 분리 저장, UI에서 조합 표시:
   `--dry <place_id>` 로 1곳 파싱 테스트 가능. 로컬 IP가 429 차단됐던 이력 있음 → **수집은 서버에서**.
 - 자동 수집: [systemd/cafe-coffee-nearby.timer](systemd/cafe-coffee-nearby.timer) — **매일 07:30 KST** (insight ingest 21:00와 분리)
 - 수동 수집: 관리자 탭 "⟳ 리뷰 수집" 버튼 → `/api/nearby/refresh` (백그라운드 스레드, last_run 폴링)
+- **성장 리포트**: 주변 탭 "🌱 성장 리포트" 버튼 — around_cafe `growth_report.py`의 서버 이식판.
+  스코어카드(30곳 중 순위)/모멘텀(표본 기간 기반 주당 리뷰 속도)/누적 자산/블로그 비율/실측 Δ(일별 스냅샷 비교).
+  매일 07:30 수집으로 자동 갱신 — 로컬 `run_weekly.bat`(작업 스케줄러 + Playwright) 파이프라인은 더 이상 필요 없음.
+- ⚠️ 수집 진행 중 `git push` 하면 60초 자동 배포의 서비스 재시작으로 백그라운드 수집이 끊길 수 있음
+  (orphan run 은 30분 후 잠금 자동 해제, systemd `cafe-coffee-nearby.service` 수동 시작으로 즉시 보충 가능)
 
 **서버 최초 1회 셋업**:
 ```bash

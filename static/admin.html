@@ -929,6 +929,31 @@
     font-size: 0.72rem; margin-left: 6px; color: #4285f4; text-decoration: none;
     white-space: nowrap;
   }
+
+  /* ===== 주변: 성장 리포트 ===== */
+  .growth-kpi { display: flex; gap: 10px; flex-wrap: wrap; margin: 4px 0 14px; }
+  .growth-kpi > div {
+    background: var(--coffee-dark, #5b3a29); color: #fff; border-radius: 12px;
+    padding: 10px 14px; min-width: 104px; flex: 1 1 104px;
+  }
+  .growth-kpi b { font-size: 1.35rem; display: block; }
+  .growth-kpi span { font-size: 0.68rem; opacity: 0.85; }
+  .growth-card { margin-top: 16px; }
+  .growth-card h3 { margin: 0 0 8px; font-size: 0.95rem; color: var(--coffee-dark); }
+  .growth-table { border-collapse: collapse; width: 100%; font-size: 0.8rem; }
+  .growth-table th, .growth-table td {
+    border-bottom: 1px solid #f0ebe3; padding: 5px 7px; text-align: left;
+  }
+  .growth-table th { color: var(--muted); font-weight: 600; font-size: 0.72rem; }
+  .growth-table td.num { text-align: right; white-space: nowrap; }
+  .growth-table tr.me { background: #fff3e6; }
+  .growth-table tr.me td { font-weight: 700; }
+  .gbar { height: 10px; background: #c9a37e; border-radius: 3px; min-width: 2px; }
+  .growth-note {
+    background: #fff8ec; border: 1px solid #f1e0bf; padding: 8px 12px;
+    border-radius: 8px; font-size: 0.76rem; color: #6b5733; margin-top: 8px;
+  }
+  .growth-table-wrap { overflow-x: auto; }
   .nearby-actions {
     display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px;
   }
@@ -1963,6 +1988,7 @@
         <h2>📍 주변 가게 리뷰</h2>
         <div class="header-actions">
           <button class="btn-hidden-toggle" type="button" id="btn-nearby-hidden-toggle">숨김 보기</button>
+          <button class="btn-text" type="button" id="btn-nearby-growth">🌱 성장 리포트</button>
           <button class="btn-text" type="button" id="btn-nearby-collect">⟳ 리뷰 수집</button>
         </div>
       </div>
@@ -1975,6 +2001,9 @@
       <div id="nearby-last-run" class="nearby-lastrun"></div>
       <div id="nearby-body">
         <div class="empty">탭을 선택하면 불러옵니다.</div>
+      </div>
+      <div id="nearby-growth" style="display:none;">
+        <div class="empty">불러오는 중...</div>
       </div>
     </section>
   </div><!-- /tab-panel-nearby -->
@@ -5822,6 +5851,134 @@ document.getElementById("btn-nearby-hidden-toggle").addEventListener("click", fu
   this.textContent = _nearbyShowHidden ? "숨김 감추기" : "숨김 보기";
   loadNearby();
 });
+
+// ---------- 성장 리포트 (around_cafe growth_report.py 서버 이식판) ----------
+let _nearbyGrowthOn = false;
+
+document.getElementById("btn-nearby-growth").addEventListener("click", function () {
+  _nearbyGrowthOn = !_nearbyGrowthOn;
+  this.textContent = _nearbyGrowthOn ? "📋 가게 목록" : "🌱 성장 리포트";
+  document.getElementById("nearby-body").style.display = _nearbyGrowthOn ? "none" : "block";
+  document.getElementById("nearby-growth").style.display = _nearbyGrowthOn ? "block" : "none";
+  if (_nearbyGrowthOn) loadNearbyGrowth();
+});
+
+async function loadNearbyGrowth() {
+  const box = document.getElementById("nearby-growth");
+  box.innerHTML = '<div class="empty">불러오는 중...</div>';
+  try {
+    const res = await api("GET", "/api/nearby/growth");
+    renderNearbyGrowth(res);
+  } catch (err) {
+    if (err.message !== "unauthorized")
+      box.innerHTML = `<div class="empty">불러오기 실패: ${escapeHtml(err.message)}</div>`;
+  }
+}
+
+function renderNearbyGrowth(data) {
+  const box = document.getElementById("nearby-growth");
+  const shops = (data.shops || []).filter(s => s.visitor != null);
+  if (!shops.length) {
+    box.innerHTML = '<div class="empty">수집된 데이터가 없습니다. ⟳ 리뷰 수집을 먼저 실행하세요.</div>';
+    return;
+  }
+  const me = shops.find(s => s.is_anchor) || shops[0];
+  const fmt = n => (n == null ? "-" : Number(n).toLocaleString());
+  const star = v => (v ? "★" + Number(v).toFixed(2) : "-");
+
+  // 순위 헬퍼 (값 큰 순)
+  const rank = (key, getter) => {
+    const arr = shops.filter(s => getter(s) != null).sort((a, b) => getter(b) - getter(a));
+    const i = arr.findIndex(s => s.id === me.id);
+    return { r: i >= 0 ? i + 1 : null, n: arr.length, top: arr[0] };
+  };
+  const G = { rating: s => s.rating || null, visitor: s => s.visitor,
+              blog: s => s.blog, vel: s => s.vel_week };
+
+  // ① KPI + 스코어카드
+  const kpi = `
+    <div class="growth-kpi">
+      <div><b>${star(me.rating)}</b><span>별점</span></div>
+      <div><b>${fmt(me.visitor)}</b><span>누적 방문자 리뷰</span></div>
+      <div><b>${fmt(me.blog)}</b><span>누적 블로그 리뷰</span></div>
+      <div><b>${me.vel_week != null ? me.vel_week + "/주" : "-"}</b><span>최근 리뷰 속도(추정)</span></div>
+    </div>`;
+  const scRows = [
+    ["별점", star(me.rating), rank("rating", G.rating)],
+    ["누적 방문자 리뷰", fmt(me.visitor), rank("visitor", G.visitor)],
+    ["누적 블로그 리뷰", fmt(me.blog), rank("blog", G.blog)],
+    ["최근 리뷰 속도", me.vel_week != null ? me.vel_week + "/주" : "-", rank("vel", G.vel)],
+  ].map(([label, val, rk]) => {
+    const topName = rk.top ? escapeHtml(rk.top.name) : "-";
+    return `<tr><td>${label}</td><td class="num"><b>${val}</b></td>
+      <td class="num">${rk.r ?? "-"}/${rk.n}</td><td>${topName}</td></tr>`;
+  }).join("");
+
+  // ② 모멘텀 랭킹
+  const vels = shops.filter(s => s.vel_week != null).sort((a, b) => b.vel_week - a.vel_week);
+  const maxVel = vels.length ? vels[0].vel_week : 1;
+  const momRows = vels.map((s, i) => `
+    <tr class="${s.is_anchor ? "me" : ""}">
+      <td>${i + 1}</td><td>${escapeHtml(s.name)}</td>
+      <td class="num">${s.vel_week}/주</td>
+      <td style="min-width:90px;"><div class="gbar" style="width:${Math.max(2, Math.round(s.vel_week / maxVel * 100))}%"></div></td>
+      <td class="num">${fmt(s.visitor)}</td>
+    </tr>`).join("");
+
+  // ③ 누적 자산
+  const byVisitor = [...shops].sort((a, b) => b.visitor - a.visitor);
+  const maxV = byVisitor[0].visitor || 1;
+  const assetRows = byVisitor.map(s => `
+    <tr class="${s.is_anchor ? "me" : ""}">
+      <td>${escapeHtml(s.name)}</td><td class="num">${fmt(s.visitor)}</td>
+      <td style="min-width:90px;"><div class="gbar" style="width:${Math.max(2, Math.round(s.visitor / maxV * 100))}%"></div></td>
+      <td class="num">${fmt(s.blog)}</td><td class="num">${star(s.rating)}</td>
+    </tr>`).join("");
+
+  // ④ 블로그 마케팅 적극도
+  const ratios = shops.filter(s => s.visitor > 0 && s.blog != null)
+    .map(s => ({ ...s, ratio: Math.round(s.blog / s.visitor * 1000) / 10 }))
+    .sort((a, b) => b.ratio - a.ratio).slice(0, 12);
+  const ratioRows = ratios.map(s => `
+    <tr class="${s.is_anchor ? "me" : ""}">
+      <td>${escapeHtml(s.name)}</td><td class="num">${fmt(s.blog)}</td>
+      <td class="num">${fmt(s.visitor)}</td><td class="num">${s.ratio}%</td>
+    </tr>`).join("");
+
+  // ⑤ 실측 Δ — 30일 기준 우선, 없으면 7일, 그것도 없으면 안내
+  const withDelta = shops.map(s => ({ s, d: s.delta30 || s.delta7 }))
+    .filter(x => x.d && x.d.days >= 1);
+  let deltaHtml;
+  if (withDelta.length) {
+    const rows = withDelta
+      .map(x => ({ ...x, pm: Math.round(x.d.dv / x.d.days * 30 * 10) / 10 }))
+      .sort((a, b) => b.pm - a.pm)
+      .map(x => `
+        <tr class="${x.s.is_anchor ? "me" : ""}">
+          <td>${escapeHtml(x.s.name)}</td>
+          <td class="num">+${x.d.dv}</td><td class="num">+${x.d.db}</td>
+          <td class="num">${x.pm}</td><td class="num">${x.d.days}일</td>
+        </tr>`).join("");
+    deltaHtml = `<div class="growth-table-wrap"><table class="growth-table">
+      <tr><th>카페</th><th>방문자 Δ</th><th>블로그 Δ</th><th>방문자/월 환산</th><th>비교 기간</th></tr>${rows}</table></div>`;
+  } else {
+    deltaHtml = `<div class="growth-note">일별 스냅샷 ${data.snapshot_days}일째 수집 중 —
+      매일 07:30 자동 수집이 일주일쯤 쌓이면 카페별 <b>실제 리뷰 증가분(진짜 성장 추이)</b>이 여기에 표로 채워집니다.</div>`;
+  }
+
+  const card = (title, inner, note) => `
+    <div class="growth-card"><h3>${title}</h3>${inner}${note ? `<div class="growth-note">${note}</div>` : ""}</div>`;
+  box.innerHTML = `
+    ${kpi}
+    ${card("① 성장 스코어카드 (30곳 중 우리 위치)",
+      `<div class="growth-table-wrap"><table class="growth-table"><tr><th>지표</th><th>우리 값</th><th>순위</th><th>1위</th></tr>${scRows}</table></div>`)}
+    ${card("② 최근 리뷰 속도 — 지금 빨리 크는 곳", `<div class="growth-table-wrap"><table class="growth-table"><tr><th>#</th><th>카페</th><th>주당</th><th></th><th>누적</th></tr>${momRows}</table></div>`,
+      "최근 방문자 표본 ≤10건의 기간으로 추정한 <b>현재 모멘텀</b>입니다 (절대치 아님, 상대 비교용).")}
+    ${card("③ 누적 리뷰 자산 (방문자·블로그·별점)", `<div class="growth-table-wrap"><table class="growth-table"><tr><th>카페</th><th>방문자</th><th></th><th>블로그</th><th>별점</th></tr>${assetRows}</table></div>`)}
+    ${card("④ 블로그 마케팅 적극도 (블로그/방문자 비율)", `<div class="growth-table-wrap"><table class="growth-table"><tr><th>카페</th><th>블로그</th><th>방문자</th><th>비율</th></tr>${ratioRows}</table></div>`)}
+    ${card("⑤ 실측 성장 추이 (일별 스냅샷 Δ)", deltaHtml)}
+  `;
+}
 
 document.getElementById("btn-nearby-collect").addEventListener("click", async () => {
   try {
