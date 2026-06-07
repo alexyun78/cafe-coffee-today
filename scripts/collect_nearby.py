@@ -27,6 +27,19 @@ import requests
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 import db  # noqa: E402
 
+try:  # .env 의 NAVER_CLIENT_ID/SECRET (블로그 검색 API용 — 없으면 블로그 검색 생략)
+    from dotenv import load_dotenv
+    load_dotenv(Path(__file__).resolve().parent.parent / ".env")
+except ImportError:
+    pass
+import os  # noqa: E402
+
+NAVER_CLIENT_ID = os.environ.get("NAVER_CLIENT_ID", "").strip()
+NAVER_CLIENT_SECRET = os.environ.get("NAVER_CLIENT_SECRET", "").strip()
+BLOG_API = "https://openapi.naver.com/v1/search/blog.json"
+BLOG_REGION = "남양주"          # 검색 정확도용 지역 접두어
+BLOG_DISPLAY = 5                # 가게당 최신 블로그 글 수
+
 KST = timezone(timedelta(hours=9))
 UA = ("Mozilla/5.0 (Linux; Android 13; SM-G991N) AppleWebKit/537.36 "
       "(KHTML, like Gecko) Chrome/124.0.0.0 Mobile Safari/537.36")
@@ -125,6 +138,7 @@ def extract_reviews(state: dict, today: date) -> list:
         if is_blog and not author:
             nm = v.get("name")          # FsasReview 는 블로그 이름이 name 필드
             author = str(nm) if nm else None
+        url = v.get("url") if isinstance(v.get("url"), str) else None
         out.append({
             "rid": str(v.get("id") or key),
             "source": "blog" if is_blog else "visitor",
@@ -132,16 +146,34 @@ def extract_reviews(state: dict, today: date) -> list:
             "visited_raw": visited_raw,
             "visited": parse_visited(visited_raw, today),
             "author": author,
+            "url": url,
         })
     return out
 
 
+def extract_keywords(state: dict) -> list:
+    """방문자 키워드 통계: VisitorReviewStatsResult → analysis.votedKeyword.details.
+    [{"k": "커피가 맛있어요", "n": 231}, ...] (최대 8개)"""
+    for v in state.values():
+        if not isinstance(v, dict) or v.get("__typename") != "VisitorReviewStatsResult":
+            continue
+        details = (((v.get("analysis") or {}).get("votedKeyword") or {}).get("details")) or []
+        out = []
+        for d in details[:8]:
+            if isinstance(d, dict) and d.get("displayName") and d.get("count") is not None:
+                out.append({"k": str(d["displayName"]), "n": int(d["count"])})
+        if out:
+            return out
+    return []
+
+
 def fetch_shop(session, place_id: str):
-    """리뷰 페이지 1회 GET → (visitor_total, blog_total, score, reviews, status_code)."""
+    """리뷰 페이지 1회 GET →
+    (visitor_total, blog_total, score, keywords, reviews, status_code)."""
     url = f"https://m.place.naver.com/restaurant/{place_id}/review/visitor?reviewSort=recent"
     r = session.get(url, headers=HEADERS, timeout=TIMEOUT, allow_redirects=True)
     if r.status_code != 200:
-        return None, None, None, [], r.status_code
+        return None, None, None, [], [], r.status_code
     # 네이버가 Content-Type 에 charset 을 안 실어주면 requests 가 ISO-8859-1 로
     # 잘못 디코딩해 한글이 깨진다 (mojibake 가 DB 까지 저장됐던 원인). UTF-8 강제.
     r.encoding = "utf-8"
@@ -160,16 +192,82 @@ def fetch_shop(session, place_id: str):
     m = RE_VISITOR_SCORE.search(html)
     score = float(m.group(1)) if m else None
 
-    reviews = []
+    reviews, keywords = [], []
     state = extract_apollo(html)
     if state:
         reviews = extract_reviews(state, today)
-    return visitor_total, blog_total, score, reviews, 200
+        keywords = extract_keywords(state)
+    return visitor_total, blog_total, score, keywords, reviews, 200
+
+
+RE_TAG = re.compile(r"<[^>]+>")
+
+
+def _clean_search_text(s: str) -> str:
+    """검색 API 결과의 <b> 태그/HTML 엔티티 제거."""
+    s = RE_TAG.sub("", s or "")
+    for ent, ch in (("&quot;", '"'), ("&amp;", "&"), ("&lt;", "<"),
+                    ("&gt;", ">"), ("&apos;", "'"), ("&#39;", "'")):
+        s = s.replace(ent, ch)
+    return s.strip()
+
+
+def fetch_blog_posts(session, shop_name: str) -> list:
+    """네이버 공식 검색 API (블로그) — 가게명 언급 최신 글 (합법, 키 필요).
+    검색 결과라 가게와 무관한 글이 섞일 수 있어 UI 에 '블로그 검색'으로 구분 표기."""
+    if not (NAVER_CLIENT_ID and NAVER_CLIENT_SECRET):
+        return []
+    try:
+        r = session.get(
+            BLOG_API,
+            headers={"X-Naver-Client-Id": NAVER_CLIENT_ID,
+                     "X-Naver-Client-Secret": NAVER_CLIENT_SECRET},
+            params={"query": f"{BLOG_REGION} {shop_name}",
+                    "display": BLOG_DISPLAY, "sort": "date"},
+            timeout=TIMEOUT,
+        )
+        if r.status_code != 200:
+            return []
+        items = r.json().get("items", [])
+    except (requests.RequestException, ValueError):
+        return []
+    out = []
+    for it in items:
+        title = _clean_search_text(it.get("title"))
+        desc = _clean_search_text(it.get("description"))
+        body = (title + (" — " + desc if desc else "")).strip()
+        if not body:
+            continue
+        pd = it.get("postdate") or ""   # YYYYMMDD
+        visited = f"{pd[:4]}-{pd[4:6]}-{pd[6:8]}" if len(pd) == 8 else None
+        out.append({
+            "rid": None,
+            "source": "blog_search",
+            "body": body,
+            "visited_raw": pd,
+            "visited": visited,
+            "author": it.get("bloggername"),
+            "url": it.get("link"),
+        })
+    return out
+
+
+def _norm_url(u: str) -> str:
+    """블로그 url 정규화 — place 페이지 내장 리뷰(m.blog...)와 검색 API(blog...)가
+    같은 글이면 같은 hash 가 되도록."""
+    u = (u or "").split("://")[-1].rstrip("/")
+    if u.startswith("m."):
+        u = u[2:]
+    return u.lower()
 
 
 def review_hash(shop_id: int, rv: dict) -> str:
-    # 네이버 리뷰 id 가 있으면 그것 기준 (가장 안정적), 없으면 본문+작성자+방문일
-    if rv.get("rid"):
+    # 우선순위: 원문 url (블로그 글 — 내장/검색 양쪽에서 같은 글이면 중복 차단)
+    #         > 네이버 리뷰 id > 본문+작성자+방문일
+    if rv.get("url"):
+        # shop_id 포함 — 같은 글이 두 가게를 다뤄도 가게별로는 각각 1번씩 저장
+        basis = f"{shop_id}|naver|{_norm_url(rv['url'])}"
+    elif rv.get("rid"):
         basis = f"naver|{rv['rid']}"
     else:
         basis = f"{shop_id}|naver|{rv.get('author')}|{rv.get('visited_raw')}|{rv['body']}"
@@ -183,12 +281,12 @@ def collect_all() -> str:
         return "수집 대상 없음 (place_id 등록된 가게 0곳)"
     today_kst = datetime.now(KST).date().isoformat()
     session = requests.Session()
-    done, new_reviews, errors = 0, 0, []
+    done, new_reviews, new_blogs, errors = 0, 0, 0, []
     for i, s in enumerate(shops):
         if i:
             time.sleep(3 + random.uniform(0, 2))   # 가게당 3~5초 — 예의 유지
         try:
-            vt, bt, score, revs, status = fetch_shop(session, s["place_id"])
+            vt, bt, score, keywords, revs, status = fetch_shop(session, s["place_id"])
         except requests.RequestException as e:
             errors.append(f"{s['name']}: {str(e)[:60]}")
             continue
@@ -200,15 +298,25 @@ def collect_all() -> str:
             continue
         if vt is not None or bt is not None:
             db.nearby_record_counts(s["id"], today_kst, vt, bt, score)
-        for rv in revs:
+        if keywords:
+            db.nearby_set_keywords(s["id"], json.dumps(keywords, ensure_ascii=False))
+        # 공식 검색 API — 가게명 언급 최신 블로그 글 (키 없으면 빈 리스트)
+        blog_posts = fetch_blog_posts(session, s["name"])
+        for rv in revs + blog_posts:
             if db.nearby_upsert_review(
                 s["id"], rv["source"], rv["visited"], rv["body"],
-                rv["author"], review_hash(s["id"], rv),
+                rv["author"], review_hash(s["id"], rv), rv.get("url"),
             ):
-                new_reviews += 1
+                if rv["source"] == "blog_search":
+                    new_blogs += 1
+                else:
+                    new_reviews += 1
         done += 1
-        print(f"  {s['name']:<22} 방문자 {vt} (★{score}) · 블로그 {bt} · 표본 {len(revs)}건")
-    msg = f"{len(shops)}곳 중 {done}곳 수집, 신규 표본 리뷰 {new_reviews}건"
+        print(f"  {s['name']:<22} 방문자 {vt} (★{score}) · 블로그 {bt} · "
+              f"표본 {len(revs)}건 · 블로그검색 {len(blog_posts)}건 · 키워드 {len(keywords)}개")
+    msg = f"{len(shops)}곳 중 {done}곳 수집, 신규 표본 {new_reviews}건 · 블로그 글 {new_blogs}건"
+    if not (NAVER_CLIENT_ID and NAVER_CLIENT_SECRET):
+        msg += " (블로그 검색 생략 — NAVER API 키 없음)"
     if errors:
         msg += f" / 오류 {len(errors)}건: " + "; ".join(errors[:5])
     return msg
@@ -230,10 +338,17 @@ def run() -> str:
 def main():
     if len(sys.argv) >= 3 and sys.argv[1] == "--dry":
         pid = sys.argv[2]
-        vt, bt, score, revs, status = fetch_shop(requests.Session(), pid)
+        vt, bt, score, keywords, revs, status = fetch_shop(requests.Session(), pid)
         print(f"HTTP {status} · 방문자 {vt} (★{score}) · 블로그 {bt} · 표본 {len(revs)}건")
+        print(f"키워드: {keywords}")
         for rv in revs[:15]:
             print(f"  [{rv['source']}] [{rv['visited']}] ({rv['author']}) {rv['body'][:70]}")
+        if len(sys.argv) >= 4:   # --dry PID 가게명 → 블로그 검색도 테스트
+            posts = fetch_blog_posts(requests.Session(), sys.argv[3])
+            print(f"블로그 검색 ({sys.argv[3]}): {len(posts)}건")
+            for p in posts:
+                print(f"  [{p['visited']}] ({p['author']}) {p['body'][:70]}")
+                print(f"    {p['url']}")
         return
     db.init_schema()
     print(run())

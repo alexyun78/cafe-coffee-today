@@ -198,6 +198,7 @@ CREATE TABLE IF NOT EXISTS nearby_shops (
     is_anchor    INTEGER NOT NULL DEFAULT 0,   -- 92도씨 본인
     hidden       INTEGER NOT NULL DEFAULT 0,
     notes        TEXT,
+    keywords_json TEXT,             -- 방문자 키워드 통계 [{"k":"커피가 맛있어요","n":231},...]
     created_at   TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now')),
     updated_at   TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now'))
 );
@@ -221,7 +222,8 @@ CREATE TABLE IF NOT EXISTS nearby_reviews (
     visited_date  TEXT,             -- YYYY-MM-DD (파싱 실패 시 NULL)
     body          TEXT,
     author        TEXT,
-    review_hash   TEXT NOT NULL UNIQUE,   -- sha1(shop_id|source|visited|body) — 중복 수집 방지
+    url           TEXT,             -- 블로그 원문 링크 (있을 때만)
+    review_hash   TEXT NOT NULL UNIQUE,   -- 리뷰 id/url 기반 — 중복 수집 방지
     first_seen_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now'))
 );
 CREATE INDEX IF NOT EXISTS idx_nearby_reviews_shop ON nearby_reviews(shop_id, visited_date DESC);
@@ -382,6 +384,62 @@ def init_schema():
             conn.execute(
                 "INSERT INTO migrations (name) VALUES (?)", ("nearby_utf8_fix_v1",)
             )
+        # 주변 가게: place_id 30곳 전체 반영 (around_cafe m.search 탐색 결과, 1회만)
+        # 비어 있는 가게만 채움 — 관리자가 수동 입력한 값은 덮어쓰지 않는다.
+        if not conn.execute(
+            "SELECT 1 FROM migrations WHERE name=?", ("nearby_place_ids_v2",)
+        ).fetchone():
+            for pid, nm in (
+                ("1939889314", "92도씨 로스터리 카페"),
+                ("1912596380", "요거트월드 다산점"),
+                ("1079290498", "메가MGC커피 다산부영점"),
+                ("1259572595", "사계의오후 베이커리카페"),
+                ("1746887613", "우디가"),
+                ("1944493693", "테르타스"),
+                ("2039555768", "후투티"),
+                ("1339670713", "이디야커피 다산부영점"),
+                ("1419816579", "와플대학 다산도농캠퍼스"),
+                ("1994685913", "하이오커피 다산메인타워점"),
+                ("1940273523", "우지커피 다산부영점"),
+                ("1093721028", "크루아"),
+                ("1263648796", "투썸플레이스 다산법원점"),
+                ("1653648391", "뚜레쥬르 다산메인타워점"),
+                ("1061015586", "카페요아정 구리다산점"),
+                ("1748623081", "배스킨라빈스 다산법조타운점"),
+                ("1149003902", "83커피 로스터스 다산점"),
+                ("2035816890", "범표원두 정약용도서관점"),
+                ("1537274993", "스타벅스 도농역점"),
+                ("1350844771", "베이커리씨어터 정약용도서관점"),
+                ("1037684026", "초코라떼 2호 다산점"),
+                ("11690228", "파리바게뜨 남양주부영점"),
+                ("1370897623", "설빙 남양주도농점"),
+                ("1218651867", "카페아잇"),
+                ("2060033329", "공차 남양주2청사점"),
+                ("1649123045", "그란스 다산"),
+                ("1306331610", "컴포즈커피 남양주2청사점"),
+                ("1608507138", "그로브나인 다산"),
+                ("1614899919", "메가MGC커피 남양주2청사점"),
+                ("1259152535", "빽다방 남양주2청사점"),
+            ):
+                conn.execute(
+                    "UPDATE nearby_shops SET place_id=? "
+                    "WHERE name=? AND (place_id IS NULL OR TRIM(place_id)='')",
+                    (pid, nm),
+                )
+            conn.execute(
+                "INSERT INTO migrations (name) VALUES (?)", ("nearby_place_ids_v2",)
+            )
+        # 주변 가게: 키워드 통계/리뷰 원문 링크 컬럼 (기존 서버 DB 마이그레이션용)
+        ns_existing = {
+            r["name"] for r in conn.execute("PRAGMA table_info(nearby_shops)").fetchall()
+        }
+        if "keywords_json" not in ns_existing:
+            conn.execute("ALTER TABLE nearby_shops ADD COLUMN keywords_json TEXT")
+        nr_existing = {
+            r["name"] for r in conn.execute("PRAGMA table_info(nearby_reviews)").fetchall()
+        }
+        if "url" not in nr_existing:
+            conn.execute("ALTER TABLE nearby_reviews ADD COLUMN url TEXT")
         # 컵노트 기준 통일: 연결된 '오늘의 커피'의 컵노트를 생두 마스터로 1회 싱크업
         # (이후로는 오늘의 커피 편집 시 sync_bean_cup_notes_from_coffee 로 실시간 동기화)
         if not conn.execute(
@@ -1903,7 +1961,7 @@ def nearby_overview(include_hidden: bool = False) -> dict:
 def list_nearby_reviews(shop_id: int, limit: int = 50) -> list:
     with connect() as conn:
         rows = conn.execute(
-            "SELECT id, source, visited_date, body, author, first_seen_at "
+            "SELECT id, source, visited_date, body, author, url, first_seen_at "
             "FROM nearby_reviews WHERE shop_id=? "
             "ORDER BY (visited_date IS NULL), visited_date DESC, id DESC LIMIT ?",
             (shop_id, limit),
@@ -1977,16 +2035,26 @@ def nearby_record_counts(shop_id: int, fetched_date: str,
 
 
 def nearby_upsert_review(shop_id: int, source: str, visited_date,
-                         body: str, author, review_hash: str) -> bool:
+                         body: str, author, review_hash: str, url=None) -> bool:
     """표본 리뷰 저장. 이미 본 리뷰(hash 동일)면 False."""
     with connect() as conn:
         cur = conn.execute(
             "INSERT OR IGNORE INTO nearby_reviews "
-            "(shop_id, source, visited_date, body, author, review_hash) "
-            "VALUES (?,?,?,?,?,?)",
-            (shop_id, source, visited_date, body, author, review_hash),
+            "(shop_id, source, visited_date, body, author, url, review_hash) "
+            "VALUES (?,?,?,?,?,?,?)",
+            (shop_id, source, visited_date, body, author, url, review_hash),
         )
         return cur.rowcount > 0
+
+
+def nearby_set_keywords(shop_id: int, keywords_json: str) -> None:
+    """방문자 키워드 통계 최신값 저장 (수집 시마다 갱신)."""
+    with connect() as conn:
+        conn.execute(
+            "UPDATE nearby_shops SET keywords_json=?, "
+            "updated_at=strftime('%Y-%m-%dT%H:%M:%SZ','now') WHERE id=?",
+            (keywords_json, shop_id),
+        )
 
 
 def nearby_run_start() -> int:

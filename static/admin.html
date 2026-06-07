@@ -919,6 +919,16 @@
   .nearby-counts .cnt .delta-up { color: #1e7d46; }
   .nearby-counts .cnt .delta-dn { color: var(--danger, #c0392b); }
   .nearby-counts .cnt.dim { background: #f0f0f0; color: #999; font-weight: 500; }
+  .nearby-kws { display: flex; gap: 5px; flex-wrap: wrap; margin-top: 6px; }
+  .nearby-kws .kw {
+    font-size: 0.72rem; padding: 2px 8px; border-radius: 999px;
+    background: #eef4ee; color: #2f6f4f; border: 1px solid #d8e8d8;
+  }
+  .nearby-kws .kw b { font-weight: 700; }
+  .nearby-review .rv-link {
+    font-size: 0.72rem; margin-left: 6px; color: #4285f4; text-decoration: none;
+    white-space: nowrap;
+  }
   .nearby-actions {
     display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px;
   }
@@ -5715,6 +5725,14 @@ function renderNearby() {
           <span class="nearby-cat">${escapeHtml(_nearbyShortCat(s.category))}</span>
         </div>
         <div class="nearby-counts">${cntHtml}${sample}</div>
+        ${(() => {
+          let kws = [];
+          try { kws = JSON.parse(s.keywords_json || "[]"); } catch (e) {}
+          return kws.length
+            ? `<div class="nearby-kws">${kws.slice(0, 4).map(k =>
+                `<span class="kw">${escapeHtml(k.k)} <b>${k.n}</b></span>`).join("")}</div>`
+            : "";
+        })()}
         <div class="nearby-actions">
           ${s.sample_count ? `<button type="button" class="rv-toggle" data-id="${s.id}">💬 표본 리뷰 ${_nearbyOpenReviews.has(s.id) ? "접기" : "보기"}</button>` : ""}
           <a class="l-naver" href="${naverUrl}" target="_blank" rel="noopener">네이버</a>
@@ -5775,11 +5793,17 @@ async function fillNearbyReviews(shopId) {
     const res = await api("GET", `/api/nearby/shops/${shopId}/reviews`);
     const rvs = res.reviews || [];
     box.innerHTML = rvs.length
-      ? rvs.map(r => `
+      ? rvs.map(r => {
+          const badge = r.source === "blog" ? "📝 블로그 · "
+                      : r.source === "blog_search" ? "🔎 블로그 검색 · " : "";
+          const link = r.url
+            ? ` <a class="rv-link" href="${escapeAttr(r.url)}" target="_blank" rel="noopener">원문 ↗</a>` : "";
+          return `
           <div class="nearby-review">
-            <span class="rv-meta">${r.source === "blog" ? "📝 블로그 · " : ""}${escapeHtml(r.visited_date || "날짜 미상")}${r.author ? " · " + escapeHtml(r.author) : ""}</span>
-            ${escapeHtml(r.body || "")}
-          </div>`).join("")
+            <span class="rv-meta">${badge}${escapeHtml(r.visited_date || "날짜 미상")}${r.author ? " · " + escapeHtml(r.author) : ""}</span>
+            ${escapeHtml(r.body || "")}${link}
+          </div>`;
+        }).join("")
       : '<div class="empty" style="padding:8px;">수집된 표본 리뷰가 없습니다.</div>';
   } catch (err) {
     if (err.message !== "unauthorized")
