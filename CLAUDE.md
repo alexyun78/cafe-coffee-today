@@ -235,7 +235,54 @@ python migrate_notion.py
 
 **약어 사전**은 `glossary` 필드만 채워두면 템플릿이 항상 글 끝에 친근 카드로 자동 렌더링.
 
-### Coffee Insight 자체 생성 파이프라인 — 권장 (2026-06-11 이후, Drive 비의존)
+### Coffee Insight 백로그 릴리스 파이프라인 — **현재 채택 (2026-06-10 이후, 토큰 0)**
+
+> 📌 **이게 현재 1차 발행 경로다.** 아래 "자체 생성(Claude API)" 과 "Drive 폴백" 보다 우선한다.
+> **비용 0** 이 목표라 채택. 글은 Cowork 대화(구독 포함, **API 과금 아님**)에서 미리 써서 큐에 쌓고,
+> 서버는 매일 큐에서 1편을 꺼내 **렌더만**(LLM 호출 0) 한다.
+
+매일 자동 발행 흐름:
+
+1. **사전(아무 때나)** — Cowork 대화에서 친근 사이드카 JSON 을 여러 편 작성해
+   `content/insight_queue/*.json` 에 쌓아둔다. (파일명 `q-NN-<slug>.json`, 정렬 순서 = 발행 순서.)
+   스키마는 자체 생성과 동일(`type`,`topic`,`title_ko`,`one_liner`,`categories_*`,친근 `easy_*`,`glossary`,`data_charts`).
+   `id`/`date`/`hero_image` 는 비워둔다 — 릴리스 시 자동으로 채워진다.
+2. **20:30 KST** — 서버 `cafe-coffee-release.timer` → [scripts/release.sh](scripts/release.sh):
+   - `git fetch/reset --hard origin/main` (락 `cafe-coffee-ops.lock` 공유)
+   - `.venv/bin/python scripts/release_insight.py`:
+     - 오늘(KST) 날짜 결정. **같은 날짜 발행분이 index 에 이미 있으면 생략(멱등)** — 수동 백필/재실행 충돌 방지.
+     - 큐에서 파일명 정렬상 맨 앞 1편 선택 → `normalize`(id=`<date>-<slug>`) → 필수 필드 검증
+       → `ingest_insights.process_one` 으로 렌더(HTML/JSON) + `index.json` 갱신 → **발행한 큐 파일 삭제**
+   - `git add static/insights/ content/insight_queue/` → commit → `git push` (`.env` 의 `INGEST_GITHUB_TOKEN`)
+3. **~20:31 KST** — `cafe-coffee-deploy.timer` 가 push 감지 → reset+restart. 사이트 반영.
+
+- **필요한 .env 키**: `INGEST_GITHUB_TOKEN`(push, 기존 재사용)뿐. **`ANTHROPIC_API_KEY` 불필요**(API 안 부름).
+- **수동/백필**: `.venv/bin/python scripts/release_insight.py [--date YYYY-MM-DD]`. `--list` 큐 보기, `--dry` 렌더만 /tmp 로 테스트.
+- **큐 보충**: 큐가 떨어지면(릴리스 로그에 "큐 잔여 N편 — 곧 보충" 경고) Cowork 대화에서 사이드카를 더 만들어 push.
+  논문(paper)편은 신선도가 떨어지니 큐에는 **상록 trivia 위주**로 채우는 게 안전. (원하면 검증된 실재 논문으로 paper 도 추가 가능.)
+
+**서버 전환 셋업 (1회)** — 유료 generate 경로 → 무료 release 경로:
+```bash
+cd /root/92cafe/cafe-today-coffee
+git pull                                  # release.sh / release_insight.py / systemd 유닛 / 큐 받기
+.venv/bin/pip install jinja2==3.1.4        # (이미 있으면 skip)
+# 유료 자체생성 타이머 끄기 (있으면)
+systemctl disable --now cafe-coffee-generate.timer 2>/dev/null || true
+# 무료 릴리스 타이머 설치·활성
+cp systemd/cafe-coffee-release.service systemd/cafe-coffee-release.timer /etc/systemd/system/
+systemctl daemon-reload
+systemctl enable --now cafe-coffee-release.timer
+systemctl start cafe-coffee-release.service     # 즉시 1편 발행(따라잡기, 멱등)
+journalctl -u cafe-coffee-release.service -n 60 --no-pager
+```
+**검증**: `systemctl list-timers 'cafe-coffee-*'` 에 release 다음 실행(내일 20:30)이 보이고,
+`release_insight.py --list` 에 큐가 남아 있으면 정상. `ANTHROPIC_API_KEY` 는 더 이상 필요 없다(있어도 무해, 안 씀).
+
+> 아래 "자체 생성(Claude API)" 와 "Drive 폴백" 은 **보존용/비상용**. 평소엔 release 만 돌린다.
+> generate.timer 와 release.timer 가 동시에 활성이면 같은 날짜·종류 멱등으로 충돌은 안 나지만
+> 중복 발행 위험이 있으니 **한쪽(release)만 활성** 권장.
+
+### Coffee Insight 자체 생성 파이프라인 — API 유료 (2026-06-11, Drive 비의존, 현재 비활성 권장)
 
 > 📌 **운영 현황 & 다른 PC 인수인계 (2026-06-10 갱신)**
 >
@@ -597,8 +644,11 @@ journalctl -u cafe-coffee-nearby.service -n 50 --no-pager
 | [migrate_notion.py](migrate_notion.py) | Notion → SQLite 일회성 이전 |
 | [index.html](index.html) | 탭 기반 공개 뷰 (오늘의커피 + 누가쏠까?: 손가락 게임, 룰렛) |
 | [static/admin.html](static/admin.html) | 관리 폼 — 4탭 (오늘의커피 / 생두관리 / 재고 / 주변리뷰) |
-| [scripts/generate_insight.py](scripts/generate_insight.py) | 인사이트 자체 생성 (Claude API + web_search, Drive 비의존) |
-| [scripts/ingest_insights.py](scripts/ingest_insights.py) | 인사이트 렌더·인덱스 로직 (Drive ingest + 자체 생성 공용) |
+| [scripts/release_insight.py](scripts/release_insight.py) | **인사이트 백로그 릴리스 (토큰 0, 현재 채택)** — 큐에서 1편 발행 |
+| [scripts/release.sh](scripts/release.sh) | 서버 릴리스 래퍼: git pull → release_insight.py → commit/push |
+| [content/insight_queue/](content/insight_queue/) | 미리 작성한 사이드카 큐 (`q-NN-<slug>.json`, FIFO 발행) |
+| [scripts/generate_insight.py](scripts/generate_insight.py) | 인사이트 자체 생성 (Claude API 유료, Drive 비의존, 현재 비활성 권장) |
+| [scripts/ingest_insights.py](scripts/ingest_insights.py) | 인사이트 렌더·인덱스 로직 (release + 자체생성 + Drive ingest 공용) |
 | [scripts/collect_nearby.py](scripts/collect_nearby.py) | 주변 가게 네이버 리뷰 수집기 (requests-only) |
 | [scripts/seed_nearby_shops.sql](scripts/seed_nearby_shops.sql) | 주변 가게 초기 데이터 (init_schema에서 자동 실행) |
 | [static/roastery.html](static/roastery.html) | 92도씨 로스터리 메인 공개 페이지 |

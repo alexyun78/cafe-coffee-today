@@ -1,0 +1,13 @@
+[Unit]
+Description=Cafe Today Coffee — daily insight backlog release timer (20:30 KST)
+
+[Timer]
+# 매일 저녁 8시 30분 (Asia/Seoul). 21:00 ingest(폴백) 보다 앞서 커밋되어
+# 60초 자동 배포 타이머가 사이트에 반영한다. (구 generate.timer 대체)
+OnCalendar=*-*-* 20:30:00 Asia/Seoul
+Persistent=true
+AccuracySec=30s
+Unit=cafe-coffee-release.service
+
+[Install]
+WantedBy=timers.target
