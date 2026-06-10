@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>하루 1~3잔의 커피와 심장 — 최근 코호트 연구로 본 커피와 심혈관 건강 (논평) — 92°C ROASTERY</title>
+<meta name="description" content="적당한 커피(하루 1~3잔)는 전체·심혈관 사망 위험 감소와 연관 — 단, 관찰연구라 &#39;인과&#39;가 아니라 &#39;연관&#39;이라는 점을 짚는 논평">
+<link rel="icon" type="image/png" href="/static/img/logo-92black.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --canvas: #FFFFFF; --canvas-warm: #FAF7F2; --canvas-stone: #F2ECE3;
+  --ink: #1A1410; --ink-mute: #4A3F36; --ink-soft: #6B5E52;
+  --espresso: #6F4E37; --caramel: #C9986A; --copper: #B5703D;
+  --line: #E8E0D5; --line-soft: #F0E9DD;
+  --font-display: "Cormorant Garamond", "Pretendard", serif;
+  --font-body: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  --r-sm: 6px; --r-md: 12px; --r-pill: 999px;
+}
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color: transparent; }
+html { scroll-behavior: smooth; }
+body { font-family: var(--font-body); color: var(--ink); background: var(--canvas); font-feature-settings: "kern","ss01","lnum"; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+a { color: var(--copper); text-decoration: none; border-bottom: 1px solid transparent; transition: border-color .2s; }
+a:hover { border-bottom-color: var(--copper); }
+img { display: block; max-width: 100%; height: auto; }
+.container { max-width: 860px; margin: 0 auto; padding: 0 32px; }
+@media (max-width: 720px) { .container { padding: 0 20px; } }
+@media (max-width: 480px) { .container { padding: 0 16px; } }
+.site-nav { position: sticky; top: 0; z-index: 50; background: rgba(255,255,255,0.9); backdrop-filter: saturate(140%) blur(14px); -webkit-backdrop-filter: saturate(140%) blur(14px); border-bottom: 1px solid var(--line-soft); }
+.nav-inner { max-width: 1200px; margin: 0 auto; padding: 16px 32px; display: flex; align-items: center; justify-content: space-between; }
+.brand { font-family: var(--font-display); font-size: 1.3rem; font-weight: 700; color: var(--ink); display: inline-flex; align-items: center; gap: 4px; border-bottom: none; }
+.brand:hover { border-bottom: none; }
+.brand-mark { display: inline-flex; align-items: flex-start; font-family: "Pretendard", sans-serif; font-weight: 900; letter-spacing: -0.04em; line-height: 1; color: inherit; }
+.temp-mark { display: flex; flex-direction: column; line-height: .82; margin: 0 .05em 0 .04em; }
+.temp-mark .temp-deg { font-size: .42em; letter-spacing: -.04em; }
+.temp-mark .temp-c { font-size: .58em; letter-spacing: -.05em; margin-top: -.05em; }
+.nav-back { font-family: var(--font-mono); font-size: .75rem; letter-spacing: .18em; color: var(--ink-mute); border-bottom: none; }
+.nav-back:hover { color: var(--copper); border-bottom: none; }
+.article-hero { padding: 56px 0 48px; border-bottom: 1px solid var(--line-soft); }
+.eyebrow { font-family: var(--font-mono); font-size: .72rem; letter-spacing: .28em; color: var(--copper); margin-bottom: 18px; display: flex; align-items: center; gap: 12px; }
+.eyebrow::before { content: ""; display: inline-block; width: 28px; height: 1px; background: var(--copper); }
+.article-title { font-family: var(--font-display); font-weight: 500; font-size: clamp(2rem, 4.5vw, 3.2rem); line-height: 1.15; letter-spacing: -0.02em; color: var(--ink); margin-bottom: 20px; }
+.article-title em { font-style: italic; color: var(--espresso); font-weight: 600; }
+.article-one-liner { font-family: var(--font-display); font-style: italic; font-size: 1.3rem; line-height: 1.5; color: var(--espresso); margin-bottom: 28px; padding-left: 20px; border-left: 3px solid var(--caramel); }
+.article-meta { display: flex; gap: 24px; flex-wrap: wrap; font-family: var(--font-mono); font-size: .75rem; letter-spacing: .12em; color: var(--ink-soft); padding-top: 20px; border-top: 1px solid var(--line-soft); }
+.article-meta span { display: inline-flex; align-items: center; gap: 6px; }
+.article-meta span::before { content: "■"; color: var(--caramel); font-size: .55rem; }
+.hero-image { margin: 32px 0 0; border-radius: var(--r-md); overflow: hidden; border: 1px solid var(--line); }
+.hero-image img { width: 100%; }
+.article-body { padding: 56px 0 80px; }
+.article-footer { padding: 36px 0 56px; border-top: 1px solid var(--line-soft); text-align: center; font-family: var(--font-mono); font-size: .75rem; letter-spacing: .14em; color: var(--ink-soft); }
+.article-footer a { color: var(--ink-mute); border-bottom: 1px solid transparent; }
+.article-footer a:hover { color: var(--copper); border-bottom-color: var(--copper); }
+.source-basis { display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; background: rgba(201,152,106,.18); border: 1px solid rgba(181,112,61,.35); border-radius: var(--r-pill); font-family: var(--font-mono); font-size: .72rem; letter-spacing: .12em; color: var(--espresso); font-weight: 500; }
+.source-basis.abstract { background: rgba(107,94,82,.1); border-color: rgba(107,94,82,.3); color: var(--ink-soft); }
+.links-row { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 18px; }
+.link-pill { display: inline-flex; align-items: center; gap: 8px; padding: 9px 16px; background: var(--canvas-warm); border: 1px solid var(--line); border-radius: var(--r-pill); font-family: var(--font-mono); font-size: .78rem; letter-spacing: .08em; color: var(--ink-mute); border-bottom: 1px solid var(--line); transition: border-color .2s, color .2s; }
+.link-pill:hover { color: var(--copper); border-color: var(--copper); }
+
+/* ===== EZ: 쉬운 설명 스타일 ===== */
+.ez-hero { text-align: center; padding: 8px 0 32px; }
+.ez-hero-emoji { font-size: 3.4rem; line-height: 1; }
+.ez-hero-title { font-family: var(--font-display); font-size: clamp(1.6rem, 3.5vw, 2.2rem); font-weight: 600; color: var(--ink); margin-top: 14px; line-height: 1.3; }
+.ez-section { margin-bottom: 52px; }
+.ez-section h2 { font-family: var(--font-body); font-size: 1.5rem; font-weight: 700; color: var(--ink); margin-bottom: 18px; letter-spacing: -0.01em; }
+.ez-section h3 { font-size: 1.08rem; font-weight: 600; color: var(--espresso); margin: 22px 0 10px; }
+.ez-section p { font-size: 1.04rem; line-height: 1.85; color: var(--ink-mute); margin-bottom: 14px; }
+.ez-section p:last-child { margin-bottom: 0; }
+.ez-section ul { padding-left: 22px; margin-bottom: 14px; }
+.ez-section li { font-size: 1.02rem; line-height: 1.8; color: var(--ink-mute); margin-bottom: 8px; }
+.ez-callout { margin: 14px 0; padding: 14px 18px; background: var(--canvas-warm); border-left: 3px solid var(--caramel); border-radius: 4px; font-size: 0.98rem; color: var(--espresso); line-height: 1.75; }
+.ez-callout strong { color: var(--copper); }
+.ez-findings { list-style: none; padding: 0; }
+.ez-findings > li { padding: 18px 22px; margin-bottom: 14px; background: var(--canvas-warm); border: 1px solid var(--line); border-radius: 10px; font-size: 1.02rem; line-height: 1.7; color: var(--ink-mute); }
+.ez-findings > li strong { color: var(--ink); display: block; margin-bottom: 4px; font-size: 1.06rem; }
+.ez-findings > li.gold { background: linear-gradient(135deg, #FFF8E7, #FFEFCD); border-color: #F0D67A; }
+.ez-findings > li.silver { background: linear-gradient(135deg, #F6F6F6, #ECECEC); border-color: #C7C7C7; }
+.ez-findings > li.bronze { background: linear-gradient(135deg, #FFEEDD, #FFDCC0); border-color: #E4B07F; }
+.ez-findings > li.medal { background: linear-gradient(135deg, #F0E6FF, #E1D2FF); border-color: #BDA8E5; }
+.ez-table { width: 100%; border-collapse: collapse; margin: 16px 0 8px; font-size: 0.96rem; }
+.ez-table th, .ez-table td { padding: 11px 14px; border: 1px solid var(--line); text-align: left; vertical-align: top; }
+.ez-table thead th { background: var(--ink); color: #fff; font-weight: 600; letter-spacing: .02em; }
+.ez-table tbody th { background: var(--canvas-warm); color: var(--ink); font-weight: 600; }
+.ez-table tbody tr:nth-child(even) td { background: rgba(250, 247, 242, .55); }
+.ez-summary { padding: 26px 30px; background: linear-gradient(135deg, #FAF0E0, #F3E1C5); border-radius: 14px; font-size: 1.13rem; line-height: 1.75; font-weight: 500; color: var(--ink); border: 1px solid #E5C99B; }
+.ez-summary strong { color: var(--espresso); }
+.ez-citation { margin-top: 24px; padding: 18px 22px; background: var(--canvas-warm); border-radius: 8px; font-family: var(--font-mono); font-size: 0.82rem; color: var(--ink-soft); line-height: 1.7; }
+.ez-citation p { margin: 4px 0; }
+.ez-chart-card { padding: 22px 24px 18px; background: var(--canvas); border: 1px solid var(--line); border-radius: 12px; margin: 16px 0; }
+.ez-chart-card .ez-chart-title { font-size: 1rem; font-weight: 600; color: var(--ink); margin-bottom: 14px; }
+.ez-bar-row { display: flex; align-items: center; margin: 10px 0; font-size: 0.95rem; gap: 14px; }
+.ez-bar-label { width: 180px; flex-shrink: 0; color: var(--ink-mute); font-weight: 500; }
+.ez-bar-track { flex: 1; height: 32px; background: var(--canvas-warm); border-radius: 6px; overflow: hidden; position: relative; border: 1px solid var(--line); }
+.ez-bar-fill { height: 100%; background: linear-gradient(90deg, var(--caramel), var(--copper)); display: flex; align-items: center; justify-content: flex-end; padding: 0 12px; color: white; font-weight: 700; font-size: 0.92rem; min-width: 56px; }
+.ez-bar-fill.alt { background: linear-gradient(90deg, #6F4E37, #4A3F36); }
+.ez-glossary { display: grid; gap: 12px; }
+.ez-glossary-item { padding: 16px 20px; background: var(--canvas-warm); border: 1px solid var(--line); border-radius: 10px; border-left: 3px solid var(--caramel); }
+.ez-glossary-term { font-family: var(--font-display); font-style: italic; font-size: 1.1rem; font-weight: 600; color: var(--espresso); margin-bottom: 6px; }
+.ez-glossary-def { font-size: 0.98rem; color: var(--ink-mute); line-height: 1.7; }
+@media (max-width: 720px) {
+  .article-hero { padding: 36px 0 32px; }
+  .article-body { padding: 36px 0 56px; }
+  .ez-section { margin-bottom: 40px; }
+  .ez-section h2 { font-size: 1.3rem; }
+  .ez-bar-label { width: 100%; margin-bottom: 4px; }
+  .ez-bar-row { flex-direction: column; align-items: stretch; }
+  .article-meta { gap: 12px 18px; font-size: .68rem; }
+}
+</style>
+</head>
+<body>
+
+<header class="site-nav">
+  <div class="nav-inner">
+    <a class="brand" href="/">
+      <span class="brand-mark">92<span class="temp-mark"><span class="temp-deg">°</span><span class="temp-c">C</span></span></span>ROASTERY
+    </a>
+    <a class="nav-back" href="/insight">← INSIGHTS</a>
+  </div>
+</header>
+
+<article>
+  <section class="article-hero">
+    <div class="container">
+      <div class="eyebrow">— COFFEE INSIGHT · 2026.06.09</div>
+      <h1 class="article-title">하루 1~3잔의 커피와 심장 — 최근 코호트 연구로 본 커피와 심혈관 건강 (논평)</h1>
+      <p class="article-one-liner">적당한 커피(하루 1~3잔)는 전체·심혈관 사망 위험 감소와 연관 — 단, 관찰연구라 &#39;인과&#39;가 아니라 &#39;연관&#39;이라는 점을 짚는 논평</p>
+      <div class="article-meta">
+        <span>NUTRITION, METABOLISM AND CARDIOVASCULAR DISEASES (ELSEVIER)</span>
+        <span>2025-10</span>
+        <span>DOI 10.1016/J.NUMECD.2025.104115</span>
+        <span>건강/영양 · 소비자</span>
+      </div>
+      
+      <div class="hero-image">
+        <img src="/static/img/insights/hero/health.svg" alt="하루 1~3잔의 커피와 심장 — 최근 코호트 연구로 본 커피와 심혈관 건강 (논평)">
+      </div>
+      
+    </div>
+  </section>
+
+  <section class="article-body">
+    <div class="container">
+
+      
+      <div class="ez-hero">
+        <div class="ez-hero-emoji">❤️</div>
+        <div class="ez-hero-title">커피, 심장에 좋을까 나쁠까?</div>
+      </div>
+
+      
+      <div class="ez-section">
+        <h2>🤔 무슨 연구야?</h2>
+        
+          <p>&#39;커피 마시면 심장 두근거리는데 괜찮나?&#39; 한 번쯤 걱정해봤지? 그런데 최근 여러 대규모 연구를 보면, 적당히 마시는 커피는 오히려 심장 건강과 좋은 쪽으로 연관돼 있다고 해.</p><p>이 글은 새 실험을 한 게 아니라, 최근 나온 큰 추적 연구(코호트)를 전문가가 정리·해석한 &#39;논평&#39;이야. 핵심 메시지는 &#39;적당한 커피는 대체로 괜찮고, 사망 위험 감소와도 연관된다. 하지만 너무 과신하진 말자&#39;는 거지.</p><p>여기서 제일 중요한 단어가 &#39;연관&#39;이야. &#39;커피가 심장을 지켜준다(원인)&#39;가 아니라 &#39;커피를 마시는 사람들이 통계적으로 더 건강하더라(연관)&#39;는 거거든. 이 차이를 꼭 기억해줘.</p>
+        
+      </div>
+
+      
+      
+      <div class="ez-section">
+        <h2>🧪 핵심 개념 쉽게 풀어보면</h2>
+        
+          <h3>1️⃣ 코호트 연구가 뭐야?</h3>
+          <p>수많은 사람을 몇 년~몇십 년 따라다니면서 &#39;커피를 얼마나 마시나&#39;와 &#39;나중에 어떤 병에 걸리나&#39;를 비교하는 관찰 연구야. 사람한테 일부러 커피를 강제로 먹이는 실험이 아니야.</p>
+          <div class="ez-callout">💡 비유: 반 친구들을 오래 지켜보며 &#39;아침 먹는 애가 성적이 어떤가&#39;를 관찰하는 거랑 비슷해. 관찰일 뿐 강제 실험은 아니지.</div>
+        
+          <h3>2️⃣ &#39;연관&#39;과 &#39;인과&#39;는 다르다</h3>
+          <p>둘이 같이 나타난다고 해서 하나가 다른 하나의 &#39;원인&#39;인 건 아니야. 관찰 연구는 보통 &#39;연관&#39;까지만 말할 수 있어. 진짜 원인인지는 더 엄밀한 실험이 필요해.</p>
+          <div class="ez-callout">💡 비유: 아이스크림 판매와 물놀이 사고가 같이 늘지만, 아이스크림이 사고를 일으킨 건 아니잖아? 둘 다 &#39;여름&#39; 때문이지.</div>
+        
+          <h3>3️⃣ 숨은 변수 &#39;교란 요인&#39;</h3>
+          <p>커피를 많이 마시는 사람이 운동도 더 하거나 덜 피우거나 할 수 있어. 그런 숨은 차이(교란 요인)가 결과를 헷갈리게 만들 수 있어서, 연구자들은 이걸 보정하려고 애써.</p>
+          <div class="ez-callout">💡 비유: 키 큰 사람이 농구를 잘하는 게 &#39;신발&#39; 덕분이라고 착각하면 안 되는 거랑 같아. 진짜 이유(키)는 따로 있지.</div>
+        
+      </div>
+      
+
+      
+      
+      <div class="ez-section">
+        <h2>🎯 핵심 발견</h2>
+        <ul class="ez-findings">
+          
+          
+            
+              <li class="gold">
+                <strong>🥇 하루 1~3잔은 사망 위험 감소와 연관</strong>적당한 양의 커피를 마시는 사람들은 전체 사망·심혈관 사망 위험이 더 낮은 쪽으로 연관됐어. &#39;적당히&#39;가 핵심 단어야.
+              </li>
+            
+              <li class="silver">
+                <strong>🥈 심장병 있는 사람한테도 부정적이지 않았다</strong>이미 심혈관·뇌혈관 질환이 있는 사람에서도 보호적 연관이 보였어. 병력이 있다고 무조건 끊을 근거는 약하다는 거지.
+              </li>
+            
+              <li class="bronze">
+                <strong>🥉 고혈압·심부전·부정맥과도 좋은 연관</strong>규칙적인 커피 섭취가 고혈압·심부전·심방세동 위험 감소와 연관된다는 누적 근거도 함께 소개됐어.
+              </li>
+            
+              <li class="medal">
+                <strong>🏅 그래도 &#39;연관&#39;이지 &#39;인과&#39;는 아냐</strong>이 모든 게 관찰 연구의 연관이야. 설탕 듬뿍 단 커피, 잠 못 자게 하는 과음은 또 다른 문제니까 &#39;무첨가·적당량&#39;이 정답이야.
+              </li>
+            
+          
+        </ul>
+      </div>
+      
+
+      
+      
+
+      
+      
+      
+      <div class="ez-section">
+        <h2>🆚 흔한 오해 vs 연구가 말하는 것</h2>
+        <table class="ez-table">
+          <thead><tr><th>오해</th><th>연구가 말하는 것</th></tr></thead>
+          <tbody>
+            <tr>
+              <th>커피는 심장에 나쁘다</th><td>적당량은 오히려 사망 위험 감소와 연관</td>
+            </tr><tr>
+              <th>심장병 있으면 무조건 끊어야</th><td>병력 있어도 보호적 연관 — 개별화 필요</td>
+            </tr><tr>
+              <th>많이 마실수록 좋다</th><td>&#39;적당히(1~3잔)&#39;가 핵심, 과음은 별개</td>
+            </tr><tr>
+              <th>커피가 심장을 지켜준다(원인)</th><td>관찰상 &#39;연관&#39;일 뿐 인과는 미증명</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      
+      
+
+      
+      
+      <div class="ez-section">
+        <h2>💼 누구한테 의미가 있을까?</h2>
+        <table class="ez-table">
+          <thead><tr><th>대상</th><th>의미</th></tr></thead>
+          <tbody>
+            
+              <tr><th>소비자</th><td>지나치지 않은 커피(하루 1~3잔)는 대체로 심혈관에 해롭지 않고 오히려 사망 위험 감소와 연관. 단 설탕·시럽 과다, 수면 방해는 별개 문제이므로 &#39;무첨가·적당량&#39;이 핵심.</td></tr>
+            
+              <tr><th>보건/임상</th><td>심혈관 질환 병력이 있다고 무조건 커피를 끊을 근거는 약함 — 개인의 카페인 민감도·부정맥·수면을 보며 개별화. 환자 상담 시 &#39;관찰 근거&#39;임을 함께 설명.</td></tr>
+            
+              <tr><th>연구</th><td>카페인·디카페인·커피 종류를 구분한 설계, 무작위 대조시험(RCT)·멘델리안 무작위화로 인과성 검증이 후속 과제.</td></tr>
+            
+          </tbody>
+        </table>
+      </div>
+      
+
+      
+      
+      <div class="ez-section">
+        <h2>⚠️ 한계도 있어</h2>
+        <p>원저 실험이 아닌 논평이며, 근거의 핵심이 관찰형 코호트라 인과를 증명하지 않음; 커피 섭취량·종류 자가보고의 부정확성, 건강한 사람이 커피를 더 마시는 역인과 가능성, 설탕·흡연·식습관 등 교란 요인이 남는다.</p>
+      </div>
+      
+
+      
+      
+      <div class="ez-section">
+        <div class="ez-summary">💡 <strong>한 줄 요약</strong> — 적당한 커피(하루 1~3잔)는 전체·심혈관 사망 위험 감소와 연관되고, 심장병 병력이 있어도 부정적이지 않았다는 코호트 근거를 정리한 논평이야. 단 이건 &#39;연관&#39;이지 &#39;인과&#39;가 아니고, 설탕 범벅·과음은 별개 문제. 결론은 &#39;무첨가로 적당히&#39;!</div>
+      </div>
+      
+
+      
+      
+      <div class="ez-section">
+        <h2>📚 원문 정보</h2>
+        <div class="ez-citation">
+          <p><strong>📄 논문</strong> — Cardiovascular health and coffee: Insights from a recent cohort study</p>
+          <p><strong>📰 저널</strong> — Nutrition, Metabolism and Cardiovascular Diseases (Elsevier) (2025-10)</p>
+          <p><strong>👥 저자</strong> — Mattioli</p>
+          <p><strong>🔗 DOI</strong> — <a href="https://doi.org/10.1016/j.numecd.2025.104115" target="_blank" rel="noopener noreferrer" style="color: var(--copper);">10.1016/j.numecd.2025.104115</a></p>
+        </div>
+        <div class="links-row">
+          <a class="link-pill" href="https://doi.org/10.1016/j.numecd.2025.104115" target="_blank" rel="noopener noreferrer">DOI →</a>
+          
+          <a class="link-pill" href="https://www.sciencedirect.com/journal/nutrition-metabolism-and-cardiovascular-diseases" target="_blank" rel="noopener noreferrer">JOURNAL HOMEPAGE →</a>
+        </div>
+        <div style="margin-top: 18px;">
+          
+          <span class="source-basis abstract">ABSTRACT BASIS</span>
+          
+        </div>
+      </div>
+      
+
+      
+      
+      <div class="ez-section">
+        <h2>📖 어려운 말 풀이 사전</h2>
+        <p>이 글에 나온 어려운 약어와 용어를 한 번에 정리했어. 의미만 알면 본문이 훨씬 쉬워져!</p>
+        <div class="ez-glossary">
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">코호트 연구</div>
+            <div class="ez-glossary-def">많은 사람을 오랫동안 추적하며 습관(커피)과 결과(질병·사망)의 관계를 보는 관찰 연구. 인과가 아니라 &#39;연관&#39;을 본다</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">논평 (Commentary)</div>
+            <div class="ez-glossary-def">새 실험이 아니라, 최근 연구를 전문가가 비평적으로 해석·정리한 글</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">연관 vs 인과</div>
+            <div class="ez-glossary-def">&#39;같이 나타난다(연관)&#39;와 &#39;그것이 원인이다(인과)&#39;는 다르다. 관찰연구는 보통 연관까지만 말할 수 있다</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">교란 요인 (Confounder)</div>
+            <div class="ez-glossary-def">커피와 건강 둘 다에 영향을 주는 숨은 요인(예: 흡연·운동). 결과를 왜곡할 수 있다</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">역인과 (Reverse causation)</div>
+            <div class="ez-glossary-def">원래 건강한 사람이 커피를 더 마시는 것일 수도 있다는 것 — 원인과 결과가 뒤바뀐 해석 위험</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">심방세동</div>
+            <div class="ez-glossary-def">심장이 불규칙하게 빨리 뛰는 부정맥. 커피·카페인과의 관계가 자주 논의되는 주제</div>
+          </div>
+          
+        </div>
+      </div>
+      
+
+    </div>
+  </section>
+
+  <footer class="article-footer">
+    <div class="container">
+      <a href="/insight">← BACK TO INSIGHTS</a>
+      <span style="margin: 0 16px;">·</span>
+      <a href="/">HOME</a>
+    </div>
+  </footer>
+</article>
+
+</body>
+</html>

@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-06-10T02:37:01Z",
+  "updated_at": "2026-06-10T05:33:32Z",
   "items": [
     {
       "id": "2026-06-10-is-decaf-really-caffeine-free",
@@ -18,6 +18,111 @@
       "journal": null,
       "pub_date": null,
       "source_basis": null
+    },
+    {
+      "id": "2026-06-09-coffee-cardiovascular-cohort-commentary",
+      "type": "paper",
+      "date": "2026-06-09",
+      "title_ko": "하루 1~3잔의 커피와 심장 — 최근 코호트 연구로 본 커피와 심혈관 건강 (논평)",
+      "one_liner": "적당한 커피(하루 1~3잔)는 전체·심혈관 사망 위험 감소와 연관 — 단, 관찰연구라 '인과'가 아니라 '연관'이라는 점을 짚는 논평",
+      "categories_primary": [
+        "건강/영양"
+      ],
+      "categories_secondary": [
+        "소비자"
+      ],
+      "hero_image": "/static/img/insights/hero/health.svg",
+      "journal": "Nutrition, Metabolism and Cardiovascular Diseases (Elsevier)",
+      "pub_date": "2025-10",
+      "source_basis": "abstract_only"
+    },
+    {
+      "id": "2026-06-08-coffee-flavor-by-origin-country",
+      "type": "trivia",
+      "date": "2026-06-08",
+      "title_ko": "에티오피아는 꽃향, 브라질은 고소함 — 나라마다 커피 맛이 다른 이유",
+      "one_liner": "땅·높이·기후가 다르면 커피 맛도 달라져 — 산지가 곧 커피의 '고향 맛'이야!",
+      "categories_primary": [
+        "커피 상식"
+      ],
+      "categories_secondary": [
+        "산지"
+      ],
+      "hero_image": "/static/img/insights/trivia/origin.svg",
+      "journal": null,
+      "pub_date": null,
+      "source_basis": null
+    },
+    {
+      "id": "2026-06-07-arabica-rootstock-robusta-drought",
+      "type": "paper",
+      "date": "2026-06-07",
+      "title_ko": "뿌리를 바꿔 가뭄을 버틴다 — 아라비카 대목에 접붙인 로부스타의 물 부족 생리 성능",
+      "one_liner": "로부스타를 아라비카 뿌리(대목)에 접붙이니 가뭄 스트레스에서 광합성 감소 −7.7%에 그쳐 — 3년 묘목 시험으로 본 기후 적응 전략",
+      "categories_primary": [
+        "지속가능성/경제"
+      ],
+      "categories_secondary": [
+        "생두",
+        "공학"
+      ],
+      "hero_image": "/static/img/insights/hero/sustainability.svg",
+      "journal": "Frontiers in Climate",
+      "pub_date": "2026-01-23",
+      "source_basis": "abstract_only"
+    },
+    {
+      "id": "2026-06-06-green-coffee-flavor-potential-visnir-hsi",
+      "type": "paper",
+      "date": "2026-06-06",
+      "title_ko": "볶기 전에 맛을 예측한다 — 가시·근적외 초분광 영상(Vis-NIR HSI)과 머신러닝으로 생두 향미 잠재력 맞히기",
+      "one_liner": "생두에 빛을 쏘아 얻은 초분광 데이터로 로스팅 전 향미 잠재력 예측 — 배치 효과 제거 + 퓨샷 러닝으로 적은 표본에서도 일반화",
+      "categories_primary": [
+        "장비/공학"
+      ],
+      "categories_secondary": [
+        "생두",
+        "향미/관능"
+      ],
+      "hero_image": "/static/img/insights/hero/equipment.svg",
+      "journal": "Food Control (Elsevier)",
+      "pub_date": "2025-09",
+      "source_basis": "abstract_only"
+    },
+    {
+      "id": "2026-06-05-coffee-processing-washed-natural-honey",
+      "type": "trivia",
+      "date": "2026-06-05",
+      "title_ko": "워시드·내추럴·허니 — 같은 생두인데 왜 맛이 다를까?",
+      "one_liner": "커피 열매에서 씨앗을 꺼내는 '가공 방식'만 바꿔도 맛이 확 달라져!",
+      "categories_primary": [
+        "커피 상식"
+      ],
+      "categories_secondary": [
+        "가공방식"
+      ],
+      "hero_image": "/static/img/insights/trivia/processing.svg",
+      "journal": null,
+      "pub_date": null,
+      "source_basis": null
+    },
+    {
+      "id": "2026-06-04-talaromyces-fermentation-arabica-flavor",
+      "type": "paper",
+      "date": "2026-06-04",
+      "title_ko": "곰팡이 발효가 아라비카에 바닐라·계피 향을? — Talaromyces funiculosus 발효의 휘발성·비휘발성 프로파일 종합 분석",
+      "one_liner": "내생곰팡이 T. funiculosus KQ2로 발효하니 1,3-디메톡시벤젠이 쌓여 바닐라·계피 향 — 균주 특이 대사 마커 40종(VIP>1, 수용성 8 + 휘발성 32) 동정",
+      "categories_primary": [
+        "향미/관능"
+      ],
+      "categories_secondary": [
+        "미생물",
+        "화학/분석화학"
+      ],
+      "hero_image": "/static/img/insights/hero/flavor.svg",
+      "journal": "Food Chemistry (Elsevier)",
+      "pub_date": "2026-02",
+      "source_basis": "abstract_only"
     },
     {
       "id": "2026-06-03-monosaccharide-pretreatment-coffee-volatile-aroma",
