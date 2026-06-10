@@ -1,7 +1,24 @@
 {
   "version": 1,
-  "updated_at": "2026-06-03T12:00:32Z",
+  "updated_at": "2026-06-10T02:37:01Z",
   "items": [
+    {
+      "id": "2026-06-10-is-decaf-really-caffeine-free",
+      "type": "trivia",
+      "date": "2026-06-10",
+      "title_ko": "디카페인 커피, 정말 카페인이 0%일까?",
+      "one_liner": "디카페인=무카페인? 사실은 살짝 남아 있어!",
+      "categories_primary": [
+        "커피 상식"
+      ],
+      "categories_secondary": [
+        "디카페인"
+      ],
+      "hero_image": "/static/img/insights/trivia/decaf.svg",
+      "journal": null,
+      "pub_date": null,
+      "source_basis": null
+    },
     {
       "id": "2026-06-03-monosaccharide-pretreatment-coffee-volatile-aroma",
       "date": "2026-06-03",

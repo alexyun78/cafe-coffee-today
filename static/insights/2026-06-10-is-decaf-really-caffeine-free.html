@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>디카페인 커피, 정말 카페인이 0%일까? — 92°C ROASTERY</title>
+<meta name="description" content="디카페인=무카페인? 사실은 살짝 남아 있어!">
+<link rel="icon" type="image/png" href="/static/img/logo-92black.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --canvas: #FFFFFF; --canvas-warm: #FAF7F2; --canvas-stone: #F2ECE3;
+  --ink: #1A1410; --ink-mute: #4A3F36; --ink-soft: #6B5E52;
+  --espresso: #6F4E37; --caramel: #C9986A; --copper: #B5703D;
+  --line: #E8E0D5; --line-soft: #F0E9DD;
+  --font-display: "Cormorant Garamond", "Pretendard", serif;
+  --font-body: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  --r-sm: 6px; --r-md: 12px; --r-pill: 999px;
+}
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color: transparent; }
+html { scroll-behavior: smooth; }
+body { font-family: var(--font-body); color: var(--ink); background: var(--canvas); font-feature-settings: "kern","ss01","lnum"; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+a { color: var(--copper); text-decoration: none; border-bottom: 1px solid transparent; transition: border-color .2s; }
+a:hover { border-bottom-color: var(--copper); }
+img { display: block; max-width: 100%; height: auto; }
+.container { max-width: 860px; margin: 0 auto; padding: 0 32px; }
+@media (max-width: 720px) { .container { padding: 0 20px; } }
+@media (max-width: 480px) { .container { padding: 0 16px; } }
+.site-nav { position: sticky; top: 0; z-index: 50; background: rgba(255,255,255,0.9); backdrop-filter: saturate(140%) blur(14px); -webkit-backdrop-filter: saturate(140%) blur(14px); border-bottom: 1px solid var(--line-soft); }
+.nav-inner { max-width: 1200px; margin: 0 auto; padding: 16px 32px; display: flex; align-items: center; justify-content: space-between; }
+.brand { font-family: var(--font-display); font-size: 1.3rem; font-weight: 700; color: var(--ink); display: inline-flex; align-items: center; gap: 4px; border-bottom: none; }
+.brand:hover { border-bottom: none; }
+.brand-mark { display: inline-flex; align-items: flex-start; font-family: "Pretendard", sans-serif; font-weight: 900; letter-spacing: -0.04em; line-height: 1; color: inherit; }
+.temp-mark { display: flex; flex-direction: column; line-height: .82; margin: 0 .05em 0 .04em; }
+.temp-mark .temp-deg { font-size: .42em; letter-spacing: -.04em; }
+.temp-mark .temp-c { font-size: .58em; letter-spacing: -.05em; margin-top: -.05em; }
+.nav-back { font-family: var(--font-mono); font-size: .75rem; letter-spacing: .18em; color: var(--ink-mute); border-bottom: none; }
+.nav-back:hover { color: var(--copper); border-bottom: none; }
+.article-hero { padding: 56px 0 48px; border-bottom: 1px solid var(--line-soft); }
+.eyebrow { font-family: var(--font-mono); font-size: .72rem; letter-spacing: .28em; color: var(--copper); margin-bottom: 18px; display: flex; align-items: center; gap: 12px; }
+.eyebrow::before { content: ""; display: inline-block; width: 28px; height: 1px; background: var(--copper); }
+.article-title { font-family: var(--font-display); font-weight: 500; font-size: clamp(2rem, 4.5vw, 3.2rem); line-height: 1.15; letter-spacing: -0.02em; color: var(--ink); margin-bottom: 20px; }
+.article-title em { font-style: italic; color: var(--espresso); font-weight: 600; }
+.article-one-liner { font-family: var(--font-display); font-style: italic; font-size: 1.3rem; line-height: 1.5; color: var(--espresso); margin-bottom: 28px; padding-left: 20px; border-left: 3px solid var(--caramel); }
+.article-meta { display: flex; gap: 24px; flex-wrap: wrap; font-family: var(--font-mono); font-size: .75rem; letter-spacing: .12em; color: var(--ink-soft); padding-top: 20px; border-top: 1px solid var(--line-soft); }
+.article-meta span { display: inline-flex; align-items: center; gap: 6px; }
+.article-meta span::before { content: "■"; color: var(--caramel); font-size: .55rem; }
+.hero-image { margin: 32px 0 0; border-radius: var(--r-md); overflow: hidden; border: 1px solid var(--line); }
+.hero-image img { width: 100%; }
+.article-body { padding: 56px 0 80px; }
+.article-footer { padding: 36px 0 56px; border-top: 1px solid var(--line-soft); text-align: center; font-family: var(--font-mono); font-size: .75rem; letter-spacing: .14em; color: var(--ink-soft); }
+.article-footer a { color: var(--ink-mute); border-bottom: 1px solid transparent; }
+.article-footer a:hover { color: var(--copper); border-bottom-color: var(--copper); }
+.source-basis { display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; background: rgba(201,152,106,.18); border: 1px solid rgba(181,112,61,.35); border-radius: var(--r-pill); font-family: var(--font-mono); font-size: .72rem; letter-spacing: .12em; color: var(--espresso); font-weight: 500; }
+.source-basis.abstract { background: rgba(107,94,82,.1); border-color: rgba(107,94,82,.3); color: var(--ink-soft); }
+.links-row { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 18px; }
+.link-pill { display: inline-flex; align-items: center; gap: 8px; padding: 9px 16px; background: var(--canvas-warm); border: 1px solid var(--line); border-radius: var(--r-pill); font-family: var(--font-mono); font-size: .78rem; letter-spacing: .08em; color: var(--ink-mute); border-bottom: 1px solid var(--line); transition: border-color .2s, color .2s; }
+.link-pill:hover { color: var(--copper); border-color: var(--copper); }
+
+/* ===== EZ: 쉬운 설명 스타일 ===== */
+.ez-hero { text-align: center; padding: 8px 0 32px; }
+.ez-hero-emoji { font-size: 3.4rem; line-height: 1; }
+.ez-hero-title { font-family: var(--font-display); font-size: clamp(1.6rem, 3.5vw, 2.2rem); font-weight: 600; color: var(--ink); margin-top: 14px; line-height: 1.3; }
+.ez-section { margin-bottom: 52px; }
+.ez-section h2 { font-family: var(--font-body); font-size: 1.5rem; font-weight: 700; color: var(--ink); margin-bottom: 18px; letter-spacing: -0.01em; }
+.ez-section h3 { font-size: 1.08rem; font-weight: 600; color: var(--espresso); margin: 22px 0 10px; }
+.ez-section p { font-size: 1.04rem; line-height: 1.85; color: var(--ink-mute); margin-bottom: 14px; }
+.ez-section p:last-child { margin-bottom: 0; }
+.ez-section ul { padding-left: 22px; margin-bottom: 14px; }
+.ez-section li { font-size: 1.02rem; line-height: 1.8; color: var(--ink-mute); margin-bottom: 8px; }
+.ez-callout { margin: 14px 0; padding: 14px 18px; background: var(--canvas-warm); border-left: 3px solid var(--caramel); border-radius: 4px; font-size: 0.98rem; color: var(--espresso); line-height: 1.75; }
+.ez-callout strong { color: var(--copper); }
+.ez-findings { list-style: none; padding: 0; }
+.ez-findings > li { padding: 18px 22px; margin-bottom: 14px; background: var(--canvas-warm); border: 1px solid var(--line); border-radius: 10px; font-size: 1.02rem; line-height: 1.7; color: var(--ink-mute); }
+.ez-findings > li strong { color: var(--ink); display: block; margin-bottom: 4px; font-size: 1.06rem; }
+.ez-findings > li.gold { background: linear-gradient(135deg, #FFF8E7, #FFEFCD); border-color: #F0D67A; }
+.ez-findings > li.silver { background: linear-gradient(135deg, #F6F6F6, #ECECEC); border-color: #C7C7C7; }
+.ez-findings > li.bronze { background: linear-gradient(135deg, #FFEEDD, #FFDCC0); border-color: #E4B07F; }
+.ez-findings > li.medal { background: linear-gradient(135deg, #F0E6FF, #E1D2FF); border-color: #BDA8E5; }
+.ez-table { width: 100%; border-collapse: collapse; margin: 16px 0 8px; font-size: 0.96rem; }
+.ez-table th, .ez-table td { padding: 11px 14px; border: 1px solid var(--line); text-align: left; vertical-align: top; }
+.ez-table thead th { background: var(--ink); color: #fff; font-weight: 600; letter-spacing: .02em; }
+.ez-table tbody th { background: var(--canvas-warm); color: var(--ink); font-weight: 600; }
+.ez-table tbody tr:nth-child(even) td { background: rgba(250, 247, 242, .55); }
+.ez-summary { padding: 26px 30px; background: linear-gradient(135deg, #FAF0E0, #F3E1C5); border-radius: 14px; font-size: 1.13rem; line-height: 1.75; font-weight: 500; color: var(--ink); border: 1px solid #E5C99B; }
+.ez-summary strong { color: var(--espresso); }
+.ez-citation { margin-top: 24px; padding: 18px 22px; background: var(--canvas-warm); border-radius: 8px; font-family: var(--font-mono); font-size: 0.82rem; color: var(--ink-soft); line-height: 1.7; }
+.ez-citation p { margin: 4px 0; }
+.ez-chart-card { padding: 22px 24px 18px; background: var(--canvas); border: 1px solid var(--line); border-radius: 12px; margin: 16px 0; }
+.ez-chart-card .ez-chart-title { font-size: 1rem; font-weight: 600; color: var(--ink); margin-bottom: 14px; }
+.ez-bar-row { display: flex; align-items: center; margin: 10px 0; font-size: 0.95rem; gap: 14px; }
+.ez-bar-label { width: 180px; flex-shrink: 0; color: var(--ink-mute); font-weight: 500; }
+.ez-bar-track { flex: 1; height: 32px; background: var(--canvas-warm); border-radius: 6px; overflow: hidden; position: relative; border: 1px solid var(--line); }
+.ez-bar-fill { height: 100%; background: linear-gradient(90deg, var(--caramel), var(--copper)); display: flex; align-items: center; justify-content: flex-end; padding: 0 12px; color: white; font-weight: 700; font-size: 0.92rem; min-width: 56px; }
+.ez-bar-fill.alt { background: linear-gradient(90deg, #6F4E37, #4A3F36); }
+.ez-glossary { display: grid; gap: 12px; }
+.ez-glossary-item { padding: 16px 20px; background: var(--canvas-warm); border: 1px solid var(--line); border-radius: 10px; border-left: 3px solid var(--caramel); }
+.ez-glossary-term { font-family: var(--font-display); font-style: italic; font-size: 1.1rem; font-weight: 600; color: var(--espresso); margin-bottom: 6px; }
+.ez-glossary-def { font-size: 0.98rem; color: var(--ink-mute); line-height: 1.7; }
+@media (max-width: 720px) {
+  .article-hero { padding: 36px 0 32px; }
+  .article-body { padding: 36px 0 56px; }
+  .ez-section { margin-bottom: 40px; }
+  .ez-section h2 { font-size: 1.3rem; }
+  .ez-bar-label { width: 100%; margin-bottom: 4px; }
+  .ez-bar-row { flex-direction: column; align-items: stretch; }
+  .article-meta { gap: 12px 18px; font-size: .68rem; }
+}
+</style>
+</head>
+<body>
+
+<header class="site-nav">
+  <div class="nav-inner">
+    <a class="brand" href="/">
+      <span class="brand-mark">92<span class="temp-mark"><span class="temp-deg">°</span><span class="temp-c">C</span></span></span>ROASTERY
+    </a>
+    <a class="nav-back" href="/insight">← INSIGHTS</a>
+  </div>
+</header>
+
+<article>
+  <section class="article-hero">
+    <div class="container">
+      <div class="eyebrow">— 오늘의 커피 상식 · 2026.06.10</div>
+      <h1 class="article-title">디카페인 커피, 정말 카페인이 0%일까?</h1>
+      <p class="article-one-liner">디카페인=무카페인? 사실은 살짝 남아 있어!</p>
+      <div class="article-meta">
+        
+        
+        
+        <span>커피 상식 · 디카페인</span>
+      </div>
+      
+      <div class="hero-image">
+        <img src="/static/img/insights/trivia/decaf.svg" alt="디카페인 커피, 정말 카페인이 0%일까?">
+      </div>
+      
+    </div>
+  </section>
+
+  <section class="article-body">
+    <div class="container">
+
+      
+      <div class="ez-hero">
+        <div class="ez-hero-emoji">💤</div>
+        <div class="ez-hero-title">디카페인 커피, 정말 카페인이 0%일까?</div>
+      </div>
+
+      
+      <div class="ez-section">
+        <h2>🤔 무슨 연구야?</h2>
+        
+          <p>친구가 &#34;나 디카페인 마셔서 밤에도 잠 잘 와&#34; 하는 거 들어봤지? 그런데 사실 디카페인에도 카페인이 &#34;완전히 0&#34;은 아니야. 아주 조금 남아 있어.</p><p>디카페인은 &#39;카페인 없는 커피&#39;가 아니라 &#39;카페인을 거의 다 빼낸 커피&#39;야. 국제 기준으로 원두 카페인의 약 97% 이상을 제거해야 디카페인이라고 부를 수 있어. 그래서 한 잔에 보통 2~5mg 정도 남아. 일반 커피 한 잔이 95mg쯤 되니까 진짜 쥐꼬리만큼이지!</p><p>그럼 이 카페인을 어떻게 빼낼까? 커피 향은 안 날아가게 하면서 카페인만 쏙 빼는 게 핵심이야. 방법이 크게 세 가지 있어.</p>
+        
+      </div>
+
+      
+      
+      <div class="ez-section">
+        <h2>🧪 핵심 개념 쉽게 풀어보면</h2>
+        
+          <h3>1️⃣ &#39;디카페인&#39;의 진짜 뜻</h3>
+          <p>디카페인(Decaf)은 &#39;카페인을 제거(de-)했다&#39;는 뜻이야. 0이 아니라 &#39;거의 다 뺐다&#39;는 거지. 그리고 카페인 제거는 항상 볶기 전 &#39;생두&#39; 상태에서 해. 볶은 뒤엔 향이 너무 잘 날아가거든.</p>
+          <div class="ez-callout">💡 비유: 빨래에서 얼룩만 쏙 빼는 느낌이야. 옷(=향)은 그대로 두고 얼룩(=카페인)만 골라 빼는 거지.</div>
+        
+          <h3>2️⃣ 카페인은 물에 잘 녹아</h3>
+          <p>카페인은 물에 잘 녹는 성질이 있어. 그래서 대부분의 디카페인 방식은 &#39;생두를 물에 불려 카페인을 녹여낸 뒤, 향 성분은 최대한 다시 돌려준다&#39;는 원리로 움직여.</p>
+          <div class="ez-callout">💡 비유: 티백을 물에 담그면 색과 맛이 우러나오지? 카페인도 그렇게 물로 우려내는 거야.</div>
+        
+      </div>
+      
+
+      
+      
+      <div class="ez-section">
+        <h2>🎯 핵심 발견</h2>
+        <ul class="ez-findings">
+          
+          
+            
+              <li class="gold">
+                <strong>🥇 스위스 워터 프로세스 (물)</strong>화학 약품 없이 물 + 활성탄 필터만으로 카페인을 걸러내는 방식이야. 생두를 물에 담가 카페인과 향을 한꺼번에 우려낸 다음, 활성탄으로 카페인만 쏙 걸러내. &#39;케미컬 프리&#39;라서 인기가 많아. (멕시코의 마운틴 워터 방식도 사촌 격이야.)
+              </li>
+            
+              <li class="silver">
+                <strong>🥈 이산화탄소(CO₂) 방식</strong>높은 압력으로 CO₂를 &#39;액체도 기체도 아닌&#39; 초임계 상태로 만들면 카페인만 쏙 달라붙어. 향은 잘 지키면서 대량으로 처리할 수 있어서 큰 회사들이 많이 써.
+              </li>
+            
+              <li class="bronze">
+                <strong>🥉 용매 방식 (E.A. · 슈가케인)</strong>에틸아세테이트(EA)라는 용매로 카페인을 녹여내는 방식이야. 이 EA를 사탕수수에서 뽑으면 &#39;슈가케인 디카페인&#39;이라고 불러서 자연 친화 이미지로 요즘 인기가 많아.
+              </li>
+            
+              <li class="medal">
+                <strong>🏅 그래도 0%는 아니야</strong>어떤 방식을 써도 카페인을 100% 없애진 못해. 보통 한 잔에 2~5mg은 남아. 카페인에 아주 민감한 사람이라면 이 점은 기억해 두자!
+              </li>
+            
+          
+        </ul>
+      </div>
+      
+
+      
+      
+
+      
+      
+      
+      <div class="ez-section">
+        <h2>🆚 디카페인 3대 방식 한눈 비교</h2>
+        <table class="ez-table">
+          <thead><tr><th>방식</th><th>약품 사용</th><th>느낌</th></tr></thead>
+          <tbody>
+            <tr>
+              <th>스위스 워터</th><td>안 씀 (물+활성탄)</td><td>깔끔·케미컬프리</td>
+            </tr><tr>
+              <th>CO₂ (초임계)</th><td>CO₂ (천연)</td><td>향 보존·대량 처리</td>
+            </tr><tr>
+              <th>EA·슈가케인</th><td>에틸아세테이트</td><td>과일·사탕수수 유래</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      
+      
+
+      
+      
+
+      
+      
+
+      
+      
+      <div class="ez-section">
+        <div class="ez-summary">💡 <strong>한 줄 요약</strong> — 디카페인은 &#39;카페인 0&#39;이 아니라 볶기 전 생두에서 카페인을 97% 넘게 빼낸 커피야. 물(스위스워터)·CO₂·용매(EA) 세 방식이 대표적이고, 그래도 한 잔에 2~5mg은 남아 있어.</div>
+      </div>
+      
+
+      
+      
+      
+      
+
+      
+      
+      <div class="ez-section">
+        <h2>📖 어려운 말 풀이 사전</h2>
+        <p>이 글에 나온 어려운 약어와 용어를 한 번에 정리했어. 의미만 알면 본문이 훨씬 쉬워져!</p>
+        <div class="ez-glossary">
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">디카페인 (Decaf)</div>
+            <div class="ez-glossary-def">카페인을 약 97% 이상 제거한 커피. 완전한 0%는 아니다.</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">스위스 워터 프로세스</div>
+            <div class="ez-glossary-def">물과 활성탄만으로 카페인을 걸러내는, 화학약품을 쓰지 않는 디카페인 방식.</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">초임계 CO₂</div>
+            <div class="ez-glossary-def">높은 압력에서 액체와 기체의 중간 성질을 갖는 이산화탄소. 카페인만 선택적으로 녹여낸다.</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">에틸아세테이트 (EA)</div>
+            <div class="ez-glossary-def">카페인을 녹이는 용매. 사탕수수·과일에서 얻으면 &#39;슈가케인 디카페인&#39;이라 부른다.</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">활성탄</div>
+            <div class="ez-glossary-def">미세한 구멍이 아주 많아 특정 분자(여기선 카페인)를 흡착해 걸러내는 숯.</div>
+          </div>
+          
+        </div>
+      </div>
+      
+
+    </div>
+  </section>
+
+  <footer class="article-footer">
+    <div class="container">
+      <a href="/insight">← BACK TO INSIGHTS</a>
+      <span style="margin: 0 16px;">·</span>
+      <a href="/">HOME</a>
+    </div>
+  </footer>
+</article>
+
+</body>
+</html>
