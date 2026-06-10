@@ -1,0 +1,14 @@
+[Unit]
+Description=Cafe Today Coffee — daily insight self-generation timer (20:30 KST)
+
+[Timer]
+# 매일 저녁 8시 30분 (Asia/Seoul). 21:00 ingest 보다 앞서 커밋되어
+# 60초 자동 배포 타이머가 사이트에 반영한다.
+OnCalendar=*-*-* 20:30:00 Asia/Seoul
+# 서버가 꺼져 있다가 켜졌을 때 놓친 시각이 있으면 즉시 한 번 실행
+Persistent=true
+AccuracySec=30s
+Unit=cafe-coffee-generate.service
+
+[Install]
+WantedBy=timers.target

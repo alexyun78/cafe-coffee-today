@@ -43,6 +43,8 @@
 | `ADMIN_PIN` | 관리 폼 접근 PIN | `.env` |
 | `FLASK_SECRET` | 세션 쿠키 서명 키 | `.env` |
 | `NAVER_CLIENT_ID` / `NAVER_CLIENT_SECRET` | 네이버 검색 API (주변 가게 블로그 후기 수집) | `.env` (로컬+서버) |
+| `ANTHROPIC_API_KEY` | 인사이트 자체 생성(`generate_insight.py`, Claude API) | `.env` (서버) |
+| `INSIGHT_MODEL` | 자체 생성 모델 ID (선택, 기본 `claude-opus-4-8`) | `.env` (서버, 선택) |
 | `HOST` | 배포 서버 IP | `.env` |
 | `ID` | 배포 서버 SSH 사용자 | `.env` |
 | `PASSWORD` | 배포 서버 SSH 비밀번호 | `.env` |
@@ -159,9 +161,12 @@ python migrate_notion.py
 - [systemd/cafe-coffee.service](systemd/cafe-coffee.service) — gunicorn 앱 구동 (127.0.0.1:3002)
 - [systemd/cafe-coffee-deploy.service](systemd/cafe-coffee-deploy.service) — `deploy.sh` 1회 실행
 - [systemd/cafe-coffee-deploy.timer](systemd/cafe-coffee-deploy.timer) — 60초 주기 트리거
-- [systemd/cafe-coffee-ingest.service](systemd/cafe-coffee-ingest.service) — `scripts/ingest.sh` 1회 실행
-- [systemd/cafe-coffee-ingest.timer](systemd/cafe-coffee-ingest.timer) — **매일 21:00 KST** 인사이트 인제스트
-- [deploy.sh](deploy.sh) (루트 레벨) — 서버에서 실행되는 배포 스크립트: `git fetch/reset → pip install(조건부) → systemctl restart`. `flock` 으로 ingest 와 충돌 방지.
+- [systemd/cafe-coffee-generate.service](systemd/cafe-coffee-generate.service) — `scripts/generate.sh` 1회 실행 (자체 생성, 권장)
+- [systemd/cafe-coffee-generate.timer](systemd/cafe-coffee-generate.timer) — **매일 20:30 KST** 인사이트 자체 생성 (Claude API)
+- [systemd/cafe-coffee-ingest.service](systemd/cafe-coffee-ingest.service) — `scripts/ingest.sh` 1회 실행 (구: Drive 경유, 폴백)
+- [systemd/cafe-coffee-ingest.timer](systemd/cafe-coffee-ingest.timer) — **매일 21:00 KST** 인사이트 인제스트 (폴백)
+- [deploy.sh](deploy.sh) (루트 레벨) — 서버에서 실행되는 배포 스크립트: `git fetch/reset → pip install(조건부) → systemctl restart`. `flock` 으로 ingest/generate 와 충돌 방지.
+- [scripts/generate.sh](scripts/generate.sh) — 서버 자체 생성 래퍼: `git pull → generate_insight.py → git commit/push`. 같은 락 공유.
 - [scripts/ingest.sh](scripts/ingest.sh) — 서버 인제스트 래퍼: `git pull → ingest_insights.py → git commit/push`. deploy.sh 와 같은 락 공유.
 
 ### Coffee Insight — 친근 설명 스타일 (2026-05-20 이후 표준)
@@ -230,7 +235,49 @@ python migrate_notion.py
 
 **약어 사전**은 `glossary` 필드만 채워두면 템플릿이 항상 글 끝에 친근 카드로 자동 렌더링.
 
-### Coffee Insight 발행 파이프라인
+### Coffee Insight 자체 생성 파이프라인 — 권장 (2026-06-11 이후, Drive 비의존)
+
+claude.ai Google Drive 커넥터 토큰이 조용히 만료되면 글이 멈추는 문제(아래 ⚠️ 장애 패턴)를 없애기 위해, **서버가 직접 Claude API 로 글을 생성**하는 경로로 이전. claude.ai 루틴·Google Drive 를 둘 다 거치지 않는다.
+
+매일 자동 발행 흐름:
+
+1. **20:30 KST** — 서버 `cafe-coffee-generate.timer` 가 `scripts/generate.sh` 실행:
+   - `git fetch/reset --hard origin/main` (락 `cafe-coffee-ops.lock` 공유)
+   - `.venv/bin/python scripts/generate_insight.py`:
+     - 오늘 날짜(KST)+요일로 종류 결정 (화목토일=`paper`, 월수금=`trivia`)
+     - `index.json` 최근 제목·토픽·DOI 로 중복 회피 컨텍스트 구성
+     - **Claude API(`claude-opus-4-8`) + 서버 `web_search` 툴** 호출:
+       - paper: 실제 최근 커피 논문을 웹검색으로 찾아 **실재 DOI 확인** 후 abstract 기반 사이드카 JSON 생성 (가짜 DOI 금지)
+       - trivia: 상록 토픽 친근 에세이. 신선도 필요 토픽은 검색 확인, 불확실하면 상록 대체
+     - 최종 JSON 추출 → 필수 필드 검증(없으면 1회 재시도) → `ingest_insights.process_one` 으로 렌더 + `index.json` 갱신 (Drive ingest 와 동일 템플릿·스키마 재사용)
+   - `git add static/insights/` → commit → `git push` (`.env` 의 `INGEST_GITHUB_TOKEN`)
+2. **~20:31 KST** — `cafe-coffee-deploy.timer` 가 push 감지 → `git reset --hard` → `systemctl restart`. 사이트 반영.
+
+- **필요한 .env 키**: `ANTHROPIC_API_KEY`(필수), `INGEST_GITHUB_TOKEN`(push, 기존 재사용), `INSIGHT_MODEL`(선택, 기본 `claude-opus-4-8`).
+- **종류/요일·톤·스키마는 기존과 동일** — 친근 필드(`easy_*`)·`glossary`·`data_charts`·trivia `topic` 키 모두 위 스키마 그대로.
+- **수동 1회 실행/백필**: `.venv/bin/python scripts/generate_insight.py [--date YYYY-MM-DD] [--type paper|trivia]`. 같은 날짜·종류가 index 에 있으면 자동 생략(멱등).
+
+**서버 최초 1회 셋업**:
+```bash
+cd /root/92cafe/cafe-today-coffee
+# 1) .env 에 ANTHROPIC_API_KEY 추가
+echo 'ANTHROPIC_API_KEY=sk-ant-...' >> .env && chmod 600 .env
+# 2) 의존성 (generate.sh 가 자동 설치하지만 수동도 가능)
+.venv/bin/pip install jinja2==3.1.4 anthropic
+# 3) systemd 유닛 설치 + 활성화
+cp systemd/cafe-coffee-generate.service systemd/cafe-coffee-generate.timer /etc/systemd/system/
+systemctl daemon-reload
+systemctl enable --now cafe-coffee-generate.timer
+# 4) 즉시 1회 테스트
+systemctl start cafe-coffee-generate.service
+journalctl -u cafe-coffee-generate.service -n 80 --no-pager
+```
+
+> 자체 생성 경로가 정상 동작을 확인하면, 아래 claude.ai 루틴(coffee-daily·coffee-trivia) 2개는 비활성/삭제해도 된다(같은 날짜·종류는 index 멱등으로 충돌은 안 나지만, Drive 재인증 시 양쪽이 모두 발행해 중복될 수 있으므로 한쪽만 운영 권장). 21:00 ingest 타이머는 Drive 가 비어 있으면 아무것도 안 하므로 폴백으로 남겨둬도 무해.
+
+---
+
+### Coffee Insight 발행 파이프라인 (구: Drive 경유, 폴백)
 
 매일 자동 발행 흐름 (2026-05-12 이후):
 
@@ -517,6 +564,8 @@ journalctl -u cafe-coffee-nearby.service -n 50 --no-pager
 | [migrate_notion.py](migrate_notion.py) | Notion → SQLite 일회성 이전 |
 | [index.html](index.html) | 탭 기반 공개 뷰 (오늘의커피 + 누가쏠까?: 손가락 게임, 룰렛) |
 | [static/admin.html](static/admin.html) | 관리 폼 — 4탭 (오늘의커피 / 생두관리 / 재고 / 주변리뷰) |
+| [scripts/generate_insight.py](scripts/generate_insight.py) | 인사이트 자체 생성 (Claude API + web_search, Drive 비의존) |
+| [scripts/ingest_insights.py](scripts/ingest_insights.py) | 인사이트 렌더·인덱스 로직 (Drive ingest + 자체 생성 공용) |
 | [scripts/collect_nearby.py](scripts/collect_nearby.py) | 주변 가게 네이버 리뷰 수집기 (requests-only) |
 | [scripts/seed_nearby_shops.sql](scripts/seed_nearby_shops.sql) | 주변 가게 초기 데이터 (init_schema에서 자동 실행) |
 | [static/roastery.html](static/roastery.html) | 92도씨 로스터리 메인 공개 페이지 |
