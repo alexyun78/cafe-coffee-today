@@ -126,7 +126,7 @@ img { display: block; max-width: 100%; height: auto; }
 <article>
   <section class="article-hero">
     <div class="container">
-      <div class="eyebrow">— COFFEE INSIGHT · {{ date_display }}</div>
+      <div class="eyebrow">— {% if type == 'trivia' %}오늘의 커피 상식{% else %}COFFEE INSIGHT{% endif %}{% if date_display %} · {{ date_display }}{% endif %}</div>
       <h1 class="article-title">{{ title_ko|e }}</h1>
       {% if one_liner %}<p class="article-one-liner">{{ one_liner|e }}</p>{% endif %}
       <div class="article-meta">
@@ -263,7 +263,20 @@ img { display: block; max-width: 100%; height: auto; }
       </div>
       {% endif %}
 
-      {# 📚 원문 정보 #}
+      {% if type == 'trivia' %}
+      {# 📚 더 알아보기 — 커피 상식: 출처/참고 링크가 있을 때만 #}
+      {% if links and (links.values()|select|list) %}
+      <div class="ez-section">
+        <h2>📚 더 알아보기</h2>
+        <div class="links-row">
+          {% for label, url in links.items() if url %}
+          <a class="link-pill" href="{{ url }}" target="_blank" rel="noopener noreferrer">{{ label|upper|e }} →</a>
+          {% endfor %}
+        </div>
+      </div>
+      {% endif %}
+      {% else %}
+      {# 📚 원문 정보 — 논문 인사이트 #}
       <div class="ez-section">
         <h2>📚 원문 정보</h2>
         <div class="ez-citation">
@@ -285,6 +298,7 @@ img { display: block; max-width: 100%; height: auto; }
           {% endif %}
         </div>
       </div>
+      {% endif %}
 
       {# 📖 어려운 말 풀이 사전 — 항상 마지막에 #}
       {% if glossary %}

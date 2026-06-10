@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400" role="img" aria-label="커피 대회">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#FAF7F2"/><stop offset="100%" stop-color="#F2ECE3"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#F0D67A"/><stop offset="100%" stop-color="#C9986A"/>
+    </linearGradient>
+  </defs>
+  <rect width="600" height="400" fill="url(#bg)"/>
+  <g transform="translate(300 195)">
+    <!-- trophy cup -->
+    <path d="M-58 -80 L 58 -80 L 52 -20 Q 44 30, 0 34 Q -44 30, -52 -20 Z" fill="url(#gold)" stroke="#6F4E37" stroke-width="3" stroke-linejoin="round"/>
+    <!-- handles -->
+    <path d="M-58 -72 Q -96 -68, -88 -28 Q -84 -8, -56 -16" fill="none" stroke="#6F4E37" stroke-width="3"/>
+    <path d="M58 -72 Q 96 -68, 88 -28 Q 84 -8, 56 -16" fill="none" stroke="#6F4E37" stroke-width="3"/>
+    <!-- coffee bean on cup -->
+    <ellipse cx="0" cy="-26" rx="18" ry="24" fill="#6F4E37"/>
+    <path d="M0 -48 C -8 -36, -8 -16, 0 -4" stroke="#3C2C1F" stroke-width="2.5" fill="none"/>
+    <!-- stem + base -->
+    <rect x="-10" y="34" width="20" height="34" fill="#C9986A" stroke="#6F4E37" stroke-width="3"/>
+    <path d="M-44 84 L 44 84 L 34 68 L -34 68 Z" fill="url(#gold)" stroke="#6F4E37" stroke-width="3" stroke-linejoin="round"/>
+    <rect x="-58" y="84" width="116" height="14" rx="6" fill="#C9986A" stroke="#6F4E37" stroke-width="3"/>
+  </g>
+  <!-- sparkles -->
+  <g fill="#E8B85C"><path d="M150 110 l 6 16 16 6 -16 6 -6 16 -6 -16 -16 -6 16 -6 z"/>
+  <path d="M440 130 l 5 13 13 5 -13 5 -5 13 -5 -13 -13 -5 13 -5 z"/></g>
+  <text x="40" y="370" font-family="ui-monospace, 'JetBrains Mono', monospace" font-size="14" letter-spacing="6" fill="#6B5E52">— COMPETITION</text>
+  <text x="560" y="50" text-anchor="end" font-family="'Cormorant Garamond', serif" font-style="italic" font-size="22" fill="#6F4E37">대회 소식</text>
+</svg>

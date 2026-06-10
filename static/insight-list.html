@@ -168,9 +168,19 @@ img { display: block; max-width: 100%; height: auto; }
 .insight-card-hero {
   aspect-ratio: 3 / 2; background: var(--canvas-warm);
   border-bottom: 1px solid var(--line);
-  overflow: hidden;
+  overflow: hidden; position: relative;
 }
 .insight-card-hero img { width: 100%; height: 100%; object-fit: cover; }
+.card-badge {
+  position: absolute; top: 12px; left: 12px; z-index: 2;
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 5px 11px; border-radius: var(--r-pill);
+  font-family: var(--font-mono); font-size: .66rem; font-weight: 600;
+  letter-spacing: .06em; line-height: 1;
+  background: rgba(181,112,61,.95); color: #fff;
+  box-shadow: 0 2px 8px rgba(111,78,55,.25);
+}
+.card-badge.trivia { background: rgba(181,112,61,.95); }
 .insight-card-body {
   padding: 22px 22px 24px;
   display: flex; flex-direction: column; gap: 12px;
@@ -251,7 +261,7 @@ img { display: block; max-width: 100%; height: auto; }
   <div class="container">
     <div class="eyebrow">— COFFEE INSIGHT</div>
     <h1 class="list-title">매일 한 편의 <em>커피 인사이트</em></h1>
-    <p class="list-sub">전 세계에서 발표되는 커피 학술 논문을 매일 한 편씩 골라 한국어로 정리합니다. 생두부터 추출, 향미 화학, 건강까지 — 한 잔 뒤에 숨어 있는 과학을 짧고 깊게 읽어 보세요.</p>
+    <p class="list-sub">매일 한 편씩 — 화·목·토·일엔 전 세계 커피 학술 <em>논문</em>을, 월·수·금엔 친근하게 풀어 쓴 <em>오늘의 커피 상식</em>을 올립니다. 생두부터 추출, 가공, 산지, 대회 소식까지, 한 잔 뒤에 숨은 이야기를 짧고 깊게 읽어 보세요.</p>
   </div>
 </section>
 
@@ -327,9 +337,10 @@ img { display: block; max-width: 100%; height: auto; }
     var cats = [primary, second].filter(Boolean).join(' / ');
     // 고유 날짜이면 /insight/YYYY-MM-DD 단축 URL 사용, 같은 날짜에 여러 글 있으면 풀 슬러그.
     var hrefId = (dateCounts[item.date] === 1 && item.date) ? item.date : item.id;
+    var badge = (item.type === 'trivia') ? '<span class="card-badge trivia">📖 커피 상식</span>' : '';
     return ''
       + '<a class="insight-card" href="/insight/' + encodeURIComponent(hrefId) + '">'
-      + '  <div class="insight-card-hero"><img src="' + hero + '" alt="' + escapeHtml(item.title_ko || '') + '" loading="lazy"></div>'
+      + '  <div class="insight-card-hero">' + badge + '<img src="' + hero + '" alt="' + escapeHtml(item.title_ko || '') + '" loading="lazy"></div>'
       + '  <div class="insight-card-body">'
       + '    <div class="insight-card-meta">'
       + '      <span class="insight-card-date">' + escapeHtml(fmtDate(item.date)) + '</span>'

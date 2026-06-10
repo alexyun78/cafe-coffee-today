@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400" role="img" aria-label="요즘 뜨는">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#FAF7F2"/><stop offset="100%" stop-color="#F2ECE3"/>
+    </linearGradient>
+    <linearGradient id="flask" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#E8B85C"/><stop offset="100%" stop-color="#B5703D"/>
+    </linearGradient>
+  </defs>
+  <rect width="600" height="400" fill="url(#bg)"/>
+  <!-- erlenmeyer flask, fermentation bubbles -->
+  <g transform="translate(270 210)">
+    <path d="M-22 -90 L 22 -90 L 22 -40 L 58 60 Q 64 90, 32 90 L -32 90 Q -64 90, -58 60 L -22 -40 Z" fill="#FAF7F2" stroke="#6F4E37" stroke-width="3" stroke-linejoin="round"/>
+    <path d="M-40 20 L 50 20 L 32 60 Q 32 70, 22 70 L -22 70 Q -32 70, -38 50 Z" fill="url(#flask)"/>
+    <line x1="-28" y1="-90" x2="28" y2="-90" stroke="#6F4E37" stroke-width="5" stroke-linecap="round"/>
+    <g fill="#FAF7F2" opacity="0.9">
+      <circle cx="-8" cy="40" r="6"/><circle cx="14" cy="30" r="8"/><circle cx="2" cy="14" r="5"/><circle cx="22" cy="52" r="4"/>
+    </g>
+  </g>
+  <!-- sparkles / trending -->
+  <g fill="#E8B85C" stroke="#B5703D" stroke-width="2">
+    <path d="M430 110 l 9 24 24 9 -24 9 -9 24 -9 -24 -24 -9 24 -9 z"/>
+  </g>
+  <g fill="#C9986A">
+    <path d="M460 200 l 5 13 13 5 -13 5 -5 13 -5 -13 -13 -5 13 -5 z"/>
+    <path d="M400 60 l 4 10 10 4 -10 4 -4 10 -4 -10 -10 -4 10 -4 z"/>
+  </g>
+  <!-- upward arrow -->
+  <g transform="translate(150 150)" stroke="#5A8A3C" stroke-width="6" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M0 90 L 40 40 L 70 70 L 120 10"/>
+    <path d="M95 10 L 120 10 L 120 35"/>
+  </g>
+  <text x="40" y="370" font-family="ui-monospace, 'JetBrains Mono', monospace" font-size="14" letter-spacing="6" fill="#6B5E52">— TRENDING</text>
+  <text x="560" y="50" text-anchor="end" font-family="'Cormorant Garamond', serif" font-style="italic" font-size="22" fill="#6F4E37">요즘 뜨는</text>
+</svg>

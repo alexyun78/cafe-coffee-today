@@ -269,6 +269,26 @@ systemctl start cafe-coffee-ingest.service
 journalctl -u cafe-coffee-ingest.service -n 100 --no-pager
 ```
 
+### 오늘의 커피 상식 (Trivia) — 월·수·금 (2026-06-10 추가)
+
+인사이트 피드에 **두 종류**의 글이 흐른다. 같은 `static/insights/` + `index.json` + `/insight` 목록을 공유하되 `type` 으로 구분:
+
+| 요일 | type | 생성 루틴 | 성격 |
+|---|---|---|---|
+| 화·목·토·일 | `paper` (기본) | `coffee-daily` (`trig_01541UWrc8MzYgdaNPw86sFE`, cron `47 10 * * 0,2,4,6`) | 학술 논문 분석 |
+| **월·수·금** | `trivia` | `coffee-trivia` (`trig_01DbFdJC3SWsjUDxPxZqgQYs`, cron `47 10 * * 1,3,5`) | 친근한 커피 상식 에세이 |
+
+두 루틴 모두 19:47 KST 발화 → Drive sidecar 업로드 → 21:00 KST 서버 ingest 가 동일하게 수집. **같은 Google Drive 커넥터(`d0e97970-…`)를 공유** 하므로 커넥터 재인증 한 번이면 둘 다 복구된다.
+
+- **sidecar 파일명**: `cafe-trivia YYYY-MM-DD — <slug>` (논문은 `cafe-insight …`). `scripts/ingest_insights.py` 의 `INSIGHT_FILE_PREFIXES` 가 둘 다 수집.
+- **sidecar 필수 필드**: `type:"trivia"`, `topic:<키>`, `title_ko`, `one_liner`, `categories_primary:["커피 상식"]`, `categories_secondary:[한글 라벨]`, 그리고 친근 필드(`easy_*`)·`glossary`. 첫 글자는 반드시 `{`.
+- **일러스트**: 텍스트만 생성하는 크론 환경이라 AI 이미지 대신 **토픽별 큐레이션 SVG 세트**(`static/img/insights/trivia/`)를 `topic` 키로 매핑(`ingest_insights.py`의 `TRIVIA_HERO`). 키: `origin·processing·trend·terms·decaf·bestcup·competition·trade`(+`default`).
+- **주제 풀**: 나라별·산지별 재배, 프로세싱, 요즘 뜨는 프로세싱, 용어 풀이, 디카페인 가공, 올해의 커피, 국내/세계 대회 소식, 무역·시장 소식. 신선도가 필요한 주제(대회/무역/올해의커피)는 루틴이 WebFetch 로 확인하고, 불확실하면 상록 주제로 대체(추측 금지).
+- **렌더**: `paper`/`trivia` 모두 `scripts/insight_template.html.j2` 한 템플릿. trivia 는 eyebrow="오늘의 커피 상식", "📚 원문 정보"(DOI/저널) 대신 "📚 더 알아보기"(출처 링크, 있을 때만). 목록 카드엔 `📖 커피 상식` 배지.
+- **루틴 관리 UI**: 상식 https://claude.ai/code/routines/trig_01DbFdJC3SWsjUDxPxZqgQYs · 논문 https://claude.ai/code/routines/trig_01541UWrc8MzYgdaNPw86sFE
+
+> ⚠️ **장애 패턴(2026-06)**: 루틴은 매일 발화해도 **claude.ai Google Drive 커넥터 토큰이 만료되면 Drive 업로드만 조용히 실패** → 사이트가 멈춘다(2026-06-03 이후 6일 공백 발생). "왜 인사이트 안 떴어"류 질문 시: ① `static/insights/` 에 오늘 날짜 파일 확인 → ② 없으면 Drive 에 `cafe-insight`/`cafe-trivia` 오늘자 sidecar 가 올라왔는지 확인 → ③ sidecar 도 없으면 **루틴 재실행해도 안 생김 = 커넥터 재인증 필요**(claude.ai 루틴 UI 에서). 서버 ingest(GOOGLE_REFRESH_TOKEN, 읽기 전용)는 별개로 정상.
+
 ---
 
 ## APK ([cafe-coffee-apk/](cafe-coffee-apk/))

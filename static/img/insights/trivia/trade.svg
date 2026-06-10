@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400" role="img" aria-label="커피 무역">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#FAF7F2"/><stop offset="100%" stop-color="#F2ECE3"/>
+    </linearGradient>
+  </defs>
+  <rect width="600" height="400" fill="url(#bg)"/>
+  <!-- sea -->
+  <path d="M0 290 Q 60 275, 120 290 T 240 290 T 360 290 T 480 290 T 600 290 L 600 400 L 0 400 Z" fill="#E7D6BC" opacity="0.7"/>
+  <path d="M0 290 Q 60 275, 120 290 T 240 290 T 360 290 T 480 290 T 600 290" fill="none" stroke="#C9986A" stroke-width="2.5"/>
+  <!-- cargo ship -->
+  <g transform="translate(300 235)">
+    <path d="M-150 20 L 150 20 L 120 70 L -120 70 Z" fill="#6F4E37" stroke="#3C2C1F" stroke-width="3" stroke-linejoin="round"/>
+    <!-- containers (coffee sacks colors) -->
+    <g stroke="#3C2C1F" stroke-width="2">
+      <rect x="-120" y="-30" width="50" height="50" fill="#B5703D"/>
+      <rect x="-66" y="-30" width="50" height="50" fill="#C9986A"/>
+      <rect x="-12" y="-30" width="50" height="50" fill="#A0845C"/>
+      <rect x="42" y="-30" width="50" height="50" fill="#B5703D"/>
+      <rect x="-93" y="-78" width="50" height="48" fill="#C9986A"/>
+      <rect x="-39" y="-78" width="50" height="48" fill="#A0845C"/>
+      <rect x="15" y="-78" width="50" height="48" fill="#B5703D"/>
+    </g>
+    <!-- bean mark on a container -->
+    <ellipse cx="-14" cy="-54" rx="9" ry="13" fill="#3C2C1F"/>
+  </g>
+  <!-- globe badge -->
+  <g transform="translate(470 110)">
+    <circle r="40" fill="#E7D6BC" stroke="#6F4E37" stroke-width="3"/>
+    <ellipse rx="40" ry="16" fill="none" stroke="#6F4E37" stroke-width="2" opacity="0.6"/>
+    <line x1="0" y1="-40" x2="0" y2="40" stroke="#6F4E37" stroke-width="2" opacity="0.6"/>
+    <path d="M-30 -20 q30 16 60 0" fill="none" stroke="#B5703D" stroke-width="2.5" stroke-dasharray="2 7"/>
+  </g>
+  <text x="40" y="370" font-family="ui-monospace, 'JetBrains Mono', monospace" font-size="14" letter-spacing="6" fill="#6B5E52">— COFFEE TRADE</text>
+  <text x="560" y="50" text-anchor="end" font-family="'Cormorant Garamond', serif" font-style="italic" font-size="22" fill="#6F4E37">커피 무역</text>
+</svg>

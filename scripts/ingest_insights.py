@@ -65,10 +65,30 @@ CATEGORY_HERO = {
 }
 DEFAULT_HERO = "/static/img/insights/hero/default.svg"
 
+# ---- 커피 상식(trivia) topic → 일러스트 매핑 ----
+# 클라우드 루틴이 sidecar 에 type="trivia" + topic=<키> 를 넣으면 여기서 그림을 고른다.
+# 토픽별 큐레이션 SVG 세트 (static/img/insights/trivia/). 키가 안 맞으면 부분 일치 → default.
+TRIVIA_HERO = {
+    "origin": "/static/img/insights/trivia/origin.svg",
+    "cultivation": "/static/img/insights/trivia/origin.svg",
+    "terroir": "/static/img/insights/trivia/origin.svg",
+    "processing": "/static/img/insights/trivia/processing.svg",
+    "terms": "/static/img/insights/trivia/terms.svg",
+    "glossary": "/static/img/insights/trivia/terms.svg",
+    "decaf": "/static/img/insights/trivia/decaf.svg",
+    "trend": "/static/img/insights/trivia/trend.svg",
+    "competition": "/static/img/insights/trivia/competition.svg",
+    "trade": "/static/img/insights/trivia/trade.svg",
+    "bestcup": "/static/img/insights/trivia/bestcup.svg",
+    "best": "/static/img/insights/trivia/bestcup.svg",
+}
+TRIVIA_DEFAULT_HERO = "/static/img/insights/trivia/default.svg"
+
 # ---- Drive API ----
 DRIVE_TOKEN_URL = "https://oauth2.googleapis.com/token"
 DRIVE_FILES_URL = "https://www.googleapis.com/drive/v3/files"
-INSIGHT_FILE_PREFIX = "cafe-insight"
+# 논문 인사이트(cafe-insight) + 커피 상식(cafe-trivia) 두 종류를 모두 인제스트한다.
+INSIGHT_FILE_PREFIXES = ("cafe-insight", "cafe-trivia")
 
 
 def log(msg: str) -> None:
@@ -98,13 +118,16 @@ def get_access_token(client_id: str, client_secret: str, refresh_token: str) -> 
 
 
 def drive_search_files(access_token: str) -> list[dict]:
-    """이름이 `cafe-insight` 로 시작하는 모든 파일."""
+    """이름이 `cafe-insight` 또는 `cafe-trivia` 로 시작하는 모든 파일."""
     headers = {"Authorization": f"Bearer {access_token}"}
     files: list[dict] = []
     page_token = None
+    name_clause = " or ".join(
+        f"name contains '{p}'" for p in INSIGHT_FILE_PREFIXES
+    )
     while True:
         params = {
-            "q": f"name contains '{INSIGHT_FILE_PREFIX}' and trashed=false",
+            "q": f"({name_clause}) and trashed=false",
             "fields": "nextPageToken, files(id, name, mimeType, modifiedTime)",
             "pageSize": 100,
         }
@@ -117,8 +140,9 @@ def drive_search_files(access_token: str) -> list[dict]:
         page_token = body.get("nextPageToken")
         if not page_token:
             break
-    # 이름 패턴 검증
-    pattern = re.compile(rf"^{INSIGHT_FILE_PREFIX}\s+\d{{4}}-\d{{2}}-\d{{2}}\s+—")
+    # 이름 패턴 검증 (`cafe-insight 2026-06-10 — slug` / `cafe-trivia ...`)
+    alt = "|".join(re.escape(p) for p in INSIGHT_FILE_PREFIXES)
+    pattern = re.compile(rf"^(?:{alt})\s+\d{{4}}-\d{{2}}-\d{{2}}\s+—")
     return [f for f in files if pattern.match(f["name"])]
 
 
@@ -168,6 +192,21 @@ def select_hero_image(categories_primary: list[str], categories_secondary: list[
             if key in cat:
                 return path
     return DEFAULT_HERO
+
+
+def select_trivia_hero(topic: str, categories: list[str]) -> str:
+    """커피 상식 글의 일러스트 선택. payload.topic 키 우선, 없으면 카테고리 키워드로 추론."""
+    candidates = [topic or ""] + [c for c in (categories or []) if c]
+    for cand in candidates:
+        c = str(cand).strip().lower()
+        if not c:
+            continue
+        if c in TRIVIA_HERO:
+            return TRIVIA_HERO[c]
+        for key, path in TRIVIA_HERO.items():
+            if key in c:
+                return path
+    return TRIVIA_DEFAULT_HERO
 
 
 def extract_pdf_figures(pdf_url: str, out_dir: Path, max_images: int = 6) -> list[dict]:
@@ -288,6 +327,7 @@ def render_html(payload: dict, env: Environment) -> str:
     data_charts = _sanitize_charts(payload.get("data_charts") or [])
 
     return tpl.render(
+        type=payload.get("type") or "paper",
         title_ko=payload.get("title_ko", ""),
         title_original=payload.get("title_original", ""),
         authors=payload.get("authors", ""),
@@ -331,16 +371,25 @@ def process_one(payload: dict, env: Environment) -> dict | None:
         err(f"잘못된 id: {payload_id}")
         return None
 
-    # hero image 결정 (payload 가 지정 안 했으면 카테고리로 추론)
-    if not payload.get("hero_image"):
-        payload["hero_image"] = select_hero_image(
-            payload.get("categories_primary") or [],
-            payload.get("categories_secondary") or [],
-        )
+    is_trivia = (payload.get("type") or "paper") == "trivia"
 
-    # PDF figure 추출 (OA fulltext 인 경우만)
+    # hero image 결정 (payload 가 지정 안 했으면 추론)
+    if not payload.get("hero_image"):
+        if is_trivia:
+            payload["hero_image"] = select_trivia_hero(
+                payload.get("topic") or "",
+                (payload.get("categories_primary") or [])
+                + (payload.get("categories_secondary") or []),
+            )
+        else:
+            payload["hero_image"] = select_hero_image(
+                payload.get("categories_primary") or [],
+                payload.get("categories_secondary") or [],
+            )
+
+    # PDF figure 추출 (논문 OA fulltext 인 경우만 — 상식 글은 PDF 없음)
     pdf_url = (payload.get("links") or {}).get("oa_pdf")
-    if pdf_url and payload.get("source_basis") == "fulltext":
+    if not is_trivia and pdf_url and payload.get("source_basis") == "fulltext":
         fig_dir = FIGURES_ROOT / payload_id
         figures = extract_pdf_figures(pdf_url, fig_dir)
         if figures:
@@ -364,6 +413,7 @@ def process_one(payload: dict, env: Environment) -> dict | None:
     # index 요약 객체
     return {
         "id": payload_id,
+        "type": payload.get("type") or "paper",
         "date": payload.get("date"),
         "title_ko": payload.get("title_ko"),
         "one_liner": payload.get("one_liner"),

@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400" role="img" aria-label="올해의 커피">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#FAF7F2"/><stop offset="100%" stop-color="#F2ECE3"/>
+    </linearGradient>
+    <linearGradient id="cup" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#FAF7F2"/><stop offset="100%" stop-color="#E8DCC8"/>
+    </linearGradient>
+  </defs>
+  <rect width="600" height="400" fill="url(#bg)"/>
+  <!-- saucer + cup -->
+  <g transform="translate(300 210)">
+    <ellipse cx="0" cy="110" rx="120" ry="22" fill="#E7D6BC" stroke="#6F4E37" stroke-width="3"/>
+    <path d="M-78 -40 L 78 -40 L 66 70 Q 66 94, 42 94 L -42 94 Q -66 94, -66 70 Z" fill="url(#cup)" stroke="#6F4E37" stroke-width="3" stroke-linejoin="round"/>
+    <ellipse cx="0" cy="-40" rx="78" ry="15" fill="#5A3F2B"/>
+    <ellipse cx="0" cy="-40" rx="66" ry="11" fill="#3C2C1F"/>
+    <path d="M78 -18 Q 120 -18, 120 18 Q 120 52, 78 52" fill="none" stroke="#6F4E37" stroke-width="3"/>
+    <!-- steam -->
+    <g stroke="#C9986A" stroke-width="3" fill="none" stroke-linecap="round" opacity="0.8">
+      <path d="M-24 -66 q10 -16, 0 -32"/><path d="M0 -70 q10 -18, 0 -36"/><path d="M24 -66 q10 -16, 0 -32"/>
+    </g>
+  </g>
+  <!-- award star + ribbon -->
+  <g transform="translate(440 110)">
+    <circle r="42" fill="#E8B85C" stroke="#6F4E37" stroke-width="3"/>
+    <path d="M0 -26 l 8 18 20 2 -15 14 4 20 -17 -10 -17 10 4 -20 -15 -14 20 -2 z" fill="#FAF7F2" stroke="#B5703D" stroke-width="1.5"/>
+    <path d="M-20 36 L -30 78 L -10 66 L 0 84 L 10 66 L 30 78 L 20 36 Z" fill="#C0392B" stroke="#6F4E37" stroke-width="2.5" stroke-linejoin="round"/>
+  </g>
+  <text x="40" y="370" font-family="ui-monospace, 'JetBrains Mono', monospace" font-size="14" letter-spacing="6" fill="#6B5E52">— CUP OF THE YEAR</text>
+  <text x="560" y="50" text-anchor="end" font-family="'Cormorant Garamond', serif" font-style="italic" font-size="22" fill="#6F4E37">올해의 커피</text>
+</svg>

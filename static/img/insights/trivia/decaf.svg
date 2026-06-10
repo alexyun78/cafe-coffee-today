@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400" role="img" aria-label="디카페인">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#FAF7F2"/><stop offset="100%" stop-color="#F2ECE3"/>
+    </linearGradient>
+    <linearGradient id="cup" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#FAF7F2"/><stop offset="100%" stop-color="#E8DCC8"/>
+    </linearGradient>
+  </defs>
+  <rect width="600" height="400" fill="url(#bg)"/>
+  <!-- cup -->
+  <g transform="translate(250 205)">
+    <path d="M-80 -45 L 80 -45 L 68 65 Q 68 88, 44 88 L -44 88 Q -68 88, -68 65 Z" fill="url(#cup)" stroke="#6F4E37" stroke-width="3" stroke-linejoin="round"/>
+    <ellipse cx="0" cy="-45" rx="80" ry="15" fill="#5A3F2B"/>
+    <ellipse cx="0" cy="-45" rx="68" ry="11" fill="#3C2C1F"/>
+    <path d="M80 -22 Q 122 -22, 122 14 Q 122 48, 80 48" fill="none" stroke="#6F4E37" stroke-width="3"/>
+  </g>
+  <!-- caffeine molecule, crossed out -->
+  <g transform="translate(430 130)">
+    <g fill="#C9986A" stroke="#6F4E37" stroke-width="2.5">
+      <circle cx="0" cy="-30" r="13"/><circle cx="30" cy="-10" r="13"/>
+      <circle cx="22" cy="26" r="13"/><circle cx="-22" cy="26" r="13"/><circle cx="-30" cy="-10" r="13"/>
+    </g>
+    <g stroke="#6F4E37" stroke-width="2.5">
+      <line x1="0" y1="-30" x2="30" y2="-10"/><line x1="30" y1="-10" x2="22" y2="26"/>
+      <line x1="22" y1="26" x2="-22" y2="26"/><line x1="-22" y1="26" x2="-30" y2="-10"/><line x1="-30" y1="-10" x2="0" y2="-30"/>
+    </g>
+    <!-- prohibition circle -->
+    <circle cx="0" cy="-2" r="58" fill="none" stroke="#C0392B" stroke-width="6" opacity="0.85"/>
+    <line x1="-41" y1="-43" x2="41" y2="39" stroke="#C0392B" stroke-width="6" opacity="0.85" stroke-linecap="round"/>
+  </g>
+  <text x="40" y="370" font-family="ui-monospace, 'JetBrains Mono', monospace" font-size="14" letter-spacing="6" fill="#6B5E52">— DECAF</text>
+  <text x="560" y="50" text-anchor="end" font-family="'Cormorant Garamond', serif" font-style="italic" font-size="22" fill="#6F4E37">디카페인</text>
+</svg>

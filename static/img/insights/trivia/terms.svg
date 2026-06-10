@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400" role="img" aria-label="커피 용어">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#FAF7F2"/><stop offset="100%" stop-color="#F2ECE3"/>
+    </linearGradient>
+  </defs>
+  <rect width="600" height="400" fill="url(#bg)"/>
+  <!-- open book -->
+  <g transform="translate(300 250)">
+    <path d="M-150 0 Q -75 -28, 0 -10 Q 75 -28, 150 0 L 150 60 Q 75 40, 0 56 Q -75 40, -150 60 Z" fill="#E7D6BC" stroke="#6F4E37" stroke-width="3" stroke-linejoin="round"/>
+    <path d="M0 -10 L 0 56" stroke="#6F4E37" stroke-width="3"/>
+    <g stroke="#C9986A" stroke-width="2" opacity="0.8">
+      <line x1="-130" y1="14" x2="-20" y2="6"/><line x1="-130" y1="28" x2="-20" y2="20"/><line x1="-130" y1="42" x2="-20" y2="34"/>
+      <line x1="20" y1="6" x2="130" y2="14"/><line x1="20" y1="20" x2="130" y2="28"/><line x1="20" y1="34" x2="130" y2="42"/>
+    </g>
+  </g>
+  <!-- speech bubble with ? -->
+  <g transform="translate(320 90)">
+    <path d="M-55 -40 H 55 Q 75 -40, 75 -20 V 30 Q 75 50, 55 50 H 5 L -15 75 L -12 50 H -55 Q -75 50, -75 30 V -20 Q -75 -40, -55 -40 Z" fill="#B5703D" stroke="#6F4E37" stroke-width="3" stroke-linejoin="round"/>
+    <text x="0" y="22" text-anchor="middle" font-family="'Cormorant Garamond', serif" font-weight="700" font-size="64" fill="#FAF7F2">?</text>
+  </g>
+  <!-- little cup -->
+  <g transform="translate(130 120)">
+    <path d="M-26 -10 H 26 L 22 28 Q 22 38, 12 38 H -12 Q -22 38, -22 28 Z" fill="#FAF7F2" stroke="#6F4E37" stroke-width="2.5" stroke-linejoin="round"/>
+    <ellipse cx="0" cy="-10" rx="26" ry="6" fill="#5A3F2B"/>
+    <path d="M26 0 Q 42 0, 42 14 Q 42 26, 26 26" fill="none" stroke="#6F4E37" stroke-width="2.5"/>
+  </g>
+  <text x="40" y="370" font-family="ui-monospace, 'JetBrains Mono', monospace" font-size="14" letter-spacing="6" fill="#6B5E52">— COFFEE TERMS</text>
+  <text x="560" y="50" text-anchor="end" font-family="'Cormorant Garamond', serif" font-style="italic" font-size="22" fill="#6F4E37">용어 풀이</text>
+</svg>
