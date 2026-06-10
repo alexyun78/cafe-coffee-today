@@ -409,4 +409,203 @@ ssh-keyscan 49.247.207.115 2>/dev/null | grep -v '^#'  # 호스트키 복사
 ### 공개 페이지 탭 ([index.html](index.html))
 
 - **탭 바**: 다크 브라운 배경, 활성 탭만 컬러 강조.
-  - ☕ **
+  - ☕ **오늘의 커피** — 에스프레소→캐러멜 그라디언트, 상단 광택.
+  - 🎲 **누가쏠까** — 브라스(황동) shimmer 애니메이션(3.2s 주기).
+- **탭 자동 전환**: 누가쏠까 탭 진입 후 **3초간 게임 미선택 시** 자동으로 오늘의 커피 탭으로 복귀. 게임 닫기(X)로 돌아왔을 때도 재무장.
+- **탭 하이라이트 제거**: 전역 `-webkit-tap-highlight-color: transparent` — 터치 시 반투명 사각형 잔상 제거.
+
+### 손가락 게임
+
+- **상단 대형 상태 텍스트** ([.finger-game-status](index.html)): "손가락을 대세요" / "2명 이상 필요해요" / "그대로 유지하세요" / 카운트다운 숫자 / "🎉 [동물] 당첨!"
+- **동물 풀 (13종)**: 사자, 호랑이, 양, 고양이, 강아지, 얼룩말, 기린, 낙타, 사슴, 악어, 코끼리, 공작새, 고래. 동시에 같은 동물 중복 금지.
+- **색상 풀 (13색)**: `FINGER_COLORS`. 동시에 같은 색 중복 금지.
+- **동작**:
+  - 터치 다운 → 110px 원 + 원 **바깥 위쪽**에 동물 라벨 (1.35rem).
+  - 터치 이동 → 원/라벨 따라 이동.
+  - 터치 업 → 원·라벨 제거 (단, 당첨 확정 후에는 `fingerWinnerShown` 플래그로 제거 차단).
+- **진행 타이머**:
+  - 2초 무변화(추가 원 없음) → 3·2·1 카운트다운(700Hz 비프) → 당첨.
+  - 당첨 원 280px로 확대, 동물 라벨 2.8rem, 상단 "🎉 [동물] 당첨!".
+- **Idle 종료 타이머**: 터치 0개 상태 5초 무반응 → 상단 "3초 뒤 종료" 카운트(480Hz 비프) → 닫고 오늘의 커피로.
+
+### 누가쏠까 룰렛 게임
+
+- **Phase 1 (인원 설정)**: 2명 이상 선택, START 버튼.
+- **Phase 2 (카드)**:
+  - 카드 크기 256×352 (모바일 232×320) — 매우 큼, 줄바꿈으로 수직 배치.
+  - 카드 앞면 "?" (6rem), 뒷면 숫자 (7rem).
+  - **카드 숫자는 항상 1..N 범위**(N = 참여 인원). 매 라운드 순서를 셔플하되 직전 라운드와 동일 순서면 재셔플(최대 20회).
+  - **카드 뒷면 색상 = 휠 세그먼트 색상** (`COLORS[i % COLORS.length]`).
+  - 터치 정확도: 3D 변환 중 이벤트 누수 방지 위해 `.roulette-card-inner/-front/-back`에 `pointer-events: none`, 래퍼만 `pointerup` 수신, `touch-action: manipulation`.
+- **Phase 3 (휠)**: 휠 컨테이너 `min(92vw, 75vh)`, SVG viewBox로 컨테이너 꽉 채움. 포인터 26/44px.
+- **Idle 종료 타이머 (모든 Phase 공통)**: 5초 무반응 → 상단 주황 뱃지(.close-hint)로 "3초 뒤 종료" 카운트 → 닫고 오늘의 커피로. 무장/해제 포인트:
+  - 무장: `startRouletteGame`, `changeRouletteCount(±)`, `startRouletteCards`, 카드 플립(다음 카드 대기).
+  - 해제: 모든 카드 플립 완료(휠 시작), `closeRouletteGame`.
+
+### 관리자 폼 ([static/admin.html](static/admin.html))
+
+- **필수 필드** (하나라도 비면 저장 차단, `*` 표시 + 필드별 에러 메시지):
+  1. 원두 이름
+  2. 로스터리
+  3. 로스팅 일자
+  4. 프로세싱
+  5. 컵노트
+- **목록 항목 메타**: `로스터리 · 🫘 로스팅일 · ☕ 제공일` — 제공일은 있을 때만 표시.
+- **복제 동작** ([openDuplicate](static/admin.html)):
+  - 복사: 원두이름, 로스터리, 프로세싱, **컵노트**, **감상**.
+  - 비움: **제공일**.
+  - 기본값: **로스팅일자 = 오늘 날짜** (원본 복사하지 않음).
+  - 상태: 원본 무관하게 항상 **"예정"**.
+  - 포커스: 로스팅일 필드, 토스트 "복제 — 로스팅일을 확인하세요".
+
+---
+
+## 생두 관리 시스템 (2026-05-27 추가)
+
+구글 스프레드시트 기반 생두 관리를 DB + 관리자 UI로 이전. 스프레드시트는 더 이상 사용하지 않음.
+
+### 생두 관리 DB 테이블
+
+| 테이블 | 역할 | 비고 |
+|---|---|---|
+| `suppliers` | 생두 공급업체 (레햄코리아, 커피리브레 등 7곳) | `short_name`으로 UI 접두어 `[레햄]` 표시 |
+| `green_beans` | 생두 마스터 (이름, 공급처, 가공, 등급, 컵노트) | **단일 소스 of truth** — 44종 |
+| `purchases` | 구매 이력 (날짜, 수량kg, 단가, 할인, 총액) | 54건 이전됨 |
+| `roasting_logs` | 로스팅 배치 (투입g, 배출g, 수분손실%) | 202건 이전됨 |
+| `pricing` | 소매/도매 단가표 (중량별) | Phase 5 예정 |
+| `blends` + `blend_components` | 블렌드 구성비 | Phase 5 예정 |
+
+- `coffees.green_bean_id` (nullable FK → green_beans) — 오늘의커피와 생두 마스터 연결
+- **재고 = computed query**: `SUM(purchases.qty) - SUM(roasting_logs.input/1000) + green_beans.stock_adjustment_kg` — 테이블이 아님. `stock_adjustment_kg`는 생두 목록에서 "최종 수량"을 직접 설정할 때만 갱신되는 보정값(`PUT /api/green-beans/<id>/stock`). 보정 후에도 구매(+)·로스팅(-)은 합계에 자연히 반영됨.
+- 스프레드시트 데이터는 `scripts/seed_green_beans.sql`로 `init_schema()`에서 자동 시드 (서버 배포 시 수동 작업 불필요)
+
+### 생두 관리 API (모두 `@require_pin`)
+
+| 그룹 | 경로 | 메서드 |
+|---|---|---|
+| 공급업체 | `/api/suppliers[/<id>]` | GET/POST/PUT/DELETE |
+| 생두 | `/api/green-beans[/<id>]` | GET/POST/PUT/DELETE |
+| | `/api/green-beans/suggestions` | GET |
+| | `/api/green-beans/<id>/for-coffee` | GET (오늘의커피 폼 자동완성용) |
+| | `/api/green-beans/<id>/stock` | PUT (최종 수량 직접 설정 → stock_adjustment_kg 보정) |
+| 구매 | `/api/purchases[/<id>]` | GET/POST/PUT/DELETE |
+| | ↳ POST/PUT 은 `green_bean_id` 대신 생두 정보(name+process+supplier_name+origin_country+grade+cup_notes)를 보내면 `db.find_or_create_green_bean()`으로 생두를 찾거나 새로 만든 뒤 연결 | |
+| 로스팅 | `/api/roasting-logs[/<id>]` | GET/POST/PUT/DELETE |
+| 재고 | `/api/inventory` | GET |
+| 디카페인 | `/api/decaf/options` | GET (드롭다운용 목록 + 현재 선택) |
+| | `/api/decaf/current` | PUT (제공 중 디카페인 설정, null=해제 → 공개 `/api/coffee`의 `decaf` 필드) |
+| 가격 | `/api/pricing[/<id>]` | GET/POST/DELETE |
+| | `/api/pricing/cost-analysis/<gb_id>` | GET |
+| 이미지 | `/api/coffee/<id>/card-token` | POST (APK용 1회용 다운로드 토큰) |
+| 주변 가게 | `/api/nearby/overview` | GET (가게+총수 스냅샷+표본 수+마지막 수집) |
+| | `/api/nearby/shops` | POST (가게 수동 추가) |
+| | `/api/nearby/shops/<id>` | PUT (place_id/hidden/notes 등) / DELETE |
+| | `/api/nearby/shops/<id>/reviews` | GET (표본 리뷰 목록) |
+| | `/api/nearby/refresh` | POST (수집기 백그라운드 실행, 중복 실행 409) |
+| | `/api/nearby/growth` | GET (성장 리포트 — 스코어카드/모멘텀/실측 Δ) |
+
+### 관리자 UI 탭 구조 (admin.html)
+
+```
+[ ☕ 오늘의 커피 ] [ 🫘 생두 관리 ] [ 📦 재고 ] [ 📍 주변 ]
+```
+
+- **오늘의 커피**: 기존 기능 그대로
+- **생두 관리**: 생두 목록(재고 색상코딩) + 등록/편집 폼 + 구매 기록 폼 + 로스팅 기록 폼
+  - **구매 폼은 생두 입력 폼을 겸함**: 공급업체·원두명·원산지·가공방식·등급·컵노트를 직접 입력하고 구입일·수량·단가·할인을 함께 기록. 저장 시 (name+supplier+process) 기준으로 기존 생두를 찾거나 새로 만들어 연결 → 생두 목록·재고·로스팅 드롭다운에 즉시 반영. 원두명을 고르면 정보 자동 입력
+  - **공급업체·원두명은 공용 콤보 드롭다운**(`createComboSelect`, `.combo-select`): 기존 목록 표시 + 숨김 보기 토글/항목별 숨기기 + "직접 입력"(검색창에 새 값 입력 후 선택). 구매 폼·생두 폼이 같은 컴포넌트를 공유. 공급처 숨김은 `suppliers.hidden`(`PUT /api/suppliers/<id>` `{hidden}`), 원두 숨김은 기존 `green_beans.hidden`
+- **재고**: 최근구매일→재고량 정렬, 30개 페이징, 1년 이상 미구매+재고0 접힘
+
+### 생두 이름 규칙
+
+DB에서 분리 저장, UI에서 조합 표시:
+- `green_beans.name` = `브라질 세하도` (순수 원두명)
+- `suppliers.short_name` = `레햄` (접두어)
+- UI 표시 = `[레햄] 브라질 세하도`
+
+### 주변 가게 리뷰 모니터링 (2026-06-07 추가)
+
+92도씨 기준 반경 500m 커피·디저트 가게(30곳)의 네이버 리뷰를 관리자 **📍 주변** 탭에서 모니터링.
+원본 분석 작업: `D:/python/92/around_cafe` (네이버 지역검색 API + place id 탐색).
+
+**정직성 원칙 (변경 금지)**:
+- 네이버 anti-bot 우회 스크래핑 금지 (GraphQL 페이지네이션, 더보기 자동화 등).
+- 수집 가능한 것: ① 방문자/블로그 리뷰 **총 건수 + ★평점 + 키워드 통계** (페이지 SSR에 그대로 실림 — 정확),
+  ② 방문자 리뷰 **최근 ~10건 표본** (첫 페이지 SSR `__APOLLO_STATE__`에 실리는 분량만),
+  ③ **블로그 글** — 페이지 내장 3건 + 네이버 공식 검색 API(blog.json, `NAVER_CLIENT_ID/SECRET`) 최신 5건/곳.
+- UI에 "표본"임을 항상 명시. 6개월 전체 이력·기간별 통계는 만들지 않는다.
+- 블로그 검색은 가게명 기반 검색 결과라 무관한 글이 섞일 수 있음 → UI에 "🔎 블로그 검색" 배지로 구분.
+- **응답 디코딩 UTF-8 강제 필수** (`r.encoding = "utf-8"`) — 네이버가 charset 헤더를 안 줘서
+  생략하면 ISO-8859-1 오디코딩으로 한글이 깨진 채 DB에 저장된다 (실제 발생했던 버그).
+- 리뷰 본문은 APOLLO `body` 필드만 사용 — 렌더링 텍스트에서 긁으면 "연인・배우자" 같은
+  방문 메타 칩이 본문에 오염된다 (around_cafe v2 스크레이퍼에서 발생했던 버그).
+
+**구성**:
+- 테이블: `nearby_shops`(가게 마스터, place_id·hidden·is_anchor), `nearby_review_counts`(총수 일별 스냅샷 — Δ 추이),
+  `nearby_reviews`(표본, `review_hash`로 중복 방지 — 누적되면 표본 이상의 이력이 자연히 쌓임), `nearby_collect_runs`(수집 로그)
+- 시드: [scripts/seed_nearby_shops.sql](scripts/seed_nearby_shops.sql) — `init_schema()`에서 1회 자동 실행. place_id는 30곳 전부 마이그레이션(`nearby_place_ids_v2`)으로 채워짐. 신규 가게는 관리자 탭 "ID 입력" 버튼.
+- 수집기: [scripts/collect_nearby.py](scripts/collect_nearby.py) — requests-only, 가게당 3~5초 간격, 429 시 전체 중단.
+  `--dry <place_id>` 로 1곳 파싱 테스트 가능. 로컬 IP가 429 차단됐던 이력 있음 → **수집은 서버에서**.
+- 자동 수집: [systemd/cafe-coffee-nearby.timer](systemd/cafe-coffee-nearby.timer) — **매일 07:30 KST** (insight ingest 21:00와 분리)
+- 수동 수집: 관리자 탭 "⟳ 리뷰 수집" 버튼 → `/api/nearby/refresh` (백그라운드 스레드, last_run 폴링)
+- **성장 리포트**: 주변 탭 "🌱 성장 리포트" 버튼 — around_cafe `growth_report.py`의 서버 이식판.
+  스코어카드(30곳 중 순위)/모멘텀(표본 기간 기반 주당 리뷰 속도)/누적 자산/블로그 비율/실측 Δ(일별 스냅샷 비교).
+  매일 07:30 수집으로 자동 갱신 — 로컬 `run_weekly.bat`(작업 스케줄러 + Playwright) 파이프라인은 더 이상 필요 없음.
+- ⚠️ 수집 진행 중 `git push` 하면 60초 자동 배포의 서비스 재시작으로 백그라운드 수집이 끊길 수 있음
+  (orphan run 은 30분 후 잠금 자동 해제, systemd `cafe-coffee-nearby.service` 수동 시작으로 즉시 보충 가능)
+
+**서버 최초 1회 셋업**:
+```bash
+cd /root/92cafe/cafe-today-coffee
+cp systemd/cafe-coffee-nearby.service systemd/cafe-coffee-nearby.timer /etc/systemd/system/
+systemctl daemon-reload
+systemctl enable --now cafe-coffee-nearby.timer
+systemctl start cafe-coffee-nearby.service   # 즉시 1회 테스트
+journalctl -u cafe-coffee-nearby.service -n 50 --no-pager
+```
+
+### 남은 Phase
+
+| Phase | 내용 | 상태 |
+|---|---|---|
+| 1+2 | DB + API + 관리자 UI + 마이그레이션 | ✅ 완료 |
+| 3 | 재고 탭 고도화 (저재고 알림, 필터) | 미착수 |
+| 4 | 오늘의커피 폼에 "생두 선택" 드롭다운 연동 | 미착수 |
+| 5 | 가격 탭 (원가분석, 블렌드, 소매/도매) | 미착수 |
+| 6 | 대시보드 + 리포트 + CSV 내보내기 | 미착수 |
+
+---
+
+## 주의사항
+
+- `.env`, `data/`, `__pycache__/`, `.venv/`, `node_modules/`, `cafe-coffee-apk/android/`는 gitignore 대상.
+- API 응답의 한글 키(`커피`, `로스팅` 등)는 기존 프런트 호환성을 위한 것. 섣불리 영문화하지 말 것.
+- 날짜 필드(`roast_date`, `serve_date`)는 API에서 `{"start": "YYYY-MM-DD", "end": null}` 객체로 반환 (Notion 호환).
+- PIN 인증은 세션 쿠키 기반. 서버 재시작 시 세션 무효화됨 (FLASK_SECRET 유지되어도 메모리 세션 사용).
+- 절대 `--no-verify`로 커밋 우회하지 말 것.
+- 운영 DB에 직접 SQL 수정 전 반드시 `data/backup/`에 덤프 생성.
+
+---
+
+## 파일 맵
+
+| 파일 | 역할 |
+|---|---|
+| [app.py](app.py) | Flask 앱, 라우트, PIN 미들웨어, 생두 관리 API (24개 엔드포인트) |
+| [db.py](db.py) | SQLite 래퍼, 스키마 초기화 (coffees + 생두 7테이블), CRUD |
+| [generate_bean_images.py](generate_bean_images.py) | 커피 카드 이미지 생성 (PIL) |
+| [migrate_notion.py](migrate_notion.py) | Notion → SQLite 일회성 이전 |
+| [index.html](index.html) | 탭 기반 공개 뷰 (오늘의커피 + 누가쏠까?: 손가락 게임, 룰렛) |
+| [static/admin.html](static/admin.html) | 관리 폼 — 4탭 (오늘의커피 / 생두관리 / 재고 / 주변리뷰) |
+| [scripts/generate_insight.py](scripts/generate_insight.py) | 인사이트 자체 생성 (Claude API + web_search, Drive 비의존) |
+| [scripts/ingest_insights.py](scripts/ingest_insights.py) | 인사이트 렌더·인덱스 로직 (Drive ingest + 자체 생성 공용) |
+| [scripts/collect_nearby.py](scripts/collect_nearby.py) | 주변 가게 네이버 리뷰 수집기 (requests-only) |
+| [scripts/seed_nearby_shops.sql](scripts/seed_nearby_shops.sql) | 주변 가게 초기 데이터 (init_schema에서 자동 실행) |
+| [static/roastery.html](static/roastery.html) | 92도씨 로스터리 메인 공개 페이지 |
+| [scripts/seed_green_beans.sql](scripts/seed_green_beans.sql) | 생두 초기 데이터 (init_schema에서 자동 실행) |
+| [scripts/migrate_spreadsheet.py](scripts/migrate_spreadsheet.py) | 구글 스프레드시트 → DB 마이그레이션 스크립트 |
+| [requirements.txt](requirements.txt) | 파이썬 의존성 |
+| [deploy.sh](deploy.sh) | 서버 자동 배포 스크립트 |
+| [systemd/](systemd/) | systemd 유닛 파일 |
+| [cafe-coffee-apk/](cafe-coffee-apk/) | Capacitor 안드로이드 래퍼 |
+| [.env](.env) | 비밀 환경 변수 (커밋 금지) |
