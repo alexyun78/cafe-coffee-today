@@ -1,7 +1,24 @@
 {
   "version": 1,
-  "updated_at": "2026-06-10T05:33:32Z",
+  "updated_at": "2026-06-11T11:30:20Z",
   "items": [
+    {
+      "id": "2026-06-11-coffee-acidity-good-taste",
+      "type": "trivia",
+      "date": "2026-06-11",
+      "title_ko": "커피의 신맛은 왜 '좋은 맛'으로 쳐줄까?",
+      "one_liner": "커피의 산미는 상한 맛이 아니라 과일 같은 생기야!",
+      "categories_primary": [
+        "커피 상식"
+      ],
+      "categories_secondary": [
+        "향미/관능"
+      ],
+      "hero_image": "/static/img/insights/trivia/terms.svg",
+      "journal": null,
+      "pub_date": null,
+      "source_basis": null
+    },
     {
       "id": "2026-06-10-is-decaf-really-caffeine-free",
       "type": "trivia",
