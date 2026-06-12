@@ -1,7 +1,24 @@
 {
   "version": 1,
-  "updated_at": "2026-06-11T11:30:20Z",
+  "updated_at": "2026-06-12T11:30:14Z",
   "items": [
+    {
+      "id": "2026-06-12-coffee-body-mouthfeel",
+      "type": "trivia",
+      "date": "2026-06-12",
+      "title_ko": "커피가 '묵직하다'는 게 대체 무슨 말이야?",
+      "one_liner": "바디는 맛이 아니라 입안에서 느껴지는 '무게감·질감'이야.",
+      "categories_primary": [
+        "커피 상식"
+      ],
+      "categories_secondary": [
+        "향미/관능"
+      ],
+      "hero_image": "/static/img/insights/trivia/terms.svg",
+      "journal": null,
+      "pub_date": null,
+      "source_basis": null
+    },
     {
       "id": "2026-06-11-coffee-acidity-good-taste",
       "type": "trivia",
