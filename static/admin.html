@@ -1177,6 +1177,7 @@
   .record-row-actions button.dup { background: #FFF3E0; color: #E65100; }
   .record-row-actions button.edit { background: #E8F0FE; color: #1565C0; }
   .record-row-actions button.makecoffee { background: #E8F5E9; color: #2E7D32; }
+  .record-row-actions button.unmakecoffee { background: #FFF3E0; color: #c62828; }
   /* 배출량 인라인 입력 (배출 미기입 기록) */
   .roast-inline-output { display: flex; gap: 6px; margin-top: 6px; }
   .roast-inline-output .rio-input {
@@ -5183,6 +5184,7 @@ function renderRoastList(items) {
           <button type="button" class="dup" data-id="${r.id}">복제</button>
           ${Number(r.has_active_coffee)
             ? `<button type="button" class="makecoffee done" disabled title="같은 이름의 커피가 이미 예정/진행 중">☕ 등록됨</button>`
+              + `<button type="button" class="unmakecoffee" data-id="${r.id}" title="오늘의 커피 예정 등록을 취소합니다">✕ 등록 취소</button>`
             : `<button type="button" class="makecoffee" data-id="${r.id}">☕ 예정 등록</button>`}
           <button type="button" class="delete" data-id="${r.id}">삭제</button>
         </div>
@@ -5229,6 +5231,23 @@ function renderRoastList(items) {
         loadRoastList();   // 같은 생두의 다른 기록에서도 버튼이 사라지도록 갱신
       } catch (err) {
         if (err.message !== "unauthorized") showBanner("등록 실패: " + err.message, "error");
+        btn.disabled = false;
+      }
+    });
+  });
+  // 등록 취소 — 이 로스팅으로 등록된 '오늘의 커피 예정'을 오늘의 커피 목록에서 제거.
+  el.querySelectorAll(".record-row-actions .unmakecoffee").forEach(btn => {
+    btn.addEventListener("click", async () => {
+      if (!confirm("이 로스팅으로 등록된 '오늘의 커피 예정'을 취소할까요?\n오늘의 커피 목록에서 제거됩니다. (제공 중이던 항목이면 공개 페이지에서도 사라집니다.)")) return;
+      btn.disabled = true;
+      try {
+        const res = await api("POST", `/api/roasting-logs/${btn.dataset.id}/unmake-coffee`);
+        const rm = res.removed;
+        if (rm) showToast(`'${rm.name}' 오늘의 커피 등록 취소됨${rm.status === "진행 중" ? " (제공 중이던 항목)" : ""}`);
+        else showToast("취소할 등록이 없습니다");
+        loadRoastList();   // 같은 생두의 다른 기록 버튼도 함께 갱신
+      } catch (err) {
+        if (err.message !== "unauthorized") showBanner("취소 실패: " + err.message, "error");
         btn.disabled = false;
       }
     });

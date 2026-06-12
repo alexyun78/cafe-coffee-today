@@ -885,6 +885,25 @@ def api_roasting_log_make_coffee(rid):
     db.update_roasting_log(rid, {"make_coffee": 1})
     return jsonify({"success": True, "coffee": coffee})
 
+@app.post("/api/roasting-logs/<int:rid>/unmake-coffee")
+@require_pin
+def api_roasting_log_unmake_coffee(rid):
+    """로스팅 기록으로 '오늘의 커피 예정'에 등록된 항목을 취소(삭제).
+    같은 이름의 활성(예정/진행 중) 커피를 찾아 삭제하고, 이 기록의 커피 연동
+    토글도 꺼서 배출량 재기입 시 자동 재등록되지 않게 한다."""
+    log = db.get_roasting_log(rid)
+    if not log:
+        return jsonify({"success": False, "error": "not found"}), 404
+    bean = db.get_green_bean(log["green_bean_id"]) if log.get("green_bean_id") else None
+    name = (bean.get("name") or "").strip() if bean else ""
+    removed = None
+    existing = db.find_active_by_name(name) if name else None
+    if existing:
+        db.delete(existing["id"])
+        removed = {"name": name, "status": existing.get("status")}
+    db.update_roasting_log(rid, {"make_coffee": 0})
+    return jsonify({"success": True, "removed": removed})
+
 @app.put("/api/roasting-logs/<int:rid>")
 @require_pin
 def api_roasting_log_update(rid):
