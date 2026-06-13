@@ -1,7 +1,24 @@
 {
   "version": 1,
-  "updated_at": "2026-06-12T11:30:14Z",
+  "updated_at": "2026-06-13T11:30:20Z",
   "items": [
+    {
+      "id": "2026-06-13-coffee-altitude-why-matters",
+      "type": "trivia",
+      "date": "2026-06-13",
+      "title_ko": "높은 산에서 자란 커피가 더 맛있다고?",
+      "one_liner": "고도가 높으면 콩이 단단해지고 향미가 또렷해져!",
+      "categories_primary": [
+        "커피 상식"
+      ],
+      "categories_secondary": [
+        "생두"
+      ],
+      "hero_image": "/static/img/insights/trivia/origin.svg",
+      "journal": null,
+      "pub_date": null,
+      "source_basis": null
+    },
     {
       "id": "2026-06-12-coffee-body-mouthfeel",
       "type": "trivia",
