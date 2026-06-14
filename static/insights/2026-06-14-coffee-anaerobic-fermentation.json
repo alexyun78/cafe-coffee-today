@@ -106,5 +106,9 @@
     }
   ],
   "data_charts": [],
-  "links": {}
+  "links": {},
+  "date": "2026-06-14",
+  "version": 1,
+  "id": "2026-06-14-coffee-anaerobic-fermentation",
+  "hero_image": "/static/img/insights/trivia/processing.svg"
 }

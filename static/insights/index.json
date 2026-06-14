@@ -1,7 +1,24 @@
 {
   "version": 1,
-  "updated_at": "2026-06-13T11:30:20Z",
+  "updated_at": "2026-06-14T11:30:01Z",
   "items": [
+    {
+      "id": "2026-06-14-coffee-anaerobic-fermentation",
+      "type": "trivia",
+      "date": "2026-06-14",
+      "title_ko": "요즘 핫한 '무산소 발효' 커피, 뭐가 다른 거야?",
+      "one_liner": "산소를 막은 통에서 발효해 독특한 과일·발효향을 입혀!",
+      "categories_primary": [
+        "커피 상식"
+      ],
+      "categories_secondary": [
+        "미생물"
+      ],
+      "hero_image": "/static/img/insights/trivia/processing.svg",
+      "journal": null,
+      "pub_date": null,
+      "source_basis": null
+    },
     {
       "id": "2026-06-13-coffee-altitude-why-matters",
       "type": "trivia",
