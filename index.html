@@ -2517,7 +2517,7 @@
 
         // ========== 휴무 안내 팝업 ==========
         // 공지 식별자(날짜)가 바뀌면 "다시 보지 않기"가 리셋됨
-        const NOTICE_POPUP_ID = '2026-06-22';
+        const NOTICE_POPUP_ID = '2026-06-22';   // 휴무일 = 공지 ID
         function closeNoticePopup() {
           const cb = document.getElementById('notice-popup-dontshow');
           if (cb && cb.checked) {
@@ -2527,6 +2527,12 @@
         }
         (function showNoticePopup() {
           if (localStorage.getItem('cafe-notice-dismissed') === NOTICE_POPUP_ID) return;
+          // 휴무일 7일 전 ~ 휴무일(당일 자정까지)만 노출
+          const start = new Date(NOTICE_POPUP_ID + 'T00:00:00');
+          start.setDate(start.getDate() - 7);
+          const end = new Date(NOTICE_POPUP_ID + 'T23:59:59');
+          const now = new Date();
+          if (now < start || now > end) return;
           const overlay = document.getElementById('notice-popup-overlay');
           if (overlay) overlay.style.display = 'flex';
         })();
