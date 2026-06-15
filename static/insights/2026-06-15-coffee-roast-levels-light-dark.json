@@ -106,5 +106,9 @@
     }
   ],
   "data_charts": [],
-  "links": {}
+  "links": {},
+  "date": "2026-06-15",
+  "version": 1,
+  "id": "2026-06-15-coffee-roast-levels-light-dark",
+  "hero_image": "/static/img/insights/trivia/terms.svg"
 }

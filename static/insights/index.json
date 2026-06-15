@@ -1,7 +1,24 @@
 {
   "version": 1,
-  "updated_at": "2026-06-14T11:30:01Z",
+  "updated_at": "2026-06-15T11:30:05Z",
   "items": [
+    {
+      "id": "2026-06-15-coffee-roast-levels-light-dark",
+      "type": "trivia",
+      "date": "2026-06-15",
+      "title_ko": "라이트·미디엄·다크 로스팅, 뭐가 달라?",
+      "one_liner": "볶는 정도에 따라 산미·단맛·쓴맛의 균형이 확 바뀌어!",
+      "categories_primary": [
+        "커피 상식"
+      ],
+      "categories_secondary": [
+        "로스팅"
+      ],
+      "hero_image": "/static/img/insights/trivia/terms.svg",
+      "journal": null,
+      "pub_date": null,
+      "source_basis": null
+    },
     {
       "id": "2026-06-14-coffee-anaerobic-fermentation",
       "type": "trivia",
