@@ -1485,6 +1485,43 @@
     <script src="/static/feedback.js" defer></script>
 </head>
 <body>
+    <!-- 휴무 안내 팝업 -->
+    <div id="notice-popup-overlay" style="
+      display:none; position:fixed; inset:0; z-index:1000;
+      background:rgba(0,0,0,0.55); align-items:center; justify-content:center;
+      padding:24px; backdrop-filter:blur(2px);
+    ">
+      <div style="
+        background:#fff; border-radius:18px; max-width:340px; width:100%;
+        box-shadow:0 20px 60px rgba(0,0,0,0.35); overflow:hidden;
+        animation:noticePopIn .25s ease;
+      ">
+        <div style="
+          background:linear-gradient(135deg,#6F4E37,#8B6F47); color:#fff;
+          padding:22px 24px; text-align:center;
+        ">
+          <div style="font-size:2.4rem; line-height:1;">📅</div>
+          <div style="font-size:1.15rem; font-weight:700; margin-top:10px;">휴무 안내</div>
+        </div>
+        <div style="padding:24px; text-align:center; color:#3a2e25;">
+          <p style="font-size:1.25rem; font-weight:700; margin:0 0 6px;">6월 22일 (월요일)</p>
+          <p style="font-size:1rem; margin:0; color:#6b5848;">휴무입니다.</p>
+        </div>
+        <label style="
+          display:flex; align-items:center; justify-content:center; gap:8px;
+          padding:0 24px 16px; color:#8a7866; font-size:0.85rem; cursor:pointer;
+        ">
+          <input type="checkbox" id="notice-popup-dontshow" style="width:16px; height:16px; cursor:pointer;">
+          다시 보지 않기
+        </label>
+        <button onclick="closeNoticePopup()" style="
+          width:100%; border:none; border-top:1px solid #eee; background:#fff;
+          padding:16px; font-size:1rem; font-weight:600; color:#6F4E37; cursor:pointer;
+        ">닫기</button>
+      </div>
+    </div>
+    <style>@keyframes noticePopIn{from{opacity:0;transform:scale(.92)}to{opacity:1;transform:scale(1)}}</style>
+
     <div class="container">
         <div class="header">
             <a id="home-link" class="home-link" href="https://92cafe.co.kr" aria-label="92cafe.co.kr 홈으로 이동">🏠 Home</a>
@@ -2476,6 +2513,22 @@
             }
             return 0;
           }
+        })();
+
+        // ========== 휴무 안내 팝업 ==========
+        // 공지 식별자(날짜)가 바뀌면 "다시 보지 않기"가 리셋됨
+        const NOTICE_POPUP_ID = '2026-06-22';
+        function closeNoticePopup() {
+          const cb = document.getElementById('notice-popup-dontshow');
+          if (cb && cb.checked) {
+            localStorage.setItem('cafe-notice-dismissed', NOTICE_POPUP_ID);
+          }
+          document.getElementById('notice-popup-overlay').style.display = 'none';
+        }
+        (function showNoticePopup() {
+          if (localStorage.getItem('cafe-notice-dismissed') === NOTICE_POPUP_ID) return;
+          const overlay = document.getElementById('notice-popup-overlay');
+          if (overlay) overlay.style.display = 'flex';
         })();
 
         // ========== 탭 전환 ==========
