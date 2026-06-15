@@ -1243,7 +1243,7 @@
       <p style="font-size:1rem; margin:0; color:#6b5848;">휴무입니다.</p>
     </div>
     <label style="display:flex; align-items:center; justify-content:center; gap:8px; padding:0 24px 16px; color:#8a7866; font-size:0.85rem; cursor:pointer;">
-      <input type="checkbox" id="notice-popup-dontshow" style="width:16px; height:16px; cursor:pointer;">
+      <input type="checkbox" id="notice-popup-dontshow" onchange="if(this.checked)closeNoticePopup()" style="width:16px; height:16px; cursor:pointer;">
       다시 보지 않기
     </label>
     <button onclick="closeNoticePopup()" style="width:100%; border:none; border-top:1px solid #eee; background:#fff; padding:16px; font-size:1rem; font-weight:600; color:#6F4E37; cursor:pointer;">닫기</button>

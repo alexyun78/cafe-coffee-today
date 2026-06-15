@@ -1511,7 +1511,7 @@
           display:flex; align-items:center; justify-content:center; gap:8px;
           padding:0 24px 16px; color:#8a7866; font-size:0.85rem; cursor:pointer;
         ">
-          <input type="checkbox" id="notice-popup-dontshow" style="width:16px; height:16px; cursor:pointer;">
+          <input type="checkbox" id="notice-popup-dontshow" onchange="if(this.checked)closeNoticePopup()" style="width:16px; height:16px; cursor:pointer;">
           다시 보지 않기
         </label>
         <button onclick="closeNoticePopup()" style="
