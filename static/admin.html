@@ -2311,21 +2311,24 @@ $("#decaf-clear").addEventListener("click", async () => {
 
 function sortAdminItems(items) {
   const today = ymdLocal(new Date());
-  function rank(serve) {
-    if (!serve) return 2;
+  // rank 0: 오늘 제공 중 / 1: 미래 제공 예정 / 2: 제공일 미정 + 상태 '예정' / 3: 그 외(과거·완료 등)
+  function rank(it, serve) {
     if (serve === today) return 0;
     if (serve > today) return 1;
-    return 2;
+    if (!serve && (it["상태"] || "") === "예정") return 2;
+    return 3;
   }
   return items.slice().sort((a, b) => {
     const aServe = (a["제공일"] && a["제공일"].start) || "";
     const bServe = (b["제공일"] && b["제공일"].start) || "";
-    const ar = rank(aServe);
-    const br = rank(bServe);
+    const ar = rank(a, aServe);
+    const br = rank(b, bServe);
     if (ar !== br) return ar - br;
     if (ar === 1 && aServe !== bServe) return aServe.localeCompare(bServe);
     const aRoast = (a["로스팅"] && a["로스팅"].start) || "";
     const bRoast = (b["로스팅"] && b["로스팅"].start) || "";
+    // 제공일 미정 '예정'은 로스팅을 먼저 시작한 것(가장 이른 날짜)이 위로 — 오름차순
+    if (ar === 2) return aRoast.localeCompare(bRoast);
     return bRoast.localeCompare(aRoast);
   });
 }
