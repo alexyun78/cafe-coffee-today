@@ -1,7 +1,24 @@
 {
   "version": 1,
-  "updated_at": "2026-06-15T11:30:05Z",
+  "updated_at": "2026-06-16T11:30:10Z",
   "items": [
+    {
+      "id": "2026-06-16-coffee-bloom-degassing",
+      "type": "trivia",
+      "date": "2026-06-16",
+      "title_ko": "커피 내릴 때 부풀어 오르는 거품, 정체가 뭐야?",
+      "one_liner": "그 거품(블룸)은 원두가 신선하다는 증거야!",
+      "categories_primary": [
+        "커피 상식"
+      ],
+      "categories_secondary": [
+        "추출"
+      ],
+      "hero_image": "/static/img/insights/trivia/terms.svg",
+      "journal": null,
+      "pub_date": null,
+      "source_basis": null
+    },
     {
       "id": "2026-06-15-coffee-roast-levels-light-dark",
       "type": "trivia",
