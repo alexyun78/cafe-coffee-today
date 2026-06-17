@@ -1,7 +1,24 @@
 {
   "version": 1,
-  "updated_at": "2026-06-16T11:30:10Z",
+  "updated_at": "2026-06-17T11:30:06Z",
   "items": [
+    {
+      "id": "2026-06-17-arabica-vs-robusta",
+      "type": "trivia",
+      "date": "2026-06-17",
+      "title_ko": "아라비카 vs 로부스타, 두 커피는 뭐가 다를까?",
+      "one_liner": "세계 커피의 양대 품종 — 향의 아라비카, 힘의 로부스타!",
+      "categories_primary": [
+        "커피 상식"
+      ],
+      "categories_secondary": [
+        "생두"
+      ],
+      "hero_image": "/static/img/insights/trivia/origin.svg",
+      "journal": null,
+      "pub_date": null,
+      "source_basis": null
+    },
     {
       "id": "2026-06-16-coffee-bloom-degassing",
       "type": "trivia",
