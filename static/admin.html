@@ -1257,9 +1257,12 @@
     flex-direction: column; align-items: flex-start; justify-content: center; gap: 2px;
   }
   .bean-opt-main { display: block; }
+  .bean-opt-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 10px; }
   .bean-opt-roast { font-size: 0.76rem; font-weight: 600; color: #2e7d32; }
   .bean-opt-roast.stale { color: #E65100; }
   .bean-opt-roast.none { color: #E65100; font-weight: 700; }
+  .bean-opt-stock { font-size: 0.76rem; font-weight: 600; color: #1565C0; }
+  .bean-opt-stock.low { color: #E65100; font-weight: 700; }
   .bean-opt-btn {
     flex-shrink: 0; padding: 6px 9px; border: none; border-radius: 6px;
     font-size: 0.72rem; font-weight: 600; font-family: inherit; cursor: pointer;
@@ -4004,9 +4007,16 @@ function createBeanSelect(root) {
       let labelCls = "bean-opt-label", labelInner = main;
       if (showRoast) {
         const lr = fmtLastRoast(lastRoast[b.id]);
+        const st = fmtStockKg(b.remaining_kg);
         labelCls += " with-roast";
+        const stockHtml = st
+          ? `<span class="bean-opt-stock ${st.low ? "low" : ""}">📦 재고 ${escapeHtml(st.text)}</span>`
+          : "";
         labelInner = `<span class="bean-opt-main">${main}</span>` +
-          `<span class="bean-opt-roast ${lr.cls}">🫘 ${escapeHtml(lr.text)}</span>`;
+          `<span class="bean-opt-meta">` +
+            `<span class="bean-opt-roast ${lr.cls}">🫘 ${escapeHtml(lr.text)}</span>` +
+            stockHtml +
+          `</span>`;
       }
       const btns = viewHidden
         ? `<button type="button" class="bean-opt-btn unhide" data-act="unhide" data-id="${b.id}">보이기</button>
