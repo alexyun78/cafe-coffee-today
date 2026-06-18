@@ -2210,6 +2210,7 @@
 // ===== Special Day 팝업 (매월 29일 스페셜티) =====
 // 노출 기간: SPECIAL_POPUP_START ~ SPECIAL_POPUP_END (당일 포함)
 // "오늘 하루 보지 않기" → 그날 날짜 저장, 다음 날이면 다시 노출
+var SPECIAL_POPUP_ENABLED = false;   // 잠시 내림(커피 변경 중) — 다시 켜려면 true
 var SPECIAL_POPUP_START = '2026-06-18';
 var SPECIAL_POPUP_END   = '2026-06-29';
 function specialTodayStr() {
@@ -2225,6 +2226,7 @@ function closeSpecialPopup() {
   maybeShowNoticePopup();   // 스페셜을 닫으면 휴무 안내(있으면)를 이어서 노출
 }
 function maybeShowSpecialPopup() {
+  if (!SPECIAL_POPUP_ENABLED) return false;
   var today = specialTodayStr();
   if (today < SPECIAL_POPUP_START || today > SPECIAL_POPUP_END) return false;
   if (localStorage.getItem('cafe-special-dismissed') === today) return false;
