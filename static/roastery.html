@@ -1251,6 +1251,60 @@
 </div>
 <style>@keyframes noticePopIn{from{opacity:0;transform:scale(.92)}to{opacity:1;transform:scale(1)}}</style>
 
+<!-- Special Day 팝업 -->
+<div id="special-popup-overlay" style="
+  display:none; position:fixed; inset:0; z-index:2100;
+  background:rgba(18,12,8,0.62); align-items:center; justify-content:center;
+  padding:24px; backdrop-filter:blur(3px);
+">
+  <div style="
+    position:relative; background:#fffdf9; border-radius:22px; max-width:360px; width:100%;
+    box-shadow:0 24px 70px rgba(0,0,0,0.42); overflow:hidden;
+    animation:specialPopIn .38s cubic-bezier(.2,.85,.25,1);
+  ">
+    <div style="position:relative; background:linear-gradient(150deg,#2f8a57 0%,#1f6b46 48%,#13503a 100%); padding:30px 24px 24px; text-align:center; overflow:hidden;">
+      <div style="position:absolute; top:14px; left:18px; color:rgba(255,255,255,.35); font-size:.8rem;">✦</div>
+      <div style="position:absolute; top:30px; right:24px; color:rgba(255,255,255,.45); font-size:1.1rem;">✦</div>
+      <div style="position:absolute; bottom:16px; left:30px; color:rgba(255,255,255,.25); font-size:.7rem;">✦</div>
+      <svg width="62" height="62" viewBox="0 0 60 60" style="display:block; margin:0 auto 10px; filter:drop-shadow(0 3px 6px rgba(0,0,0,.2));" aria-hidden="true">
+        <g fill="#ffffff" opacity="0.96">
+          <ellipse cx="30" cy="15" rx="6.5" ry="12" transform="rotate(0 30 30)"/>
+          <ellipse cx="30" cy="15" rx="6.5" ry="12" transform="rotate(72 30 30)"/>
+          <ellipse cx="30" cy="15" rx="6.5" ry="12" transform="rotate(144 30 30)"/>
+          <ellipse cx="30" cy="15" rx="6.5" ry="12" transform="rotate(216 30 30)"/>
+          <ellipse cx="30" cy="15" rx="6.5" ry="12" transform="rotate(288 30 30)"/>
+        </g>
+        <circle cx="30" cy="30" r="6.5" fill="#FFD75E"/>
+      </svg>
+      <div style="letter-spacing:4px; font-size:.7rem; font-weight:700; color:#d6f0e0;">SPECIAL DAY</div>
+      <div style="font-size:1.45rem; font-weight:800; color:#fff; margin-top:6px; line-height:1.25;">매월 29일,<br>더 특별한 한 잔</div>
+    </div>
+    <div style="padding:22px 24px 4px; color:#3a2e25; text-align:center;">
+      <p style="font-size:.95rem; line-height:1.6; margin:0; color:#5a4a3c;">
+        92도씨 로스터리는 <b>매일</b> 특별한 커피를 내려 드려요.<br>
+        그리고 <b>매월 29일</b>엔, 한 걸음 더 특별한 커피를 준비합니다.
+      </p>
+      <div style="background:linear-gradient(135deg,#f3fbf6,#e8f5ee); border:1px solid #d4eadc; border-radius:16px; padding:16px; margin:16px 0 8px;">
+        <div style="font-size:.66rem; letter-spacing:2px; font-weight:700; color:#2f8a57;">그 첫 번째 · 오늘의 커피</div>
+        <div style="font-size:1.18rem; font-weight:800; color:#1f5b3e; margin:6px 0 2px; line-height:1.3;">페루 라 프리마베라<br>게이샤 워시드</div>
+        <div style="display:flex; gap:6px; justify-content:center; flex-wrap:wrap; margin-top:12px;">
+          <span style="background:#fff; border:1px solid #d4eadc; color:#2f7d54; font-size:.78rem; font-weight:600; padding:5px 11px; border-radius:999px;">🌼 자스민 꽃향</span>
+          <span style="background:#fff; border:1px solid #d4eadc; color:#2f7d54; font-size:.78rem; font-weight:600; padding:5px 11px; border-radius:999px;">💧 깨끗한 클린컵</span>
+        </div>
+      </div>
+      <p style="font-size:.86rem; line-height:1.55; margin:8px 0 0; color:#8a7866;">
+        게이샤 특유의 화사한 자스민 향과 투명한 클린컵을 그대로 담은 한 잔이에요.
+      </p>
+    </div>
+    <label style="display:flex; align-items:center; justify-content:center; gap:8px; padding:16px 24px 14px; color:#8a7866; font-size:0.85rem; cursor:pointer;">
+      <input type="checkbox" id="special-popup-dontshow" onchange="if(this.checked)closeSpecialPopup()" style="width:16px; height:16px; cursor:pointer; accent-color:#2f8a57;">
+      오늘 하루 보지 않기
+    </label>
+    <button onclick="closeSpecialPopup()" style="width:100%; border:none; border-top:1px solid #eee; background:#fff; padding:16px; font-size:1rem; font-weight:700; color:#2f8a57; cursor:pointer;">닫기</button>
+  </div>
+</div>
+<style>@keyframes specialPopIn{from{opacity:0;transform:scale(.9) translateY(10px)}to{opacity:1;transform:scale(1) translateY(0)}}</style>
+
 <header class="site-nav">
     <div class="nav-inner">
         <a class="brand" href="/">
@@ -2153,6 +2207,33 @@
 </script>
 
 <script>
+// ===== Special Day 팝업 (매월 29일 스페셜티) =====
+// 노출 기간: SPECIAL_POPUP_START ~ SPECIAL_POPUP_END (당일 포함)
+// "오늘 하루 보지 않기" → 그날 날짜 저장, 다음 날이면 다시 노출
+var SPECIAL_POPUP_START = '2026-06-18';
+var SPECIAL_POPUP_END   = '2026-06-29';
+function specialTodayStr() {
+  var d = new Date();
+  return d.getFullYear() + '-' +
+    String(d.getMonth() + 1).padStart(2, '0') + '-' +
+    String(d.getDate()).padStart(2, '0');
+}
+function closeSpecialPopup() {
+  var cb = document.getElementById('special-popup-dontshow');
+  if (cb && cb.checked) localStorage.setItem('cafe-special-dismissed', specialTodayStr());
+  document.getElementById('special-popup-overlay').style.display = 'none';
+  maybeShowNoticePopup();   // 스페셜을 닫으면 휴무 안내(있으면)를 이어서 노출
+}
+function maybeShowSpecialPopup() {
+  var today = specialTodayStr();
+  if (today < SPECIAL_POPUP_START || today > SPECIAL_POPUP_END) return false;
+  if (localStorage.getItem('cafe-special-dismissed') === today) return false;
+  var overlay = document.getElementById('special-popup-overlay');
+  if (!overlay) return false;
+  overlay.style.display = 'flex';
+  return true;
+}
+
 // ===== 휴무 안내 팝업 (공지 ID 변경 시 "다시 보지 않기" 리셋) =====
 var NOTICE_POPUP_ID = '2026-06-22';   // 휴무일 = 공지 ID
 function closeNoticePopup() {
@@ -2160,7 +2241,7 @@ function closeNoticePopup() {
   if (cb && cb.checked) localStorage.setItem('cafe-notice-dismissed', NOTICE_POPUP_ID);
   document.getElementById('notice-popup-overlay').style.display = 'none';
 }
-(function showNoticePopup() {
+function maybeShowNoticePopup() {
   if (localStorage.getItem('cafe-notice-dismissed') === NOTICE_POPUP_ID) return;
   // 휴무일 7일 전 ~ 휴무일(당일 자정까지)만 노출
   var start = new Date(NOTICE_POPUP_ID + 'T00:00:00');
@@ -2170,7 +2251,10 @@ function closeNoticePopup() {
   if (now < start || now > end) return;
   var overlay = document.getElementById('notice-popup-overlay');
   if (overlay) overlay.style.display = 'flex';
-})();
+}
+
+// 우선순위: Special Day 먼저, 닫으면 휴무 안내. 스페셜이 없으면 휴무 안내 바로.
+if (!maybeShowSpecialPopup()) maybeShowNoticePopup();
 </script>
 
 </body>
