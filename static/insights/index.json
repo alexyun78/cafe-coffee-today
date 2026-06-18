@@ -1,7 +1,24 @@
 {
   "version": 1,
-  "updated_at": "2026-06-17T11:30:06Z",
+  "updated_at": "2026-06-18T11:30:11Z",
   "items": [
+    {
+      "id": "2026-06-18-geisha-gesha-why-expensive",
+      "type": "trivia",
+      "date": "2026-06-18",
+      "title_ko": "게이샤 커피는 왜 그렇게 비쌀까?",
+      "one_liner": "꽃·과일향이 폭발하는 전설의 품종, 그런데 키우기가 까다로워!",
+      "categories_primary": [
+        "커피 상식"
+      ],
+      "categories_secondary": [
+        "생두"
+      ],
+      "hero_image": "/static/img/insights/trivia/origin.svg",
+      "journal": null,
+      "pub_date": null,
+      "source_basis": null
+    },
     {
       "id": "2026-06-17-arabica-vs-robusta",
       "type": "trivia",
