@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>에티오피아 워시드 · 내추럴 로스팅 이론 — Stronghold S7X</title>
+<link rel="stylesheet" href="nothing.css">
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <span class="eyebrow">Coffee Roasting Theory · Deep Research</span>
+    <h1>에티오피아 생두 로스팅 이론 — 워시드 vs 내추럴
+      <span class="sub">Stronghold S7X 반열풍 전기 로스터 기준 · Washed vs Natural Processing</span>
+    </h1>
+    <p class="lede">
+      에티오피아(Ethiopia) 워시드(washed)·내추럴(natural) 생두가 구조와 화학 반응에서 어떻게 다른지 정리하고,
+      똑같은 열을 줬을 때 두 콩이 어떻게 달라지는지 살펴본 다음, Stronghold S7X에서
+      <em>향을 살리는 쪽</em>과 <em>단맛을 살리는 쪽</em>으로 나눠 어떻게 볶으면 좋을지 정리했어요.
+    </p>
+    <div class="meta-row">
+      <span class="chip">📅 작성일 <b>2026-06-17</b></span>
+      <span class="chip">🔍 검증 클레임 <b>18 확정 / 7 기각</b></span>
+      <span class="chip">📚 교차검증 소스 <b>12개</b></span>
+      <span class="chip">⚙️ 머신 <b>Stronghold S7X</b></span>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <nav class="toc">
+    <h4>목차</h4>
+    <ol>
+      <li><a href="#tldr">핵심 요약 (TL;DR)</a></li>
+      <li><a href="#structure">① 물리적 구조 차이</a></li>
+      <li><a href="#chemistry">② 열에 대한 화학적 작용</a></li>
+      <li><a href="#sameheat">③ 동일 열 주입 시 변화 차이</a></li>
+      <li><a href="#flavor">④ 향미를 살리는 로스팅</a></li>
+      <li><a href="#sweet">⑤ 단맛을 살리는 로스팅</a></li>
+      <li><a href="#s7x">⑥ S7X 실무 파라미터</a></li>
+      <li><a href="#caveats">⑦ 주의사항 · 기각된 통설</a></li>
+      <li><a href="#sources">출처 · 미해결 질문</a></li>
+    </ol>
+  </nav>
+
+  <!-- TLDR -->
+  <section id="tldr">
+    <h2><span class="num">★</span>핵심 요약 <span class="conf high">높은 신뢰도</span></h2>
+    <div class="panel">
+      <p style="margin-top:0">
+        워시드와 내추럴은 <strong>가공하는 단계에서 이미 콩이 달라져요</strong>. 워시드는 밀도(빽빽한 정도)가 높고 수분이
+        고르게 퍼져 있는데, 내추럴은 밀도가 낮고 세포벽이 열에 더 약해요.
+        그래서 같은 불·같은 온도 곡선(RoR)으로 볶으면 <strong>내추럴이 더 빨리, 더 뜨겁게 익어서</strong>
+        겉이 타거나(스코칭) 끝이 타는(팁핑) 위험이 커집니다.
+      </p>
+      <p>
+        그래서 큰 원칙은 이래요 — <em>내추럴 = 처음 온도를 더 낮게 + 열을 더 천천히</em>,
+        <em>워시드 = 처음 온도를 좀 더 높게 + 빠르게 볶아도 OK</em>. 맛으로 보면
+        <strong>워시드는 깔끔함·산미·꽃향</strong>, <strong>내추럴은 단맛·묵직함·과일향</strong> 쪽으로 나와요.
+      </p>
+      <div class="kpi">
+        <div class="box"><div class="n">+1~2℃</div><div class="l">같은 열 줄 때 내추럴이 더 뜨거워요 (220초 이후)</div></div>
+        <div class="box"><div class="n">185–195℃</div><div class="l">내추럴 추천 시작 온도</div></div>
+        <div class="box"><div class="n">195–205℃</div><div class="l">워시드 추천 시작 온도</div></div>
+        <div class="box"><div class="n">140–165℃</div><div class="l">마이야르 반응 활발한 구간</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 1. STRUCTURE -->
+  <section id="structure">
+    <h2><span class="num">①</span>물리적 구조 차이 <span class="conf high">높은 신뢰도</span></h2>
+    <p class="section-lead">가공 방식은 그냥 "말리는 법"에 그치지 않아요. 콩의 밀도·수분·세포 구조·표면 상태까지 다 바꿔놓거든요.</p>
+
+    <div class="grid2">
+      <div class="proc-card washed">
+        <h4><span class="dot w"></span>워시드 <span class="en">Washed / Wet</span></h4>
+        <span class="tag">예가체프 · 시다모 워시드 (Yirgacheffe · Sidamo)</span>
+        <ul>
+          <li><strong>밀도 높음</strong> — 물에 띄워 골라내고(부유선별) 발효·건조를 잘 관리해서 고른 편</li>
+          <li><strong>수분이 고르게 들어 있음</strong> — 실험에서도 워시드가 내추럴보다 수분이 더 높게 나왔어요<a href="#s1" class="ref">[1]</a></li>
+          <li>세포 구조가 상대적으로 <strong>열에 잘 버팀</strong></li>
+          <li>표면이 깨끗함 — 끈적한 점액질(mucilage)을 벗겨냈거든요</li>
+        </ul>
+      </div>
+      <div class="proc-card natural">
+        <h4><span class="dot n"></span>내추럴 <span class="en">Natural / Dry</span></h4>
+        <span class="tag">구지 · 시다모 내추럴 (Guji · Sidamo Natural)</span>
+        <ul>
+          <li><strong>밀도 낮음</strong>(특히 낮은 지대) — 과육째 햇볕에 말려서 수분이 들쭉날쭉</li>
+          <li><strong>수분이 고르지 않음</strong> — 콩마다 마른 정도가 달라요</li>
+          <li>세포벽이 <strong>열에 더 약함</strong> → 너무 익거나(과발현) 겉이 타기 쉬움<a href="#s3" class="ref">[3]</a></li>
+          <li>표면에 <strong>마른 과육(dried fruit mucilage)</strong>이 남아 있음 → 금방 갈색으로 변함</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="callout warn">
+      <span class="lbl">짚고 갈 점</span>
+      밀도를 <strong>가장 크게 정하는 건 가공이 아니라 고도·품종</strong>이에요. 높은 곳에서 난 내추럴(구지)이
+      낮은 곳 워시드보다 밀도가 높을 수도 있어요. 그러니 위 카드는 "조건이 같을 때의 대략적인 경향"으로 봐야지,
+      무조건 들어맞는 법칙은 아니에요. 수출용 표준 수분은 둘 다 10–12%를 목표로 해요.
+    </div>
+
+    <h3>밀도가 열전도에 미치는 영향 <span class="conf high">높은 신뢰도</span></h3>
+    <p>
+      mtpak이 정리한 것처럼 <em>"콩 속으로 열이 얼마나 잘 들어가느냐(열전도)에 밀도가 가장 크게 작용한다"</em>고 해요.
+      <strong>단단한 콩은 속까지 익히는 데 열이 더 많이 들고</strong>, 처음에 센 열도 더 잘 견뎌요.
+      반대로 <strong>무른 콩(내추럴)은 세포 구조가 약해서 너무 익거나 겉이 탈 위험이 커요.</strong>
+      그래서 처음 온도를 더 낮게, 열도 더 천천히 줘야 해요.<a href="#s2" class="ref">[2]</a><a href="#s3" class="ref">[3]</a>
+    </p>
+    <div class="callout">
+      <span class="lbl">현장 감각</span>
+      단단한 콩이라고 "처음부터 불을 최대로"가 정답은 아니에요. Royal Coffee는 단단한 콩을 볶을 때
+      <strong>"드럼은 뜨겁게, 불꽃은 낮게(hot drum, low flame)"</strong> 해서 모아둔 열을 쓰다가,
+      색이 좀 올라온 뒤에 불을 키우라고 권해요.
+    </div>
+  </section>
+
+  <!-- 2. CHEMISTRY -->
+  <section id="chemistry">
+    <h2><span class="num">②</span>열에 대한 화학적 작용 <span class="conf high">높은 신뢰도</span></h2>
+    <p class="section-lead">볶을 때 맛을 만드는 핵심은 마이야르 반응·캐러멜화·스트레커 분해예요. 가공 방식 차이는 이 반응들이 일어나는 "속도"에 영향을 줘요.</p>
+
+    <table>
+      <thead>
+        <tr><th>반응 <span class="en">Reaction</span></th><th>무엇이 일어나나</th><th>온도/구간</th><th>향미 결과</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="col-label">마이야르 반응<br><span class="en">Maillard</span></td>
+          <td>당(환원당)과 아미노산(단백질 성분)이 서로 만나 반응해요<a href="#s8" class="ref">[8]</a></td>
+          <td>약 <strong>140–165℃</strong>에서 확 빨라져요 (딱 잘리는 경계가 아니라 빨라지는 구간)</td>
+          <td>갈색으로 변하고, 고소·구수하고, 묵직함(멜라노이딘)을 만들어요</td>
+        </tr>
+        <tr>
+          <td class="col-label">스트레커 분해<br><span class="en">Strecker</span></td>
+          <td>α-다이카보닐 화합물과 α-아미노산이 반응해 아민·탄산이 떨어져 나가요<a href="#s8" class="ref">[8]</a></td>
+          <td>마이야르 반응이랑 같이 진행돼요</td>
+          <td>알데하이드·피라진(pyrazine)이 생겨 향(아로마)을 만들어요</td>
+        </tr>
+        <tr>
+          <td class="col-label">캐러멜화<br><span class="en">Caramelization</span></td>
+          <td>당이 열로 스스로 분해돼요 (아미노산 없이도)</td>
+          <td>약 170℃ 이상</td>
+          <td>단맛이 캐러멜·구운 향으로, 너무 하면 쓴맛</td>
+        </tr>
+        <tr>
+          <td class="col-label">산 분해<br><span class="en">Acid degradation</span></td>
+          <td>클로로겐산(CGA) 같은 산이 분해되고 유기산이 변해요</td>
+          <td>볶는 내내</td>
+          <td>산미가 줄거나 바뀌고, 쓴맛의 씨앗이 돼요</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="callout good">
+      <span class="lbl">가공 차이가 실제로 화학 반응에 주는 영향</span>
+      내추럴은 표면에 <strong>마른 과육의 당이 남아 있어서</strong> 캐러멜화·갈변이 더 빨리 시작되고 진행돼요.
+      그래서 <strong>겉 색만 봐서는 속이 얼마나 익었는지 알 수 없어요</strong> —
+      겉은 진해 보여도 속은 덜 익었을 수 있거든요. 색이 아니라 시간·온도·RoR로 판단해야 해요.<a href="#s7" class="ref">[7]</a>
+    </div>
+
+    <div class="callout bad">
+      <span class="lbl">기각된 통설 — 이 보고서는 여기에 기대지 않아요</span>
+      "내추럴은 말리는 동안 <strong>당이 과육에서 콩 속으로 옮겨가</strong> 당이 더 많이 남는다"는 흔한 설명은
+      검증에서 <strong>0–3으로 떨어졌어요</strong>(아래 ⑦ 참고). 내추럴에서 단맛이 나는 건
+      "콩 속에 당이 더 많아서"가 아니라 <strong>표면에 남은 과육·세포 구조·볶는 방식</strong>이 함께 작용한 결과로 보는 게 맞아요.
+    </div>
+  </section>
+
+  <!-- 3. SAME HEAT -->
+  <section id="sameheat">
+    <h2><span class="num">③</span>같은 열을 주입하면 — 무엇이 달라지나 <span class="conf high">높은 신뢰도</span></h2>
+    <p class="section-lead">볶기 시작부터 끝까지 <strong>같은 불·같은 온도 곡선(RoR)</strong>으로 똑같이 했을 때 뭐가 달라지는지 봐요.</p>
+
+    <h3>① 내추럴이 더 빨리, 더 뜨겁게 익어요</h3>
+    <p>
+      작은 실험용 분사층(spouted bed) 로스터로 250℃ 공기를 일정하게 넣으면서 워시드·내추럴 4쌍을 비교한
+      실험이 있어요. <em>볶는 시간이 길어질수록(220초 넘어가면) 내추럴 콩 온도가 워시드보다 높게 나왔어요</em>
+      (생산국이 어디든 똑같은 경향, 차이는 약 1–2℃).<a href="#s1" class="ref">[1]</a>
+      즉 같은 열을 줘도 내추럴이 더 앞서 나가서, <strong>같은 방식 그대로 쓰면 내추럴은 너무 많이 볶이기</strong> 쉬워요.
+    </p>
+    <div class="callout warn">
+      <span class="lbl">숫자 볼 때 주의</span>
+      차이(1–2℃)는 작은 데다, 실험실 분사층 로스터에서 나온 값이에요. 드럼·반열풍 기계(S7X)에도 똑같이 적용되는지는
+      확실하지 않으니, <strong>"대충 이런 방향이구나" 정도로만</strong> 쓰고 실제로 볶아보며 맞추세요.
+    </div>
+
+    <h3>② 겉 탐·끝 탐 위험: 내추럴이 가장 큼</h3>
+    <div class="grid2">
+      <div class="panel tight">
+        <h4 style="margin-top:0; color:var(--bad)">스코칭 <span class="en">Scorching</span></h4>
+        <p style="font-size:14.5px; margin:6px 0">
+          <strong>맞닿아서 생기는 문제(전도)</strong>예요. 너무 뜨거운 드럼 쇠벽에 콩이 직접 닿는 게 원인 →
+          <strong>처음 온도가 너무 높을 때</strong>가 주범이죠. 콩 옆면에 탄 자국·물집·구멍을 남겨요.<a href="#s4" class="ref">[4]</a>
+        </p>
+      </div>
+      <div class="panel tight">
+        <h4 style="margin-top:0; color:var(--warn)">팁핑 <span class="en">Tipping</span></h4>
+        <p style="font-size:14.5px; margin:6px 0">
+          <strong>뜨거운 바람 때문에 생기는 문제(대류)</strong>에 가까워요. 공기가 너무 뜨겁거나, 콩이 받아들이는 속도보다
+          열을 빨리 줘서 <strong>콩 끝이나 배아 부분이 타는</strong> 거예요.<a href="#s4" class="ref">[4]</a>
+        </p>
+      </div>
+    </div>
+    <p>
+      밀도가 낮고, 알이 크고, 끝이 뾰족한 <strong>내추럴이 두 가지 결함에 가장 약해요</strong>.
+      (단, "알이 크다"는 건 품종마다 달라요 — 에티오피아 토착 품종 내추럴은 오히려 알이 작을 수도 있어요.)
+    </p>
+
+    <h3>③ 나오는 맛의 차이</h3>
+    <table>
+      <thead><tr><th>항목</th><th class="w">워시드 (같은 열)</th><th class="n">내추럴 (같은 열)</th></tr></thead>
+      <tbody>
+        <tr><td class="col-label">익는 속도</td><td class="w">느리고 안정적</td><td class="n">빠르고 과하게 볶일 위험</td></tr>
+        <tr><td class="col-label">결함 위험</td><td class="w">비교적 낮음</td><td class="n">겉 탐·끝 탐 높음</td></tr>
+        <tr><td class="col-label">산미 <span class="en">acidity</span></td><td class="w">밝고 또렷</td><td class="n">눌리기 쉬움</td></tr>
+        <tr><td class="col-label">단맛·바디</td><td class="w">깔끔하지만 가벼움</td><td class="n">진하지만 탄맛 끼기 쉬움</td></tr>
+        <tr><td class="col-label">두드러지는 캐릭터</td><td class="w">깔끔·꽃향·감귤류</td><td class="n">과일향·발효향·묵직함</td></tr>
+      </tbody>
+    </table>
+    <div class="callout good">
+      <span class="lbl">정리</span>
+      흔히 쓰는 기본 방식은 워시드에 맞춰진 거예요. 내추럴에 그대로 쓰면 "더 빨리 타고 산미가 눌려요".
+      <strong>내추럴은 처음 온도를 낮추고 온도 올리는 속도를 완만하게</strong> 따로 짜야 해요.
+    </div>
+  </section>
+
+  <!-- 4. FLAVOR -->
+  <section id="flavor">
+    <h2><span class="num">④</span>향미를 살리는 로스팅 <span class="en">아로마·플로럴·프루티·산미</span></h2>
+    <p class="section-lead">목표: 날아가기 쉬운 향과 산미를 지키기. 핵심은 <strong>볶는 마무리(디벨롭)를 짧게 + 마이야르·캐러멜화를 너무 밀어붙이지 않기</strong>예요.</p>
+
+    <div class="profile flavor">
+      <div class="head">향미 우선 프로파일 <span class="badge">짧고 또렷하게</span></div>
+      <div class="pgrid">
+        <div class="pcol">
+          <h5><span class="dot w"></span>워시드 (예가체프/시다모)</h5>
+          <div class="param"><span class="k">차징 온도 <span class="en">charge</span></span><span class="v">195–205℃ (높게)</span></div>
+          <div class="param"><span class="k">핫에어 <span class="en">hot air</span></span><span class="v">높게 (대류 우세)</span></div>
+          <div class="param"><span class="k">할로겐 <span class="en">halogen</span></span><span class="v">중 (복사 절제)</span></div>
+          <div class="param"><span class="k">총 시간</span><span class="v">다소 빠르게</span></div>
+          <div class="param"><span class="k">디벨롭먼트</span><span class="v">짧게 (낮은 DTR=디벨롭 비율)</span></div>
+          <div class="param"><span class="k">로스트 레벨</span><span class="v">라이트 ~ 라이트미디엄</span></div>
+        </div>
+        <div class="pcol">
+          <h5><span class="dot n"></span>내추럴 (구지/시다모)</h5>
+          <div class="param"><span class="k">차징 온도 <span class="en">charge</span></span><span class="v">185–195℃ (낮게)</span></div>
+          <div class="param"><span class="k">핫에어 <span class="en">hot air</span></span><span class="v">중~높게</span></div>
+          <div class="param"><span class="k">할로겐 <span class="en">halogen</span></span><span class="v">낮~중 (스코칭 회피)</span></div>
+          <div class="param"><span class="k">교반 <span class="en">stirring</span></span><span class="v">높게 (고른 열전달)</span></div>
+          <div class="param"><span class="k">디벨롭먼트</span><span class="v">짧고 가볍게</span></div>
+          <div class="param"><span class="k">로스트 레벨</span><span class="v">라이트 (프루티 보존)</span></div>
+        </div>
+      </div>
+    </div>
+    <p>
+      <strong>왜 그럴까요?</strong> 산미·꽃향은 빠르게 볶을 때(마무리를 짧게) 잘 보존돼요.<a href="#s5" class="ref">[5]</a>
+      워시드는 밀도가 높아 높은 시작 온도도 견디는데, 뜨거운 바람(대류) 비중을 높여 표면을 고르게 익히고
+      마이야르·캐러멜화 구간을 길게 끌지 않아서 깔끔한 산미를 남겨요. 내추럴은 시작 온도를 낮춰 겉 타는 걸 막되,
+      마무리를 짧고 가볍게 가져가 과일향·아로마를 지켜요. 검증해 보니 <em>"향을 노린다고 마이야르를 무조건 세게 밀 필요는 없다"</em>고 해요.
+    </p>
+  </section>
+
+  <!-- 5. SWEET -->
+  <section id="sweet">
+    <h2><span class="num">⑤</span>단맛을 살리는 로스팅 <span class="en">sweetness·캐러멜·바디</span></h2>
+    <p class="section-lead">목표: 캐러멜화·마이야르 산물을 충분히 끌어내기. 핵심은 <strong>온도를 완만하게 올리고(RoR) 마무리 시간을 넉넉히</strong> 주는 거예요. 단, "타지 않게".</p>
+
+    <div class="profile sweet">
+      <div class="head">단맛·바디 우선 프로파일 <span class="badge">느리고 균일하게</span></div>
+      <div class="pgrid">
+        <div class="pcol">
+          <h5><span class="dot w"></span>워시드 (예가체프/시다모)</h5>
+          <div class="param"><span class="k">차징 온도 <span class="en">charge</span></span><span class="v">195–205℃ (유지)</span></div>
+          <div class="param"><span class="k">마이야르 구간</span><span class="v">길게 (천천히)</span></div>
+          <div class="param"><span class="k">디벨롭먼트</span><span class="v">늘림 (높은 DTR)</span></div>
+          <div class="param"><span class="k">할로겐 <span class="en">halogen</span></span><span class="v">중~높게 (침투·바디)</span></div>
+          <div class="param"><span class="k">총 시간</span><span class="v">다소 길게</span></div>
+          <div class="param"><span class="k">로스트 레벨</span><span class="v">미디엄</span></div>
+        </div>
+        <div class="pcol">
+          <h5><span class="dot n"></span>내추럴 (구지/시다모)</h5>
+          <div class="param"><span class="k">차징 온도 <span class="en">charge</span></span><span class="v">185–195℃ (낮게)</span></div>
+          <div class="param"><span class="k">RoR 램프</span><span class="v">완만하게 (스코칭 방지)</span></div>
+          <div class="param"><span class="k">교반 <span class="en">stirring</span></span><span class="v">높게 (필수)</span></div>
+          <div class="param"><span class="k">캐러멜화</span><span class="v">천천히·충분히</span></div>
+          <div class="param"><span class="k">총 시간</span><span class="v">느리게 (당 캐러멜화 시간 확보)</span></div>
+          <div class="param"><span class="k">로스트 레벨</span><span class="v">미디엄 (탄맛 직전까지)</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="callout">
+      <span class="lbl">단맛을 지키는 핵심</span>
+      Royal NY는 <em>"캐러멜화가 너무 빨리 지나가 버리면 단맛이 거의 사라진다"</em>고 해요.<a href="#s5" class="ref">[5]</a>
+      단맛은 캐러멜화에 <strong>시간</strong>을 줘야 살아나요. 그래서 단맛을 노릴 땐 향을 노릴 때보다 천천히 볶는 게 정석이에요.
+    </div>
+    <div class="callout bad">
+      <span class="lbl">내추럴 단맛 볶기의 딜레마</span>
+      내추럴은 "천천히 볶아야 단맛이 나는데, 천천히 볶으면 더 잘 탄다"는 딜레마가 있어요. 이걸 푸는 열쇠가
+      <strong>낮은 시작 온도 + 완만한 RoR + 강한 교반(휘젓기)</strong>이에요. 콩을 자주 휘저어 열을 고루 퍼뜨려서
+      드럼에 닿아 타는 걸 막으면서, 전체 시간을 늘려 캐러멜화할 시간을 버는 거죠.
+    </div>
+  </section>
+
+  <!-- 6. S7X -->
+  <section id="s7x">
+    <h2><span class="num">⑥</span>Stronghold S7X 실무 파라미터 <span class="conf medium">중간 신뢰도</span></h2>
+    <p class="section-lead">
+      S7X는 <strong>핫에어(뜨거운 바람=대류) · 할로겐(빛으로 데우기=복사) · 교반(콩 휘젓기)</strong>을
+      따로따로 조절할 수 있는 기계예요. 이 3가지를 콩 특성에 맞게 나눠 쓰는 게 핵심이죠.
+    </p>
+
+    <div class="panel">
+      <h3 style="margin-top:0">세 가지 열 채널의 역할</h3>
+      <div class="grid2">
+        <div>
+          <p style="margin-top:0"><strong>🌀 핫에어 (뜨거운 바람 / 대류)</strong><br>
+          <span class="en">convection</span> — 표면을 고르게, 산미·깔끔함에 좋아요. 향 방향에선 비중을 높여요</p>
+          <p><strong>🔆 할로겐 (빛으로 데우기 / 복사)</strong><br>
+          <span class="en">radiation</span> — 속까지 열을 넣고 묵직함을 만들어요. 단, 과하면 겉·끝이 타요. 내추럴엔 살살</p>
+        </div>
+        <div>
+          <p style="margin-top:0"><strong>🔄 교반 (콩 휘젓기 / Stirring)</strong><br>
+          열을 고르게 퍼뜨리고 겉 타는 걸 막아요. <strong>내추럴엔 사실상 필수</strong>라 높게</p>
+          <p><strong>🌡 차징/예열 (처음 온도)</strong><br>
+          가공·밀도에 따라 따로 맞춰요. 내추럴은 워시드보다 낮게</p>
+        </div>
+      </div>
+    </div>
+
+    <h3>출발점 기준값 (8분 / 600g 배치)</h3>
+    <table>
+      <thead><tr><th>파라미터</th><th>출발값</th><th>비고</th></tr></thead>
+      <tbody>
+        <tr><td class="col-label">핫에어 <span class="en">Hot Air</span></td><td>약 8</td><td>대류의 주된 힘 (0–20 단계)</td></tr>
+        <tr><td class="col-label">할로겐 <span class="en">Halogen</span></td><td>5 이상</td><td>빛으로 내는 열 / 타워 드럼 데우기</td></tr>
+        <tr><td class="col-label">교반 <span class="en">Agitation</span></td><td>7 이상</td><td>콩에 따라 조정</td></tr>
+        <tr><td class="col-label">표준 예열 (Internal)</td><td>170℃</td><td>콩 센서 기준</td></tr>
+        <tr><td class="col-label">표준 예열 (Tower Drum)</td><td>165℃</td><td>할로겐 빛으로 데워서 시간이 더 걸려요</td></tr>
+        <tr><td class="col-label">정상 RoR</td><td>TP(터닝포인트=콩 온도 최저점) 직후 ~5℃ → 종료 ~3℃</td><td>30초마다 콩 온도가 얼마나 오르는지로 계산</td></tr>
+      </tbody>
+    </table>
+    <div class="callout warn">
+      <span class="lbl">신뢰도 한계 — 꼭 읽으세요</span>
+      위 숫자들은 <strong>블로그 한 곳(The God Shot)</strong>에만 기댄 값이고, 일반 Stronghold/S7 시리즈 기준이에요
+      (<strong>S7X는 전용 드럼 히터가 더 붙은 모델</strong>이라 그대로 안 맞을 수 있어요).
+      170/165℃, 핫에어 8·할로겐 5·교반 7은 <strong>그냥 일반적인 예열·출발 기본값일 뿐</strong>,
+      에티오피아 가공별로 딱 맞는 시작 온도는 아니에요. 특히 <strong>내추럴은 따로 더 낮은 시작 온도</strong>를 권해요.<a href="#s6" class="ref">[6]</a>
+      <strong>정확한 값은 S7X 매뉴얼 + 직접 볶아보며 확정</strong>해야 해요.
+    </div>
+
+    <h3>방향별 S7X 3축 배분 요약</h3>
+    <table>
+      <thead><tr><th>목표 / 생두</th><th>핫에어</th><th>할로겐</th><th>교반</th><th>차징</th><th>디벨롭</th></tr></thead>
+      <tbody>
+        <tr><td class="col-label">향미 · 워시드</td><td>↑ 높게</td><td>중</td><td>중</td><td>195–205℃</td><td>짧게</td></tr>
+        <tr><td class="col-label">향미 · 내추럴</td><td>중~↑</td><td>↓ 낮~중</td><td>↑ 높게</td><td>185–195℃</td><td>짧게</td></tr>
+        <tr><td class="col-label">단맛 · 워시드</td><td>중</td><td>중~↑</td><td>중</td><td>195–205℃</td><td>↑ 길게</td></tr>
+        <tr><td class="col-label">단맛 · 내추럴</td><td>중</td><td>↓ 절제</td><td>↑ 높게</td><td>185–195℃</td><td>↑ 길게(완만 RoR)</td></tr>
+      </tbody>
+    </table>
+    <p style="font-size:13.5px; color:var(--muted)">
+      ※ 이 종합 프로파일은 검증된 낱개 사실들(맛·속도·밀도와 열·S7X 설정값)을 합쳐서 만든 실무 권고예요.
+      <strong>하나의 출처로 통째 검증된 건 아니니까요</strong>(신뢰도 낮음). 꼭 직접 볶아보며 맞추세요.
+    </p>
+  </section>
+
+  <!-- 7. CAVEATS -->
+  <section id="caveats">
+    <h2><span class="num">⑦</span>주의사항 · 적대적 검증에서 기각된 통설</h2>
+    <p class="section-lead">아래 7개 "흔한 설명"은 3표 교차검증에서 떨어졌어요. <strong>이 보고서의 권고는 여기에 기대지 않습니다.</strong></p>
+
+    <div class="panel">
+      <ul class="refuted">
+        <li><span class="strike">가공(워시드/내추럴)은 콩 모양·밀도에 별 영향이 없다</span><span class="vote">0–3 기각</span><br><span style="font-size:13.5px; color:var(--muted)">→ 실제로는 영향이 있어요(밀도·수분 차이가 확인됐어요).</span></li>
+        <li><span class="strike">볶기 초반(0–150초)에 내추럴이 무게·부피밀도가 더 빨리 줄어든다</span><span class="vote">0–3 기각</span><br><span style="font-size:13.5px; color:var(--muted)">→ 차이는 후반(220초 이후)에 나타나요. 초반이 아니에요.</span></li>
+        <li><span class="strike">당이 과육에서 콩 속으로 옮겨가 내추럴에 당이 더 많이 남는다</span><span class="vote">0–3 기각</span><br><span style="font-size:13.5px; color:var(--muted)">→ 단맛이 나는 이유를 "당이 옮겨가서"로 설명하면 안 돼요.</span></li>
+        <li><span class="strike">워시드는 표면 당이 적어서 깔끔함·산미·꽃향으로 이어진다</span><span class="vote">0–3 기각</span></li>
+        <li><span class="strike">워시드는 구조가 고르니까 더 과감하게 높은 시작 온도를 줘도 된다</span><span class="vote">1–2 기각</span></li>
+        <li><span class="strike">마이야르 향은 구운 향·캐러멜·초콜릿 정도로만 한정된다</span><span class="vote">0–3 기각</span></li>
+        <li><span class="strike">내추럴은 당이 많아 빨리 갈변돼서 로스터를 속인다(당 함량이 원인이라는 주장)</span><span class="vote">0–3 기각</span><br><span style="font-size:13.5px; color:var(--muted)">→ "겉 색만으론 못 믿는다"는 결론 자체는 맞아요. 다만 그 원인을 "당 함량 탓"으로 돌리는 설명은 기각됐어요.</span></li>
+      </ul>
+    </div>
+
+    <div class="callout">
+      <span class="lbl">출처가 얼마나 탄탄한지 정리</span>
+      가공-맛-열 관련 주장은 전문 연구자(Mark Al-Shemmeri)와 여러 독립 전문 출처로 교차검증돼서
+      <strong>신뢰도 높음</strong>이에요. 반면 Stronghold 설정값은 블로그 한 곳에 기댄 데다 S7X 전용 검증이 없어서
+      <strong>중간</strong>이고요. 마지막 종합 프로파일은 여러 사실을 합친 권고라 <strong>낮음</strong>이에요 — 꼭 직접 볶아보며 검증하세요.
+    </div>
+  </section>
+
+  <!-- SOURCES -->
+  <section id="sources">
+    <h2>출처 <span class="en">Sources</span></h2>
+    <div class="panel tight">
+      <div class="src" id="s1"><span class="q primary">primary</span><span>[1] Mark Al-Shemmeri, <em>Effect of post-harvest processing on coffee's roasting performance</em> — <a href="https://medium.com/@markalshemmeri/effect-of-post-harvest-processing-on-coffees-roasting-performance-130bdfe2da36">medium.com/@markalshemmeri</a></span></div>
+      <div class="src" id="s2"><span class="q secondary">secondary</span><span>[2] MTPak Coffee, <em>Density of green coffee beans & how it affects roast</em> — <a href="https://mtpak.coffee/2022/10/density-of-green-coffee-beans-how-it-affetcs-roast/">mtpak.coffee</a></span></div>
+      <div class="src" id="s3"><span class="q blog">blog</span><span>[3] Green Coffee Collective, <em>Washed coffee beans guide</em> — <a href="https://greencoffeecollective.com/blogs/learn/washed-coffee-beans-guide">greencoffeecollective.com</a></span></div>
+      <div class="src" id="s4"><span class="q secondary">secondary</span><span>[4] MTPak Coffee, <em>Avoid tipping & scorching</em> + Green Coffee Collective, <em>Scorching/tipping</em> — <a href="https://mtpak.coffee/2023/06/avoid-tipping-and-scorching-coffee-roast/">mtpak.coffee</a> · <a href="https://greencoffeecollective.com/blogs/learn/scorching-tipping-coffee-roasting">greencoffeecollective.com</a></span></div>
+      <div class="src" id="s5"><span class="q secondary">secondary</span><span>[5] Perfect Daily Grind, <em>How to roast natural/honey processed coffee</em> + Royal NY, <em>Roasting washed vs natural</em> — <a href="https://perfectdailygrind.com/2017/10/how-to-roast-natural-honey-processed-coffee/">perfectdailygrind.com</a> · <a href="https://www.royalny.com/blogs/roasting-washed-vs-natural-coffee">royalny.com</a></span></div>
+      <div class="src" id="s6"><span class="q blog">blog</span><span>[6] The God Shot, <em>First time roasting on a Stronghold</em> — <a href="https://www.thegodshot.be/en_GB/blog/tips-1/first-time-roasting-on-a-stronghold-5">thegodshot.be</a></span></div>
+      <div class="src" id="s7"><span class="q blog">blog</span><span>[7] EthioCoffee, <em>Roasting Ethiopian coffee beans guide</em> — <a href="https://www.ethiocoffee.co/insights/roasting-ethiopian-coffee-beans-guide">ethiocoffee.co</a></span></div>
+      <div class="src" id="s8"><span class="q blog">blog</span><span>[8] Coffee Fanatics, <em>Maillard & Strecker overview</em> + Wikipedia, <em>Maillard reaction</em> — <a href="https://coffeefanatics.jp/en/maillard-reaction-strecker-degradation-a-scientific-overview/">coffeefanatics.jp</a> · <a href="https://en.wikipedia.org/wiki/Maillard_reaction">en.wikipedia.org</a></span></div>
+      <div class="src"><span class="q blog">blog</span><span>[+] ICT Coffee, <em>Science of coffee bean density</em> — <a href="https://www.ictcoffee.com/news/the-science-of-coffee-bean-density-why-it-matters-for-roasting/">ictcoffee.com</a></span></div>
+    </div>
+
+    <h3>미해결 질문 <span class="en">Open Questions</span></h3>
+    <div class="panel tight">
+      <ol style="margin:0; padding-left:20px;">
+        <li style="margin:8px 0">S7X 전용 드럼 히터(S7와 다른 점)가 시작 온도·3축 추천값에 어떻게 반영돼야 하는지 — <strong>제조사 공식 매뉴얼 확인이 필요해요</strong>.</li>
+        <li style="margin:8px 0">에티오피아 워시드와 내추럴 각각의 <strong>검증된 마무리 비율(DTR)·총 시간·1차 크랙까지 걸리는 시간</strong> 범위 — 실제로 잰 데이터가 없어요.</li>
+        <li style="margin:8px 0">분사층 실험에서 본 "내추럴 +1–2℃"가 <strong>반열풍 드럼(S7X)에서도 똑같이 나타나는지</strong>.</li>
+        <li style="margin:8px 0">클로로겐산(CGA)·산 분해가 가공별로 얼마나 다른지, 발열 반응·1차 크랙 시점이 구체적으로 얼마나 차이 나는지 — 믿을 만한 출처를 아직 못 찾았어요.</li>
+      </ol>
+    </div>
+  </section>
+
+  <footer>
+    <p><strong>Deep Research 리포트</strong> · 6개 검색 관점 · 소스 12개 수집 · 주장 56개 뽑음 → 25개 검증 → 18개 확정 / 7개 기각 (3표 교차검증).</p>
+    <p>이 문서는 공개된 웹 출처를 모아 정리한 <strong>로스팅 이론 참고 자료</strong>예요. Stronghold 설정값은 일반 가이드를 바탕으로 한 출발점이고요.
+    실제로 쓸 땐 S7X 매뉴얼과 본인 환경(볶는 양·생두 묶음·계절)에 맞춰 <strong>직접 볶아보며 꼭 조정</strong>하세요.</p>
+    <p style="color:#6b5d4d; margin-top:18px;">생성: 2026-06-17 · 대상 머신: Stronghold S7X · 생두: Ethiopia (Washed/Natural)</p>
+  </footer>
+
+</div>
+<script src="nothing.js"></script>
+</body>
+</html>

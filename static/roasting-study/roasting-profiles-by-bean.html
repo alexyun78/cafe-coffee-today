@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>생두별 로스팅 프로파일 체계 — 우리 S7X 환경 기준</title>
+<link rel="stylesheet" href="nothing.css">
+</head>
+<body>
+<header class="hero"><div class="wrap">
+  <div class="crumb"><a href="index.html">← 커리큘럼 허브</a> · 우리 환경 프로파일 설계</div>
+  <span class="eyebrow">Roasting Profiles by Bean · Our S7X Environment</span>
+  <h1>생두별 로스팅 프로파일 체계<span class="sub">우리 S7X 환경 기준 · 공통으로 가져갈 것과 생두별로 갈라질 것</span></h1>
+  <p class="lede">
+    같은 로스터라도 <em>워시드·내추럴·무산소</em>냐, <em>브라질·에티오피아·케냐·인도네시아·디카페인</em>이냐에 따라
+    볶는 법이 달라져요. 이 문서는 <strong>우리 S7X의 실측 기준점</strong>(투입 170℃·1차 크랙 174~177℃·배출 180℃ 부근)에
+    모든 프로파일을 묶고, <strong>"항상 똑같이 가져갈 뼈대"</strong>와 <strong>"생두별로 손보는 부분"</strong>을 분리해 정리했어요.
+  </p>
+  <div class="meta-row">
+    <span class="chip">📅 작성 <b>2026-06-18</b></span>
+    <span class="chip">⚙️ 기준 <b>우리 S7X 실측값</b></span>
+    <span class="chip">📊 검증 <b>Boost·KCRC 챔피언 데이터</b></span>
+  </div>
+</div></header>
+<div class="wrap">
+
+  <nav class="toc"><h4>목차</h4><ol>
+    <li><a href="#base">① 우리 환경 기준점</a></li>
+    <li><a href="#common">② 모든 로스팅의 공통 뼈대</a></li>
+    <li><a href="#general">③ 일반 로스팅 진행법</a></li>
+    <li><a href="#process">④ 가공별 분기 (워시드·내추럴·무산소)</a></li>
+    <li><a href="#origin">⑤ 산지별 분기 (브라질·에티오피아·케냐·인니)</a></li>
+    <li><a href="#decaf">⑥ 디카페인</a></li>
+    <li><a href="#matrix">⑦ 공통 vs 분기 매트릭스</a></li>
+    <li><a href="#kcrc">⑧ KCRC 챔피언 프로파일 분석</a></li>
+    <li><a href="#blend">⑨ 우리 블렌드에 적용</a></li>
+  </ol></nav>
+
+  <!-- BASE -->
+  <section id="base">
+    <h2><span class="num">①</span>우리 환경 기준점 <span class="conf field">실측 캘리브레이션</span></h2>
+    <p class="section-lead">모든 프로파일은 이 세 숫자에 묶여요. 남의 프로파일도 이 기준으로 환산해 읽어요. (S7X Internal 센서 기준)</p>
+    <div class="kpi">
+      <div class="box"><div class="n">170℃</div><div class="l">투입(차징) 기본값</div></div>
+      <div class="box"><div class="n">174~177℃</div><div class="l">1차 크랙 발생</div></div>
+      <div class="box"><div class="n">~180℃</div><div class="l">배출(드롭) — 강배전은 더</div></div>
+      <div class="box"><div class="n">4축</div><div class="l">열풍·할로겐·드럼·교반</div></div>
+    </div>
+    <div class="callout good">
+      <span class="lbl">왜 이 숫자가 중요한가</span>
+      이 기준점은 <strong>우리 S7X에서 직접 잰 값</strong>이라, 책·블로그의 드럼 로스터 온도(빈 프로브 기준)와 다르고 더 믿을 만해요.
+      <strong>Boost의 KCRC 1위 챔피언 프로파일도 1차 크랙 Internal 176.4℃·배출 179.7℃</strong>로,<a href="#k1" class="ref">[KCRC]</a> 우리 기준과 거의 같아요. 캘리브레이션이 맞다는 뜻이죠.
+    </div>
+    <table>
+      <thead><tr><th>지점</th><th>우리 환경 (Internal)</th><th>비고</th></tr></thead>
+      <tbody>
+        <tr><td class="col-label">투입(차징)</td><td><strong>170℃ 기본</strong></td><td>저밀도·약한 콩은 ↓(165~168), 고밀도는 유지~↑</td></tr>
+        <tr><td class="col-label">터닝포인트(TP)</td><td>~120℃ / 약 0:50~1:10</td><td>투입량·예열에 따라 변동</td></tr>
+        <tr><td class="col-label">옐로잉(마이야르 시작)</td><td>~140℃ / 약 2:30~3:00</td><td>건조 끝·갈변 시작</td></tr>
+        <tr><td class="col-label">1차 크랙</td><td><strong>174~177℃</strong></td><td>모든 생두 거의 공통 기준점</td></tr>
+        <tr><td class="col-label">배출(드롭)</td><td><strong>~180℃(라이트~미디엄)</strong></td><td>미디엄다크/풀시티는 ~183~187, 다크는 188℃+</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- COMMON -->
+  <section id="common">
+    <h2><span class="num">②</span>모든 로스팅의 공통 뼈대</h2>
+    <p class="section-lead">생두가 뭐든 <strong>항상 똑같이 지키는 원칙</strong>이에요. 이게 흔들리면 생두별 조정은 의미가 없어요.</p>
+    <div class="panel">
+      <ul style="margin:0; padding-left:20px;">
+        <li><strong>4단계 흐름</strong>: 건조 → 마이야르(갈변) → 1차 크랙 → 디벨롭 → 드롭. 순서는 안 바뀌어요.</li>
+        <li><strong>RoR은 매끄럽게 우하향</strong>: 계속 떨어지되 멈추거나(크래시) 다시 튀지(플릭) 않게. 곡선의 '모양'이 숫자보다 중요.</li>
+        <li><strong>1차 크랙 직전 화력 감소</strong>: 발열 폭주 대비. 특히 <strong>할로겐(복사)·드럼히터(전도)부터</strong> 먼저 낮춰요.</li>
+        <li><strong>색만 보고 판단 금지</strong>: 소리·시간·RoR·향을 종합. (내추럴·디카페인은 특히 색이 거짓말을 해요)</li>
+        <li><strong>교반으로 균일성 확보</strong>: 한쪽만 타는 걸 막아요. 밀도 낮고 불균일한 콩일수록 더 높게.</li>
+        <li><strong>기준점 고정</strong>: 투입 170 · FC 174~177 · 드롭 180+. 여기서 ±로 조정.</li>
+        <li><strong>일지 + 리플리케이션</strong>: 좋은 배치를 기록하고 복제. (Boost 데이터의 70%가 리플리케이션)<a href="#bo" class="ref">[Boost]</a></li>
+      </ul>
+    </div>
+    <div class="callout"><span class="lbl">열원 역할 복습 (→ <a href="m07-s7x-basics.html">모듈 07</a>)</span>
+      <strong>열풍=대류(균일·깔끔)</strong> · <strong>할로겐=복사(표면·크랙 추진, 과하면 스코칭/팁핑)</strong> · <strong>드럼히터=전도(바디, 과하면 스코칭)</strong> · <strong>교반(균일성)</strong>.
+      생두별 조정은 결국 <strong>"이 네 축의 배분을 어떻게 바꾸느냐"</strong>예요.
+    </div>
+  </section>
+
+  <!-- GENERAL -->
+  <section id="general">
+    <h2><span class="num">③</span>일반 로스팅 진행법 — 한 배치의 표준 흐름</h2>
+    <p class="section-lead">우리 환경 기준, 미디엄 한 배치의 표준 진행이에요. 생두별 조정은 여기서 출발해요.</p>
+    <div class="panel">
+      <div class="timeline-row"><div class="t">0:00<small>투입/차징</small></div><div class="d">예열 후 <b>Internal 170℃</b>에서 생두 투입. 열풍 위주로 충분한 초기 에너지. 교반 높게.</div></div>
+      <div class="timeline-row"><div class="t">~1:00<small>터닝포인트</small></div><div class="d"><b>~120℃</b> 바닥 찍고 반등. 여기서부터 RoR 관리 시작.</div></div>
+      <div class="timeline-row"><div class="t">~2:30–3:00<small>옐로잉</small></div><div class="d"><b>~140℃</b>, 풋내 가시고 노랗게. 건조 끝·마이야르 시작. RoR 완만한 우하향 유지.</div></div>
+      <div class="timeline-row"><div class="t">~5:00–6:30<small>마이야르 후반</small></div><div class="d">할로겐·드럼히터를 <b>단계적으로 낮추기 시작</b>. 크랙 폭주 대비.</div></div>
+      <div class="timeline-row"><div class="t">~6:30–8:00<small>1차 크랙</small></div><div class="d"><b>174~177℃</b>, "탁탁". 화력 한 단 더 낮춰 RoR이 0으로 죽지 않게(베이킹 방지).</div></div>
+      <div class="timeline-row"><div class="t">드롭<small>디벨롭 후</small></div><div class="d">목표 레벨에서 배출. <b>라이트 ~180℃ / 미디엄 ~181~183 / 미디엄다크 ~183~187</b>. 냉각 빠르게.</div></div>
+    </div>
+    <div class="callout bad"><span class="lbl">가장 흔한 실패 — 베이킹</span>
+      Boost의 한 S7X 사용자(Aked)는 <strong>고화력을 계속 유지하고 디벨롭을 30~60초로 짧게</strong> 가져가 매 배치가 베이킹(맛 죽음)이었어요.<a href="#bo" class="ref">[Boost]</a>
+      교훈: <strong>화력을 무작정 유지하지 말고 RoR이 살아 있게</strong>, 디벨롭은 충분히(우리 목표 DTR은 생두별로 다름, 아래 참고).
+    </div>
+  </section>
+
+  <!-- PROCESS -->
+  <section id="process">
+    <h2><span class="num">④</span>가공별 분기 — 워시드 · 내추럴 · 무산소</h2>
+    <p class="section-lead">가공은 콩의 <strong>표면 당·수분 균일성·세포 강도</strong>를 바꿔서, 같은 산지라도 볶는 법이 달라져요. (→ <a href="m03-processing.html">모듈 03</a>)</p>
+
+    <div class="bean w">
+      <h4><span class="dot" style="background:var(--washed)"></span>워시드 <span class="en">Washed</span></h4>
+      <span class="role">과육을 깨끗이 벗겨 건조 — 밀도 균일·열에 안정·깔끔한 산미</span>
+      <div class="params">
+        <div class="p"><b>투입</b>170℃ (기준 그대로)</div>
+        <div class="p"><b>화력</b>열풍 위주·균형, 할로겐 중</div>
+        <div class="p"><b>디벨롭</b>절제(산미·향 보존)</div>
+        <div class="p"><b>레벨/드롭</b>라이트~미디엄 / ~180~182℃</div>
+        <div class="p"><b>주의</b>비교적 관대 — 베이킹만 주의</div>
+      </div>
+      <p style="font-size:13.5px; margin:6px 0 0; color:var(--muted)">가장 다루기 쉬워요. 표준 프로파일의 '기준 케이스'로 삼고, 나머지 가공을 여기서 가감해요.</p>
+    </div>
+
+    <div class="bean n">
+      <h4><span class="dot" style="background:var(--natural)"></span>내추럴 <span class="en">Natural</span></h4>
+      <span class="role">과육째 건조 — 표면 당 많음·수분 불균일·세포벽 약함·단맛/과일향</span>
+      <div class="params">
+        <div class="p"><b>투입</b>165~170℃ (약간 낮춰 스코칭 회피)</div>
+        <div class="p"><b>화력</b>할로겐↓(복사 절제)·교반↑</div>
+        <div class="p"><b>디벨롭</b>짧고 가볍게(과일향) 또는 단맛이면 완만히</div>
+        <div class="p"><b>레벨/드롭</b>미디엄 / ~181~184℃</div>
+        <div class="p"><b>주의</b>색 판단 금지·팁핑·겉 탐</div>
+      </div>
+      <p style="font-size:13.5px; margin:6px 0 0; color:var(--muted)">표면 당 때문에 <strong>겉이 빨리 갈변</strong>해요. 색만 보면 속이 덜 익어요. 초반 급가열 시 팁핑(끝 탐) 위험 — 할로겐 절제·교반 강화.</p>
+    </div>
+
+    <div class="bean a">
+      <h4><span class="dot" style="background:var(--anaero)"></span>무산소 발효 <span class="en">Anaerobic</span></h4>
+      <span class="role">산소 차단 발효 — 향·발효물·표면 당이 매우 강함·개성 큼</span>
+      <div class="params">
+        <div class="p"><b>투입</b>163~168℃ (더 낮게·보수적)</div>
+        <div class="p"><b>화력</b>전체 보수적·할로겐↓·교반↑</div>
+        <div class="p"><b>디벨롭</b>짧게(향 보존) + 발효취 다스릴 만큼만</div>
+        <div class="p"><b>레벨/드롭</b>라이트~미디엄 / ~179~182℃</div>
+        <div class="p"><b>주의</b>과하면 발효취·알콜취·잡미</div>
+      </div>
+      <p style="font-size:13.5px; margin:6px 0 0; color:var(--muted)">내추럴보다 한 단계 더 조심. 향이 강한 만큼 <strong>라이트~미디엄으로 개성을 살리되</strong>, 너무 약하게 볶으면 날카로운 발효취가 남아요. 우리 단맛 블렌드와는 방향이 반대라 보통 안 씀.</p>
+    </div>
+  </section>
+
+  <!-- ORIGIN -->
+  <section id="origin">
+    <h2><span class="num">⑤</span>산지별 분기 — 브라질 · 에티오피아 · 케냐 · 인도네시아</h2>
+    <p class="section-lead">산지는 주로 <strong>고도→밀도</strong>와 <strong>산미 성격</strong>으로 갈려요. 밀도가 높으면 열이 더 들고, 낮으면 겉이 타기 쉬워요. (→ <a href="m02-origins.html">모듈 02</a>)</p>
+
+    <div class="bean br">
+      <h4><span class="dot" style="background:#d98b3f"></span>브라질 <span class="en">Brazil</span> — 우리 블렌드 베이스</h4>
+      <span class="role">저고도·저밀도, 내추럴 多 — 초콜릿·견과·저산미·단맛</span>
+      <div class="params">
+        <div class="p"><b>투입</b>165~170℃ (저밀도라 과열 금지)</div>
+        <div class="p"><b>화력</b>열풍 위주·할로겐 절제·교반 중</div>
+        <div class="p"><b>디벨롭</b>넉넉히(단맛 캐러멜화) DTR 18~25%</div>
+        <div class="p"><b>레벨/드롭</b>미디엄~미디엄다크 / ~183~187℃</div>
+        <div class="p"><b>주의</b>스코칭·팁핑(저밀도+내추럴)</div>
+      </div>
+      <p style="font-size:13.5px; margin:6px 0 0; color:var(--muted)">단맛·바디·에스프레소에 최적. <strong>디벨롭을 넉넉히 줘 단맛을 끌어내되 2차 크랙 직전에 멈춰요</strong>. 저밀도라 초반 화력 과하면 팁핑.</p>
+    </div>
+
+    <div class="bean et">
+      <h4><span class="dot" style="background:#c98b5a"></span>에티오피아 <span class="en">Ethiopia</span></h4>
+      <span class="role">고지대 — 워시드(꽃·시트러스·고밀도) / 내추럴(베리·저밀도)</span>
+      <div class="params">
+        <div class="p"><b>투입</b>워시드 170 / 내추럴 165~170℃</div>
+        <div class="p"><b>화력</b>열풍↑(균일)·빠른 갈변 관리</div>
+        <div class="p"><b>디벨롭</b>짧게(향·산미 보존) DTR 12~18%</div>
+        <div class="p"><b>레벨/드롭</b>라이트~미디엄 / ~179~182℃</div>
+        <div class="p"><b>주의</b>알 작음·내추럴은 색 판단 금지</div>
+      </div>
+      <p style="font-size:13.5px; margin:6px 0 0; color:var(--muted)">향·산미가 생명이라 <strong>1차 크랙 직후~짧은 디벨롭</strong>으로 가볍게. 우리 블렌드(단맛·저산미)와는 반대 방향이지만 싱글로 자주 다뤄요. (→ <a href="ethiopia-roasting-stronghold-s7x.html">에티오피아 보고서</a>)</p>
+    </div>
+
+    <div class="bean ke">
+      <h4><span class="dot" style="background:#cf6b4a"></span>케냐 <span class="en">Kenya</span></h4>
+      <span class="role">고지대·고밀도(SL28) — 블랙커런트·강한 산미·바디</span>
+      <div class="params">
+        <div class="p"><b>투입</b>170~172℃ (고밀도라 에너지 더)</div>
+        <div class="p"><b>화력</b>충분한 열(드럼히터·할로겐 활용)</div>
+        <div class="p"><b>디벨롭</b>중간(산미 살리되 균형) DTR 15~20%</div>
+        <div class="p"><b>레벨/드롭</b>미디엄 / ~182~185℃</div>
+        <div class="p"><b>주의</b>고밀도 → 언더디벨롭·베이킹</div>
+      </div>
+      <p style="font-size:13.5px; margin:6px 0 0; color:var(--muted)">고밀도라 <strong>속까지 익히려면 에너지가 더 필요</strong>해요. 화력이 부족하면 RoR이 죽어 베이킹·언더디벨롭. 강한 산미를 다 죽이지 않되 충분히 익혀 균형.</p>
+    </div>
+
+    <div class="bean id">
+      <h4><span class="dot" style="background:#7ba05b"></span>인도네시아(수마트라) <span class="en">Indonesia</span></h4>
+      <span class="role">웻헐(길링바사) — 흙내·삼나무·매우 묵직·산미 거의 없음·불균일</span>
+      <div class="params">
+        <div class="p"><b>투입</b>165~168℃ (저밀도·불균일)</div>
+        <div class="p"><b>화력</b>열풍 위주·교반↑↑(필수)</div>
+        <div class="p"><b>디벨롭</b>충분히(바디) DTR 18~22%</div>
+        <div class="p"><b>레벨/드롭</b>미디엄~미디엄다크 / ~184~188℃</div>
+        <div class="p"><b>주의</b>모양·수분 불균일 → 고른 열 어려움</div>
+      </div>
+      <p style="font-size:13.5px; margin:6px 0 0; color:var(--muted)">콩 모양·수분이 들쭉날쭉해 <strong>교반을 가장 높게</strong> 가져가 균일하게. 저산미·묵직함이 강점이라 우리 블렌드의 <strong>저산미 보강재</strong>로도 좋아요.</p>
+    </div>
+  </section>
+
+  <!-- DECAF -->
+  <section id="decaf">
+    <h2><span class="num">⑥</span>디카페인 — 가장 까다로운 케이스</h2>
+    <div class="bean d">
+      <h4><span class="dot" style="background:var(--decaf)"></span>디카페인 <span class="en">Decaf</span></h4>
+      <span class="role">카페인 제거 공정으로 구조 약함·갈변 빠름·크랙 약함 (→ <a href="m04-decaf.html">모듈 04</a>)</span>
+      <div class="params">
+        <div class="p"><b>투입</b>160~165℃ (확 낮춰서)</div>
+        <div class="p"><b>화력</b>전체↓·할로겐/드럼히터 특히↓·교반↑</div>
+        <div class="p"><b>디벨롭</b>짧게~중간(과볶음 쉬움)</div>
+        <div class="p"><b>레벨/드롭</b>미디엄 / 색 아닌 소리·시간으로</div>
+        <div class="p"><b>주의</b>색 거짓말·약한 크랙·스코칭</div>
+      </div>
+      <p style="font-size:13.5px; margin:6px 0 0; color:var(--muted)">이미 공정에서 표면이 변해 <strong>갈변이 매우 빠르고 크랙 소리가 약해요</strong>. 색·소리에만 의존하면 실수. 투입·화력을 낮추고 <strong>작은 배치로 테스트</strong> 후 본 배치.</p>
+    </div>
+  </section>
+
+  <!-- MATRIX -->
+  <section id="matrix">
+    <h2><span class="num">⑦</span>공통 vs 분기 — 한 장 정리</h2>
+    <p class="section-lead">무엇을 항상 똑같이 가져가고, 무엇을 생두별로 손보는지 한눈에.</p>
+    <table class="matrix">
+      <thead><tr><th>요소</th><th>공통 / 분기</th><th>내용</th></tr></thead>
+      <tbody>
+        <tr><td class="col-label">4단계 흐름</td><td class="common">공통</td><td>건조→마이야르→1차크랙→디벨롭→드롭 (순서 불변)</td></tr>
+        <tr><td class="col-label">RoR 관리</td><td class="common">공통</td><td>매끄러운 우하향, 크래시·플릭 방지</td></tr>
+        <tr><td class="col-label">크랙 전 화력↓</td><td class="common">공통</td><td>할로겐·드럼히터부터 단계적으로</td></tr>
+        <tr><td class="col-label">판단 기준</td><td class="common">공통</td><td>색만 X → 소리·시간·RoR·향 종합</td></tr>
+        <tr><td class="col-label">1차 크랙 온도</td><td class="common">공통</td><td>거의 모든 생두 Internal 174~177℃</td></tr>
+        <tr><td class="col-label">일지·리플리케이션</td><td class="common">공통</td><td>골든 배치 기록·복제</td></tr>
+        <tr><td class="col-label">투입(차징) 온도</td><td class="diverge">분기</td><td>디카페인 160~165 · 저밀도/내추럴 165~168 · 워시드 170 · 고밀도(케냐) 170~172</td></tr>
+        <tr><td class="col-label">열원 배분</td><td class="diverge">분기</td><td>저밀도·내추럴=할로겐↓·교반↑ / 고밀도=에너지↑ / 디카페인=전체↓</td></tr>
+        <tr><td class="col-label">디벨롭 길이(DTR)</td><td class="diverge">분기</td><td>향 보존(에티오피아)=짧게 12~18% / 단맛·바디(브라질·인니)=길게 18~25%</td></tr>
+        <tr><td class="col-label">로스트 레벨·드롭</td><td class="diverge">분기</td><td>라이트 ~180 / 미디엄 ~182 / 미디엄다크 ~185~187 / 다크 188℃+</td></tr>
+        <tr><td class="col-label">주의 결함</td><td class="diverge">분기</td><td>저밀도=스코칭·팁핑 / 고밀도=언더·베이킹 / 디카페인=스코칭·과볶음</td></tr>
+      </tbody>
+    </table>
+    <div class="callout good"><span class="lbl">한 문장 요약</span>
+      <strong>뼈대(흐름·RoR·크랙 기준점·판단법)는 항상 같고</strong>, <strong>투입 온도·열원 배분·디벨롭 길이·드롭 레벨</strong> 네 가지를 생두 성격(밀도·가공·목표 향미)에 맞춰 손봐요.
+    </div>
+  </section>
+
+  <!-- KCRC -->
+  <section id="kcrc">
+    <h2><span class="num">⑧</span>KCRC 챔피언 프로파일 분석 <span class="conf field">Boost 실측</span></h2>
+    <p class="section-lead">2027 KCRC(한국 로스팅 챔피언십) 1위 민철홍 선수의 S7X 프로파일이에요. 대회용 라이트 로스트라, 우리 목표와 비교하면 배울 게 많아요.</p>
+    <div class="panel" id="k1">
+      <h3 style="margin-top:0">민철홍 1위 · S7X · Light <span class="en">(2026-06-04 기록)</span></h3>
+      <div class="timeline-row"><div class="t">0:53<small>터닝포인트</small></div><div class="d">Internal <b>122℃</b> / Bean Surface 103℃</div></div>
+      <div class="timeline-row"><div class="t">2:42<small>옐로잉</small></div><div class="d">Internal <b>139.5℃</b> / BS 160.4℃ · 건조 34.76%</div></div>
+      <div class="timeline-row"><div class="t">6:55<small>1차 크랙</small></div><div class="d">Internal <b>176.4℃</b> / BS 210.1℃</div></div>
+      <div class="timeline-row"><div class="t">7:46<small>배출(드롭)</small></div><div class="d">Internal <b>179.7℃</b> / BS 213.9℃ · 디벨롭 51초 / <b>DTR 10.94%</b></div></div>
+    </div>
+
+    <div class="roastfig">
+      <svg viewBox="0 0 600 272" role="img" aria-label="KCRC 1위 민철홍 S7X 로스팅 곡선">
+        <defs><pattern id="dg" width="16" height="16" patternUnits="userSpaceOnUse">
+          <circle cx="1" cy="1" r="1" class="dot-grid-bg" fill="currentColor" opacity="0.35"/></pattern></defs>
+        <rect x="50" y="20" width="510" height="230" fill="url(#dg)"/>
+        <!-- baseline + grid -->
+        <line x1="50" y1="250" x2="560" y2="250" class="rc-grid"/>
+        <line x1="50" y1="20" x2="50" y2="250" class="rc-grid"/>
+        <!-- phase markers -->
+        <line x1="106" y1="215" x2="106" y2="250" class="rc-mark"/>
+        <line x1="491" y1="55" x2="491" y2="250" class="rc-mark hot"/>
+        <line x1="545" y1="45" x2="545" y2="250" class="rc-mark hot"/>
+        <!-- bean Internal temp curve -->
+        <path class="rc-curve" d="M50,74 Q78,160 106,215 C150,205 192,182 222,163 C320,120 425,72 491,55 L545,45"/>
+        <!-- points -->
+        <circle cx="106" cy="215" r="4" class="rc-pt"/>
+        <circle cx="222" cy="163" r="4" class="rc-pt"/>
+        <circle cx="491" cy="55" r="4.5" class="rc-pt hot"/>
+        <circle cx="545" cy="45" r="4.5" class="rc-pt hot"/>
+        <!-- value labels -->
+        <text x="112" y="210" class="rc-val">122℃</text>
+        <text x="228" y="158" class="rc-val">139.5℃</text>
+        <text x="470" y="44" class="rc-val hot" text-anchor="end">176.4℃ · FC</text>
+        <text x="540" y="36" class="rc-val hot" text-anchor="end">180℃ DROP</text>
+        <!-- time axis -->
+        <text x="106" y="265" class="rc-lbl" text-anchor="middle">0:53</text>
+        <text x="222" y="265" class="rc-lbl" text-anchor="middle">2:42</text>
+        <text x="491" y="265" class="rc-lbl" text-anchor="middle">6:55</text>
+        <text x="545" y="265" class="rc-lbl" text-anchor="middle">7:46</text>
+      </svg>
+      <div class="cap"><span>BEAN INTERNAL TEMP · S7X · 민철홍 1위 (실측)</span><span>LIGHT · DTR 10.94%</span></div>
+    </div>
+
+    <table>
+      <thead><tr><th>비교</th><th>KCRC 1위 (대회·라이트)</th><th>우리 블렌드 (상업·미디엄다크)</th></tr></thead>
+      <tbody>
+        <tr><td class="col-label">목표</td><td>클린·산미·향 (싱글 평가)</td><td>저산미·단맛·바디 (에스프레소)</td></tr>
+        <tr><td class="col-label">1차 크랙</td><td>176.4℃ / 6:55</td><td>174~177℃ (동일 기준점)</td></tr>
+        <tr><td class="col-label">배출</td><td>179.7℃ (FC 직후)</td><td>~183~187℃ (디벨롭 더 끌고)</td></tr>
+        <tr><td class="col-label">DTR</td><td><strong>10.94%</strong> (짧게)</td><td><strong>20~25%</strong> (길게·단맛)</td></tr>
+        <tr><td class="col-label">총 시간</td><td>7:46 (빠르게)</td><td>더 길게(단맛 캐러멜화)</td></tr>
+      </tbody>
+    </table>
+    <div class="callout"><span class="lbl">챔피언에게서 배울 것 / 다르게 갈 것</span>
+      <strong>배울 점:</strong> 기준점(FC 176·드롭 180)이 우리와 같다는 것 → 우리 캘리브레이션이 맞다는 확인. RoR을 매끄럽게 끌고 가는 곡선 설계.
+      <strong>다르게:</strong> 챔피언은 <strong>FC 직후 바로 드롭(DTR 11%)</strong>으로 산미·클린함을 노렸지만, 우리는 <strong>단맛이 목표라 디벨롭을 2배(20~25%)로 더 끌어</strong> 드롭을 늦춰요.
+    </div>
+  </section>
+
+  <!-- BLEND -->
+  <section id="blend">
+    <h2><span class="num">⑨</span>우리 블렌드에 적용 — 최종 출발 프로파일</h2>
+    <p class="section-lead">위 체계를 우리 블렌드(브라질70/콜롬비아18/로부스타12 · 미디엄다크 에스프레소)에 적용한 출발점이에요.</p>
+    <div class="panel">
+      <div class="timeline-row"><div class="t">0:00<small>투입</small></div><div class="d">Internal <b>167~170℃</b>(저밀도 브라질 베이스라 기준보다 약간↓). 열풍 위주·교반 높게.</div></div>
+      <div class="timeline-row"><div class="t">~1:00<small>TP</small></div><div class="d">~120℃. RoR 관리 시작.</div></div>
+      <div class="timeline-row"><div class="t">~2:30–3:00<small>옐로잉</small></div><div class="d">~140℃. 할로겐 절제(스코칭·팁핑 방지).</div></div>
+      <div class="timeline-row"><div class="t">~6:30–8:00<small>1차 크랙</small></div><div class="d"><b>174~177℃</b>. 화력 한 단 낮춰 RoR 살리기(베이킹 방지).</div></div>
+      <div class="timeline-row"><div class="t">드롭<small>DTR 20~25%</small></div><div class="d"><b>~183~187℃</b>, 2차 크랙 직전. 디벨롭을 챔피언보다 2배 길게 끌어 단맛 확보 후 배출.</div></div>
+    </div>
+    <div class="callout warn"><span class="lbl">로부스타는 따로</span>
+      로부스타(12%)는 밀도가 달라 <strong>포스트블렌딩(따로 볶고 섞기)</strong>. 브라질·콜롬비아만 위 프로파일로 같이 볶고, 로부스타는 별도 미디엄다크로. (→ <a href="blend-design-sweet-lowacid.html">블렌드 설계 ⑤장</a>)
+    </div>
+    <div class="callout bad"><span class="lbl">반드시</span>
+      이 숫자는 <strong>실측 기준점 + 생두 원리</strong>로 짠 출발점이에요. 첫 배치를 Boost에 자동 로깅하고, 커핑 후 <strong>드롭 온도·디벨롭을 ±로 조정</strong>해 '골든 배치'를 확정한 뒤 리플리케이션하세요.
+    </div>
+  </section>
+
+  <section>
+    <h2>출처</h2>
+    <div class="panel" style="padding:10px 20px;">
+      <p style="margin:8px 0; font-size:13.5px;"><strong>우리 환경 기준점:</strong> 사용자 S7X 실측 캘리브레이션(투입 170·FC 174~177·드롭 180).</p>
+      <p style="margin:8px 0; font-size:13.5px;" id="bo"><strong>[Boost]</strong> <a href="https://boost.stronghold.coffee">boost.stronghold.coffee</a> — KCRC 1위 민철홍 프로파일, Aked S7X 베이킹 사례, 리플리케이션 통계. 분석 정리: <a href="boost-s7x-reference.html">Boost S7X 데이터 분석</a>.</p>
+      <p style="margin:8px 0; font-size:13.5px;"><strong>이론 근거:</strong> <a href="green-bean-density-roasting-report.html">밀도 보고서</a> · <a href="ethiopia-roasting-stronghold-s7x.html">에티오피아 가공 보고서</a> · 모듈 02·03·06·07·08. 전체는 <code>SOURCES.md</code>.</p>
+    </div>
+  </section>
+
+  <div class="nextprev">
+    <a href="boost-s7x-reference.html"><div class="k">← 연결</div><div class="t">Boost S7X 데이터 분석</div></a>
+    <a href="blend-design-sweet-lowacid.html" class="r"><div class="k">연결 →</div><div class="t">블렌드 설계</div></a>
+  </div>
+  <footer>
+    <p><strong>생두별 로스팅 프로파일 체계</strong> · 우리 S7X 환경 기준 · 공통 뼈대 + 생두별 분기 + KCRC 챔피언 분석.</p>
+    <p style="color:#6b5d4d; margin-top:12px;">작성: 2026-06-18 · 기준점은 실측 캘리브레이션, 프로파일은 출발점(실배치 보정 필수).</p>
+  </footer>
+</div>
+<script src="nothing.js"></script>
+</body>
+</html>

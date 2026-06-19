@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>모듈 08 — 프로파일 설계 · 로스터 양성 커리큘럼</title>
+<link rel="stylesheet" href="nothing.css">
+</head>
+<body>
+<header class="hero"><div class="wrap">
+  <div class="crumb"><a href="index.html">← 커리큘럼 허브</a> · STAGE 3 볶기 — 원리와 실습</div>
+  <span class="eyebrow">Module 08 · Profile Design</span>
+  <h1>프로파일 설계 — 곡선으로 맛을 디자인하기<span class="sub">로스트 레벨 · DTR · 로스팅 결함 진단</span></h1>
+  <p class="lede">프로파일(profile)은 <em>시간에 따른 온도·화력의 계획표</em>예요. 같은 콩도 프로파일이 다르면 맛이 달라지죠.
+  이 모듈에서 <strong>라이트/미디엄/다크</strong>를 가르는 기준, <strong>DTR</strong>, 그리고 <strong>흔한 결함을 잡는 법</strong>을 배워요.</p>
+  <div class="meta-row"><span class="chip">⏱ 학습 <b>약 20분</b></span><span class="chip">📐 핵심 <b>DTR·결함 진단</b></span><span class="chip">🎯 다음 <b>09 블렌딩</b></span></div>
+</div></header>
+<div class="wrap">
+  <nav class="toc"><h4>이 모듈에서 배울 것</h4><ol>
+    <li><a href="#levels">① 로스트 레벨</a></li>
+    <li><a href="#dtr">② DTR — 디벨롭 비율</a></li>
+    <li><a href="#shape">③ 좋은 프로파일의 모양</a></li>
+    <li><a href="#defects">④ 흔한 결함 진단표</a></li>
+    <li><a href="#quiz">스스로 점검 · 출처</a></li>
+  </ol></nav>
+
+  <section id="levels">
+    <h2><span class="num">①</span>로스트 레벨 — 얼마나 진하게</h2>
+    <p class="section-lead">크랙을 기준으로 단계를 나눠요. 우리 블렌드는 <strong>풀시티(미디엄다크)</strong>를 목표로 해요.</p>
+    <table>
+      <thead><tr><th>레벨</th><th>기준</th><th>맛 경향</th></tr></thead>
+      <tbody>
+        <tr><td class="col-label">라이트 <span class="en">Light</span></td><td>1차 크랙 직후 배출</td><td>산미·꽃향·과일 또렷, 바디 가벼움</td></tr>
+        <tr><td class="col-label">미디엄 <span class="en">Medium</span></td><td>1차 크랙 후 적당히 디벨롭</td><td>산미·단맛 균형, 캐러멜</td></tr>
+        <tr><td class="col-label" style="color:var(--accent)">풀시티 <span class="en">Full City</span></td><td>2차 크랙 직전</td><td><strong>저산미·단맛·묵직함 (우리 블렌드)</strong></td></tr>
+        <tr><td class="col-label">다크 <span class="en">Dark</span></td><td>2차 크랙 진행</td><td>쓴맛·탄향·오일, 산미 거의 없음</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section id="dtr">
+    <h2><span class="num">②</span>DTR — 디벨롭 비율 <span class="conf high">Scott Rao</span></h2>
+    <p class="section-lead">DTR(Development Time Ratio)은 <strong>'1차 크랙부터 배출까지 시간'이 전체 시간에서 차지하는 비율</strong>이에요.</p>
+    <div class="panel">
+      <p style="margin-top:0; font-size:15.5px;"><strong>DTR = (1차 크랙~드롭 시간) ÷ (전체 로스팅 시간) × 100</strong></p>
+      <p style="margin-bottom:0; color:var(--muted); font-size:14px;">예: 총 12분 로스팅에서 1차 크랙이 9분 30초에 왔다면, 디벨롭은 2분 30초 → DTR ≈ 20.8%</p>
+    </div>
+    <p>Scott Rao는 1차~2차 크랙 사이 대부분의 로스트에 <strong>약 20~25% DTR</strong>을 권해요.<a href="#s8" class="ref">[8]</a> 2만 건 넘는 로스팅 데이터에서
+    상위 결과 대부분이 이 구간이었다고 해요. 우리 블렌드(풀시티)도 이 범위에서 단맛을 충분히 끌어내는 걸 목표로 해요.</p>
+    <div class="callout warn">
+      <span class="lbl">숫자는 조건부예요</span>
+      20~25%는 <strong>"클래식 드럼 로스터를 60% 이상 채운"</strong> 전제예요.<a href="#s8" class="ref">[8]</a> 화력 대비 배치가 작으면 더 낮춰야 해요.
+      S7X는 구조가 달라 <strong>총 시간·크랙 시점이 다르니</strong>, DTR "비율"을 목표로 잡고 절대 시간은 실측으로 맞추세요.
+    </div>
+  </section>
+
+  <section id="shape">
+    <h2><span class="num">③</span>좋은 프로파일의 모양</h2>
+    <p class="section-lead">숫자 하나하나보다 <strong>곡선의 '모양'</strong>이 중요해요. 특히 RoR 곡선이요.</p>
+    <ul>
+      <li><strong>콩 온도(BT)는 매끄럽게 우상향</strong> — 꺾이거나 멈추지 않게.</li>
+      <li><strong>RoR은 부드럽게 우하향</strong> — 계속 떨어지되 0이 되거나 다시 튀지 않게.</li>
+      <li><strong>1차 크랙 부근에서 화력 살짝↓</strong> — 발열 폭주(플릭) 방지.</li>
+    </ul>
+    <div class="callout good">
+      <span class="lbl">S7X 활용</span>
+      RoR이 너무 빨리 떨어지면(크래시 조짐) <strong>열풍을 조금 올리고</strong>, 표면이 빨리 타면 <strong>할로겐을 낮춰요.</strong>
+      열원을 따로 쥘 수 있으니 <strong>"곡선의 어디가 문제인지"에 맞춰 골라 조정</strong>할 수 있어요. (→ <a href="m07-s7x-basics.html">모듈 07</a>)
+    </div>
+  </section>
+
+  <section id="defects">
+    <h2><span class="num">④</span>흔한 로스팅 결함 진단표</h2>
+    <p class="section-lead">맛·모양으로 원인을 추적해 다음 배치를 고쳐요. 로스터의 핵심 실력이에요.</p>
+    <table>
+      <thead><tr><th>결함</th><th>증상</th><th>원인</th><th>교정</th></tr></thead>
+      <tbody>
+        <tr><td class="col-label">스코칭 <span class="en">scorching</span></td><td>콩 옆면에 탄 자국·물집</td><td>전도열 과다(차징 과열·드럼히터↑)</td><td>차징 온도↓, 드럼히터↓, 교반↑</td></tr>
+        <tr><td class="col-label">팁핑 <span class="en">tipping</span></td><td>콩 끝이 탐</td><td>대류·복사 급가열</td><td>초반 화력↓(특히 할로겐)</td></tr>
+        <tr><td class="col-label">베이킹 <span class="en">baking</span></td><td>밍밍·종이맛, 단맛 죽음</td><td>RoR이 멈춤(크래시)·시간 과다</td><td>구간 화력 유지로 RoR 살리기</td></tr>
+        <tr><td class="col-label">언더디벨롭</td><td>풋내·신맛·차 같은 맛</td><td>디벨롭 부족(DTR 낮음)</td><td>1차 크랙 후 조금 더, DTR↑</td></tr>
+        <tr><td class="col-label">오버디벨롭/번트</td><td>탄맛·재떨이</td><td>너무 진하게·2차 크랙 진입</td><td>드롭 앞당기기, 복사열↓</td></tr>
+      </tbody>
+    </table>
+    <div class="callout bad">
+      <span class="lbl">기억하세요</span>
+      <strong>언더디벨롭·번트·베이킹 배치는 커핑으로 살리려 하지 말고 재로스팅</strong> 대상이에요. 결함은 다음 배치 교정의 '데이터'로 쓰는 게 맞아요.
+      매 배치 <strong>로스팅 일지</strong>를 쓰면 원인 추적이 빨라져요. (→ <a href="m12-growth.html">모듈 12</a>)
+    </div>
+  </section>
+
+  <section id="quiz">
+    <h2><span class="num">✓</span>스스로 점검</h2>
+    <div class="quiz"><h4>이 정도는 답할 수 있어야 해요</h4>
+      <details><summary>1. 풀시티는 어디서 멈추는 로스트?</summary><p><strong>2차 크랙 직전</strong>이에요. 저산미·단맛·묵직함 — 우리 블렌드 목표죠.</p></details>
+      <details><summary>2. 총 13분, 1차 크랙 10분이면 DTR은?</summary><p>디벨롭 3분 ÷ 13분 ≈ <strong>23%</strong>. Scott Rao 권장(20~25%) 범위 안이에요.</p></details>
+      <details><summary>3. 밍밍하고 단맛이 죽은 '베이킹'의 원인은?</summary><p>중간에 <strong>RoR이 멈추거나(크래시) 시간이 너무 길어져서</strong>예요. RoR을 살려야 해요.</p></details>
+      <details><summary>4. 콩 옆면 탄 자국(스코칭)의 S7X 교정은?</summary><p><strong>차징 온도·드럼히터를 낮추고 교반을 높여요.</strong></p></details>
+    </div>
+    <h3>출처 <span class="en">Sources</span></h3>
+    <div class="panel" style="padding:8px 20px;">
+      <div class="src" id="s8"><span class="q primary">primary</span><span>[8] Scott Rao, <em>Development Time Ratio</em> — <a href="https://www.scottrao.com/blog/2016/8/25/development-time-ratio">scottrao.com</a></span></div>
+      <div class="src"><span class="q secondary">secondary</span><span>Perfect Daily Grind 디벨롭/결함 가이드 · <a href="green-bean-density-roasting-report.html">밀도 보고서</a>(SCA-102 결함) · 전체는 <code>SOURCES.md</code></span></div>
+    </div>
+  </section>
+
+  <div class="nextprev">
+    <a href="m07-s7x-basics.html"><div class="k">← 이전</div><div class="t">07 로스팅 기초 &amp; S7X</div></a>
+    <a href="m09-blending.html" class="r"><div class="k">다음 →</div><div class="t">09 블렌딩</div></a>
+  </div>
+  <footer><p><strong>모듈 08 · 프로파일 설계</strong> · STAGE 3 볶기</p><p style="color:#5f5d6b; margin-top:12px;">로스터 양성 커리큘럼 · 중학생 눈높이 · 2026-06-18</p></footer>
+</div>
+<script src="nothing.js"></script>
+</body>
+</html>

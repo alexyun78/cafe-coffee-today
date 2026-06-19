@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>단맛 가득·산미 없는 에스프레소 블렌드 설계 — Stronghold S7X</title>
+<link rel="stylesheet" href="nothing.css">
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="crumb"><a href="index.html">← 커리큘럼 허브</a> · 목표 제품 설계</div>
+    <span class="eyebrow">Blend Design · Espresso · Low-acid &amp; Sweet</span>
+    <h1>단맛 가득, 산미는 거의 없는 에스프레소 블렌드
+      <span class="sub">100% 아라비카 · 브라질:콜롬비아:과테말라 2:1:1 · Stronghold S7X 프로파일까지</span>
+    </h1>
+    <p class="lede">
+      목표는 분명해요 — <em>산미는 거의 없고</em>, <em>단맛·바디·크레마(거품)는 좋고</em>, 그러면서 <em>원가는 싸고</em>
+      <em>생두는 1년 내내 쉽게</em> 구할 수 있는 에스프레소 블렌드. 논문과 전문 매거진, 커피 커뮤니티에서 확인한
+      내용을 바탕으로 생두 조합·비율·로스팅 방식·S7X 세팅까지 한 번에 정리했어요.
+    </p>
+    <div class="meta-row">
+      <span class="chip">📅 작성일 <b>2026-06-18</b></span>
+      <span class="chip">🔍 검증 <b>18 확정 / 7 기각</b></span>
+      <span class="chip">📚 소스 <b>22개 (논문·매거진·커뮤니티)</b></span>
+      <span class="chip">⚙️ 머신 <b>Stronghold S7X</b></span>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <nav class="toc">
+    <h4>목차</h4>
+    <ol>
+      <li><a href="#goal">핵심 요약 · 최종 블렌드</a></li>
+      <li><a href="#why">① 왜 이렇게 짰나 — 설계 원칙</a></li>
+      <li><a href="#beans">② 생두 3종과 역할</a></li>
+      <li><a href="#chem">③ 산미↓ 단맛↑ — 로스팅의 화학</a></li>
+      <li><a href="#profile">④ S7X 로스팅 프로파일</a></li>
+      <li><a href="#blendway">⑤ 같이 볶기 vs 따로 볶기</a></li>
+      <li><a href="#cupping">⑥ 커핑 평가 · 조정 가이드</a></li>
+      <li><a href="#caveats">⑦ 기각된 통설 · 주의</a></li>
+      <li><a href="#sources">출처 · 미해결 질문</a></li>
+    </ol>
+  </nav>
+
+  <!-- GOAL -->
+  <section id="goal">
+    <h2><span class="num">★</span>핵심 요약 — 최종 블렌드 <span class="conf high">높은 신뢰도</span></h2>
+    <div class="panel">
+      <p style="margin-top:0">
+        이 설계는 <strong>100% 아라비카</strong>예요 — 로부스타는 뺐어요. <strong>브라질 내추럴을 베이스로 깔고</strong>(단맛·낮은 산미·바디·크레마를
+        한 번에 책임져요), <strong>콜롬비아로 바디·단맛을 보강</strong>한 뒤, <strong>과테말라로 초콜릿·바디·복합미(깊이)</strong>를 더해요.<a href="#s1" class="ref">[1]</a><a href="#s2" class="ref">[2]</a>
+        산지는 <strong>최대 3종까지</strong>가 좋다고 해요(너무 많으면 한 잔 안에서 서로 묻혀요).<a href="#s1" class="ref">[1]</a>
+        실제 운용 비율은 <strong>브라질 : 콜롬비아 : 과테말라 = 2 : 1 : 1</strong>이에요.
+      </p>
+
+      <div class="ratiolegend">
+        <span><i class="sw" style="background:var(--text-display)"></i> 브라질 내추럴 50%</span>
+        <span><i class="sw" style="background:var(--text-secondary)"></i> 콜롬비아 25%</span>
+        <span><i class="sw" style="background:var(--text-disabled)"></i> 과테말라 25%</span>
+      </div>
+      <div class="ratiobar">
+        <div class="seg br" style="width:50%">브라질 50%</div>
+        <div class="seg co" style="width:25%">콜롬 25%</div>
+        <div class="seg gt" style="width:25%">과테 25%</div>
+      </div>
+      <p style="font-size:13px; color:var(--muted); margin-top:4px;">
+        ※ 2:1:1은 브라질 베이스(50%)에 워시드 두 종(콜롬비아·과테말라)을 절반 얹는 구성이라
+        <strong>로부스타 버전보다 산미가 살짝 올라올 수 있어요</strong> → 로스팅을 조금 더 끌거나(2차 크랙 직전~살짝) 보완하세요. (아래 ②·③에서 자세히)
+      </p>
+
+      <div class="kpi">
+        <div class="box"><div class="n">풀시티</div><div class="l">로스팅 정도 (미디엄다크)</div></div>
+        <div class="box"><div class="n">20~25%</div><div class="l">디벨롭 비율(DTR) — Scott Rao 권장</div></div>
+        <div class="box"><div class="n">2차 크랙 직전</div><div class="l">볶기를 멈추는 지점</div></div>
+        <div class="box"><div class="n">같이 볶기 OK</div><div class="l">셋 다 아라비카 → 프리블렌딩 가능</div></div>
+      </div>
+    </div>
+
+    <div class="callout good">
+      <span class="lbl">한 줄 정리</span>
+      <strong>브라질 50 / 콜롬비아 25 / 과테말라 25 (2:1:1)</strong>를 <strong>풀시티(2차 크랙 직전)</strong>로 볶아요.
+      셋 다 아라비카라 <strong>밀도 차가 크지 않아 같이 볶아도(프리블렌딩) 무난</strong>해요(과테말라가 제일 단단하니 화력만 약간 보정).
+      로부스타를 뺀 만큼 <strong>크레마는 브라질 내추럴 + 약간 더 진한 로스팅 + 신선도</strong>로 살리고, 컵은 더 깨끗해져요.
+    </div>
+  </section>
+
+  <!-- WHY -->
+  <section id="why">
+    <h2><span class="num">①</span>왜 이렇게 짰나 — 설계 원칙 <span class="conf high">높은 신뢰도</span></h2>
+    <p class="section-lead">목표(저가·저산미·고단맛·구매 쉬움) 하나하나를 어떤 선택으로 풀었는지 정리했어요.</p>
+    <table>
+      <thead><tr><th>목표</th><th>설계 선택</th><th>근거</th></tr></thead>
+      <tbody>
+        <tr><td class="col-label">싸게</td><td>브라질 베이스(세계 최대 생산국)로 50%, 비싼 스페셜티 대신 커머셜~프리미엄급</td><td>브라질은 양이 많아 단가가 낮고 사철 유통<a href="#s1" class="ref">[1]</a></td></tr>
+        <tr><td class="col-label">산미 거의 없게</td><td>내추럴 베이스 + 풀시티(미디엄다크) 로스팅. 워시드 두 종(콜롬·과테)이라 로스팅을 살짝 더 끔</td><td>로스팅이 진할수록 신맛 내는 산(시트르·말산)이 분해돼요<a href="#s5" class="ref">[5]</a></td></tr>
+        <tr><td class="col-label">단맛 좋게</td><td>내추럴(과육째 건조) 베이스 + 1차 크랙 후 디벨롭 넉넉히</td><td>내추럴은 단맛이 강하고, 디벨롭에서 캐러멜화로 단맛이 발달<a href="#s7" class="ref">[7]</a></td></tr>
+        <tr><td class="col-label">바디·크레마</td><td>콜롬비아·과테말라로 바디·초콜릿, 크레마는 브라질 내추럴 + 약간 더 진한 로스팅 + 신선도로</td><td>로부스타 없이도 내추럴 베이스의 지질·당이 크레마를 만들어요(아래 ②)</td></tr>
+        <tr><td class="col-label">구매 쉽게</td><td>브라질·콜롬비아·과테말라 — 전부 어디서나 흔한 메이저 아라비카 생두</td><td>특정 농장·소량 로트에 의존하지 않음</td></tr>
+      </tbody>
+    </table>
+    <div class="callout warn">
+      <span class="lbl">솔직한 한계</span>
+      가격·연중 구매 난이도의 <strong>정확한 숫자(시세표)</strong>는 이번 리서치에서 신뢰할 자료로 확정하지 못했어요.
+      "브라질·콜롬비아·과테말라가 흔하다"는 큰 방향은 맞지만, 과테말라(특히 SHB·안티구아)는 브라질보다 단가가 높을 수 있어요.
+      실제 단가는 <strong>거래하는 생두상 시세로 다시 확인</strong>하세요.
+    </div>
+  </section>
+
+  <!-- BEANS -->
+  <section id="beans">
+    <h2><span class="num">②</span>생두 3종과 역할 <span class="conf high">높은 신뢰도</span></h2>
+    <p class="section-lead">각 생두가 블렌드 안에서 무슨 일을 하는지, 왜 그 비율인지 풀어 봤어요.</p>
+
+    <div class="grid3">
+      <div class="bean-card br">
+        <h4>브라질 내추럴 <span class="pct">50%</span></h4>
+        <span class="role">베이스 — 단맛·바디·크레마·저산미 <span class="en">Cerrado / Santos, Natural</span></span>
+        <ul>
+          <li><strong>단맛·낮은 산미·바디·크레마</strong>를 한 번에 책임지는 핵심<a href="#s2" class="ref">[2]</a></li>
+          <li>내추럴(과육째 햇볕 건조)이라 <strong>초콜릿·견과류</strong>의 묵직한 단맛</li>
+          <li>지질·당이 많아 <strong>로부스타 없이도 크레마</strong>를 만드는 토대</li>
+          <li>세계 최대 생산국 → <strong>싸고 1년 내내</strong> 구하기 쉬움. 블렌드에서 보통 <strong>40~80%</strong> 차지<a href="#s2" class="ref">[2]</a></li>
+        </ul>
+      </div>
+      <div class="bean-card co">
+        <h4>콜롬비아 <span class="pct">25%</span></h4>
+        <span class="role">바디·단맛 보강 <span class="en">Supremo / Excelso, Washed</span></span>
+        <ul>
+          <li>매끈한 <strong>바디와 단맛</strong>을 더해 균형을 잡아요</li>
+          <li>사철 유통되고 <strong>품질이 안정적</strong>이라 블렌드 보강용으로 무난</li>
+          <li>풀시티로 볶으면 특유의 <strong>샤프한 산미는 가라앉아요</strong></li>
+          <li>(대안) 산미를 더 죽이고 싶으면 <strong>내추럴/허니 가공 콜롬비아</strong>나 <strong>수마트라 만델링</strong>으로 교체 가능</li>
+        </ul>
+      </div>
+      <div class="bean-card gt">
+        <h4>과테말라 <span class="pct">25%</span></h4>
+        <span class="role">초콜릿·바디·복합미 <span class="en">Antigua / Huehuetenango (SHB), Washed</span></span>
+        <ul>
+          <li>화산토 떼루아의 <strong>코코아·향신료·묵직한 바디</strong>로 깊이를 더해요</li>
+          <li>저산미를 노린다면 <strong>안티구아(초콜릿·균형)</strong> 권장 — 우에우에테낭고는 더 밝고 산미가 높아요</li>
+          <li>고지대 <strong>SHB(Strictly Hard Bean)는 밀도가 높아</strong> 셋 중 제일 단단 → 로스팅 화력만 약간 보정</li>
+          <li>풀시티로 볶으면 산미는 눌리고 <strong>초콜릿·당밀 톤이 살아나</strong> 브라질 단맛과 잘 붙어요</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="callout">
+      <span class="lbl">비율 근거 — 왜 2:1:1인가</span>
+      전문 매거진들이 드는 정석이 <strong>"브라질 베이스 + 보강 2종"</strong> 형태예요.<a href="#s1" class="ref">[1]</a> 여기에 사용자가 실제 운용하는
+      <strong>브라질 : 콜롬비아 : 과테말라 = 2 : 1 : 1 (= 50 / 25 / 25)</strong>을 적용했어요. 브라질이 절반으로 단맛·저산미·크레마의 토대를 잡고,
+      콜롬비아·과테말라가 똑같은 무게로 바디와 초콜릿 복합미를 채우는 <strong>좌우대칭 보강</strong> 구조라 균형이 잘 잡혀요.
+    </div>
+
+    <div class="callout good">
+      <span class="lbl">로부스타를 뺀 대가와 보완 — 크레마</span>
+      로부스타가 주던 <strong>크레마 볼륨·바이트·카페인 펀치</strong>는 분명 줄어요. 하지만 <strong>고무·약품 냄새 위험이 사라져 컵이 훨씬 깨끗</strong>해지죠.
+      크레마는 이렇게 살려요 — ① <strong>브라질 내추럴(고지질·고당)</strong> 베이스가 1차로 책임, ② <strong>풀시티 쪽으로 약간 더 진하게</strong> 볶아 오일·CO₂ 확보,
+      ③ <strong>로스팅 후 3~10일 숙성</strong>한 신선한 원두를 약 3~4주 안에 소진, ④ 추출 시 <strong>분쇄도·도징·압력</strong>으로 마무리.
+      더 묵직한 크레마를 원하면 <strong>콜롬비아/과테말라를 내추럴·허니 가공</strong>으로 골라 지질·당을 올리는 것도 방법이에요(여전히 100% 아라비카).
+    </div>
+  </section>
+
+  <!-- CHEMISTRY -->
+  <section id="chem">
+    <h2><span class="num">③</span>산미는 내리고 단맛은 올리는 로스팅의 화학 <span class="conf high">높은 신뢰도</span></h2>
+    <p class="section-lead">"진하게 볶으면 신맛이 줄고 단맛이 는다"는 말엔 분명한 과학적 이유가 있어요. 논문으로 확인된 내용이에요.</p>
+
+    <h3>1. 신맛 내는 산이 분해돼요</h3>
+    <p>
+      생두에 가장 많이 든 산은 <strong>시트르산(citric, 상큼한 신맛)·말산(malic, 사과 같은 신맛)</strong>이에요.
+      그런데 동료 평가를 거친 논문(Yeretzian 외, 2021)에 따르면 <em>로스팅이 진해질수록 이 시트르산·말산·클로로겐산(CGA)의 양이 줄어들어요.</em><a href="#s5" class="ref">[5]</a>
+      가장 많던 밝은 산이 분해되니까, 풀시티에서 <strong>혀로 느끼는 산미가 확 내려가는</strong> 거죠.
+    </p>
+    <div class="callout warn">
+      <span class="lbl">정확히 말하면</span>
+      진하게 볶으면 <strong>퀸산(quinic)·아세트산 같은 다른 산은 오히려 늘어요.</strong><a href="#s5" class="ref">[5]</a> 그래서 "모든 산이 사라진다"가 아니라,
+      <strong>상큼한 산(시트르·말산)이 줄어 산미가 부드러워진다</strong>가 맞는 표현이에요. (퀸산은 떫고 쓴맛 쪽이라 너무 진하면 텁텁해져요.)
+    </div>
+
+    <h3>2. 1차 크랙 뒤 '디벨롭'에서 단맛이 자라요</h3>
+    <p>
+      콩이 "탁탁" 터지는 <strong>1차 크랙(first crack)</strong> 직후가 단맛을 만드는 핵심 구간이에요. 여기서 바로 멈추면
+      <em>신맛·단맛은 있지만 차(tea)처럼 밍밍하게 덜 익은(언더디벨롭)</em> 맛이 나요.<a href="#s7" class="ref">[7]</a>
+      반대로 1차 크랙을 지나 <strong>조금 더 볶으면 당이 캐러멜화되며 단맛이 발달</strong>해요. 그래서 단맛을 노리면 1차 크랙에서 바로 떨구지 않고 좀 더 끌어요.
+    </p>
+
+    <h3>3. 그런데 2차 크랙으로 넘기면 안 돼요</h3>
+    <div class="callout bad">
+      <span class="lbl">탄 설탕(burnt-sugar)의 함정</span>
+      디벨롭을 너무 오래 끌면 <strong>당이 새까맣게 타서 '탄 설탕' 쓴맛</strong>이 강해져요.<a href="#s7" class="ref">[7]</a>
+      그래서 우리 블렌드는 <strong>2차 크랙 직전에서 멈춰요</strong> — 단맛은 충분히 끌어내되, 타기 직전에 손을 떼는 거죠.
+      이게 "미디엄다크(풀시티)"가 단맛·저산미 에스프레소의 스위트스폿인 이유예요.
+    </div>
+
+    <div class="callout">
+      <span class="lbl">짚고 갈 점 — 흔한 오해</span>
+      "170℃쯤에서 큰 탄수화물이 작은 당으로 쪼개져 단맛이 는다"거나 "마이야르 단계를 길게 늘여 쓴맛으로 균형을 잡는다"는 설명은
+      이번 검증에서 <strong>0–3으로 기각</strong>됐어요. 단맛은 그렇게 단순하지 않으니, 위 1~3의 메커니즘으로 이해하는 게 맞아요.
+    </div>
+  </section>
+
+  <!-- PROFILE -->
+  <section id="profile">
+    <h2><span class="num">④</span>Stronghold S7X 로스팅 프로파일 <span class="conf low">낮은 신뢰도 · 출발점</span></h2>
+    <p class="section-lead">
+      S7X는 <strong>열풍(대류)·할로겐(복사)·드럼히터(전도)</strong> 3개의 열원을 <strong>따로따로</strong> 조절할 수 있고, 여기에 <strong>드럼 회전(교반)</strong>까지 더해 4축으로 볶아요.<a href="#s12" class="ref">[12]</a>
+    </p>
+
+    <div class="panel">
+      <h3 style="margin-top:0">네 가지 조절 축이 하는 일</h3>
+      <div class="grid2">
+        <div>
+          <p style="margin-top:0"><strong>🌀 열풍 (뜨거운 바람 / 대류 convection)</strong><br>
+          <span class="en">드럼 전체를 돌며 고르게 데워요.</span> 균일한 디벨롭의 핵심. 메인 동력으로 써요.</p>
+          <p><strong>🔆 할로겐 (빛으로 데우기 / 복사 radiation)</strong><br>
+          <span class="en">표면을 직접 달궈요.</span> 표면 캐러멜화·크랙을 밀어줘요. 과하면 겉·끝이 타니 절제.</p>
+        </div>
+        <div>
+          <p style="margin-top:0"><strong>🔥 드럼히터 (쇠벽 열 / 전도 conduction)</strong><br>
+          <span class="en">콩이 닿는 드럼을 데워요.</span> S7X는 이걸 따로 제어해요(S7 Pro와 차이). 바디에 기여하되 스코칭 주의.</p>
+          <p><strong>🔄 드럼 회전·교반 (Stirring)</strong><br>
+          <span class="en">날개가 콩을 중심→바깥으로 밀어</span> 고루 섞어요. 한쪽만 타는 걸 막아줘요.<a href="#s12" class="ref">[12]</a></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout bad">
+      <span class="lbl">⚠️ 이 숫자들은 '검증된 정답'이 아니에요</span>
+      Stronghold가 <strong>공식으로 공개한 미디엄다크 에스프레소 권장 수치(차징 온도·열원 %·RPM·총 시간)는 찾지 못했어요.</strong>
+      아래 표는 <strong>로스팅 일반 원리 + S7X 구조</strong>로 짠 <strong>출발점</strong>일 뿐이에요. 반드시 직접 볶으며(실배치) 맞추고,
+      가능하면 <strong>블랙워터이슈(bwissue)·언스페셜티 에듀(unspecialty)의 S7X 실측 프로파일</strong>과 대조하세요.
+    </div>
+
+    <div class="callout good">
+      <span class="lbl">실데이터 보정 — Boost</span>
+      Stronghold 공식 데이터 플랫폼 <a href="boost-s7x-reference.html"><strong>Boost</strong></a>의 실제 로스터 프로파일을 분석해 아래 수치를 좁혔어요 —
+      관측된 <strong>차징 165~195℃</strong>(과한 195+는 베이킹 위험), <strong>1차 크랙 ≈ Internal 170℃ 부근</strong>, 디벨롭은 짧은 30~60초가 아니라 <strong>DTR 20~25%</strong>.
+      자세한 사례·통계는 <a href="boost-s7x-reference.html">Boost S7X 데이터 분석</a> 참고.
+    </div>
+
+    <h3>미디엄다크 에스프레소 — 단계별 출발 프로파일 (600g 기준)</h3>
+    <div class="timeline">
+      <div class="phase">
+        <div class="when">투입(차징)<small>0:00</small></div>
+        <div class="what"><h5>예열·투입 온도</h5>
+          <p>우리 S7X 실측 기준 <strong>투입 Internal ~170℃</strong>. 저밀도 브라질이 절반이지만 단단한 과테말라 SHB가 섞인 혼합 밀도라, 브라질 단독일 때보다 살짝 높게 잡아 단단한 콩까지 익혀요. 과열(195℃+)은 베이킹 위험이라 금물.
+          <span class="axis"><span class="a">열풍 중~높</span><span class="a">할로겐 중</span><span class="a">드럼히터 낮~중</span><span class="a">교반 높</span></span></p></div>
+      </div>
+      <div class="phase">
+        <div class="when">터닝포인트<small>~1:00–1:40</small></div>
+        <div class="what"><h5>온도 최저점(TP) 찍고 반등</h5>
+          <p>투입 직후 콩이 열을 먹어 온도가 바닥을 쳤다가 다시 올라가는 지점이에요. 여기서부터 RoR(30초당 오르는 온도)을 관리 시작.</p></div>
+      </div>
+      <div class="phase">
+        <div class="when">건조·마이야르<small>~1:40–7:00</small></div>
+        <div class="what"><h5>수분 빼고 갈변 쌓기</h5>
+          <p>열풍 위주로 고르게. RoR은 완만하게 우하향(계속 떨어지되 멈추진 않게). 할로겐은 중간으로 표면을 천천히 익혀요.
+          <span class="axis"><span class="a">열풍 메인</span><span class="a">할로겐 중</span><span class="a">교반 유지</span></span></p></div>
+      </div>
+      <div class="phase">
+        <div class="when">1차 크랙<small>Internal 174~177℃</small></div>
+        <div class="what"><h5>"탁탁" — 디벨롭 시작</h5>
+          <p>우리 환경 실측 <strong>1차 크랙 ≈ Internal 174~177℃</strong>. 크랙이 오면 화력을 살짝 낮춰 폭주를 막아요(플릭/크래시 방지). 여기부터 드롭까지가 <strong>디벨롭 구간</strong>.</p></div>
+      </div>
+      <div class="phase">
+        <div class="when">드롭(배출)<small>Internal ~183~187℃</small></div>
+        <div class="what"><h5>2차 크랙 직전에 멈춤</h5>
+          <p>디벨롭 비율(DTR)을 <strong>20~25%</strong>로 맞춰요.<a href="#s8" class="ref">[8]</a> 라이트는 드롭 ~180℃지만 미디엄다크는 디벨롭을 더 끌어 <strong>~183~187℃</strong>,
+          2차 크랙 소리가 나기 <strong>직전</strong>에 배출. (탄 설탕 쓴맛 회피)</p></div>
+      </div>
+    </div>
+
+    <div class="roastfig">
+      <svg viewBox="0 0 600 272" role="img" aria-label="우리 블렌드 미디엄다크 로스팅 곡선">
+        <defs><pattern id="dgb" width="16" height="16" patternUnits="userSpaceOnUse">
+          <circle cx="1" cy="1" r="1" class="dot-grid-bg" fill="currentColor" opacity="0.35"/></pattern></defs>
+        <rect x="50" y="20" width="510" height="230" fill="url(#dgb)"/>
+        <line x1="50" y1="250" x2="560" y2="250" class="rc-grid"/>
+        <line x1="50" y1="20" x2="50" y2="250" class="rc-grid"/>
+        <line x1="99" y1="222" x2="99" y2="250" class="rc-mark"/>
+        <line x1="414" y1="71" x2="414" y2="250" class="rc-mark hot"/>
+        <line x1="536" y1="44" x2="536" y2="250" class="rc-mark hot"/>
+        <!-- development band FC→drop (the long sweet-building stretch) -->
+        <rect x="414" y="20" width="122" height="230" fill="var(--accent)" opacity="0.06"/>
+        <path class="rc-curve" d="M50,90 Q75,165 99,222 C140,212 175,185 184,167 C290,120 360,90 414,71 C460,60 500,50 536,44"/>
+        <circle cx="99" cy="222" r="4" class="rc-pt"/>
+        <circle cx="184" cy="167" r="4" class="rc-pt"/>
+        <circle cx="414" cy="71" r="4.5" class="rc-pt hot"/>
+        <circle cx="536" cy="44" r="4.5" class="rc-pt hot"/>
+        <text x="105" y="217" class="rc-val">~120℃</text>
+        <text x="190" y="162" class="rc-val">~140℃</text>
+        <text x="408" y="60" class="rc-val hot" text-anchor="end">175℃ · FC</text>
+        <text x="540" y="35" class="rc-val hot" text-anchor="end">~185℃ DROP</text>
+        <text x="475" y="245" class="rc-lbl" text-anchor="middle">DEVELOP · DTR 20~25%</text>
+        <text x="99" y="265" class="rc-lbl" text-anchor="middle">1:00</text>
+        <text x="184" y="265" class="rc-lbl" text-anchor="middle">2:45</text>
+        <text x="414" y="265" class="rc-lbl" text-anchor="middle">~7:30</text>
+        <text x="536" y="265" class="rc-lbl" text-anchor="middle">~10:00</text>
+      </svg>
+      <div class="cap"><span>우리 블렌드 · 미디엄다크(풀시티) 출발 곡선</span><span>FC 175℃ → 드롭 ~185℃ · 출발점</span></div>
+    </div>
+
+    <div class="callout warn">
+      <span class="lbl">DTR 숫자 주의</span>
+      DTR 20~25%는 <strong>"드럼을 60% 이상 채운 클래식 드럼 로스터"</strong> 기준이에요.<a href="#s8" class="ref">[8]</a> 화력 대비 배치가 작으면 이 값을 낮춰야 해요.
+      S7X는 구조가 달라서 <strong>총 시간·크랙 시점은 기계와 배치에 따라 달라지니</strong>, DTR "비율"만 목표로 잡고 절대 시간은 실측으로 맞추세요.
+    </div>
+
+    <div class="callout good">
+      <span class="lbl">열원 배분 요령(원리 기반)</span>
+      ⓐ <strong>열풍(대류)</strong>으로 균일하게 디벨롭하고, ⓑ <strong>할로겐(복사)</strong>은 1차 크랙을 밀어주되 표면이 타지 않게 절제,
+      ⓒ <strong>드럼히터(전도)</strong>는 바디를 위해 쓰되 스코칭(겉 탐)을 막게 낮게, ⓓ <strong>교반은 높게</strong> 유지해 고르게 볶아요.
+    </div>
+  </section>
+
+  <!-- BLEND WAY -->
+  <section id="blendway">
+    <h2><span class="num">⑤</span>같이 볶을까, 따로 볶을까 <span class="conf high">높은 신뢰도</span></h2>
+    <p class="section-lead">생두를 미리 섞어 한 번에 볶느냐(프리블렌딩), 따로 볶아 나중에 섞느냐(포스트블렌딩)의 문제예요.</p>
+
+    <div class="grid2">
+      <div class="panel">
+        <h4 style="margin-top:0; color:var(--green)">프리블렌딩 <span class="en">같이 볶기</span></h4>
+        <p style="font-size:14px; margin:6px 0">
+          이미 자리 잡은 블렌드는 생두를 미리 섞어 한 번에 볶기 쉬워요. 특히 <strong>드럼 안에서 콩끼리 열이 '평균화'</strong>돼서
+          맛이 자연스럽게 섞여요.<a href="#s2" class="ref">[2]</a> 대량 생산·편의성에 유리.
+        </p>
+      </div>
+      <div class="panel">
+        <h4 style="margin-top:0; color:var(--accent)">포스트블렌딩 <span class="en">따로 볶고 섞기</span></h4>
+        <p style="font-size:14px; margin:6px 0">
+          생두마다 <strong>밀도·크기가 다르면 익는 속도도 달라요.</strong> 따로 볶으면 <strong>각각의 디벨롭을 최적으로</strong> 맞출 수 있어요.
+          그래서 Scott Rao는 포스트블렌딩을 권해요.<a href="#s9" class="ref">[9]</a>
+        </p>
+      </div>
+    </div>
+
+    <div class="callout good">
+      <span class="lbl">우리 블렌드의 선택 — 로부스타를 빼서 단순해졌어요</span>
+      로부스타를 빼니 <strong>밀도 차가 가장 큰 변수가 사라졌어요</strong>. 셋 다 아라비카라 성질이 비슷해
+      <strong>미리 섞어 한 번에 볶는 프리블렌딩이 기본</strong>이에요 — 작업이 훨씬 간단하고, 드럼 안에서 열이 평균화돼 맛도 자연스럽게 섞여요.<a href="#s2" class="ref">[2]</a>
+      <br><br>
+      다만 <strong>과테말라 SHB는 셋 중 제일 단단</strong>해서 같은 배치에서 살짝 덜 익을 수 있어요. 두 가지 길 —
+      <strong>(간단) 다 같이 풀시티로</strong> 볶되 화력·디벨롭을 약간 더 주거나,
+      <strong>(정밀) 과테말라만 따로</strong> 볶아 최적 디벨롭을 맞춘 뒤 50/25/25로 계량해 섞기.<a href="#s9" class="ref">[9]</a><a href="#s10" class="ref">[10]</a>
+      처음엔 간단 쪽으로 시작하고, 커핑에서 과테말라가 풋내(언더디벨롭)면 정밀 쪽으로 넘어가세요.
+    </div>
+  </section>
+
+  <!-- CUPPING -->
+  <section id="cupping">
+    <h2><span class="num">⑥</span>커핑 평가 · 맛 보고 조정하기 <span class="conf medium">중간 신뢰도</span></h2>
+    <p class="section-lead">볶고 나면 에스프레소로 내려 맛을 보고, 아래처럼 방향을 잡아 다음 배치를 손봐요.</p>
+    <table>
+      <thead><tr><th>이런 맛이 나면</th><th>원인 추정</th><th>다음 배치에서</th></tr></thead>
+      <tbody>
+        <tr><td class="col-label">아직 신맛이 있다</td><td>로스팅이 덜 진함 / 디벨롭 짧음 / 워시드(콜롬·과테) 비중</td><td>드롭을 조금 더 늦춰 2차 크랙에 더 가깝게(직전까지만), 또는 브라질 비율↑(예: 60/20/20)</td></tr>
+        <tr><td class="col-label">탄맛·재떨이 쓴맛</td><td>너무 진하게 볶음 / 2차 크랙 진입</td><td>드롭을 앞당기고 할로겐(복사) 낮추기</td></tr>
+        <tr><td class="col-label">밍밍하고 차 같다 / 과테말라 풋내</td><td>언더디벨롭(속 덜 익음) — 단단한 과테말라가 덜 익음</td><td>DTR을 20~25% 쪽으로 늘리기, 또는 과테말라만 따로 볶기</td></tr>
+        <tr><td class="col-label">단조롭고 밋밋하다</td><td>과테말라 복합미 부족 / 비율·신선도</td><td>과테말라 소폭↑(예: 50/20/30), 신선한 로트로 교체</td></tr>
+        <tr><td class="col-label">크레마가 약하다</td><td>너무 오래된 원두 / 로스팅이 약함 / 지질 부족</td><td>로스팅 후 3~10일 숙성된 신선 원두 사용, 약간 더 진하게, 내추럴·허니 가공 보강두 고려</td></tr>
+        <tr><td class="col-label">겉만 타고 속 덜 익음</td><td>화력 과다·교반 부족(스코칭)</td><td>드럼히터·할로겐 낮추고 교반↑, 차징 온도 낮추기</td></tr>
+      </tbody>
+    </table>
+    <p style="font-size:13px; color:var(--muted)">
+      ※ 이 조정표는 검증된 원리(산 분해·디벨롭·밀도별 익는 속도)를 실무용으로 합친 거예요. 정확한 세팅은 <strong>로스팅 일지를 쓰며 본인 기계로</strong> 맞춰가야 해요.
+    </p>
+  </section>
+
+  <!-- CAVEATS -->
+  <section id="caveats">
+    <h2><span class="num">⑦</span>기각된 통설 · 주의사항</h2>
+    <p class="section-lead">아래는 흔히 돌지만 3표 적대적 검증에서 떨어진 주장이에요. <strong>이 설계는 여기에 기대지 않아요.</strong></p>
+    <div class="panel">
+      <ul class="refuted">
+        <li><span class="strike">170℃쯤에서 탄수화물이 작은 당으로 쪼개져 단맛이 늘어난다</span><span class="vote">0–3 기각</span></li>
+        <li><span class="strike">에스프레소 블렌드는 마이야르 단계를 길게 늘여 쓴맛으로 균형을 잡는다</span><span class="vote">0–3 기각</span></li>
+        <li><span class="strike">프리미엄 로부스타는 풍미 손상 없이 크레마를 더 오래 지속시킨다</span><span class="vote">0–3 기각</span></li>
+        <li><span class="strike">25%까지 넣어도 고급 로부스타는 거의 안 느껴진다</span><span class="vote">0–3 기각</span></li>
+        <li><span class="strike">정통 이탈리안 블렌드는 로부스타 없이 40/40/20이다 → 로부스타는 불필요</span><span class="vote">1–2 기각</span><br><span style="font-size:13px; color:var(--muted)">→ "로부스타가 꼭 필요하다"도, "전혀 불필요하다"도 단정 못 해요. 크레마·바디엔 소량이 도움 되지만, <strong>이 설계는 컵의 청결함을 택해 100% 아라비카로 가고</strong> 크레마는 내추럴 베이스·로스팅·신선도로 보완해요(②).</span></li>
+        <li><span class="strike">신맛 산이 분해되니 진하게 볶으면 단맛도 크게 준다</span><span class="vote">1–2 기각</span></li>
+      </ul>
+    </div>
+    <div class="callout">
+      <span class="lbl">출처가 얼마나 탄탄한가</span>
+      <strong>산미 화학(③)은 동료평가 논문</strong>(Yeretzian 2021)으로 뒷받침돼 가장 단단해요. <strong>블렌드 비율·산지 역할·블렌딩 방식은 전문 매거진/로스터</strong>(Sweet Maria's·PDG·Scott Rao)
+      자료라 등급은 중간이지만, 모두 <strong>독립 출처에서 만장일치(3–0)</strong>로 확인됐어요. 반면 <strong>S7X 구체 수치(④)는 검증값이 없어 신뢰도 낮음</strong> — 꼭 실배치로 보정하세요.
+    </div>
+  </section>
+
+  <!-- SOURCES -->
+  <section id="sources">
+    <h2>출처 <span class="en">Sources</span></h2>
+    <div class="panel tight">
+      <div class="src" id="s1"><span class="q secondary">secondary</span><span>[1] Perfect Daily Grind, <em>How to build an espresso blend</em> — <a href="https://perfectdailygrind.com/2020/07/how-to-build-an-espresso-blend/">perfectdailygrind.com</a></span></div>
+      <div class="src" id="s2"><span class="q secondary">secondary</span><span>[2] Sweet Maria's, <em>Blending / Espresso 생두 고르기</em> — <a href="https://library.sweetmarias.com/blending/">library.sweetmarias.com</a></span></div>
+      <div class="src" id="s5"><span class="q primary">primary</span><span>[5] Yeretzian 외 (2021), <em>Coffee roasting and acids</em>, Crit Rev Food Sci Nutr — <a href="https://www.tandfonline.com/doi/full/10.1080/10408398.2021.1957767">tandfonline.com</a></span></div>
+      <div class="src" id="s7"><span class="q secondary">secondary</span><span>[7] Perfect Daily Grind, <em>What is bean development &amp; how to control it</em> — <a href="https://perfectdailygrind.com/2020/06/what-is-bean-development-in-coffee-roasting-and-how-to-control-it/">perfectdailygrind.com</a></span></div>
+      <div class="src" id="s8"><span class="q primary">primary</span><span>[8] Scott Rao, <em>Development Time Ratio</em> — <a href="https://www.scottrao.com/blog/2016/8/25/development-time-ratio">scottrao.com</a></span></div>
+      <div class="src" id="s9"><span class="q secondary">secondary</span><span>[9] Scott Rao, <em>The bias against blends</em> (포스트블렌딩) — <a href="https://www.scottrao.com/blog/thebiasagainstblends">scottrao.com</a></span></div>
+      <div class="src" id="s10"><span class="q secondary">secondary</span><span>[10] MTPak Coffee, <em>Pre-blend or post-blend roasted coffee?</em> — <a href="https://mtpak.coffee/2021/08/pre-blend-or-post-blend-roasted-coffee/">mtpak.coffee</a></span></div>
+      <div class="src" id="s12"><span class="q primary">primary</span><span>[12] Stronghold Coffee, <em>S7X 제품 사양</em>(3열원·교반) — <a href="https://stronghold.coffee/product/s7x.sq">stronghold.coffee</a></span></div>
+      <div class="src"><span class="q secondary">secondary</span><span>[+] PDG, <em>로스팅 중 화학 변화</em> — <a href="https://perfectdailygrind.com/2019/03/what-happens-during-coffee-roasting-the-chemical-changes/">perfectdailygrind.com</a> · Will Frith, <em>Stronghold love II</em>(blog) · 한국 커뮤니티 <a href="https://www.bwissue.com">블랙워터이슈(bwissue)</a></span></div>
+    </div>
+
+    <h3>미해결 질문 <span class="en">Open Questions</span></h3>
+    <div class="panel tight">
+      <ol style="margin:0; padding-left:20px;">
+        <li style="margin:8px 0">S7X 미디엄다크 에스프레소의 <strong>검증된 권장 수치</strong>(차징 온도·열원별 %·드럼 RPM·터닝포인트·총 시간) — 제조사 공식 레시피, <strong>블랙워터이슈</strong>·<strong><a href="https://unspecialty.com">언스페셜티 에듀</a></strong>의 S7X 실측 프로파일·세팅 추가 조사 필요.</li>
+        <li style="margin:8px 0">브라질·콜롬비아·과테말라의 <strong>커머셜~프리미엄 시세와 연중 가용성</strong> 정량 데이터 — 생두상 시세표 교차 확인(특히 과테말라 SHB·안티구아 프리미엄).</li>
+        <li style="margin:8px 0">100% 아라비카에서 <strong>내추럴·허니 가공 보강두가 크레마·바디를 얼마나 끌어올리는지</strong> 정량 효과 — 실배치 커핑으로 확인.</li>
+        <li style="margin:8px 0">드럼 회전수(RPM) 자체가 <strong>열전달·균일성에 주는 정량 영향</strong>과 미디엄다크 최적 RPM 범위.</li>
+      </ol>
+    </div>
+  </section>
+
+  <footer>
+    <p><strong>Deep Research 기반 블렌드 설계</strong> · 5개 검색 관점 · 소스 22개 · 주장 99개 추출 → 25개 검증 → 18 확정 / 7 기각 (3표 교차검증).</p>
+    <p>이 문서는 공개 웹 출처(논문·매거진·커뮤니티)를 모아 정리한 <strong>설계 참고 자료</strong>예요. 비율·프로파일은 출발점이며, 특히 S7X 수치는
+    <strong>직접 볶아보며(실배치) 꼭 조정</strong>하세요. 참고 출처 전체 목록은 <code>SOURCES.md</code>에 있어요.</p>
+    <p style="color:#6b5d4d; margin-top:16px;">생성: 2026-06-18 · 머신: Stronghold S7X · 블렌드: 브라질 50 / 콜롬비아 25 / 과테말라 25 (2:1:1) · 100% 아라비카 · 풀시티</p>
+  </footer>
+
+</div>
+<script src="nothing.js"></script>
+</body>
+</html>

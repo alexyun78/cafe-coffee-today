@@ -885,6 +885,15 @@
   .admin-tab-panel { display: none; }
   .admin-tab-panel.active { display: block; }
 
+  /* ===== 로스팅 스터디 ===== */
+  .roasting-study-frame-wrap {
+    border: 1px solid var(--line, #e7ddd0); border-radius: 12px; overflow: hidden;
+    background: #fff;
+  }
+  #roasting-study-frame {
+    width: 100%; height: calc(100vh - 230px); min-height: 480px; border: 0; display: block;
+  }
+
   /* ===== 주변 가게 리뷰 ===== */
   .nearby-note {
     background: #fff8ec; border: 1px solid #f1e0bf; border-radius: 10px;
@@ -1382,6 +1391,7 @@
     <button class="admin-tab-btn" data-tab="beans" role="tab" aria-selected="false">🫘 생두 관리</button>
     <button class="admin-tab-btn" data-tab="inventory" role="tab" aria-selected="false">📦 재고</button>
     <button class="admin-tab-btn" data-tab="nearby" role="tab" aria-selected="false">📍 주변</button>
+    <button class="admin-tab-btn" data-tab="roasting-study" role="tab" aria-selected="false">🔥 로스팅스터디</button>
   </nav>
 
   <!-- ===== 탭 패널: 오늘의 커피 ===== -->
@@ -2011,6 +2021,26 @@
       </div>
     </section>
   </div><!-- /tab-panel-nearby -->
+
+  <!-- ===== 탭 패널: 로스팅 스터디 ===== -->
+  <div id="tab-panel-roasting-study" class="admin-tab-panel">
+    <section class="card">
+      <div class="list-header">
+        <h2>🔥 로스팅 스터디</h2>
+        <div class="header-actions">
+          <a class="btn-text" href="/static/roasting-study/index.html" target="_blank" rel="noopener">↗ 새 창으로</a>
+        </div>
+      </div>
+      <div class="nearby-note">
+        신입에서 프로 로스터까지 — 생두·산지·가공·커핑·로스팅·블렌딩·추출 12개 모듈과 심층 보고서를 정리한
+        교육 자료입니다. 기준 머신은 <b>Stronghold S7X</b>. 아래에서 바로 열람하거나 "↗ 새 창으로" 버튼으로 크게 볼 수 있어요.
+      </div>
+      <div class="roasting-study-frame-wrap">
+        <iframe id="roasting-study-frame" title="로스팅 스터디 커리큘럼" loading="lazy"
+                referrerpolicy="no-referrer"></iframe>
+      </div>
+    </section>
+  </div><!-- /tab-panel-roasting-study -->
 
 </div>
 
@@ -3767,6 +3797,10 @@ init();
       if (btn.dataset.tab === "beans") loadBeansTab();
       if (btn.dataset.tab === "inventory") loadInventory();
       if (btn.dataset.tab === "nearby") loadNearby();
+      if (btn.dataset.tab === "roasting-study") {
+        const frame = document.getElementById("roasting-study-frame");
+        if (frame && !frame.src) frame.src = "/static/roasting-study/index.html";
+      }
     });
   });
 })();
