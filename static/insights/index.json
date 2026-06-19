@@ -1,7 +1,24 @@
 {
   "version": 1,
-  "updated_at": "2026-06-18T11:30:11Z",
+  "updated_at": "2026-06-19T11:30:01Z",
   "items": [
+    {
+      "id": "2026-06-19-espresso-crema-what-is-it",
+      "type": "trivia",
+      "date": "2026-06-19",
+      "title_ko": "에스프레소 위의 황금빛 거품, 크레마가 뭐야?",
+      "one_liner": "크레마는 압력으로 만든 커피 오일+CO2 거품층이야!",
+      "categories_primary": [
+        "커피 상식"
+      ],
+      "categories_secondary": [
+        "추출"
+      ],
+      "hero_image": "/static/img/insights/trivia/terms.svg",
+      "journal": null,
+      "pub_date": null,
+      "source_basis": null
+    },
     {
       "id": "2026-06-18-geisha-gesha-why-expensive",
       "type": "trivia",
