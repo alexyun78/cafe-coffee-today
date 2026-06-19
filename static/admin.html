@@ -5195,10 +5195,11 @@ function renderRoastList(items) {
     // 직전 로스팅 손실 대조: 같은 원두의 바로 이전(더 오래된) 기록과 비교.
     // items는 최신순 정렬이므로 idx 뒤쪽이 더 오래된 기록.
     let lossCmpHtml = "";
-    let prevLoss = null;
+    let prevLoss = null, prevRec = null;
     for (let j = idx + 1; j < items.length; j++) {
       if (items[j].green_bean_id === r.green_bean_id && items[j].moisture_loss_pct != null) {
         prevLoss = Number(items[j].moisture_loss_pct);
+        prevRec = items[j];
         break;
       }
     }
@@ -5210,7 +5211,10 @@ function renderRoastList(items) {
         deltaTxt = ` (Δ ${d >= 0 ? "+" : ""}${d.toFixed(1)}%p)`;
         if (Math.abs(d) >= 2) warnCls = " warn";   // 2%p 이상 차이면 일관성 주의
       }
-      lossCmpHtml = `<div class="record-row-losscmp${warnCls}">직전 ${prevLoss.toFixed(1)}%${deltaTxt}</div>`;
+      const prevInput = prevRec.actual_input_weight_g != null
+        ? Number(prevRec.actual_input_weight_g) : Number(prevRec.input_weight_g) || 0;
+      const prevInputTxt = prevInput ? ` · 투입 ${prevInput.toLocaleString()}g` : "";
+      lossCmpHtml = `<div class="record-row-losscmp${warnCls}">직전 ${prevLoss.toFixed(1)}%${deltaTxt}${prevInputTxt}</div>`;
     }
     const stock = fmtStockKg(_roastStockMap[r.green_bean_id]);
     const pr = priceForRoast(r.green_bean_id, r.roast_date || "");
