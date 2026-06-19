@@ -1832,7 +1832,7 @@
           </div>
 
           <div class="field">
-            <label for="purchase-field-discount">할인가 (할인 후 결제액, 원)</label>
+            <label for="purchase-field-discount">할인가 (할인 후 단가, 원/kg)</label>
             <input type="text" id="purchase-field-discount" inputmode="numeric" placeholder="할인 없으면 비워두세요">
           </div>
 
@@ -4935,7 +4935,8 @@ function openPurchaseEdit(id) {
   document.getElementById("purchase-field-qty").value = p.quantity_kg != null ? p.quantity_kg : "";
   document.getElementById("purchase-field-price").value = p.unit_price != null ? p.unit_price : "";
   document.getElementById("purchase-field-discount").value =
-    (Number(p.discount) || 0) > 0 && p.total_price != null ? p.total_price : "";
+    (Number(p.discount) || 0) > 0 && p.total_price != null && p.quantity_kg
+      ? Math.round(Number(p.total_price) / Number(p.quantity_kg)) : "";
   document.getElementById("purchase-form-title").textContent = "구매 편집";
   updatePurchaseTotal();
   showPurchaseForm();
@@ -4989,11 +4990,12 @@ function updatePurchaseTotal() {
   const price = parseInt(document.getElementById("purchase-field-price").value) || 0;
   const original = Math.round(qty * price);
   const raw = document.getElementById("purchase-field-discount").value.trim();
-  const finalAmt = raw === "" ? original : Math.max(0, parseInt(raw) || 0);
+  const discUnit = raw === "" ? price : Math.max(0, parseInt(raw) || 0);
+  const finalAmt = Math.round(qty * discUnit);
   const discount = Math.max(0, original - finalAmt);
   const disp = document.getElementById("purchase-total-display");
   if (discount > 0) {
-    disp.innerHTML = `정가 ₩${original.toLocaleString()} → 결제 <strong>₩${finalAmt.toLocaleString()}</strong> ` +
+    disp.innerHTML = `정가 ₩${original.toLocaleString()} (₩${price.toLocaleString()}/kg) → 결제 <strong>₩${finalAmt.toLocaleString()}</strong> (₩${discUnit.toLocaleString()}/kg) ` +
       `<span style="color:var(--danger);">(할인 ₩${discount.toLocaleString()})</span>`;
   } else {
     disp.textContent = "총액: ₩" + original.toLocaleString();
@@ -5049,7 +5051,8 @@ document.getElementById("purchase-form").addEventListener("submit", async (e) =>
     discount: (() => {
       const original = Math.round(qtyVal * priceVal);
       const raw = document.getElementById("purchase-field-discount").value.trim();
-      const finalAmt = raw === "" ? original : Math.max(0, parseInt(raw) || 0);
+      const discUnit = raw === "" ? priceVal : Math.max(0, parseInt(raw) || 0);
+      const finalAmt = Math.round(qtyVal * discUnit);
       return Math.max(0, original - finalAmt);
     })(),
   };
