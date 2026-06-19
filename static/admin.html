@@ -1335,6 +1335,11 @@
     font-weight: 700; padding: 2px 10px; border-radius: 10px;
     display: inline-block; font-size: 0.82rem;
   }
+  button.inv-remaining {
+    border: 0; cursor: pointer; font-family: inherit; line-height: 1.2;
+    display: inline-flex; align-items: center; gap: 4px;
+  }
+  button.inv-remaining:hover { filter: brightness(0.96); }
 
   /* Quick-entry form inside card */
   .quick-form { margin-top: 16px; }
@@ -4545,6 +4550,28 @@ async function openStockEdit(id) {
   }
 }
 
+// 재고 탭에서 현재 재고(잔여 수량)를 직접 설정. 생두 목록의 openStockEdit 와 동일 로직.
+async function openInvStockEdit(id) {
+  const it = (_invItemsCache || []).find(x => x.id === id);
+  if (!it) return;
+  const cur = Number(it.remaining_kg) || 0;
+  const input = window.prompt(
+    `'${it.name}' 현재 재고(kg)\n구매·로스팅 합계는 그대로 두고 잔여 수량만 보정합니다.\n이후 구매·로스팅은 정상 반영됩니다.`,
+    cur.toFixed(1),
+  );
+  if (input === null) return;
+  const val = parseFloat(String(input).replace(",", "."));
+  if (isNaN(val)) { showBanner("숫자를 입력하세요.", "error"); return; }
+  try {
+    await api("PUT", "/api/green-beans/" + id + "/stock", { remaining_kg: val });
+    showToast(`재고가 ${val.toFixed(1)}kg 로 수정되었습니다`);
+    await loadInventory();      // 재고 탭 갱신
+    loadBeanList();             // 생두 목록 캐시도 최신화 (백그라운드)
+  } catch (err) {
+    if (err.message !== "unauthorized") showBanner("수정 실패: " + err.message, "error");
+  }
+}
+
 // ---------- 관리자 폼 뒤로가기(Android back) 처리 ----------
 // 생두/구매/로스팅 폼이 열려 있으면 back키가 관리자 모드를 벗어나지 않고
 // 폼만 닫고 목록으로 돌아가도록 한다 (History API).
@@ -5668,7 +5695,7 @@ function invRowHtml(it) {
         <span>${escapeHtml(it.process || "—")}</span>
         <span>구매 ${Number(it.purchased_kg).toFixed(1)}</span>
         <span>사용 ${Number(it.used_kg).toFixed(1)}</span>
-        <span>잔여 <strong class="inv-remaining ${cls}">${remaining.toFixed(1)}</strong> kg</span>
+        <span>잔여 <button type="button" class="inv-remaining inv-stock-btn ${cls}" data-id="${it.id}" title="탭하여 재고 수정">${remaining.toFixed(1)}<span class="bean-stock-pencil">✎</span></button> kg</span>
       </div>
       <div class="record-row-actions">${hideBtn}</div>
     </div>`;
@@ -5716,6 +5743,12 @@ function renderInventory(items) {
       btn.addEventListener("click", async () => {
         try { await setBeanHidden(btn.dataset.bean, btn.classList.contains("hide")); }
         catch (err) { if (err.message !== "unauthorized") showBanner("변경 실패: " + err.message, "error"); }
+      });
+    });
+    scope.querySelectorAll(".inv-stock-btn").forEach(btn => {
+      btn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        openInvStockEdit(parseInt(btn.dataset.id, 10));
       });
     });
   }
