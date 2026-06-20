@@ -517,6 +517,38 @@ def init_schema():
                 "INSERT INTO migrations (name) VALUES (?)",
                 ("backfill_empty_coffee_cup_notes_v1",),
             )
+        # 단일 소스 복구(v2): 가드 없던 과거 sync 가 빈 컵노트로 생두 소스를 지운 경우
+        # (예: 에티오피아 함벨라 게넷) 복구한다. 1) 빈 생두를 그 생두의 가장 최근
+        # '비어있지 않은' 커피 스냅샷으로 되살리고 → 2) 되살린 생두 값으로 빈 커피를 백필.
+        # 멱등(빈 생두/빈 커피만 건드리고, 채워주는 출처가 있을 때만).
+        if not conn.execute(
+            "SELECT 1 FROM migrations WHERE name=?", ("recover_cup_notes_single_source_v2",)
+        ).fetchone():
+            conn.execute(
+                "UPDATE green_beans SET "
+                "cup_notes=(SELECT c.cup_notes FROM coffees c "
+                "           WHERE c.green_bean_id = green_beans.id "
+                "             AND c.cup_notes IS NOT NULL AND TRIM(c.cup_notes) != '' "
+                "           ORDER BY c.id DESC LIMIT 1), "
+                "updated_at=strftime('%Y-%m-%dT%H:%M:%SZ','now') "
+                "WHERE COALESCE(TRIM(cup_notes),'')='' "
+                "  AND EXISTS (SELECT 1 FROM coffees c "
+                "              WHERE c.green_bean_id = green_beans.id "
+                "                AND c.cup_notes IS NOT NULL AND TRIM(c.cup_notes) != '')"
+            )
+            conn.execute(
+                "UPDATE coffees SET "
+                "cup_notes=(SELECT cup_notes FROM green_beans WHERE id=coffees.green_bean_id), "
+                "updated_at=strftime('%Y-%m-%dT%H:%M:%SZ','now') "
+                "WHERE green_bean_id IS NOT NULL "
+                "AND (cup_notes IS NULL OR TRIM(cup_notes)='') "
+                "AND COALESCE(TRIM((SELECT cup_notes FROM green_beans "
+                "                   WHERE id=coffees.green_bean_id)), '') != ''"
+            )
+            conn.execute(
+                "INSERT INTO migrations (name) VALUES (?)",
+                ("recover_cup_notes_single_source_v2",),
+            )
 
 
 # ---------- PIN brute-force 카운터 (워커 공유 영속) ----------
