@@ -498,6 +498,25 @@ def init_schema():
             conn.execute(
                 "INSERT INTO migrations (name) VALUES (?)", ("cup_notes_korean_v1",)
             )
+        # 단일 소스 정합성: 컵노트가 비어 있는 커피를 연결된 생두 마스터 값으로 백필.
+        # 표시는 _row_to_api 가 생두를 우선하지만, 빈 스냅샷도 채워 직접 컬럼을 읽는
+        # 경로(피드백 토큰 후보·인기 컵노트 집계 등)까지 일관되게 만든다. 멱등.
+        if not conn.execute(
+            "SELECT 1 FROM migrations WHERE name=?", ("backfill_empty_coffee_cup_notes_v1",)
+        ).fetchone():
+            conn.execute(
+                "UPDATE coffees SET "
+                "cup_notes=(SELECT cup_notes FROM green_beans WHERE id=coffees.green_bean_id), "
+                "updated_at=strftime('%Y-%m-%dT%H:%M:%SZ','now') "
+                "WHERE green_bean_id IS NOT NULL "
+                "AND (cup_notes IS NULL OR TRIM(cup_notes)='') "
+                "AND COALESCE(TRIM((SELECT cup_notes FROM green_beans "
+                "                   WHERE id=coffees.green_bean_id)), '') != ''"
+            )
+            conn.execute(
+                "INSERT INTO migrations (name) VALUES (?)",
+                ("backfill_empty_coffee_cup_notes_v1",),
+            )
 
 
 # ---------- PIN brute-force 카운터 (워커 공유 영속) ----------
@@ -581,7 +600,19 @@ def _compute_display_status(raw: Optional[str], serve_date: Optional[str]) -> Op
 
 
 def _row_to_api(row: sqlite3.Row) -> dict:
-    """Convert DB row to API response (Korean keys, Notion-compatible shape)."""
+    """Convert DB row to API response (Korean keys, Notion-compatible shape).
+
+    컵노트 단일 소스(single source of truth):
+      생두 마스터(green_beans.cup_notes)가 그 생두의 유일한 컵노트다.
+      생두에 연결된(green_bean_id) 커피는 항상 생두의 컵노트를 표시한다.
+      → 한 곳(생두)에서만 작성하면 그 생두를 쓰는 모든 커피가 즉시 공유한다.
+      쿼리에서 green_beans 를 LEFT JOIN 해 bean_cup_notes 로 노출했을 때만 적용되고,
+      연결이 없거나 생두 컵노트가 비면 그 커피 자체 스냅샷(cup_notes)으로 폴백한다."""
+    cup = row["cup_notes"]
+    if "bean_cup_notes" in row.keys():
+        bean_cup = row["bean_cup_notes"]
+        if bean_cup is not None and str(bean_cup).strip():
+            cup = bean_cup
     return {
         "id": row["id"],
         "커피": row["name"],
@@ -589,7 +620,7 @@ def _row_to_api(row: sqlite3.Row) -> dict:
         "로스팅": _date_obj(row["roast_date"]),
         "프로세싱": row["process"],
         "상태": _compute_display_status(row["status"], row["serve_date"]),
-        "컵노트": row["cup_notes"],
+        "컵노트": cup,
         "감상": row["comment"],
         "제공일": _date_obj(row["serve_date"]),
         "구분": row["category"],
@@ -602,9 +633,11 @@ def _row_to_api(row: sqlite3.Row) -> dict:
 def list_all() -> list:
     with connect() as conn:
         rows = conn.execute(
-            "SELECT * FROM coffees ORDER BY "
-            "CASE WHEN status='예정' THEN 0 ELSE 1 END, "
-            "roast_date DESC, id DESC"
+            "SELECT c.*, gb.cup_notes AS bean_cup_notes "
+            "FROM coffees c LEFT JOIN green_beans gb ON gb.id = c.green_bean_id "
+            "ORDER BY "
+            "CASE WHEN c.status='예정' THEN 0 ELSE 1 END, "
+            "c.roast_date DESC, c.id DESC"
         ).fetchall()
     return [_row_to_api(r) for r in rows]
 
@@ -651,7 +684,10 @@ def list_today_and_history():
     today_iso = date.today().isoformat()
 
     with connect() as conn:
-        rows = conn.execute("SELECT * FROM coffees").fetchall()
+        rows = conn.execute(
+            "SELECT c.*, gb.cup_notes AS bean_cup_notes "
+            "FROM coffees c LEFT JOIN green_beans gb ON gb.id = c.green_bean_id"
+        ).fetchall()
 
     items = [_row_to_api(r) for r in rows]
 
@@ -697,7 +733,12 @@ def _date_to_ts(s: str) -> float:
 
 def get_by_id(coffee_id: int) -> Optional[dict]:
     with connect() as conn:
-        row = conn.execute("SELECT * FROM coffees WHERE id=?", (coffee_id,)).fetchone()
+        row = conn.execute(
+            "SELECT c.*, gb.cup_notes AS bean_cup_notes "
+            "FROM coffees c LEFT JOIN green_beans gb ON gb.id = c.green_bean_id "
+            "WHERE c.id=?",
+            (coffee_id,),
+        ).fetchone()
     return _row_to_api(row) if row else None
 
 
@@ -765,7 +806,13 @@ def sync_bean_cup_notes_from_coffee(coffee_id: int, cup_notes) -> bool:
 
     따라서 여기서는 편집된 커피 행(이미 db.update 로 갱신됨) 외에 다른 커피는
     절대 덮어쓰지 않고, 생두의 최신 포인터만 앞당긴다.
-    연결된 green_bean_id 가 없으면 아무 일도 하지 않는다."""
+    연결된 green_bean_id 가 없으면 아무 일도 하지 않는다.
+
+    ⚠️ 단일 소스 보호: 생두 컵노트는 그 생두를 쓰는 모든 커피가 공유하므로,
+    빈/공백 값으로는 생두를 덮어쓰지 않는다 (빈 편집이 소스를 지우는 사고 방지).
+    컵노트를 비우려면 생두 관리에서 직접 비운다."""
+    if cup_notes is None or not str(cup_notes).strip():
+        return False
     with connect() as conn:
         row = conn.execute(
             "SELECT green_bean_id FROM coffees WHERE id=?", (coffee_id,)

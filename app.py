@@ -382,6 +382,10 @@ def api_create():
     if parsed.get("status") == "진행 중" and not parsed.get("serve_date"):
         parsed["serve_date"] = date.today().isoformat()
     new_id = db.create(parsed)
+    # 컵노트 단일 소스: 생두에 연결돼 있고 컵노트를 입력했으면 생두 마스터로 동기화
+    # (빈 값은 sync 내부에서 무시 → 공유 소스를 지우지 않음)
+    if "cup_notes" in parsed:
+        db.sync_bean_cup_notes_from_coffee(new_id, parsed["cup_notes"])
     if parsed.get("status") == "진행 중":
         db.complete_other_in_progress(new_id)
     return jsonify({"success": True, "id": new_id, "item": db.get_by_id(new_id)})
