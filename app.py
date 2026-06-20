@@ -171,7 +171,7 @@ def add_security_headers(resp):
             path="/",
         )
     resp.headers.setdefault("X-Content-Type-Options", "nosniff")
-    resp.headers.setdefault("X-Frame-Options", "DENY")
+    resp.headers.setdefault("X-Frame-Options", "SAMEORIGIN")
     resp.headers.setdefault("Referrer-Policy", "strict-origin-when-cross-origin")
     resp.headers.setdefault("Permissions-Policy", "geolocation=(), microphone=(), camera=()")
     resp.headers.setdefault(
@@ -183,7 +183,7 @@ def add_security_headers(resp):
         "script-src 'self' 'unsafe-inline'; "
         "connect-src 'self'; "
         "frame-src https://www.youtube.com https://www.youtube-nocookie.com; "
-        "frame-ancestors 'none'; "
+        "frame-ancestors 'self'; "
         "base-uri 'self'; "
         "form-action 'self'",
     )
