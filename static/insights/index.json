@@ -1,7 +1,24 @@
 {
   "version": 1,
-  "updated_at": "2026-06-19T11:30:01Z",
+  "updated_at": "2026-06-20T11:30:02Z",
   "items": [
+    {
+      "id": "2026-06-20-coffee-cupping-what-is-it",
+      "type": "trivia",
+      "date": "2026-06-20",
+      "title_ko": "전문가들이 한다는 '커핑', 대체 뭐 하는 거야?",
+      "one_liner": "커핑은 정해진 방식으로 커피 맛을 객관적으로 평가하는 거야!",
+      "categories_primary": [
+        "커피 상식"
+      ],
+      "categories_secondary": [
+        "향미/관능"
+      ],
+      "hero_image": "/static/img/insights/trivia/terms.svg",
+      "journal": null,
+      "pub_date": null,
+      "source_basis": null
+    },
     {
       "id": "2026-06-19-espresso-crema-what-is-it",
       "type": "trivia",
