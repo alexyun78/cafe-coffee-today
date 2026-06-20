@@ -549,6 +549,41 @@ def init_schema():
                 "INSERT INTO migrations (name) VALUES (?)",
                 ("recover_cup_notes_single_source_v2",),
             )
+        # 단일 소스 복구(v3, 이름 기준): 레거시 커피 다수가 green_bean_id 없이 이름만
+        # 같다(예: 함벨라 게넷). v2(연결 기준)로는 못 살리므로 '같은 이름'으로 복구한다.
+        #   1) 빈 생두를 같은 이름의 가장 최근 비어있지 않은 커피 스냅샷으로 되살리고
+        #   2) 빈 커피를 같은 이름 생두 값으로 백필. 멱등.
+        if not conn.execute(
+            "SELECT 1 FROM migrations WHERE name=?", ("recover_cup_notes_by_name_v3",)
+        ).fetchone():
+            conn.execute(
+                "UPDATE green_beans SET "
+                "cup_notes=(SELECT c.cup_notes FROM coffees c "
+                "           WHERE c.name = green_beans.name "
+                "             AND c.cup_notes IS NOT NULL AND TRIM(c.cup_notes) != '' "
+                "           ORDER BY c.id DESC LIMIT 1), "
+                "updated_at=strftime('%Y-%m-%dT%H:%M:%SZ','now') "
+                "WHERE COALESCE(TRIM(cup_notes),'')='' "
+                "  AND EXISTS (SELECT 1 FROM coffees c "
+                "              WHERE c.name = green_beans.name "
+                "                AND c.cup_notes IS NOT NULL AND TRIM(c.cup_notes) != '')"
+            )
+            conn.execute(
+                "UPDATE coffees SET "
+                "cup_notes=(SELECT gb.cup_notes FROM green_beans gb "
+                "           WHERE gb.name = coffees.name "
+                "             AND TRIM(COALESCE(gb.cup_notes,'')) != '' "
+                "           ORDER BY gb.id LIMIT 1), "
+                "updated_at=strftime('%Y-%m-%dT%H:%M:%SZ','now') "
+                "WHERE (cup_notes IS NULL OR TRIM(cup_notes)='') "
+                "  AND EXISTS (SELECT 1 FROM green_beans gb "
+                "              WHERE gb.name = coffees.name "
+                "                AND TRIM(COALESCE(gb.cup_notes,'')) != '')"
+            )
+            conn.execute(
+                "INSERT INTO migrations (name) VALUES (?)",
+                ("recover_cup_notes_by_name_v3",),
+            )
 
 
 # ---------- PIN brute-force 카운터 (워커 공유 영속) ----------
@@ -631,15 +666,30 @@ def _compute_display_status(raw: Optional[str], serve_date: Optional[str]) -> Op
     return natural if nat_o > raw_o else raw_key
 
 
+# 컵노트 단일 소스 SQL — 커피 행(c)에 대해 '유효 컵노트'를 생두 마스터에서 해석.
+#   우선순위: 1) green_bean_id 로 연결된 생두 → 2) 이름이 같은 생두(연결 안 됐을 때)
+#   → 둘 다 비면 NULL 이라 _row_to_api 가 커피 자체 스냅샷(c.cup_notes)으로 폴백.
+# 레거시 커피 다수가 green_bean_id 없이 이름만 같으므로 이름 폴백이 핵심이다.
+_EFF_CUP_NOTES_SQL = (
+    "COALESCE("
+    "(SELECT gb.cup_notes FROM green_beans gb "
+    "  WHERE gb.id = c.green_bean_id AND TRIM(COALESCE(gb.cup_notes,'')) <> ''), "
+    "(SELECT gb.cup_notes FROM green_beans gb "
+    "  WHERE gb.name = c.name AND TRIM(COALESCE(gb.cup_notes,'')) <> '' "
+    "  ORDER BY gb.id LIMIT 1)"
+    ") AS bean_cup_notes"
+)
+
+
 def _row_to_api(row: sqlite3.Row) -> dict:
     """Convert DB row to API response (Korean keys, Notion-compatible shape).
 
     컵노트 단일 소스(single source of truth):
       생두 마스터(green_beans.cup_notes)가 그 생두의 유일한 컵노트다.
-      생두에 연결된(green_bean_id) 커피는 항상 생두의 컵노트를 표시한다.
-      → 한 곳(생두)에서만 작성하면 그 생두를 쓰는 모든 커피가 즉시 공유한다.
-      쿼리에서 green_beans 를 LEFT JOIN 해 bean_cup_notes 로 노출했을 때만 적용되고,
-      연결이 없거나 생두 컵노트가 비면 그 커피 자체 스냅샷(cup_notes)으로 폴백한다."""
+      커피는 green_bean_id 또는 '같은 이름'으로 그 생두를 찾아 컵노트를 표시한다.
+      → 한 곳(생두)에서만 작성하면 같은 생두/같은 이름의 모든 커피가 즉시 공유한다.
+      쿼리에서 _EFF_CUP_NOTES_SQL 로 bean_cup_notes 를 노출했을 때만 적용되고,
+      생두 컵노트가 비면 그 커피 자체 스냅샷(cup_notes)으로 폴백한다."""
     cup = row["cup_notes"]
     if "bean_cup_notes" in row.keys():
         bean_cup = row["bean_cup_notes"]
@@ -665,8 +715,7 @@ def _row_to_api(row: sqlite3.Row) -> dict:
 def list_all() -> list:
     with connect() as conn:
         rows = conn.execute(
-            "SELECT c.*, gb.cup_notes AS bean_cup_notes "
-            "FROM coffees c LEFT JOIN green_beans gb ON gb.id = c.green_bean_id "
+            "SELECT c.*, " + _EFF_CUP_NOTES_SQL + " FROM coffees c "
             "ORDER BY "
             "CASE WHEN c.status='예정' THEN 0 ELSE 1 END, "
             "c.roast_date DESC, c.id DESC"
@@ -717,8 +766,7 @@ def list_today_and_history():
 
     with connect() as conn:
         rows = conn.execute(
-            "SELECT c.*, gb.cup_notes AS bean_cup_notes "
-            "FROM coffees c LEFT JOIN green_beans gb ON gb.id = c.green_bean_id"
+            "SELECT c.*, " + _EFF_CUP_NOTES_SQL + " FROM coffees c"
         ).fetchall()
 
     items = [_row_to_api(r) for r in rows]
@@ -766,9 +814,7 @@ def _date_to_ts(s: str) -> float:
 def get_by_id(coffee_id: int) -> Optional[dict]:
     with connect() as conn:
         row = conn.execute(
-            "SELECT c.*, gb.cup_notes AS bean_cup_notes "
-            "FROM coffees c LEFT JOIN green_beans gb ON gb.id = c.green_bean_id "
-            "WHERE c.id=?",
+            "SELECT c.*, " + _EFF_CUP_NOTES_SQL + " FROM coffees c WHERE c.id=?",
             (coffee_id,),
         ).fetchone()
     return _row_to_api(row) if row else None
@@ -838,7 +884,10 @@ def sync_bean_cup_notes_from_coffee(coffee_id: int, cup_notes) -> bool:
 
     따라서 여기서는 편집된 커피 행(이미 db.update 로 갱신됨) 외에 다른 커피는
     절대 덮어쓰지 않고, 생두의 최신 포인터만 앞당긴다.
-    연결된 green_bean_id 가 없으면 아무 일도 하지 않는다.
+
+    연결 해석: green_bean_id 가 있으면 그 생두를, 없으면 '같은 이름'의 생두를 갱신한다.
+    (레거시 커피 다수가 green_bean_id 없이 이름만 같으므로 이름 폴백이 필요.)
+    이름 매칭 생두도 없으면 아무 일도 하지 않는다.
 
     ⚠️ 단일 소스 보호: 생두 컵노트는 그 생두를 쓰는 모든 커피가 공유하므로,
     빈/공백 값으로는 생두를 덮어쓰지 않는다 (빈 편집이 소스를 지우는 사고 방지).
@@ -847,14 +896,24 @@ def sync_bean_cup_notes_from_coffee(coffee_id: int, cup_notes) -> bool:
         return False
     with connect() as conn:
         row = conn.execute(
-            "SELECT green_bean_id FROM coffees WHERE id=?", (coffee_id,)
+            "SELECT green_bean_id, name FROM coffees WHERE id=?", (coffee_id,)
         ).fetchone()
-        if not row or not row["green_bean_id"]:
+        if not row:
+            return False
+        if row["green_bean_id"]:
+            cur = conn.execute(
+                "UPDATE green_beans SET cup_notes=?, "
+                "updated_at=strftime('%Y-%m-%dT%H:%M:%SZ','now') WHERE id=?",
+                (cup_notes, row["green_bean_id"]),
+            )
+            return cur.rowcount > 0
+        # green_bean_id 없음 → 같은 이름의 생두를 갱신 (단일 소스 유지)
+        if not row["name"]:
             return False
         conn.execute(
             "UPDATE green_beans SET cup_notes=?, "
-            "updated_at=strftime('%Y-%m-%dT%H:%M:%SZ','now') WHERE id=?",
-            (cup_notes, row["green_bean_id"]),
+            "updated_at=strftime('%Y-%m-%dT%H:%M:%SZ','now') WHERE name=?",
+            (cup_notes, row["name"]),
         )
         return True
 
