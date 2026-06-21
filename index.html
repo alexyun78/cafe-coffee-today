@@ -1495,21 +1495,23 @@
         background:#fff; border-radius:18px; max-width:340px; width:100%;
         box-shadow:0 20px 60px rgba(0,0,0,0.35); overflow:hidden;
         animation:noticePopIn .25s ease;
+        display:flex; flex-direction:column; max-height:calc(100dvh - 48px);
       ">
         <div style="
           background:linear-gradient(135deg,#6F4E37,#8B6F47); color:#fff;
-          padding:22px 24px; text-align:center;
+          padding:22px 24px; text-align:center; flex-shrink:0;
         ">
           <div style="font-size:2.4rem; line-height:1;">📅</div>
           <div style="font-size:1.15rem; font-weight:700; margin-top:10px;">휴무 안내</div>
         </div>
-        <div style="padding:24px; text-align:center; color:#3a2e25;">
+        <div style="padding:24px; text-align:center; color:#3a2e25; overflow-y:auto; flex:1 1 auto; min-height:0;">
           <p style="font-size:1.25rem; font-weight:700; margin:0 0 6px;">6월 22일 (월요일)</p>
           <p style="font-size:1rem; margin:0; color:#6b5848;">휴무입니다.</p>
         </div>
         <label style="
           display:flex; align-items:center; justify-content:center; gap:8px;
-          padding:0 24px 16px; color:#8a7866; font-size:0.85rem; cursor:pointer;
+          padding:14px 24px 16px; color:#8a7866; font-size:0.85rem; cursor:pointer;
+          flex-shrink:0; background:#fff; border-top:1px solid #f0eae2;
         ">
           <input type="checkbox" id="notice-popup-dontshow" onchange="if(this.checked)closeNoticePopup()" style="width:16px; height:16px; cursor:pointer;">
           다시 보지 않기
@@ -1517,6 +1519,7 @@
         <button onclick="closeNoticePopup()" style="
           width:100%; border:none; border-top:1px solid #eee; background:#fff;
           padding:16px; font-size:1rem; font-weight:600; color:#6F4E37; cursor:pointer;
+          flex-shrink:0;
         ">닫기</button>
       </div>
     </div>
@@ -1532,8 +1535,9 @@
         position:relative; background:#fffdf9; border-radius:22px; max-width:360px; width:100%;
         box-shadow:0 24px 70px rgba(0,0,0,0.42); overflow:hidden;
         animation:specialPopIn .38s cubic-bezier(.2,.85,.25,1);
+        display:flex; flex-direction:column; max-height:calc(100dvh - 48px);
       ">
-        <div style="position:relative; background:linear-gradient(150deg,#2f8a57 0%,#1f6b46 48%,#13503a 100%); padding:30px 24px 24px; text-align:center; overflow:hidden;">
+        <div style="position:relative; background:linear-gradient(150deg,#2f8a57 0%,#1f6b46 48%,#13503a 100%); padding:30px 24px 24px; text-align:center; overflow:hidden; flex-shrink:0;">
           <div style="position:absolute; top:14px; left:18px; color:rgba(255,255,255,.35); font-size:.8rem;">✦</div>
           <div style="position:absolute; top:30px; right:24px; color:rgba(255,255,255,.45); font-size:1.1rem;">✦</div>
           <div style="position:absolute; bottom:16px; left:30px; color:rgba(255,255,255,.25); font-size:.7rem;">✦</div>
@@ -1550,7 +1554,7 @@
           <div style="letter-spacing:4px; font-size:.7rem; font-weight:700; color:#d6f0e0;">SPECIAL DAY</div>
           <div style="font-size:1.45rem; font-weight:800; color:#fff; margin-top:6px; line-height:1.25;">6월 29일,<br>열대과일의 향연 🍓</div>
         </div>
-        <div style="padding:22px 24px 4px; color:#3a2e25; text-align:center;">
+        <div style="padding:22px 24px 4px; color:#3a2e25; text-align:center; overflow-y:auto; flex:1 1 auto; min-height:0;">
           <p style="font-size:.95rem; line-height:1.65; margin:0; color:#5a4a3c; word-break:keep-all;">
             92도씨 로스터리는 <b>매일</b><br>특별한 커피를 내려 드려요.<br>
             그리고 <b>6월 29일</b>엔,<br>잘 익은 과일을 한가득 담은 <b>두 잔</b>을 준비했어요.
@@ -1583,11 +1587,11 @@
             29일, 두 가지 커피를 하나씩<br>순차적으로 제공합니다.<br>소진된 커피는 추가로 제공되지 않습니다.
           </p>
         </div>
-        <label style="display:flex; align-items:center; justify-content:center; gap:8px; padding:16px 24px 14px; color:#8a7866; font-size:0.85rem; cursor:pointer;">
+        <label style="display:flex; align-items:center; justify-content:center; gap:8px; padding:16px 24px 14px; color:#8a7866; font-size:0.85rem; cursor:pointer; flex-shrink:0; background:#fffdf9; border-top:1px solid #f0eae2;">
           <input type="checkbox" id="special-popup-dontshow" onchange="if(this.checked)closeSpecialPopup()" style="width:16px; height:16px; cursor:pointer; accent-color:#2f8a57;">
           오늘 하루 보지 않기
         </label>
-        <button onclick="closeSpecialPopup()" style="width:100%; border:none; border-top:1px solid #eee; background:#fff; padding:16px; font-size:1rem; font-weight:700; color:#2f8a57; cursor:pointer;">닫기</button>
+        <button onclick="closeSpecialPopup()" style="width:100%; border:none; border-top:1px solid #eee; background:#fff; padding:16px; font-size:1rem; font-weight:700; color:#2f8a57; cursor:pointer; flex-shrink:0;">닫기</button>
       </div>
     </div>
     <style>@keyframes specialPopIn{from{opacity:0;transform:scale(.9) translateY(10px)}to{opacity:1;transform:scale(1) translateY(0)}}</style>
