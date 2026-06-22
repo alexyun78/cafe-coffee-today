@@ -1,7 +1,24 @@
 {
   "version": 1,
-  "updated_at": "2026-06-21T11:30:02Z",
+  "updated_at": "2026-06-22T11:30:04Z",
   "items": [
+    {
+      "id": "2026-06-22-coffee-extraction-yield-tds",
+      "type": "trivia",
+      "date": "2026-06-22",
+      "title_ko": "'추출이 잘됐다'는 건 과학적으로 무슨 뜻이야?",
+      "one_liner": "커피가루에서 알맞은 양을 뽑아내는 게 핵심 — 너무 적어도 많아도 탈!",
+      "categories_primary": [
+        "커피 상식"
+      ],
+      "categories_secondary": [
+        "추출"
+      ],
+      "hero_image": "/static/img/insights/trivia/terms.svg",
+      "journal": null,
+      "pub_date": null,
+      "source_basis": null
+    },
     {
       "id": "2026-06-21-wet-hulling-sumatra-giling-basah",
       "type": "trivia",

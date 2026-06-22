@@ -121,5 +121,9 @@
       ]
     }
   ],
-  "links": {}
+  "links": {},
+  "date": "2026-06-22",
+  "version": 1,
+  "id": "2026-06-22-coffee-extraction-yield-tds",
+  "hero_image": "/static/img/insights/trivia/terms.svg"
 }
