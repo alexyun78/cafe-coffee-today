@@ -1,7 +1,24 @@
 {
   "version": 1,
-  "updated_at": "2026-06-22T11:30:04Z",
+  "updated_at": "2026-06-23T11:30:04Z",
   "items": [
+    {
+      "id": "2026-06-23-espresso-channeling-problem",
+      "type": "trivia",
+      "date": "2026-06-23",
+      "title_ko": "에스프레소가 들쭉날쭉한 범인, '채널링'이 뭐야?",
+      "one_liner": "물이 한 곳으로만 새는 현상 — 맛이 한쪽은 과다, 한쪽은 과소!",
+      "categories_primary": [
+        "커피 상식"
+      ],
+      "categories_secondary": [
+        "추출"
+      ],
+      "hero_image": "/static/img/insights/trivia/terms.svg",
+      "journal": null,
+      "pub_date": null,
+      "source_basis": null
+    },
     {
       "id": "2026-06-22-coffee-extraction-yield-tds",
       "type": "trivia",
