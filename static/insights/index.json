@@ -1,7 +1,24 @@
 {
   "version": 1,
-  "updated_at": "2026-06-23T11:30:04Z",
+  "updated_at": "2026-06-24T11:30:05Z",
   "items": [
+    {
+      "id": "2026-06-24-coffee-belt-growing-regions",
+      "type": "trivia",
+      "date": "2026-06-24",
+      "title_ko": "커피는 왜 적도 근처 나라에서만 자랄까?",
+      "one_liner": "적도를 두른 '커피 벨트'의 기후가 딱 맞기 때문이야!",
+      "categories_primary": [
+        "커피 상식"
+      ],
+      "categories_secondary": [
+        "생두"
+      ],
+      "hero_image": "/static/img/insights/trivia/origin.svg",
+      "journal": null,
+      "pub_date": null,
+      "source_basis": null
+    },
     {
       "id": "2026-06-23-espresso-channeling-problem",
       "type": "trivia",
