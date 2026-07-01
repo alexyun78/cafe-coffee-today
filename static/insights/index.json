@@ -1,7 +1,24 @@
 {
   "version": 1,
-  "updated_at": "2026-06-24T11:30:05Z",
+  "updated_at": "2026-07-01T14:00:45Z",
   "items": [
+    {
+      "id": "2026-07-01-honey-process-what-is-it",
+      "type": "trivia",
+      "date": "2026-07-01",
+      "title_ko": "허니 프로세스? 커피에 진짜 꿀을 넣는 거야?",
+      "one_liner": "꿀은 한 방울도 안 들어가! 과육의 끈적한 점액질을 남겨 말리는 가공법이야.",
+      "categories_primary": [
+        "커피 상식"
+      ],
+      "categories_secondary": [
+        "가공"
+      ],
+      "hero_image": "/static/img/insights/trivia/processing.svg",
+      "journal": null,
+      "pub_date": null,
+      "source_basis": null
+    },
     {
       "id": "2026-06-24-coffee-belt-growing-regions",
       "type": "trivia",
