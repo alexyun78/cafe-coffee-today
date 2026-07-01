@@ -1240,7 +1240,7 @@
       <div style="font-size:1.15rem; font-weight:700; margin-top:10px;">휴무 안내</div>
     </div>
     <div style="padding:24px; text-align:center; color:#3a2e25; overflow-y:auto; flex:1 1 auto; min-height:0;">
-      <p style="font-size:1.25rem; font-weight:700; margin:0 0 6px;">6월 22일 (월요일)</p>
+      <p style="font-size:1.25rem; font-weight:700; margin:0 0 6px;">7월 13일 (월요일)</p>
       <p style="font-size:1rem; margin:0; color:#6b5848;">휴무입니다.</p>
     </div>
     <label style="display:flex; align-items:center; justify-content:center; gap:8px; padding:14px 24px 16px; color:#8a7866; font-size:0.85rem; cursor:pointer; flex-shrink:0; background:#fff; border-top:1px solid #f0eae2;">
@@ -1640,7 +1640,7 @@
 
     // 월별 지정 휴무일 — 매월 랜덤으로 직접 지정 (요일 규칙 없음)
     var CLOSED_DAYS = {
-        '2026-06-22': true, // 6월 휴무일 (월)
+        '2026-07-13': true, // 7월 휴무일 (월)
     };
 
     // 휴무일 판별 — 공휴일 OR 월별 지정 휴무일
@@ -2255,7 +2255,7 @@ function maybeShowSpecialPopup() {
 }
 
 // ===== 휴무 안내 팝업 (공지 ID 변경 시 "다시 보지 않기" 리셋) =====
-var NOTICE_POPUP_ID = '2026-06-22';   // 휴무일 = 공지 ID
+var NOTICE_POPUP_ID = '2026-07-13';   // 휴무일 = 공지 ID
 function closeNoticePopup() {
   var cb = document.getElementById('notice-popup-dontshow');
   if (cb && cb.checked) localStorage.setItem('cafe-notice-dismissed', NOTICE_POPUP_ID);
@@ -2263,9 +2263,9 @@ function closeNoticePopup() {
 }
 function maybeShowNoticePopup() {
   if (localStorage.getItem('cafe-notice-dismissed') === NOTICE_POPUP_ID) return;
-  // 휴무일 7일 전 ~ 휴무일(당일 자정까지)만 노출
+  // 휴무일 14일 전 ~ 휴무일(당일 자정까지)만 노출
   var start = new Date(NOTICE_POPUP_ID + 'T00:00:00');
-  start.setDate(start.getDate() - 7);
+  start.setDate(start.getDate() - 14);
   var end = new Date(NOTICE_POPUP_ID + 'T23:59:59');
   var now = new Date();
   if (now < start || now > end) return;
