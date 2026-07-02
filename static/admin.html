@@ -279,6 +279,28 @@
   }
   .btn-new:hover { background: var(--coffee-mid); }
   .header-actions { display: flex; gap: 8px; flex-shrink: 0; }
+
+  /* 리스트 카테고리 검색 바 (생두/구매/로스팅 공용) */
+  .cat-search { display: flex; gap: 8px; align-items: center; margin-bottom: 10px; }
+  .cat-search-cat {
+    flex-shrink: 0; padding: 9px 10px; border: 1.5px solid var(--border);
+    border-radius: 8px; background: white; font-family: inherit;
+    font-size: 0.85rem; color: var(--coffee-dark); min-height: 42px; cursor: pointer;
+  }
+  .cat-search-input {
+    flex: 1; min-width: 0; padding: 9px 12px; border: 1.5px solid var(--border);
+    border-radius: 8px; font-family: inherit; font-size: 0.9rem; min-height: 42px;
+  }
+  .cat-search-input:focus, .cat-search-cat:focus {
+    outline: none; border-color: var(--coffee-mid);
+  }
+  .cat-search-clear {
+    flex-shrink: 0; background: #f0ebe4; color: var(--muted); border: none;
+    border-radius: 8px; padding: 0 13px; min-height: 42px; cursor: pointer;
+    font-size: 1.05rem; font-family: inherit; line-height: 1;
+  }
+  .cat-search-clear:hover { background: #e6ddd0; color: var(--coffee-dark); }
+  .cat-search-count { font-size: 0.78rem; color: var(--muted); margin: -2px 0 10px 2px; }
   .btn-text {
     background: #f0ebe4; color: var(--coffee-dark); border: none;
     padding: 10px 14px; border-radius: 8px; font-size: 0.9rem;
@@ -1613,6 +1635,20 @@
             <button class="btn-new" type="button" id="btn-bean-new">+ 추가</button>
           </div>
         </div>
+        <div class="cat-search">
+          <select class="cat-search-cat" id="bean-search-cat" aria-label="검색 카테고리">
+            <option value="all">전체</option>
+            <option value="name">원두명</option>
+            <option value="supplier">공급처</option>
+            <option value="process">가공방식</option>
+            <option value="origin">원산지</option>
+            <option value="grade">등급</option>
+            <option value="cup_notes">컵노트</option>
+          </select>
+          <input type="search" class="cat-search-input" id="bean-search-input" placeholder="검색어 입력…" autocomplete="placehold">
+          <button type="button" class="cat-search-clear" id="bean-search-clear" title="검색 지우기">✕</button>
+        </div>
+        <div class="cat-search-count" id="bean-search-count" hidden></div>
         <div id="bean-list-items" class="bean-list-items">
           <div class="empty">불러오는 중...</div>
         </div>
@@ -1732,6 +1768,18 @@
             <button class="btn-new" type="button" id="btn-purchase-new">+ 추가</button>
           </div>
         </div>
+        <div class="cat-search">
+          <select class="cat-search-cat" id="purchase-search-cat" aria-label="검색 카테고리">
+            <option value="all">전체</option>
+            <option value="bean_name">원두명</option>
+            <option value="supplier">공급처</option>
+            <option value="process">가공방식</option>
+            <option value="date">구입일</option>
+          </select>
+          <input type="search" class="cat-search-input" id="purchase-search-input" placeholder="검색어 입력…" autocomplete="placehold">
+          <button type="button" class="cat-search-clear" id="purchase-search-clear" title="검색 지우기">✕</button>
+        </div>
+        <div class="cat-search-count" id="purchase-search-count" hidden></div>
         <div id="purchase-list-items" class="record-list">
           <div class="empty">불러오는 중...</div>
         </div>
@@ -1858,6 +1906,19 @@
           <h2>로스팅 기록</h2>
           <button class="btn-new" type="button" id="btn-roast-new">+ 추가</button>
         </div>
+        <div class="cat-search">
+          <select class="cat-search-cat" id="roast-search-cat" aria-label="검색 카테고리">
+            <option value="all">전체</option>
+            <option value="bean_name">원두명</option>
+            <option value="supplier">공급처</option>
+            <option value="process">가공방식</option>
+            <option value="date">로스팅일</option>
+            <option value="roast_level">로스팅 단계</option>
+          </select>
+          <input type="search" class="cat-search-input" id="roast-search-input" placeholder="검색어 입력…" autocomplete="placehold">
+          <button type="button" class="cat-search-clear" id="roast-search-clear" title="검색 지우기">✕</button>
+        </div>
+        <div class="cat-search-count" id="roast-search-count" hidden></div>
         <div id="roast-list-items" class="record-list">
           <div class="empty">불러오는 중...</div>
         </div>
@@ -3848,6 +3909,44 @@ let _purchaseShowHidden = false;
 let _beanShowHidden = false;
 let _invShowHidden = false;
 
+// 각 리스트의 카테고리 검색 상태 { cat, text }
+let _beanSearch = { cat: "all", text: "" };
+let _purchaseSearch = { cat: "all", text: "" };
+let _roastSearch = { cat: "all", text: "" };
+
+// 공용: 항목이 검색어와 일치하는지. fields = { 카테고리키: 값 }
+function matchesSearch(state, fields) {
+  const q = (state.text || "").trim().toLowerCase();
+  if (!q) return true;
+  const hay = state.cat === "all"
+    ? Object.values(fields).join(" ")
+    : (fields[state.cat] || "");
+  return String(hay).toLowerCase().includes(q);
+}
+
+// 공용: 검색 바(카테고리 select + 입력 + 지우기)를 렌더 함수에 연결.
+// onChange 는 목록을 다시 그린다. countEl 에 "N건 / 전체 M건" 표시.
+function wireListSearch(prefix, state, onChange) {
+  const cat = document.getElementById(prefix + "-search-cat");
+  const input = document.getElementById(prefix + "-search-input");
+  const clear = document.getElementById(prefix + "-search-clear");
+  if (!cat || !input) return;
+  cat.addEventListener("change", () => { state.cat = cat.value; onChange(); });
+  input.addEventListener("input", () => { state.text = input.value; onChange(); });
+  if (clear) clear.addEventListener("click", () => {
+    input.value = ""; state.text = ""; input.focus(); onChange();
+  });
+}
+
+// 공용: 검색 결과 개수 표시 갱신
+function updateSearchCount(prefix, state, shownCount, totalCount) {
+  const el = document.getElementById(prefix + "-search-count");
+  if (!el) return;
+  if (!(state.text || "").trim()) { el.hidden = true; return; }
+  el.hidden = false;
+  el.textContent = `검색 결과 ${shownCount}건 / 전체 ${totalCount}건`;
+}
+
 // ---------- 공용 생두 숨김/삭제 메커니즘 ----------
 // green_beans.hidden 플래그 하나로 모든 화면(드롭다운·생두 목록·구매 기록·재고·
 // 원두명 추천)이 함께 동작한다. 숨김은 표시 정리일 뿐 재고 집계에는 영향 없음.
@@ -4450,9 +4549,19 @@ function renderBeanList(items) {
   const el = document.getElementById("bean-list-items");
   if (!el) return;
   syncHiddenToggleBtn("btn-bean-hidden-toggle", _beanShowHidden);
-  const shown = (items || []).filter(b => !!b.hidden === _beanShowHidden);
+  const base = (items || []).filter(b => !!b.hidden === _beanShowHidden);
+  const shown = base.filter(b => matchesSearch(_beanSearch, {
+    name: b.name,
+    supplier: (b.supplier_name || "") + " " + (b.supplier_short || ""),
+    process: b.process,
+    origin: b.origin_country,
+    grade: b.grade,
+    cup_notes: b.cup_notes,
+  }));
+  updateSearchCount("bean", _beanSearch, shown.length, base.length);
   if (!shown.length) {
-    el.innerHTML = `<div class="empty">${_beanShowHidden ? "숨긴 생두가 없습니다." : "등록된 생두가 없습니다."}</div>`;
+    const q = (_beanSearch.text || "").trim();
+    el.innerHTML = `<div class="empty">${q ? "검색 결과가 없습니다." : (_beanShowHidden ? "숨긴 생두가 없습니다." : "등록된 생두가 없습니다.")}</div>`;
     return;
   }
   el.innerHTML = shown.map(b => {
@@ -4527,6 +4636,7 @@ document.getElementById("btn-bean-hidden-toggle").addEventListener("click", () =
   _beanShowHidden = !_beanShowHidden;
   renderBeanList(_beanListCache);
 });
+wireListSearch("bean", _beanSearch, () => renderBeanList(_beanListCache));
 
 // 생두 목록에서 현재 재고(잔여 수량)를 직접 설정. 구매·로스팅 합계는 그대로 두고
 // 보정값만 갱신하므로 이후 구매(+)·로스팅(-)이 정상적으로 증감한다.
@@ -4784,9 +4894,17 @@ function renderPurchaseList(items) {
   const el = document.getElementById("purchase-list-items");
   syncHiddenToggleBtn("btn-purchase-hidden-toggle", _purchaseShowHidden);
   // 숨긴 생두의 구매 기록은 기본 숨김. "숨김 보기"면 숨긴 생두 것만.
-  const shown = (items || []).filter(p => isBeanHidden(p.green_bean_id) === _purchaseShowHidden);
+  const base = (items || []).filter(p => isBeanHidden(p.green_bean_id) === _purchaseShowHidden);
+  const shown = base.filter(p => matchesSearch(_purchaseSearch, {
+    bean_name: p.bean_name,
+    supplier: p.supplier_short,
+    process: p.process,
+    date: p.purchase_date,
+  }));
+  updateSearchCount("purchase", _purchaseSearch, shown.length, base.length);
   if (!shown.length) {
-    el.innerHTML = `<div class="empty">${_purchaseShowHidden ? "숨긴 생두의 구매 기록이 없습니다." : "구매 기록이 없습니다."}</div>`;
+    const q = (_purchaseSearch.text || "").trim();
+    el.innerHTML = `<div class="empty">${q ? "검색 결과가 없습니다." : (_purchaseShowHidden ? "숨긴 생두의 구매 기록이 없습니다." : "구매 기록이 없습니다.")}</div>`;
     return;
   }
   el.innerHTML = shown.map(p => {
@@ -4980,6 +5098,7 @@ document.getElementById("btn-purchase-hidden-toggle").addEventListener("click", 
   _purchaseShowHidden = !_purchaseShowHidden;
   renderPurchaseList(_purchaseListCache);
 });
+wireListSearch("purchase", _purchaseSearch, () => renderPurchaseList(_purchaseListCache));
 
 // 구매 폼 열기/닫기
 function showPurchaseForm() {
@@ -5183,11 +5302,20 @@ function priceForRoast(gid, roastDate) {
 function renderRoastList(items) {
   _roastListCache = items || [];
   const el = document.getElementById("roast-list-items");
-  if (!items.length) {
-    el.innerHTML = '<div class="empty">로스팅 기록이 없습니다.</div>';
+  const shown = (items || []).filter(r => matchesSearch(_roastSearch, {
+    bean_name: r.bean_name,
+    supplier: r.supplier_short,
+    process: r.bean_process,
+    date: r.roast_date,
+    roast_level: r.roast_level,
+  }));
+  updateSearchCount("roast", _roastSearch, shown.length, (items || []).length);
+  if (!shown.length) {
+    const q = (_roastSearch.text || "").trim();
+    el.innerHTML = `<div class="empty">${q ? "검색 결과가 없습니다." : "로스팅 기록이 없습니다."}</div>`;
     return;
   }
-  el.innerHTML = items.map((r, idx) => {
+  el.innerHTML = shown.map((r, idx) => {
     const prefix = r.supplier_short ? `[${escapeHtml(r.supplier_short)}] ` : "";
     const input = Number(r.input_weight_g) || 0;
     const output = r.output_weight_g != null ? Number(r.output_weight_g) : null;
@@ -5196,10 +5324,10 @@ function renderRoastList(items) {
     // items는 최신순 정렬이므로 idx 뒤쪽이 더 오래된 기록.
     let lossCmpHtml = "";
     let prevLoss = null, prevRec = null;
-    for (let j = idx + 1; j < items.length; j++) {
-      if (items[j].green_bean_id === r.green_bean_id && items[j].moisture_loss_pct != null) {
-        prevLoss = Number(items[j].moisture_loss_pct);
-        prevRec = items[j];
+    for (let j = idx + 1; j < shown.length; j++) {
+      if (shown[j].green_bean_id === r.green_bean_id && shown[j].moisture_loss_pct != null) {
+        prevLoss = Number(shown[j].moisture_loss_pct);
+        prevRec = shown[j];
         break;
       }
     }
@@ -5423,6 +5551,7 @@ document.getElementById("btn-roast-new").addEventListener("click", () => {
   showRoastForm();
 });
 document.getElementById("btn-roast-cancel").addEventListener("click", hideRoastForm);
+wireListSearch("roast", _roastSearch, () => renderRoastList(_roastListCache));
 
 // 수분손실 자동계산 — 실제 투입량이 있으면 그 값을, 없으면 재고용 투입량을 기준으로
 function updateRoastLoss() {
