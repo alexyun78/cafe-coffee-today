@@ -1,7 +1,24 @@
 {
   "version": 1,
-  "updated_at": "2026-07-01T14:00:45Z",
+  "updated_at": "2026-07-02T11:30:15Z",
   "items": [
+    {
+      "id": "2026-07-02-coffee-grind-size-matters",
+      "type": "trivia",
+      "date": "2026-07-02",
+      "title_ko": "같은 원두인데 분쇄도만 바꿔도 맛이 달라진다고?",
+      "one_liner": "굵기가 물과 만나는 시간을 바꿔서 신맛·쓴맛의 균형이 확 달라져!",
+      "categories_primary": [
+        "커피 상식"
+      ],
+      "categories_secondary": [
+        "추출"
+      ],
+      "hero_image": "/static/img/insights/trivia/terms.svg",
+      "journal": null,
+      "pub_date": null,
+      "source_basis": null
+    },
     {
       "id": "2026-07-01-honey-process-what-is-it",
       "type": "trivia",
