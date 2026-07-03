@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>커피 열매, 어떻게 벗기냐에 따라 맛이 완전 달라진다고?! — 92°C ROASTERY</title>
+<meta name="description" content="같은 콩도 가공법 하나로 맛이 딴판! 워시드·내추럴·허니의 비밀">
+<link rel="icon" type="image/png" href="/static/img/logo-92black.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --canvas: #FFFFFF; --canvas-warm: #FAF7F2; --canvas-stone: #F2ECE3;
+  --ink: #1A1410; --ink-mute: #4A3F36; --ink-soft: #6B5E52;
+  --espresso: #6F4E37; --caramel: #C9986A; --copper: #B5703D;
+  --line: #E8E0D5; --line-soft: #F0E9DD;
+  --font-display: "Cormorant Garamond", "Pretendard", serif;
+  --font-body: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  --r-sm: 6px; --r-md: 12px; --r-pill: 999px;
+}
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color: transparent; }
+html { scroll-behavior: smooth; }
+body { font-family: var(--font-body); color: var(--ink); background: var(--canvas); font-feature-settings: "kern","ss01","lnum"; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+a { color: var(--copper); text-decoration: none; border-bottom: 1px solid transparent; transition: border-color .2s; }
+a:hover { border-bottom-color: var(--copper); }
+img { display: block; max-width: 100%; height: auto; }
+.container { max-width: 860px; margin: 0 auto; padding: 0 32px; }
+@media (max-width: 720px) { .container { padding: 0 20px; } }
+@media (max-width: 480px) { .container { padding: 0 16px; } }
+.site-nav { position: sticky; top: 0; z-index: 50; background: rgba(255,255,255,0.9); backdrop-filter: saturate(140%) blur(14px); -webkit-backdrop-filter: saturate(140%) blur(14px); border-bottom: 1px solid var(--line-soft); }
+.nav-inner { max-width: 1200px; margin: 0 auto; padding: 16px 32px; display: flex; align-items: center; justify-content: space-between; }
+.brand { font-family: var(--font-display); font-size: 1.3rem; font-weight: 700; color: var(--ink); display: inline-flex; align-items: center; gap: 4px; border-bottom: none; }
+.brand:hover { border-bottom: none; }
+.brand-mark { display: inline-flex; align-items: flex-start; font-family: "Pretendard", sans-serif; font-weight: 900; letter-spacing: -0.04em; line-height: 1; color: inherit; }
+.temp-mark { display: flex; flex-direction: column; line-height: .82; margin: 0 .05em 0 .04em; }
+.temp-mark .temp-deg { font-size: .42em; letter-spacing: -.04em; }
+.temp-mark .temp-c { font-size: .58em; letter-spacing: -.05em; margin-top: -.05em; }
+.nav-back { font-family: var(--font-mono); font-size: .75rem; letter-spacing: .18em; color: var(--ink-mute); border-bottom: none; }
+.nav-back:hover { color: var(--copper); border-bottom: none; }
+.article-hero { padding: 56px 0 48px; border-bottom: 1px solid var(--line-soft); }
+.eyebrow { font-family: var(--font-mono); font-size: .72rem; letter-spacing: .28em; color: var(--copper); margin-bottom: 18px; display: flex; align-items: center; gap: 12px; }
+.eyebrow::before { content: ""; display: inline-block; width: 28px; height: 1px; background: var(--copper); }
+.article-title { font-family: var(--font-display); font-weight: 500; font-size: clamp(2rem, 4.5vw, 3.2rem); line-height: 1.15; letter-spacing: -0.02em; color: var(--ink); margin-bottom: 20px; }
+.article-title em { font-style: italic; color: var(--espresso); font-weight: 600; }
+.article-one-liner { font-family: var(--font-display); font-style: italic; font-size: 1.3rem; line-height: 1.5; color: var(--espresso); margin-bottom: 28px; padding-left: 20px; border-left: 3px solid var(--caramel); }
+.article-meta { display: flex; gap: 24px; flex-wrap: wrap; font-family: var(--font-mono); font-size: .75rem; letter-spacing: .12em; color: var(--ink-soft); padding-top: 20px; border-top: 1px solid var(--line-soft); }
+.article-meta span { display: inline-flex; align-items: center; gap: 6px; }
+.article-meta span::before { content: "■"; color: var(--caramel); font-size: .55rem; }
+.hero-image { margin: 32px 0 0; border-radius: var(--r-md); overflow: hidden; border: 1px solid var(--line); }
+.hero-image img { width: 100%; }
+.article-body { padding: 56px 0 80px; }
+.article-footer { padding: 36px 0 56px; border-top: 1px solid var(--line-soft); text-align: center; font-family: var(--font-mono); font-size: .75rem; letter-spacing: .14em; color: var(--ink-soft); }
+.article-footer a { color: var(--ink-mute); border-bottom: 1px solid transparent; }
+.article-footer a:hover { color: var(--copper); border-bottom-color: var(--copper); }
+.source-basis { display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; background: rgba(201,152,106,.18); border: 1px solid rgba(181,112,61,.35); border-radius: var(--r-pill); font-family: var(--font-mono); font-size: .72rem; letter-spacing: .12em; color: var(--espresso); font-weight: 500; }
+.source-basis.abstract { background: rgba(107,94,82,.1); border-color: rgba(107,94,82,.3); color: var(--ink-soft); }
+.links-row { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 18px; }
+.link-pill { display: inline-flex; align-items: center; gap: 8px; padding: 9px 16px; background: var(--canvas-warm); border: 1px solid var(--line); border-radius: var(--r-pill); font-family: var(--font-mono); font-size: .78rem; letter-spacing: .08em; color: var(--ink-mute); border-bottom: 1px solid var(--line); transition: border-color .2s, color .2s; }
+.link-pill:hover { color: var(--copper); border-color: var(--copper); }
+
+/* ===== EZ: 쉬운 설명 스타일 ===== */
+.ez-hero { text-align: center; padding: 8px 0 32px; }
+.ez-hero-emoji { font-size: 3.4rem; line-height: 1; }
+.ez-hero-title { font-family: var(--font-display); font-size: clamp(1.6rem, 3.5vw, 2.2rem); font-weight: 600; color: var(--ink); margin-top: 14px; line-height: 1.3; }
+.ez-section { margin-bottom: 52px; }
+.ez-section h2 { font-family: var(--font-body); font-size: 1.5rem; font-weight: 700; color: var(--ink); margin-bottom: 18px; letter-spacing: -0.01em; }
+.ez-section h3 { font-size: 1.08rem; font-weight: 600; color: var(--espresso); margin: 22px 0 10px; }
+.ez-section p { font-size: 1.04rem; line-height: 1.85; color: var(--ink-mute); margin-bottom: 14px; }
+.ez-section p:last-child { margin-bottom: 0; }
+.ez-section ul { padding-left: 22px; margin-bottom: 14px; }
+.ez-section li { font-size: 1.02rem; line-height: 1.8; color: var(--ink-mute); margin-bottom: 8px; }
+.ez-callout { margin: 14px 0; padding: 14px 18px; background: var(--canvas-warm); border-left: 3px solid var(--caramel); border-radius: 4px; font-size: 0.98rem; color: var(--espresso); line-height: 1.75; }
+.ez-callout strong { color: var(--copper); }
+.ez-findings { list-style: none; padding: 0; }
+.ez-findings > li { padding: 18px 22px; margin-bottom: 14px; background: var(--canvas-warm); border: 1px solid var(--line); border-radius: 10px; font-size: 1.02rem; line-height: 1.7; color: var(--ink-mute); }
+.ez-findings > li strong { color: var(--ink); display: block; margin-bottom: 4px; font-size: 1.06rem; }
+.ez-findings > li.gold { background: linear-gradient(135deg, #FFF8E7, #FFEFCD); border-color: #F0D67A; }
+.ez-findings > li.silver { background: linear-gradient(135deg, #F6F6F6, #ECECEC); border-color: #C7C7C7; }
+.ez-findings > li.bronze { background: linear-gradient(135deg, #FFEEDD, #FFDCC0); border-color: #E4B07F; }
+.ez-findings > li.medal { background: linear-gradient(135deg, #F0E6FF, #E1D2FF); border-color: #BDA8E5; }
+.ez-table { width: 100%; border-collapse: collapse; margin: 16px 0 8px; font-size: 0.96rem; }
+.ez-table th, .ez-table td { padding: 11px 14px; border: 1px solid var(--line); text-align: left; vertical-align: top; }
+.ez-table thead th { background: var(--ink); color: #fff; font-weight: 600; letter-spacing: .02em; }
+.ez-table tbody th { background: var(--canvas-warm); color: var(--ink); font-weight: 600; }
+.ez-table tbody tr:nth-child(even) td { background: rgba(250, 247, 242, .55); }
+.ez-summary { padding: 26px 30px; background: linear-gradient(135deg, #FAF0E0, #F3E1C5); border-radius: 14px; font-size: 1.13rem; line-height: 1.75; font-weight: 500; color: var(--ink); border: 1px solid #E5C99B; }
+.ez-summary strong { color: var(--espresso); }
+.ez-citation { margin-top: 24px; padding: 18px 22px; background: var(--canvas-warm); border-radius: 8px; font-family: var(--font-mono); font-size: 0.82rem; color: var(--ink-soft); line-height: 1.7; }
+.ez-citation p { margin: 4px 0; }
+.ez-chart-card { padding: 22px 24px 18px; background: var(--canvas); border: 1px solid var(--line); border-radius: 12px; margin: 16px 0; }
+.ez-chart-card .ez-chart-title { font-size: 1rem; font-weight: 600; color: var(--ink); margin-bottom: 14px; }
+.ez-bar-row { display: flex; align-items: center; margin: 10px 0; font-size: 0.95rem; gap: 14px; }
+.ez-bar-label { width: 180px; flex-shrink: 0; color: var(--ink-mute); font-weight: 500; }
+.ez-bar-track { flex: 1; height: 32px; background: var(--canvas-warm); border-radius: 6px; overflow: hidden; position: relative; border: 1px solid var(--line); }
+.ez-bar-fill { height: 100%; background: linear-gradient(90deg, var(--caramel), var(--copper)); display: flex; align-items: center; justify-content: flex-end; padding: 0 12px; color: white; font-weight: 700; font-size: 0.92rem; min-width: 56px; }
+.ez-bar-fill.alt { background: linear-gradient(90deg, #6F4E37, #4A3F36); }
+.ez-glossary { display: grid; gap: 12px; }
+.ez-glossary-item { padding: 16px 20px; background: var(--canvas-warm); border: 1px solid var(--line); border-radius: 10px; border-left: 3px solid var(--caramel); }
+.ez-glossary-term { font-family: var(--font-display); font-style: italic; font-size: 1.1rem; font-weight: 600; color: var(--espresso); margin-bottom: 6px; }
+.ez-glossary-def { font-size: 0.98rem; color: var(--ink-mute); line-height: 1.7; }
+@media (max-width: 720px) {
+  .article-hero { padding: 36px 0 32px; }
+  .article-body { padding: 36px 0 56px; }
+  .ez-section { margin-bottom: 40px; }
+  .ez-section h2 { font-size: 1.3rem; }
+  .ez-bar-label { width: 100%; margin-bottom: 4px; }
+  .ez-bar-row { flex-direction: column; align-items: stretch; }
+  .article-meta { gap: 12px 18px; font-size: .68rem; }
+}
+</style>
+</head>
+<body>
+
+<header class="site-nav">
+  <div class="nav-inner">
+    <a class="brand" href="/">
+      <span class="brand-mark">92<span class="temp-mark"><span class="temp-deg">°</span><span class="temp-c">C</span></span></span>ROASTERY
+    </a>
+    <a class="nav-back" href="/insight">← INSIGHTS</a>
+  </div>
+</header>
+
+<article>
+  <section class="article-hero">
+    <div class="container">
+      <div class="eyebrow">— 오늘의 커피 상식 · 2026.07.03</div>
+      <h1 class="article-title">커피 열매, 어떻게 벗기냐에 따라 맛이 완전 달라진다고?!</h1>
+      <p class="article-one-liner">같은 콩도 가공법 하나로 맛이 딴판! 워시드·내추럴·허니의 비밀</p>
+      <div class="article-meta">
+        
+        
+        
+        <span>커피 상식 · 프로세싱</span>
+      </div>
+      
+      <div class="hero-image">
+        <img src="/static/img/insights/trivia/processing.svg" alt="커피 열매, 어떻게 벗기냐에 따라 맛이 완전 달라진다고?!">
+      </div>
+      
+    </div>
+  </section>
+
+  <section class="article-body">
+    <div class="container">
+
+      
+      <div class="ez-hero">
+        <div class="ez-hero-emoji">🍒</div>
+        <div class="ez-hero-title">커피 열매, 어떻게 벗기냐에 따라 맛이 완전 달라진다고?!</div>
+      </div>
+
+      
+      <div class="ez-section">
+        <h2>🤔 무슨 연구야?</h2>
+        
+          <p>커피 한 잔이 만들어지기까지 정말 많은 과정이 있어. 근데 그중에서도 &#39;프로세싱&#39;이라는 단계가 맛을 엄청나게 바꿔놓는다는 거 알고 있었어? 🍒 커피는 사실 과일이야 — 체리처럼 빨간 열매 안에 씨앗이 들어 있고, 그 씨앗이 바로 우리가 볶아 마시는 생두(그린빈)야.</p><p>근데 그 씨앗을 꺼내는 방법이 한 가지가 아니거든. 마치 복숭아를 먹을 때 껍질째 통으로 말릴지, 물에 씻어 껍질을 벗길지, 반만 벗길지처럼 — 커피도 세 가지 방법이 있어. 그리고 그 방법에 따라 컵 안의 맛이 완전히 달라져! 🎭</p><p>오늘은 커피의 세 가지 프로세싱 방법 — 워시드, 내추럴, 허니 — 을 쉽고 맛있게 풀어볼게. 카페 메뉴판 볼 때 이제 다르게 보일 거야. 준비됐어? ☀️</p>
+        
+      </div>
+
+      
+      
+      <div class="ez-section">
+        <h2>🧪 핵심 개념 쉽게 풀어보면</h2>
+        
+          <h3>워시드(Washed) 프로세스</h3>
+          <p>수확한 커피 열매를 물로 씻고, 기계로 과육을 벗긴 뒤, 발효 탱크에 담가 점액질(뮤실리지)까지 완전히 제거해. 그 뒤에 햇볕에 말리면 완성! 깔끔하고 밝은 산미가 특징이야.</p>
+          <div class="ez-callout">💡 새 옷을 세탁기로 빡빡 세탁하고 다리미로 다린 것처럼 — 잡맛 없이 깨끗한 맛이 나.</div>
+        
+          <h3>내추럴(Natural) 프로세스</h3>
+          <p>과육을 제거하지 않고, 열매째 통으로 그늘이나 햇볕 아래서 말려! 건조하는 동안 과육의 당분과 향이 씨앗 속으로 스며들어서 달고 과일향이 풍부해져.</p>
+          <div class="ez-callout">💡 김치 담그듯 재료를 그대로 두고 발효·건조시키는 거야. 시간이 걸리지만 깊고 달콤한 맛이 나지!</div>
+        
+          <h3>허니(Honey) 프로세스</h3>
+          <p>과육은 벗기는데, 씨앗에 붙은 점액질(뮤실리지)은 일부 남겨두고 말리는 방식이야. 남기는 양에 따라 옐로우·레드·블랙 허니로 나뉘어. 워시드의 깔끔함과 내추럴의 달콤함의 중간!</p>
+          <div class="ez-callout">💡 빵 구울 때 버터를 조금만 바르는 것처럼 — 완전히 넣지도, 완전히 빼지도 않는 절충안이야.</div>
+        
+      </div>
+      
+
+      
+      
+      <div class="ez-section">
+        <h2>🎯 핵심 발견</h2>
+        <ul class="ez-findings">
+          
+          
+            
+              <li class="gold">
+                <strong>내추럴이 더 달콤한 이유</strong>과육이 붙은 채로 말리면 열매 안 당분이 씨앗에 스며들어. 마치 포도를 그대로 말리면 건포도가 달콤해지는 것처럼! 그래서 내추럴 커피에선 블루베리, 포도, 초콜릿 향이 자주 느껴져. 🍇
+              </li>
+            
+              <li class="silver">
+                <strong>에티오피아는 내추럴, 케냐는 워시드</strong>커피 산지마다 선호하는 프로세싱이 달라. 에티오피아는 전통적으로 내추럴을 많이 써서 과일향 폭발! 케냐는 물이 풍부해 워시드를 선호해서 토마토 같은 밝은 산미가 특징이야. 🌍
+              </li>
+            
+              <li class="bronze">
+                <strong>허니 프로세스는 코스타리카가 원조</strong>허니 프로세스는 코스타리카 농부들이 물 부족 문제를 해결하려고 개발한 방법이야. 물을 덜 쓰면서도 맛있는 커피를 만들 수 있어서 이제 전 세계로 퍼졌어! 🌱
+              </li>
+            
+              <li class="medal">
+                <strong>같은 농장 열매, 다른 가공 = 완전 다른 커피</strong>신기하게도 같은 나무에서 딴 열매도 워시드와 내추럴로 가공하면 전혀 다른 맛이 나! 바리스타들은 &#39;프로세싱이 맛의 30~50%를 결정한다&#39;고 말할 정도야. 농부와 가공자의 역할이 그래서 중요해. ☕
+              </li>
+            
+          
+        </ul>
+      </div>
+      
+
+      
+      
+
+      
+      
+      
+      <div class="ez-section">
+        <h2>프로세싱 방식 한눈에 비교</h2>
+        <table class="ez-table">
+          <thead><tr><th>방식</th><th>과육 제거</th><th>점액질 제거</th><th>맛 특징</th><th>대표 산지</th></tr></thead>
+          <tbody>
+            <tr>
+              <th>워시드</th><td>O (기계)</td><td>O (발효)</td><td>깔끔·밝은 산미</td><td>케냐, 콜롬비아, 에티오피아</td>
+            </tr><tr>
+              <th>내추럴</th><td>X (통째 건조)</td><td>X</td><td>달콤·과일향·묵직</td><td>에티오피아, 브라질, 예멘</td>
+            </tr><tr>
+              <th>허니</th><td>O (기계)</td><td>일부 남김</td><td>중간·균형·달콤</td><td>코스타리카, 엘살바도르</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      
+      
+
+      
+      
+
+      
+      
+
+      
+      
+      <div class="ez-section">
+        <div class="ez-summary">💡 <strong>한 줄 요약</strong> — 같은 콩도 워시드는 깔끔, 내추럴은 달콤, 허니는 그 중간! 가공 방법이 커피 맛의 운명을 바꿔.</div>
+      </div>
+      
+
+      
+      
+      
+      
+
+      
+      
+      <div class="ez-section">
+        <h2>📖 어려운 말 풀이 사전</h2>
+        <p>이 글에 나온 어려운 약어와 용어를 한 번에 정리했어. 의미만 알면 본문이 훨씬 쉬워져!</p>
+        <div class="ez-glossary">
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">프로세싱(Processing)</div>
+            <div class="ez-glossary-def">수확한 커피 열매에서 씨앗을 꺼내는 가공 과정 전체</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">생두(Green Bean)</div>
+            <div class="ez-glossary-def">볶기 전 커피 씨앗. 초록빛이 돌아서 생두라고 불러</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">뮤실리지(Mucilage)</div>
+            <div class="ez-glossary-def">커피 씨앗 껍질 안쪽에 붙어 있는 끈적한 점액질</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">워시드(Washed)</div>
+            <div class="ez-glossary-def">물로 씻어 과육과 점액질을 완전히 제거하는 가공 방법</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">내추럴(Natural)</div>
+            <div class="ez-glossary-def">열매째 통으로 건조시키는 가공 방법</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">허니(Honey)</div>
+            <div class="ez-glossary-def">과육은 제거하고 점액질 일부를 남겨 건조하는 방법</div>
+          </div>
+          
+        </div>
+      </div>
+      
+
+    </div>
+  </section>
+
+  <footer class="article-footer">
+    <div class="container">
+      <a href="/insight">← BACK TO INSIGHTS</a>
+      <span style="margin: 0 16px;">·</span>
+      <a href="/">HOME</a>
+    </div>
+  </footer>
+</article>
+
+</body>
+</html>

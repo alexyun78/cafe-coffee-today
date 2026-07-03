@@ -1,7 +1,24 @@
 {
   "version": 1,
-  "updated_at": "2026-07-03T11:30:05Z",
+  "updated_at": "2026-07-03T12:00:33Z",
   "items": [
+    {
+      "id": "2026-07-03-washed-natural-honey-process",
+      "type": "trivia",
+      "date": "2026-07-03",
+      "title_ko": "커피 열매, 어떻게 벗기냐에 따라 맛이 완전 달라진다고?!",
+      "one_liner": "같은 콩도 가공법 하나로 맛이 딴판! 워시드·내추럴·허니의 비밀",
+      "categories_primary": [
+        "커피 상식"
+      ],
+      "categories_secondary": [
+        "프로세싱"
+      ],
+      "hero_image": "/static/img/insights/trivia/processing.svg",
+      "journal": null,
+      "pub_date": null,
+      "source_basis": null
+    },
     {
       "id": "2026-07-03-cold-brew-vs-iced-coffee",
       "type": "trivia",
