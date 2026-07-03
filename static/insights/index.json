@@ -1,7 +1,25 @@
 {
   "version": 1,
-  "updated_at": "2026-07-02T11:30:15Z",
+  "updated_at": "2026-07-03T11:30:05Z",
   "items": [
+    {
+      "id": "2026-07-03-cold-brew-vs-iced-coffee",
+      "type": "trivia",
+      "date": "2026-07-03",
+      "title_ko": "콜드브루랑 아이스 아메리카노는 뭐가 다를까?",
+      "one_liner": "찬물에 오래 우리느냐, 뜨겁게 내려 식히느냐 — 추출 방식부터 달라!",
+      "categories_primary": [
+        "커피 상식"
+      ],
+      "categories_secondary": [
+        "추출",
+        "트렌드"
+      ],
+      "hero_image": "/static/img/insights/trivia/trend.svg",
+      "journal": null,
+      "pub_date": null,
+      "source_basis": null
+    },
     {
       "id": "2026-07-02-coffee-grind-size-matters",
       "type": "trivia",
