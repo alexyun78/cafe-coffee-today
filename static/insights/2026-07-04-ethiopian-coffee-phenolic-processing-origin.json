@@ -1,0 +1,105 @@
+{
+  "version": 1,
+  "id": "2026-07-04-ethiopian-coffee-phenolic-processing-origin",
+  "date": "2026-07-04",
+  "slug": "ethiopian-coffee-phenolic-processing-origin",
+  "title_ko": "에티오피아 5개 주요 산지 아라비카 커피의 가공법·재배 지역별 페놀성 화합물 및 생리활성 성분 변화",
+  "title_original": "Effects of conventional processing methods and growing locations on the phenolic content and bioactive compounds of Ethiopian coffee beans",
+  "one_liner": "에티오피아 5산지 아라비카, 로스팅 후 CGA 평균 81% 소실 — 산지·가공법 복합 영향 정량 실증",
+  "authors": "Dhaba Mengesha Adula",
+  "journal": "Discover Food (Springer Nature)",
+  "pub_date": "2026-04-11",
+  "doi": "10.1007/s44187-026-00968-z",
+  "categories_primary": [
+    "화학/분석화학"
+  ],
+  "categories_secondary": [
+    "생두",
+    "로스팅"
+  ],
+  "summary": "에티오피아 5개 산지(짐마·시다마·이르가체페·네케메·하라르) 아라비카 생두를 HPLC 및 Folin-Ciocalteu법으로 CGA·카페인·트리고넬린·TPC 정량. 산지별 CGA 함량: 짐마·시다마·네케메 약 4.5 mg/g, 하라르 3.68 mg/g(최대 1.22배 차이). 로스팅(190°C, 16분) 후 CGA 평균 81%(79~83%), TPC 평균 27%(23~30%), 트리고넬린 40% 감소. 재배 지역과 가공법 모두 생리활성 성분 조성에 통계적으로 유의한 영향.",
+  "key_findings": [
+    "생두 CGA 함량: 짐마·시다마·네케메 약 4.5 mg/g vs 하라르 3.68 mg/g — 최대 1.22배 산지 간 차이",
+    "생두 카페인 함량: 0.76~1.04 mg/g — 이르가체페 최고, 하라르 최저",
+    "로스팅 후 CGA 감소율: 평균 81%(79~83%) — 5개 산지 모두 일관된 대폭 감소",
+    "로스팅 후 TPC 감소율: 네케메 30% > 하라르 29% > 시다마 26% > 짐마 24% > 이르가체페 23% (평균 27%)",
+    "로스팅 후 트리고넬린 감소율: 평균 40%",
+    "재배 지역과 가공법이 생리활성 성분 조성에 통계적으로 유의한 복합 영향 확인"
+  ],
+  "methodology": "Coffea arabica 5개 에티오피아 산지(Jimma, Sidama, Yirgachefe, Nekemte, Hararge) 생두 수거. 190°C, 16분 표준 로스팅. 에티오피아 전통 추출법 적용. Folin-Ciocalteu UV-Vis 분광광도법(TPC), HPLC(CGA·카페인·트리고넬린). ANOVA 및 다중 비교 검정.",
+  "implications": {
+    "농가/가공장": "짐마·시다마·네케메 산지 생두가 CGA 기준 가장 높은 기능성 성분 함량 보유. 건강 기능성 스페셜티 포지셔닝 가능. 가공법 표준화가 화학 조성 일관성에 중요.",
+    "로스터/큐그레이더": "로스팅이 CGA를 평균 81% 파괴 → 라이트 로스트라도 생두 CGA의 약 19%만 잔존. 산지별 TPC 감소 폭 차이(23~30%)가 항산화 잠재력에 영향.",
+    "R&D": "다양한 로스팅 강도에서 산지별 CGA·TPC 잔존 패턴 비교 연구 필요. 가공법 단독 효과 정량 연구 및 화학 지문 기반 산지 인증 ML 모델 개발 가능."
+  },
+  "limitations": "단독 연구자 연구로 독립 검증 부재; 가공법 구분 미분리; 단일 로스팅 조건(190°C, 16분); 이르가체페 CGA 절대값 미명시; 단위계 혼용 가능성; 생체이용률 데이터 미제공",
+  "glossary": [
+    {
+      "term": "Chlorogenic Acid (CGA)",
+      "ko": "클로로겐산 — 생두 주요 페놀 화합물, 항산화 기능, 로스팅 시 80% 이상 분해"
+    },
+    {
+      "term": "TPC (Total Polyphenol Content)",
+      "ko": "총폴리페놀 함량 — Folin-Ciocalteu법 측정, 항산화 잠재력 대리 지표"
+    },
+    {
+      "term": "Trigonelline",
+      "ko": "트리고넬린 — 커피 알칼로이드, 로스팅 시 아로마 화합물·비타민 B3 전구체로 분해"
+    },
+    {
+      "term": "HPLC",
+      "ko": "고성능 액체 크로마토그래피 — 커피 생리활성 성분 정량 표준 기법"
+    },
+    {
+      "term": "EIAR",
+      "ko": "에티오피아 농업연구소 (Ethiopian Institute of Agricultural Research)"
+    }
+  ],
+  "citation_apa": "Adula, D. M. (2026). Effects of conventional processing methods and growing locations on the phenolic content and bioactive compounds of Ethiopian coffee beans. Discover Food, 6(1). https://doi.org/10.1007/s44187-026-00968-z",
+  "links": {
+    "doi": "https://doi.org/10.1007/s44187-026-00968-z",
+    "oa_pdf": "https://link.springer.com/article/10.1007/s44187-026-00968-z",
+    "journal_homepage": "https://link.springer.com/journal/44187"
+  },
+  "source_basis": "abstract_only",
+  "data_charts": [
+    {
+      "type": "bar",
+      "title": "로스팅 후 산지별 총폴리페놀(TPC) 감소율",
+      "x_labels": [
+        "Jimma",
+        "Sidama",
+        "Nekemte",
+        "Yirgachefe",
+        "Hararge"
+      ],
+      "y_label": "TPC 감소율 (%)",
+      "values": [
+        24,
+        26,
+        30,
+        23,
+        29
+      ],
+      "unit": "%"
+    },
+    {
+      "type": "bar",
+      "title": "로스팅에 의한 주요 생리활성 성분 평균 감소율",
+      "x_labels": [
+        "클로로겐산(CGA)",
+        "총폴리페놀(TPC)",
+        "트리고넬린"
+      ],
+      "y_label": "평균 감소율 (%)",
+      "values": [
+        81,
+        27,
+        40
+      ],
+      "unit": "%"
+    }
+  ],
+  "drive_doc_url": "https://docs.google.com/document/d/1xJ4CRvPOKH8Zd2VlMpmJQ746gkrfExOMde0nDq4na14/edit?usp=drivesdk&ouid=116660508274764947762",
+  "hero_image": "/static/img/insights/hero/chemistry.svg"
+}

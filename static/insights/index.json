@@ -1,7 +1,25 @@
 {
   "version": 1,
-  "updated_at": "2026-07-04T11:30:05Z",
+  "updated_at": "2026-07-04T12:00:29Z",
   "items": [
+    {
+      "id": "2026-07-04-ethiopian-coffee-phenolic-processing-origin",
+      "type": "paper",
+      "date": "2026-07-04",
+      "title_ko": "에티오피아 5개 주요 산지 아라비카 커피의 가공법·재배 지역별 페놀성 화합물 및 생리활성 성분 변화",
+      "one_liner": "에티오피아 5산지 아라비카, 로스팅 후 CGA 평균 81% 소실 — 산지·가공법 복합 영향 정량 실증",
+      "categories_primary": [
+        "화학/분석화학"
+      ],
+      "categories_secondary": [
+        "생두",
+        "로스팅"
+      ],
+      "hero_image": "/static/img/insights/hero/chemistry.svg",
+      "journal": "Discover Food (Springer Nature)",
+      "pub_date": "2026-04-11",
+      "source_basis": "abstract_only"
+    },
     {
       "id": "2026-07-04-coffee-storage-freshness",
       "type": "trivia",
