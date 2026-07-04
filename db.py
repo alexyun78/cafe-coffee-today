@@ -1395,6 +1395,8 @@ def list_green_beans(include_inactive: bool = False) -> list:
             COALESCE(p_sum.purchased_kg, 0) - COALESCE(r_sum.used_kg, 0)
                 + COALESCE(gb.stock_adjustment_kg, 0) AS remaining_kg,
             COALESCE(p_sum.avg_unit_price, 0) AS avg_unit_price,
+            COALESCE(p_last.last_unit_price, 0) AS last_unit_price,
+            COALESCE(p_last.last_discounted_unit_price, 0) AS last_discounted_unit_price,
             COALESCE(r_sum.roast_count, 0) AS roast_count,
             r_sum.last_roast_date AS last_roast_date
         FROM green_beans gb
@@ -1405,6 +1407,16 @@ def list_green_beans(include_inactive: bool = False) -> list:
                    ROUND(CAST(SUM(total_price) AS REAL) / NULLIF(SUM(quantity_kg), 0)) AS avg_unit_price
             FROM purchases GROUP BY green_bean_id
         ) p_sum ON p_sum.green_bean_id = gb.id
+        LEFT JOIN (
+            SELECT green_bean_id, unit_price AS last_unit_price,
+                   ROUND(CAST(total_price AS REAL) / NULLIF(quantity_kg, 0)) AS last_discounted_unit_price
+            FROM (
+                SELECT green_bean_id, unit_price, total_price, quantity_kg,
+                       ROW_NUMBER() OVER (PARTITION BY green_bean_id
+                                          ORDER BY purchase_date DESC, id DESC) AS rn
+                FROM purchases
+            ) WHERE rn = 1
+        ) p_last ON p_last.green_bean_id = gb.id
         LEFT JOIN (
             SELECT green_bean_id, SUM(input_weight_g) / 1000.0 AS used_kg,
                    COUNT(*) AS roast_count, MAX(roast_date) AS last_roast_date
@@ -1426,6 +1438,8 @@ def get_green_bean(gb_id: int) -> Optional[dict]:
             COALESCE(p_sum.purchased_kg, 0) - COALESCE(r_sum.used_kg, 0)
                 + COALESCE(gb.stock_adjustment_kg, 0) AS remaining_kg,
             COALESCE(p_sum.avg_unit_price, 0) AS avg_unit_price,
+            COALESCE(p_last.last_unit_price, 0) AS last_unit_price,
+            COALESCE(p_last.last_discounted_unit_price, 0) AS last_discounted_unit_price,
             COALESCE(r_sum.avg_loss_pct, 0) AS avg_loss_pct
         FROM green_beans gb
         LEFT JOIN suppliers s ON s.id = gb.supplier_id
@@ -1435,6 +1449,16 @@ def get_green_bean(gb_id: int) -> Optional[dict]:
                    ROUND(CAST(SUM(total_price) AS REAL) / NULLIF(SUM(quantity_kg), 0)) AS avg_unit_price
             FROM purchases GROUP BY green_bean_id
         ) p_sum ON p_sum.green_bean_id = gb.id
+        LEFT JOIN (
+            SELECT green_bean_id, unit_price AS last_unit_price,
+                   ROUND(CAST(total_price AS REAL) / NULLIF(quantity_kg, 0)) AS last_discounted_unit_price
+            FROM (
+                SELECT green_bean_id, unit_price, total_price, quantity_kg,
+                       ROW_NUMBER() OVER (PARTITION BY green_bean_id
+                                          ORDER BY purchase_date DESC, id DESC) AS rn
+                FROM purchases
+            ) WHERE rn = 1
+        ) p_last ON p_last.green_bean_id = gb.id
         LEFT JOIN (
             SELECT green_bean_id,
                    SUM(input_weight_g) / 1000.0 AS used_kg,

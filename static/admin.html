@@ -1015,6 +1015,7 @@
     overflow: hidden; text-overflow: ellipsis;
   }
   .bean-card-meta { font-size: 0.8rem; color: var(--muted); margin-top: 3px; }
+  .bean-card-price { font-size: 0.8rem; color: var(--muted); margin-top: 2px; }
   .bean-card-right { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
   .bean-card-stock {
     font-size: 0.85rem; font-weight: 700; padding: 4px 12px;
@@ -4511,6 +4512,16 @@ function renderBeanList(items) {
     if (remaining <= 0) stockCls = remaining < 0 ? "bean-stock-negative" : "bean-stock-zero";
     else if (remaining < 2) stockCls = "bean-stock-low";
     const isInactive = b.status !== "활성";
+    const origPrice = Number(b.last_unit_price) || 0;
+    const discPrice = Number(b.last_discounted_unit_price) || 0;
+    let priceHtml = "";
+    if (discPrice > 0 && discPrice < origPrice) {
+      priceHtml = `<div class="bean-card-price">`
+        + `<span style="text-decoration:line-through;opacity:0.6;">₩${origPrice.toLocaleString()}/kg</span> `
+        + `<span style="color:var(--danger);">₩${discPrice.toLocaleString()}/kg</span></div>`;
+    } else if (origPrice > 0) {
+      priceHtml = `<div class="bean-card-price">₩${origPrice.toLocaleString()}/kg</div>`;
+    }
     const actionBtns = _beanShowHidden
       ? `<button type="button" class="bean-card-btn unhide bean-unhide-btn" data-id="${b.id}">보이기</button>
          <button type="button" class="bean-card-btn delete bean-del-btn" data-id="${b.id}">삭제</button>`
@@ -4528,6 +4539,7 @@ function renderBeanList(items) {
           <div class="bean-card-meta">
             ${escapeHtml(b.process || "")}${b.grade ? " · " + escapeHtml(b.grade) : ""}${b.origin_country ? " · " + escapeHtml(b.origin_country) : ""}
           </div>
+          ${priceHtml}
         </div>
         <div class="bean-card-right">
           <button type="button" class="bean-card-stock ${stockCls} bean-stock-btn" data-id="${b.id}" title="탭하여 재고 수정">${remaining.toFixed(1)} kg<span class="bean-stock-pencil">✎</span></button>
