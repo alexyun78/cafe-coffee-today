@@ -1,7 +1,24 @@
 {
   "version": 1,
-  "updated_at": "2026-07-03T12:00:33Z",
+  "updated_at": "2026-07-04T11:30:05Z",
   "items": [
+    {
+      "id": "2026-07-04-coffee-storage-freshness",
+      "type": "trivia",
+      "date": "2026-07-04",
+      "title_ko": "원두는 냉장고에 넣으면 안 된다고?",
+      "one_liner": "커피의 적은 빛·산소·습기·열 네 가지 — 냉장고는 습기 때문에 오히려 독이야!",
+      "categories_primary": [
+        "커피 상식"
+      ],
+      "categories_secondary": [
+        "보관"
+      ],
+      "hero_image": "/static/img/insights/trivia/terms.svg",
+      "journal": null,
+      "pub_date": null,
+      "source_basis": null
+    },
     {
       "id": "2026-07-03-washed-natural-honey-process",
       "type": "trivia",
