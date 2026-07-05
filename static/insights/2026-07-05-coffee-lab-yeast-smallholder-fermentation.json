@@ -1,0 +1,95 @@
+{
+  "version": 1,
+  "id": "2026-07-05-coffee-lab-yeast-smallholder-fermentation",
+  "date": "2026-07-05",
+  "slug": "coffee-lab-yeast-smallholder-fermentation",
+  "title_ko": "소규모 농가 조건에서 상업용 유산균·효모를 이용한 커피 반-제어 발효 최적화",
+  "title_original": "Semi-Controlled Fermentation of Coffee by the Addition of Commercial Lactic Acid Bacteria and Yeast at a Smallholder Capacity",
+  "one_liner": "시판 요거트·빵 효모를 커피 부산물로 배양, 소농 단위 발효 최적화로 SCA 커핑 점수 84→85.9점 향상",
+  "authors": "Calderón-Gaviria, K.D., Duque-Buitrago, L.F., Torres-Valenzuela, L.S., Sánchez-Tamayo, M.I., Plaza-Dorado, J.L.",
+  "journal": "Food Biophysics (Springer Nature), Vol. 21, Art. 36",
+  "pub_date": "2026",
+  "doi": "10.1007/s11483-026-10111-1",
+  "categories_primary": [
+    "미생물학"
+  ],
+  "categories_secondary": [
+    "생두",
+    "지속가능성"
+  ],
+  "summary": "콜롬비아 톨리마 대학교 연구팀이 시판 요거트 유산균(Streptococcus thermophilus + Lactobacillus delbrueckii subsp. bulgaricus)과 생빵 효모(Saccharomyces cerevisiae)를 커피 부산물(과육·폐수)에서 배양해 소농 규모 스타터 컬처를 제조하고, RSM 기반 실험으로 최적 발효 조건을 도출했다. LAB 최적: 커피 과육 100% 기질, 48h 발효, 7.8×10⁷ CFU/mL (R²=0.84). 효모 최적: 커피 폐수 100%, 36h, 8.3×10⁸ CFU/mL (R²=0.88). SCA 커핑 결과 LAB 처리구 84→85.9점 향상, 혼합(LAB+효모) 처리구 향기/아로마 8.25점 최고, 효모 처리구 구연산 산미 뚜렷 향상. 바디는 처리군 간 차이 미미(7.5~7.75).",
+  "key_findings": [
+    "LAB 스타터 최적: 커피 과육(CP) 100% 기질, 48h 발효 → 7.8×10⁷ CFU/mL; R²=0.84, Adj-R²=0.77",
+    "효모 스타터 최적: 커피 폐수(CWW) 100%, 36h → 8.3×10⁸ CFU/mL; R²=0.88, Adj-R²=0.83",
+    "LAB 접종 SCA 총점: 대조군 84.0 → 85.9점 (+1.9점)",
+    "혼합(LAB+효모) 접종: 향기/아로마 항목 최고 8.25점",
+    "효모 처리구: 구연산 계열 산미 지각 뚜렷 향상",
+    "바디 점수: 전 처리군 7.5~7.75로 일관 — LAB·효모 접종의 바디 영향 최소"
+  ],
+  "methodology": "Coffea arabica var. Colombia 대상. RSM 실험 설계(5개 독립 변수: 발효 시간, 접종 농도, 수분 함량, 미생물 종류, 접종원 제조 방법). LAB: 시판 요거트(S. thermophilus + L. delbrueckii subsp. bulgaricus), CP/CWW 기질. 효모: 상업 S. cerevisiae, CWW 기질. 이차 회귀 모델 피팅. SCA 커핑 관능 평가.",
+  "implications": {
+    "농가/가공장": "시판 요거트와 생빵 효모를 커피 과육·폐수에서 배양해 스타터 컬처를 직접 제조 가능. 전문 장비 불필요, 소농 현장 적용 가능성 높음. 커피 부산물 재활용으로 순환 농업 실현.",
+    "로스터/큐그레이더": "혼합 LAB+효모 접종에서 향기/아로마 8.25점으로 향미 복잡도 향상 확인. 효모 처리구 구연산 산미 특성은 라이트~미디엄 로스팅 밝은 산미 로트 포지셔닝에 활용 가능.",
+    "R&D": "RSM 최적화를 내추럴·허니·무산소 발효로 확장 필요. 멀티-오브젝티브 최적화(CFU 최대화+SCA 점수)로 두 목표 동시 탐색 권고. 자생 토착 LAB 스타터와의 비교 연구가 유망한 후속 과제."
+  },
+  "limitations": "단일 품종(var. Colombia)·단일 재배 지역 한정. 기기 분석(유기산·휘발성 화합물) 데이터 부재. 시판 요거트 LAB의 열대 발효 환경 장기 생존율 미검증. 현장 온도·습도 변동 조건 재현성 미검토.",
+  "glossary": [
+    {
+      "term": "LAB (Lactic Acid Bacteria)",
+      "ko": "유산균 — 당을 젖산으로 발효하는 세균 그룹"
+    },
+    {
+      "term": "Starter Culture",
+      "ko": "스타터 컬처 — 발효 공정 접종용 선별 미생물"
+    },
+    {
+      "term": "RSM (Response Surface Methodology)",
+      "ko": "반응표면분석 — 최적 조건 탐색 통계 실험 설계법"
+    },
+    {
+      "term": "Coffee Pulp (CP)",
+      "ko": "커피 과육 — 탈과피 후 발생하는 커피 부산물"
+    },
+    {
+      "term": "CWW (Coffee Washing Water)",
+      "ko": "커피 세척 폐수 — 워시드 가공 발효·세척 단계 폐수"
+    },
+    {
+      "term": "CFU/mL",
+      "ko": "mL당 균집락 형성 단위 — 스타터 컬처 생균 수 표준 단위"
+    },
+    {
+      "term": "SCA Cupping",
+      "ko": "SCA 커핑 — 스페셜티커피협회 표준 관능 평가 프로토콜"
+    },
+    {
+      "term": "Semi-Controlled Fermentation",
+      "ko": "반-제어 발효 — 스타터 접종하되 완전 멸균 불필요한 중간 형태 발효"
+    }
+  ],
+  "citation_apa": "Calderón-Gaviria, K. D., Duque-Buitrago, L. F., Torres-Valenzuela, L. S., Sánchez-Tamayo, M. I., & Plaza-Dorado, J. L. (2026). Semi-controlled fermentation of coffee by the addition of commercial lactic acid bacteria and yeast at a smallholder capacity. Food Biophysics, 21, 36. https://doi.org/10.1007/s11483-026-10111-1",
+  "links": {
+    "doi": "https://doi.org/10.1007/s11483-026-10111-1",
+    "oa_pdf": "",
+    "journal_homepage": "https://link.springer.com/journal/11483"
+  },
+  "source_basis": "abstract_only",
+  "data_charts": [
+    {
+      "type": "bar",
+      "title": "처리군별 SCA 커핑 총점 비교",
+      "x_labels": [
+        "대조군(무접종)",
+        "LAB 단독 접종"
+      ],
+      "y_label": "SCA 커핑 총점",
+      "values": [
+        84.0,
+        85.9
+      ],
+      "unit": "점"
+    }
+  ],
+  "drive_doc_url": "https://docs.google.com/document/d/1sd-aRxRIqSjd1Gfhc0VXi2YFWxMC8PQNHhGhAqzZjoo/edit?usp=drivesdk&ouid=116660508274764947762",
+  "hero_image": "/static/img/insights/hero/microbiology.svg"
+}
