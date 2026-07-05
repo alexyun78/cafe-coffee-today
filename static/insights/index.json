@@ -1,7 +1,24 @@
 {
   "version": 1,
-  "updated_at": "2026-07-04T12:00:29Z",
+  "updated_at": "2026-07-05T11:30:05Z",
   "items": [
+    {
+      "id": "2026-07-05-water-quality-coffee-taste",
+      "type": "trivia",
+      "date": "2026-07-05",
+      "title_ko": "커피 한 잔의 98%가 물이라는 거 알았어?",
+      "one_liner": "물속 미네랄이 향미 성분을 붙잡아 뽑아내서, 물이 바뀌면 맛도 바뀌어!",
+      "categories_primary": [
+        "커피 상식"
+      ],
+      "categories_secondary": [
+        "추출"
+      ],
+      "hero_image": "/static/img/insights/trivia/terms.svg",
+      "journal": null,
+      "pub_date": null,
+      "source_basis": null
+    },
     {
       "id": "2026-07-04-ethiopian-coffee-phenolic-processing-origin",
       "type": "paper",
