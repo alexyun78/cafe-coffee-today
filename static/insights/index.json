@@ -1,7 +1,24 @@
 {
   "version": 1,
-  "updated_at": "2026-07-05T12:00:30Z",
+  "updated_at": "2026-07-06T11:30:02Z",
   "items": [
+    {
+      "id": "2026-07-06-peaberry-what-is-it",
+      "type": "trivia",
+      "date": "2026-07-06",
+      "title_ko": "피베리? 커피콩이 하나만 든 특별한 열매라고?",
+      "one_liner": "보통 씨앗 두 개가 들어야 하는데 하나만 동그랗게 자란 커피야!",
+      "categories_primary": [
+        "커피 상식"
+      ],
+      "categories_secondary": [
+        "생두"
+      ],
+      "hero_image": "/static/img/insights/trivia/origin.svg",
+      "journal": null,
+      "pub_date": null,
+      "source_basis": null
+    },
     {
       "id": "2026-07-05-water-quality-coffee-taste",
       "type": "trivia",
