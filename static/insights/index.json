@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-07-06T11:30:02Z",
+  "updated_at": "2026-07-06T12:00:32Z",
   "items": [
     {
       "id": "2026-07-06-peaberry-what-is-it",
@@ -15,6 +15,23 @@
         "생두"
       ],
       "hero_image": "/static/img/insights/trivia/origin.svg",
+      "journal": null,
+      "pub_date": null,
+      "source_basis": null
+    },
+    {
+      "id": "2026-07-06-anaerobic-fermentation-coffee",
+      "type": "trivia",
+      "date": "2026-07-06",
+      "title_ko": "커피에 와인 양조 기술을 쓴다고?! 무산소 발효의 놀라운 비밀",
+      "one_liner": "산소를 차단하면 커피가 와인처럼 복잡해지는 마법 🍷 요즘 핫한 발효 트렌드",
+      "categories_primary": [
+        "커피 상식"
+      ],
+      "categories_secondary": [
+        "트렌드 프로세싱"
+      ],
+      "hero_image": "/static/img/insights/trivia/trend.svg",
       "journal": null,
       "pub_date": null,
       "source_basis": null
