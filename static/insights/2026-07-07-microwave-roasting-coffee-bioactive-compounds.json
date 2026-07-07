@@ -1,0 +1,66 @@
+{
+  "version": 1,
+  "id": "2026-07-07-microwave-roasting-coffee-bioactive-compounds",
+  "date": "2026-07-07",
+  "slug": "microwave-roasting-coffee-bioactive-compounds",
+  "title_ko": "마이크로파 로스팅이 커피 원두의 로스팅 특성 및 생리활성 화합물에 미치는 영향",
+  "title_original": "Effect of microwave roasting on roast characteristics and bioactive compounds in coffee beans",
+  "one_liner": "100W 마이크로파 8-12분 최적 조건 도출 — 열풍 대비 퓨란·폴리페놀 풍부하게 보존",
+  "authors": "Zhu, J., Chen, C., Zhao, C., Ma, Y., Guo, Q., Gou, D. (China West Normal University, 쓰촨성, 중국)",
+  "journal": "Innovative Food Science & Emerging Technologies",
+  "pub_date": "2026-08-01",
+  "doi": "10.1016/j.ifset.2026.104673",
+  "categories_primary": [
+    "로스팅"
+  ],
+  "categories_secondary": [
+    "화학/분석화학"
+  ],
+  "summary": "마이크로파 로스팅은 유전 가열 원리로 원두 내부를 직접 가열하는 대안 기술이다. 중국 서남정법대학교 연구팀이 마이크로파 출력·교반 속도·가열 시간 세 변수를 체계적으로 최적화한 결과, 100 W / 140~180 rpm / 8~12분 조건이 균일한 색도와 균형 잡힌 수분 제거를 달성하는 최적 조합으로 확인되었다.\n\n생리활성 화합물 분석에서 카페인은 마이크로파 열에 안정적이어서 함량이 유지된 반면, 3-CQA(3-클로로겐산)는 뚜렷한 열분해를 겪었다. 열풍 로스팅과의 비교에서 마이크로파 방식은 퓨란류와 페놀성 화합물을 더 풍부하게 보존하여 향기 복잡도 및 항산화 잠재력 향상 가능성을 시사한다.\n\n이 연구는 마이크로파 로스팅의 공정 최적화 변수와 화합물 보존 특성을 처음으로 종합적으로 규명함으로써, 대안 로스팅 기술 개발의 실용적 기반을 제공한다.",
+  "key_findings": [
+    "마이크로파 출력이 질량 손실·로스팅 균일성에 가장 결정적 영향 → 100 W 최적",
+    "최적 조건(100 W / 140~180 rpm / 8~12분): 균일 색도·균형 수분 제거 달성",
+    "카페인: 마이크로파 열에 안정 — 처리 조건 무관하게 함량 유지",
+    "3-CQA: 뚜렷한 열분해 — 출력·시간 증가에 따라 손실 증가",
+    "퓨란류·페놀성 화합물: 열풍 대비 마이크로파에서 더 풍부하게 보존"
+  ],
+  "methodology": "커피 원두(품종·산지 미명시) 대상. 독립 변수: 마이크로파 출력(W), 교반 속도(rpm), 가열 시간(min). 평가: 질량 손실률, 로스팅 균일도, 색도, 카페인, 3-CQA, 퓨란류·페놀 화합물. 대조군: 열풍 로스팅. 분석: HPLC(카페인·3-CQA), GC(퓨란류) 계열. 중국 국가자연과학기금 62401478 지원.",
+  "implications": {
+    "농가/가공장": "해당 없음 (로스팅 기기·공정 연구). 소규모 배치 단위 마이크로파 로스터 활용 가능성.",
+    "로스터/큐그레이더": "동일 색도 기준에서 마이크로파 방식이 더 복잡한 달콤·캐러멜 향기 프로파일 기대 가능. 3-CQA 감소 빠르므로 쓴맛 적고 산미·단맛 중심 컵 가능성. 단, SCA 커핑 미포함으로 추가 검증 필요.",
+    "R&D": "마이크로파 출력 밀도-원두 물성 상관성, 품종별 반응 차이, 마이크로파-열풍 하이브리드 로스팅, 스케일업 균일성 제어, SCA 커핑 연계 연구가 후속 과제."
+  },
+  "limitations": "원두 품종·산지 미명시; 100 W 소규모 — 상업용 스케일업 미검증; 퓨란·페놀 개별 정량 미제시; SCA 커핑 미포함; 5-CQA 등 다른 CGA 이성질체 거동 미보고.",
+  "glossary": [
+    {
+      "term": "Microwave Roasting",
+      "ko": "마이크로파 로스팅 — 유전 가열로 원두 내부 직접 가열"
+    },
+    {
+      "term": "3-CQA (3-Caffeoylquinic acid)",
+      "ko": "3-카페오일퀴닌산 — 클로로겐산 이성질체"
+    },
+    {
+      "term": "Furans",
+      "ko": "퓨란류 — 마이야르 반응 산물, 달콤·캐러멜 향기 기여"
+    },
+    {
+      "term": "Dielectric Heating",
+      "ko": "유전 가열 — 전자기장 내 극성 분자 마찰열 발생"
+    },
+    {
+      "term": "Mass Loss Rate",
+      "ko": "질량 손실률 — 로스팅 중 수분·CO₂ 방출에 의한 중량 감소 비율"
+    }
+  ],
+  "citation_apa": "Zhu, J., Chen, C., Zhao, C., Ma, Y., Guo, Q., & Gou, D. (2026). Effect of microwave roasting on roast characteristics and bioactive compounds in coffee beans. Innovative Food Science & Emerging Technologies, 112, 104673. https://doi.org/10.1016/j.ifset.2026.104673",
+  "links": {
+    "doi": "https://doi.org/10.1016/j.ifset.2026.104673",
+    "oa_pdf": "",
+    "journal_homepage": "https://www.sciencedirect.com/journal/innovative-food-science-and-emerging-technologies"
+  },
+  "source_basis": "abstract_only",
+  "data_charts": [],
+  "drive_doc_url": "https://docs.google.com/document/d/1AV3YYSw4kuI428fxlaiAhcWCOkdHvlReHVO8EitT_TY/edit?usp=drivesdk&ouid=116660508274764947762",
+  "hero_image": "/static/img/insights/hero/roasting.svg"
+}

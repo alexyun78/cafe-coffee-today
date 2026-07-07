@@ -1,7 +1,24 @@
 {
   "version": 1,
-  "updated_at": "2026-07-07T11:30:01Z",
+  "updated_at": "2026-07-07T12:00:32Z",
   "items": [
+    {
+      "id": "2026-07-07-microwave-roasting-coffee-bioactive-compounds",
+      "type": "paper",
+      "date": "2026-07-07",
+      "title_ko": "마이크로파 로스팅이 커피 원두의 로스팅 특성 및 생리활성 화합물에 미치는 영향",
+      "one_liner": "100W 마이크로파 8-12분 최적 조건 도출 — 열풍 대비 퓨란·폴리페놀 풍부하게 보존",
+      "categories_primary": [
+        "로스팅"
+      ],
+      "categories_secondary": [
+        "화학/분석화학"
+      ],
+      "hero_image": "/static/img/insights/hero/roasting.svg",
+      "journal": "Innovative Food Science & Emerging Technologies",
+      "pub_date": "2026-08-01",
+      "source_basis": "abstract_only"
+    },
     {
       "id": "2026-07-07-fine-robusta-reevaluation",
       "type": "trivia",
