@@ -1,7 +1,25 @@
 {
   "version": 1,
-  "updated_at": "2026-07-06T12:00:32Z",
+  "updated_at": "2026-07-07T11:30:01Z",
   "items": [
+    {
+      "id": "2026-07-07-fine-robusta-reevaluation",
+      "type": "trivia",
+      "date": "2026-07-07",
+      "title_ko": "싸구려 취급받던 로부스타가 다시 주목받는다고?",
+      "one_liner": "정성껏 가공한 '파인 로부스타'가 등장하며 편견이 깨지고 있어!",
+      "categories_primary": [
+        "커피 상식"
+      ],
+      "categories_secondary": [
+        "트렌드",
+        "생두"
+      ],
+      "hero_image": "/static/img/insights/trivia/trend.svg",
+      "journal": null,
+      "pub_date": null,
+      "source_basis": null
+    },
     {
       "id": "2026-07-06-peaberry-what-is-it",
       "type": "trivia",
