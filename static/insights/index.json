@@ -1,7 +1,25 @@
 {
   "version": 1,
-  "updated_at": "2026-07-07T12:00:32Z",
+  "updated_at": "2026-07-08T11:30:05Z",
   "items": [
+    {
+      "id": "2026-07-08-specialty-coffee-80-points",
+      "type": "trivia",
+      "date": "2026-07-08",
+      "title_ko": "스페셜티 커피는 왜 '80점'이 기준일까?",
+      "one_liner": "전문 감별사가 100점 만점으로 채점해 80점을 넘겨야 스페셜티야!",
+      "categories_primary": [
+        "커피 상식"
+      ],
+      "categories_secondary": [
+        "등급",
+        "품질"
+      ],
+      "hero_image": "/static/img/insights/trivia/bestcup.svg",
+      "journal": null,
+      "pub_date": null,
+      "source_basis": null
+    },
     {
       "id": "2026-07-07-microwave-roasting-coffee-bioactive-compounds",
       "type": "paper",
