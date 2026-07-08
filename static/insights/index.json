@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-07-08T11:30:05Z",
+  "updated_at": "2026-07-08T12:00:30Z",
   "items": [
     {
       "id": "2026-07-08-specialty-coffee-80-points",
@@ -16,6 +16,23 @@
         "품질"
       ],
       "hero_image": "/static/img/insights/trivia/bestcup.svg",
+      "journal": null,
+      "pub_date": null,
+      "source_basis": null
+    },
+    {
+      "id": "2026-07-08-ethiopia-yirgacheffe-origin",
+      "type": "trivia",
+      "date": "2026-07-08",
+      "title_ko": "커피는 에티오피아에서 태어났다! 예가체프가 '커피의 성지'인 이유",
+      "one_liner": "커피나무가 처음 자란 땅, 예가체프의 꽃향기 비밀 ☕🌸",
+      "categories_primary": [
+        "커피 상식"
+      ],
+      "categories_secondary": [
+        "원산지"
+      ],
+      "hero_image": "/static/img/insights/trivia/origin.svg",
       "journal": null,
       "pub_date": null,
       "source_basis": null
