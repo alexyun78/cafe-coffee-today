@@ -1,7 +1,24 @@
 {
   "version": 1,
-  "updated_at": "2026-07-08T12:00:30Z",
+  "updated_at": "2026-07-09T11:30:01Z",
   "items": [
+    {
+      "id": "2026-07-09-washed-vs-natural-process",
+      "type": "trivia",
+      "date": "2026-07-09",
+      "title_ko": "워시드 vs 내추럴, 같은 콩인데 왜 맛이 달라?",
+      "one_liner": "씨앗을 과육째 말리느냐 씻어서 말리느냐 — 가공법이 향미를 바꿔!",
+      "categories_primary": [
+        "커피 상식"
+      ],
+      "categories_secondary": [
+        "가공"
+      ],
+      "hero_image": "/static/img/insights/trivia/processing.svg",
+      "journal": null,
+      "pub_date": null,
+      "source_basis": null
+    },
     {
       "id": "2026-07-08-specialty-coffee-80-points",
       "type": "trivia",
