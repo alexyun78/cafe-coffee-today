@@ -1,0 +1,80 @@
+{
+  "version": 1,
+  "id": "2026-07-09-coffee-puck-permeability-xct-espresso-model",
+  "date": "2026-07-09",
+  "slug": "coffee-puck-permeability-xct-espresso-model",
+  "title_ko": "에스프레소 커피 퍽의 투과도 모델: X선 마이크로단층촬영으로 검증한 퍽 유체역학",
+  "title_original": "A model for the permeability of coffee pucks validated using X-ray computed micro-tomography",
+  "one_liner": "X선 CT로 퍽 공극 3D 분석, 침투 이론으로 투과도 예측 — 입자 2배 시 투과도 4배, 에스프레소 디아링인 물리적 기초 정량화",
+  "authors": "Wadsworth, F. B., Vasseur, J., Zhang, J., Dobson, K. J., Gagné, J., Buckland, H. M., Coumans, J. P., Heap, M. J., Theurel, A., Kendrick, J. E., Lavallée, Y., Hendon, C. H.",
+  "journal": "Royal Society Open Science",
+  "pub_date": "2026-04-01",
+  "doi": "10.1098/rsos.252031",
+  "categories_primary": [
+    "추출"
+  ],
+  "categories_secondary": [
+    "장비/공학",
+    "물리학"
+  ],
+  "summary": "에스프레소 커피 퍽의 투과도를 결정하는 물리적 모델을 침투 이론(percolation theory)으로 개발하고, X선 마이크로단층촬영(XCT)으로 검증한 연구. 르완다·콜롬비아 원두 11개 분쇄 설정 XCT 데이터 + 격자-볼츠만 시뮬레이션으로 코젠-카르만 모델 대비 침투 이론 모델의 우수성 실증. 투과도 결정 핵심 변수: 연결 공극률 + 비표면적. 분쇄 입자 2배 → 투과도 4배, 비선형 관계 정량화. 포흐하이머 수 도입으로 관성 흐름 임계 조건 예측. 에스프레소 레시피 디아링인의 물리적 기초 제공.",
+  "key_findings": [
+    "침투 이론 기반 모델이 코젠-카르만 방정식보다 커피 퍽 투과도 예측에서 우수 — 특히 저공극률(고밀도 충전) 구간에서 현저한 차이",
+    "투과도 결정 두 핵심 변수: ① 연결 공극률, ② 비표면적",
+    "입자 크기 2배 → 투과도 약 4배 증가 (비선형 관계)",
+    "포흐하이머 수(Fo) 도입 — Fo ≥ 1이면 관성 흐름 시작, 비선형 모델 필요",
+    "도즈·분쇄 입도가 지배 인자, 탬핑은 중요하지만 부차적",
+    "르완다 텀바·콜롬비아 구아야칸 × 11 분쇄 설정 XCT + LBM 시뮬레이션으로 모델 검증"
+  ],
+  "methodology": "르완다('Tumba')·콜롬비아('Guayacán') 원두를 Mahlkönig 그라인더로 11개 분쇄 단계 적용. 닉콘 XTH 180 XCT 스캐너(스트래스클라이드 대학교)로 퍽 3D 구조 획득. 격자-볼츠만 방법으로 유체 흐름 수치 시뮬레이션. 코젠-카르만·침투 이론 모델 비교 검증. 포흐하이머 수 도입.",
+  "implications": {
+    "농가/가공장": "해당 없음. 이 연구는 분쇄·추출 단계 유체역학에 관한 것으로 생두 가공·농가 수준의 직접 적용 대상이 아님.",
+    "로스터/큐그레이더": "분쇄 입도 조절의 비선형 특성 이해가 에스프레소 디아링인 예측력을 높임. 극세 분쇄 구간에서 한 눈금 변화의 효과가 거친 분쇄 구간보다 불균형하게 클 수 있음. 도즈와 분쇄 두 변수를 함께 체계적으로 탐색하는 레시피 개발 접근이 유효.",
+    "R&D": "침투 이론 모델을 실제 분쇄 PSD 입력, 동적 채널링, 관능 품질 상관 실험, 품종별 비표면적 정량화 등으로 확장하는 후속 연구 유망."
+  },
+  "limitations": "두 원두만 실험(일반화 제한), 정적 퍽 구조(동적 채널링 미포함), LBM 시뮬레이션 조건과 실제 에스프레소 조건 차이, 관능 평가 없음.",
+  "glossary": [
+    {
+      "term": "Permeability",
+      "ko": "투과도 — 다공성 매질을 통한 유체 흐름의 용이성"
+    },
+    {
+      "term": "XCT (X-ray Computed Micro-Tomography)",
+      "ko": "X선 마이크로단층촬영 — 비파괴 3D 내부 구조 분석"
+    },
+    {
+      "term": "Lattice-Boltzmann Method",
+      "ko": "격자-볼츠만 방법 — 다공성 구조 유체 흐름 수치 시뮬레이션"
+    },
+    {
+      "term": "Kozeny-Carman Equation",
+      "ko": "코젠-카르만 방정식 — 고전 투과도 모델 (고밀도 계에서 부정확)"
+    },
+    {
+      "term": "Percolation Theory",
+      "ko": "침투 이론 — 연결 공극 분율에 따른 투과도 거동 설명"
+    },
+    {
+      "term": "Forchheimer Number",
+      "ko": "포흐하이머 수 — 관성 흐름 시작 지점 예측 무차원 수 (Fo≥1: 비선형)"
+    },
+    {
+      "term": "Specific Surface Area",
+      "ko": "비표면적 — 단위 부피당 입자 표면적; 분쇄 곱게 → 급증 → 투과도 감소"
+    },
+    {
+      "term": "Porosity",
+      "ko": "공극률 — 전체 부피 중 기공 비율; 도즈·탬핑으로 결정"
+    }
+  ],
+  "citation_apa": "Wadsworth, F. B., Vasseur, J., Zhang, J., Dobson, K. J., Gagné, J., Buckland, H. M., Coumans, J. P., Heap, M. J., Theurel, A., Kendrick, J. E., Lavallée, Y., & Hendon, C. H. (2026). A model for the permeability of coffee pucks validated using X-ray computed micro-tomography. Royal Society Open Science, 13(4), 252031. https://doi.org/10.1098/rsos.252031",
+  "links": {
+    "doi": "https://doi.org/10.1098/rsos.252031",
+    "oa_pdf": "",
+    "journal_homepage": "https://royalsocietypublishing.org/journal/rsos"
+  },
+  "source_basis": "abstract_only",
+  "data_charts": [],
+  "drive_doc_url": "https://docs.google.com/document/d/1hI70wJ59cj-xijgGgoM6F89YaqnQrN3F9nSDnXwYfDA/edit?usp=drivesdk&ouid=116660508274764947762",
+  "hero_image": "/static/img/insights/hero/extraction.svg"
+}
