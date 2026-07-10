@@ -1,7 +1,24 @@
 {
   "version": 1,
-  "updated_at": "2026-07-09T12:00:35Z",
+  "updated_at": "2026-07-10T11:30:08Z",
   "items": [
+    {
+      "id": "2026-07-10-latte-art-milk-foam",
+      "type": "trivia",
+      "date": "2026-07-10",
+      "title_ko": "라떼 위의 하트, 어떻게 그리는 걸까?",
+      "one_liner": "붓으로 그리는 게 아니라 고운 우유 거품을 붓는 각도와 흐름으로 만들어!",
+      "categories_primary": [
+        "커피 상식"
+      ],
+      "categories_secondary": [
+        "메뉴"
+      ],
+      "hero_image": "/static/img/insights/trivia/terms.svg",
+      "journal": null,
+      "pub_date": null,
+      "source_basis": null
+    },
     {
       "id": "2026-07-09-washed-vs-natural-process",
       "type": "trivia",
