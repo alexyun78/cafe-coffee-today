@@ -1,7 +1,24 @@
 {
   "version": 1,
-  "updated_at": "2026-07-10T12:00:38Z",
+  "updated_at": "2026-07-11T11:30:00Z",
   "items": [
+    {
+      "id": "2026-07-11-flavor-wheel-tasting-notes",
+      "type": "trivia",
+      "date": "2026-07-11",
+      "title_ko": "커피 맛 설명에 왜 '자스민·블루베리'가 나올까?",
+      "one_liner": "진짜 과일을 넣은 게 아니라 향을 빗대는 '플레이버 휠' 언어야!",
+      "categories_primary": [
+        "커피 상식"
+      ],
+      "categories_secondary": [
+        "테이스팅"
+      ],
+      "hero_image": "/static/img/insights/trivia/terms.svg",
+      "journal": null,
+      "pub_date": null,
+      "source_basis": null
+    },
     {
       "id": "2026-07-10-latte-art-milk-foam",
       "type": "trivia",
