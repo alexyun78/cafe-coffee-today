@@ -1,0 +1,75 @@
+{
+  "version": 1,
+  "id": "2026-07-11-spent-coffee-grounds-cocoa-muffin",
+  "date": "2026-07-11",
+  "slug": "spent-coffee-grounds-cocoa-muffin",
+  "title_ko": "커피 추출 찌꺼기(SCG)로 코코아를 대체한 머핀: 이화학 분석과 135인 소비자 관능평가",
+  "title_original": "Spent Coffee Grounds as a Viable Byproduct Alternative for Cocoa in Muffins: Physicochemical and Sensory Characterization",
+  "one_liner": "추출 후 커피 찌꺼기로 코코아 대체 머핀 구현 — 섬유질↑, 항산화↑, 카드뮴↓, 소비자 기호도 동등",
+  "authors": "Emiliano Terán, Eli Terán-Cabanillas, David M. Aleman-Hidalgo, J. Basilio Heredia, Rosabel Vélez-De la Rocha, Roberto J. Avena-Bustillos, Xueqi Li, Selina C. Wang",
+  "journal": "ACS Food Science & Technology",
+  "pub_date": "2026",
+  "doi": "10.1021/acsfoodscitech.5c00883",
+  "categories_primary": [
+    "지속가능성"
+  ],
+  "categories_secondary": [
+    "식품가공",
+    "커피 부산물"
+  ],
+  "summary": "커피 추출 후 발생하는 SCG(Spent Coffee Grounds)는 전 세계 연간 수백만 톤이 폐기된다. 멕시코 CIAD, USDA-ARS, UC Davis 공동 연구팀은 SCG를 코코아 파우더 대체재로 머핀에 적용하고 이화학 특성 분석과 135명 소비자 기호도 검사를 실시했다. SCG는 코코아 대비 식이섬유·항산화 활성 우위, 카드뮴 함량 현저히 낮음을 확인했으며, 소비자 기호도도 동등하게 검증되어 SCG의 코코아 대체재 가능성을 실증했다.",
+  "key_findings": [
+    "SCG의 식이���유 함량이 코코아 파우더 대비 더 높음 — 영양학적 우위",
+    "SCG의 항산��� 활성이 ��코아 파우더 대비 더 높음 — 페놀성 화합물 기여",
+    "SCG의 카드뮴 함량이 코���아 파우더 대비 현저히 낮음 — 식품 안전성 우위",
+    "기기 분석: 색상·질감·거칠기에서 SCG와 코코아 머핀 간 유의미한 차이",
+    "135명 소비자 패널 기호도 검사: SCG 머핀과 코코아 머핀의 전반적 수용도 동등"
+  ],
+  "methodology": "SCG와 코코아 파우더를 머핀 배합에 각각 적용, 색상·질감·거칠기 기기 분석, 식이섬유·항산화·카드뮴 화학 분석, 135명 소비자 기호도 관능 평가 실시",
+  "implications": {
+    "농가/가공장": "SCG를 식품 원료로 가공·판매하는 새로운 부산물 가치사슬 창출 가능성 제시. 카페·로스터리 SCG를 건조·분말화하여 제과업체에 코코아 대체재로 공급하는 B2B 모델 탐색 가능. 카드뮴 낮은 안전성 우위를 친환경·안전 마케팅에 활용 가능.",
+    "로스터/큐그레이더": "스페셜티 등급 SCG의 성분 프로파일(항산화, 식이섬유)로 식품 원료 시장에서 프리미엄 포지셔닝 가능. 라이트 로스트 SCG는 클로로겐산 잔류가 더 높아 기능성 식품 원료로서의 가치가 특히 높을 가능성.",
+    "R&D": "코코아 대체율 최적화, 추출 방식·로스팅별 SCG 성분 변화와 식품 적합성, 타 제품군 확장, SCG 표준화 처리 프로토콜 개발이 우선 후속 과제."
+  },
+  "limitations": "SCG 공급원(추출 방식·품종·로스팅) 미분류, 소비자 패널 지역 편향 가능성, 저장 안정성 미검토, 대규모 제조 위생 기준 미확인",
+  "glossary": [
+    {
+      "term": "SCG (Spent Coffee Grounds)",
+      "ko": "추출 커피 찌꺼기"
+    },
+    {
+      "term": "Cadmium (Cd)",
+      "ko": "카드뮴 (유독성 중금속)"
+    },
+    {
+      "term": "Antioxidant Capacity",
+      "ko": "항산�� 활성"
+    },
+    {
+      "term": "Consumer Acceptance Test",
+      "ko": "소비자 기��도 검사"
+    },
+    {
+      "term": "Physicochemical Properties",
+      "ko": "이화�� 특성"
+    },
+    {
+      "term": "Melanoidins",
+      "ko": "멜라노이딘 (마이야르 반응 고분자 산물)"
+    },
+    {
+      "term": "Dietary Fiber",
+      "ko": "식이섬유"
+    }
+  ],
+  "citation_apa": "Terán, E., Terán-Cabanillas, E., Aleman-Hidalgo, D. M., Heredia, J. B., Vélez-De la Rocha, R., Avena-Bustillos, R. J., Li, X., & Wang, S. C. (2026). Spent coffee grounds as a viable byproduct alternative for cocoa in muffins: Physicochemical and sensory characterization. ACS Food Science & Technology, 6, 390–400. https://doi.org/10.1021/acsfoodscitech.5c00883",
+  "links": {
+    "doi": "https://doi.org/10.1021/acsfoodscitech.5c00883",
+    "oa_pdf": "",
+    "journal_homepage": "https://pubs.acs.org/journal/afsthl"
+  },
+  "source_basis": "abstract_only",
+  "data_charts": [],
+  "drive_doc_url": "https://docs.google.com/document/d/1nVI6aNcv2uyuaVrLIWOtiU2tVqpwAs6u_kYmnxiCdfM/edit?usp=drivesdk&ouid=116660508274764947762",
+  "hero_image": "/static/img/insights/hero/sustainability.svg"
+}

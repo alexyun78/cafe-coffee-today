@@ -1,7 +1,25 @@
 {
   "version": 1,
-  "updated_at": "2026-07-11T11:30:00Z",
+  "updated_at": "2026-07-11T12:00:33Z",
   "items": [
+    {
+      "id": "2026-07-11-spent-coffee-grounds-cocoa-muffin",
+      "type": "paper",
+      "date": "2026-07-11",
+      "title_ko": "커피 추출 찌꺼기(SCG)로 코코아를 대체한 머핀: 이화학 분석과 135인 소비자 관능평가",
+      "one_liner": "추출 후 커피 찌꺼기로 코코아 대체 머핀 구현 — 섬유질↑, 항산화↑, 카드뮴↓, 소비자 기호도 동등",
+      "categories_primary": [
+        "지속가능성"
+      ],
+      "categories_secondary": [
+        "식품가공",
+        "커피 부산물"
+      ],
+      "hero_image": "/static/img/insights/hero/sustainability.svg",
+      "journal": "ACS Food Science & Technology",
+      "pub_date": "2026",
+      "source_basis": "abstract_only"
+    },
     {
       "id": "2026-07-11-flavor-wheel-tasting-notes",
       "type": "trivia",
