@@ -10,6 +10,7 @@ import json
 import os
 import re
 import secrets
+import sqlite3
 import subprocess
 import threading
 import time
@@ -800,9 +801,11 @@ def api_purchase_create():
         return jsonify({"success": False, "error": "생두 선택 또는 원두명+가공방식 필수"}), 400
     try:
         gb_id = db.find_or_create_green_bean(data)
+        new_id = db.create_purchase({**data, "green_bean_id": gb_id})
     except ValueError as e:
         return jsonify({"success": False, "error": str(e)}), 400
-    new_id = db.create_purchase({**data, "green_bean_id": gb_id})
+    except sqlite3.IntegrityError:
+        return jsonify({"success": False, "error": "이미 같은 이름·공급처·가공방식의 생두가 있어요. 기존 생두를 선택해 재구매하거나 이름을 다르게 해 주세요."}), 409
     return jsonify({"success": True, "id": new_id, "green_bean_id": gb_id})
 
 @app.put("/api/purchases/<int:pid>")
@@ -815,6 +818,8 @@ def api_purchase_update(pid):
             data = {**data, "green_bean_id": db.find_or_create_green_bean(data)}
         except ValueError as e:
             return jsonify({"success": False, "error": str(e)}), 400
+        except sqlite3.IntegrityError:
+            return jsonify({"success": False, "error": "이미 같은 이름·공급처·가공방식의 생두가 있어요. 기존 생두를 선택해 재구매하거나 이름을 다르게 해 주세요."}), 409
     if not db.update_purchase(pid, data):
         return jsonify({"success": False, "error": "not found"}), 404
     return jsonify({"success": True})

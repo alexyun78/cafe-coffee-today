@@ -1542,11 +1542,51 @@ def find_or_create_green_bean(data: dict) -> int:
             gid = row["id"] if row else None
 
         if gid is not None:
-            # 제공된 값으로 설명 필드 보강 (빈 값은 건드리지 않음)
+            # 제공된 값으로 설명 필드 보강 (빈 값은 건드리지 않음).
+            #
+            # 주의: 정체성 컬럼(name/supplier_id/process)을 덮어쓰면 다른 생두의
+            # UNIQUE(name, supplier_id, process) 와 충돌해 IntegrityError → 500 으로
+            # "재구매가 조용히 실패"하던 버그가 있었다. 재구매의 의도는 "이 생두에 구매를
+            # 한 건 더 기록"하는 것이므로, 정체성 변경이 다른 생두와 충돌하면 정체성은
+            # 그대로 두고(기존 생두 유지) 나머지 설명 필드만 보강한다.
+            cur_row = conn.execute(
+                "SELECT name, supplier_id, process FROM green_beans WHERE id=?", (gid,)
+            ).fetchone()
+            target_name = name or (cur_row["name"] if cur_row else name)
+            target_supplier = supplier_id if supplier_id is not None else (
+                cur_row["supplier_id"] if cur_row else None)
+            target_process = process or (cur_row["process"] if cur_row else process)
+            identity_changed = bool(cur_row) and (
+                target_name != cur_row["name"]
+                or target_supplier != cur_row["supplier_id"]
+                or target_process != cur_row["process"]
+            )
+            allow_identity = True
+            if identity_changed:
+                if target_supplier is None:
+                    dup = conn.execute(
+                        "SELECT id FROM green_beans WHERE name=? AND process=? "
+                        "AND supplier_id IS NULL AND id<>?",
+                        (target_name, target_process, gid),
+                    ).fetchone()
+                else:
+                    dup = conn.execute(
+                        "SELECT id FROM green_beans WHERE name=? AND process=? "
+                        "AND supplier_id=? AND id<>?",
+                        (target_name, target_process, target_supplier, gid),
+                    ).fetchone()
+                if dup:
+                    allow_identity = False  # 충돌 → 정체성은 건드리지 않고 구매만 연결
+
             sets, vals = [], []
-            if supplier_id is not None:
-                sets.append("supplier_id=?"); vals.append(supplier_id)
-            for col in ("name", "process", "origin_country", "grade", "cup_notes"):
+            if allow_identity:
+                if supplier_id is not None:
+                    sets.append("supplier_id=?"); vals.append(supplier_id)
+                if name:
+                    sets.append("name=?"); vals.append(name)
+                if process:
+                    sets.append("process=?"); vals.append(process)
+            for col in ("origin_country", "grade", "cup_notes"):
                 v = data.get(col)
                 if v is not None and str(v).strip() != "":
                     sets.append(f"{col}=?"); vals.append(str(v).strip())
