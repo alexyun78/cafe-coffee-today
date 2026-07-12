@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-07-12T11:30:03Z",
+  "updated_at": "2026-07-12T12:00:42Z",
   "items": [
     {
       "id": "2026-07-12-single-origin-vs-blend",
@@ -18,6 +18,24 @@
       "journal": null,
       "pub_date": null,
       "source_basis": null
+    },
+    {
+      "id": "2026-07-12-arabica-cultivars-climate-volatile-sensory",
+      "type": "paper",
+      "date": "2026-07-12",
+      "title_ko": "기후 변이가 아라비카 커피 품종의 휘발성 조성 및 관능 품질을 결정짓는다",
+      "one_liner": "일사량·강수량 차이가 2-아세틸퓨란 등 달콤 아로마 화합물 발현을 품종별로 다르게 구동함 확인",
+      "categories_primary": [
+        "생두"
+      ],
+      "categories_secondary": [
+        "향미/관능",
+        "지속가능성/경제"
+      ],
+      "hero_image": "/static/img/insights/hero/green-bean.svg",
+      "journal": "Scientific Reports (Nature Publishing Group)",
+      "pub_date": "2026-04-13",
+      "source_basis": "abstract_only"
     },
     {
       "id": "2026-07-11-spent-coffee-grounds-cocoa-muffin",

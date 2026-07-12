@@ -1,0 +1,74 @@
+{
+  "version": 1,
+  "id": "2026-07-12-arabica-cultivars-climate-volatile-sensory",
+  "date": "2026-07-12",
+  "slug": "arabica-cultivars-climate-volatile-sensory",
+  "title_ko": "기후 변이가 아라비카 커피 품종의 휘발성 조성 및 관능 품질을 결정짓는다",
+  "title_original": "Climate variability shapes volatile composition and sensory quality in Coffea arabica cultivars",
+  "one_liner": "일사량·강수량 차이가 2-아세틸퓨란 등 달콤 아로마 화합물 발현을 품종별로 다르게 구동함 확인",
+  "authors": "Cristhiane Altoé Filete, Sávio da Silva Berilli, Willian dos Santos Gomes, Taís Rizzo Moreira, Marinalva Maria Bratz Simmer, Emanuele Catarina Silva Oliveira, Joellington Marinho Almeida, Aldemar Polonini Moreli, Lucas Louzada Pereira",
+  "journal": "Scientific Reports (Nature Publishing Group)",
+  "pub_date": "2026-04-13",
+  "doi": "10.1038/s41598-026-47655-8",
+  "categories_primary": [
+    "생두"
+  ],
+  "categories_secondary": [
+    "향미/관능",
+    "지속가능성/경제"
+  ],
+  "summary": "브라질 에스피리투산투 주 IFES 연구팀이 세 Coffea arabica 품종(Catucaí 785, Catucaí Açú, Arara)을 2021·2022 두 수확 연도에 걸쳐 추적하여 기후 변이(일사량·기온·강수량)와 휘발성 아로마 화합물·관능 품질 사이의 인과 구조를 실증한 연구. Catucaí 785는 건조한 해(2022)에 달콤·캐러멜 핵심 화합물 2-아세틸퓨란이 풍부하게 발현되어 블랙커런트·당밀·호두 관능 기술어가 증가했다. Catucaí Açú는 강수 풍부 환경에서, Arara는 2022년 전반적 관능 품질이 향상됐다. PCA로 품종×연도 상호작용(G×E)의 정량적 구조를 확인했으며, 기후변화 시대 품종 선택과 수확 시기 최적화에 과학적 근거를 제공한다.",
+  "key_findings": [
+    "일사량·기온·강수량의 연도별 차이 → 광합성·대사산물 합성 경로 개입 → 아로마 화합물 조성 변화 → 관능 프로파일 차이 인과 연결 실증",
+    "Catucaí 785: 2022 건조 연도에서 2-아세틸퓨란 풍부 발현 → 블랙커런트·당밀·호두 기술어 증가, 더 복합적인 단맛 프로파일",
+    "품종별 기후 반응성: Catucaí 785(건조 강점) / Catucaí Açú(강수 풍부 강점) / Arara(성숙기 고습 민감, 2022 과일·캐러멜 향상)",
+    "PCA로 품종-수확 연도 조합별 휘발성 화합물 클러스터 뚜렷이 구분 → G×E 상호작용의 정량적 실증"
+  ],
+  "methodology": "3 Coffea arabica 품종(Catucaí 785, Catucaí Açú, Arara) × 2 수확 연도(2021, 2022). 기상 자료(일사량, 기온, 강수량) 수집. 휘발성 화합물 추출·정량(HS-SPME GC 기반). 숙련 패널 음료 관능 평가(기술어 분석). 통계: PCA, ANOVA. 기관: IFES, Venda Nova do Imigrante, 브라질.",
+  "implications": {
+    "농가/가공장": "기상 데이터 활용한 수확 시기 최적화와 품종별 미세 농장 관리의 과학적 근거 확보. Catucaí 785 재배 농가는 건조 연도에 고품질 로트 기대 가능. 간이 기상 센서 도입으로 연도별 품질 예측 가능성 향상.",
+    "로스터/큐그레이더": "생두 구매 시 기상 이력 데이터 참고자료 요청이 유효. 2-아세틸퓨란 풍부한 건조 빈티지 Catucaí 785는 라이트~미디엄 로스팅에서 달콤·캐러멜·견과류 프로파일 극대화 가능. 빈티지별 블라인드 커핑으로 기후 효과 체계적 학습 가능.",
+    "R&D": "기상 변수별 아로마 화합물 발현 임계값 정량화, 성숙기 일사량·온도 적산값 회귀 모델 개발, 기후변화 시나리오별 품종 향미 잠재력 모델링, 다른 브라질 산지 검증 연구 필요."
+  },
+  "limitations": "단일 지역·농장 데이터(일반화 제한), 2년 비교만(장기 경향 불충분), 수확 후 가공법 통제 여부 미명시, 기상 변수-화합물 간 정량 임계값 미제시, 관능 평가 프로토콜 세부 사항 미확인.",
+  "glossary": [
+    {
+      "term": "Catucaí",
+      "ko": "카투카이 — Caturra×Icatu 잡종계 브라질 아라비카 품종"
+    },
+    {
+      "term": "Arara",
+      "ko": "아라라 — Catuaí×Icatu 기반 브라질 아라비카 품종"
+    },
+    {
+      "term": "2-acetylfuran",
+      "ko": "2-아세틸퓨란 — 달콤·캐러멜·견과류 향기 핵심 5원환 방향족 화합물"
+    },
+    {
+      "term": "PCA",
+      "ko": "주성분 분석 — 다변량 데이터 차원 축소 통계 기법"
+    },
+    {
+      "term": "G×E Interaction",
+      "ko": "유전형×환경 상호작용 — 품종별 기후 반응성이 다르게 나타나는 현상"
+    },
+    {
+      "term": "HS-SPME",
+      "ko": "헤드스페이스-고체상 마이크로추출 — 휘발성 화합물 표준 분석법"
+    },
+    {
+      "term": "Climatic Variability",
+      "ko": "기후 변이 — 연도별 기상 조건의 자연적 변동성"
+    }
+  ],
+  "citation_apa": "Filete, C. A., da Silva Berilli, S., dos Santos Gomes, W., Rizzo Moreira, T., Bratz Simmer, M. M., Catarina Silva Oliveira, E., Marinho Almeida, J., Polonini Moreli, A., & Louzada Pereira, L. (2026). Climate variability shapes volatile composition and sensory quality in Coffea arabica cultivars. Scientific Reports. https://doi.org/10.1038/s41598-026-47655-8",
+  "links": {
+    "doi": "https://doi.org/10.1038/s41598-026-47655-8",
+    "oa_pdf": "https://www.nature.com/articles/s41598-026-47655-8",
+    "journal_homepage": "https://www.nature.com/srep/"
+  },
+  "source_basis": "abstract_only",
+  "data_charts": [],
+  "drive_doc_url": "https://docs.google.com/document/d/1uL2qXJcFi6wZAwlbayo9N4ZYNpf94Qe8e8_Edngx7kY/edit?usp=drivesdk&ouid=116660508274764947762",
+  "hero_image": "/static/img/insights/hero/green-bean.svg"
+}
