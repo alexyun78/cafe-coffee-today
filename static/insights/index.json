@@ -1,7 +1,24 @@
 {
   "version": 1,
-  "updated_at": "2026-07-11T12:00:33Z",
+  "updated_at": "2026-07-12T11:30:03Z",
   "items": [
+    {
+      "id": "2026-07-12-single-origin-vs-blend",
+      "type": "trivia",
+      "date": "2026-07-12",
+      "title_ko": "싱글 오리진 vs 블렌드, 뭐가 더 좋은 거야?",
+      "one_liner": "하나의 개성이냐 조화로운 균형이냐 — 우열이 아니라 목적의 차이야!",
+      "categories_primary": [
+        "커피 상식"
+      ],
+      "categories_secondary": [
+        "트렌드"
+      ],
+      "hero_image": "/static/img/insights/trivia/trend.svg",
+      "journal": null,
+      "pub_date": null,
+      "source_basis": null
+    },
     {
       "id": "2026-07-11-spent-coffee-grounds-cocoa-muffin",
       "type": "paper",
