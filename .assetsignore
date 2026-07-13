@@ -1,0 +1,33 @@
+# Workers Static Assets 제외 목록 (worker/wrangler.jsonc → assets.directory="..")
+# 웹에 서빙할 것: /index.html + /static/** 뿐. 나머지는 전부 제외.
+# 주의: 패턴은 gitignore 문법 — 루트 한정 제외는 반드시 / 로 시작할 것
+#       (예: /*.png 없이 *.png 라고 쓰면 static/img/**/*.png 까지 제외돼 이미지가 다 깨짐)
+/.git
+/.github
+/.claude
+/.gstack
+/.venv
+/__pycache__
+/cafe-coffee-apk
+/content
+/data
+/docs
+/scripts
+/systemd
+/templates
+/worker
+/node_modules
+/*.py
+/*.md
+/*.sh
+/*.txt
+/*.csv
+/*.db
+/.env
+/.gitignore
+/.assetsignore
+# 저장소 루트에 굴러다니는 작업 파일
+/*.png
+/api_response.json
+# APK 바이너리는 GitHub Releases로 이전 예정 (파일당 25MiB 제한도 있음)
+/static/downloads

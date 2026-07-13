@@ -1,0 +1,32 @@
+// cafe-coffee Worker — Flask(iwinv) → Cloudflare Workers 마이그레이션 (docs/CLOUDFLARE-MIGRATION.md)
+{
+  "name": "cafe-coffee",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-07-01",
+  // 정적 자산 = 저장소 루트 (제외 목록은 루트의 .assetsignore)
+  // Flask와 동일한 URL 구조: /index.html, /static/** 그대로.
+  "assets": {
+    "directory": "..",
+    "binding": "ASSETS",
+    // 이 경로들은 Worker가 먼저 처리 (API + 페이지 라우트 + 방문 집계 대상)
+    "run_worker_first": [
+      "/api/*",
+      "/", "/today", "/today/",
+      "/admin", "/admin/",
+      "/roastery", "/roastery/",
+      "/apk", "/apk/",
+      "/insight", "/insight/*",
+      "/game", "/game/", "/game-apk", "/game-apk/",
+      "/downloads/*"
+    ]
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "cafe-coffee",
+      "database_id": "89f4749f-7999-4410-8090-606b9ff1d90c"
+    }
+  ],
+  "observability": { "enabled": true }
+  // 비밀값(wrangler secret put): ADMIN_PIN, SESSION_SECRET(구 FLASK_SECRET), ADMIN_ALIAS_PATH(선택)
+}

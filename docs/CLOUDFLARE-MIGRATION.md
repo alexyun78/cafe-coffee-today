@@ -49,19 +49,27 @@
 3. `worker/` 디렉터리에 Hono 프로젝트 생성 (`npm create hono@latest`), `wrangler.jsonc`에 D1 바인딩 + Static Assets(`run_worker_first: ["/api/*"]`) 구성.
 4. GitHub repo ↔ Workers Builds 연동 (push 시 자동 배포).
 
-## Phase 1 — DB 이관 (0.5일)
+## Phase 1 — DB 이관 (0.5일) — ✅ 완료 (2026-07-13)
 
-```bash
-bash scripts/migrate-remote.sh pull            # 서버 최신 DB 로컬로
-sqlite3 data/coffee.db .dump > /tmp/dump.sql   # PRAGMA/트랜잭션 문 정리 필요할 수 있음
-wrangler d1 create cafe-coffee
-wrangler d1 execute cafe-coffee --remote --file=/tmp/dump.sql
-```
+- **D1 DB**: `cafe-coffee`, database_id=`89f4749f-7999-4410-8090-606b9ff1d90c`, 리전 APAC/ICN(서울)
+- 절차: `migrate-remote.sh pull` → python `iterdump` 기반 커스텀 덤프 → `wrangler d1 execute --remote --file`
+- **주의(재실행 시)**: ① sqlite3 `.dump` 그대로는 실패 — `BEGIN/COMMIT/PRAGMA`, `sqlite_sequence` 제거 필요 ② **FK 의존 순서로 INSERT 재배열 필수** (coffees가 green_beans 참조 — 원본 생성 순서대로면 "no such table" 에러) + `PRAGMA defer_foreign_keys=true` 선두 삽입 ③ D1은 compound SELECT(UNION) 항 수 제한 있음 — 검증 쿼리는 테이블별로
+- **검증 완료**: 17개 테이블 전 건수 일치 (coffees 208 · green_beans 69 · purchases 91 · roasting_logs 712 · nearby_reviews 1,346 · visits 4,998 등) + 한글 텍스트 바이트 일치 확인
+- 컷오버 밤에 같은 절차로 **최종 재임포트** 필요 (병행 기간 중 서버 쓰기 반영)
 
-- `seed_green_beans.sql` / `seed_nearby_shops.sql` 은 dump에 데이터가 포함되므로 별도 실행 불필요 (init_schema 시드 로직은 이식 안 함).
-- 검증: 건수 대조 — coffees / green_beans(44) / purchases(54+) / roasting_logs(202+) / nearby_*.
+## Phase 2 — API 포팅 (2~4일, 최대 공수) — 🔄 진행 중 (2026-07-13 골격 완성)
 
-## Phase 2 — API 포팅 (2~4일, 최대 공수)
+> **진행 현황**: [worker/](../worker/) 생성 (Hono + TS). **프리뷰 URL = https://cafe-coffee.92cafe.workers.dev**
+> - ✅ 골격: wrangler.jsonc (D1 바인딩 + Static Assets(루트, [.assetsignore](../.assetsignore)) + run_worker_first)
+> - ✅ `GET /api/coffee` 완전 포팅 — **실서비스 Flask 응답과 JSON 바이트 단위 완전 일치 검증**
+> - ✅ `GET /api/insights[/<id>]`, `/insight/<id>` 날짜 해석 (index.json 자산 기반)
+> - ✅ 페이지 라우트 전부 (/ /today /admin /roastery /apk /game /game-apk /insight) — 전 라우트 200 확인
+> - ✅ workers.dev 서브도메인 `92cafe` 등록
+> - ⏳ 남은 포팅 (미구현 /api/*는 501 반환): admin verify/logout/status/stats, coffee CRUD, suggestions,
+>   feedback 6종, suppliers/green-beans/purchases/roasting-logs CRUD, decaf, inventory, pricing,
+>   nearby 8종(refresh는 GH Actions workflow_dispatch로), suyochek-shorts(RSS 프록시+캐시), 방문 집계(visits), app-version build
+> - ⚠️ 재배포: `cd worker && npx wrangler deploy` (환경변수 CLOUDFLARE_API_TOKEN/CLOUDFLARE_ACCOUNT_ID)
+> - ⚠️ D1 재임포트 시 이 파일 Phase 1 주의사항 + **덤프 파일은 `newline='\n'`으로 쓸 것** (Windows 텍스트모드가 \n→\r\n 오염 — 실제 발생, 재임포트로 복구했음)
 
 - `app.py`(1,356줄) 약 40개 엔드포인트 + `db.py`(2,306줄) CRUD를 Hono로 1:1 포팅.
 - **불변 조건 (프런트 무수정을 위해)**:
