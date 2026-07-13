@@ -102,11 +102,18 @@
 1. ✅ `server.url` → `https://92cafe.co.kr/today`, cleartext=false. **컷오버 전에도 안전** — 도메인이 현재 iwinv nginx(HTTPS)를 가리키므로 새 APK는 즉시 동작하고, DNS 컷오버 시 자동으로 Worker로 넘어감(무중단).
 2. ✅ version.json 1.0.6→1.0.7 ("서버 이전" 공지) → 기존 사용자 업데이트 배너.
 3. ✅ build-apk.yml: 서버 SCP 유지(브리지 기간) + **GitHub Release `apk-latest` 업로드 추가**. Worker `/downloads/*`·`/static/downloads/*` → 릴리스로 302 리다이렉트.
-4. ⚠️ 잔여: game.apk(누가쏠까 단독 앱)는 릴리스에 없음 — 서버 static/downloads에만 존재. 컷오버 전 서버에서 받아 `gh release upload apk-latest game.apk` 필요 (또는 game-apk 페이지 은퇴).
+4. ✅ game-latest.apk도 릴리스에 업로드 완료 (사용자 승인) — `/downloads/*`·`/static/downloads/*` 리다이렉트 전부 200 확인. **Phase 4 완전 종료.**
 
 > **참고 (2026-07-13)**: 네임서버 전파 완료 — **존 status=active**, 92cafe.co.kr DNS는 이제 Cloudflare가 서비스(A레코드는 iwinv 서버 유지 → 무중단).
 
-## Phase 5 — 병행 운영 → 컷오버 (실작업 0.5일 + 관찰 1~2주)
+## Phase 5 — 병행 운영 → 컷오버 (실작업 0.5일 + 관찰 1~2주) — 🔄 병행 관찰 시작 (2026-07-14~)
+
+> **결정 (2026-07-14)**: 사용자 선택 = 며칠 병행 후 컷오버. 그동안 확인할 것:
+> - 매일 07:30 nearby GH 수집 성공 여부 (Actions 탭)
+> - 매일 20:30 서버 발행 → 20:40 GH 멱등 skip → deploy-worker로 프리뷰 사이트에 새 인사이트 반영
+> - 프리뷰 URL(https://cafe-coffee.92cafe.workers.dev/admin)에서 관리자 화면 실사용 (조회는 자유,
+>   ⚠️ **쓰기(커피 등록 등)는 D1에만 기록**되고 iwinv 서버엔 안 감 — 실제 운영 입력은 기존대로 서버(92cafe.co.kr)에!)
+> - 컷오버 지시가 오면: 최종 pull→D1 재임포트 → A레코드 제거 → Worker 커스텀 도메인(92cafe.co.kr+www) 연결
 
 1. **병행 검증**: 도메인 A레코드는 iwinv를 계속 가리키는 동안, Worker는 `*.workers.dev` 프리뷰 URL로 전 기능 검증 — 공개 페이지/게임, admin 4탭 CRUD 전체, 인사이트 목록·상세, 릴리스 1회 실발행, 수집 1회, 새 APK 설치 동작.
 2. **컷오버 밤 (DNS 레벨이라 즉시·무중단·즉시 롤백 가능)**: iwinv admin 쓰기 중단 → 최종 `dump → D1 재임포트` → Cloudflare DNS에서 92cafe.co.kr을 Worker 커스텀 도메인으로 전환 (A레코드 제거) → APK 릴리스 공지. 문제 시 A레코드 복원으로 즉시 원복.
