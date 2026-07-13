@@ -1,7 +1,24 @@
 {
   "version": 1,
-  "updated_at": "2026-07-12T12:00:42Z",
+  "updated_at": "2026-07-13T11:30:02Z",
   "items": [
+    {
+      "id": "2026-07-13-first-crack-roasting",
+      "type": "trivia",
+      "date": "2026-07-13",
+      "title_ko": "로스팅 중 '탁탁' 터지는 1차 크랙이 뭐야?",
+      "one_liner": "생두 속 수증기가 팝콘처럼 콩을 터뜨리는 소리 — 로스팅의 신호등이야!",
+      "categories_primary": [
+        "커피 상식"
+      ],
+      "categories_secondary": [
+        "로스팅"
+      ],
+      "hero_image": "/static/img/insights/trivia/processing.svg",
+      "journal": null,
+      "pub_date": null,
+      "source_basis": null
+    },
     {
       "id": "2026-07-12-single-origin-vs-blend",
       "type": "trivia",
