@@ -1,0 +1,35 @@
+# Worker 자동 배포 — push 시 wrangler deploy (docs/CLOUDFLARE-MIGRATION.md)
+# 구 서버의 cafe-coffee-deploy.timer(60초 git pull) 대응.
+# 인사이트 발행(정적 자산)·Worker 코드 변경이 사이트에 반영되는 유일한 경로.
+name: Deploy Worker
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'worker/**'
+      - 'static/**'
+      - 'index.html'
+      - '.assetsignore'
+      - 'cafe-coffee-apk/www/version.json'
+      - '.github/workflows/deploy-worker.yml'
+  workflow_dispatch: {}
+concurrency:
+  group: deploy-worker
+  cancel-in-progress: false
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install worker deps
+        working-directory: worker
+        run: npm ci
+      - name: Deploy
+        working-directory: worker
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: e5fa6a9863ba24f777e38e8c2e60ad43
+        run: npx wrangler deploy
