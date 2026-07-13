@@ -17,7 +17,7 @@
       "/apk", "/apk/",
       "/insight", "/insight/*",
       "/game", "/game/", "/game-apk", "/game-apk/",
-      "/downloads/*"
+      "/downloads/*", "/static/downloads/*"
     ]
   },
   "d1_databases": [

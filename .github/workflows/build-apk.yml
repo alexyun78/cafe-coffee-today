@@ -96,6 +96,18 @@ jobs:
           name: cafe-coffee-apk-v${{ steps.version.outputs.version }}
           path: cafe-coffee-apk/dist/
 
+      # Cloudflare 마이그레이션 (Phase 4): Worker의 /downloads/* 가 이 릴리스로 리다이렉트
+      - name: Publish to GitHub Release (apk-latest)
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create apk-latest --repo ${{ github.repository }} \
+            --title "APK (latest)" --notes "자동 빌드 최신 APK — /apk 페이지에서 다운로드" 2>/dev/null || true
+          gh release upload apk-latest --repo ${{ github.repository }} --clobber \
+            dist/cafe-coffee-latest.apk \
+            dist/cafe-coffee-${{ steps.version.outputs.version }}.apk \
+            dist/cafe-coffee-version.json
+
       - name: Deploy APK to server
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SERVER_SSH_KEY }}

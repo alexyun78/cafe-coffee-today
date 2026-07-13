@@ -4,8 +4,8 @@
   "webDir": "www",
   "backgroundColor": "#6F4E37",
   "server": {
-    "url": "http://49.247.207.115:3002/today",
-    "cleartext": true,
+    "url": "https://92cafe.co.kr/today",
+    "cleartext": false,
     "androidScheme": "https"
   },
   "android": {

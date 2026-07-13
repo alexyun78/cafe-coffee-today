@@ -200,8 +200,16 @@ app.get('/insight/:id', async (c) => {
   return c.json({ success: false, error: 'not found' }, 404)
 })
 
-// /downloads/* — APK 배포는 GitHub Releases 로 이전 예정 (Phase 4)
-app.get('/downloads/*', (c) => c.json({ success: false, error: 'downloads moved (migration in progress)' }, 404))
+// APK 다운로드 — GitHub Releases(apk-latest 태그)로 리다이렉트 (Phase 4)
+// 구 경로 /downloads/*, /static/downloads/* 둘 다 지원 (apk.html 링크 호환)
+const APK_RELEASE_BASE = 'https://github.com/alexyun78/cafe-coffee-today/releases/download/apk-latest/'
+const downloadRedirect = (c: any) => {
+  const name = new URL(c.req.url).pathname.split('/').pop() || ''
+  if (!/^[A-Za-z0-9._-]+$/.test(name)) return c.json({ success: false, error: 'not found' }, 404)
+  return c.redirect(APK_RELEASE_BASE + name, 302)
+}
+app.get('/downloads/:name', downloadRedirect)
+app.get('/static/downloads/:name', downloadRedirect)
 
 // 나머지는 정적 자산으로 (+ 비공개 관리자 별칭 경로 — 서버 .env 의 ADMIN_ALIAS_PATH 대응)
 app.notFound((c) => {
