@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TDS? 보디? 크레마? 커피 용어가 너무 어렵다고? 지금 바로 정복해 보자! — 92°C ROASTERY</title>
+<meta name="description" content="카페 메뉴판과 리뷰에 자꾸 나오는 커피 핵심 용어 6가지, 오늘 완벽 이해 ☕">
+<link rel="icon" type="image/png" href="/static/img/logo-92black.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --canvas: #FFFFFF; --canvas-warm: #FAF7F2; --canvas-stone: #F2ECE3;
+  --ink: #1A1410; --ink-mute: #4A3F36; --ink-soft: #6B5E52;
+  --espresso: #6F4E37; --caramel: #C9986A; --copper: #B5703D;
+  --line: #E8E0D5; --line-soft: #F0E9DD;
+  --font-display: "Cormorant Garamond", "Pretendard", serif;
+  --font-body: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  --r-sm: 6px; --r-md: 12px; --r-pill: 999px;
+}
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color: transparent; }
+html { scroll-behavior: smooth; }
+body { font-family: var(--font-body); color: var(--ink); background: var(--canvas); font-feature-settings: "kern","ss01","lnum"; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+a { color: var(--copper); text-decoration: none; border-bottom: 1px solid transparent; transition: border-color .2s; }
+a:hover { border-bottom-color: var(--copper); }
+img { display: block; max-width: 100%; height: auto; }
+.container { max-width: 860px; margin: 0 auto; padding: 0 32px; }
+@media (max-width: 720px) { .container { padding: 0 20px; } }
+@media (max-width: 480px) { .container { padding: 0 16px; } }
+.site-nav { position: sticky; top: 0; z-index: 50; background: rgba(255,255,255,0.9); backdrop-filter: saturate(140%) blur(14px); -webkit-backdrop-filter: saturate(140%) blur(14px); border-bottom: 1px solid var(--line-soft); }
+.nav-inner { max-width: 1200px; margin: 0 auto; padding: 16px 32px; display: flex; align-items: center; justify-content: space-between; }
+.brand { font-family: var(--font-display); font-size: 1.3rem; font-weight: 700; color: var(--ink); display: inline-flex; align-items: center; gap: 4px; border-bottom: none; }
+.brand:hover { border-bottom: none; }
+.brand-mark { display: inline-flex; align-items: flex-start; font-family: "Pretendard", sans-serif; font-weight: 900; letter-spacing: -0.04em; line-height: 1; color: inherit; }
+.temp-mark { display: flex; flex-direction: column; line-height: .82; margin: 0 .05em 0 .04em; }
+.temp-mark .temp-deg { font-size: .42em; letter-spacing: -.04em; }
+.temp-mark .temp-c { font-size: .58em; letter-spacing: -.05em; margin-top: -.05em; }
+.nav-back { font-family: var(--font-mono); font-size: .75rem; letter-spacing: .18em; color: var(--ink-mute); border-bottom: none; }
+.nav-back:hover { color: var(--copper); border-bottom: none; }
+.article-hero { padding: 56px 0 48px; border-bottom: 1px solid var(--line-soft); }
+.eyebrow { font-family: var(--font-mono); font-size: .72rem; letter-spacing: .28em; color: var(--copper); margin-bottom: 18px; display: flex; align-items: center; gap: 12px; }
+.eyebrow::before { content: ""; display: inline-block; width: 28px; height: 1px; background: var(--copper); }
+.article-title { font-family: var(--font-display); font-weight: 500; font-size: clamp(2rem, 4.5vw, 3.2rem); line-height: 1.15; letter-spacing: -0.02em; color: var(--ink); margin-bottom: 20px; }
+.article-title em { font-style: italic; color: var(--espresso); font-weight: 600; }
+.article-one-liner { font-family: var(--font-display); font-style: italic; font-size: 1.3rem; line-height: 1.5; color: var(--espresso); margin-bottom: 28px; padding-left: 20px; border-left: 3px solid var(--caramel); }
+.article-meta { display: flex; gap: 24px; flex-wrap: wrap; font-family: var(--font-mono); font-size: .75rem; letter-spacing: .12em; color: var(--ink-soft); padding-top: 20px; border-top: 1px solid var(--line-soft); }
+.article-meta span { display: inline-flex; align-items: center; gap: 6px; }
+.article-meta span::before { content: "■"; color: var(--caramel); font-size: .55rem; }
+.hero-image { margin: 32px 0 0; border-radius: var(--r-md); overflow: hidden; border: 1px solid var(--line); }
+.hero-image img { width: 100%; }
+.article-body { padding: 56px 0 80px; }
+.article-footer { padding: 36px 0 56px; border-top: 1px solid var(--line-soft); text-align: center; font-family: var(--font-mono); font-size: .75rem; letter-spacing: .14em; color: var(--ink-soft); }
+.article-footer a { color: var(--ink-mute); border-bottom: 1px solid transparent; }
+.article-footer a:hover { color: var(--copper); border-bottom-color: var(--copper); }
+.source-basis { display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; background: rgba(201,152,106,.18); border: 1px solid rgba(181,112,61,.35); border-radius: var(--r-pill); font-family: var(--font-mono); font-size: .72rem; letter-spacing: .12em; color: var(--espresso); font-weight: 500; }
+.source-basis.abstract { background: rgba(107,94,82,.1); border-color: rgba(107,94,82,.3); color: var(--ink-soft); }
+.links-row { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 18px; }
+.link-pill { display: inline-flex; align-items: center; gap: 8px; padding: 9px 16px; background: var(--canvas-warm); border: 1px solid var(--line); border-radius: var(--r-pill); font-family: var(--font-mono); font-size: .78rem; letter-spacing: .08em; color: var(--ink-mute); border-bottom: 1px solid var(--line); transition: border-color .2s, color .2s; }
+.link-pill:hover { color: var(--copper); border-color: var(--copper); }
+
+/* ===== EZ: 쉬운 설명 스타일 ===== */
+.ez-hero { text-align: center; padding: 8px 0 32px; }
+.ez-hero-emoji { font-size: 3.4rem; line-height: 1; }
+.ez-hero-title { font-family: var(--font-display); font-size: clamp(1.6rem, 3.5vw, 2.2rem); font-weight: 600; color: var(--ink); margin-top: 14px; line-height: 1.3; }
+.ez-section { margin-bottom: 52px; }
+.ez-section h2 { font-family: var(--font-body); font-size: 1.5rem; font-weight: 700; color: var(--ink); margin-bottom: 18px; letter-spacing: -0.01em; }
+.ez-section h3 { font-size: 1.08rem; font-weight: 600; color: var(--espresso); margin: 22px 0 10px; }
+.ez-section p { font-size: 1.04rem; line-height: 1.85; color: var(--ink-mute); margin-bottom: 14px; }
+.ez-section p:last-child { margin-bottom: 0; }
+.ez-section ul { padding-left: 22px; margin-bottom: 14px; }
+.ez-section li { font-size: 1.02rem; line-height: 1.8; color: var(--ink-mute); margin-bottom: 8px; }
+.ez-callout { margin: 14px 0; padding: 14px 18px; background: var(--canvas-warm); border-left: 3px solid var(--caramel); border-radius: 4px; font-size: 0.98rem; color: var(--espresso); line-height: 1.75; }
+.ez-callout strong { color: var(--copper); }
+.ez-findings { list-style: none; padding: 0; }
+.ez-findings > li { padding: 18px 22px; margin-bottom: 14px; background: var(--canvas-warm); border: 1px solid var(--line); border-radius: 10px; font-size: 1.02rem; line-height: 1.7; color: var(--ink-mute); }
+.ez-findings > li strong { color: var(--ink); display: block; margin-bottom: 4px; font-size: 1.06rem; }
+.ez-findings > li.gold { background: linear-gradient(135deg, #FFF8E7, #FFEFCD); border-color: #F0D67A; }
+.ez-findings > li.silver { background: linear-gradient(135deg, #F6F6F6, #ECECEC); border-color: #C7C7C7; }
+.ez-findings > li.bronze { background: linear-gradient(135deg, #FFEEDD, #FFDCC0); border-color: #E4B07F; }
+.ez-findings > li.medal { background: linear-gradient(135deg, #F0E6FF, #E1D2FF); border-color: #BDA8E5; }
+.ez-table { width: 100%; border-collapse: collapse; margin: 16px 0 8px; font-size: 0.96rem; }
+.ez-table th, .ez-table td { padding: 11px 14px; border: 1px solid var(--line); text-align: left; vertical-align: top; }
+.ez-table thead th { background: var(--ink); color: #fff; font-weight: 600; letter-spacing: .02em; }
+.ez-table tbody th { background: var(--canvas-warm); color: var(--ink); font-weight: 600; }
+.ez-table tbody tr:nth-child(even) td { background: rgba(250, 247, 242, .55); }
+.ez-summary { padding: 26px 30px; background: linear-gradient(135deg, #FAF0E0, #F3E1C5); border-radius: 14px; font-size: 1.13rem; line-height: 1.75; font-weight: 500; color: var(--ink); border: 1px solid #E5C99B; }
+.ez-summary strong { color: var(--espresso); }
+.ez-citation { margin-top: 24px; padding: 18px 22px; background: var(--canvas-warm); border-radius: 8px; font-family: var(--font-mono); font-size: 0.82rem; color: var(--ink-soft); line-height: 1.7; }
+.ez-citation p { margin: 4px 0; }
+.ez-chart-card { padding: 22px 24px 18px; background: var(--canvas); border: 1px solid var(--line); border-radius: 12px; margin: 16px 0; }
+.ez-chart-card .ez-chart-title { font-size: 1rem; font-weight: 600; color: var(--ink); margin-bottom: 14px; }
+.ez-bar-row { display: flex; align-items: center; margin: 10px 0; font-size: 0.95rem; gap: 14px; }
+.ez-bar-label { width: 180px; flex-shrink: 0; color: var(--ink-mute); font-weight: 500; }
+.ez-bar-track { flex: 1; height: 32px; background: var(--canvas-warm); border-radius: 6px; overflow: hidden; position: relative; border: 1px solid var(--line); }
+.ez-bar-fill { height: 100%; background: linear-gradient(90deg, var(--caramel), var(--copper)); display: flex; align-items: center; justify-content: flex-end; padding: 0 12px; color: white; font-weight: 700; font-size: 0.92rem; min-width: 56px; }
+.ez-bar-fill.alt { background: linear-gradient(90deg, #6F4E37, #4A3F36); }
+.ez-glossary { display: grid; gap: 12px; }
+.ez-glossary-item { padding: 16px 20px; background: var(--canvas-warm); border: 1px solid var(--line); border-radius: 10px; border-left: 3px solid var(--caramel); }
+.ez-glossary-term { font-family: var(--font-display); font-style: italic; font-size: 1.1rem; font-weight: 600; color: var(--espresso); margin-bottom: 6px; }
+.ez-glossary-def { font-size: 0.98rem; color: var(--ink-mute); line-height: 1.7; }
+@media (max-width: 720px) {
+  .article-hero { padding: 36px 0 32px; }
+  .article-body { padding: 36px 0 56px; }
+  .ez-section { margin-bottom: 40px; }
+  .ez-section h2 { font-size: 1.3rem; }
+  .ez-bar-label { width: 100%; margin-bottom: 4px; }
+  .ez-bar-row { flex-direction: column; align-items: stretch; }
+  .article-meta { gap: 12px 18px; font-size: .68rem; }
+}
+</style>
+</head>
+<body>
+
+<header class="site-nav">
+  <div class="nav-inner">
+    <a class="brand" href="/">
+      <span class="brand-mark">92<span class="temp-mark"><span class="temp-deg">°</span><span class="temp-c">C</span></span></span>ROASTERY
+    </a>
+    <a class="nav-back" href="/insight">← INSIGHTS</a>
+  </div>
+</header>
+
+<article>
+  <section class="article-hero">
+    <div class="container">
+      <div class="eyebrow">— 오늘의 커피 상식 · 2026.07.13</div>
+      <h1 class="article-title">TDS? 보디? 크레마? 커피 용어가 너무 어렵다고? 지금 바로 정복해 보자!</h1>
+      <p class="article-one-liner">카페 메뉴판과 리뷰에 자꾸 나오는 커피 핵심 용어 6가지, 오늘 완벽 이해 ☕</p>
+      <div class="article-meta">
+        
+        
+        
+        <span>커피 상식 · 커피 용어</span>
+      </div>
+      
+      <div class="hero-image">
+        <img src="/static/img/insights/trivia/terms.svg" alt="TDS? 보디? 크레마? 커피 용어가 너무 어렵다고? 지금 바로 정복해 보자!">
+      </div>
+      
+    </div>
+  </section>
+
+  <section class="article-body">
+    <div class="container">
+
+      
+      <div class="ez-hero">
+        <div class="ez-hero-emoji">📖</div>
+        <div class="ez-hero-title">TDS? 보디? 크레마? 커피 용어가 너무 어렵다고? 지금 바로 정복해 보자!</div>
+      </div>
+
+      
+      <div class="ez-section">
+        <h2>🤔 무슨 연구야?</h2>
+        
+          <p>스페셜티 카페에 가서 메뉴판 보다가 &#39;이거 뭔 말이야…&#39; 하고 당황한 적 있지 않아? 😅 &#39;밝은 산미&#39;, &#39;미디엄 보디&#39;, &#39;롱 피니시&#39;, &#39;TDS&#39; — 마치 외계어 같은 이 단어들, 사실 알고 나면 커피가 10배는 더 재미있어져!</p><p>커피 용어는 와인 테이스팅 언어에서 많이 빌려 왔어. 와인 좋아하는 사람들이 &#39;탄닌이 강하다&#39;, &#39;피니시가 길다&#39; 하는 것처럼, 커피도 비슷한 언어로 맛을 설명하는 거야. 어렵게 느껴지는 건 처음뿐 — 오늘 한 번만 읽으면 앞으로 커피 리뷰 읽는 게 완전 달라져! ☕</p><p>오늘은 커피 메뉴판과 리뷰에 자주 등장하는 핵심 용어 6가지를 일상 비유로 쉽게 풀어볼게 🎯 이 정도만 알면 바리스타랑 대화할 때도 눈빛이 달라질 거야!</p>
+        
+      </div>
+
+      
+      
+      <div class="ez-section">
+        <h2>🧪 핵심 개념 쉽게 풀어보면</h2>
+        
+          <h3>TDS (Total Dissolved Solids, 총 용존 고형물)</h3>
+          <p>커피 한 잔에 얼마나 많은 커피 성분이 녹아 있는지 나타내는 숫자야. 보통 퍼센트(%)로 표시해. SCA(스페셜티커피협회) 기준으로 브루잉 커피(필터 커피)는 약 1.15~1.45%가 이상적이라고 봐. 이 범위를 훨씬 넘으면 너무 진하고, 아래면 너무 연해. 전문 바리스타들은 굴절계(refractometer)라는 기계로 TDS를 측정해서 레시피를 조정해.</p>
+          <div class="ez-callout">💡 설탕물을 만들 때 설탕이 많이 녹을수록 더 달고 진한 것처럼, TDS가 높을수록 커피가 더 진하고 강해. 마치 온도계로 온도 재듯이 커피 농도를 재는 거야! 🔬</div>
+        
+          <h3>추출수율 (Extraction Yield)</h3>
+          <p>원두 속에서 실제로 물에 녹아 나온 성분의 비율이야. &#39;원두의 몇 %가 컵 안으로 나왔나?&#39;를 나타내. SCA 기준으로 18~22%가 이상적이라고 봐. 18% 미만은 &#39;과소 추출(under extraction)&#39;로 신맛이 날카롭고 밋밋해. 22% 초과는 &#39;과다 추출(over extraction)&#39;로 쓰고 떫은 맛이 나. TDS와 함께 쓰면 레시피를 과학적으로 잡을 수 있어.</p>
+          <div class="ez-callout">💡 티백으로 차를 우릴 때 너무 짧게 담그면 연하고 너무 오래 담그면 쓰고 떫어지잖아? 딱 맞는 시간에 꺼내야 최고의 맛이 나는 것처럼, 커피도 딱 맞는 수율로 추출해야 밸런스가 살아! ⏱️</div>
+        
+          <h3>보디 (Body)</h3>
+          <p>커피를 입안에 머금었을 때 느껴지는 묵직함, 질감, 무게감이야. &#39;풀 보디&#39;, &#39;미디엄 보디&#39;, &#39;라이트 보디&#39;로 나눠. 보디가 강한 커피는 우유처럼 묵직하고, 보디가 약한 커피는 물처럼 가볍게 느껴져. 내추럴 프로세싱이나 에스프레소는 보디가 강한 편이고, 워시드 라이트 로스팅은 가벼운 편이야.</p>
+          <div class="ez-callout">💡 물 한 잔과 우유 한 잔을 입안에 굴려봐 — 우유가 훨씬 무겁고 진하게 느껴지지? 그게 바로 보디의 차이야. 커피도 종류에 따라 물처럼 가볍거나 우유처럼 묵직하게 느껴지는 게 달라! 🥛</div>
+        
+          <h3>크레마 (Crema)</h3>
+          <p>에스프레소 위에 떠 있는 황금빛 거품층이야. 고압(약 9기압)으로 뜨거운 물을 원두에 통과시킬 때, 원두 속 CO₂와 오일이 유화되어 만들어져. 신선한 원두일수록 크레마가 두텁고 오래 유지돼. 너무 연한 갈색이면 과소 추출, 너무 짙고 검으면 과다 추출의 신호일 수 있어.</p>
+          <div class="ez-callout">💡 맥주를 따를 때 위에 생기는 하얀 거품층 같아! 그 거품이 맥주 향기를 가두는 것처럼, 크레마도 에스프레소의 향과 맛을 가두는 역할을 해. 그래서 에스프레소는 만들자마자 바로 마시는 게 최고야 🍺</div>
+        
+      </div>
+      
+
+      
+      
+      <div class="ez-section">
+        <h2>🎯 핵심 발견</h2>
+        <ul class="ez-findings">
+          
+          
+            
+              <li class="gold">
+                <strong>애프터테이스트가 길수록 좋은 커피?</strong>애프터테이스트(Aftertaste)는 커피를 삼킨 뒤에도 입안에 남아 있는 여운이야. 스페셜티 커피 평가에서 중요한 항목 중 하나인데, 좋은 커피일수록 달콤하거나 과일향 나는 여운이 길게 남아. 반대로 품질이 아쉬운 커피는 쓰거나 탁한 여운이 오래 남는 경우가 있어. 커피 한 잔 마시고 &#39;이 향이 왜 이렇게 오래 남지?&#39;하는 경험을 해봤다면, 그게 바로 좋은 애프터테이스트야! ✨
+              </li>
+            
+              <li class="silver">
+                <strong>디개싱을 모르면 커피를 망친다!</strong>디개싱(Degassing)은 원두를 볶은 뒤 원두 안에 갇힌 CO₂가 천천히 빠져나오는 과정이야. 갓 볶은 원두는 CO₂가 너무 많아서 오히려 추출을 방해해 — 커피가 제대로 우러나오지 못하거든. 그래서 에스프레소는 로스팅 후 최소 3~7일, 브루잉용은 7~14일 정도 &#39;쉬게&#39; 두는 게 좋아. 마치 갓 구운 빵도 조금 식혀야 더 맛있는 것처럼! 🍞
+              </li>
+            
+              <li class="bronze">
+                <strong>TDS는 레시피의 나침반</strong>전문 바리스타들은 TDS 측정기(굴절계)로 커피 농도를 재고, 추출수율을 계산해서 레시피를 조정해. 같은 원두라도 분쇄 굵기, 물 온도, 추출 시간을 바꾸면 TDS가 달라지거든. 카페에서 &#39;오늘 커피 맛이 좀 이상한데?&#39; 싶으면 TDS가 기준 범위를 벗어난 거일 수 있어! 데이터로 맛을 잡는 거야 📊
+              </li>
+            
+              <li class="medal">
+                <strong>보디와 산미는 시소 관계</strong>보디와 산미는 보통 반비례해. 보디가 강하면(예: 내추럴, 에스프레소) 산미가 약해지는 경향이 있고, 산미가 밝고 강하면(예: 워시드, 케냐) 보디가 가벼운 경우가 많아. 이 균형이 커피 맛의 &#39;밸런스&#39;를 결정하는 핵심이야. 좋아하는 스타일을 알면 카페에서 원두 추천받을 때 딱 말할 수 있어! ⚖️
+              </li>
+            
+              <li class="medal">
+                <strong>크레마가 두껍다고 다 좋은 건 아니야</strong>크레마가 두꺼우면 신선한 원두라는 신호지만, 무조건 두꺼울수록 좋은 건 아니야. 로스팅한 지 1~2일 된 원두는 CO₂가 너무 많아서 크레마가 두껍지만 맛은 오히려 불안정해. 적절히 디개싱된 원두(3~7일 후)가 크레마 두께와 맛의 균형이 가장 좋아. 크레마는 신선도의 지표이지 &#39;맛의 전부&#39;가 아니야! 🎯
+              </li>
+            
+          
+        </ul>
+      </div>
+      
+
+      
+      
+
+      
+      
+      
+      <div class="ez-section">
+        <h2>커피 핵심 용어 한눈에 정리</h2>
+        <table class="ez-table">
+          <thead><tr><th>용어</th><th>한마디 정의</th><th>이상적인 범위/상태</th></tr></thead>
+          <tbody>
+            <tr>
+              <th>TDS</th><td>커피 농도 (용존 고형물 비율)</td><td>브루잉: 1.15~1.45% / 에스프레소: ~8~12%</td>
+            </tr><tr>
+              <th>추출수율</th><td>원두 성분이 컵으로 나온 비율</td><td>18~22% (SCA 기준)</td>
+            </tr><tr>
+              <th>보디</th><td>입안에서 느끼는 무게감·질감</td><td>라이트 / 미디엄 / 풀 보디</td>
+            </tr><tr>
+              <th>크레마</th><td>에스프레소 위 황금빛 거품층</td><td>두껍고 균일한 적갈색, 빠르게 사라지지 않는 것</td>
+            </tr><tr>
+              <th>애프터테이스트</th><td>삼킨 뒤 입안에 남는 여운</td><td>달콤·과일향이 길게 남을수록 좋음</td>
+            </tr><tr>
+              <th>디개싱</th><td>로스팅 후 CO₂ 방출 과정</td><td>에스프레소 3~7일 / 브루잉 7~14일 후 최적</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      
+      
+
+      
+      
+
+      
+      
+
+      
+      
+      <div class="ez-section">
+        <div class="ez-summary">💡 <strong>한 줄 요약</strong> — TDS·추출수율·보디·크레마·애프터테이스트·디개싱 — 이 6가지만 알면 커피 메뉴판이 더 이상 외계어가 아니야! ☕</div>
+      </div>
+      
+
+      
+      
+      
+      
+
+      
+      
+      <div class="ez-section">
+        <h2>📖 어려운 말 풀이 사전</h2>
+        <p>이 글에 나온 어려운 약어와 용어를 한 번에 정리했어. 의미만 알면 본문이 훨씬 쉬워져!</p>
+        <div class="ez-glossary">
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">TDS (Total Dissolved Solids)</div>
+            <div class="ez-glossary-def">물에 녹아 있는 커피 성분의 총량. 농도를 나타내는 지표</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">추출수율 (Extraction Yield)</div>
+            <div class="ez-glossary-def">원두에서 실제 컵으로 녹아 나온 성분의 비율 (이상: 18~22%)</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">보디 (Body)</div>
+            <div class="ez-glossary-def">입안에서 느껴지는 커피의 무게감과 질감</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">크레마 (Crema)</div>
+            <div class="ez-glossary-def">고압 추출 시 에스프레소 위에 형성되는 황금빛 거품층</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">애프터테이스트 (Aftertaste)</div>
+            <div class="ez-glossary-def">커피를 삼킨 뒤 입안에 남는 맛과 향의 여운</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">디개싱 (Degassing)</div>
+            <div class="ez-glossary-def">로스팅 후 원두 내 CO₂가 천천히 빠져나오는 과정</div>
+          </div>
+          
+        </div>
+      </div>
+      
+
+    </div>
+  </section>
+
+  <footer class="article-footer">
+    <div class="container">
+      <a href="/insight">← BACK TO INSIGHTS</a>
+      <span style="margin: 0 16px;">·</span>
+      <a href="/">HOME</a>
+    </div>
+  </footer>
+</article>
+
+</body>
+</html>

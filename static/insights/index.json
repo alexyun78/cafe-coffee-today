@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-07-13T11:30:02Z",
+  "updated_at": "2026-07-13T12:00:37Z",
   "items": [
     {
       "id": "2026-07-13-first-crack-roasting",
@@ -15,6 +15,23 @@
         "로스팅"
       ],
       "hero_image": "/static/img/insights/trivia/processing.svg",
+      "journal": null,
+      "pub_date": null,
+      "source_basis": null
+    },
+    {
+      "id": "2026-07-13-coffee-terms-decoded",
+      "type": "trivia",
+      "date": "2026-07-13",
+      "title_ko": "TDS? 보디? 크레마? 커피 용어가 너무 어렵다고? 지금 바로 정복해 보자!",
+      "one_liner": "카페 메뉴판과 리뷰에 자꾸 나오는 커피 핵심 용어 6가지, 오늘 완벽 이해 ☕",
+      "categories_primary": [
+        "커피 상식"
+      ],
+      "categories_secondary": [
+        "커피 용어"
+      ],
+      "hero_image": "/static/img/insights/trivia/terms.svg",
       "journal": null,
       "pub_date": null,
       "source_basis": null
