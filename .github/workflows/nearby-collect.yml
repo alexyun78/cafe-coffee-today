@@ -1,0 +1,29 @@
+# 주변 가게 네이버 리뷰 수집 — Cloudflare 마이그레이션 Phase 3 (docs/CLOUDFLARE-MIGRATION.md)
+# 서버 cafe-coffee-nearby.timer(07:30 KST)의 GitHub Actions 이전판.
+# 결과는 Worker POST /api/nearby/ingest 로 D1 에 저장 (review_hash 멱등 —
+# 병행 기간에 서버 수집과 겹쳐도 스냅샷은 UPSERT, 표본은 중복 차단).
+# ⚠️ 네이버가 GitHub Actions IP 를 차단하면(429/403) 로그에 기록됨 — 그 경우
+#    docs/CLOUDFLARE-MIGRATION.md 리스크 1번 폴백(로컬 스케줄러) 검토.
+name: Nearby Collect
+on:
+  schedule:
+    - cron: '30 22 * * *' # 07:30 KST
+  workflow_dispatch: {}
+concurrency: nearby-collect
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install deps
+        run: pip install requests
+      - name: Collect and ingest to Worker(D1)
+        env:
+          WORKER_BASE: https://cafe-coffee.92cafe.workers.dev
+          ADMIN_PIN: ${{ secrets.ADMIN_PIN }}
+          NAVER_CLIENT_ID: ${{ secrets.NAVER_CLIENT_ID }}
+          NAVER_CLIENT_SECRET: ${{ secrets.NAVER_CLIENT_SECRET }}
+        run: python scripts/collect_nearby_d1.py

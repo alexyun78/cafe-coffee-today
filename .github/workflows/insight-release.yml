@@ -1,0 +1,35 @@
+# Coffee Insight 백로그 릴리스 — Cloudflare 마이그레이션 Phase 3 (docs/CLOUDFLARE-MIGRATION.md)
+# 서버 cafe-coffee-release.timer(20:30 KST)의 GitHub Actions 이전판.
+# 병행 기간: 서버가 20:30에 먼저 발행하면 여기(20:40)는 멱등 체크로 자동 생략.
+# 컷오버 후: 서버 타이머 disable → 이 워크플로가 1차 발행 경로.
+name: Insight Release
+on:
+  schedule:
+    - cron: '40 11 * * *' # 20:40 KST
+  workflow_dispatch: {}
+permissions:
+  contents: write
+concurrency: insight-release
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install deps
+        run: pip install jinja2==3.1.4 requests
+      - name: Release one insight from queue
+        run: python scripts/release_insight.py
+      - name: Commit & push
+        run: |
+          git config user.name "insight-release-bot"
+          git config user.email "noreply@github.com"
+          git add static/insights/ content/insight_queue/
+          if git diff --cached --quiet; then
+            echo "발행 변경 없음 (이미 발행됐거나 큐 비어 있음)"
+          else
+            git commit -m "content(insights): 백로그 릴리스 일일 인사이트 ($(TZ=Asia/Seoul date +%F)) [GH Actions]"
+            git push
+          fi
