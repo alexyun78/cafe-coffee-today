@@ -57,19 +57,22 @@
 - **검증 완료**: 17개 테이블 전 건수 일치 (coffees 208 · green_beans 69 · purchases 91 · roasting_logs 712 · nearby_reviews 1,346 · visits 4,998 등) + 한글 텍스트 바이트 일치 확인
 - 컷오버 밤에 같은 절차로 **최종 재임포트** 필요 (병행 기간 중 서버 쓰기 반영)
 
-## Phase 2 — API 포팅 (2~4일, 최대 공수) — 🔄 진행 중 (2026-07-13 골격 완성)
+## Phase 2 — API 포팅 — ✅ 완료 (2026-07-13 밤)
 
-> **진행 현황**: [worker/](../worker/) 생성 (Hono + TS). **프리뷰 URL = https://cafe-coffee.92cafe.workers.dev**
-> - ✅ 골격: wrangler.jsonc (D1 바인딩 + Static Assets(루트, [.assetsignore](../.assetsignore)) + run_worker_first)
-> - ✅ `GET /api/coffee` 완전 포팅 — **실서비스 Flask 응답과 JSON 바이트 단위 완전 일치 검증**
-> - ✅ `GET /api/insights[/<id>]`, `/insight/<id>` 날짜 해석 (index.json 자산 기반)
-> - ✅ 페이지 라우트 전부 (/ /today /admin /roastery /apk /game /game-apk /insight) — 전 라우트 200 확인
-> - ✅ workers.dev 서브도메인 `92cafe` 등록
-> - ⏳ 남은 포팅 (미구현 /api/*는 501 반환): admin verify/logout/status/stats, coffee CRUD, suggestions,
->   feedback 6종, suppliers/green-beans/purchases/roasting-logs CRUD, decaf, inventory, pricing,
->   nearby 8종(refresh는 GH Actions workflow_dispatch로), suyochek-shorts(RSS 프록시+캐시), 방문 집계(visits), app-version build
-> - ⚠️ 재배포: `cd worker && npx wrangler deploy` (환경변수 CLOUDFLARE_API_TOKEN/CLOUDFLARE_ACCOUNT_ID)
-> - ⚠️ D1 재임포트 시 이 파일 Phase 1 주의사항 + **덤프 파일은 `newline='\n'`으로 쓸 것** (Windows 텍스트모드가 \n→\r\n 오염 — 실제 발생, 재임포트로 복구했음)
+> **프리뷰 URL = https://cafe-coffee.92cafe.workers.dev** · [worker/](../worker/) (Hono + TS, 6모듈)
+> - ✅ **전 엔드포인트(~60개) 포팅 + 실서비스 대조 검증 통과** — 조회 16종 exact-match
+>   (유일한 차이 = Python float 표기 `20.0` vs JS `20`, JSON 파싱 후 동일값이라 무영향)
+> - ✅ 인증: Flask 세션 → HMAC 서명 쿠키 `adm`(WebCrypto, 7일) + Bearer 토큰(APK) 병행.
+>   `SESSION_SECRET`=구 FLASK_SECRET 동일 값 → feedback ip_hash 연속성 유지.
+>   PIN 레이트리밋(D1 pin_attempts) 동일 동작 확인 (locked/attempts_left)
+> - ✅ 쓰기 왕복 검증: coffee POST→PUT→DELETE, supplier CRUD (D1에서, 흔적 제거)
+> - ✅ visits 방문 집계 미들웨어(쿠키 vid·봇 제외·waitUntil 비동기), suyochek RSS(Workers Cache 10분),
+>   insights, app-version(version.json 번들 import), ADMIN_ALIAS_PATH 대응
+> - ✅ 페이지 렌더링 브라우저 확인 (/today 데이터·휴무팝업·디카페인 배너, / 로스터리, /insight 오늘 글)
+> - 미이식(결정대로): 카드 PNG(501), /downloads(404 — Phase 4에서 GitHub Releases)
+> - ⚠️ 시크릿(설정 완료): `wrangler secret put` — ADMIN_PIN, SESSION_SECRET. 추가 예정: GITHUB_DISPATCH_TOKEN(주변 수집 수동 트리거용, 선택)
+> - ⚠️ 재배포: `cd worker && npx wrangler deploy` (env CLOUDFLARE_API_TOKEN/CLOUDFLARE_ACCOUNT_ID)
+> - ⚠️ D1 재임포트 시 Phase 1 주의사항 + **덤프 파일은 `newline='\n'`으로 쓸 것** (Windows 텍스트모드 \r\n 오염 — 실제 발생, 재임포트로 복구)
 
 - `app.py`(1,356줄) 약 40개 엔드포인트 + `db.py`(2,306줄) CRUD를 Hono로 1:1 포팅.
 - **불변 조건 (프런트 무수정을 위해)**:
@@ -86,14 +89,12 @@
   - `/admin` + `ADMIN_ALIAS_PATH` 비공개 별칭 (서버 .env에만 존재 — 이전 시 Worker 환경변수로) → `static/admin.html`
   - `/roastery`, `/apk`, `/insight(...)`, `/game(...)` 등 — app.py 115줄 정규식 참고
 
-## Phase 3 — 크론 이전 (1일)
+## Phase 3 — 크론 이전 — 🔄 구축 완료, 실행 검증 중 (2026-07-13 밤)
 
-1. `.github/workflows/insight-release.yml` — cron `30 11 * * *`(=20:30 KST): checkout → `release_insight.py` → commit/push (`GITHUB_TOKEN` 사용, 서버 PAT 불필요) → push가 Workers Builds 재배포 유발. 멱등 로직 그대로라 중복 발행 없음.
-2. `.github/workflows/nearby-collect.yml` — cron `30 22 * * *`(=07:30 KST):
-   - **선 테스트 필수**: GH Actions에서 `collect_nearby.py --dry <place_id>` 1곳 → 네이버가 GitHub IP를 차단하는지 확인. **이것이 전체 계획의 리스크 1순위.**
-   - 통과 시: 수집 결과를 Worker 보호 엔드포인트 `POST /api/nearby/ingest`(PIN 헤더)로 전송하는 어댑터 추가 (파이썬 수집 코드 재사용).
-   - 차단 시 폴백: 로컬 PC 작업 스케줄러에서 실행 (기존 로컬 IP 429 이력 있으므로 간격 늘려서), 또는 수집 주기 축소.
-3. 관리자 "⟳ 리뷰 수집" 버튼: Worker가 GitHub `workflow_dispatch` REST API 호출 (fine-grained PAT `actions:write` 1개 필요 → Worker secret).
+1. ✅ [.github/workflows/insight-release.yml](../.github/workflows/insight-release.yml) — cron `40 11 * * *`(=**20:40 KST** — 서버 20:30 릴리스보다 늦게 잡아 병행 기간 멱등 skip): `release_insight.py` → commit/push(`GITHUB_TOKEN`). 컷오버 후 서버 release.timer disable → 이게 1차 발행 경로.
+2. ✅ [.github/workflows/nearby-collect.yml](../.github/workflows/nearby-collect.yml) — cron `30 22 * * *`(=07:30 KST) + workflow_dispatch: [scripts/collect_nearby_d1.py](../scripts/collect_nearby_d1.py)가 collect_nearby.py 파싱 재사용 → `POST /api/nearby/ingest`(Bearer, ADMIN_PIN으로 verify). GH Secrets 설정 완료(ADMIN_PIN·NAVER_CLIENT_ID/SECRET).
+   - **네이버 GH IP 차단 여부 = 첫 실행 결과로 판정** (리스크 1순위). 차단 시 폴백: 로컬 PC 스케줄러.
+3. ⏳ 관리자 "⟳ 리뷰 수집" 버튼: Worker `/api/nearby/refresh`가 GitHub `workflow_dispatch` 호출하도록 구현됨 — `GITHUB_DISPATCH_TOKEN`(fine-grained PAT, actions:write) Worker secret만 추가하면 활성.
 
 ## Phase 4 — APK 전환 (0.5일)
 
