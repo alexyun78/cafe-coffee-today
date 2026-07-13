@@ -39,8 +39,9 @@
 > - ✅ API 토큰 발급 (`Edit Cloudflare Workers` 템플릿 + D1:Edit + Zone:Edit) → `.env`의 `CLOUDFLARE_API_TOKEN`, verify=active 확인
 > - ✅ 92cafe.co.kr 존 생성 (API 경유 — 대시보드 Add-a-site UI가 멈춰서 우회). **zone_id=`f73059debc9807dc62cd41633011e9d1`**, status=pending
 > - ✅ 배정 네임서버: **`arya.ns.cloudflare.com` / `margo.ns.cloudflare.com`** ← iwinv 도메인 관리에서 이걸로 변경
-> - ⏳ DNS 레코드 복제 (A @/www → 49.247.207.115, DNS-only) — 사용자 승인 대기
-> - ⏳ iwinv 네임서버 변경 (사용자 작업)
+> - ✅ DNS 레코드 복제 완료: A @ / A www → 49.247.207.115 (DNS-only, TTL 300)
+> - ⏳ **iwinv 네임서버 변경 (유일하게 남은 사용자 작업)**: iwinv 도메인 관리 → 네임서버를 `arya.ns.cloudflare.com` / `margo.ns.cloudflare.com` 으로 변경. 전파 후 존이 pending→active 되면 Phase 0 완료
+> - 참고: 대시보드 Add-a-site UI가 이 계정에서 무한 스피너로 먹통 — 존/레코드는 API로 처리했음. 이후 존 관련 작업도 API 권장
 
 1. **네임서버 이전 (무중단, 가장 먼저 시작 — 전파 최대 24h)**: Cloudflare 대시보드에 92cafe.co.kr 추가 → 기존 DNS 레코드 자동 스캔 확인 (A→49.247.207.115 **그대로 유지**, 일단 DNS-only 회색 구름) → iwinv 도메인 관리에서 NS를 Cloudflare 지정 값으로 변경. 트래픽은 계속 iwinv 서버로 가므로 서비스 영향 0.
    - ⚠️ **도메인 등록기관 확인**: 등록 자체가 iwinv라면 **서버 해지 시 도메인 등록은 유지**해야 함 (등록비는 별도 소액). Cloudflare Registrar는 .co.kr 미지원 — 원하면 가비아 등 국내 등록기관으로 기관 이전.
