@@ -93,14 +93,18 @@
 
 1. ✅ [.github/workflows/insight-release.yml](../.github/workflows/insight-release.yml) — cron `40 11 * * *`(=**20:40 KST** — 서버 20:30 릴리스보다 늦게 잡아 병행 기간 멱등 skip): `release_insight.py` → commit/push(`GITHUB_TOKEN`). 컷오버 후 서버 release.timer disable → 이게 1차 발행 경로.
 2. ✅ [.github/workflows/nearby-collect.yml](../.github/workflows/nearby-collect.yml) — cron `30 22 * * *`(=07:30 KST) + workflow_dispatch: [scripts/collect_nearby_d1.py](../scripts/collect_nearby_d1.py)가 collect_nearby.py 파싱 재사용 → `POST /api/nearby/ingest`(Bearer, ADMIN_PIN으로 verify). GH Secrets 설정 완료(ADMIN_PIN·NAVER_CLIENT_ID/SECRET).
-   - **네이버 GH IP 차단 여부 = 첫 실행 결과로 판정** (리스크 1순위). 차단 시 폴백: 로컬 PC 스케줄러.
-3. ⏳ 관리자 "⟳ 리뷰 수집" 버튼: Worker `/api/nearby/refresh`가 GitHub `workflow_dispatch` 호출하도록 구현됨 — `GITHUB_DISPATCH_TOKEN`(fine-grained PAT, actions:write) Worker secret만 추가하면 활성.
+   - ✅ **리스크 1순위 해소 (2026-07-13 실측)**: 네이버가 GitHub Actions IP를 차단하지 않음 — 30/30곳 수집 성공, 표본 528건·별점·키워드·블로그검색 전부 정상, D1 인제스트 589문 적용.
+3. ✅ [.github/workflows/deploy-worker.yml](../.github/workflows/deploy-worker.yml) — push(worker/·static/·index.html 변경) 시 `wrangler deploy` 자동 실행. 구 서버 60초 deploy 타이머 대응 — **인사이트 발행이 사이트에 반영되는 경로**. GH Secret `CLOUDFLARE_API_TOKEN` 설정 완료, 실행 검증 완료.
+4. ⏳ 관리자 "⟳ 리뷰 수집" 버튼: Worker `/api/nearby/refresh`가 GitHub `workflow_dispatch` 호출하도록 구현됨 — `GITHUB_DISPATCH_TOKEN`(fine-grained PAT, actions:write) Worker secret만 추가하면 활성.
 
-## Phase 4 — APK 전환 (0.5일)
+## Phase 4 — APK 전환 — ✅ 적용 (2026-07-13 밤, v1.0.7 빌드 중)
 
-1. `cafe-coffee-apk/capacitor.config.json` `server.url` → `https://<커스텀도메인>` (cleartext 허용 설정 제거 가능).
-2. `cafe-coffee-apk/www/version.json` 증가 → 기존 사용자에게 업데이트 배너.
-3. `build-apk.yml`: SCP 스텝 제거 → GitHub Release에 APK 업로드. `/apk` 페이지는 최신 릴리스로 링크.
+1. ✅ `server.url` → `https://92cafe.co.kr/today`, cleartext=false. **컷오버 전에도 안전** — 도메인이 현재 iwinv nginx(HTTPS)를 가리키므로 새 APK는 즉시 동작하고, DNS 컷오버 시 자동으로 Worker로 넘어감(무중단).
+2. ✅ version.json 1.0.6→1.0.7 ("서버 이전" 공지) → 기존 사용자 업데이트 배너.
+3. ✅ build-apk.yml: 서버 SCP 유지(브리지 기간) + **GitHub Release `apk-latest` 업로드 추가**. Worker `/downloads/*`·`/static/downloads/*` → 릴리스로 302 리다이렉트.
+4. ⚠️ 잔여: game.apk(누가쏠까 단독 앱)는 릴리스에 없음 — 서버 static/downloads에만 존재. 컷오버 전 서버에서 받아 `gh release upload apk-latest game.apk` 필요 (또는 game-apk 페이지 은퇴).
+
+> **참고 (2026-07-13)**: 네임서버 전파 완료 — **존 status=active**, 92cafe.co.kr DNS는 이제 Cloudflare가 서비스(A레코드는 iwinv 서버 유지 → 무중단).
 
 ## Phase 5 — 병행 운영 → 컷오버 (실작업 0.5일 + 관찰 1~2주)
 
