@@ -32,7 +32,15 @@
 | APK WebView → `http://49.247.207.115:3002` | WebView → `https://<커스텀도메인>` (version.json 증가로 업데이트 배너) |
 | APK 파일 SCP → `static/downloads/` | **GitHub Releases** 업로드, `/apk` 페이지는 최신 릴리스 링크 |
 
-## Phase 0 — 준비 (0.5일)
+## Phase 0 — 준비 (0.5일) — 🔄 진행 중 (2026-07-13)
+
+> **진행 현황 (2026-07-13 밤)**:
+> - ✅ Cloudflare 계정 이메일 인증 완료 (가입 후 6일간 미인증 상태였음 — 토큰 생성 실패의 근본 원인)
+> - ✅ API 토큰 발급 (`Edit Cloudflare Workers` 템플릿 + D1:Edit + Zone:Edit) → `.env`의 `CLOUDFLARE_API_TOKEN`, verify=active 확인
+> - ✅ 92cafe.co.kr 존 생성 (API 경유 — 대시보드 Add-a-site UI가 멈춰서 우회). **zone_id=`f73059debc9807dc62cd41633011e9d1`**, status=pending
+> - ✅ 배정 네임서버: **`arya.ns.cloudflare.com` / `margo.ns.cloudflare.com`** ← iwinv 도메인 관리에서 이걸로 변경
+> - ⏳ DNS 레코드 복제 (A @/www → 49.247.207.115, DNS-only) — 사용자 승인 대기
+> - ⏳ iwinv 네임서버 변경 (사용자 작업)
 
 1. **네임서버 이전 (무중단, 가장 먼저 시작 — 전파 최대 24h)**: Cloudflare 대시보드에 92cafe.co.kr 추가 → 기존 DNS 레코드 자동 스캔 확인 (A→49.247.207.115 **그대로 유지**, 일단 DNS-only 회색 구름) → iwinv 도메인 관리에서 NS를 Cloudflare 지정 값으로 변경. 트래픽은 계속 iwinv 서버로 가므로 서비스 영향 0.
    - ⚠️ **도메인 등록기관 확인**: 등록 자체가 iwinv라면 **서버 해지 시 도메인 등록은 유지**해야 함 (등록비는 별도 소액). Cloudflare Registrar는 .co.kr 미지원 — 원하면 가비아 등 국내 등록기관으로 기관 이전.
