@@ -13,8 +13,10 @@
 | 항목 | 결정 |
 |---|---|
 | 백엔드 포팅 | **TypeScript + Hono** 재작성 (Python Workers 베타는 배제) |
-| 도메인 | **보유 커스텀 도메인** 연결 (도메인명 TBD — Phase 0에서 확정, 네임서버를 Cloudflare로 이전) |
+| 도메인 | **92cafe.co.kr** (`.env`의 `SERVICE_DOMAIN`) — 신규가 아니라 **이미 운영 중**: NS=ns1.iwinv.kr, A→49.247.207.115, 서버 nginx+HTTPS가 roastery.html 서빙 (2026-07-13 확인, CLAUDE.md 미기재였음). 네임서버만 Cloudflare로 이전 |
 | 카드 PNG (PIL 렌더) | **일단 보류** — `/api/coffee/<id>/card-token`, `card.png` 미이식. admin.html 카드 다운로드 버튼 숨김. 추후 클라이언트 canvas로 재구현 검토 |
+
+> `.env` 신규 키 (2026-07-13): `CLOUDFLARE_EMAIL` / `CLOUDFLARE_PASSWORD` (대시보드 로그인 — CLI 자동화엔 못 씀), `SERVICE_DOMAIN`. Phase 0에서 `CLOUDFLARE_API_TOKEN` 추가 예정.
 
 ## 아키텍처 매핑
 
@@ -32,7 +34,8 @@
 
 ## Phase 0 — 준비 (0.5일)
 
-1. 도메인명 확정, Cloudflare 대시보드에 사이트 추가 → 등록기관에서 네임서버 변경 (**전파 최대 24h — 가장 먼저 시작**).
+1. **네임서버 이전 (무중단, 가장 먼저 시작 — 전파 최대 24h)**: Cloudflare 대시보드에 92cafe.co.kr 추가 → 기존 DNS 레코드 자동 스캔 확인 (A→49.247.207.115 **그대로 유지**, 일단 DNS-only 회색 구름) → iwinv 도메인 관리에서 NS를 Cloudflare 지정 값으로 변경. 트래픽은 계속 iwinv 서버로 가므로 서비스 영향 0.
+   - ⚠️ **도메인 등록기관 확인**: 등록 자체가 iwinv라면 **서버 해지 시 도메인 등록은 유지**해야 함 (등록비는 별도 소액). Cloudflare Registrar는 .co.kr 미지원 — 원하면 가비아 등 국내 등록기관으로 기관 이전.
 2. API 토큰 발급: dash → My Profile → API Tokens → "Edit Cloudflare Workers" 템플릿. `.env`에 `CLOUDFLARE_API_TOKEN=` 추가 (대시보드 로그인 정보로는 wrangler 자동화 불가).
 3. `worker/` 디렉터리에 Hono 프로젝트 생성 (`npm create hono@latest`), `wrangler.jsonc`에 D1 바인딩 + Static Assets(`run_worker_first: ["/api/*"]`) 구성.
 4. GitHub repo ↔ Workers Builds 연동 (push 시 자동 배포).
@@ -60,6 +63,11 @@ wrangler d1 execute cafe-coffee --remote --file=/tmp/dump.sql
 - `rev N · <hash>` 빌드 표시: git 명령 불가 → Workers Builds 환경변수(`WORKERS_CI_COMMIT_SHA`)로 대체.
 - 미이식(보류): `card-token` / `card.png` (501 반환), admin.html 버튼 숨김.
 - 정적 자산: `index.html`, `static/`(22MB, 인사이트 87건 포함) → Static Assets. 파일당 25MiB 제한 내 확인.
+- **페이지 라우트 재현** (app.py 1096~1131, CLAUDE.md 기재와 다름 — 실측 기준):
+  - `/` → `static/roastery.html` (도메인 루트 = 로스터리 홈)
+  - `/today` → `index.html` (오늘의커피 + 누가쏠까 탭)
+  - `/admin` + `ADMIN_ALIAS_PATH` 비공개 별칭 (서버 .env에만 존재 — 이전 시 Worker 환경변수로) → `static/admin.html`
+  - `/roastery`, `/apk`, `/insight(...)`, `/game(...)` 등 — app.py 115줄 정규식 참고
 
 ## Phase 3 — 크론 이전 (1일)
 
@@ -78,9 +86,9 @@ wrangler d1 execute cafe-coffee --remote --file=/tmp/dump.sql
 
 ## Phase 5 — 병행 운영 → 컷오버 (실작업 0.5일 + 관찰 1~2주)
 
-1. **병행 검증** (iwinv 유지 상태에서 새 도메인으로): 공개 페이지/게임, admin 4탭 CRUD 전체, 인사이트 목록·상세, 릴리스 1회 실발행, 수집 1회, 새 APK 설치 동작.
-2. **컷오버 밤**: iwinv admin 쓰기 중단 → 최종 `dump → D1 재임포트` (병행 기간 중 쓰기 유실 방지) → APK 릴리스 공지.
-3. **구 URL 브리지**: 구 APK가 IP URL을 보므로, iwinv를 즉시 끄지 말고 `http://49.247.207.115:3002/* → https://<도메인>` **301 리다이렉트 전용 초경량 모드**로 마지막 결제 주기 동안 유지. WebView는 리다이렉트를 따라가므로 미업데이트 사용자도 무중단.
+1. **병행 검증**: 도메인 A레코드는 iwinv를 계속 가리키는 동안, Worker는 `*.workers.dev` 프리뷰 URL로 전 기능 검증 — 공개 페이지/게임, admin 4탭 CRUD 전체, 인사이트 목록·상세, 릴리스 1회 실발행, 수집 1회, 새 APK 설치 동작.
+2. **컷오버 밤 (DNS 레벨이라 즉시·무중단·즉시 롤백 가능)**: iwinv admin 쓰기 중단 → 최종 `dump → D1 재임포트` → Cloudflare DNS에서 92cafe.co.kr을 Worker 커스텀 도메인으로 전환 (A레코드 제거) → APK 릴리스 공지. 문제 시 A레코드 복원으로 즉시 원복.
+3. **구 APK 브리지**: 구 APK는 도메인이 아니라 `http://49.247.207.115:3002`(IP)를 직접 보므로 DNS 전환의 영향 밖. iwinv를 즉시 끄지 말고 `IP:3002/* → https://92cafe.co.kr` **301 리다이렉트 전용 초경량 모드**로 마지막 결제 주기 동안 유지. WebView는 리다이렉트를 따라가므로 미업데이트 사용자도 무중단.
 4. 관찰 1~2주 → systemd 타이머 전체 disable → **iwinv 해지**.
 5. CLAUDE.md 전면 갱신 (배포/서버/크론 섹션 재작성 — iwinv 관련 내용 제거).
 
