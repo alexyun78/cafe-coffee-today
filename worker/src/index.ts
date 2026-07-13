@@ -1,161 +1,76 @@
 // cafe-coffee Worker — Flask app.py 포팅 (docs/CLOUDFLARE-MIGRATION.md Phase 2)
 // 불변 조건: 한글 JSON 키, {start,end} 날짜 객체, {success,...} 응답 형태를 Flask와 동일하게 유지.
 import { Hono } from 'hono'
-
-type Env = {
-  DB: D1Database
-  ASSETS: Fetcher
-  // secrets (wrangler secret put): ADMIN_PIN, SESSION_SECRET, ADMIN_ALIAS_PATH?
-}
+import { Env, Row, getCookie, utcNowISO } from './util'
+import { adminRoutes } from './auth'
+import { coffeeRoutes } from './coffee'
+import { beanRoutes } from './beans'
+import { nearbyRoutes } from './nearby'
+import versionJson from '../../cafe-coffee-apk/www/version.json'
 
 const app = new Hono<{ Bindings: Env }>()
 
-// ---------- 유틸 (db.py 포팅) ----------
+// ---------- 방문자 추적 (app.py _track_visit — 쿠키 기반, 봇 제외) ----------
 
-/** Notion 호환 날짜 객체 (db.py _date_obj) */
-const dateObj = (s: string | null | undefined) => (s ? { start: s, end: null } : null)
+const VISIT_COOKIE = 'vid'
+const VISIT_COOKIE_TTL = 86400
+const BOT_RE = /bot|crawler|spider|crawl|http:\/\/|googlebot|bingbot|yandex|duckduck|baiduspider|slurp|facebookexternalhit|whatsapp|telegrambot|applebot|amazonbot|petalbot|semrushbot|ahrefsbot|mj12bot|headlesschrome|phantomjs|puppeteer|playwright|selenium/i
+const TRACK_PATH_RE = /^\/(?:$|insight(?:\/|$)|apk(?:\/|$)|game(?:-apk)?(?:\/|$)|today(?:\/|$)|roastery(?:\/|$))/
+const VID_RE = /^[A-Za-z0-9_-]{8,40}$/
 
-const STATUS_ORDER: Record<string, number> = { 예정: 0, '진행 중': 1, 완료: 2 }
-
-/** KST 오늘 날짜 (서버가 KST였으므로 date.today() 대응) */
-function kstTodayISO(): string {
-  return new Date(Date.now() + 9 * 3600_000).toISOString().slice(0, 10)
+function classifyDevice(ua: string): string {
+  const l = (ua || '').toLowerCase()
+  if (!l) return 'desktop'
+  if (BOT_RE.test(l)) return 'bot'
+  if (l.includes('ipad') || (l.includes('android') && !l.includes('mobile'))) return 'tablet'
+  if (['mobile', 'iphone', 'ipod', 'android'].some((s) => l.includes(s))) return 'mobile'
+  return 'desktop'
 }
 
-/** 제공일 기준 상태 자동 진행 (db.py _compute_display_status) */
-function computeDisplayStatus(raw: string | null, serveDate: string | null): string | null {
-  if (!serveDate) return raw
-  const today = kstTodayISO()
-  const natural = serveDate > today ? '예정' : serveDate === today ? '진행 중' : '완료'
-  const rawKey = raw || '예정'
-  const rawO = STATUS_ORDER[rawKey] ?? 0
-  const natO = STATUS_ORDER[natural] ?? 0
-  return natO > rawO ? natural : rawKey
-}
-
-/** 컵노트 단일 소스 SQL (db.py _EFF_CUP_NOTES_SQL) */
-const EFF_CUP_NOTES_SQL = `COALESCE(
-  (SELECT gb.cup_notes FROM green_beans gb
-    WHERE gb.id = c.green_bean_id AND TRIM(COALESCE(gb.cup_notes,'')) <> ''),
-  (SELECT gb.cup_notes FROM green_beans gb
-    WHERE gb.name = c.name AND TRIM(COALESCE(gb.cup_notes,'')) <> ''
-    ORDER BY gb.id LIMIT 1)
-) AS bean_cup_notes`
-
-type CoffeeRow = Record<string, any>
-
-/** DB row → 한글 키 API 응답 (db.py _row_to_api) */
-function rowToApi(row: CoffeeRow) {
-  let cup = row.cup_notes
-  if (row.bean_cup_notes != null && String(row.bean_cup_notes).trim()) cup = row.bean_cup_notes
-  return {
-    id: row.id,
-    커피: row.name,
-    로스터리: row.roastery,
-    로스팅: dateObj(row.roast_date),
-    프로세싱: row.process,
-    상태: computeDisplayStatus(row.status, row.serve_date),
-    컵노트: cup,
-    감상: row.comment,
-    제공일: dateObj(row.serve_date),
-    구분: row.category,
-    'BREWED AT': row.brewed_at,
-    '로스팅 포인트': row.roast_point,
-    운영상태: row.availability || '운영',
-  }
-}
-
-/** 오늘 기준 N개월 전 (db.py _months_ago_iso — 월말 클램프 동일) */
-function monthsAgoISO(months: number): string {
-  const t = new Date(Date.now() + 9 * 3600_000) // KST
-  let y = t.getUTCFullYear()
-  let m = t.getUTCMonth() + 1 - months
-  while (m < 1) { m += 12; y -= 1 }
-  for (const d of [t.getUTCDate(), 28, 27, 26, 25]) {
-    const cand = new Date(Date.UTC(y, m - 1, d))
-    if (cand.getUTCMonth() === m - 1) {
-      return cand.toISOString().slice(0, 10)
-    }
-  }
-  return new Date(Date.UTC(y, m - 1, 1)).toISOString().slice(0, 10)
-}
-
-const dateToTs = (s: string): number => {
-  const t = Date.parse((s || '').slice(0, 10))
-  return Number.isFinite(t) ? t : 0
-}
-
-/** 제공 중 디카페인 (db.py get_current_decaf) */
-async function getCurrentDecaf(db: D1Database) {
-  const s = await db
-    .prepare("SELECT value FROM settings WHERE key='current_decaf_gb_id'")
-    .first<{ value: string }>()
-  if (!s || !s.value) return null
-  const id = parseInt(s.value, 10)
-  if (!Number.isFinite(id)) return null
-  const bean = await db
-    .prepare('SELECT id, name, process, cup_notes, is_decaf FROM green_beans WHERE id = ?')
-    .bind(id)
-    .first<CoffeeRow>()
-  if (!bean || !bean.is_decaf) return null
-  return { id: bean.id, name: bean.name, process: bean.process, cup_notes: bean.cup_notes }
-}
-
-// ---------- 공개 조회 ----------
-
-// GET /api/coffee — {today, history, decaf} (app.py get_coffee + db.py list_today_and_history)
-app.get('/api/coffee', async (c) => {
-  try {
-    const { results } = await c.env.DB
-      .prepare(`SELECT c.*, ${EFF_CUP_NOTES_SQL} FROM coffees c`)
-      .all<CoffeeRow>()
-
-    const cutoff = monthsAgoISO(3)
-    const todayISO = kstTodayISO()
-    const today: any[] = []
-    const history: any[] = []
-
-    for (const row of results) {
-      const item = rowToApi(row)
-      if (!item['커피']) continue
-      const status = item['상태']
-      if (status === '진행 중') {
-        today.push(item)
-        history.push(item)
-      } else if (status === '예정') {
-        history.push(item)
-      } else if (status === '완료') {
-        const serve = item['제공일']?.start || ''
-        const roast = item['로스팅']?.start || ''
-        const ref = serve || roast
-        if (ref && ref >= cutoff) history.push(item)
+app.use('*', async (c, next) => {
+  let setVid: string | null = null
+  if (c.req.method === 'GET' && TRACK_PATH_RE.test(new URL(c.req.url).pathname)) {
+    const device = classifyDevice(c.req.header('User-Agent') || '')
+    if (device !== 'bot') {
+      let vid = getCookie(c.req.raw, VISIT_COOKIE)
+      let isNew = 0
+      if (!VID_RE.test(vid)) {
+        const bytes = new Uint8Array(12)
+        crypto.getRandomValues(bytes)
+        vid = btoa(String.fromCharCode(...bytes)).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '')
+        isNew = 1
+        setVid = vid
       }
+      const tsUtc = utcNowISO()
+      const kst = new Date(Date.now() + 9 * 3600_000)
+      const path = new URL(c.req.url).pathname
+      // 통계는 보조 기능 — 실패해도 요청 본 흐름은 막지 않음 (waitUntil 비동기)
+      c.executionCtx.waitUntil(
+        c.env.DB
+          .prepare('INSERT INTO visits (ts, date_kst, hour_kst, path, visitor_id, device, is_new) VALUES (?,?,?,?,?,?,?)')
+          .bind(tsUtc, kst.toISOString().slice(0, 10), kst.getUTCHours(), path, vid, device, isNew)
+          .run()
+          .catch(() => {}),
+      )
     }
-
-    // 정렬: 진행중 → 예정(가까운 제공일순) → 그 외(로스팅 최신순), 동률은 이름순
-    const sortKey = (item: any): [number, number, string] => {
-      const status = item['상태']
-      const serve = item['제공일']?.start || ''
-      const roast = item['로스팅']?.start || ''
-      const name = item['커피'] || ''
-      if (status === '진행 중') return [0, -dateToTs(roast), name]
-      if (status === '예정' && serve && serve >= todayISO) return [1, dateToTs(serve), name]
-      return [2, -dateToTs(roast), name]
-    }
-    history.sort((a, b) => {
-      const ka = sortKey(a), kb = sortKey(b)
-      if (ka[0] !== kb[0]) return ka[0] - kb[0]
-      if (ka[1] !== kb[1]) return ka[1] - kb[1]
-      return ka[2] < kb[2] ? -1 : ka[2] > kb[2] ? 1 : 0
-    })
-
-    return c.json({ success: true, today, history, decaf: await getCurrentDecaf(c.env.DB) })
-  } catch (e: any) {
-    return c.json({ success: false, error: String(e?.message || e) }, 500)
   }
+  await next()
+  if (setVid)
+    c.header(
+      'Set-Cookie',
+      `${VISIT_COOKIE}=${setVid}; Max-Age=${VISIT_COOKIE_TTL}; Path=/; HttpOnly; SameSite=Lax; Secure`,
+      { append: true },
+    )
 })
 
-// ---------- 인사이트 (정적 자산 기반 — app.py api_insights_*) ----------
+// ---------- API 라우터 ----------
+
+app.route('/', adminRoutes)
+app.route('/', coffeeRoutes)
+app.route('/', nearbyRoutes) // beans보다 먼저 — /api/nearby/* 를 beans 의 use('/api/*') 가드보다 우선 매칭
+app.route('/', beanRoutes)
+
+// ---------- 인사이트 (정적 자산 기반 — app.py 1228~1320) ----------
 
 const INSIGHT_ID_RE = /^[A-Za-z0-9][A-Za-z0-9\-]{0,127}$/
 const INSIGHT_DATE_RE = /^\d{4}-\d{2}-\d{2}$/
@@ -187,24 +102,70 @@ app.get('/api/insights/:id', async (c) => {
   return c.json({ success: true, item: data })
 })
 
-// ---------- 앱 버전 ----------
+// ---------- 수요책 Shorts (app.py 1134~1225 — YouTube RSS 프록시 + 캐시) ----------
 
-app.get('/api/app-version', async (c) => {
-  // TODO(Phase 4): version.json 값 반영 + build를 Workers Builds 커밋 SHA로
-  return c.json({ version: '1.3.0', build: null })
+const SUYOCHEK_FEED_URL = 'https://www.youtube.com/feeds/videos.xml?channel_id=UC1OMiatCVGDGzjgiZyaM1Tg'
+const SUYOCHEK_TITLE_RE = /커피\s*마시러\s*가는\s*길/
+const SUYOCHEK_EP_RE = /\((\d+)\s*회\)/
+const SUYOCHEK_MAX_ITEMS = 50
+const SUYOCHEK_SUPPLEMENT = [
+  { id: '6V5H2D3Vg0Y', title: '커피 마시러 가는 길(116회) — 보조', ep: 116 },
+  { id: 'cyJ8rWRIa4Q', title: '커피 마시러 가는 길(115회) — 보조', ep: 115 },
+  { id: '5ClREy_mKrM', title: '커피 마시러 가는 길(114회) — 보조', ep: 114 },
+]
+
+function parseSuyochekFeed(xml: string) {
+  const items: { id: string; title: string; ep: number | null }[] = []
+  const entryRe = /<entry>([\s\S]*?)<\/entry>/g
+  let m: RegExpExecArray | null
+  while ((m = entryRe.exec(xml)) && items.length < SUYOCHEK_MAX_ITEMS) {
+    const vid = (m[1].match(/<yt:videoId>([^<]+)<\/yt:videoId>/) || [])[1]?.trim()
+    const title = (m[1].match(/<title>([^<]*)<\/title>/) || [])[1]?.trim()
+    if (!vid || !title || !SUYOCHEK_TITLE_RE.test(title)) continue
+    const epM = title.match(SUYOCHEK_EP_RE)
+    items.push({ id: vid, title, ep: epM ? parseInt(epM[1], 10) : null })
+  }
+  return items
+}
+
+function mergeWithSupplement(rssItems: { id: string; title: string; ep: number | null }[]) {
+  const seen = new Set(rssItems.map((it) => it.id))
+  const merged = [...rssItems]
+  for (const sup of SUYOCHEK_SUPPLEMENT) {
+    if (seen.has(sup.id)) continue
+    merged.push({ ...sup })
+    seen.add(sup.id)
+  }
+  return merged.slice(0, SUYOCHEK_MAX_ITEMS)
+}
+
+app.get('/api/suyochek-shorts', async (c) => {
+  // Workers Cache API 로 10분 캐시 (Flask 메모리 캐시 대응)
+  const cacheKey = new Request('https://cache.internal/suyochek-shorts')
+  const cache = caches.default
+  const hit = await cache.match(cacheKey)
+  if (hit) return new Response(hit.body, hit)
+  let items = mergeWithSupplement([])
+  try {
+    const r = await fetch(SUYOCHEK_FEED_URL, {
+      headers: { 'User-Agent': 'cafe-today-coffee/1.0 (+https://92cafe.co.kr)' },
+      signal: AbortSignal.timeout(6000),
+    })
+    if (r.ok) items = mergeWithSupplement(parseSuyochekFeed(await r.text()))
+  } catch { /* 폴백: 보조 목록 */ }
+  const resp = c.json({ success: true, items, updated_at: Date.now() / 1000 })
+  resp.headers.set('Cache-Control', 'public, max-age=600')
+  c.executionCtx.waitUntil(cache.put(cacheKey, resp.clone()))
+  return resp
 })
 
-// ---------- 카드 PNG (마이그레이션 결정: 보류) ----------
+// ---------- 앱 버전 ----------
 
-app.post('/api/coffee/:id/card-token', (c) =>
-  c.json({ success: false, error: 'card download not available (migration)' }, 501))
-app.get('/api/coffee/:id/card.png', (c) =>
-  c.json({ success: false, error: 'card download not available (migration)' }, 501))
+app.get('/api/app-version', (c) => c.json({ build: null, ...versionJson }))
 
-// ---------- 아직 포팅 안 된 API (Phase 2 진행 중) ----------
+// ---------- 아직 포팅 안 된 API가 남았다면 명시적으로 ----------
 
-app.all('/api/*', (c) =>
-  c.json({ success: false, error: `not yet ported: ${new URL(c.req.url).pathname}` }, 501))
+app.all('/api/*', (c) => c.json({ success: false, error: `not yet ported: ${new URL(c.req.url).pathname}` }, 501))
 
 // ---------- 페이지 라우트 (app.py 정적 페이지 매핑) ----------
 
@@ -220,14 +181,12 @@ app.get('/game', serveAsset('/static/game.html'))
 app.get('/game-apk', serveAsset('/static/game-apk.html'))
 app.get('/insight', serveAsset('/static/insight-list.html'))
 
-// /insight/<id> — 풀 슬러그 → 해당 HTML, 날짜만 → index.json에서 해석 (app.py insight_article_page)
+// /insight/<id> — 풀 슬러그 → HTML, 날짜만 → index.json 해석 (app.py insight_article_page)
 app.get('/insight/:id', async (c) => {
   const id = c.req.param('id')
   if (!INSIGHT_ID_RE.test(id)) return c.json({ success: false, error: 'invalid id' }, 404)
-
   const direct = await c.env.ASSETS.fetch(new Request(new URL(`/static/insights/${id}.html`, c.req.url)))
   if (direct.ok) return direct
-
   if (INSIGHT_DATE_RE.test(id)) {
     const index = (await fetchAssetJSON(c, '/static/insights/index.json')) || {}
     const matches = (index.items || []).filter((x: any) => x.date === id)
@@ -241,11 +200,15 @@ app.get('/insight/:id', async (c) => {
   return c.json({ success: false, error: 'not found' }, 404)
 })
 
-// /downloads/* — APK 배포는 GitHub Releases로 이전 예정 (Phase 4)
-app.get('/downloads/*', (c) =>
-  c.json({ success: false, error: 'downloads moved (migration in progress)' }, 404))
+// /downloads/* — APK 배포는 GitHub Releases 로 이전 예정 (Phase 4)
+app.get('/downloads/*', (c) => c.json({ success: false, error: 'downloads moved (migration in progress)' }, 404))
 
-// 나머지는 정적 자산으로
-app.notFound((c) => c.env.ASSETS.fetch(c.req.raw))
+// 나머지는 정적 자산으로 (+ 비공개 관리자 별칭 경로 — 서버 .env 의 ADMIN_ALIAS_PATH 대응)
+app.notFound((c) => {
+  const alias = (c.env.ADMIN_ALIAS_PATH || '').trim()
+  if (alias && alias.startsWith('/') && alias !== '/admin' && new URL(c.req.url).pathname === alias)
+    return c.env.ASSETS.fetch(new Request(new URL('/static/admin.html', c.req.url)))
+  return c.env.ASSETS.fetch(c.req.raw)
+})
 
 export default app
