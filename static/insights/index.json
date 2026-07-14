@@ -1,7 +1,24 @@
 {
   "version": 1,
-  "updated_at": "2026-07-13T12:00:37Z",
+  "updated_at": "2026-07-14T11:30:01Z",
   "items": [
+    {
+      "id": "2026-07-14-fair-trade-coffee",
+      "type": "trivia",
+      "date": "2026-07-14",
+      "title_ko": "공정무역 커피는 대체 뭐가 '공정'한 걸까?",
+      "one_liner": "농부에게 최저가격을 보장해 헐값에 팔리지 않게 지켜주는 약속이야!",
+      "categories_primary": [
+        "커피 상식"
+      ],
+      "categories_secondary": [
+        "무역"
+      ],
+      "hero_image": "/static/img/insights/trivia/trade.svg",
+      "journal": null,
+      "pub_date": null,
+      "source_basis": null
+    },
     {
       "id": "2026-07-13-first-crack-roasting",
       "type": "trivia",
