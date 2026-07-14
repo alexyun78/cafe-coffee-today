@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>커피·카페인과 심혈관 건강: 위험과 이익을 가르는 최신 체계적 문헌고찰 및 메타분석 — 92°C ROASTERY</title>
+<meta name="description" content="커피는 뇌졸중·부정맥엔 보호적이되 심근경색엔 반대 방향 — 심혈관 결과별로 위험과 이익이 엇갈린다.">
+<link rel="icon" type="image/png" href="/static/img/logo-92black.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --canvas: #FFFFFF; --canvas-warm: #FAF7F2; --canvas-stone: #F2ECE3;
+  --ink: #1A1410; --ink-mute: #4A3F36; --ink-soft: #6B5E52;
+  --espresso: #6F4E37; --caramel: #C9986A; --copper: #B5703D;
+  --line: #E8E0D5; --line-soft: #F0E9DD;
+  --font-display: "Cormorant Garamond", "Pretendard", serif;
+  --font-body: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  --r-sm: 6px; --r-md: 12px; --r-pill: 999px;
+}
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color: transparent; }
+html { scroll-behavior: smooth; }
+body { font-family: var(--font-body); color: var(--ink); background: var(--canvas); font-feature-settings: "kern","ss01","lnum"; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+a { color: var(--copper); text-decoration: none; border-bottom: 1px solid transparent; transition: border-color .2s; }
+a:hover { border-bottom-color: var(--copper); }
+img { display: block; max-width: 100%; height: auto; }
+.container { max-width: 860px; margin: 0 auto; padding: 0 32px; }
+@media (max-width: 720px) { .container { padding: 0 20px; } }
+@media (max-width: 480px) { .container { padding: 0 16px; } }
+.site-nav { position: sticky; top: 0; z-index: 50; background: rgba(255,255,255,0.9); backdrop-filter: saturate(140%) blur(14px); -webkit-backdrop-filter: saturate(140%) blur(14px); border-bottom: 1px solid var(--line-soft); }
+.nav-inner { max-width: 1200px; margin: 0 auto; padding: 16px 32px; display: flex; align-items: center; justify-content: space-between; }
+.brand { font-family: var(--font-display); font-size: 1.3rem; font-weight: 700; color: var(--ink); display: inline-flex; align-items: center; gap: 4px; border-bottom: none; }
+.brand:hover { border-bottom: none; }
+.brand-mark { display: inline-flex; align-items: flex-start; font-family: "Pretendard", sans-serif; font-weight: 900; letter-spacing: -0.04em; line-height: 1; color: inherit; }
+.temp-mark { display: flex; flex-direction: column; line-height: .82; margin: 0 .05em 0 .04em; }
+.temp-mark .temp-deg { font-size: .42em; letter-spacing: -.04em; }
+.temp-mark .temp-c { font-size: .58em; letter-spacing: -.05em; margin-top: -.05em; }
+.nav-back { font-family: var(--font-mono); font-size: .75rem; letter-spacing: .18em; color: var(--ink-mute); border-bottom: none; }
+.nav-back:hover { color: var(--copper); border-bottom: none; }
+.article-hero { padding: 56px 0 48px; border-bottom: 1px solid var(--line-soft); }
+.eyebrow { font-family: var(--font-mono); font-size: .72rem; letter-spacing: .28em; color: var(--copper); margin-bottom: 18px; display: flex; align-items: center; gap: 12px; }
+.eyebrow::before { content: ""; display: inline-block; width: 28px; height: 1px; background: var(--copper); }
+.article-title { font-family: var(--font-display); font-weight: 500; font-size: clamp(2rem, 4.5vw, 3.2rem); line-height: 1.15; letter-spacing: -0.02em; color: var(--ink); margin-bottom: 20px; }
+.article-title em { font-style: italic; color: var(--espresso); font-weight: 600; }
+.article-one-liner { font-family: var(--font-display); font-style: italic; font-size: 1.3rem; line-height: 1.5; color: var(--espresso); margin-bottom: 28px; padding-left: 20px; border-left: 3px solid var(--caramel); }
+.article-meta { display: flex; gap: 24px; flex-wrap: wrap; font-family: var(--font-mono); font-size: .75rem; letter-spacing: .12em; color: var(--ink-soft); padding-top: 20px; border-top: 1px solid var(--line-soft); }
+.article-meta span { display: inline-flex; align-items: center; gap: 6px; }
+.article-meta span::before { content: "■"; color: var(--caramel); font-size: .55rem; }
+.hero-image { margin: 32px 0 0; border-radius: var(--r-md); overflow: hidden; border: 1px solid var(--line); }
+.hero-image img { width: 100%; }
+.article-body { padding: 56px 0 80px; }
+.article-footer { padding: 36px 0 56px; border-top: 1px solid var(--line-soft); text-align: center; font-family: var(--font-mono); font-size: .75rem; letter-spacing: .14em; color: var(--ink-soft); }
+.article-footer a { color: var(--ink-mute); border-bottom: 1px solid transparent; }
+.article-footer a:hover { color: var(--copper); border-bottom-color: var(--copper); }
+.source-basis { display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; background: rgba(201,152,106,.18); border: 1px solid rgba(181,112,61,.35); border-radius: var(--r-pill); font-family: var(--font-mono); font-size: .72rem; letter-spacing: .12em; color: var(--espresso); font-weight: 500; }
+.source-basis.abstract { background: rgba(107,94,82,.1); border-color: rgba(107,94,82,.3); color: var(--ink-soft); }
+.links-row { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 18px; }
+.link-pill { display: inline-flex; align-items: center; gap: 8px; padding: 9px 16px; background: var(--canvas-warm); border: 1px solid var(--line); border-radius: var(--r-pill); font-family: var(--font-mono); font-size: .78rem; letter-spacing: .08em; color: var(--ink-mute); border-bottom: 1px solid var(--line); transition: border-color .2s, color .2s; }
+.link-pill:hover { color: var(--copper); border-color: var(--copper); }
+
+/* ===== EZ: 쉬운 설명 스타일 ===== */
+.ez-hero { text-align: center; padding: 8px 0 32px; }
+.ez-hero-emoji { font-size: 3.4rem; line-height: 1; }
+.ez-hero-title { font-family: var(--font-display); font-size: clamp(1.6rem, 3.5vw, 2.2rem); font-weight: 600; color: var(--ink); margin-top: 14px; line-height: 1.3; }
+.ez-section { margin-bottom: 52px; }
+.ez-section h2 { font-family: var(--font-body); font-size: 1.5rem; font-weight: 700; color: var(--ink); margin-bottom: 18px; letter-spacing: -0.01em; }
+.ez-section h3 { font-size: 1.08rem; font-weight: 600; color: var(--espresso); margin: 22px 0 10px; }
+.ez-section p { font-size: 1.04rem; line-height: 1.85; color: var(--ink-mute); margin-bottom: 14px; }
+.ez-section p:last-child { margin-bottom: 0; }
+.ez-section ul { padding-left: 22px; margin-bottom: 14px; }
+.ez-section li { font-size: 1.02rem; line-height: 1.8; color: var(--ink-mute); margin-bottom: 8px; }
+.ez-callout { margin: 14px 0; padding: 14px 18px; background: var(--canvas-warm); border-left: 3px solid var(--caramel); border-radius: 4px; font-size: 0.98rem; color: var(--espresso); line-height: 1.75; }
+.ez-callout strong { color: var(--copper); }
+.ez-findings { list-style: none; padding: 0; }
+.ez-findings > li { padding: 18px 22px; margin-bottom: 14px; background: var(--canvas-warm); border: 1px solid var(--line); border-radius: 10px; font-size: 1.02rem; line-height: 1.7; color: var(--ink-mute); }
+.ez-findings > li strong { color: var(--ink); display: block; margin-bottom: 4px; font-size: 1.06rem; }
+.ez-findings > li.gold { background: linear-gradient(135deg, #FFF8E7, #FFEFCD); border-color: #F0D67A; }
+.ez-findings > li.silver { background: linear-gradient(135deg, #F6F6F6, #ECECEC); border-color: #C7C7C7; }
+.ez-findings > li.bronze { background: linear-gradient(135deg, #FFEEDD, #FFDCC0); border-color: #E4B07F; }
+.ez-findings > li.medal { background: linear-gradient(135deg, #F0E6FF, #E1D2FF); border-color: #BDA8E5; }
+.ez-table { width: 100%; border-collapse: collapse; margin: 16px 0 8px; font-size: 0.96rem; }
+.ez-table th, .ez-table td { padding: 11px 14px; border: 1px solid var(--line); text-align: left; vertical-align: top; }
+.ez-table thead th { background: var(--ink); color: #fff; font-weight: 600; letter-spacing: .02em; }
+.ez-table tbody th { background: var(--canvas-warm); color: var(--ink); font-weight: 600; }
+.ez-table tbody tr:nth-child(even) td { background: rgba(250, 247, 242, .55); }
+.ez-summary { padding: 26px 30px; background: linear-gradient(135deg, #FAF0E0, #F3E1C5); border-radius: 14px; font-size: 1.13rem; line-height: 1.75; font-weight: 500; color: var(--ink); border: 1px solid #E5C99B; }
+.ez-summary strong { color: var(--espresso); }
+.ez-citation { margin-top: 24px; padding: 18px 22px; background: var(--canvas-warm); border-radius: 8px; font-family: var(--font-mono); font-size: 0.82rem; color: var(--ink-soft); line-height: 1.7; }
+.ez-citation p { margin: 4px 0; }
+.ez-chart-card { padding: 22px 24px 18px; background: var(--canvas); border: 1px solid var(--line); border-radius: 12px; margin: 16px 0; }
+.ez-chart-card .ez-chart-title { font-size: 1rem; font-weight: 600; color: var(--ink); margin-bottom: 14px; }
+.ez-bar-row { display: flex; align-items: center; margin: 10px 0; font-size: 0.95rem; gap: 14px; }
+.ez-bar-label { width: 180px; flex-shrink: 0; color: var(--ink-mute); font-weight: 500; }
+.ez-bar-track { flex: 1; height: 32px; background: var(--canvas-warm); border-radius: 6px; overflow: hidden; position: relative; border: 1px solid var(--line); }
+.ez-bar-fill { height: 100%; background: linear-gradient(90deg, var(--caramel), var(--copper)); display: flex; align-items: center; justify-content: flex-end; padding: 0 12px; color: white; font-weight: 700; font-size: 0.92rem; min-width: 56px; }
+.ez-bar-fill.alt { background: linear-gradient(90deg, #6F4E37, #4A3F36); }
+.ez-glossary { display: grid; gap: 12px; }
+.ez-glossary-item { padding: 16px 20px; background: var(--canvas-warm); border: 1px solid var(--line); border-radius: 10px; border-left: 3px solid var(--caramel); }
+.ez-glossary-term { font-family: var(--font-display); font-style: italic; font-size: 1.1rem; font-weight: 600; color: var(--espresso); margin-bottom: 6px; }
+.ez-glossary-def { font-size: 0.98rem; color: var(--ink-mute); line-height: 1.7; }
+@media (max-width: 720px) {
+  .article-hero { padding: 36px 0 32px; }
+  .article-body { padding: 36px 0 56px; }
+  .ez-section { margin-bottom: 40px; }
+  .ez-section h2 { font-size: 1.3rem; }
+  .ez-bar-label { width: 100%; margin-bottom: 4px; }
+  .ez-bar-row { flex-direction: column; align-items: stretch; }
+  .article-meta { gap: 12px 18px; font-size: .68rem; }
+}
+</style>
+</head>
+<body>
+
+<header class="site-nav">
+  <div class="nav-inner">
+    <a class="brand" href="/">
+      <span class="brand-mark">92<span class="temp-mark"><span class="temp-deg">°</span><span class="temp-c">C</span></span></span>ROASTERY
+    </a>
+    <a class="nav-back" href="/insight">← INSIGHTS</a>
+  </div>
+</header>
+
+<article>
+  <section class="article-hero">
+    <div class="container">
+      <div class="eyebrow">— COFFEE INSIGHT · 2026.07.14</div>
+      <h1 class="article-title">커피·카페인과 심혈관 건강: 위험과 이익을 가르는 최신 체계적 문헌고찰 및 메타분석</h1>
+      <p class="article-one-liner">커피는 뇌졸중·부정맥엔 보호적이되 심근경색엔 반대 방향 — 심혈관 결과별로 위험과 이익이 엇갈린다.</p>
+      <div class="article-meta">
+        <span>BMC CARDIOVASCULAR DISORDERS</span>
+        <span>2026-05-07</span>
+        <span>DOI 10.1186/S12872-026-05693-0</span>
+        <span>건강/영양 · 심혈관계 · 역학/메타분석</span>
+      </div>
+      
+      <div class="hero-image">
+        <img src="/static/img/insights/hero/health.svg" alt="커피·카페인과 심혈관 건강: 위험과 이익을 가르는 최신 체계적 문헌고찰 및 메타분석">
+      </div>
+      
+    </div>
+  </section>
+
+  <section class="article-body">
+    <div class="container">
+
+      
+      <div class="ez-hero">
+        <div class="ez-hero-emoji"></div>
+        <div class="ez-hero-title">커피는 뇌졸중·부정맥엔 보호적이되 심근경색엔 반대 방향 — 심혈관 결과별로 위험과 이익이 엇갈린다.</div>
+      </div>
+
+      
+      <div class="ez-section">
+        <h2>🤔 무슨 연구야?</h2>
+        
+          <p>Shaban 등 카타르·이집트 연구팀은 PubMed, Web of Science, Cochrane Library, Embase, Scopus 5개 데이터베이스에서 2000~2025년 발표된 코호트·환자-대조 연구를 체계적으로 검색해 38개 연구(총 2,856,002명)를 포함한 메타분석을 수행했다. 분석 결과, 관상동맥질환(HR 0.98, p=0.80)과 심부전(HR 1.03, p=0.62)에서는 유의미한 연관성이 없었다. 뇌졸중은 커피 섭취가 위험을 낮추는 유의미한 역상관 관계(HR 0.89, p=0.01)를 보였고, 부정맥도 보호 방향이었다. 반면 심근경색에서는 높은 섭취군에서 위험이 유의미하게 증가했다(OR 1.48, p&lt;0.0001). 고혈압 환자 하위집단에서는 카페인과 CVD 사망률이 비선형 역상관 관계를 보였다. 커피는 결과에 따라 보호·위험이 엇갈리므로 개인 맞춤형 접근이 필요하다.</p>
+        
+      </div>
+
+      
+      
+
+      
+      
+      <div class="ez-section">
+        <h2>🎯 핵심 발견</h2>
+        <ul class="ez-findings">
+          
+          
+            
+              <li class="gold">관상동맥질환: HR 0.98, p=0.80 — 유의미한 연관성 없음</li>
+            
+              <li class="silver">심부전: HR 1.03, p=0.62 — 유의미한 연관성 없음</li>
+            
+              <li class="bronze">뇌졸중: HR 0.89, p=0.01 — 커피가 위험을 유의미하게 낮춤 (보호 효과)</li>
+            
+              <li class="medal">심근경색: OR 1.48, p&lt;0.0001 — 높은 커피 섭취가 위험을 유의미하게 높임</li>
+            
+              <li class="gold">부정맥: 역상관 관계 — 보호 방향</li>
+            
+              <li class="silver">고혈압 환자 CVD 사망: 카페인과 비선형 역상관 관계 — 적절한 섭취가 위험 감소에 기여</li>
+            
+          
+        </ul>
+      </div>
+      
+
+      
+      
+      <div class="ez-section">
+        <h2>📊 숫자로 보기</h2>
+        
+          
+          
+          <div class="ez-chart-card">
+            <div class="ez-chart-title">커피 섭취와 심혈관 결과별 위험비(HR/OR) 요약</div>
+            
+              
+              <div class="ez-bar-row">
+                <div class="ez-bar-label">관상동맥질환</div>
+                <div class="ez-bar-track"><div class="ez-bar-fill" style="width: 66.2%;">0.98HR/OR</div></div>
+              </div>
+            
+              
+              <div class="ez-bar-row">
+                <div class="ez-bar-label">심부전</div>
+                <div class="ez-bar-track"><div class="ez-bar-fill" style="width: 69.6%;">1.03HR/OR</div></div>
+              </div>
+            
+              
+              <div class="ez-bar-row">
+                <div class="ez-bar-label">뇌졸중</div>
+                <div class="ez-bar-track"><div class="ez-bar-fill" style="width: 60.1%;">0.89HR/OR</div></div>
+              </div>
+            
+              
+              <div class="ez-bar-row">
+                <div class="ez-bar-label">심근경색</div>
+                <div class="ez-bar-track"><div class="ez-bar-fill" style="width: 100.0%;">1.48HR/OR</div></div>
+              </div>
+            
+              
+              <div class="ez-bar-row">
+                <div class="ez-bar-label">부정맥(방향)</div>
+                <div class="ez-bar-track"><div class="ez-bar-fill" style="width: 60.8%;">0.9HR/OR</div></div>
+              </div>
+            
+          </div>
+        
+      </div>
+      
+
+      
+      
+
+      
+      
+      <div class="ez-section">
+        <h2>💼 누구한테 의미가 있을까?</h2>
+        <table class="ez-table">
+          <thead><tr><th>대상</th><th>의미</th></tr></thead>
+          <tbody>
+            
+              <tr><th>농가 · 가공장</th><td>해당 없음. 이 연구는 커피 음용과 심혈관 역학에 관한 것으로 농가 생산 단계와 직접 연관 없음.</td></tr>
+            
+              <tr><th>로스터 · 큐그레이더</th><td>심혈관 결과별 위험-이익 이중성을 이해하고 고객 커뮤니케이션 시 단순화된 &#39;좋다/나쁘다&#39; 메시지를 지양할 필요가 있다. 뇌졸중 예방·부정맥 감소 측면의 긍정적 데이터는 합리적 커뮤니케이션 근거로 활용 가능.</td></tr>
+            
+              <tr><th>R&amp;D</th><td>커피 종류·로스팅 도·카페인 함량별 심혈관 결과 차이 분석, 심근경색 위험 증가와 뇌졸중 감소의 생물학적 기전 규명(카페인 아데노신 길항 vs. 클로로겐산 항산화), CYP1A2 유전형별 개인화 분석, RCT 연구 필요.</td></tr>
+            
+          </tbody>
+        </table>
+      </div>
+      
+
+      
+      
+      <div class="ez-section">
+        <h2>⚠️ 한계도 있어</h2>
+        <p>최고-최저 이분법 비교(중간 구간 용량-반응 미세 분석 한계), 커피 섭취량 측정 비표준화, 역인과 관계 제어 한계, 커피 종류 구분 어려움, CYP1A2 유전형 미고려.</p>
+      </div>
+      
+
+      
+      
+      <div class="ez-section">
+        <div class="ez-summary">💡 <strong>한 줄 요약</strong> — 커피는 뇌졸중·부정맥엔 보호적이되 심근경색엔 반대 방향 — 심혈관 결과별로 위험과 이익이 엇갈린다.</div>
+      </div>
+      
+
+      
+      
+      <div class="ez-section">
+        <h2>📚 원문 정보</h2>
+        <div class="ez-citation">
+          <p><strong>📄 논문</strong> — Coffee, caffeine, and cardiovascular health: navigating risks and benefits—an updated systematic review and meta-analysis</p>
+          <p><strong>📰 저널</strong> — BMC Cardiovascular Disorders (2026-05-07)</p>
+          <p><strong>👥 저자</strong> — Eman E. Shaban, Hussam Elmelliti, Ahmed Shaban, Amira Shaban, Hany A. Zaki</p>
+          <p><strong>🔗 DOI</strong> — <a href="https://doi.org/10.1186/s12872-026-05693-0" target="_blank" rel="noopener noreferrer" style="color: var(--copper);">10.1186/s12872-026-05693-0</a></p>
+        </div>
+        <div class="links-row">
+          <a class="link-pill" href="https://doi.org/10.1186/s12872-026-05693-0" target="_blank" rel="noopener noreferrer">DOI →</a>
+          
+          <a class="link-pill" href="https://bmccardiovascdisord.biomedcentral.com" target="_blank" rel="noopener noreferrer">JOURNAL HOMEPAGE →</a>
+        </div>
+        <div style="margin-top: 18px;">
+          
+          <span class="source-basis abstract">ABSTRACT BASIS</span>
+          
+        </div>
+      </div>
+      
+
+      
+      
+      <div class="ez-section">
+        <h2>📖 어려운 말 풀이 사전</h2>
+        <p>이 글에 나온 어려운 약어와 용어를 한 번에 정리했어. 의미만 알면 본문이 훨씬 쉬워져!</p>
+        <div class="ez-glossary">
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">Meta-analysis</div>
+            <div class="ez-glossary-def">메타분석</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">Hazard Ratio (HR)</div>
+            <div class="ez-glossary-def">위험비</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">Odds Ratio (OR)</div>
+            <div class="ez-glossary-def">오즈비</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">Newcastle-Ottawa Scale</div>
+            <div class="ez-glossary-def">뉴캐슬-오타와 척도</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">Cardiac Arrhythmia</div>
+            <div class="ez-glossary-def">심장 부정맥</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">CYP1A2</div>
+            <div class="ez-glossary-def">카페인 대사 효소</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">Chlorogenic Acids</div>
+            <div class="ez-glossary-def">클로로겐산</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">Heterogeneity</div>
+            <div class="ez-glossary-def">이질성</div>
+          </div>
+          
+        </div>
+      </div>
+      
+
+    </div>
+  </section>
+
+  <footer class="article-footer">
+    <div class="container">
+      <a href="/insight">← BACK TO INSIGHTS</a>
+      <span style="margin: 0 16px;">·</span>
+      <a href="/">HOME</a>
+    </div>
+  </footer>
+</article>
+
+</body>
+</html>

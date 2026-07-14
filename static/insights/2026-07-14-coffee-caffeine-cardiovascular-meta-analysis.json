@@ -1,0 +1,101 @@
+{
+  "version": 1,
+  "id": "2026-07-14-coffee-caffeine-cardiovascular-meta-analysis",
+  "date": "2026-07-14",
+  "slug": "coffee-caffeine-cardiovascular-meta-analysis",
+  "title_ko": "커피·카페인과 심혈관 건강: 위험과 이익을 가르는 최신 체계적 문헌고찰 및 메타분석",
+  "title_original": "Coffee, caffeine, and cardiovascular health: navigating risks and benefits—an updated systematic review and meta-analysis",
+  "one_liner": "커피는 뇌졸중·부정맥엔 보호적이되 심근경색엔 반대 방향 — 심혈관 결과별로 위험과 이익이 엇갈린다.",
+  "authors": "Eman E. Shaban, Hussam Elmelliti, Ahmed Shaban, Amira Shaban, Hany A. Zaki",
+  "journal": "BMC Cardiovascular Disorders",
+  "pub_date": "2026-05-07",
+  "doi": "10.1186/s12872-026-05693-0",
+  "categories_primary": [
+    "건강/영양"
+  ],
+  "categories_secondary": [
+    "심혈관계",
+    "역학/메타분석"
+  ],
+  "summary": "Shaban 등 카타르·이집트 연구팀은 PubMed, Web of Science, Cochrane Library, Embase, Scopus 5개 데이터베이스에서 2000~2025년 발표된 코호트·환자-대조 연구를 체계적으로 검색해 38개 연구(총 2,856,002명)를 포함한 메타분석을 수행했다. 분석 결과, 관상동맥질환(HR 0.98, p=0.80)과 심부전(HR 1.03, p=0.62)에서는 유의미한 연관성이 없었다. 뇌졸중은 커피 섭취가 위험을 낮추는 유의미한 역상관 관계(HR 0.89, p=0.01)를 보였고, 부정맥도 보호 방향이었다. 반면 심근경색에서는 높은 섭취군에서 위험이 유의미하게 증가했다(OR 1.48, p<0.0001). 고혈압 환자 하위집단에서는 카페인과 CVD 사망률이 비선형 역상관 관계를 보였다. 커피는 결과에 따라 보호·위험이 엇갈리므로 개인 맞춤형 접근이 필요하다.",
+  "key_findings": [
+    "관상동맥질환: HR 0.98, p=0.80 — 유의미한 연관성 없음",
+    "심부전: HR 1.03, p=0.62 — 유의미한 연관성 없음",
+    "뇌졸중: HR 0.89, p=0.01 — 커피가 위험을 유의미하게 낮춤 (보호 효과)",
+    "심근경색: OR 1.48, p<0.0001 — 높은 커피 섭취가 위험을 유의미하게 높임",
+    "부정맥: 역상관 관계 — 보호 방향",
+    "고혈압 환자 CVD 사망: 카페인과 비선형 역상관 관계 — 적절한 섭취가 위험 감소에 기여"
+  ],
+  "methodology": "체계적 문헌고찰 및 메타분석. 5개 데이터베이스(PubMed, WoS, Cochrane, Embase, Scopus) 검색(2000-2025). 포함 기준: 커피/카페인과 CVD 연관성을 HR/RR/OR로 보고한 코호트·환자-대조 연구. 최종 38개 연구, 2,856,002명. 질 평가: 뉴캐슬-오타와 척도(코호트), JBI 도구(환자-대조). 결과별 pooled effect size 산출 및 이질성 평가.",
+  "implications": {
+    "농가/가공장": "해당 없음. 이 연구는 커피 음용과 심혈관 역학에 관한 것으로 농가 생산 단계와 직접 연관 없음.",
+    "로스터/큐그레이더": "심혈관 결과별 위험-이익 이중성을 이해하고 고객 커뮤니케이션 시 단순화된 '좋다/나쁘다' 메시지를 지양할 필요가 있다. 뇌졸중 예방·부정맥 감소 측면의 긍정적 데이터는 합리적 커뮤니케이션 근거로 활용 가능.",
+    "R&D": "커피 종류·로스팅 도·카페인 함량별 심혈관 결과 차이 분석, 심근경색 위험 증가와 뇌졸중 감소의 생물학적 기전 규명(카페인 아데노신 길항 vs. 클로로겐산 항산화), CYP1A2 유전형별 개인화 분석, RCT 연구 필요."
+  },
+  "limitations": "최고-최저 이분법 비교(중간 구간 용량-반응 미세 분석 한계), 커피 섭취량 측정 비표준화, 역인과 관계 제어 한계, 커피 종류 구분 어려움, CYP1A2 유전형 미고려.",
+  "glossary": [
+    {
+      "term": "Meta-analysis",
+      "ko": "메타분석"
+    },
+    {
+      "term": "Hazard Ratio (HR)",
+      "ko": "위험비"
+    },
+    {
+      "term": "Odds Ratio (OR)",
+      "ko": "오즈비"
+    },
+    {
+      "term": "Newcastle-Ottawa Scale",
+      "ko": "뉴캐슬-오타와 척도"
+    },
+    {
+      "term": "Cardiac Arrhythmia",
+      "ko": "심장 부정맥"
+    },
+    {
+      "term": "CYP1A2",
+      "ko": "카페인 대사 효소"
+    },
+    {
+      "term": "Chlorogenic Acids",
+      "ko": "클로로겐산"
+    },
+    {
+      "term": "Heterogeneity",
+      "ko": "이질성"
+    }
+  ],
+  "citation_apa": "Shaban, E. E., Elmelliti, H., Shaban, A., Shaban, A., & Zaki, H. A. (2026). Coffee, caffeine, and cardiovascular health: navigating risks and benefits—an updated systematic review and meta-analysis. BMC Cardiovascular Disorders, 26, Article 05693. https://doi.org/10.1186/s12872-026-05693-0",
+  "links": {
+    "doi": "https://doi.org/10.1186/s12872-026-05693-0",
+    "oa_pdf": "",
+    "journal_homepage": "https://bmccardiovascdisord.biomedcentral.com"
+  },
+  "source_basis": "abstract_only",
+  "data_charts": [
+    {
+      "type": "bar",
+      "title": "커피 섭취와 심혈관 결과별 위험비(HR/OR) 요약",
+      "x_labels": [
+        "관상동맥질환",
+        "심부전",
+        "뇌졸중",
+        "심근경색",
+        "부정맥(방향)"
+      ],
+      "y_label": "HR 또는 OR (1.0 = 중립)",
+      "values": [
+        0.98,
+        1.03,
+        0.89,
+        1.48,
+        0.9
+      ],
+      "unit": "HR/OR"
+    }
+  ],
+  "drive_doc_url": "https://docs.google.com/document/d/1EtljN0MsLqJNVzGaksym7LZrHAQj8cgFjaL5QG9DAQE/edit?usp=drivesdk&ouid=116660508274764947762",
+  "hero_image": "/static/img/insights/hero/health.svg"
+}
