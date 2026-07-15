@@ -760,6 +760,19 @@
   /* 재고 2줄 행에서 잔여 강조 색 유지 */
   .inv-row .record-row-detail .inv-remaining { padding: 1px 7px; border-radius: 8px; }
 
+  /* 재고 정렬 버튼 바 — 활성 버튼 클릭 시 ↓/↑ 토글 */
+  .inv-sort-btn {
+    flex: 1; min-width: 0; min-height: 42px; padding: 8px 6px;
+    border: 1.5px solid var(--border); border-radius: 8px;
+    background: #faf8f5; color: var(--text); font-family: inherit;
+    font-size: 0.86rem; cursor: pointer; white-space: nowrap;
+  }
+  .inv-sort-btn.active {
+    border-color: var(--accent); background: #FFF3E0;
+    font-weight: 600; color: var(--coffee-dark);
+  }
+  .inv-sort-btn .inv-sort-arrow { font-weight: 700; color: var(--accent); }
+
   /* 제공일 토글 */
   .toggle-row {
     display: flex; align-items: center; gap: 8px; margin-bottom: 8px;
@@ -2007,12 +2020,10 @@
           </select>
           <button type="button" id="inv-filter-reset" hidden>초기화 ✕</button>
         </div>
-        <div class="filter-row">
-          <select id="inv-sort" aria-label="재고 정렬">
-            <option value="">기본 정렬 (최근구매순)</option>
-            <option value="remain-desc">잔여 많은 순 ↓</option>
-            <option value="remain-asc">잔여 적은 순 ↑</option>
-          </select>
+        <div class="filter-row inv-sort-bar" id="inv-sort-bar" role="group" aria-label="재고 정렬">
+          <button type="button" class="inv-sort-btn active" data-key="purchase">최근 구매순 <span class="inv-sort-arrow">↓</span></button>
+          <button type="button" class="inv-sort-btn" data-key="remain">재고량 <span class="inv-sort-arrow"></span></button>
+          <button type="button" class="inv-sort-btn" data-key="price">가격순 <span class="inv-sort-arrow"></span></button>
         </div>
       </div>
       <div class="inv-table-wrap">
@@ -5744,19 +5755,45 @@ function syncInvFiltersFromDom(rerender = true) {
   if (rerender) renderInventory(_invItemsCache);
 }
 
-// ---------- 재고 정렬 (기본=최근구매순 API 순서 / 잔여 내림·오름) ----------
-let _invSort = "";
+// ---------- 재고 정렬 (최근 구매순/재고량/가격순 — 같은 버튼 재클릭 시 ↓/↑ 토글) ----------
+const _invSort = { key: "purchase", dir: -1 };   // dir: -1 = 내림(↓), 1 = 올림(↑)
+
+function updateInvSortBar() {
+  document.querySelectorAll("#inv-sort-bar .inv-sort-btn").forEach((btn) => {
+    const on = btn.dataset.key === _invSort.key;
+    btn.classList.toggle("active", on);
+    btn.querySelector(".inv-sort-arrow").textContent = on ? (_invSort.dir === 1 ? "↑" : "↓") : "";
+  });
+}
+
+function applyInvSort(pool) {
+  const { key, dir } = _invSort;
+  pool.sort((a, b) => {
+    if (key === "remain")
+      return dir * ((Number(a.remaining_kg) || 0) - (Number(b.remaining_kg) || 0));
+    if (key === "price") {
+      const pa = Number(a.avg_unit_price) || 0, pb = Number(b.avg_unit_price) || 0;
+      if (!pa !== !pb) return pa ? -1 : 1;          // 단가 정보 없는 항목은 항상 뒤로
+      return dir * (pa - pb);
+    }
+    const da = a.last_purchase_date || "", db = b.last_purchase_date || "";
+    if (!da !== !db) return da ? -1 : 1;            // 구매 이력 없는 항목은 항상 뒤로
+    return dir * da.localeCompare(db);
+  });
+}
 
 (function initInvFilters() {
   ["inv-filter-supplier", "inv-filter-country", "inv-filter-process", "inv-filter-stock"]
     .forEach((id) => {
       document.getElementById(id).addEventListener("change", () => syncInvFiltersFromDom());
     });
-  const sortSel = document.getElementById("inv-sort");
-  sortSel.addEventListener("change", () => {
-    _invSort = sortSel.value;
-    sortSel.classList.toggle("filter-on", !!_invSort);
-    renderInventory(_invItemsCache);
+  document.querySelectorAll("#inv-sort-bar .inv-sort-btn").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      if (_invSort.key === btn.dataset.key) _invSort.dir *= -1;
+      else { _invSort.key = btn.dataset.key; _invSort.dir = -1; }
+      updateInvSortBar();
+      renderInventory(_invItemsCache);
+    });
   });
   document.getElementById("inv-filter-reset").addEventListener("click", () => {
     ["inv-filter-supplier", "inv-filter-country", "inv-filter-process", "inv-filter-stock"]
@@ -5787,6 +5824,7 @@ function invRowHtml(it) {
         <span>${escapeHtml(it.process || "—")}</span>
         <span>구매 ${Number(it.purchased_kg).toFixed(1)}</span>
         <span>사용 ${Number(it.used_kg).toFixed(1)}</span>
+        ${Number(it.avg_unit_price) > 0 ? `<span>단가 ₩${Number(it.avg_unit_price).toLocaleString()}</span>` : ""}
         <span>잔여 <button type="button" class="inv-remaining inv-stock-btn ${cls}" data-id="${it.id}" title="탭하여 재고 수정">${remaining.toFixed(1)}<span class="bean-stock-pencil">✎</span></button> kg</span>
       </div>
       <div class="record-row-actions">${hideBtn}</div>
@@ -5801,10 +5839,7 @@ function renderInventory(items) {
   const pool = (items || [])
     .filter(it => !!it.hidden === _invShowHidden)
     .filter(invMatchesFilters);
-  if (_invSort) {
-    const dir = _invSort === "remain-asc" ? 1 : -1;
-    pool.sort((a, b) => dir * ((Number(a.remaining_kg) || 0) - (Number(b.remaining_kg) || 0)));
-  }
+  applyInvSort(pool);
   if (!pool.length) {
     body.innerHTML = `<div class="empty">${
       filterActive ? "필터 조건에 맞는 생두가 없습니다."
