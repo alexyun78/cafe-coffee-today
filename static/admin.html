@@ -2007,6 +2007,13 @@
           </select>
           <button type="button" id="inv-filter-reset" hidden>초기화 ✕</button>
         </div>
+        <div class="filter-row">
+          <select id="inv-sort" aria-label="재고 정렬">
+            <option value="">기본 정렬 (최근구매순)</option>
+            <option value="remain-desc">잔여 많은 순 ↓</option>
+            <option value="remain-asc">잔여 적은 순 ↑</option>
+          </select>
+        </div>
       </div>
       <div class="inv-table-wrap">
         <div id="inv-body">
@@ -5737,11 +5744,20 @@ function syncInvFiltersFromDom(rerender = true) {
   if (rerender) renderInventory(_invItemsCache);
 }
 
+// ---------- 재고 정렬 (기본=최근구매순 API 순서 / 잔여 내림·오름) ----------
+let _invSort = "";
+
 (function initInvFilters() {
   ["inv-filter-supplier", "inv-filter-country", "inv-filter-process", "inv-filter-stock"]
     .forEach((id) => {
       document.getElementById(id).addEventListener("change", () => syncInvFiltersFromDom());
     });
+  const sortSel = document.getElementById("inv-sort");
+  sortSel.addEventListener("change", () => {
+    _invSort = sortSel.value;
+    sortSel.classList.toggle("filter-on", !!_invSort);
+    renderInventory(_invItemsCache);
+  });
   document.getElementById("inv-filter-reset").addEventListener("click", () => {
     ["inv-filter-supplier", "inv-filter-country", "inv-filter-process", "inv-filter-stock"]
       .forEach((id) => { document.getElementById(id).value = ""; });
@@ -5785,6 +5801,10 @@ function renderInventory(items) {
   const pool = (items || [])
     .filter(it => !!it.hidden === _invShowHidden)
     .filter(invMatchesFilters);
+  if (_invSort) {
+    const dir = _invSort === "remain-asc" ? 1 : -1;
+    pool.sort((a, b) => dir * ((Number(a.remaining_kg) || 0) - (Number(b.remaining_kg) || 0)));
+  }
   if (!pool.length) {
     body.innerHTML = `<div class="empty">${
       filterActive ? "필터 조건에 맞는 생두가 없습니다."
