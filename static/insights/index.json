@@ -1,7 +1,24 @@
 {
   "version": 1,
-  "updated_at": "2026-07-15T11:30:30Z",
+  "updated_at": "2026-07-15T12:01:00Z",
   "items": [
+    {
+      "id": "2026-07-15-panama-geisha-wonder",
+      "type": "trivia",
+      "date": "2026-07-15",
+      "title_ko": "세계에서 제일 비싼 커피가 파나마 산? 게이샤 원두의 놀라운 여행기 ✈️",
+      "one_liner": "에티오피아 숲에서 태어나 파나마에서 전설이 된 커피, 게이샤의 모든 것 🌸",
+      "categories_primary": [
+        "커피 상식"
+      ],
+      "categories_secondary": [
+        "원산지"
+      ],
+      "hero_image": "/static/img/insights/trivia/origin.svg",
+      "journal": null,
+      "pub_date": null,
+      "source_basis": null
+    },
     {
       "id": "2026-07-15-caffeine-in-coffee",
       "type": "trivia",
