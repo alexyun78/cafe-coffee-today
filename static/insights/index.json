@@ -1,7 +1,24 @@
 {
   "version": 1,
-  "updated_at": "2026-07-14T12:00:38Z",
+  "updated_at": "2026-07-15T11:30:30Z",
   "items": [
+    {
+      "id": "2026-07-15-caffeine-in-coffee",
+      "type": "trivia",
+      "date": "2026-07-15",
+      "title_ko": "에스프레소가 아메리카노보다 카페인이 많을까?",
+      "one_liner": "한 잔 기준이면 오히려 적을 수 있어 — 농도와 총량은 다른 얘기야!",
+      "categories_primary": [
+        "커피 상식"
+      ],
+      "categories_secondary": [
+        "카페인"
+      ],
+      "hero_image": "/static/img/insights/trivia/terms.svg",
+      "journal": null,
+      "pub_date": null,
+      "source_basis": null
+    },
     {
       "id": "2026-07-14-fair-trade-coffee",
       "type": "trivia",
