@@ -1,0 +1,77 @@
+{
+  "version": 1,
+  "id": "2026-07-16-ai-driven-coffee-consumer-liking-sensory",
+  "date": "2026-07-16",
+  "slug": "ai-driven-coffee-consumer-liking-sensory",
+  "title_ko": "AI로 예측하는 소비자 커피 기호도 — 산미·향미 강도·달콤함 세 지표가 핵심",
+  "title_original": "AI-driven prediction of consumer liking of coffee from sensory data",
+  "one_liner": "AI가 산미·향미·달콤함 세 지표만으로 소비자 기호도 정밀 예측 — TDS와 추출수율이 온도보다 훨씬 중요하다.",
+  "authors": "Michael Gunning, Maite Pilar Serantes Laforgue, Jean-Xavier Guinard, Ilias Tagkopoulos (UC Davis, 식품과학기술학과 & 바이오인포매틱스 프로그램, 미국)",
+  "journal": "npj Science of Food (Nature Publishing Group), Vol. 10, Article 142",
+  "pub_date": "2026-04-01",
+  "doi": "10.1038/s41538-026-00779-7",
+  "categories_primary": [
+    "장비/공학"
+  ],
+  "categories_secondary": [
+    "향미·관능",
+    "추출"
+  ],
+  "summary": "118명 소비자가 27종 블랙 드립 커피를 JAR 척도 및 CATA 방식으로 평가한 데이터에 4가지 피처 랭킹 방법과 k-Means 소비자 세분화를 적용, JAR 산미·JAR 향미 강도·CATA 달콤함이 기호도의 압도적 예측 변수임을 실증하고 AI 모델로 기호/비기호를 정밀 예측함. 추출 파라미터 분석에서 TDS(추출농도)가 가장 강한 영향 인자이며 추출수율이 그 다음, 추출 온도는 유의미한 영향 없음.",
+  "key_findings": [
+    "JAR 산미, JAR 향미 강도, CATA 달콤함이 소비자 기호도의 1차 예측 변수 (p < 1e-70)",
+    "TDS(추출농도)가 커피 풍미 지각 및 소비자 기호도에 가장 강한 영향",
+    "추출수율(Percent Extraction)이 두 번째 중요 인자",
+    "추출 온도는 관능 프로파일이나 소비자 기호도에 통계적으로 유의미한 영향 없음",
+    "4가지 피처 랭킹 방법이 동일 상위 변수를 일관되게 지목 — 결과 신뢰성 확보",
+    "k-Means 기반 소비자 세분화로 세그먼트별 선호 패턴 식별",
+    "소수의 관능 지표만으로 소비자 기호/비기호 고정밀 예측 가능"
+  ],
+  "methodology": "118명 소비자 × 27종 블랙 드립 커피. 전반적 기호도 점수, JAR 척도(산미·향미 강도 등), CATA 관능 프로파일. 4가지 피처 랭킹 앙상블. 머신러닝 분류 모델(기호/비기호 예측). k-Means 클러스터링 기반 소비자 세분화. TDS·추출수율·추출 온도 측정값 통합 분석. UC Davis 식품과학기술학과 + 바이오인포매틱스 프로그램 공동.",
+  "implications": {
+    "농가/가공장": "해당 없음. 이 연구는 최종 소비자 기호도 예측에 관한 것으로, 생두 재배·가공 단계와 직접 연관 없음. 단, 소비자 기호도 데이터를 역방향 피드백으로 활용하는 데이터 파이프라인 구축의 잠재적 참고 자료.",
+    "로스터/큐그레이더": "레시피 개발 시 추출 온도보다 TDS(추출농도)와 추출수율을 먼저 최적화해야 함. 소비자가 '산미 적당함', '향미 강도 균형', '달콤함 감지'를 가장 중요시하므로, 라이트 로스트 판매 시 소비자 JAR 반응을 모니터링하는 간단한 설문 도입이 효과적.",
+    "R&D": "에스프레소·콜드브루 등 다른 추출 방식으로 확장, 소비자 세그먼트별 최적 TDS·추출수율 정량화, 원산지·로스팅 변수 추가 통합, 문화권별 외적 타당도 검증, JAR+CATA vs. 전통적 묘사 분석 방법론 비교 연구 필요."
+  },
+  "limitations": "블랙 드립 커피 국한 / 미국 UC Davis 지역 모집단 편향 / 27개 샘플 원두 다양성 불명확 / 예측 모델 상세 알고리즘·정확도 수치 미공개 / 추출 온도 무효 결과의 실용 적용 범위 주의 필요",
+  "glossary": [
+    {
+      "term": "JAR (Just-About-Right)",
+      "ko": "관능 속성이 이상적 수준 대비 적절한지 평가하는 5~7점 척도. '딱 맞음'이 중앙값"
+    },
+    {
+      "term": "CATA (Check-All-That-Apply)",
+      "ko": "제시 속성 중 해당하는 것을 모두 선택하는 관능 방법. 훈련 불필요, 신속"
+    },
+    {
+      "term": "TDS (Total Dissolved Solids)",
+      "ko": "추출농도. 커피 음료 내 용해 고형분 비율(%). 굴절계로 측정. SCA 기준 드립 1.15~1.35%"
+    },
+    {
+      "term": "추출수율 (Percent Extraction)",
+      "ko": "원래 커피 고형분 중 실제 추출된 비율(%). SCA 이상 범위 18~22%"
+    },
+    {
+      "term": "피처 랭킹 (Feature Ranking)",
+      "ko": "ML에서 예측에 중요한 입력 변수를 순위화하는 기법. SHAP, Random Forest 중요도 등"
+    },
+    {
+      "term": "k-Means 군집화",
+      "ko": "비지도 학습으로 데이터를 k개 군집으로 분류. 소비자 선호 세분화에 적용"
+    },
+    {
+      "term": "npj Science of Food",
+      "ko": "Nature Publishing Group 오픈 액세스 저널. 식품과학·영양 분야 상위권"
+    }
+  ],
+  "citation_apa": "Gunning, M., Serantes Laforgue, M. P., Guinard, J.-X., & Tagkopoulos, I. (2026). AI-driven prediction of consumer liking of coffee from sensory data. npj Science of Food, 10, 142. https://doi.org/10.1038/s41538-026-00779-7",
+  "links": {
+    "doi": "https://doi.org/10.1038/s41538-026-00779-7",
+    "oa_pdf": "https://www.nature.com/articles/s41538-026-00779-7",
+    "journal_homepage": "https://www.nature.com/npjscifood/"
+  },
+  "source_basis": "abstract_only",
+  "data_charts": [],
+  "drive_doc_url": "https://docs.google.com/document/d/1hectHAQTr1K0L1SlIPD348O45vwExhl14Xm9-azfhLs/edit?usp=drivesdk&ouid=116660508274764947762",
+  "hero_image": "/static/img/insights/hero/equipment.svg"
+}

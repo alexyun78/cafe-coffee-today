@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-07-16T11:30:30Z",
+  "updated_at": "2026-07-16T12:00:47Z",
   "items": [
     {
       "id": "2026-07-16-ethiopia-coffee-ceremony",
@@ -19,6 +19,24 @@
       "journal": null,
       "pub_date": null,
       "source_basis": null
+    },
+    {
+      "id": "2026-07-16-ai-driven-coffee-consumer-liking-sensory",
+      "type": "paper",
+      "date": "2026-07-16",
+      "title_ko": "AI로 예측하는 소비자 커피 기호도 — 산미·향미 강도·달콤함 세 지표가 핵심",
+      "one_liner": "AI가 산미·향미·달콤함 세 지표만으로 소비자 기호도 정밀 예측 — TDS와 추출수율이 온도보다 훨씬 중요하다.",
+      "categories_primary": [
+        "장비/공학"
+      ],
+      "categories_secondary": [
+        "향미·관능",
+        "추출"
+      ],
+      "hero_image": "/static/img/insights/hero/equipment.svg",
+      "journal": "npj Science of Food (Nature Publishing Group), Vol. 10, Article 142",
+      "pub_date": "2026-04-01",
+      "source_basis": "abstract_only"
     },
     {
       "id": "2026-07-15-panama-geisha-wonder",
