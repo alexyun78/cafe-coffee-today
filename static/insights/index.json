@@ -1,7 +1,25 @@
 {
   "version": 1,
-  "updated_at": "2026-07-15T12:01:00Z",
+  "updated_at": "2026-07-16T11:30:30Z",
   "items": [
+    {
+      "id": "2026-07-16-ethiopia-coffee-ceremony",
+      "type": "trivia",
+      "date": "2026-07-16",
+      "title_ko": "커피의 고향 에티오피아엔 '커피 의식'이 있다고?",
+      "one_liner": "생두를 즉석에서 볶아 세 잔을 나누는, 손님을 위한 정성의 의례야!",
+      "categories_primary": [
+        "커피 상식"
+      ],
+      "categories_secondary": [
+        "문화",
+        "산지"
+      ],
+      "hero_image": "/static/img/insights/trivia/origin.svg",
+      "journal": null,
+      "pub_date": null,
+      "source_basis": null
+    },
     {
       "id": "2026-07-15-panama-geisha-wonder",
       "type": "trivia",
