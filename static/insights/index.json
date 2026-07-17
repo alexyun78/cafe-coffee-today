@@ -1,7 +1,24 @@
 {
   "version": 1,
-  "updated_at": "2026-07-16T12:00:47Z",
+  "updated_at": "2026-07-17T12:00:46Z",
   "items": [
+    {
+      "id": "2026-07-17-pulped-natural-wet-hull-process",
+      "type": "trivia",
+      "date": "2026-07-17",
+      "title_ko": "수마트라 커피에서 흙냄새·버섯향이 나는 이유가 뭐야?! 아무도 안 알려준 가공법 2가지 🌿",
+      "one_liner": "브라질식 '펄프드 내추럴'과 인도네시아만의 '길링바사' — 환경이 만든 독특한 커피 가공의 비밀!",
+      "categories_primary": [
+        "커피 상식"
+      ],
+      "categories_secondary": [
+        "프로세싱"
+      ],
+      "hero_image": "/static/img/insights/trivia/processing.svg",
+      "journal": null,
+      "pub_date": null,
+      "source_basis": null
+    },
     {
       "id": "2026-07-16-ethiopia-coffee-ceremony",
       "type": "trivia",
