@@ -1966,14 +1966,14 @@
             </label>
           </div>
 
-          <!-- 복제 모드에서만 표시 — 같은 내용으로 N건 한꺼번에 저장 -->
+          <!-- 신규·복제 공통 — 같은 내용으로 N건(N배치) 한꺼번에 저장 -->
           <div class="field" id="roast-dup-count-field" hidden>
-            <label for="roast-field-dup-count">복제 수량 <span class="label-hint">(같은 내용으로 여러 건 저장)</span></label>
+            <label for="roast-field-dup-count">저장 수량 <span class="label-hint">(같은 내용으로 여러 배치 한 번에)</span></label>
             <div class="dup-count-stepper">
               <input type="number" id="roast-field-dup-count" min="1" max="20" step="1" value="1" inputmode="numeric">
               <div class="dup-count-arrows">
-                <button type="button" id="roast-dup-count-up" aria-label="복제 수량 늘리기">▲</button>
-                <button type="button" id="roast-dup-count-down" aria-label="복제 수량 줄이기">▼</button>
+                <button type="button" id="roast-dup-count-up" aria-label="저장 수량 늘리기">▲</button>
+                <button type="button" id="roast-dup-count-down" aria-label="저장 수량 줄이기">▼</button>
               </div>
             </div>
           </div>
@@ -5506,9 +5506,12 @@ document.getElementById("btn-roast-new").addEventListener("click", () => {
   document.getElementById("roast-field-date").value = todayStr();
   document.getElementById("roast-form-title").textContent = "로스팅 기록";
   document.getElementById("roast-make-coffee-field").style.display = "";
-  document.getElementById("roast-dup-count-field").hidden = true;
+  // 신규 기록도 처음부터 복제 수량 지정 가능 (같은 내용으로 여러 배치 한 번에)
+  document.getElementById("roast-dup-count-field").hidden = false;
+  document.getElementById("roast-field-dup-count").value = "1";
   applyRoastActual(null);
   updateRoastLoss();
+  updateRoastStockHint();
   showRoastForm();
 });
 document.getElementById("btn-roast-cancel").addEventListener("click", hideRoastForm);
