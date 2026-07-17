@@ -1123,6 +1123,16 @@
     gap: 8px; flex-wrap: wrap;
   }
   .record-row-name { font-weight: 600; color: var(--coffee-dark); font-size: 0.9rem; }
+  .usage-badge {
+    display: inline-block; margin-left: 6px; padding: 1px 8px; border-radius: 999px;
+    font-size: 0.72rem; font-weight: 700; vertical-align: middle;
+  }
+  .usage-badge.blend { color: #6a1b9a; background: #F3E5F5; }
+  .usage-badge.decaf { color: #1565c0; background: #E3F2FD; }
+  .makecoffee-note {
+    font-size: 0.76rem; font-weight: 600; color: #6a1b9a;
+    background: #F3E5F5; padding: 4px 10px; border-radius: 6px;
+  }
   .record-row-date { font-size: 0.78rem; color: var(--muted); }
   .record-row-date .rr-time { color: var(--accent); font-weight: 700; margin-left: 2px; }
   .record-row-detail { font-size: 0.82rem; color: var(--text); margin-top: 4px; }
@@ -1955,6 +1965,17 @@
           <div class="field">
             <label for="roast-field-notes">메모</label>
             <textarea id="roast-field-notes" placeholder="특이사항"></textarea>
+          </div>
+
+          <div class="field">
+            <label>원두 사용 타입</label>
+            <div class="segmented" id="roast-usage-btns" role="radiogroup" aria-label="원두 사용 타입">
+              <button type="button" data-usage="싱글">싱글</button>
+              <button type="button" data-usage="블랜드">블랜드</button>
+              <button type="button" data-usage="디카페인">디카페인</button>
+            </div>
+            <input type="hidden" id="roast-field-usage-type" value="싱글">
+            <div class="auto-calc" id="roast-usage-hint" hidden>🧩 블랜드는 블렌딩 재료로만 쓰이며 오늘의 커피에 등록되지 않아요.</div>
           </div>
 
           <div class="field" id="roast-make-coffee-field">
@@ -5322,10 +5343,14 @@ function renderRoastList(items) {
     const cupHtml = cup
       ? `<div class="record-row-cupnotes" title="오늘의 커피 기준 컵노트">☕ ${escapeHtml(cup)}</div>`
       : "";
+    const usage = r.usage_type || "싱글";
+    const usageBadge = usage === "블랜드"
+      ? `<span class="usage-badge blend">🧩 블랜드</span>`
+      : usage === "디카페인" ? `<span class="usage-badge decaf">🌙 디카페인</span>` : "";
     return `
       <div class="record-row" data-id="${r.id}" style="border-left-color: var(--accent);">
         <div class="record-row-top">
-          <span class="record-row-name">${prefix}${escapeHtml(r.bean_name || "")}</span>
+          <span class="record-row-name">${prefix}${escapeHtml(r.bean_name || "")}${usageBadge}</span>
           <span class="record-row-date">${escapeHtml(r.roast_date || "")}${
             r.output_at ? ` <span class="rr-time" title="배출량 기입 ${escapeHtml(fmtKstDateTime(r.output_at))}">🕒 ${escapeHtml(fmtKstTime(r.output_at))}</span>` : ""
           }</span>
@@ -5352,10 +5377,12 @@ function renderRoastList(items) {
         <div class="record-row-actions">
           <button type="button" class="edit" data-id="${r.id}">편집</button>
           <button type="button" class="dup" data-id="${r.id}">복제</button>
-          ${Number(r.has_active_coffee)
-            ? `<button type="button" class="makecoffee done" disabled title="같은 이름의 커피가 이미 예정/진행 중">☕ 등록됨</button>`
-              + `<button type="button" class="unmakecoffee" data-id="${r.id}" title="오늘의 커피 예정 등록을 취소합니다">✕ 등록 취소</button>`
-            : `<button type="button" class="makecoffee" data-id="${r.id}">☕ 예정 등록</button>`}
+          ${usage === "블랜드"
+            ? `<span class="makecoffee-note" title="블랜드용 로스팅은 오늘의 커피에 등록되지 않습니다">🧩 블랜드 · 오늘의 커피 미등록</span>`
+            : Number(r.has_active_coffee)
+              ? `<button type="button" class="makecoffee done" disabled title="같은 이름의 커피가 이미 예정/진행 중">☕ 등록됨</button>`
+                + `<button type="button" class="unmakecoffee" data-id="${r.id}" title="오늘의 커피 예정 등록을 취소합니다">✕ 등록 취소</button>`
+              : `<button type="button" class="makecoffee" data-id="${r.id}">☕ 예정 등록</button>`}
           <button type="button" class="delete" data-id="${r.id}">삭제</button>
         </div>
       </div>
@@ -5452,7 +5479,7 @@ function openRoastDuplicate(id) {
   document.getElementById("roast-field-make-coffee").checked = r.make_coffee != 0;
   applyRoastActual(null);   // 실제 투입량은 배치별 실측값이라 복제하지 않음 (배출량처럼 비움)
   document.getElementById("roast-form-title").textContent = "로스팅 기록";
-  document.getElementById("roast-make-coffee-field").style.display = "";
+  setRoastUsageType(r.usage_type || "싱글");   // 원두 사용 타입도 원본 그대로 복제
   document.getElementById("roast-dup-count-field").hidden = false;   // 복제 모드에서만 수량 스테퍼 표시
   document.getElementById("roast-field-dup-count").value = "1";
   updateRoastLoss();
@@ -5480,11 +5507,28 @@ function openRoastEdit(id) {
   document.getElementById("roast-field-make-coffee").checked = r.make_coffee != 0;
   applyRoastActual(r.actual_input_weight_g != null ? r.actual_input_weight_g : null);
   document.getElementById("roast-form-title").textContent = "로스팅 편집";
-  document.getElementById("roast-make-coffee-field").style.display = "none";
+  setRoastUsageType(r.usage_type || "싱글");
+  document.getElementById("roast-make-coffee-field").style.display = "none";   // 편집 폼에선 연동 토글 숨김
   document.getElementById("roast-dup-count-field").hidden = true;
   updateRoastLoss();
   showRoastForm();
 }
+
+// 원두 사용 타입(싱글/블랜드/디카페인) 세그먼트 설정.
+// 블랜드는 오늘의 커피에 등록되지 않으므로 연동 토글을 숨기고 안내를 띄운다.
+function setRoastUsageType(val) {
+  const v = (val || "싱글").trim() || "싱글";
+  document.getElementById("roast-field-usage-type").value = v;
+  document.querySelectorAll("#roast-usage-btns button").forEach(b => {
+    b.classList.toggle("active", b.dataset.usage === v);
+  });
+  const isBlend = v === "블랜드";
+  document.getElementById("roast-make-coffee-field").style.display = isBlend ? "none" : "";
+  document.getElementById("roast-usage-hint").hidden = !isBlend;
+}
+document.querySelectorAll("#roast-usage-btns button").forEach(b => {
+  b.addEventListener("click", () => setRoastUsageType(b.dataset.usage));
+});
 
 // 로스팅 폼 열기/닫기
 function showRoastForm() {
@@ -5505,7 +5549,7 @@ document.getElementById("btn-roast-new").addEventListener("click", () => {
   _beanSelects["roast-field-bean"].setValue("");
   document.getElementById("roast-field-date").value = todayStr();
   document.getElementById("roast-form-title").textContent = "로스팅 기록";
-  document.getElementById("roast-make-coffee-field").style.display = "";
+  setRoastUsageType("싱글");
   // 신규 기록도 처음부터 복제 수량 지정 가능 (같은 내용으로 여러 배치 한 번에)
   document.getElementById("roast-dup-count-field").hidden = false;
   document.getElementById("roast-field-dup-count").value = "1";
@@ -5649,6 +5693,7 @@ document.getElementById("roast-form").addEventListener("submit", async (e) => {
     output_weight_g: parseFloat(document.getElementById("roast-field-output").value) || null,
     roast_level: document.getElementById("roast-field-level").value.trim() || null,
     notes: document.getElementById("roast-field-notes").value.trim() || null,
+    usage_type: document.getElementById("roast-field-usage-type").value || "싱글",
     create_coffee: document.getElementById("roast-field-make-coffee").checked,
     make_coffee: document.getElementById("roast-field-make-coffee").checked,
   };

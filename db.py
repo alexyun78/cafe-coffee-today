@@ -146,6 +146,7 @@ CREATE TABLE IF NOT EXISTS roasting_logs (
     notes             TEXT,
     coffee_id         INTEGER REFERENCES coffees(id),
     make_coffee       INTEGER NOT NULL DEFAULT 1,
+    usage_type        TEXT NOT NULL DEFAULT '싱글',
     output_at         TEXT,
     created_at        TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now'))
 );
@@ -261,6 +262,7 @@ _RL_EXTRA_COLUMNS = (
     ("make_coffee", "INTEGER NOT NULL DEFAULT 1"),
     ("output_at", "TEXT"),   # 배출량 기입(저장) 시점 타임스탬프 (UTC ISO)
     ("actual_input_weight_g", "REAL"),   # 실제 로스팅 투입량(재고용 투입량과 다를 때만)
+    ("usage_type", "TEXT NOT NULL DEFAULT '싱글'"),   # 원두 사용 타입: 싱글/블랜드/디카페인 (블랜드는 오늘의 커피 미등록)
 )
 
 
@@ -1893,6 +1895,8 @@ def create_roasting_log(data: dict) -> int:
         loss = round((1 - output_g / eff_in) * 100, 2)
     # '오늘의 커피 연동' 토글 상태를 기록(복제 시 그대로 복사하기 위함). 기본 1(ON).
     make_coffee = 1 if data.get("create_coffee", True) else 0
+    # 원두 사용 타입: 싱글/블랜드/디카페인 (블랜드는 오늘의 커피에 등록하지 않음)
+    usage_type = (data.get("usage_type") or "싱글").strip() or "싱글"
     # 배출량이 있으면 그 기입(저장) 시점을 기록 (로스팅 완료 시각)
     output_at = _utc_now_iso() if output_g is not None else None
     with connect() as conn:
@@ -1900,13 +1904,13 @@ def create_roasting_log(data: dict) -> int:
             "INSERT INTO roasting_logs "
             "(green_bean_id, roast_date, input_weight_g, actual_input_weight_g, "
             " output_weight_g, moisture_loss_pct, roast_level, notes, coffee_id, "
-            " make_coffee, output_at) "
-            "VALUES (?,?,?,?,?,?,?,?,?,?,?)",
+            " make_coffee, usage_type, output_at) "
+            "VALUES (?,?,?,?,?,?,?,?,?,?,?,?)",
             (
                 int(data["green_bean_id"]), data["roast_date"],
                 input_g, actual_g, output_g, loss,
                 data.get("roast_level"), data.get("notes"),
-                data.get("coffee_id"), make_coffee, output_at,
+                data.get("coffee_id"), make_coffee, usage_type, output_at,
             ),
         )
         return cur.lastrowid
@@ -1914,7 +1918,7 @@ def create_roasting_log(data: dict) -> int:
 
 def update_roasting_log(rid: int, data: dict) -> bool:
     allowed = ("green_bean_id", "roast_date", "input_weight_g", "output_weight_g",
-               "roast_level", "notes", "coffee_id", "make_coffee")
+               "roast_level", "notes", "coffee_id", "make_coffee", "usage_type")
     sets, vals = [], []
     for k in allowed:
         if k in data:

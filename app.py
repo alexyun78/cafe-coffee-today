@@ -874,8 +874,10 @@ def api_roasting_log_create():
             return jsonify({"success": False, "error": f"{k} 필수"}), 400
     new_id = db.create_roasting_log(data)
     coffee = None
+    # 블랜드용 로스팅은 오늘의 커피에 등록하지 않는다 (블랜딩 재료로만 사용)
+    is_blend = (data.get("usage_type") or "싱글") == "블랜드"
     # 배출량 측정 전에는 오늘의 커피 등록 보류 — 배출량이 기입되는 시점(PUT)에 등록
-    if data.get("create_coffee") and data.get("output_weight_g") not in (None, ""):
+    if data.get("create_coffee") and not is_blend and data.get("output_weight_g") not in (None, ""):
         coffee = _ensure_scheduled_coffee(data["green_bean_id"], data["roast_date"])
     return jsonify({"success": True, "id": new_id, "coffee": coffee})
 
@@ -888,6 +890,8 @@ def api_roasting_log_make_coffee(rid):
     log = db.get_roasting_log(rid)
     if not log:
         return jsonify({"success": False, "error": "not found"}), 404
+    if log.get("usage_type") == "블랜드":
+        return jsonify({"success": False, "error": "블랜드용 로스팅은 오늘의 커피로 등록할 수 없습니다"}), 400
     coffee = _ensure_scheduled_coffee(log["green_bean_id"], log["roast_date"])
     if not coffee:
         return jsonify({"success": False, "error": "생두 정보를 찾을 수 없음"}), 400
@@ -928,7 +932,8 @@ def api_roasting_log_update(rid):
     if (prev.get("output_weight_g") is None
             and data.get("output_weight_g") not in (None, "")):
         log = db.get_roasting_log(rid)
-        if log and log.get("make_coffee"):
+        # 블랜드용 로스팅은 배출량을 기입해도 오늘의 커피에 등록하지 않는다
+        if log and log.get("make_coffee") and log.get("usage_type") != "블랜드":
             coffee = _ensure_scheduled_coffee(log["green_bean_id"], log["roast_date"])
     return jsonify({"success": True, "coffee": coffee})
 
