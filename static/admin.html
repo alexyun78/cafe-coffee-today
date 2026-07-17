@@ -756,6 +756,11 @@
     cursor: pointer; line-height: 1;
   }
   .list-search-clear[hidden] { display: none; }
+  .list-search-count {
+    margin: -8px 0 12px; font-size: 0.82rem; font-weight: 700; color: var(--accent);
+  }
+  .list-search-count[hidden] { display: none; }
+  .list-search-count b { color: var(--coffee-dark); }
 
   /* 재고 2줄 행에서 잔여 강조 색 유지 */
   .inv-row .record-row-detail .inv-remaining { padding: 1px 7px; border-radius: 8px; }
@@ -1897,6 +1902,7 @@
                  placeholder="🔍 원두명·공급처·가공방식·로스팅일·단계 검색" autocomplete="placehold">
           <button type="button" class="list-search-clear" id="roast-search-clear" aria-label="검색 지우기" hidden>✕</button>
         </div>
+        <div id="roast-search-count" class="list-search-count" hidden></div>
         <div id="roast-list-items" class="record-list">
           <div class="empty">불러오는 중...</div>
         </div>
@@ -5289,10 +5295,20 @@ function priceForRoast(gid, roastDate) {
 function renderRoastList(items) {
   _roastListCache = items || [];
   const el = document.getElementById("roast-list-items");
-  const q = _roastSearch.query.trim().toLowerCase();
+  const rawQuery = _roastSearch.query.trim();
+  const q = rawQuery.toLowerCase();
   const shown = (items || []).filter(r => listMatchesQuery(q, [
     r.bean_name, r.supplier_short, r.bean_process, r.roast_date, r.roast_level,
   ]));
+  // 검색 중일 때만 결과 개수를 상단에 표기 (예: "7-17" 검색 → 20개)
+  const countEl = document.getElementById("roast-search-count");
+  if (rawQuery) {
+    countEl.hidden = false;
+    countEl.innerHTML = `🔍 '${escapeHtml(rawQuery)}' 검색 결과 <b>${shown.length}개</b>`;
+  } else {
+    countEl.hidden = true;
+    countEl.innerHTML = "";
+  }
   if (!shown.length) {
     el.innerHTML = `<div class="empty">${q ? "검색 결과가 없습니다." : "로스팅 기록이 없습니다."}</div>`;
     return;
