@@ -1,7 +1,25 @@
 {
   "version": 1,
-  "updated_at": "2026-07-17T12:00:46Z",
+  "updated_at": "2026-07-18T12:01:10Z",
   "items": [
+    {
+      "id": "2026-07-18-coffee-processing-etongue-metabolomics-wgcna",
+      "type": "paper",
+      "date": "2026-07-18",
+      "title_ko": "전자 혀·비표적 대사체학·WGCNA로 밝힌 커피 1차 가공법별 맛 특성의 분자 기반",
+      "one_liner": "블랙허니·혐기발효가 맛 품질 1위 — 467개 대사물 허브가 커피 가공별 맛 메커니즘 최초 연결.",
+      "categories_primary": [
+        "화학/분석화학"
+      ],
+      "categories_secondary": [
+        "향미·관능",
+        "생두"
+      ],
+      "hero_image": "/static/img/insights/hero/chemistry.svg",
+      "journal": "Foods (MDPI)",
+      "pub_date": "2026-04-23",
+      "source_basis": "abstract_only"
+    },
     {
       "id": "2026-07-17-pulped-natural-wet-hull-process",
       "type": "trivia",

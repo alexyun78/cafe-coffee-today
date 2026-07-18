@@ -1,0 +1,79 @@
+{
+  "version": 1,
+  "id": "2026-07-18-coffee-processing-etongue-metabolomics-wgcna",
+  "date": "2026-07-18",
+  "slug": "coffee-processing-etongue-metabolomics-wgcna",
+  "title_ko": "전자 혀·비표적 대사체학·WGCNA로 밝힌 커피 1차 가공법별 맛 특성의 분자 기반",
+  "title_original": "Analysis of Changes in Taste Characteristics of Coffee at Different Primary Processing Methods Using E-Tongue, Untargeted Metabolomics and WGCNA",
+  "one_liner": "블랙허니·혐기발효가 맛 품질 1위 — 467개 대사물 허브가 커피 가공별 맛 메커니즘 최초 연결.",
+  "authors": "Ying Liang, Yaqian Yuan, Jia Wang, Wenxue Chen, Weijun Chen, Qiuping Zhong, Jianfei Pei, Chun Chen, Xiong Fu, Rongrong He, Haiming Chen",
+  "journal": "Foods (MDPI)",
+  "pub_date": "2026-04-23",
+  "doi": "10.3390/foods15091475",
+  "categories_primary": [
+    "화학/분석화학"
+  ],
+  "categories_secondary": [
+    "향미·관능",
+    "생두"
+  ],
+  "summary": "중국 하이난 대학교 식품과학공학 연구팀이 건식(DP)·습식(WP)·레드허니(RH)·블랙허니(BH)·혐기발효(AF) 5가지 1차 가공법으로 처리한 커피 아라비카를 전자 혀, 관능 평가, 비표적 대사체학, WGCNA, KEGG 경로 분석을 통합 적용해 맛 특성의 분자 기반을 규명. BH와 AF가 마우스필·균형·전반 품질 최고점, WP·DP는 쓴맛·떫은맛 반응 최고. 5가지 그룹 간 808개 차이 대사물 동정, WGCNA 8개 관능 모듈에서 467개 허브 대사물(아미노산·유기산·알칼로이드·페놀산) 도출. KEGG 분석으로 카페인 대사·글리세로인지질 대사가 핵심 경로로 부상.",
+  "key_findings": [
+    "블랙허니(BH)와 혐기발효(AF)가 마우스필·균형감·전반 품질 관능 최고점",
+    "습식 가공(WP)과 건식 가공(DP)은 전자 혀 쓴맛·떫은맛 반응 최고 (특히 WP)",
+    "5가지 가공법 간 808개 차이 대사물 동정",
+    "WGCNA 8개 관능 모듈에서 467개 허브 대사물 식별",
+    "카페인 대사·글리세로인지질 대사가 가공법별 맛 차이의 핵심 경로"
+  ],
+  "methodology": "동일 품종 아라비카 커피를 5가지 1차 가공법(DP, WP, RH, BH, AF)으로 처리. 전자 혀(E-tongue) 센서 어레이로 맛 반응 정량, 관능 패널 평가(마우스필·균형·전반), 비표적 대사체학으로 808개 차이 대사물 선별, WGCNA로 8개 관능 모듈·467개 허브 대사물 도출, KEGG 경로 농축 분석으로 주요 경로 규명.",
+  "implications": {
+    "농가/가공장": "블랙허니·혐기발효 가공의 관능 우위 실증 데이터는 스페셜티 품질 차별화 전략으로 이 두 방식 도입의 과학적 근거를 제공. 습식 가공은 쓴맛·떫은맛 강도가 높아 맛 균형 불리, 트레이드오프 고려 필요.",
+    "로스터/큐그레이더": "가공법 태그(DP/WP/RH/BH/AF)는 대사물 조성·관능 프로파일의 실질적 차이 반영 지표. BH·AF 생두는 라이트-미디엄 로스팅으로 마우스필·균형감 극대화 유효. 가공법별 쓴맛·떫은맛 프로파일 사전 인지 시 로스팅·추출 레시피 조정 활용 가능.",
+    "R&D": "①467개 허브 대사물 중 마우스필·균형감 관련 특정 화합물 역할 검증, ②글리세로인지질 → 마우스필 기여 메커니즘 규명, ③다양한 품종·산지 재현 연구, ④가공-로스팅 연속 대사체 추적 연구 필요."
+  },
+  "limitations": "단일 품종·단일 재배지 실험으로 일반화 제한. 비표적 대사체학 특성상 일부 대사물 누락 가능. WGCNA는 상관 기반 — 인과관계 아닌 연관성 제시. 관능 평가 세부 프로토콜 미공개. 생두→로스팅→추출 전 과정 대사물 추적 미수행.",
+  "glossary": [
+    {
+      "term": "Electronic Tongue (E-tongue)",
+      "ko": "전자 혀 — 센서 어레이로 쓴맛·떫은맛·신맛 등 맛 반응을 정량하는 기기"
+    },
+    {
+      "term": "Untargeted Metabolomics",
+      "ko": "비표적 대사체학 — LC-MS 등으로 전체 소분자 대사물을 망라해 비교 분석"
+    },
+    {
+      "term": "WGCNA",
+      "ko": "가중 유전자 공발현 네트워크 분석 — 대사물을 관능 특성과 연관된 모듈로 클러스터링"
+    },
+    {
+      "term": "Hub Metabolite",
+      "ko": "허브 대사물 — WGCNA 네트워크에서 다수 대사물과 연결된 핵심 노드"
+    },
+    {
+      "term": "KEGG Pathway Enrichment",
+      "ko": "KEGG 경로 농축 분석 — 변화 대사물이 집중된 생화학 경로를 통계적으로 규명"
+    },
+    {
+      "term": "DM (Differentially Expressed Metabolite)",
+      "ko": "차이 대사물 — 그룹 간 유의미한 농도 차이를 보이는 대사물"
+    },
+    {
+      "term": "Black Honey Processing",
+      "ko": "블랙허니 가공 — 점액질 대부분 잔류 건조, 과일향·단맛·마우스필 강함"
+    },
+    {
+      "term": "Anaerobic Fermentation",
+      "ko": "혐기발효 — 밀폐 탱크 산소 차단 발효, 과일향·와인 노트·복합성 형성"
+    }
+  ],
+  "citation_apa": "Liang, Y., Yuan, Y., Wang, J., Chen, W., Chen, W., Zhong, Q., Pei, J., Chen, C., Fu, X., He, R., & Chen, H. (2026). Analysis of changes in taste characteristics of coffee at different primary processing methods using E-tongue, untargeted metabolomics and WGCNA. Foods, 15(9), 1475. https://doi.org/10.3390/foods15091475",
+  "links": {
+    "doi": "https://doi.org/10.3390/foods15091475",
+    "oa_pdf": "https://www.mdpi.com/2304-8158/15/9/1475/pdf",
+    "journal_homepage": "https://www.mdpi.com/journal/foods"
+  },
+  "source_basis": "abstract_only",
+  "data_charts": [],
+  "drive_doc_url": "https://docs.google.com/document/d/16nlkfo6XJ-NbNC8Okw2SlUZatFtHLIHfb_Dx2PNGhm0/edit?usp=drivesdk&ouid=116660508274764947762",
+  "hero_image": "/static/img/insights/hero/chemistry.svg"
+}
