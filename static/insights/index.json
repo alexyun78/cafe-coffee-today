@@ -1,7 +1,24 @@
 {
   "version": 1,
-  "updated_at": "2026-07-18T12:01:10Z",
+  "updated_at": "2026-07-20T12:00:46Z",
   "items": [
+    {
+      "id": "2026-07-20-anaerobic-carbonic-coffee-trend",
+      "type": "trivia",
+      "date": "2026-07-20",
+      "title_ko": "와인처럼 발효한 커피? 무산소·카보닉 마세레이션이 커피 맛을 완전히 바꾸고 있어! 🍷",
+      "one_liner": "밀봉 탱크 속 마법 — 무산소 발효가 커피에 와인·열대과일·복숭아 향을 불어넣는 비밀!",
+      "categories_primary": [
+        "커피 상식"
+      ],
+      "categories_secondary": [
+        "트렌드 프로세싱"
+      ],
+      "hero_image": "/static/img/insights/trivia/trend.svg",
+      "journal": null,
+      "pub_date": null,
+      "source_basis": null
+    },
     {
       "id": "2026-07-18-coffee-processing-etongue-metabolomics-wgcna",
       "type": "paper",

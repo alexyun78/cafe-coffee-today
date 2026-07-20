@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>와인처럼 발효한 커피? 무산소·카보닉 마세레이션이 커피 맛을 완전히 바꾸고 있어! 🍷 — 92°C ROASTERY</title>
+<meta name="description" content="밀봉 탱크 속 마법 — 무산소 발효가 커피에 와인·열대과일·복숭아 향을 불어넣는 비밀!">
+<link rel="icon" type="image/png" href="/static/img/logo-92black.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --canvas: #FFFFFF; --canvas-warm: #FAF7F2; --canvas-stone: #F2ECE3;
+  --ink: #1A1410; --ink-mute: #4A3F36; --ink-soft: #6B5E52;
+  --espresso: #6F4E37; --caramel: #C9986A; --copper: #B5703D;
+  --line: #E8E0D5; --line-soft: #F0E9DD;
+  --font-display: "Cormorant Garamond", "Pretendard", serif;
+  --font-body: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  --r-sm: 6px; --r-md: 12px; --r-pill: 999px;
+}
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color: transparent; }
+html { scroll-behavior: smooth; }
+body { font-family: var(--font-body); color: var(--ink); background: var(--canvas); font-feature-settings: "kern","ss01","lnum"; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+a { color: var(--copper); text-decoration: none; border-bottom: 1px solid transparent; transition: border-color .2s; }
+a:hover { border-bottom-color: var(--copper); }
+img { display: block; max-width: 100%; height: auto; }
+.container { max-width: 860px; margin: 0 auto; padding: 0 32px; }
+@media (max-width: 720px) { .container { padding: 0 20px; } }
+@media (max-width: 480px) { .container { padding: 0 16px; } }
+.site-nav { position: sticky; top: 0; z-index: 50; background: rgba(255,255,255,0.9); backdrop-filter: saturate(140%) blur(14px); -webkit-backdrop-filter: saturate(140%) blur(14px); border-bottom: 1px solid var(--line-soft); }
+.nav-inner { max-width: 1200px; margin: 0 auto; padding: 16px 32px; display: flex; align-items: center; justify-content: space-between; }
+.brand { font-family: var(--font-display); font-size: 1.3rem; font-weight: 700; color: var(--ink); display: inline-flex; align-items: center; gap: 4px; border-bottom: none; }
+.brand:hover { border-bottom: none; }
+.brand-mark { display: inline-flex; align-items: flex-start; font-family: "Pretendard", sans-serif; font-weight: 900; letter-spacing: -0.04em; line-height: 1; color: inherit; }
+.temp-mark { display: flex; flex-direction: column; line-height: .82; margin: 0 .05em 0 .04em; }
+.temp-mark .temp-deg { font-size: .42em; letter-spacing: -.04em; }
+.temp-mark .temp-c { font-size: .58em; letter-spacing: -.05em; margin-top: -.05em; }
+.nav-back { font-family: var(--font-mono); font-size: .75rem; letter-spacing: .18em; color: var(--ink-mute); border-bottom: none; }
+.nav-back:hover { color: var(--copper); border-bottom: none; }
+.article-hero { padding: 56px 0 48px; border-bottom: 1px solid var(--line-soft); }
+.eyebrow { font-family: var(--font-mono); font-size: .72rem; letter-spacing: .28em; color: var(--copper); margin-bottom: 18px; display: flex; align-items: center; gap: 12px; }
+.eyebrow::before { content: ""; display: inline-block; width: 28px; height: 1px; background: var(--copper); }
+.article-title { font-family: var(--font-display); font-weight: 500; font-size: clamp(2rem, 4.5vw, 3.2rem); line-height: 1.15; letter-spacing: -0.02em; color: var(--ink); margin-bottom: 20px; }
+.article-title em { font-style: italic; color: var(--espresso); font-weight: 600; }
+.article-one-liner { font-family: var(--font-display); font-style: italic; font-size: 1.3rem; line-height: 1.5; color: var(--espresso); margin-bottom: 28px; padding-left: 20px; border-left: 3px solid var(--caramel); }
+.article-meta { display: flex; gap: 24px; flex-wrap: wrap; font-family: var(--font-mono); font-size: .75rem; letter-spacing: .12em; color: var(--ink-soft); padding-top: 20px; border-top: 1px solid var(--line-soft); }
+.article-meta span { display: inline-flex; align-items: center; gap: 6px; }
+.article-meta span::before { content: "■"; color: var(--caramel); font-size: .55rem; }
+.hero-image { margin: 32px 0 0; border-radius: var(--r-md); overflow: hidden; border: 1px solid var(--line); }
+.hero-image img { width: 100%; }
+.article-body { padding: 56px 0 80px; }
+.article-footer { padding: 36px 0 56px; border-top: 1px solid var(--line-soft); text-align: center; font-family: var(--font-mono); font-size: .75rem; letter-spacing: .14em; color: var(--ink-soft); }
+.article-footer a { color: var(--ink-mute); border-bottom: 1px solid transparent; }
+.article-footer a:hover { color: var(--copper); border-bottom-color: var(--copper); }
+.source-basis { display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; background: rgba(201,152,106,.18); border: 1px solid rgba(181,112,61,.35); border-radius: var(--r-pill); font-family: var(--font-mono); font-size: .72rem; letter-spacing: .12em; color: var(--espresso); font-weight: 500; }
+.source-basis.abstract { background: rgba(107,94,82,.1); border-color: rgba(107,94,82,.3); color: var(--ink-soft); }
+.links-row { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 18px; }
+.link-pill { display: inline-flex; align-items: center; gap: 8px; padding: 9px 16px; background: var(--canvas-warm); border: 1px solid var(--line); border-radius: var(--r-pill); font-family: var(--font-mono); font-size: .78rem; letter-spacing: .08em; color: var(--ink-mute); border-bottom: 1px solid var(--line); transition: border-color .2s, color .2s; }
+.link-pill:hover { color: var(--copper); border-color: var(--copper); }
+
+/* ===== EZ: 쉬운 설명 스타일 ===== */
+.ez-hero { text-align: center; padding: 8px 0 32px; }
+.ez-hero-emoji { font-size: 3.4rem; line-height: 1; }
+.ez-hero-title { font-family: var(--font-display); font-size: clamp(1.6rem, 3.5vw, 2.2rem); font-weight: 600; color: var(--ink); margin-top: 14px; line-height: 1.3; }
+.ez-section { margin-bottom: 52px; }
+.ez-section h2 { font-family: var(--font-body); font-size: 1.5rem; font-weight: 700; color: var(--ink); margin-bottom: 18px; letter-spacing: -0.01em; }
+.ez-section h3 { font-size: 1.08rem; font-weight: 600; color: var(--espresso); margin: 22px 0 10px; }
+.ez-section p { font-size: 1.04rem; line-height: 1.85; color: var(--ink-mute); margin-bottom: 14px; }
+.ez-section p:last-child { margin-bottom: 0; }
+.ez-section ul { padding-left: 22px; margin-bottom: 14px; }
+.ez-section li { font-size: 1.02rem; line-height: 1.8; color: var(--ink-mute); margin-bottom: 8px; }
+.ez-callout { margin: 14px 0; padding: 14px 18px; background: var(--canvas-warm); border-left: 3px solid var(--caramel); border-radius: 4px; font-size: 0.98rem; color: var(--espresso); line-height: 1.75; }
+.ez-callout strong { color: var(--copper); }
+.ez-findings { list-style: none; padding: 0; }
+.ez-findings > li { padding: 18px 22px; margin-bottom: 14px; background: var(--canvas-warm); border: 1px solid var(--line); border-radius: 10px; font-size: 1.02rem; line-height: 1.7; color: var(--ink-mute); }
+.ez-findings > li strong { color: var(--ink); display: block; margin-bottom: 4px; font-size: 1.06rem; }
+.ez-findings > li.gold { background: linear-gradient(135deg, #FFF8E7, #FFEFCD); border-color: #F0D67A; }
+.ez-findings > li.silver { background: linear-gradient(135deg, #F6F6F6, #ECECEC); border-color: #C7C7C7; }
+.ez-findings > li.bronze { background: linear-gradient(135deg, #FFEEDD, #FFDCC0); border-color: #E4B07F; }
+.ez-findings > li.medal { background: linear-gradient(135deg, #F0E6FF, #E1D2FF); border-color: #BDA8E5; }
+.ez-table { width: 100%; border-collapse: collapse; margin: 16px 0 8px; font-size: 0.96rem; }
+.ez-table th, .ez-table td { padding: 11px 14px; border: 1px solid var(--line); text-align: left; vertical-align: top; }
+.ez-table thead th { background: var(--ink); color: #fff; font-weight: 600; letter-spacing: .02em; }
+.ez-table tbody th { background: var(--canvas-warm); color: var(--ink); font-weight: 600; }
+.ez-table tbody tr:nth-child(even) td { background: rgba(250, 247, 242, .55); }
+.ez-summary { padding: 26px 30px; background: linear-gradient(135deg, #FAF0E0, #F3E1C5); border-radius: 14px; font-size: 1.13rem; line-height: 1.75; font-weight: 500; color: var(--ink); border: 1px solid #E5C99B; }
+.ez-summary strong { color: var(--espresso); }
+.ez-citation { margin-top: 24px; padding: 18px 22px; background: var(--canvas-warm); border-radius: 8px; font-family: var(--font-mono); font-size: 0.82rem; color: var(--ink-soft); line-height: 1.7; }
+.ez-citation p { margin: 4px 0; }
+.ez-chart-card { padding: 22px 24px 18px; background: var(--canvas); border: 1px solid var(--line); border-radius: 12px; margin: 16px 0; }
+.ez-chart-card .ez-chart-title { font-size: 1rem; font-weight: 600; color: var(--ink); margin-bottom: 14px; }
+.ez-bar-row { display: flex; align-items: center; margin: 10px 0; font-size: 0.95rem; gap: 14px; }
+.ez-bar-label { width: 180px; flex-shrink: 0; color: var(--ink-mute); font-weight: 500; }
+.ez-bar-track { flex: 1; height: 32px; background: var(--canvas-warm); border-radius: 6px; overflow: hidden; position: relative; border: 1px solid var(--line); }
+.ez-bar-fill { height: 100%; background: linear-gradient(90deg, var(--caramel), var(--copper)); display: flex; align-items: center; justify-content: flex-end; padding: 0 12px; color: white; font-weight: 700; font-size: 0.92rem; min-width: 56px; }
+.ez-bar-fill.alt { background: linear-gradient(90deg, #6F4E37, #4A3F36); }
+.ez-glossary { display: grid; gap: 12px; }
+.ez-glossary-item { padding: 16px 20px; background: var(--canvas-warm); border: 1px solid var(--line); border-radius: 10px; border-left: 3px solid var(--caramel); }
+.ez-glossary-term { font-family: var(--font-display); font-style: italic; font-size: 1.1rem; font-weight: 600; color: var(--espresso); margin-bottom: 6px; }
+.ez-glossary-def { font-size: 0.98rem; color: var(--ink-mute); line-height: 1.7; }
+@media (max-width: 720px) {
+  .article-hero { padding: 36px 0 32px; }
+  .article-body { padding: 36px 0 56px; }
+  .ez-section { margin-bottom: 40px; }
+  .ez-section h2 { font-size: 1.3rem; }
+  .ez-bar-label { width: 100%; margin-bottom: 4px; }
+  .ez-bar-row { flex-direction: column; align-items: stretch; }
+  .article-meta { gap: 12px 18px; font-size: .68rem; }
+}
+</style>
+</head>
+<body>
+
+<header class="site-nav">
+  <div class="nav-inner">
+    <a class="brand" href="/">
+      <span class="brand-mark">92<span class="temp-mark"><span class="temp-deg">°</span><span class="temp-c">C</span></span></span>ROASTERY
+    </a>
+    <a class="nav-back" href="/insight">← INSIGHTS</a>
+  </div>
+</header>
+
+<article>
+  <section class="article-hero">
+    <div class="container">
+      <div class="eyebrow">— 오늘의 커피 상식 · 2026.07.20</div>
+      <h1 class="article-title">와인처럼 발효한 커피? 무산소·카보닉 마세레이션이 커피 맛을 완전히 바꾸고 있어! 🍷</h1>
+      <p class="article-one-liner">밀봉 탱크 속 마법 — 무산소 발효가 커피에 와인·열대과일·복숭아 향을 불어넣는 비밀!</p>
+      <div class="article-meta">
+        
+        
+        
+        <span>커피 상식 · 트렌드 프로세싱</span>
+      </div>
+      
+      <div class="hero-image">
+        <img src="/static/img/insights/trivia/trend.svg" alt="와인처럼 발효한 커피? 무산소·카보닉 마세레이션이 커피 맛을 완전히 바꾸고 있어! 🍷">
+      </div>
+      
+    </div>
+  </section>
+
+  <section class="article-body">
+    <div class="container">
+
+      
+      <div class="ez-hero">
+        <div class="ez-hero-emoji">🍷</div>
+        <div class="ez-hero-title">와인처럼 발효한 커피? 무산소·카보닉 마세레이션이 커피 맛을 완전히 바꾸고 있어!</div>
+      </div>
+
+      
+      <div class="ez-section">
+        <h2>🤔 무슨 연구야?</h2>
+        
+          <p>카페 메뉴판에서 &#39;무산소 발효&#39;, &#39;카보닉 마세레이션&#39;, &#39;효모 접종&#39; 같은 단어를 본 적 있어? 🤔 &#39;이거 와인 얘기야, 커피 얘기야?&#39; 싶었다면 — 정답은 둘 다야! 요즘 커피 세계에서는 와인·맥주 양조 기술을 커피 가공에 접목하는 실험이 한창 진행 중이거든.</p><p>워시드, 내추럴, 허니 같은 전통 가공법은 이제 &#39;기본&#39;이 됐고, 그 위에서 한 발 더 나아간 방법들이 스페셜티 카페를 중심으로 퍼지고 있어. 핵심은 &#39;발효 환경을 인위적으로 설계하는 것&#39;이야 — 어떤 미생물이 어떤 온도·산소량에서 커피를 발효시키느냐에 따라 맛이 완전히 달라지거든 🔬</p><p>오늘은 요즘 가장 핫한 트렌드 프로세싱 세 가지 — 무산소 발효(Anaerobic Fermentation), 카보닉 마세레이션(Carbonic Maceration), 효모·젖산균 접종(Yeast/LAB Inoculation) — 를 와인·김치 비유로 쉽게 풀어볼게 🍷🥒 커피 세계가 얼마나 빠르게 변하고 있는지 놀랄 거야!</p>
+        
+      </div>
+
+      
+      
+      <div class="ez-section">
+        <h2>🧪 핵심 개념 쉽게 풀어보면</h2>
+        
+          <h3>무산소 발효 (Anaerobic Fermentation) — 산소 없는 밀봉 탱크의 마법</h3>
+          <p>커피 열매(또는 생두)를 밀봉된 스테인리스 탱크에 넣고 산소를 차단한 채 발효시키는 방식이야. 보통 커피 발효는 공기에 노출된 상태에서 이루어지는데, 무산소 환경에서는 다른 종류의 미생물이 활동하면서 더 복잡하고 강렬한 향미 화합물을 만들어내. 발효 온도와 시간을 세밀하게 조절해서 일관된 결과를 얻을 수 있어. 워시드나 내추럴 방식에 &#39;무산소 발효&#39; 단계를 추가하는 식으로 응용돼.</p>
+          <div class="ez-callout">💡 김치를 담글 때 뚜껑을 꽉 닫고 밀봉하면 맛이 더 깊어지는 것처럼 — 공기를 차단한 환경에서 발효하면 완전히 다른 맛과 향이 생겨나! 열대과일·와인·발효향이 확 올라오는 이유야 🥒</div>
+        
+          <h3>카보닉 마세레이션 (Carbonic Maceration, CM) — 이산화탄소로 채운 탱크</h3>
+          <p>와인 업계에서 먼저 쓰던 기술이야 — 커피 열매 전체를 CO₂로 가득 채운 밀봉 탱크에 넣고 발효시켜. 산소가 없고 CO₂ 압력이 높은 환경에서 커피 열매 세포 내부에서 특수한 &#39;세포 내 발효(intracellular fermentation)&#39;가 일어나. 그 결과 복숭아·살구·열대과일 같은 밝고 달콤한 과일향이 생기고, 산미도 독특하게 살아나. 같은 원두라도 CM 처리 여부에 따라 맛이 완전히 달라져!</p>
+          <div class="ez-callout">💡 포도주를 만들 때 포도를 통째로 CO₂ 탱크에 넣으면 포도 껍질 안에서 먼저 발효가 시작되는 원리야 — 커피도 열매 안에서 먼저 변화가 일어나게 하는 거야. 와인 맛 나는 커피가 탄생하는 이유가 바로 이거! 🍇</div>
+        
+          <h3>효모·젖산균 접종 (Yeast/LAB Inoculation) — 미생물을 골라서 심는다</h3>
+          <p>발효는 어떤 미생물이 참여하느냐에 따라 맛이 달라져. 전통 가공은 공기 중 자연 발생 미생물에 맡기는 반면, 이 방식은 특정 효모(예: 사카로마이세스 세레비시에)나 젖산균(LAB, Lactobacillus 계열)을 직접 선별해 발효 탱크에 접종해. 마치 요거트나 치즈를 만들 때 균주를 선택하듯이, &#39;어떤 맛을 낼지&#39; 설계하는 거야. 더 일관성 있고 예측 가능한 향미를 만들 수 있어.</p>
+          <div class="ez-callout">💡 막걸리를 빚을 때 시판 누룩(효모)을 쓰면 맛이 일정하고, 야생 누룩을 쓰면 매번 다른 맛이 나잖아? 커피 발효도 똑같아 — 효모를 직접 고르면 원하는 맛 프로파일을 훨씬 정교하게 설계할 수 있어 🍶</div>
+        
+      </div>
+      
+
+      
+      
+      <div class="ez-section">
+        <h2>🎯 핵심 발견</h2>
+        <ul class="ez-findings">
+          
+          
+            
+              <li class="gold">
+                <strong>무산소 발효 커피는 왜 그렇게 강렬하고 독특해?</strong>산소 없는 환경에서 활동하는 혐기성 미생물은 산소 있을 때와 다른 발효 부산물을 만들어. 에스테르 화합물과 유기산이 더 많이 생성되는데, 이게 열대과일·발효향·와인향의 원천이야. 처음 맛보면 &#39;이게 커피야?!&#39; 할 정도로 강한 개성에 놀라게 돼. 취향을 많이 타는 편이라 좋아하는 사람은 열광하고, 처음엔 낯설게 느끼는 사람도 있어 🔥
+              </li>
+            
+              <li class="silver">
+                <strong>카보닉 마세레이션은 와인 기술에서 왔어</strong>CM은 프랑스 보졸레(Beaujolais) 와인 양조에서 오래전부터 쓰이던 기술이야. 커피에 이 방식을 주목받게 한 건 2015년 월드 바리스타 챔피언십(WBC)에서 우승한 사사 세스틱(Sasa Sestic)으로 알려져 있어 — 그가 CM을 적용한 콜롬비아 원두를 대회에서 선보이면서 커피 업계에 큰 반향을 일으켰거든. 그 이후 전 세계 농장과 바이어들이 CM을 실험하기 시작했어 🏆
+              </li>
+            
+              <li class="bronze">
+                <strong>트렌드 프로세싱은 &#39;더 비싼 편&#39;이야 — 왜?</strong>무산소 탱크, 온도 조절 장비, 특수 효모 구입, 세밀한 모니터링 — 트렌드 프로세싱은 장비와 인력 투자가 훨씬 많이 필요해. 실패 리스크도 있어서 성공한 배치는 특히 높은 값을 받게 돼. 카페에서 &#39;무산소 발효&#39; &#39;카보닉 마세레이션&#39;이 붙은 커피가 유독 비싼 이유가 바로 여기에 있어 💸
+              </li>
+            
+              <li class="medal">
+                <strong>스페셜티 대회에서 트렌드 프로세싱이 대세가 됐어</strong>WBC(World Barista Championship)나 World Brewers Cup 같은 국제 대회에서 최근 수년간 무산소 발효·CM 원두를 사용한 선수들이 상위권을 차지하는 경우가 많아졌어. &#39;극적인 향미 프로파일&#39;을 보여주기 좋은 원두이다 보니 대회용으로 각광받는 거야. 반면 &#39;커피 본연의 맛에서 너무 멀어졌다&#39;는 전통주의자들의 비판도 있어 — 커피 세계에도 &#39;전통파 vs 혁신파&#39; 논쟁이 있다니까! ⚔️
+              </li>
+            
+              <li class="medal">
+                <strong>집에서도 트렌드 프로세싱 커피를 살 수 있어!</strong>국내 스페셜티 카페나 온라인 원두 판매점에서 &#39;무산소 발효&#39;, &#39;CM&#39;, &#39;카보닉 마세레이션&#39; 라벨이 붙은 원두를 구입할 수 있어. 처음엔 낯설 수 있으니까, 테이스팅 노트를 보고 &#39;열대과일&#39;, &#39;복숭아&#39;, &#39;와인향&#39; 같은 설명이 있는 걸 골라봐. 핸드드립으로 마시면 독특한 향이 가장 잘 살아나! ☕✨
+              </li>
+            
+          
+        </ul>
+      </div>
+      
+
+      
+      
+
+      
+      
+      
+      <div class="ez-section">
+        <h2>트렌드 프로세싱 3종 비교</h2>
+        <table class="ez-table">
+          <thead><tr><th>비교 항목</th><th>무산소 발효</th><th>카보닉 마세레이션(CM)</th><th>효모·젖산균 접종</th></tr></thead>
+          <tbody>
+            <tr>
+              <th>발효 환경</th><td>밀봉 탱크, 산소 없음</td><td>CO₂ 충전 밀봉 탱크</td><td>열린/밀봉 탱크 + 특정 균주 투입</td>
+            </tr><tr>
+              <th>원천 기술</th><td>와인·맥주 혐기 발효</td><td>프랑스 보졸레 와인 양조</td><td>치즈·요거트 스타터 문화</td>
+            </tr><tr>
+              <th>대표 향미</th><td>열대과일·와인·발효향</td><td>복숭아·살구·밝은 과일</td><td>다양 (균주에 따라 설계 가능)</td>
+            </tr><tr>
+              <th>비용</th><td>높음</td><td>높음</td><td>중간~높음</td>
+            </tr><tr>
+              <th>일관성</th><td>중간 (조건 조절 필요)</td><td>중간</td><td>높음 (균주 고정 시)</td>
+            </tr><tr>
+              <th>대표 생산국</th><td>에티오피아, 콜롬비아</td><td>콜롬비아, 코스타리카</td><td>콜롬비아, 파나마</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      
+      
+
+      
+      
+
+      
+      
+
+      
+      
+      <div class="ez-section">
+        <div class="ez-summary">💡 <strong>한 줄 요약</strong> — 무산소 발효·카보닉 마세레이션·효모 접종 — 와인·김치 발효 기술을 커피에 접목해 열대과일·와인향을 한 잔에 담는 트렌드 프로세싱이 스페셜티 업계를 달구고 있어! 🍷</div>
+      </div>
+      
+
+      
+      
+      
+      
+
+      
+      
+      <div class="ez-section">
+        <h2>📖 어려운 말 풀이 사전</h2>
+        <p>이 글에 나온 어려운 약어와 용어를 한 번에 정리했어. 의미만 알면 본문이 훨씬 쉬워져!</p>
+        <div class="ez-glossary">
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">무산소 발효 (Anaerobic Fermentation)</div>
+            <div class="ez-glossary-def">산소를 차단한 밀봉 탱크 안에서 커피를 발효시키는 방법. 독특한 열대과일·와인향 생성</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">카보닉 마세레이션 (Carbonic Maceration)</div>
+            <div class="ez-glossary-def">CO₂로 채운 탱크에서 커피 열매 내부를 발효시키는 와인 기반 기술. 복숭아·과일향이 특징</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">효모 접종 (Yeast Inoculation)</div>
+            <div class="ez-glossary-def">특정 효모 균주를 선별해 발효 탱크에 투입, 원하는 향미를 설계하는 방법</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">젖산균 (LAB, Lactobacillus)</div>
+            <div class="ez-glossary-def">김치·요거트 발효에도 쓰이는 박테리아. 커피 발효 시 독특한 산미 생성</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">혐기성 발효</div>
+            <div class="ez-glossary-def">산소 없이 일어나는 발효. 산소 있을 때와 다른 향미 화합물을 만들어냄</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">WBC (World Barista Championship)</div>
+            <div class="ez-glossary-def">세계 최대 바리스타 경연 대회. 매년 세계 각국 대표 바리스타들이 참가</div>
+          </div>
+          
+        </div>
+      </div>
+      
+
+    </div>
+  </section>
+
+  <footer class="article-footer">
+    <div class="container">
+      <a href="/insight">← BACK TO INSIGHTS</a>
+      <span style="margin: 0 16px;">·</span>
+      <a href="/">HOME</a>
+    </div>
+  </footer>
+</article>
+
+</body>
+</html>
