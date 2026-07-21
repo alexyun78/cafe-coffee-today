@@ -1,7 +1,25 @@
 {
   "version": 1,
-  "updated_at": "2026-07-20T12:00:46Z",
+  "updated_at": "2026-07-21T12:01:03Z",
   "items": [
+    {
+      "id": "2026-07-21-coffee-microbial-fermentation-quality-health-safety",
+      "type": "paper",
+      "date": "2026-07-21",
+      "title_ko": "식품등급 미생물 발효가 커피 품질·건강·안전성·지속가능성을 바꾼다 — 최신 종합 리뷰",
+      "one_liner": "효모·LAB·S. cerevisiae가 커피 발효를 재정의 — 향미·건강·마이코톡신 안전을 동시에 잡는 미생물 전략.",
+      "categories_primary": [
+        "미생물학"
+      ],
+      "categories_secondary": [
+        "건강/영양",
+        "지속가능성/경제"
+      ],
+      "hero_image": "/static/img/insights/hero/microbiology.svg",
+      "journal": "Comprehensive Reviews in Food Science and Food Safety",
+      "pub_date": "2026-05-01",
+      "source_basis": "abstract_only"
+    },
     {
       "id": "2026-07-20-anaerobic-carbonic-coffee-trend",
       "type": "trivia",
