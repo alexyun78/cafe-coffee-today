@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>라이트 로스트? 싱글오리진? 커핑 점수? 카페 메뉴판 2탄 — 이번엔 진짜 고수 용어야! ☕ — 92°C ROASTERY</title>
+<meta name="description" content="싱글오리진·로스트 레벨·커핑·SCA 점수·품종까지 — 오늘 이거 읽으면 바리스타 친구 생긴 기분!">
+<link rel="icon" type="image/png" href="/static/img/logo-92black.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --canvas: #FFFFFF; --canvas-warm: #FAF7F2; --canvas-stone: #F2ECE3;
+  --ink: #1A1410; --ink-mute: #4A3F36; --ink-soft: #6B5E52;
+  --espresso: #6F4E37; --caramel: #C9986A; --copper: #B5703D;
+  --line: #E8E0D5; --line-soft: #F0E9DD;
+  --font-display: "Cormorant Garamond", "Pretendard", serif;
+  --font-body: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  --r-sm: 6px; --r-md: 12px; --r-pill: 999px;
+}
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color: transparent; }
+html { scroll-behavior: smooth; }
+body { font-family: var(--font-body); color: var(--ink); background: var(--canvas); font-feature-settings: "kern","ss01","lnum"; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+a { color: var(--copper); text-decoration: none; border-bottom: 1px solid transparent; transition: border-color .2s; }
+a:hover { border-bottom-color: var(--copper); }
+img { display: block; max-width: 100%; height: auto; }
+.container { max-width: 860px; margin: 0 auto; padding: 0 32px; }
+@media (max-width: 720px) { .container { padding: 0 20px; } }
+@media (max-width: 480px) { .container { padding: 0 16px; } }
+.site-nav { position: sticky; top: 0; z-index: 50; background: rgba(255,255,255,0.9); backdrop-filter: saturate(140%) blur(14px); -webkit-backdrop-filter: saturate(140%) blur(14px); border-bottom: 1px solid var(--line-soft); }
+.nav-inner { max-width: 1200px; margin: 0 auto; padding: 16px 32px; display: flex; align-items: center; justify-content: space-between; }
+.brand { font-family: var(--font-display); font-size: 1.3rem; font-weight: 700; color: var(--ink); display: inline-flex; align-items: center; gap: 4px; border-bottom: none; }
+.brand:hover { border-bottom: none; }
+.brand-mark { display: inline-flex; align-items: flex-start; font-family: "Pretendard", sans-serif; font-weight: 900; letter-spacing: -0.04em; line-height: 1; color: inherit; }
+.temp-mark { display: flex; flex-direction: column; line-height: .82; margin: 0 .05em 0 .04em; }
+.temp-mark .temp-deg { font-size: .42em; letter-spacing: -.04em; }
+.temp-mark .temp-c { font-size: .58em; letter-spacing: -.05em; margin-top: -.05em; }
+.nav-back { font-family: var(--font-mono); font-size: .75rem; letter-spacing: .18em; color: var(--ink-mute); border-bottom: none; }
+.nav-back:hover { color: var(--copper); border-bottom: none; }
+.article-hero { padding: 56px 0 48px; border-bottom: 1px solid var(--line-soft); }
+.eyebrow { font-family: var(--font-mono); font-size: .72rem; letter-spacing: .28em; color: var(--copper); margin-bottom: 18px; display: flex; align-items: center; gap: 12px; }
+.eyebrow::before { content: ""; display: inline-block; width: 28px; height: 1px; background: var(--copper); }
+.article-title { font-family: var(--font-display); font-weight: 500; font-size: clamp(2rem, 4.5vw, 3.2rem); line-height: 1.15; letter-spacing: -0.02em; color: var(--ink); margin-bottom: 20px; }
+.article-title em { font-style: italic; color: var(--espresso); font-weight: 600; }
+.article-one-liner { font-family: var(--font-display); font-style: italic; font-size: 1.3rem; line-height: 1.5; color: var(--espresso); margin-bottom: 28px; padding-left: 20px; border-left: 3px solid var(--caramel); }
+.article-meta { display: flex; gap: 24px; flex-wrap: wrap; font-family: var(--font-mono); font-size: .75rem; letter-spacing: .12em; color: var(--ink-soft); padding-top: 20px; border-top: 1px solid var(--line-soft); }
+.article-meta span { display: inline-flex; align-items: center; gap: 6px; }
+.article-meta span::before { content: "■"; color: var(--caramel); font-size: .55rem; }
+.hero-image { margin: 32px 0 0; border-radius: var(--r-md); overflow: hidden; border: 1px solid var(--line); }
+.hero-image img { width: 100%; }
+.article-body { padding: 56px 0 80px; }
+.article-footer { padding: 36px 0 56px; border-top: 1px solid var(--line-soft); text-align: center; font-family: var(--font-mono); font-size: .75rem; letter-spacing: .14em; color: var(--ink-soft); }
+.article-footer a { color: var(--ink-mute); border-bottom: 1px solid transparent; }
+.article-footer a:hover { color: var(--copper); border-bottom-color: var(--copper); }
+.source-basis { display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; background: rgba(201,152,106,.18); border: 1px solid rgba(181,112,61,.35); border-radius: var(--r-pill); font-family: var(--font-mono); font-size: .72rem; letter-spacing: .12em; color: var(--espresso); font-weight: 500; }
+.source-basis.abstract { background: rgba(107,94,82,.1); border-color: rgba(107,94,82,.3); color: var(--ink-soft); }
+.links-row { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 18px; }
+.link-pill { display: inline-flex; align-items: center; gap: 8px; padding: 9px 16px; background: var(--canvas-warm); border: 1px solid var(--line); border-radius: var(--r-pill); font-family: var(--font-mono); font-size: .78rem; letter-spacing: .08em; color: var(--ink-mute); border-bottom: 1px solid var(--line); transition: border-color .2s, color .2s; }
+.link-pill:hover { color: var(--copper); border-color: var(--copper); }
+
+/* ===== EZ: 쉬운 설명 스타일 ===== */
+.ez-hero { text-align: center; padding: 8px 0 32px; }
+.ez-hero-emoji { font-size: 3.4rem; line-height: 1; }
+.ez-hero-title { font-family: var(--font-display); font-size: clamp(1.6rem, 3.5vw, 2.2rem); font-weight: 600; color: var(--ink); margin-top: 14px; line-height: 1.3; }
+.ez-section { margin-bottom: 52px; }
+.ez-section h2 { font-family: var(--font-body); font-size: 1.5rem; font-weight: 700; color: var(--ink); margin-bottom: 18px; letter-spacing: -0.01em; }
+.ez-section h3 { font-size: 1.08rem; font-weight: 600; color: var(--espresso); margin: 22px 0 10px; }
+.ez-section p { font-size: 1.04rem; line-height: 1.85; color: var(--ink-mute); margin-bottom: 14px; }
+.ez-section p:last-child { margin-bottom: 0; }
+.ez-section ul { padding-left: 22px; margin-bottom: 14px; }
+.ez-section li { font-size: 1.02rem; line-height: 1.8; color: var(--ink-mute); margin-bottom: 8px; }
+.ez-callout { margin: 14px 0; padding: 14px 18px; background: var(--canvas-warm); border-left: 3px solid var(--caramel); border-radius: 4px; font-size: 0.98rem; color: var(--espresso); line-height: 1.75; }
+.ez-callout strong { color: var(--copper); }
+.ez-findings { list-style: none; padding: 0; }
+.ez-findings > li { padding: 18px 22px; margin-bottom: 14px; background: var(--canvas-warm); border: 1px solid var(--line); border-radius: 10px; font-size: 1.02rem; line-height: 1.7; color: var(--ink-mute); }
+.ez-findings > li strong { color: var(--ink); display: block; margin-bottom: 4px; font-size: 1.06rem; }
+.ez-findings > li.gold { background: linear-gradient(135deg, #FFF8E7, #FFEFCD); border-color: #F0D67A; }
+.ez-findings > li.silver { background: linear-gradient(135deg, #F6F6F6, #ECECEC); border-color: #C7C7C7; }
+.ez-findings > li.bronze { background: linear-gradient(135deg, #FFEEDD, #FFDCC0); border-color: #E4B07F; }
+.ez-findings > li.medal { background: linear-gradient(135deg, #F0E6FF, #E1D2FF); border-color: #BDA8E5; }
+.ez-table { width: 100%; border-collapse: collapse; margin: 16px 0 8px; font-size: 0.96rem; }
+.ez-table th, .ez-table td { padding: 11px 14px; border: 1px solid var(--line); text-align: left; vertical-align: top; }
+.ez-table thead th { background: var(--ink); color: #fff; font-weight: 600; letter-spacing: .02em; }
+.ez-table tbody th { background: var(--canvas-warm); color: var(--ink); font-weight: 600; }
+.ez-table tbody tr:nth-child(even) td { background: rgba(250, 247, 242, .55); }
+.ez-summary { padding: 26px 30px; background: linear-gradient(135deg, #FAF0E0, #F3E1C5); border-radius: 14px; font-size: 1.13rem; line-height: 1.75; font-weight: 500; color: var(--ink); border: 1px solid #E5C99B; }
+.ez-summary strong { color: var(--espresso); }
+.ez-citation { margin-top: 24px; padding: 18px 22px; background: var(--canvas-warm); border-radius: 8px; font-family: var(--font-mono); font-size: 0.82rem; color: var(--ink-soft); line-height: 1.7; }
+.ez-citation p { margin: 4px 0; }
+.ez-chart-card { padding: 22px 24px 18px; background: var(--canvas); border: 1px solid var(--line); border-radius: 12px; margin: 16px 0; }
+.ez-chart-card .ez-chart-title { font-size: 1rem; font-weight: 600; color: var(--ink); margin-bottom: 14px; }
+.ez-bar-row { display: flex; align-items: center; margin: 10px 0; font-size: 0.95rem; gap: 14px; }
+.ez-bar-label { width: 180px; flex-shrink: 0; color: var(--ink-mute); font-weight: 500; }
+.ez-bar-track { flex: 1; height: 32px; background: var(--canvas-warm); border-radius: 6px; overflow: hidden; position: relative; border: 1px solid var(--line); }
+.ez-bar-fill { height: 100%; background: linear-gradient(90deg, var(--caramel), var(--copper)); display: flex; align-items: center; justify-content: flex-end; padding: 0 12px; color: white; font-weight: 700; font-size: 0.92rem; min-width: 56px; }
+.ez-bar-fill.alt { background: linear-gradient(90deg, #6F4E37, #4A3F36); }
+.ez-glossary { display: grid; gap: 12px; }
+.ez-glossary-item { padding: 16px 20px; background: var(--canvas-warm); border: 1px solid var(--line); border-radius: 10px; border-left: 3px solid var(--caramel); }
+.ez-glossary-term { font-family: var(--font-display); font-style: italic; font-size: 1.1rem; font-weight: 600; color: var(--espresso); margin-bottom: 6px; }
+.ez-glossary-def { font-size: 0.98rem; color: var(--ink-mute); line-height: 1.7; }
+@media (max-width: 720px) {
+  .article-hero { padding: 36px 0 32px; }
+  .article-body { padding: 36px 0 56px; }
+  .ez-section { margin-bottom: 40px; }
+  .ez-section h2 { font-size: 1.3rem; }
+  .ez-bar-label { width: 100%; margin-bottom: 4px; }
+  .ez-bar-row { flex-direction: column; align-items: stretch; }
+  .article-meta { gap: 12px 18px; font-size: .68rem; }
+}
+</style>
+</head>
+<body>
+
+<header class="site-nav">
+  <div class="nav-inner">
+    <a class="brand" href="/">
+      <span class="brand-mark">92<span class="temp-mark"><span class="temp-deg">°</span><span class="temp-c">C</span></span></span>ROASTERY
+    </a>
+    <a class="nav-back" href="/insight">← INSIGHTS</a>
+  </div>
+</header>
+
+<article>
+  <section class="article-hero">
+    <div class="container">
+      <div class="eyebrow">— 오늘의 커피 상식 · 2026.07.22</div>
+      <h1 class="article-title">라이트 로스트? 싱글오리진? 커핑 점수? 카페 메뉴판 2탄 — 이번엔 진짜 고수 용어야! ☕</h1>
+      <p class="article-one-liner">싱글오리진·로스트 레벨·커핑·SCA 점수·품종까지 — 오늘 이거 읽으면 바리스타 친구 생긴 기분!</p>
+      <div class="article-meta">
+        
+        
+        
+        <span>커피 상식 · 커피 용어</span>
+      </div>
+      
+      <div class="hero-image">
+        <img src="/static/img/insights/trivia/terms.svg" alt="라이트 로스트? 싱글오리진? 커핑 점수? 카페 메뉴판 2탄 — 이번엔 진짜 고수 용어야! ☕">
+      </div>
+      
+    </div>
+  </section>
+
+  <section class="article-body">
+    <div class="container">
+
+      
+      <div class="ez-hero">
+        <div class="ez-hero-emoji">🏆</div>
+        <div class="ez-hero-title">라이트 로스트? 싱글오리진? 커핑 점수? 카페 메뉴판 2탄 — 이번엔 진짜 고수 용어야!</div>
+      </div>
+
+      
+      <div class="ez-section">
+        <h2>🤔 무슨 연구야?</h2>
+        
+          <p>저번에 TDS, 보디, 크레마 같은 기본 용어를 알아봤잖아 ☕ 근데 스페셜티 카페에 가보면 아직도 모르는 말들이 더 있어. &#39;싱글오리진이요, 라이트로 내려드릴까요?&#39; &#39;이 원두는 SCA 88점짜리예요.&#39; &#39;오늘의 커핑 세션에 초대합니다!&#39; — 이게 다 무슨 말이야?! 😅</p><p>사실 이 단어들만 알아도 카페에서 대화가 완전히 달라져. 바리스타가 뭘 설명해 주는지 이해하고, 내가 뭘 좋아하는지 정확히 말할 수 있거든. 마치 맛집 블로거가 &#39;이 파스타는 알덴테가 잘 살아있고 소스의 밸런스가 좋네&#39;라고 하는 것처럼, 커피도 그 언어가 있어 🍝</p><p>오늘은 커피 고수들이 자주 쓰는 두 번째 용어 배치 — 싱글오리진 vs 블렌드, 로스트 레벨, 커핑, SCA 점수, 품종(바리에탈) 다섯 가지를 일상 비유로 쉽게 풀어볼게. 이걸 알면 카페 메뉴판이 더 이상 두렵지 않을 거야! 💪</p>
+        
+      </div>
+
+      
+      
+      <div class="ez-section">
+        <h2>🧪 핵심 개념 쉽게 풀어보면</h2>
+        
+          <h3>싱글오리진 (Single Origin) vs 블렌드 (Blend)</h3>
+          <p>싱글오리진은 한 나라, 한 농장, 심지어 한 밭(lot)에서만 온 원두를 말해. &#39;에티오피아 예가체프 A농장 B lot&#39;처럼 출처가 딱 하나야. 반면 블렌드는 여러 나라·농장 원두를 섞어서 균형 잡힌 맛을 만든 거야. 스페셜티 카페에서 &#39;오늘의 원두&#39;는 대부분 싱글오리진이고, 아메리카노·라떼 기본 원두는 블렌드인 경우가 많아. 싱글오리진은 그 산지의 개성이 강하고, 블렌드는 안정적이고 균형감이 있어.</p>
+          <div class="ez-callout">💡 싱글오리진은 제주 한라봉만 100% 짜낸 주스 — 그 지역 특색이 강렬하게 느껴져! 블렌드는 여러 과일을 섞은 혼합 주스 — 다양하고 균형 잡힌 맛이 나. 둘 다 맛있지만 성격이 달라 🍊</div>
+        
+          <h3>로스트 레벨 (Roast Level) — 볶음 정도가 맛을 결정해</h3>
+          <p>같은 생두라도 얼마나 오래, 얼마나 강하게 볶느냐에 따라 맛이 완전히 달라져. 크게 세 단계로 나눠: 라이트 로스트(Light) — 밝은 산미·꽃향기·과일향, 생두의 개성이 가장 잘 살아있어. 미디엄 로스트(Medium) — 산미와 단맛의 균형, 캐러멜·견과류 느낌. 다크 로스트(Dark) — 산미가 줄고 쓴맛·탄향·초콜릿이 강해져, 에스프레소에 많이 씀. 스페셜티 커피는 라이트·미디엄이 인기고, 전통 프랜차이즈 커피는 다크 로스트가 많아.</p>
+          <div class="ez-callout">💡 빵을 굽는 것과 똑같아! 살짝 구운 식빵은 부드럽고 밀향이 살아있고, 오래 구운 토스트는 바삭하고 구수한 탄향이 나는 것처럼 — 볶음 정도가 맛의 방향을 바꿔 🍞</div>
+        
+          <h3>커핑 (Cupping) — 커피 품질 평가 의식</h3>
+          <p>커핑은 커피 품질을 표준화된 방식으로 평가하는 테이스팅이야. 분쇄한 커피를 잔에 담고 뜨거운 물을 부은 뒤, 스푼으로 위에 뜬 층을 깨고(break the crust), 향을 맡고, 식으면서 직접 스푼으로 떠서 마셔. 바이어·로스터·생산자가 한자리에 모여 여러 원두를 비교하는 공식 자리야. 한국에서도 스페셜티 카페에서 &#39;커핑 세션&#39; 행사를 자주 열어 — 가본 적 없다면 꼭 한 번 경험해봐!</p>
+          <div class="ez-callout">💡 와인 시음회처럼 — 와인을 조금씩 따라 냄새 맡고 입에 굴리고 뱉듯이, 커핑도 비슷한 의식이야. 여러 원두를 같은 조건에서 공정하게 비교하는 게 핵심이지! 🍷</div>
+        
+          <h3>SCA 점수 (SCA Score) — 커피의 성적표</h3>
+          <p>SCA(Specialty Coffee Association, 스페셜티커피협회)가 정한 커피 품질 평가 체계야. 향기(Fragrance/Aroma), 풍미(Flavor), 산미(Acidity), 보디(Body), 밸런스(Balance), 일관성, 여운(Aftertaste) 등 10개 항목을 100점 만점으로 채점해. 80점 이상이어야 &#39;스페셜티 커피&#39;라고 부를 수 있어. 85점 이상은 상위 5% 안에 드는 훌륭한 커피고, 90점 이상은 세계적인 희귀 커피야. 카페 메뉴판에 &#39;88점&#39;, &#39;90+&#39; 같은 숫자가 보이면 바로 이 SCA 점수야!</p>
+          <div class="ez-callout">💡 수능 점수처럼 — 80점은 인서울, 90점 이상은 SKY급! 근데 차이는, 커피 점수는 마시는 사람이 행복해야 의미가 있다는 거 ☺️</div>
+        
+      </div>
+      
+
+      
+      
+      <div class="ez-section">
+        <h2>🎯 핵심 발견</h2>
+        <ul class="ez-findings">
+          
+          
+            
+              <li class="gold">
+                <strong>품종(Varietal/Cultivar)이 달라도 맛이 완전 달라!</strong>커피나무도 품종이 달라. 대표적인 아라비카 품종으로는 티피카(Typica), 버번(Bourbon), 카투라(Caturra), 게이샤(Geisha), SL-28(케냐) 등이 있어. 같은 에티오피아라도 심겨진 품종에 따라 꽃향기가 강할 수도 있고, 과일향이 강할 수도 있어. 원두 라벨에 품종이 적혀있으면 그 이름을 기억해두면 나중에 취향 파악에 엄청 도움돼! 게이샤와 버번을 나란히 마셔보면 &#39;이게 같은 나무 열매야?!&#39; 할 정도로 맛 차이가 커 🌿
+              </li>
+            
+              <li class="silver">
+                <strong>라이트 로스트가 꼭 &#39;덜 볶은 것&#39;은 아니야</strong>라이트 로스트를 &#39;덜 익은 것&#39;, &#39;설익은 것&#39;으로 오해하는 사람들이 있어. 사실 라이트 로스트는 생두의 향미 개성이 가장 잘 보존되는 최적 구간이야. 특히 과일향이 선명하고 산미가 밝은 에티오피아·케냐 원두는 라이트 로스트에서 빛을 발해. 반대로 브라질·인도네시아처럼 묵직한 개성의 원두는 미디엄~다크에서 더 매력적이야. &#39;무조건 다크가 진하고 좋다&#39;는 편견은 이제 버려! 🔥
+              </li>
+            
+              <li class="bronze">
+                <strong>블렌드도 예술이야 — 로스터의 레시피</strong>블렌드를 단순히 &#39;섞어놓은 것&#39;으로 보면 오해야. 좋은 블렌드는 로스터가 각 원두의 장점을 살려 균형을 디자인한 작품이야. 브라질(달콤한 보디) + 에티오피아(밝은 산미) + 과테말라(균형) 식으로 각자 역할이 있어. 대형 카페 시그니처 블렌드에 바리스타들이 그 카페 아이덴티티를 담는 이유가 있는 거야 🎨
+              </li>
+            
+              <li class="medal">
+                <strong>커핑에서 &#39;슬러핑&#39; 소리는 예의야!</strong>커핑할 때 스푼으로 커피를 크게 &#39;흡!&#39; 소리 내서 빨아들이는 걸 &#39;슬러핑(Slurping)&#39;이라고 해. 평소엔 소리 내면 예의 없는 거지만, 커핑에서는 필수야! 공기와 함께 입안 전체에 커피를 분무시켜서 향미를 더 잘 느끼기 위한 기술이거든. 커핑 세션에 처음 가면 다들 소리 내서 마시는 게 낯설 수도 있지만, 거기선 그게 정석이야 😄
+              </li>
+            
+              <li class="medal">
+                <strong>로부스타 vs 아라비카 — 슈퍼마켓 커피와 스페셜티의 갈림길</strong>커피 원두는 크게 두 종류야. 아라비카(Arabica)는 향미가 풍부하고 산미가 있어 — 스페셜티 커피는 거의 다 아라비카야. 로부스타(Robusta)는 쓴맛이 강하고 카페인이 2배 많아 — 인스턴트 커피, 저가 블렌드에 많이 쓰여. 슈퍼마켓 캔커피가 왜 그렇게 쓰고 진한지, 스페셜티 원두가 왜 그렇게 향기로운지 이유가 여기에 있어! 같은 &#39;커피&#39;라도 아예 다른 종인 거야 🌱
+              </li>
+            
+          
+        </ul>
+      </div>
+      
+
+      
+      
+
+      
+      
+      
+      <div class="ez-section">
+        <h2>로스트 레벨 한눈에 비교</h2>
+        <table class="ez-table">
+          <thead><tr><th>로스트 레벨</th><th>색상</th><th>대표 향미</th><th>산미</th><th>쓴맛</th><th>주로 쓰이는 곳</th></tr></thead>
+          <tbody>
+            <tr>
+              <th>라이트 (Light)</th><td>연한 갈색</td><td>꽃향·과일·밝은 산미</td><td>강함</td><td>약함</td><td>핸드드립·스페셜티 원두</td>
+            </tr><tr>
+              <th>미디엄 (Medium)</th><td>갈색</td><td>캐러멜·견과·균형</td><td>중간</td><td>중간</td><td>드립·에스프레소 블렌드</td>
+            </tr><tr>
+              <th>다크 (Dark)</th><td>진한 갈색~검정</td><td>초콜릿·탄향·쓴맛</td><td>약함</td><td>강함</td><td>에스프레소·아메리카노 기본</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      
+      <div class="ez-section">
+        <h2>싱글오리진 vs 블렌드 비교</h2>
+        <table class="ez-table">
+          <thead><tr><th>비교 항목</th><th>싱글오리진</th><th>블렌드</th></tr></thead>
+          <tbody>
+            <tr>
+              <th>원두 출처</th><td>한 농장/한 산지</td><td>여러 산지 혼합</td>
+            </tr><tr>
+              <th>맛의 개성</th><td>강하고 독특함</td><td>균형 잡히고 안정적</td>
+            </tr><tr>
+              <th>가격</th><td>보통 더 높음</td><td>비교적 낮음</td>
+            </tr><tr>
+              <th>어울리는 추출</th><td>핸드드립·브루잉</td><td>에스프레소·라떼</td>
+            </tr><tr>
+              <th>추천 대상</th><td>커피 탐험하고 싶은 사람</td><td>매일 마시는 베이스 원두</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      
+      
+
+      
+      
+
+      
+      
+
+      
+      
+      <div class="ez-section">
+        <div class="ez-summary">💡 <strong>한 줄 요약</strong> — 싱글오리진은 개성, 블렌드는 균형 — 라이트는 향기, 다크는 쓴맛 — SCA 80점 이상이 스페셜티! 커핑에선 소리 내서 마셔야 고수야 😄☕</div>
+      </div>
+      
+
+      
+      
+      
+      
+
+      
+      
+      <div class="ez-section">
+        <h2>📖 어려운 말 풀이 사전</h2>
+        <p>이 글에 나온 어려운 약어와 용어를 한 번에 정리했어. 의미만 알면 본문이 훨씬 쉬워져!</p>
+        <div class="ez-glossary">
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">싱글오리진 (Single Origin)</div>
+            <div class="ez-glossary-def">한 나라·농장에서만 온 원두. 그 지역 개성이 강하게 느껴짐</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">블렌드 (Blend)</div>
+            <div class="ez-glossary-def">여러 산지·농장 원두를 섞어 균형 잡힌 맛을 만든 원두</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">로스트 레벨 (Roast Level)</div>
+            <div class="ez-glossary-def">원두를 볶는 정도. 라이트·미디엄·다크로 나뉘며 맛이 완전히 달라짐</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">커핑 (Cupping)</div>
+            <div class="ez-glossary-def">SCA 표준 방식으로 커피를 평가하는 테이스팅. 여러 원두를 공정하게 비교함</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">SCA 점수 (SCA Score)</div>
+            <div class="ez-glossary-def">스페셜티커피협회 100점 평가 체계. 80점 이상이 스페셜티 커피</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">바리에탈/품종 (Varietal/Cultivar)</div>
+            <div class="ez-glossary-def">커피나무의 품종. 티피카·버번·게이샤 등. 품종에 따라 향미가 달라짐</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">아라비카 (Arabica)</div>
+            <div class="ez-glossary-def">향미 풍부한 커피 주종. 스페셜티 커피의 대부분</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">로부스타 (Robusta)</div>
+            <div class="ez-glossary-def">쓴맛·카페인이 강한 커피 종. 인스턴트·저가 블렌드에 많이 사용</div>
+          </div>
+          
+        </div>
+      </div>
+      
+
+    </div>
+  </section>
+
+  <footer class="article-footer">
+    <div class="container">
+      <a href="/insight">← BACK TO INSIGHTS</a>
+      <span style="margin: 0 16px;">·</span>
+      <a href="/">HOME</a>
+    </div>
+  </footer>
+</article>
+
+</body>
+</html>
