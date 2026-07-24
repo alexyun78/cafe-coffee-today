@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>한국인이 제일 좋아하는 콜롬비아 커피, 그중에서도 '후일라'가 특별한 이유가 뭐야? ☕ — 92°C ROASTERY</title>
+<meta name="description" content="안데스 고산지대 소농의 손끝에서 탄생한 카라멜·사과 향 — 후일라 커피의 달콤한 비밀!">
+<link rel="icon" type="image/png" href="/static/img/logo-92black.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --canvas: #FFFFFF; --canvas-warm: #FAF7F2; --canvas-stone: #F2ECE3;
+  --ink: #1A1410; --ink-mute: #4A3F36; --ink-soft: #6B5E52;
+  --espresso: #6F4E37; --caramel: #C9986A; --copper: #B5703D;
+  --line: #E8E0D5; --line-soft: #F0E9DD;
+  --font-display: "Cormorant Garamond", "Pretendard", serif;
+  --font-body: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  --r-sm: 6px; --r-md: 12px; --r-pill: 999px;
+}
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color: transparent; }
+html { scroll-behavior: smooth; }
+body { font-family: var(--font-body); color: var(--ink); background: var(--canvas); font-feature-settings: "kern","ss01","lnum"; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+a { color: var(--copper); text-decoration: none; border-bottom: 1px solid transparent; transition: border-color .2s; }
+a:hover { border-bottom-color: var(--copper); }
+img { display: block; max-width: 100%; height: auto; }
+.container { max-width: 860px; margin: 0 auto; padding: 0 32px; }
+@media (max-width: 720px) { .container { padding: 0 20px; } }
+@media (max-width: 480px) { .container { padding: 0 16px; } }
+.site-nav { position: sticky; top: 0; z-index: 50; background: rgba(255,255,255,0.9); backdrop-filter: saturate(140%) blur(14px); -webkit-backdrop-filter: saturate(140%) blur(14px); border-bottom: 1px solid var(--line-soft); }
+.nav-inner { max-width: 1200px; margin: 0 auto; padding: 16px 32px; display: flex; align-items: center; justify-content: space-between; }
+.brand { font-family: var(--font-display); font-size: 1.3rem; font-weight: 700; color: var(--ink); display: inline-flex; align-items: center; gap: 4px; border-bottom: none; }
+.brand:hover { border-bottom: none; }
+.brand-mark { display: inline-flex; align-items: flex-start; font-family: "Pretendard", sans-serif; font-weight: 900; letter-spacing: -0.04em; line-height: 1; color: inherit; }
+.temp-mark { display: flex; flex-direction: column; line-height: .82; margin: 0 .05em 0 .04em; }
+.temp-mark .temp-deg { font-size: .42em; letter-spacing: -.04em; }
+.temp-mark .temp-c { font-size: .58em; letter-spacing: -.05em; margin-top: -.05em; }
+.nav-back { font-family: var(--font-mono); font-size: .75rem; letter-spacing: .18em; color: var(--ink-mute); border-bottom: none; }
+.nav-back:hover { color: var(--copper); border-bottom: none; }
+.article-hero { padding: 56px 0 48px; border-bottom: 1px solid var(--line-soft); }
+.eyebrow { font-family: var(--font-mono); font-size: .72rem; letter-spacing: .28em; color: var(--copper); margin-bottom: 18px; display: flex; align-items: center; gap: 12px; }
+.eyebrow::before { content: ""; display: inline-block; width: 28px; height: 1px; background: var(--copper); }
+.article-title { font-family: var(--font-display); font-weight: 500; font-size: clamp(2rem, 4.5vw, 3.2rem); line-height: 1.15; letter-spacing: -0.02em; color: var(--ink); margin-bottom: 20px; }
+.article-title em { font-style: italic; color: var(--espresso); font-weight: 600; }
+.article-one-liner { font-family: var(--font-display); font-style: italic; font-size: 1.3rem; line-height: 1.5; color: var(--espresso); margin-bottom: 28px; padding-left: 20px; border-left: 3px solid var(--caramel); }
+.article-meta { display: flex; gap: 24px; flex-wrap: wrap; font-family: var(--font-mono); font-size: .75rem; letter-spacing: .12em; color: var(--ink-soft); padding-top: 20px; border-top: 1px solid var(--line-soft); }
+.article-meta span { display: inline-flex; align-items: center; gap: 6px; }
+.article-meta span::before { content: "■"; color: var(--caramel); font-size: .55rem; }
+.hero-image { margin: 32px 0 0; border-radius: var(--r-md); overflow: hidden; border: 1px solid var(--line); }
+.hero-image img { width: 100%; }
+.article-body { padding: 56px 0 80px; }
+.article-footer { padding: 36px 0 56px; border-top: 1px solid var(--line-soft); text-align: center; font-family: var(--font-mono); font-size: .75rem; letter-spacing: .14em; color: var(--ink-soft); }
+.article-footer a { color: var(--ink-mute); border-bottom: 1px solid transparent; }
+.article-footer a:hover { color: var(--copper); border-bottom-color: var(--copper); }
+.source-basis { display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; background: rgba(201,152,106,.18); border: 1px solid rgba(181,112,61,.35); border-radius: var(--r-pill); font-family: var(--font-mono); font-size: .72rem; letter-spacing: .12em; color: var(--espresso); font-weight: 500; }
+.source-basis.abstract { background: rgba(107,94,82,.1); border-color: rgba(107,94,82,.3); color: var(--ink-soft); }
+.links-row { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 18px; }
+.link-pill { display: inline-flex; align-items: center; gap: 8px; padding: 9px 16px; background: var(--canvas-warm); border: 1px solid var(--line); border-radius: var(--r-pill); font-family: var(--font-mono); font-size: .78rem; letter-spacing: .08em; color: var(--ink-mute); border-bottom: 1px solid var(--line); transition: border-color .2s, color .2s; }
+.link-pill:hover { color: var(--copper); border-color: var(--copper); }
+
+/* ===== EZ: 쉬운 설명 스타일 ===== */
+.ez-hero { text-align: center; padding: 8px 0 32px; }
+.ez-hero-emoji { font-size: 3.4rem; line-height: 1; }
+.ez-hero-title { font-family: var(--font-display); font-size: clamp(1.6rem, 3.5vw, 2.2rem); font-weight: 600; color: var(--ink); margin-top: 14px; line-height: 1.3; }
+.ez-section { margin-bottom: 52px; }
+.ez-section h2 { font-family: var(--font-body); font-size: 1.5rem; font-weight: 700; color: var(--ink); margin-bottom: 18px; letter-spacing: -0.01em; }
+.ez-section h3 { font-size: 1.08rem; font-weight: 600; color: var(--espresso); margin: 22px 0 10px; }
+.ez-section p { font-size: 1.04rem; line-height: 1.85; color: var(--ink-mute); margin-bottom: 14px; }
+.ez-section p:last-child { margin-bottom: 0; }
+.ez-section ul { padding-left: 22px; margin-bottom: 14px; }
+.ez-section li { font-size: 1.02rem; line-height: 1.8; color: var(--ink-mute); margin-bottom: 8px; }
+.ez-callout { margin: 14px 0; padding: 14px 18px; background: var(--canvas-warm); border-left: 3px solid var(--caramel); border-radius: 4px; font-size: 0.98rem; color: var(--espresso); line-height: 1.75; }
+.ez-callout strong { color: var(--copper); }
+.ez-findings { list-style: none; padding: 0; }
+.ez-findings > li { padding: 18px 22px; margin-bottom: 14px; background: var(--canvas-warm); border: 1px solid var(--line); border-radius: 10px; font-size: 1.02rem; line-height: 1.7; color: var(--ink-mute); }
+.ez-findings > li strong { color: var(--ink); display: block; margin-bottom: 4px; font-size: 1.06rem; }
+.ez-findings > li.gold { background: linear-gradient(135deg, #FFF8E7, #FFEFCD); border-color: #F0D67A; }
+.ez-findings > li.silver { background: linear-gradient(135deg, #F6F6F6, #ECECEC); border-color: #C7C7C7; }
+.ez-findings > li.bronze { background: linear-gradient(135deg, #FFEEDD, #FFDCC0); border-color: #E4B07F; }
+.ez-findings > li.medal { background: linear-gradient(135deg, #F0E6FF, #E1D2FF); border-color: #BDA8E5; }
+.ez-table { width: 100%; border-collapse: collapse; margin: 16px 0 8px; font-size: 0.96rem; }
+.ez-table th, .ez-table td { padding: 11px 14px; border: 1px solid var(--line); text-align: left; vertical-align: top; }
+.ez-table thead th { background: var(--ink); color: #fff; font-weight: 600; letter-spacing: .02em; }
+.ez-table tbody th { background: var(--canvas-warm); color: var(--ink); font-weight: 600; }
+.ez-table tbody tr:nth-child(even) td { background: rgba(250, 247, 242, .55); }
+.ez-summary { padding: 26px 30px; background: linear-gradient(135deg, #FAF0E0, #F3E1C5); border-radius: 14px; font-size: 1.13rem; line-height: 1.75; font-weight: 500; color: var(--ink); border: 1px solid #E5C99B; }
+.ez-summary strong { color: var(--espresso); }
+.ez-citation { margin-top: 24px; padding: 18px 22px; background: var(--canvas-warm); border-radius: 8px; font-family: var(--font-mono); font-size: 0.82rem; color: var(--ink-soft); line-height: 1.7; }
+.ez-citation p { margin: 4px 0; }
+.ez-chart-card { padding: 22px 24px 18px; background: var(--canvas); border: 1px solid var(--line); border-radius: 12px; margin: 16px 0; }
+.ez-chart-card .ez-chart-title { font-size: 1rem; font-weight: 600; color: var(--ink); margin-bottom: 14px; }
+.ez-bar-row { display: flex; align-items: center; margin: 10px 0; font-size: 0.95rem; gap: 14px; }
+.ez-bar-label { width: 180px; flex-shrink: 0; color: var(--ink-mute); font-weight: 500; }
+.ez-bar-track { flex: 1; height: 32px; background: var(--canvas-warm); border-radius: 6px; overflow: hidden; position: relative; border: 1px solid var(--line); }
+.ez-bar-fill { height: 100%; background: linear-gradient(90deg, var(--caramel), var(--copper)); display: flex; align-items: center; justify-content: flex-end; padding: 0 12px; color: white; font-weight: 700; font-size: 0.92rem; min-width: 56px; }
+.ez-bar-fill.alt { background: linear-gradient(90deg, #6F4E37, #4A3F36); }
+.ez-glossary { display: grid; gap: 12px; }
+.ez-glossary-item { padding: 16px 20px; background: var(--canvas-warm); border: 1px solid var(--line); border-radius: 10px; border-left: 3px solid var(--caramel); }
+.ez-glossary-term { font-family: var(--font-display); font-style: italic; font-size: 1.1rem; font-weight: 600; color: var(--espresso); margin-bottom: 6px; }
+.ez-glossary-def { font-size: 0.98rem; color: var(--ink-mute); line-height: 1.7; }
+@media (max-width: 720px) {
+  .article-hero { padding: 36px 0 32px; }
+  .article-body { padding: 36px 0 56px; }
+  .ez-section { margin-bottom: 40px; }
+  .ez-section h2 { font-size: 1.3rem; }
+  .ez-bar-label { width: 100%; margin-bottom: 4px; }
+  .ez-bar-row { flex-direction: column; align-items: stretch; }
+  .article-meta { gap: 12px 18px; font-size: .68rem; }
+}
+</style>
+</head>
+<body>
+
+<header class="site-nav">
+  <div class="nav-inner">
+    <a class="brand" href="/">
+      <span class="brand-mark">92<span class="temp-mark"><span class="temp-deg">°</span><span class="temp-c">C</span></span></span>ROASTERY
+    </a>
+    <a class="nav-back" href="/insight">← INSIGHTS</a>
+  </div>
+</header>
+
+<article>
+  <section class="article-hero">
+    <div class="container">
+      <div class="eyebrow">— 오늘의 커피 상식 · 2026.07.24</div>
+      <h1 class="article-title">한국인이 제일 좋아하는 콜롬비아 커피, 그중에서도 &#39;후일라&#39;가 특별한 이유가 뭐야? ☕</h1>
+      <p class="article-one-liner">안데스 고산지대 소농의 손끝에서 탄생한 카라멜·사과 향 — 후일라 커피의 달콤한 비밀!</p>
+      <div class="article-meta">
+        
+        
+        
+        <span>커피 상식 · 원산지</span>
+      </div>
+      
+      <div class="hero-image">
+        <img src="/static/img/insights/trivia/origin.svg" alt="한국인이 제일 좋아하는 콜롬비아 커피, 그중에서도 &#39;후일라&#39;가 특별한 이유가 뭐야? ☕">
+      </div>
+      
+    </div>
+  </section>
+
+  <section class="article-body">
+    <div class="container">
+
+      
+      <div class="ez-hero">
+        <div class="ez-hero-emoji">🌿</div>
+        <div class="ez-hero-title">한국인이 제일 좋아하는 콜롬비아 커피, 그중에서도 &#39;후일라&#39;가 특별한 이유가 뭐야?</div>
+      </div>
+
+      
+      <div class="ez-section">
+        <h2>🤔 무슨 연구야?</h2>
+        
+          <p>카페에 가면 &#39;콜롬비아 커피&#39;를 정말 많이 볼 수 있지? ☕ 아이스 아메리카노 원두로도 자주 쓰이고, 스페셜티 카페 메뉴판에도 &#39;콜롬비아 후일라&#39;가 빠지지 않아. 근데 콜롬비아 중에서도 왜 &#39;후일라(Huila)&#39;가 유독 자주 보이는지 궁금하지 않았어? 🤔</p><p>콜롬비아는 전 세계에서 아라비카 커피를 가장 많이 수출하는 나라 중 하나야. 그중에서도 후일라는 스페셜티 커피 세계에서 &#39;국룰&#39;로 통할 만큼 꾸준히 사랑받는 산지거든. 단순히 커피가 많이 나서가 아니라, 그 맛이 정말 특별해서 전 세계 바이어들이 앞다퉈 찾는 곳이야. 🌍</p><p>오늘은 안데스 산맥 깊숙이 자리한 후일라 이야기를 같이 해볼게. 왜 거기서 난 커피가 카라멜, 열대과일, 사과 산미를 동시에 품을 수 있는지 — 그 달콤한 비밀을 파헤쳐 보자! 🍎🍬</p>
+        
+      </div>
+
+      
+      
+      <div class="ez-section">
+        <h2>🧪 핵심 개념 쉽게 풀어보면</h2>
+        
+          <h3>후일라(Huila)는 어디에 있어? — 안데스 산맥의 숨겨진 보물</h3>
+          <p>후일라는 콜롬비아 남부에 위치한 행정구역(주)이야. 안데스 산맥이 여러 갈래로 뻗은 지역에 자리해서 고도가 높고(커피 재배지 기준 약 1,500~2,000m), 화산성 토양이 풍부해. 마그달레나 강(Río Magdalena)이 이 지역에서 발원하면서 독특한 미세기후(microclimate)를 만들어내. 낮에는 햇빛이 좋고 밤에는 서늘해서 커피 열매가 천천히 익으며 당분이 가득 쌓이는 거야.</p>
+          <div class="ez-callout">💡 강원도 산간 지방 사과가 특별히 달고 아삭한 이유처럼 — 밤낮 온도 차가 크고 토양이 좋은 땅에서는 농산물이 더 달고 향기로워. 후일라도 그런 땅이야! 🍎</div>
+        
+          <h3>소농(小農) 문화 — 가족 농장이 만드는 품질</h3>
+          <p>후일라의 커피는 대형 플랜테이션이 아닌 수천 명의 소농(카페테로, cafetero) 가족들이 만들어. 한 가족당 농장 규모는 보통 수 헥타르 정도로 작은 편이야. 규모가 작기 때문에 기계화보다 손으로 일일이 잘 익은 열매만 골라 수확하는 &#39;핸드 피킹(hand picking)&#39;이 가능해. 대형 기계로 한꺼번에 털어내는 방식보다 품질이 훨씬 높을 수밖에 없어!</p>
+          <div class="ez-callout">💡 대형 마트 빵과 동네 소규모 베이커리 빵의 차이처럼 — 손으로 하나하나 정성 들여 만들면 맛이 다를 수밖에 없잖아? 후일라 소농들이 바로 그 역할을 하는 거야 🍞</div>
+        
+          <h3>컵 오브 엑셀런스(Cup of Excellence) — 세계 최고 품질 커피 경매</h3>
+          <p>컵 오브 엑셀런스(CoE)는 매년 국가별로 열리는 세계 최고 품질 커피 경매야. 국제 심사위원단이 커핑으로 점수를 매겨 상위 커피를 선발하고, 전 세계 바이어들이 온라인 경매로 입찰해. 콜롬비아 CoE에서는 후일라 출신 커피가 매년 상위권을 차지하는 경우가 많아. CoE 수상 커피는 100g에 수만 원에서 수십만 원까지 거래되기도 해!</p>
+          <div class="ez-callout">💡 수능처럼 전국에서 모인 커피들이 실력을 겨루는 대회야. 상위권에 꾸준히 이름을 올리는 후일라는 말 그대로 &#39;상위권 단골&#39; 산지지 📚</div>
+        
+      </div>
+      
+
+      
+      
+      <div class="ez-section">
+        <h2>🎯 핵심 발견</h2>
+        <ul class="ez-findings">
+          
+          
+            
+              <li class="gold">
+                <strong>콜롬비아 커피는 1년에 두 번 수확해!</strong>대부분의 커피 산지는 1년에 한 번만 수확해. 그런데 콜롬비아는 지리적으로 특이해서 &#39;메인 수확기(cosecha principal)&#39;와 &#39;보조 수확기(mitaca)&#39; 두 번에 걸쳐 커피를 수확할 수 있어. 안데스 산맥의 지형이 복잡해서 지역마다 우기가 다르게 찾아오기 때문이야. 후일라 기준으로 메인 수확은 보통 10~12월, 보조 수확은 4~6월 전후야. 덕분에 신선한 콜롬비아 커피를 1년 내내 접할 수 있어! 🌱
+              </li>
+            
+              <li class="silver">
+                <strong>후일라 커피의 대표 향미 — 카라멜, 사과, 열대과일</strong>후일라 워시드 커피는 카라멜, 밀크초콜릿, 빨간 사과, 파인애플, 오렌지 같은 달콤하고 균형 잡힌 맛이 특징이야. 에티오피아처럼 강렬한 꽃향기는 아니지만 &#39;먹기 편안한 달콤함&#39;이 있어서 처음 스페셜티를 접하는 사람들도 쉽게 좋아하게 돼. 한국인 입맛에 잘 맞는 이유가 여기 있어! 🍍🍎
+              </li>
+            
+              <li class="bronze">
+                <strong>후일라의 주요 커피 품종은 뭐야?</strong>후일라에서 가장 많이 재배되는 품종은 카투라(Caturra)야 — 콤팩트하고 생산성이 좋아서 소농에게 인기야. 카스티요(Castillo)와 콜롬비아(Colombia) 품종은 커피 잎녹병(coffee leaf rust, roya)에 강하게 개량된 품종인데, 콜롬비아 커피 연구기관 세니카페(Cenicafé)가 개발했어. 최근엔 핑크 버번(Pink Bourbon) 같은 희귀 품종도 재배하는 농장들이 늘고 있어! 🌿
+              </li>
+            
+              <li class="medal">
+                <strong>FNC — 콜롬비아 소농 뒤를 든든히 받쳐주는 조직</strong>콜롬비아에는 FNC(Federación Nacional de Cafeteros, 국립커피연합회)라는 강력한 커피 농민 단체가 있어. 1927년에 설립됐고 수십만 명의 커피 농민을 대표해. 품질 기준 관리, 가격 지원, 해외 마케팅(Juan Valdez 브랜드가 FNC 소속!)을 맡아. 소농들이 혼자 글로벌 시장에서 싸우지 않아도 되게 조직적으로 보호해주는 거야. 한국의 농협과 비슷한 역할이라고 볼 수 있어. 🤝 이 조직이 있어서 후일라 소농들이 세계 시장에서도 제값을 받을 수 있어!
+              </li>
+            
+              <li class="medal">
+                <strong>핑크 버번(Pink Bourbon) — 후일라의 뜨는 스타 품종</strong>최근 스페셜티 카페에서 &#39;핑크 버번&#39;이라는 이름을 종종 볼 수 있어. 이 희귀 품종이 특히 주목받기 시작한 곳이 콜롬비아 후일라야! 일반 버번은 빨간색 또는 노란색 열매가 열리는데, 핑크 버번은 이름처럼 분홍빛이 도는 열매가 열려. 꽃향기와 달콤한 과일향이 강해서 스페셜티 바이어들 사이에서 &#39;발견의 기쁨&#39;이 있는 품종으로 통해. 한 잔 마셔보면 &#39;이게 커피야?!&#39; 할 거야 🌸
+              </li>
+            
+          
+        </ul>
+      </div>
+      
+
+      
+      
+
+      
+      
+      
+      <div class="ez-section">
+        <h2>콜롬비아 후일라 vs 다른 대표 산지 비교</h2>
+        <table class="ez-table">
+          <thead><tr><th>비교 항목</th><th>콜롬비아 후일라</th><th>에티오피아 예가체프</th><th>케냐 AA</th></tr></thead>
+          <tbody>
+            <tr>
+              <th>고도</th><td>1,500~2,000m</td><td>1,700~2,200m</td><td>1,500~2,100m</td>
+            </tr><tr>
+              <th>주요 가공법</th><td>워시드</td><td>워시드·내추럴 혼합</td><td>워시드(더블 발효)</td>
+            </tr><tr>
+              <th>대표 향미</th><td>카라멜·사과·열대과일·밀크초콜릿</td><td>자스민·레몬·복숭아·꽃향기</td><td>블랙커런트·토마토·날카로운 산미</td>
+            </tr><tr>
+              <th>산미 스타일</th><td>균형 잡힌 중간 산미</td><td>밝고 섬세한 시트러스</td><td>강렬하고 선명한 산미</td>
+            </tr><tr>
+              <th>바디감</th><td>미디엄 보디</td><td>라이트~미디엄</td><td>미디엄~풀 보디</td>
+            </tr><tr>
+              <th>추천 대상</th><td>처음 스페셜티 입문하는 사람</td><td>꽃향기·섬세함 좋아하는 사람</td><td>강렬한 산미·개성 원하는 사람</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      
+      
+
+      
+      
+
+      
+      
+
+      
+      
+      <div class="ez-section">
+        <div class="ez-summary">💡 <strong>한 줄 요약</strong> — 안데스 고산지대 소농의 정성과 화산성 토양이 만나 카라멜·사과향 한 잔이 탄생하는 곳 — 그게 콜롬비아 후일라야! ☕</div>
+      </div>
+      
+
+      
+      
+      
+      
+
+      
+      
+      <div class="ez-section">
+        <h2>📖 어려운 말 풀이 사전</h2>
+        <p>이 글에 나온 어려운 약어와 용어를 한 번에 정리했어. 의미만 알면 본문이 훨씬 쉬워져!</p>
+        <div class="ez-glossary">
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">카페테로(Cafetero)</div>
+            <div class="ez-glossary-def">콜롬비아 커피 농부. 가족 단위 소농이 많으며 손으로 열매를 하나하나 수확함</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">컵 오브 엑셀런스(Cup of Excellence, CoE)</div>
+            <div class="ez-glossary-def">매년 국가별로 열리는 세계 최고 품질 커피 국제 경매 대회</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">FNC(Federación Nacional de Cafeteros)</div>
+            <div class="ez-glossary-def">콜롬비아 국립커피연합회. 소농을 대표하며 품질 관리·해외 마케팅 담당</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">핑크 버번(Pink Bourbon)</div>
+            <div class="ez-glossary-def">분홍빛 열매가 열리는 희귀 커피 품종. 콜롬비아 후일라에서 특히 주목받음</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">카스티요(Castillo)</div>
+            <div class="ez-glossary-def">콜롬비아 세니카페 연구소가 개발한 커피 잎녹병 내성 품종</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">미타카(Mitaca)</div>
+            <div class="ez-glossary-def">콜롬비아의 보조 수확기. 지역마다 다르지만 메인 수확기와 반년 간격으로 진행됨</div>
+          </div>
+          
+        </div>
+      </div>
+      
+
+    </div>
+  </section>
+
+  <footer class="article-footer">
+    <div class="container">
+      <a href="/insight">← BACK TO INSIGHTS</a>
+      <span style="margin: 0 16px;">·</span>
+      <a href="/">HOME</a>
+    </div>
+  </footer>
+</article>
+
+</body>
+</html>

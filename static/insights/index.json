@@ -1,7 +1,24 @@
 {
   "version": 1,
-  "updated_at": "2026-07-23T12:00:52Z",
+  "updated_at": "2026-07-24T12:00:48Z",
   "items": [
+    {
+      "id": "2026-07-24-colombia-huila-magic",
+      "type": "trivia",
+      "date": "2026-07-24",
+      "title_ko": "한국인이 제일 좋아하는 콜롬비아 커피, 그중에서도 '후일라'가 특별한 이유가 뭐야? ☕",
+      "one_liner": "안데스 고산지대 소농의 손끝에서 탄생한 카라멜·사과 향 — 후일라 커피의 달콤한 비밀!",
+      "categories_primary": [
+        "커피 상식"
+      ],
+      "categories_secondary": [
+        "원산지"
+      ],
+      "hero_image": "/static/img/insights/trivia/origin.svg",
+      "journal": null,
+      "pub_date": null,
+      "source_basis": null
+    },
     {
       "id": "2026-07-23-cold-brew-roasting-degree-sensory-rda",
       "type": "paper",
