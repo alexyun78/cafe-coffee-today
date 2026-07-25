@@ -1,0 +1,71 @@
+{
+  "version": 1,
+  "id": "2026-07-25-brewing-method-bioactive-antioxidant-arabica",
+  "date": "2026-07-25",
+  "slug": "brewing-method-bioactive-antioxidant-arabica",
+  "title_ko": "추출 방법이 아라비카 커피의 생리활성 화합물 프로파일과 항산화 능력을 결정짓는다",
+  "title_original": "Brewing-Method-Dependent Changes in the Bioactive Compound Profile and Antioxidant Potential of Coffee Beverages",
+  "one_liner": "추출법이 클로로겐산 구성·항산화 활성을 결정 — 콜드브루가 라디칼 소거력 1위.",
+  "authors": "Sęk, M.; Cięciel, U.; Tkacz, M.; Rohn, S.; Halagarda, M.",
+  "journal": "Molecules (MDPI)",
+  "pub_date": "2026-06-19",
+  "doi": "10.3390/molecules31122163",
+  "categories_primary": [
+    "추출"
+  ],
+  "categories_secondary": [
+    "화학/분석화학",
+    "건강/영양"
+  ],
+  "summary": "아메리카노·V60·프렌치 프레스·콜드브루 4가지 추출법이 아라비카 커피 음료의 생리활성 화합물 프로파일과 항산화 능력에 미치는 영향을 HPLC-onlineTEAC로 분석한 폴란드-독일 공동 연구. 추출법은 산도·카페인·총 페놀 함량·라디칼 소거 활성 모두에서 유의미한 차이를 만들었으며, 콜드브루가 총 라디칼 소거 활성 최고. 3-CQA·4-CQA·5-CQA 등 클로로겐산 이성질체별 항산화 기여도를 개별 정량화하여, 단순 총량 분석의 한계를 극복하는 새로운 분석 프레임워크를 제시했다.",
+  "key_findings": [
+    "4가지 추출법(아메리카노·V60·프렌치 프레스·콜드브루) 간 산도·카페인·TPC·라디칼 소거 활성 모두 통계적으로 유의미한 차이",
+    "콜드브루가 총 라디칼 소거 활성 최고 — 저온 추출이 CGA류 열분해 억제하여 항산화 활성 보존",
+    "HPLC-onlineTEAC로 3-CQA·4-CQA·5-CQA 등 CGA 이성질체별 항산화 기여도 개별 정량화",
+    "추출법에 따라 CGA 이성질체 상대 조성 비율이 달라짐 — 추출법이 항산화 품질 프로파일 자체를 결정",
+    "커피 항산화 활성은 단일 TPC 지표보다 개별 CGA 이성질체 기여도 합산으로 더 정확히 설명됨"
+  ],
+  "methodology": "동일 아라비카 원두 4가지 추출법(아메리카노·V60·프렌치 프레스·콜드브루) 비교. HPLC-onlineTEAC로 CGA 이성질체(3-CQA·4-CQA·5-CQA) 개별 항산화 기여도 정량. pH·적정 산도·카페인·TPC·총 라디칼 소거 활성 추가 측정. 크라쿠프 경제대학교(폴란드)+베를린 공과대학교(독일) 공동 연구. MDPI Molecules 오픈 액세스 게재.",
+  "implications": {
+    "농가/가공장": "CGA 함량을 유지하는 재배·수확 후 처리(적정 성숙도·저온 건조)가 최종 음료 항산화 기능성 극대화에 기여. 콜드브루용 원두의 CGA 프로파일 정보가 향후 원두 판매 경쟁력 요소로 부상할 수 있음.",
+    "로스터/큐그레이더": "동일 원두·로스팅이라도 추출법에 따라 항산화 기능성이 크게 달라짐 — 건강 소구 콜드브루 제품 마케팅에 활용 가능. 라이트 로스팅(CGA 보존율 높음) 선택과 추출법 조합 전략이 항산화 기능성 최적화에 유효.",
+    "R&D": "추출법별 CGA 이성질체 정량 수치 공개·로스팅 도수×추출법 교차 효과 연구·에스프레소 포함 비교·로부스타 재현 검증·추출 후 보관 중 CGA 분해 추적 연구가 핵심 후속 과제."
+  },
+  "limitations": "초록 기반 분석으로 CGA 이성질체 개별 정량 수치·TEAC 기여도·통계 세부 결과 미확인. 사용 원두 품종·산지·로스팅 도수·추출 파라미터 세부 조건 불명확. 단일 원두 사용 가능성으로 일반화 제한. 관능 평가 포함 여부 불명확.",
+  "glossary": [
+    {
+      "term": "Chlorogenic Acid (CGA)",
+      "ko": "클로로겐산 — 커피의 주요 폴리페놀. 퀸산+카페산 에스터 결합, 3-CQA·4-CQA·5-CQA 이성질체 존재"
+    },
+    {
+      "term": "HPLC-onlineTEAC",
+      "ko": "HPLC와 TEAC 라디칼 소거 분석을 온라인 커플링 — 개별 화합물별 항산화 기여도 실시간 정량"
+    },
+    {
+      "term": "TEAC",
+      "ko": "Trolox 등가 항산화 능력 — 항산화 활성을 트롤록스 μmol 등가량으로 표현"
+    },
+    {
+      "term": "TPC (Total Phenolic Content)",
+      "ko": "총 페놀 함량 — Folin-Ciocalteu법으로 측정, GAE로 표현"
+    },
+    {
+      "term": "Cold Brew",
+      "ko": "콜드브루 — 4~25°C에서 12~24시간 저온 장시간 침지 추출, CGA 열분해 억제"
+    },
+    {
+      "term": "V60",
+      "ko": "하리오 V60 푸어오버 드립 추출법 — 90~96°C, 2~3분 추출"
+    }
+  ],
+  "citation_apa": "Sęk, M., Cięciel, U., Tkacz, M., Rohn, S., & Halagarda, M. (2026). Brewing-Method-Dependent Changes in the Bioactive Compound Profile and Antioxidant Potential of Coffee Beverages. Molecules, 31(12), Article 2163. https://doi.org/10.3390/molecules31122163",
+  "links": {
+    "doi": "https://doi.org/10.3390/molecules31122163",
+    "oa_pdf": "https://www.mdpi.com/1420-3049/31/12/2163/pdf",
+    "journal_homepage": "https://www.mdpi.com/journal/molecules"
+  },
+  "source_basis": "abstract_only",
+  "data_charts": [],
+  "drive_doc_url": "https://docs.google.com/document/d/1xW5tXur5bS4d6hhLvt1y5qga6x3ob5Ll-2nFIWo-3DY/edit?usp=drivesdk&ouid=116660508274764947762",
+  "hero_image": "/static/img/insights/hero/extraction.svg"
+}

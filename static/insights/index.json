@@ -1,7 +1,25 @@
 {
   "version": 1,
-  "updated_at": "2026-07-24T12:00:48Z",
+  "updated_at": "2026-07-25T12:01:08Z",
   "items": [
+    {
+      "id": "2026-07-25-brewing-method-bioactive-antioxidant-arabica",
+      "type": "paper",
+      "date": "2026-07-25",
+      "title_ko": "추출 방법이 아라비카 커피의 생리활성 화합물 프로파일과 항산화 능력을 결정짓는다",
+      "one_liner": "추출법이 클로로겐산 구성·항산화 활성을 결정 — 콜드브루가 라디칼 소거력 1위.",
+      "categories_primary": [
+        "추출"
+      ],
+      "categories_secondary": [
+        "화학/분석화학",
+        "건강/영양"
+      ],
+      "hero_image": "/static/img/insights/hero/extraction.svg",
+      "journal": "Molecules (MDPI)",
+      "pub_date": "2026-06-19",
+      "source_basis": "abstract_only"
+    },
     {
       "id": "2026-07-24-colombia-huila-magic",
       "type": "trivia",
