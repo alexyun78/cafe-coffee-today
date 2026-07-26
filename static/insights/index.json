@@ -1,7 +1,25 @@
 {
   "version": 1,
-  "updated_at": "2026-07-25T12:01:08Z",
+  "updated_at": "2026-07-26T12:00:51Z",
   "items": [
+    {
+      "id": "2026-07-26-liberoid-coffee-quality-composition-fermentation",
+      "type": "paper",
+      "date": "2026-07-26",
+      "title_ko": "리베로이드 커피의 품질 잠재력 해방: 성분 조성·가공·미생물 발효 최신 종합 리뷰",
+      "one_liner": "리베리카·엑셀사의 독특한 조성과 맞춤형 미생물 발효로 제3의 커피 종 품질 잠재력을 재정의하다.",
+      "categories_primary": [
+        "생두"
+      ],
+      "categories_secondary": [
+        "미생물학",
+        "화학/분석화학"
+      ],
+      "hero_image": "/static/img/insights/hero/green-bean.svg",
+      "journal": "Comprehensive Reviews in Food Science and Food Safety (IFT/Wiley)",
+      "pub_date": "2026-05-13",
+      "source_basis": "abstract_only"
+    },
     {
       "id": "2026-07-25-brewing-method-bioactive-antioxidant-arabica",
       "type": "paper",
