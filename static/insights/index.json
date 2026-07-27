@@ -1,7 +1,24 @@
 {
   "version": 1,
-  "updated_at": "2026-07-26T12:00:51Z",
+  "updated_at": "2026-07-27T12:00:55Z",
   "items": [
+    {
+      "id": "2026-07-27-decaf-three-secret-methods",
+      "type": "trivia",
+      "date": "2026-07-27",
+      "title_ko": "카페인만 쏙 빼는 마법, 어떻게 하는 걸까? ☕",
+      "one_liner": "디카페인 커피, 그냥 연한 커피가 아니야 — 과학이 숨어 있어!",
+      "categories_primary": [
+        "커피 상식"
+      ],
+      "categories_secondary": [
+        "디카페인"
+      ],
+      "hero_image": "/static/img/insights/trivia/decaf.svg",
+      "journal": null,
+      "pub_date": null,
+      "source_basis": null
+    },
     {
       "id": "2026-07-26-liberoid-coffee-quality-composition-fermentation",
       "type": "paper",
