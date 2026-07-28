@@ -26,7 +26,9 @@ jobs:
         run: |
           git config user.name "insight-release-bot"
           git config user.email "noreply@github.com"
-          git add static/insights/ content/insight_queue/
+          git add static/insights/
+          # 큐가 완전히 비어 디렉터리가 없으면 pathspec 에러가 나므로 무시 (발행 생략과 동일)
+          git add content/insight_queue/ 2>/dev/null || true
           if git diff --cached --quiet; then
             echo "발행 변경 없음 (이미 발행됐거나 큐 비어 있음)"
           else

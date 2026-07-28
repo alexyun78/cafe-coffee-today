@@ -89,26 +89,15 @@ jobs:
           name: cafe-game-apk-v${{ steps.version.outputs.version }}
           path: cafe-game-apk/dist/
 
-      - name: Deploy APK to server
+      # 구 "Deploy APK to server"(iwinv SCP) 스텝은 2026-07-28 서버 해지로 제거.
+      # build-apk.yml 과 동일하게 GitHub Release(apk-latest) → Worker /downloads/* 리다이렉트 사용.
+      - name: Publish to GitHub Release (apk-latest)
         env:
-          SSH_PRIVATE_KEY: ${{ secrets.SERVER_SSH_KEY }}
-          SSH_HOST: 49.247.207.115
-          SSH_USER: root
-          SSH_KNOWN_HOST: ${{ secrets.SERVER_SSH_KNOWN_HOST }}
-          REMOTE_DIR: /root/92cafe/cafe-today-coffee/static/downloads
+          GH_TOKEN: ${{ github.token }}
         run: |
-          mkdir -p ~/.ssh
-          echo "$SSH_PRIVATE_KEY" > ~/.ssh/deploy_key
-          chmod 600 ~/.ssh/deploy_key
-          echo "$SSH_KNOWN_HOST" > ~/.ssh/known_hosts
-          chmod 644 ~/.ssh/known_hosts
-
-          ssh -i ~/.ssh/deploy_key -o UserKnownHostsFile=~/.ssh/known_hosts \
-            $SSH_USER@$SSH_HOST "mkdir -p $REMOTE_DIR"
-
-          scp -i ~/.ssh/deploy_key -o UserKnownHostsFile=~/.ssh/known_hosts \
+          gh release create apk-latest --repo ${{ github.repository }} \
+            --title "APK (latest)" --notes "자동 빌드 최신 APK — /apk 페이지에서 다운로드" 2>/dev/null || true
+          gh release upload apk-latest --repo ${{ github.repository }} --clobber \
             dist/game-latest.apk \
-            dist/game-version.json \
-            $SSH_USER@$SSH_HOST:$REMOTE_DIR/
-
-          echo "Deployed game-latest.apk v${{ steps.version.outputs.version }} to $SSH_HOST:$REMOTE_DIR"
+            dist/cafe-game-${{ steps.version.outputs.version }}.apk \
+            dist/game-version.json

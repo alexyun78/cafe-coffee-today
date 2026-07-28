@@ -108,26 +108,5 @@ jobs:
             dist/cafe-coffee-${{ steps.version.outputs.version }}.apk \
             dist/cafe-coffee-version.json
 
-      - name: Deploy APK to server
-        env:
-          SSH_PRIVATE_KEY: ${{ secrets.SERVER_SSH_KEY }}
-          SSH_HOST: 49.247.207.115
-          SSH_USER: root
-          SSH_KNOWN_HOST: ${{ secrets.SERVER_SSH_KNOWN_HOST }}
-          REMOTE_DIR: /root/92cafe/cafe-today-coffee/static/downloads
-        run: |
-          mkdir -p ~/.ssh
-          echo "$SSH_PRIVATE_KEY" > ~/.ssh/deploy_key
-          chmod 600 ~/.ssh/deploy_key
-          echo "$SSH_KNOWN_HOST" > ~/.ssh/known_hosts
-          chmod 644 ~/.ssh/known_hosts
-
-          ssh -i ~/.ssh/deploy_key -o UserKnownHostsFile=~/.ssh/known_hosts \
-            $SSH_USER@$SSH_HOST "mkdir -p $REMOTE_DIR"
-
-          scp -i ~/.ssh/deploy_key -o UserKnownHostsFile=~/.ssh/known_hosts \
-            dist/cafe-coffee-latest.apk \
-            dist/cafe-coffee-version.json \
-            $SSH_USER@$SSH_HOST:$REMOTE_DIR/
-
-          echo "Deployed cafe-coffee-latest.apk v${{ steps.version.outputs.version }} to $SSH_HOST:$REMOTE_DIR"
+      # 구 "Deploy APK to server"(iwinv SCP) 스텝은 2026-07-28 서버 해지로 제거.
+      # 배포 경로는 GitHub Release(apk-latest) → Worker /downloads/* 리다이렉트만 사용.
