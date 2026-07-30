@@ -5340,7 +5340,9 @@ function renderRoastList(items) {
       const prevInput = prevRec.actual_input_weight_g != null
         ? Number(prevRec.actual_input_weight_g) : Number(prevRec.input_weight_g) || 0;
       const prevInputTxt = prevInput ? ` · 투입 ${prevInput.toLocaleString()}g` : "";
-      lossCmpHtml = `<div class="record-row-losscmp${warnCls}">직전 ${prevLoss.toFixed(1)}%${deltaTxt}${prevInputTxt}</div>`;
+      const prevOutput = prevRec.output_weight_g != null ? Number(prevRec.output_weight_g) : null;
+      const prevOutputTxt = prevOutput != null ? ` · 배출 ${prevOutput.toLocaleString()}g` : "";
+      lossCmpHtml = `<div class="record-row-losscmp${warnCls}">직전 ${prevLoss.toFixed(1)}%${deltaTxt}${prevInputTxt}${prevOutputTxt}</div>`;
     }
     const stock = fmtStockKg(_roastStockMap[r.green_bean_id]);
     const pr = priceForRoast(r.green_bean_id, r.roast_date || "");
