@@ -1,7 +1,25 @@
 {
   "version": 1,
-  "updated_at": "2026-07-27T12:00:55Z",
+  "updated_at": "2026-07-31T02:53:42Z",
   "items": [
+    {
+      "id": "2026-07-31-coffee-belt",
+      "type": "trivia",
+      "date": "2026-07-31",
+      "title_ko": "커피나무는 왜 지구 허리띠 안에서만 자랄까? '커피 벨트'에 숨은 조건들 🌍",
+      "one_liner": "적도를 감싼 띠 모양의 땅 — 서리 없는 기온, 알맞은 비, 높은 고도가 모두 겹쳐야 커피가 자란다!",
+      "categories_primary": [
+        "커피 상식"
+      ],
+      "categories_secondary": [
+        "원산지",
+        "재배"
+      ],
+      "hero_image": "/static/img/insights/trivia/origin.svg",
+      "journal": null,
+      "pub_date": null,
+      "source_basis": null
+    },
     {
       "id": "2026-07-27-decaf-three-secret-methods",
       "type": "trivia",

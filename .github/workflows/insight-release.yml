@@ -9,6 +9,7 @@ on:
   workflow_dispatch: {}
 permissions:
   contents: write
+  actions: write # 발행 push 후 Deploy Worker 를 직접 dispatch (아래 참고)
 concurrency: insight-release
 jobs:
   release:
@@ -23,6 +24,7 @@ jobs:
       - name: Release one insight from queue
         run: python scripts/release_insight.py
       - name: Commit & push
+        id: commit
         run: |
           git config user.name "insight-release-bot"
           git config user.email "noreply@github.com"
@@ -31,7 +33,29 @@ jobs:
           git add content/insight_queue/ 2>/dev/null || true
           if git diff --cached --quiet; then
             echo "발행 변경 없음 (이미 발행됐거나 큐 비어 있음)"
+            echo "published=false" >> "$GITHUB_OUTPUT"
           else
             git commit -m "content(insights): 백로그 릴리스 일일 인사이트 ($(TZ=Asia/Seoul date +%F)) [GH Actions]"
             git push
+            echo "published=true" >> "$GITHUB_OUTPUT"
+          fi
+      # GITHUB_TOKEN 으로 만든 push 는 다른 워크플로를 트리거하지 못한다(무한 루프 방지 규칙).
+      # 그래서 사이트에 반영하려면 Deploy Worker 를 명시적으로 dispatch 해야 한다.
+      - name: Deploy worker (site 반영)
+        if: steps.commit.outputs.published == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh workflow run deploy-worker.yml --ref main
+      # 큐 소진은 "조용한 성공"으로 지나가면 며칠 뒤에야 발견된다(2026-07 실제 사고).
+      # 남은 편수를 요약에 남기고, 바닥나면 실패로 표시해 스케줄 실패 알림이 오게 한다.
+      - name: 큐 잔량 점검
+        if: always()
+        run: |
+          n=$(ls content/insight_queue/*.json 2>/dev/null | wc -l)
+          echo "큐 잔여 ${n}편" >> "$GITHUB_STEP_SUMMARY"
+          if [ "$n" -eq 0 ]; then
+            echo "::error::인사이트 큐가 비었다 — content/insight_queue/ 에 사이드카를 보충해야 발행이 재개된다."
+            exit 1
+          elif [ "$n" -le 3 ]; then
+            echo "::warning::인사이트 큐 잔여 ${n}편 — 곧 보충 필요."
           fi

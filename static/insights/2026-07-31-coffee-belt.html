@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>커피나무는 왜 지구 허리띠 안에서만 자랄까? '커피 벨트'에 숨은 조건들 🌍 — 92°C ROASTERY</title>
+<meta name="description" content="적도를 감싼 띠 모양의 땅 — 서리 없는 기온, 알맞은 비, 높은 고도가 모두 겹쳐야 커피가 자란다!">
+<link rel="icon" type="image/png" href="/static/img/logo-92black.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --canvas: #FFFFFF; --canvas-warm: #FAF7F2; --canvas-stone: #F2ECE3;
+  --ink: #1A1410; --ink-mute: #4A3F36; --ink-soft: #6B5E52;
+  --espresso: #6F4E37; --caramel: #C9986A; --copper: #B5703D;
+  --line: #E8E0D5; --line-soft: #F0E9DD;
+  --font-display: "Cormorant Garamond", "Pretendard", serif;
+  --font-body: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  --r-sm: 6px; --r-md: 12px; --r-pill: 999px;
+}
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color: transparent; }
+html { scroll-behavior: smooth; }
+body { font-family: var(--font-body); color: var(--ink); background: var(--canvas); font-feature-settings: "kern","ss01","lnum"; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+a { color: var(--copper); text-decoration: none; border-bottom: 1px solid transparent; transition: border-color .2s; }
+a:hover { border-bottom-color: var(--copper); }
+img { display: block; max-width: 100%; height: auto; }
+.container { max-width: 860px; margin: 0 auto; padding: 0 32px; }
+@media (max-width: 720px) { .container { padding: 0 20px; } }
+@media (max-width: 480px) { .container { padding: 0 16px; } }
+.site-nav { position: sticky; top: 0; z-index: 50; background: rgba(255,255,255,0.9); backdrop-filter: saturate(140%) blur(14px); -webkit-backdrop-filter: saturate(140%) blur(14px); border-bottom: 1px solid var(--line-soft); }
+.nav-inner { max-width: 1200px; margin: 0 auto; padding: 16px 32px; display: flex; align-items: center; justify-content: space-between; }
+.brand { font-family: var(--font-display); font-size: 1.3rem; font-weight: 700; color: var(--ink); display: inline-flex; align-items: center; gap: 4px; border-bottom: none; }
+.brand:hover { border-bottom: none; }
+.brand-mark { display: inline-flex; align-items: flex-start; font-family: "Pretendard", sans-serif; font-weight: 900; letter-spacing: -0.04em; line-height: 1; color: inherit; }
+.temp-mark { display: flex; flex-direction: column; line-height: .82; margin: 0 .05em 0 .04em; }
+.temp-mark .temp-deg { font-size: .42em; letter-spacing: -.04em; }
+.temp-mark .temp-c { font-size: .58em; letter-spacing: -.05em; margin-top: -.05em; }
+.nav-back { font-family: var(--font-mono); font-size: .75rem; letter-spacing: .18em; color: var(--ink-mute); border-bottom: none; }
+.nav-back:hover { color: var(--copper); border-bottom: none; }
+.article-hero { padding: 56px 0 48px; border-bottom: 1px solid var(--line-soft); }
+.eyebrow { font-family: var(--font-mono); font-size: .72rem; letter-spacing: .28em; color: var(--copper); margin-bottom: 18px; display: flex; align-items: center; gap: 12px; }
+.eyebrow::before { content: ""; display: inline-block; width: 28px; height: 1px; background: var(--copper); }
+.article-title { font-family: var(--font-display); font-weight: 500; font-size: clamp(2rem, 4.5vw, 3.2rem); line-height: 1.15; letter-spacing: -0.02em; color: var(--ink); margin-bottom: 20px; }
+.article-title em { font-style: italic; color: var(--espresso); font-weight: 600; }
+.article-one-liner { font-family: var(--font-display); font-style: italic; font-size: 1.3rem; line-height: 1.5; color: var(--espresso); margin-bottom: 28px; padding-left: 20px; border-left: 3px solid var(--caramel); }
+.article-meta { display: flex; gap: 24px; flex-wrap: wrap; font-family: var(--font-mono); font-size: .75rem; letter-spacing: .12em; color: var(--ink-soft); padding-top: 20px; border-top: 1px solid var(--line-soft); }
+.article-meta span { display: inline-flex; align-items: center; gap: 6px; }
+.article-meta span::before { content: "■"; color: var(--caramel); font-size: .55rem; }
+.hero-image { margin: 32px 0 0; border-radius: var(--r-md); overflow: hidden; border: 1px solid var(--line); }
+.hero-image img { width: 100%; }
+.article-body { padding: 56px 0 80px; }
+.article-footer { padding: 36px 0 56px; border-top: 1px solid var(--line-soft); text-align: center; font-family: var(--font-mono); font-size: .75rem; letter-spacing: .14em; color: var(--ink-soft); }
+.article-footer a { color: var(--ink-mute); border-bottom: 1px solid transparent; }
+.article-footer a:hover { color: var(--copper); border-bottom-color: var(--copper); }
+.source-basis { display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; background: rgba(201,152,106,.18); border: 1px solid rgba(181,112,61,.35); border-radius: var(--r-pill); font-family: var(--font-mono); font-size: .72rem; letter-spacing: .12em; color: var(--espresso); font-weight: 500; }
+.source-basis.abstract { background: rgba(107,94,82,.1); border-color: rgba(107,94,82,.3); color: var(--ink-soft); }
+.links-row { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 18px; }
+.link-pill { display: inline-flex; align-items: center; gap: 8px; padding: 9px 16px; background: var(--canvas-warm); border: 1px solid var(--line); border-radius: var(--r-pill); font-family: var(--font-mono); font-size: .78rem; letter-spacing: .08em; color: var(--ink-mute); border-bottom: 1px solid var(--line); transition: border-color .2s, color .2s; }
+.link-pill:hover { color: var(--copper); border-color: var(--copper); }
+
+/* ===== EZ: 쉬운 설명 스타일 ===== */
+.ez-hero { text-align: center; padding: 8px 0 32px; }
+.ez-hero-emoji { font-size: 3.4rem; line-height: 1; }
+.ez-hero-title { font-family: var(--font-display); font-size: clamp(1.6rem, 3.5vw, 2.2rem); font-weight: 600; color: var(--ink); margin-top: 14px; line-height: 1.3; }
+.ez-section { margin-bottom: 52px; }
+.ez-section h2 { font-family: var(--font-body); font-size: 1.5rem; font-weight: 700; color: var(--ink); margin-bottom: 18px; letter-spacing: -0.01em; }
+.ez-section h3 { font-size: 1.08rem; font-weight: 600; color: var(--espresso); margin: 22px 0 10px; }
+.ez-section p { font-size: 1.04rem; line-height: 1.85; color: var(--ink-mute); margin-bottom: 14px; }
+.ez-section p:last-child { margin-bottom: 0; }
+.ez-section ul { padding-left: 22px; margin-bottom: 14px; }
+.ez-section li { font-size: 1.02rem; line-height: 1.8; color: var(--ink-mute); margin-bottom: 8px; }
+.ez-callout { margin: 14px 0; padding: 14px 18px; background: var(--canvas-warm); border-left: 3px solid var(--caramel); border-radius: 4px; font-size: 0.98rem; color: var(--espresso); line-height: 1.75; }
+.ez-callout strong { color: var(--copper); }
+.ez-findings { list-style: none; padding: 0; }
+.ez-findings > li { padding: 18px 22px; margin-bottom: 14px; background: var(--canvas-warm); border: 1px solid var(--line); border-radius: 10px; font-size: 1.02rem; line-height: 1.7; color: var(--ink-mute); }
+.ez-findings > li strong { color: var(--ink); display: block; margin-bottom: 4px; font-size: 1.06rem; }
+.ez-findings > li.gold { background: linear-gradient(135deg, #FFF8E7, #FFEFCD); border-color: #F0D67A; }
+.ez-findings > li.silver { background: linear-gradient(135deg, #F6F6F6, #ECECEC); border-color: #C7C7C7; }
+.ez-findings > li.bronze { background: linear-gradient(135deg, #FFEEDD, #FFDCC0); border-color: #E4B07F; }
+.ez-findings > li.medal { background: linear-gradient(135deg, #F0E6FF, #E1D2FF); border-color: #BDA8E5; }
+.ez-table { width: 100%; border-collapse: collapse; margin: 16px 0 8px; font-size: 0.96rem; }
+.ez-table th, .ez-table td { padding: 11px 14px; border: 1px solid var(--line); text-align: left; vertical-align: top; }
+.ez-table thead th { background: var(--ink); color: #fff; font-weight: 600; letter-spacing: .02em; }
+.ez-table tbody th { background: var(--canvas-warm); color: var(--ink); font-weight: 600; }
+.ez-table tbody tr:nth-child(even) td { background: rgba(250, 247, 242, .55); }
+.ez-summary { padding: 26px 30px; background: linear-gradient(135deg, #FAF0E0, #F3E1C5); border-radius: 14px; font-size: 1.13rem; line-height: 1.75; font-weight: 500; color: var(--ink); border: 1px solid #E5C99B; }
+.ez-summary strong { color: var(--espresso); }
+.ez-citation { margin-top: 24px; padding: 18px 22px; background: var(--canvas-warm); border-radius: 8px; font-family: var(--font-mono); font-size: 0.82rem; color: var(--ink-soft); line-height: 1.7; }
+.ez-citation p { margin: 4px 0; }
+.ez-chart-card { padding: 22px 24px 18px; background: var(--canvas); border: 1px solid var(--line); border-radius: 12px; margin: 16px 0; }
+.ez-chart-card .ez-chart-title { font-size: 1rem; font-weight: 600; color: var(--ink); margin-bottom: 14px; }
+.ez-bar-row { display: flex; align-items: center; margin: 10px 0; font-size: 0.95rem; gap: 14px; }
+.ez-bar-label { width: 180px; flex-shrink: 0; color: var(--ink-mute); font-weight: 500; }
+.ez-bar-track { flex: 1; height: 32px; background: var(--canvas-warm); border-radius: 6px; overflow: hidden; position: relative; border: 1px solid var(--line); }
+.ez-bar-fill { height: 100%; background: linear-gradient(90deg, var(--caramel), var(--copper)); display: flex; align-items: center; justify-content: flex-end; padding: 0 12px; color: white; font-weight: 700; font-size: 0.92rem; min-width: 56px; }
+.ez-bar-fill.alt { background: linear-gradient(90deg, #6F4E37, #4A3F36); }
+.ez-glossary { display: grid; gap: 12px; }
+.ez-glossary-item { padding: 16px 20px; background: var(--canvas-warm); border: 1px solid var(--line); border-radius: 10px; border-left: 3px solid var(--caramel); }
+.ez-glossary-term { font-family: var(--font-display); font-style: italic; font-size: 1.1rem; font-weight: 600; color: var(--espresso); margin-bottom: 6px; }
+.ez-glossary-def { font-size: 0.98rem; color: var(--ink-mute); line-height: 1.7; }
+@media (max-width: 720px) {
+  .article-hero { padding: 36px 0 32px; }
+  .article-body { padding: 36px 0 56px; }
+  .ez-section { margin-bottom: 40px; }
+  .ez-section h2 { font-size: 1.3rem; }
+  .ez-bar-label { width: 100%; margin-bottom: 4px; }
+  .ez-bar-row { flex-direction: column; align-items: stretch; }
+  .article-meta { gap: 12px 18px; font-size: .68rem; }
+}
+</style>
+</head>
+<body>
+
+<header class="site-nav">
+  <div class="nav-inner">
+    <a class="brand" href="/">
+      <span class="brand-mark">92<span class="temp-mark"><span class="temp-deg">°</span><span class="temp-c">C</span></span></span>ROASTERY
+    </a>
+    <a class="nav-back" href="/insight">← INSIGHTS</a>
+  </div>
+</header>
+
+<article>
+  <section class="article-hero">
+    <div class="container">
+      <div class="eyebrow">— 오늘의 커피 상식 · 2026.07.31</div>
+      <h1 class="article-title">커피나무는 왜 지구 허리띠 안에서만 자랄까? &#39;커피 벨트&#39;에 숨은 조건들 🌍</h1>
+      <p class="article-one-liner">적도를 감싼 띠 모양의 땅 — 서리 없는 기온, 알맞은 비, 높은 고도가 모두 겹쳐야 커피가 자란다!</p>
+      <div class="article-meta">
+        
+        
+        
+        <span>커피 상식 · 원산지 · 재배</span>
+      </div>
+      
+      <div class="hero-image">
+        <img src="/static/img/insights/trivia/origin.svg" alt="커피나무는 왜 지구 허리띠 안에서만 자랄까? &#39;커피 벨트&#39;에 숨은 조건들 🌍">
+      </div>
+      
+    </div>
+  </section>
+
+  <section class="article-body">
+    <div class="container">
+
+      
+      <div class="ez-hero">
+        <div class="ez-hero-emoji">🌍</div>
+        <div class="ez-hero-title">커피나무는 왜 지구 허리띠 안에서만 자랄까?</div>
+      </div>
+
+      
+      <div class="ez-section">
+        <h2>🤔 무슨 연구야?</h2>
+        
+          <p>카페 원두 봉투에 적힌 나라 이름들을 한번 쭉 떠올려 볼까? 에티오피아, 케냐, 콜롬비아, 브라질, 과테말라, 인도네시아, 베트남… 뭔가 공통점이 보이지 않아? 🤔 한국, 일본, 프랑스, 캐나다 같은 이름은 절대 안 보여. 커피는 전 세계에서 마시는데, 정작 커피를 &#39;기르는&#39; 나라는 신기할 만큼 좁은 구역에 몰려 있거든.</p><p>지구본을 놓고 커피 생산국에 스티커를 붙여 보면 적도를 중심으로 위아래로 띠(belt)를 두른 것처럼 보여. 그래서 이 구역을 &#39;커피 벨트(coffee belt)&#39; 또는 &#39;커피 존(coffee zone)&#39;이라고 불러. 대략 북위 23.5도(북회귀선)에서 남위 23.5도(남회귀선) 사이, 지구의 허리띠에 해당하는 열대 지역이야. 🌏</p><p>그런데 여기서 진짜 재미있는 질문이 시작돼. 커피가 열대 식물이라면 왜 더 뜨거운 사막에서는 못 자랄까? 왜 같은 나라 안에서도 산 위쪽 밭 커피가 더 비쌀까? 오늘은 커피나무가 까다롭게 따지는 네 가지 조건 — 기온, 비, 고도, 그리고 서리 — 를 하나씩 뜯어보자! ☕</p>
+        
+      </div>
+
+      
+      
+      <div class="ez-section">
+        <h2>🧪 핵심 개념 쉽게 풀어보면</h2>
+        
+          <h3>1️⃣ 커피 벨트란 뭐야? — 적도를 두른 재배 띠</h3>
+          <p>커피 벨트는 북회귀선(북위 약 23.5도)과 남회귀선(남위 약 23.5도) 사이의 지역을 가리켜. 이 안에는 중남미, 아프리카 중동부, 동남아시아가 들어가는데 실제 커피 생산국 대부분이 여기 들어 있어. 이 띠 안이 특별한 이유는 계절 변화가 온대 지방처럼 극단적이지 않아서야. 겨울에 영하로 뚝 떨어지는 일이 없으니 여러해살이 나무인 커피나무가 한 자리에서 수십 년을 살아남을 수 있어. 다만 &#39;띠 안이면 다 된다&#39;는 뜻은 아니야. 띠 안에서도 조건이 맞는 좁은 땅에서만 커피가 자라거든.</p>
+          <div class="ez-callout">💡 비유: 사과나무를 아무 데나 심는다고 사과가 열리지 않잖아. 대구·청송처럼 잘 맞는 땅이 따로 있듯, 커피도 지구 전체에서 &#39;커피가 잘 되는 동네&#39;가 이 띠 안에 몰려 있는 거야 🍎</div>
+        
+          <h3>2️⃣ 기온과 비 — 너무 더워도, 너무 말라도 안 돼</h3>
+          <p>아라비카는 연평균 기온이 대략 18~22도쯤 되는 서늘한 환경을 좋아해. 30도가 넘는 날이 길게 이어지면 잎이 상하고 열매도 제대로 안 익어. 반대로 서리가 내릴 만큼 추워지면 잎이 타 죽어버려. 비도 마찬가지야. 커피는 보통 연간 1,500~2,000mm 안팎의 비를 필요로 하는데, 중요한 건 총량만이 아니라 &#39;리듬&#39;이야. 건기가 한 번 왔다가 비가 쏟아지면 그 신호를 받아 커피꽃이 한꺼번에 피거든. 비가 1년 내내 고르게만 오면 꽃이 제각각 피어서 수확 시기가 엉망이 돼.</p>
+          <div class="ez-callout">💡 비유: 김치가 익으려면 너무 뜨겁지도 너무 춥지도 않은 온도가 필요하고, 우리는 그걸 김치냉장고로 맞춰 주잖아. 커피 벨트의 땅은 자연이 만들어 준 거대한 김치냉장고인 셈이야 🥬</div>
+        
+          <h3>3️⃣ 고도가 높을수록 왜 커피가 맛있어질까?</h3>
+          <p>적도 근처는 원래 덥지만, 산을 올라가면 100m마다 기온이 대략 0.5~0.6도씩 떨어져. 그래서 적도 나라의 해발 1,500~2,000m 고지대는 커피가 좋아하는 서늘한 기온이 돼. 여기에 낮과 밤의 기온 차가 크다는 보너스가 붙어. 밤에 서늘하면 나무가 열매를 천천히 익히고, 그 시간 동안 당분과 향 성분이 차곡차곡 쌓여. 그렇게 천천히 자란 생두는 밀도가 높고 단단해서 로스팅했을 때 산미와 향이 훨씬 복잡하고 화사해. 중미 커피 등급에 붙는 SHB(Strictly Hard Bean), SHG(Strictly High Grown)라는 표시가 바로 &#39;아주 높은 데서 자란 단단한 콩&#39;이라는 뜻이야.</p>
+          <div class="ez-callout">💡 비유: 강원도 고랭지 배추가 유독 아삭하고 단 이유와 똑같아. 서늘한 데서 천천히 크면 조직이 촘촘해지고 단맛이 더 잘 배거든 🥬</div>
+        
+      </div>
+      
+
+      
+      
+      <div class="ez-section">
+        <h2>🎯 핵심 발견</h2>
+        <ul class="ez-findings">
+          
+          
+            
+              <li class="gold">
+                <strong>🥇 커피의 최대 적은 더위가 아니라 &#39;서리&#39;야</strong>커피 벨트 밖으로 나가면 커피가 안 되는 결정적인 이유가 서리(frost)야. 커피나무는 잎이 얼면 회복이 아주 어렵고, 심하면 나무 전체가 죽어서 새로 심어야 해. 새로 심은 나무가 제대로 열매를 맺기까지는 보통 3~4년이 걸리니까 농가 입장에서는 한 번의 서리가 몇 년치 수입을 날리는 사건이야. 브라질처럼 커피 벨트 남쪽 끝자락에 걸친 지역에서는 드물게 한파가 내려와 커피밭에 큰 피해를 준 사례가 여러 번 있었어. 그래서 커피 지도는 사실상 &#39;서리가 오지 않는 땅의 지도&#39;라고 봐도 돼. ❄️
+              </li>
+            
+              <li class="silver">
+                <strong>🥈 아라비카는 산 위, 로부스타는 산 아래</strong>우리가 스페셜티 카페에서 마시는 커피는 대부분 아라비카(Coffea arabica)야. 서늘한 고지대를 좋아하고 병충해에 약한 대신 향이 화려하지. 반면 로부스타(Coffea canephora)는 저지대의 덥고 습한 환경에서도 잘 버티고, 커피 잎녹병 같은 병에도 강해. 그래서 같은 커피 벨트 안이라도 아라비카는 산비탈 위쪽, 로부스타는 평지와 낮은 구릉에 자리를 잡아. 베트남이 세계적인 로부스타 산지로 성장한 것도 이런 조건 덕분이야. 로부스타는 카페인이 아라비카의 두 배 가까이 되고 쓴맛과 바디가 강해서 에스프레소 블렌드나 인스턴트 커피에 많이 쓰여.
+              </li>
+            
+              <li class="bronze">
+                <strong>🥉 커피나무는 원래 &#39;숲속 그늘&#39;의 식물이었어</strong>커피나무의 고향은 에티오피아 고원의 숲이야. 원래 큰 나무 아래 그늘에서 자라던 식물이라 직사광선을 하루 종일 받는 걸 별로 좋아하지 않아. 그래서 전통적인 농장은 커피밭에 바나나나 큰 활엽수를 함께 심어 그늘을 만들어 주는데, 이걸 셰이드 그로운(shade-grown)이라고 해. 그늘은 온도를 낮춰 열매를 천천히 익히고, 낙엽이 쌓여 흙을 기름지게 하고, 새들이 찾아와 해충을 줄여 주는 효과까지 있어. 커피가 왜 &#39;숲이 있는 산지&#39;와 잘 어울리는지 알 수 있는 대목이야. 🌳
+              </li>
+            
+              <li class="medal">
+                <strong>🏅 적도 바로 위인데 고도가 낮으면? 커피가 잘 안 돼</strong>&#39;적도에 가까울수록 커피가 잘 되겠지&#39;라고 생각하기 쉽지만 사실은 반대에 가까워. 적도 근처의 저지대 평야는 너무 덥고 습해서 아라비카가 견디기 힘들어. 그래서 케냐, 에티오피아, 콜롬비아처럼 적도에 아주 가까운 나라일수록 커피밭이 오히려 더 높은 산으로 올라가. 반대로 커피 벨트의 바깥쪽 가장자리(브라질 남부처럼 남회귀선에 가까운 곳)에서는 위도 자체가 서늘함을 만들어 주니까 상대적으로 낮은 고도에서도 커피를 재배해. 결국 중요한 건 위도 숫자가 아니라 &#39;나무가 실제로 겪는 기온&#39;이야. 🌡️
+              </li>
+            
+              <li class="medal">
+                <strong>🏅 커피 벨트는 고정된 선이 아니야</strong>커피 벨트는 지도에 인쇄된 고정선이 아니라 기온과 강수에 따라 움직이는 조건의 집합이야. 기온이 올라가면 지금 커피가 잘 되던 고도에서는 열매가 너무 빨리 익어 품질이 떨어지고, 농가들은 조금씩 더 높은 곳으로 밭을 옮기게 돼. 문제는 산에는 꼭대기가 있다는 거야. 더 올라갈 땅이 없는 산지도 많거든. 그래서 요즘 커피 연구기관들은 더위와 병에 강한 품종을 개발하고, 그늘 나무를 늘리고, 물 관리 방식을 바꾸는 연구에 힘을 쏟고 있어. 우리가 마시는 한 잔이 계속 이어지려면 꼭 필요한 일이야. 🌱
+              </li>
+            
+          
+        </ul>
+      </div>
+      
+
+      
+      
+      <div class="ez-section">
+        <h2>📊 숫자로 보기</h2>
+        
+          
+          
+          <div class="ez-chart-card">
+            <div class="ez-chart-title">생두 100g당 카페인 함량 (대략적인 평균)</div>
+            
+              
+              <div class="ez-bar-row">
+                <div class="ez-bar-label">아라비카</div>
+                <div class="ez-bar-track"><div class="ez-bar-fill" style="width: 54.5%;">1.2%</div></div>
+              </div>
+            
+              
+              <div class="ez-bar-row">
+                <div class="ez-bar-label">로부스타</div>
+                <div class="ez-bar-track"><div class="ez-bar-fill" style="width: 100.0%;">2.2%</div></div>
+              </div>
+            
+          </div>
+        
+      </div>
+      
+
+      
+      
+      
+      <div class="ez-section">
+        <h2>🆚 아라비카 vs 로부스타 — 재배 조건이 이렇게 달라</h2>
+        <table class="ez-table">
+          <thead><tr><th>비교 항목</th><th>아라비카</th><th>로부스타</th></tr></thead>
+          <tbody>
+            <tr>
+              <th>주요 재배 고도</th><td>해발 약 900~2,000m (고지대)</td><td>해발 0~800m 안팎 (저지대)</td>
+            </tr><tr>
+              <th>선호 기온</th><td>연평균 약 18~22도, 서늘한 편</td><td>연평균 약 22~28도, 더위에 강함</td>
+            </tr><tr>
+              <th>병충해 저항성</th><td>약함 (잎녹병·해충에 취약)</td><td>강함 (이름 그대로 robust)</td>
+            </tr><tr>
+              <th>카페인 함량</th><td>낮음 (대략 1% 초반대)</td><td>높음 (아라비카의 두 배 안팎)</td>
+            </tr><tr>
+              <th>맛의 성격</th><td>산미·꽃향·과일향, 섬세함</td><td>쓴맛·묵직한 바디·견과류 뉘앙스</td>
+            </tr><tr>
+              <th>주로 쓰이는 곳</th><td>스페셜티, 싱글 오리진, 핸드드립</td><td>에스프레소 블렌드, 인스턴트 커피</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      
+      
+
+      
+      
+
+      
+      
+
+      
+      
+      <div class="ez-section">
+        <div class="ez-summary">💡 <strong>한 줄 요약</strong> — 커피 벨트는 지도 위의 선이 아니라 &#39;서리가 없고, 너무 덥지 않고, 비가 리듬 있게 오는 땅&#39;의 다른 이름이야 — 그래서 커피는 적도 근처 산 위에서만 자란다! 🌍</div>
+      </div>
+      
+
+      
+      
+      
+      
+
+      
+      
+      <div class="ez-section">
+        <h2>📖 어려운 말 풀이 사전</h2>
+        <p>이 글에 나온 어려운 약어와 용어를 한 번에 정리했어. 의미만 알면 본문이 훨씬 쉬워져!</p>
+        <div class="ez-glossary">
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">커피 벨트(Coffee Belt)</div>
+            <div class="ez-glossary-def">북회귀선(북위 약 23.5도)과 남회귀선(남위 약 23.5도) 사이의 커피 재배 가능 지역. 지구를 띠처럼 두르고 있어 붙은 이름</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">아라비카(Coffea arabica)</div>
+            <div class="ez-glossary-def">서늘한 고지대를 좋아하는 커피 종. 향과 산미가 화려해 스페셜티 커피 대부분을 차지함</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">로부스타(Coffea canephora)</div>
+            <div class="ez-glossary-def">덥고 습한 저지대에서도 잘 자라는 커피 종. 병충해에 강하고 카페인과 쓴맛이 강함</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">SHB / SHG(Strictly Hard Bean / Strictly High Grown)</div>
+            <div class="ez-glossary-def">중미 지역에서 쓰는 고도 기반 생두 등급. 아주 높은 곳에서 자라 밀도가 높고 단단한 생두를 뜻함</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">셰이드 그로운(Shade-grown)</div>
+            <div class="ez-glossary-def">커피밭에 그늘나무를 함께 심어 기르는 전통 방식. 온도를 낮추고 토양과 생태계를 지켜 줌</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">서리 피해(Frost damage)</div>
+            <div class="ez-glossary-def">기온이 영하로 떨어져 커피 잎과 가지가 얼어 죽는 피해. 회복에 여러 해가 걸려 커피 재배 한계선을 결정함</div>
+          </div>
+          
+        </div>
+      </div>
+      
+
+    </div>
+  </section>
+
+  <footer class="article-footer">
+    <div class="container">
+      <a href="/insight">← BACK TO INSIGHTS</a>
+      <span style="margin: 0 16px;">·</span>
+      <a href="/">HOME</a>
+    </div>
+  </footer>
+</article>
+
+</body>
+</html>
