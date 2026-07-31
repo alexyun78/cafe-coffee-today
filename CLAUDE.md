@@ -239,7 +239,19 @@ python migrate_notion.py
 
 > 📌 **이게 현재 1차 발행 경로다.** 아래 "자체 생성(Claude API)" 과 "Drive 폴백" 보다 우선한다.
 > **비용 0** 이 목표라 채택. 글은 Cowork 대화(구독 포함, **API 과금 아님**)에서 미리 써서 큐에 쌓고,
-> 서버는 매일 큐에서 1편을 꺼내 **렌더만**(LLM 호출 0) 한다.
+> 매일 큐에서 1편을 꺼내 **렌더만**(LLM 호출 0) 한다.
+>
+> ⚠️ **2026-07-28 iwinv 해지 이후 실행 주체가 바뀌었다.** 아래 2·3번의 서버 타이머(`cafe-coffee-release.timer`,
+> `cafe-coffee-deploy.timer`)는 **더 이상 존재하지 않는다.** 지금은 GitHub Actions
+> [.github/workflows/insight-release.yml](.github/workflows/insight-release.yml)(**20:40 KST**)이 유일한 발행 경로이고,
+> 발행에 성공하면 같은 잡이 `deploy-worker.yml` 을 dispatch 해 Cloudflare Worker 로 반영한다.
+> (GITHUB_TOKEN 으로 만든 push 는 다른 워크플로를 트리거하지 못해서 명시적 dispatch 가 필요하다.)
+> 서버 관련 서술은 이력용으로만 읽을 것.
+>
+> 🔁 **"인사이트가 또 멈췄다" 1순위 원인 = 큐 소진.** 실제로 큐는 2026-07-16 에 바닥났고,
+> 7/17~7/27 은 서버가 대신 발행하다가 해지와 함께 멈췄다(4일 공백). 지금은 큐가 비면
+> 릴리스 워크플로가 **실패로 표시**되고 잔량이 잡 요약에 남으므로, Actions 탭에서 바로 보인다.
+> 확인은 `python scripts/release_insight.py --list`.
 
 매일 자동 발행 흐름:
 
