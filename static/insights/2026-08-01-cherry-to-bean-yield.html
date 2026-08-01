@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>커피 한 잔에 원두 몇 알이 들어갈까? 체리에서 잔까지 이어지는 긴 여정 ☕ — 92°C ROASTERY</title>
+<meta name="description" content="체리 한 알에 씨앗 두 개, 한 잔에 원두 약 70알 — 커피나무 한 그루가 1년 내내 일해야 몇 잔이 나올까?">
+<link rel="icon" type="image/png" href="/static/img/logo-92black.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --canvas: #FFFFFF; --canvas-warm: #FAF7F2; --canvas-stone: #F2ECE3;
+  --ink: #1A1410; --ink-mute: #4A3F36; --ink-soft: #6B5E52;
+  --espresso: #6F4E37; --caramel: #C9986A; --copper: #B5703D;
+  --line: #E8E0D5; --line-soft: #F0E9DD;
+  --font-display: "Cormorant Garamond", "Pretendard", serif;
+  --font-body: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  --r-sm: 6px; --r-md: 12px; --r-pill: 999px;
+}
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color: transparent; }
+html { scroll-behavior: smooth; }
+body { font-family: var(--font-body); color: var(--ink); background: var(--canvas); font-feature-settings: "kern","ss01","lnum"; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+a { color: var(--copper); text-decoration: none; border-bottom: 1px solid transparent; transition: border-color .2s; }
+a:hover { border-bottom-color: var(--copper); }
+img { display: block; max-width: 100%; height: auto; }
+.container { max-width: 860px; margin: 0 auto; padding: 0 32px; }
+@media (max-width: 720px) { .container { padding: 0 20px; } }
+@media (max-width: 480px) { .container { padding: 0 16px; } }
+.site-nav { position: sticky; top: 0; z-index: 50; background: rgba(255,255,255,0.9); backdrop-filter: saturate(140%) blur(14px); -webkit-backdrop-filter: saturate(140%) blur(14px); border-bottom: 1px solid var(--line-soft); }
+.nav-inner { max-width: 1200px; margin: 0 auto; padding: 16px 32px; display: flex; align-items: center; justify-content: space-between; }
+.brand { font-family: var(--font-display); font-size: 1.3rem; font-weight: 700; color: var(--ink); display: inline-flex; align-items: center; gap: 4px; border-bottom: none; }
+.brand:hover { border-bottom: none; }
+.brand-mark { display: inline-flex; align-items: flex-start; font-family: "Pretendard", sans-serif; font-weight: 900; letter-spacing: -0.04em; line-height: 1; color: inherit; }
+.temp-mark { display: flex; flex-direction: column; line-height: .82; margin: 0 .05em 0 .04em; }
+.temp-mark .temp-deg { font-size: .42em; letter-spacing: -.04em; }
+.temp-mark .temp-c { font-size: .58em; letter-spacing: -.05em; margin-top: -.05em; }
+.nav-back { font-family: var(--font-mono); font-size: .75rem; letter-spacing: .18em; color: var(--ink-mute); border-bottom: none; }
+.nav-back:hover { color: var(--copper); border-bottom: none; }
+.article-hero { padding: 56px 0 48px; border-bottom: 1px solid var(--line-soft); }
+.eyebrow { font-family: var(--font-mono); font-size: .72rem; letter-spacing: .28em; color: var(--copper); margin-bottom: 18px; display: flex; align-items: center; gap: 12px; }
+.eyebrow::before { content: ""; display: inline-block; width: 28px; height: 1px; background: var(--copper); }
+.article-title { font-family: var(--font-display); font-weight: 500; font-size: clamp(2rem, 4.5vw, 3.2rem); line-height: 1.15; letter-spacing: -0.02em; color: var(--ink); margin-bottom: 20px; }
+.article-title em { font-style: italic; color: var(--espresso); font-weight: 600; }
+.article-one-liner { font-family: var(--font-display); font-style: italic; font-size: 1.3rem; line-height: 1.5; color: var(--espresso); margin-bottom: 28px; padding-left: 20px; border-left: 3px solid var(--caramel); }
+.article-meta { display: flex; gap: 24px; flex-wrap: wrap; font-family: var(--font-mono); font-size: .75rem; letter-spacing: .12em; color: var(--ink-soft); padding-top: 20px; border-top: 1px solid var(--line-soft); }
+.article-meta span { display: inline-flex; align-items: center; gap: 6px; }
+.article-meta span::before { content: "■"; color: var(--caramel); font-size: .55rem; }
+.hero-image { margin: 32px 0 0; border-radius: var(--r-md); overflow: hidden; border: 1px solid var(--line); }
+.hero-image img { width: 100%; }
+.article-body { padding: 56px 0 80px; }
+.article-footer { padding: 36px 0 56px; border-top: 1px solid var(--line-soft); text-align: center; font-family: var(--font-mono); font-size: .75rem; letter-spacing: .14em; color: var(--ink-soft); }
+.article-footer a { color: var(--ink-mute); border-bottom: 1px solid transparent; }
+.article-footer a:hover { color: var(--copper); border-bottom-color: var(--copper); }
+.source-basis { display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; background: rgba(201,152,106,.18); border: 1px solid rgba(181,112,61,.35); border-radius: var(--r-pill); font-family: var(--font-mono); font-size: .72rem; letter-spacing: .12em; color: var(--espresso); font-weight: 500; }
+.source-basis.abstract { background: rgba(107,94,82,.1); border-color: rgba(107,94,82,.3); color: var(--ink-soft); }
+.links-row { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 18px; }
+.link-pill { display: inline-flex; align-items: center; gap: 8px; padding: 9px 16px; background: var(--canvas-warm); border: 1px solid var(--line); border-radius: var(--r-pill); font-family: var(--font-mono); font-size: .78rem; letter-spacing: .08em; color: var(--ink-mute); border-bottom: 1px solid var(--line); transition: border-color .2s, color .2s; }
+.link-pill:hover { color: var(--copper); border-color: var(--copper); }
+
+/* ===== EZ: 쉬운 설명 스타일 ===== */
+.ez-hero { text-align: center; padding: 8px 0 32px; }
+.ez-hero-emoji { font-size: 3.4rem; line-height: 1; }
+.ez-hero-title { font-family: var(--font-display); font-size: clamp(1.6rem, 3.5vw, 2.2rem); font-weight: 600; color: var(--ink); margin-top: 14px; line-height: 1.3; }
+.ez-section { margin-bottom: 52px; }
+.ez-section h2 { font-family: var(--font-body); font-size: 1.5rem; font-weight: 700; color: var(--ink); margin-bottom: 18px; letter-spacing: -0.01em; }
+.ez-section h3 { font-size: 1.08rem; font-weight: 600; color: var(--espresso); margin: 22px 0 10px; }
+.ez-section p { font-size: 1.04rem; line-height: 1.85; color: var(--ink-mute); margin-bottom: 14px; }
+.ez-section p:last-child { margin-bottom: 0; }
+.ez-section ul { padding-left: 22px; margin-bottom: 14px; }
+.ez-section li { font-size: 1.02rem; line-height: 1.8; color: var(--ink-mute); margin-bottom: 8px; }
+.ez-callout { margin: 14px 0; padding: 14px 18px; background: var(--canvas-warm); border-left: 3px solid var(--caramel); border-radius: 4px; font-size: 0.98rem; color: var(--espresso); line-height: 1.75; }
+.ez-callout strong { color: var(--copper); }
+.ez-findings { list-style: none; padding: 0; }
+.ez-findings > li { padding: 18px 22px; margin-bottom: 14px; background: var(--canvas-warm); border: 1px solid var(--line); border-radius: 10px; font-size: 1.02rem; line-height: 1.7; color: var(--ink-mute); }
+.ez-findings > li strong { color: var(--ink); display: block; margin-bottom: 4px; font-size: 1.06rem; }
+.ez-findings > li.gold { background: linear-gradient(135deg, #FFF8E7, #FFEFCD); border-color: #F0D67A; }
+.ez-findings > li.silver { background: linear-gradient(135deg, #F6F6F6, #ECECEC); border-color: #C7C7C7; }
+.ez-findings > li.bronze { background: linear-gradient(135deg, #FFEEDD, #FFDCC0); border-color: #E4B07F; }
+.ez-findings > li.medal { background: linear-gradient(135deg, #F0E6FF, #E1D2FF); border-color: #BDA8E5; }
+.ez-table { width: 100%; border-collapse: collapse; margin: 16px 0 8px; font-size: 0.96rem; }
+.ez-table th, .ez-table td { padding: 11px 14px; border: 1px solid var(--line); text-align: left; vertical-align: top; }
+.ez-table thead th { background: var(--ink); color: #fff; font-weight: 600; letter-spacing: .02em; }
+.ez-table tbody th { background: var(--canvas-warm); color: var(--ink); font-weight: 600; }
+.ez-table tbody tr:nth-child(even) td { background: rgba(250, 247, 242, .55); }
+.ez-summary { padding: 26px 30px; background: linear-gradient(135deg, #FAF0E0, #F3E1C5); border-radius: 14px; font-size: 1.13rem; line-height: 1.75; font-weight: 500; color: var(--ink); border: 1px solid #E5C99B; }
+.ez-summary strong { color: var(--espresso); }
+.ez-citation { margin-top: 24px; padding: 18px 22px; background: var(--canvas-warm); border-radius: 8px; font-family: var(--font-mono); font-size: 0.82rem; color: var(--ink-soft); line-height: 1.7; }
+.ez-citation p { margin: 4px 0; }
+.ez-chart-card { padding: 22px 24px 18px; background: var(--canvas); border: 1px solid var(--line); border-radius: 12px; margin: 16px 0; }
+.ez-chart-card .ez-chart-title { font-size: 1rem; font-weight: 600; color: var(--ink); margin-bottom: 14px; }
+.ez-bar-row { display: flex; align-items: center; margin: 10px 0; font-size: 0.95rem; gap: 14px; }
+.ez-bar-label { width: 180px; flex-shrink: 0; color: var(--ink-mute); font-weight: 500; }
+.ez-bar-track { flex: 1; height: 32px; background: var(--canvas-warm); border-radius: 6px; overflow: hidden; position: relative; border: 1px solid var(--line); }
+.ez-bar-fill { height: 100%; background: linear-gradient(90deg, var(--caramel), var(--copper)); display: flex; align-items: center; justify-content: flex-end; padding: 0 12px; color: white; font-weight: 700; font-size: 0.92rem; min-width: 56px; }
+.ez-bar-fill.alt { background: linear-gradient(90deg, #6F4E37, #4A3F36); }
+.ez-glossary { display: grid; gap: 12px; }
+.ez-glossary-item { padding: 16px 20px; background: var(--canvas-warm); border: 1px solid var(--line); border-radius: 10px; border-left: 3px solid var(--caramel); }
+.ez-glossary-term { font-family: var(--font-display); font-style: italic; font-size: 1.1rem; font-weight: 600; color: var(--espresso); margin-bottom: 6px; }
+.ez-glossary-def { font-size: 0.98rem; color: var(--ink-mute); line-height: 1.7; }
+@media (max-width: 720px) {
+  .article-hero { padding: 36px 0 32px; }
+  .article-body { padding: 36px 0 56px; }
+  .ez-section { margin-bottom: 40px; }
+  .ez-section h2 { font-size: 1.3rem; }
+  .ez-bar-label { width: 100%; margin-bottom: 4px; }
+  .ez-bar-row { flex-direction: column; align-items: stretch; }
+  .article-meta { gap: 12px 18px; font-size: .68rem; }
+}
+</style>
+</head>
+<body>
+
+<header class="site-nav">
+  <div class="nav-inner">
+    <a class="brand" href="/">
+      <span class="brand-mark">92<span class="temp-mark"><span class="temp-deg">°</span><span class="temp-c">C</span></span></span>ROASTERY
+    </a>
+    <a class="nav-back" href="/insight">← INSIGHTS</a>
+  </div>
+</header>
+
+<article>
+  <section class="article-hero">
+    <div class="container">
+      <div class="eyebrow">— 오늘의 커피 상식 · 2026.08.01</div>
+      <h1 class="article-title">커피 한 잔에 원두 몇 알이 들어갈까? 체리에서 잔까지 이어지는 긴 여정 ☕</h1>
+      <p class="article-one-liner">체리 한 알에 씨앗 두 개, 한 잔에 원두 약 70알 — 커피나무 한 그루가 1년 내내 일해야 몇 잔이 나올까?</p>
+      <div class="article-meta">
+        
+        
+        
+        <span>커피 상식 · 원산지 · 수확</span>
+      </div>
+      
+      <div class="hero-image">
+        <img src="/static/img/insights/trivia/origin.svg" alt="커피 한 잔에 원두 몇 알이 들어갈까? 체리에서 잔까지 이어지는 긴 여정 ☕">
+      </div>
+      
+    </div>
+  </section>
+
+  <section class="article-body">
+    <div class="container">
+
+      
+      <div class="ez-hero">
+        <div class="ez-hero-emoji">🍒</div>
+        <div class="ez-hero-title">커피 한 잔에 원두 몇 알이 들어갈까?</div>
+      </div>
+
+      
+      <div class="ez-section">
+        <h2>🤔 무슨 연구야?</h2>
+        
+          <p>우리가 아침에 별생각 없이 마시는 커피 한 잔. 그 안에 원두가 몇 알이나 들어가 있는지 세어 본 적 있어? 🤔 답부터 말하면 대략 70알 안팎이야. 커피 원두 한 알의 무게가 보통 0.13~0.15g 정도인데, 드립 한 잔에 원두 10g쯤 쓰니까 나누면 그쯤 나오거든.</p><p>그런데 여기서 더 놀라운 이야기가 시작돼. 원두 한 알은 커피 체리라는 열매 &#39;속의 씨앗&#39;이야. 체리 한 알에는 보통 씨앗이 두 개 들어 있으니까, 커피 한 잔을 만들려면 체리를 대략 35알쯤 따야 한다는 뜻이지. 게다가 그 체리는 기계로 우르르 훑는 게 아니라 사람이 잘 익은 것만 골라 손으로 따는 경우가 많아. 🍒</p><p>오늘은 커피나무에 열매가 맺히는 순간부터 우리 잔에 담기기까지, 무게가 어떻게 줄어들고 사람 손이 몇 번이나 닿는지를 따라가 볼게. 다 읽고 나면 아마 남은 커피를 버리기가 조금 아까워질 거야. ☕</p>
+        
+      </div>
+
+      
+      
+      <div class="ez-section">
+        <h2>🧪 핵심 개념 쉽게 풀어보면</h2>
+        
+          <h3>1️⃣ 커피 원두는 사실 &#39;열매&#39;가 아니라 &#39;씨앗&#39;이야</h3>
+          <p>커피나무에는 빨갛게 익는 열매가 열리는데, 생김새가 앵두를 닮아서 커피 체리(coffee cherry)라고 불러. 이 체리를 반으로 갈라 보면 겉껍질, 달콤한 과육, 끈적한 점액질(뮤실리지), 얇은 껍질(파치먼트), 그리고 아주 얇은 은피(실버스킨)에 감싸인 씨앗 두 개가 나와. 우리가 볶아서 갈아 마시는 건 바로 이 씨앗이야. 그러니까 엄밀히 말하면 커피는 &#39;과일 주스&#39;가 아니라 &#39;씨앗 우린 물&#39;인 셈이지. 씨앗 두 개가 마주 보며 자라기 때문에 원두 한쪽 면이 평평하고 가운데 홈(센터컷)이 있는 거야.</p>
+          <div class="ez-callout">💡 비유: 복숭아를 먹고 나면 가운데 딱딱한 씨가 남잖아. 커피는 그 반대로 과육을 벗겨 버리고 씨만 남겨서 볶아 먹는 과일이라고 생각하면 딱 맞아 🍑</div>
+        
+          <h3>2️⃣ 체리 6kg이 생두 1kg — 무게가 확 줄어드는 이유</h3>
+          <p>갓 딴 커피 체리와 최종 생두의 무게 비율은 대략 6대 1 정도야. 체리 6kg을 따야 생두 1kg이 나온다는 뜻이지. 껍질과 과육, 점액질, 파치먼트가 차례로 벗겨지고, 마지막으로 수분을 12% 안팎까지 말리면서 무게가 계속 빠지거든. 여기서 끝이 아니야. 생두를 로스팅하면 수분이 날아가고 조직이 부풀면서 무게가 다시 15~20%쯤 줄어. 그래서 체리 → 생두 → 원두로 갈수록 무게는 계속 가벼워지는데, 신기하게도 부피는 로스팅 과정에서 오히려 커져.</p>
+          <div class="ez-callout">💡 비유: 배추를 소금에 절이고 물기를 빼면 부피와 무게가 확 줄어들잖아. 커피도 껍질 벗기고 말리는 과정에서 딱 그렇게 줄어드는 거야 🥬</div>
+        
+          <h3>3️⃣ 왜 기계로 한 번에 안 따고 여러 번 손으로 골라 딸까?</h3>
+          <p>같은 가지에 달린 체리라도 익는 속도가 제각각이야. 초록색, 노란색, 빨간색, 심지어 지나치게 익어 검게 변한 체리가 한 가지에 같이 붙어 있어. 덜 익은 체리는 풋내와 떫은맛을, 너무 익은 체리는 발효취를 내기 때문에 섞이면 그 로트 전체의 맛이 떨어져. 그래서 품질을 중시하는 농장은 잘 익은 빨간 체리만 골라 따는 선별 수확(selective picking)을 하고, 수확기 동안 같은 나무를 여러 차례 다시 방문해. 반면 평지에서 대량 생산을 하는 농장은 가지를 통째로 훑거나(스트립 피킹) 기계로 흔들어 한 번에 수확하지.</p>
+          <div class="ez-callout">💡 비유: 딸기밭에서 빨갛게 익은 것만 골라 따는 것과, 밭을 통째로 갈아엎어 다 담는 것의 차이야. 골라 따면 느리고 품이 많이 들지만 상자를 열었을 때 맛이 다르지 🍓</div>
+        
+      </div>
+      
+
+      
+      
+      <div class="ez-section">
+        <h2>🎯 핵심 발견</h2>
+        <ul class="ez-findings">
+          
+          
+            
+              <li class="gold">
+                <strong>🥇 커피 한 잔 = 원두 약 70알 = 체리 약 35알</strong>드립 커피 한 잔에 원두를 보통 10g 안팎 쓰고, 볶은 원두 한 알은 대략 0.13~0.15g이야. 계산해 보면 한 잔에 원두가 70알쯤 들어가는 셈이지. 체리 한 알에는 씨앗이 두 개니까 체리로 환산하면 35알 정도야. 아침에 마시는 아메리카노 한 잔 뒤에 누군가가 체리 서른다섯 알을 손으로 골라 땄다는 뜻이야. 물론 이건 평균치고, 에스프레소는 한 샷에 7~9g, 진하게 내리는 사람은 15g 넘게 쓰기도 하니까 잔마다 조금씩 달라져. ☕
+              </li>
+            
+              <li class="silver">
+                <strong>🥈 커피나무 한 그루가 1년에 만드는 커피는 생각보다 적어</strong>잘 관리된 커피나무 한 그루가 1년에 맺는 체리는 대략 2~5kg 정도야. 이걸 생두로 바꾸면 0.5kg 안팎, 로스팅까지 마치면 채 0.5kg이 안 되는 원두가 남아. 한 잔에 10g씩 쓴다고 치면 나무 한 그루가 1년 내내 자라 만들어 낸 결과가 커피 40잔 남짓인 거야. 카페에서 하루에 팔리는 잔 수를 생각하면 정말 적지? 이 숫자를 알고 나면 원두 한 봉지 뒤에 밭이 얼마나 넓게 필요한지 감이 올 거야. 🌱
+              </li>
+            
+              <li class="bronze">
+                <strong>🥉 씨앗이 하나뿐인 체리도 있어 — 피베리</strong>체리 안에 씨앗이 두 개가 아니라 하나만 동그랗게 들어 있는 경우가 있는데, 이걸 피베리(peaberry)라고 불러. 수정이나 발육 과정에서 씨앗 하나가 제대로 자라지 못하면 남은 하나가 공간을 다 차지하면서 둥글게 여물거든. 전체 수확량에서 차지하는 비율은 보통 몇 퍼센트 정도로 낮아. 모양이 확실히 달라서 선별기로 쉽게 분리되고, 별도 상품으로 팔리는 경우가 많아. &#39;영양을 혼자 다 먹어서 더 맛있다&#39;는 말이 흔히 돌지만 그건 마케팅 쪽 이야기에 가깝고, 확실한 건 크기와 모양이 균일해서 로스팅할 때 열이 고르게 전달된다는 점이야. 🔵
+              </li>
+            
+              <li class="medal">
+                <strong>🏅 커피나무는 심고 나서 3~4년은 기다려야 해</strong>커피 묘목을 심었다고 바로 수확할 수 있는 게 아니야. 보통 3~4년은 지나야 제대로 열매가 열리기 시작하고, 나무가 가장 왕성하게 생산하는 시기는 그 뒤로 몇 년에 걸쳐 이어져. 나무가 늙으면 수확량이 떨어져서 가지를 크게 잘라 회춘시키거나(스텀핑) 아예 새로 심어야 하는데, 그러면 또 몇 년을 기다려야 해. 농가 입장에서는 한 번의 결정이 몇 년 뒤 수입을 좌우하는 셈이지. 커피가 &#39;농산물&#39;이라는 사실이 가장 잘 느껴지는 대목이야. 🌳
+              </li>
+            
+              <li class="medal">
+                <strong>🏅 수확 뒤에도 손이 한참 더 간다 — 핸드 소팅</strong>체리를 따는 걸로 끝이 아니야. 가공과 건조를 마친 생두에는 벌레 먹은 콩, 깨진 콩, 덜 여문 콩, 발효가 잘못된 콩, 그리고 작은 돌이나 나뭇조각까지 섞여 있어. 스페셜티 등급으로 팔리려면 이런 결점두를 걸러 내야 하는데, 기계 선별을 거친 뒤에도 사람이 넓은 판 위에 생두를 펼쳐 놓고 눈으로 골라내는 핸드 소팅(hand sorting)을 하는 곳이 많아. 커피 한 잔이 우리 앞에 오기까지 사람 손이 최소 두세 번은 직접 콩을 만지는 셈이야. 👐
+              </li>
+            
+          
+        </ul>
+      </div>
+      
+
+      
+      
+      <div class="ez-section">
+        <h2>📊 숫자로 보기</h2>
+        
+          
+          
+          <div class="ez-chart-card">
+            <div class="ez-chart-title">커피 체리 1,000g은 최종적으로 얼마나 남을까 (대략)</div>
+            
+              
+              <div class="ez-bar-row">
+                <div class="ez-bar-label">수확한 체리</div>
+                <div class="ez-bar-track"><div class="ez-bar-fill" style="width: 100.0%;">1000.0g</div></div>
+              </div>
+            
+              
+              <div class="ez-bar-row">
+                <div class="ez-bar-label">생두</div>
+                <div class="ez-bar-track"><div class="ez-bar-fill" style="width: 17.0%;">170.0g</div></div>
+              </div>
+            
+              
+              <div class="ez-bar-row">
+                <div class="ez-bar-label">볶은 원두</div>
+                <div class="ez-bar-track"><div class="ez-bar-fill" style="width: 14.0%;">140.0g</div></div>
+              </div>
+            
+          </div>
+        
+      </div>
+      
+
+      
+      
+      
+      <div class="ez-section">
+        <h2>🆚 체리에서 잔까지 — 단계마다 무엇이 사라질까</h2>
+        <table class="ez-table">
+          <thead><tr><th>단계</th><th>무슨 일이 일어나?</th><th>무게 변화 (대략)</th></tr></thead>
+          <tbody>
+            <tr>
+              <th>수확한 체리</th><td>잘 익은 빨간 체리를 골라 딴다</td><td>기준 100</td>
+            </tr><tr>
+              <th>과육 제거·가공</th><td>껍질·과육·점액질을 벗겨 낸다</td><td>크게 감소</td>
+            </tr><tr>
+              <th>건조</th><td>수분을 12% 안팎까지 말린다</td><td>체리 대비 약 1/6</td>
+            </tr><tr>
+              <th>탈곡·선별</th><td>파치먼트를 벗기고 결점두를 골라낸다</td><td>소폭 감소</td>
+            </tr><tr>
+              <th>로스팅</th><td>수분이 날아가고 콩이 부푼다</td><td>생두 대비 15~20% 감소</td>
+            </tr><tr>
+              <th>한 잔 추출</th><td>원두 10g 안팎을 갈아 물로 내린다</td><td>원두 약 70알</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      
+      
+
+      
+      
+
+      
+      
+
+      
+      
+      <div class="ez-section">
+        <div class="ez-summary">💡 <strong>한 줄 요약</strong> — 체리 약 35알에서 씨앗 70알을 꺼내 말리고 볶아야 겨우 커피 한 잔 — 나무 한 그루가 1년 일해도 40잔 남짓이야 🍒</div>
+      </div>
+      
+
+      
+      
+      
+      
+
+      
+      
+      <div class="ez-section">
+        <h2>📖 어려운 말 풀이 사전</h2>
+        <p>이 글에 나온 어려운 약어와 용어를 한 번에 정리했어. 의미만 알면 본문이 훨씬 쉬워져!</p>
+        <div class="ez-glossary">
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">커피 체리(Coffee cherry)</div>
+            <div class="ez-glossary-def">커피나무에 열리는 붉은 열매. 껍질과 과육 안에 보통 씨앗 두 개가 들어 있고, 그 씨앗이 커피 생두가 됨</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">생두(Green bean)</div>
+            <div class="ez-glossary-def">체리에서 과육을 제거하고 건조까지 마친, 아직 볶지 않은 커피 씨앗. 수분 12% 안팎으로 관리함</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">파치먼트(Parchment)</div>
+            <div class="ez-glossary-def">생두를 감싸고 있는 얇고 딱딱한 껍질. 건조 후 탈곡(헐링) 단계에서 벗겨 냄</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">선별 수확(Selective picking)</div>
+            <div class="ez-glossary-def">잘 익은 체리만 골라 손으로 따는 방식. 같은 나무를 여러 번 방문해야 해 품이 많이 들지만 품질이 높음</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">피베리(Peaberry)</div>
+            <div class="ez-glossary-def">체리 안에 씨앗이 하나만 둥글게 여문 것. 수확량 중 비율이 낮고 모양이 균일해 따로 선별해 판매하기도 함</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">핸드 소팅(Hand sorting)</div>
+            <div class="ez-glossary-def">생두를 펼쳐 놓고 사람이 눈으로 결점두와 이물질을 골라내는 작업. 스페셜티 품질 관리의 마지막 관문</div>
+          </div>
+          
+        </div>
+      </div>
+      
+
+    </div>
+  </section>
+
+  <footer class="article-footer">
+    <div class="container">
+      <a href="/insight">← BACK TO INSIGHTS</a>
+      <span style="margin: 0 16px;">·</span>
+      <a href="/">HOME</a>
+    </div>
+  </footer>
+</article>
+
+</body>
+</html>

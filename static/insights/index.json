@@ -1,7 +1,25 @@
 {
   "version": 1,
-  "updated_at": "2026-07-31T02:53:42Z",
+  "updated_at": "2026-08-01T12:37:28Z",
   "items": [
+    {
+      "id": "2026-08-01-cherry-to-bean-yield",
+      "type": "trivia",
+      "date": "2026-08-01",
+      "title_ko": "커피 한 잔에 원두 몇 알이 들어갈까? 체리에서 잔까지 이어지는 긴 여정 ☕",
+      "one_liner": "체리 한 알에 씨앗 두 개, 한 잔에 원두 약 70알 — 커피나무 한 그루가 1년 내내 일해야 몇 잔이 나올까?",
+      "categories_primary": [
+        "커피 상식"
+      ],
+      "categories_secondary": [
+        "원산지",
+        "수확"
+      ],
+      "hero_image": "/static/img/insights/trivia/origin.svg",
+      "journal": null,
+      "pub_date": null,
+      "source_basis": null
+    },
     {
       "id": "2026-07-31-coffee-belt",
       "type": "trivia",
