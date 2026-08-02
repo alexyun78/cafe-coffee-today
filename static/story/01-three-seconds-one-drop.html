@@ -1,26 +1,14 @@
 <!DOCTYPE html>
-<!--
-  92스토리 본문 페이지 템플릿.
-  사용법: 이 파일을 static/story/<id>.html 로 복제한 뒤 {{...}} 자리를 채운다.
-    {{TITLE}}      — 글 제목 (예: 내가 커피를 좋아하게 된 계기)
-    {{NO}}         — 화수 숫자 (예: 1)
-    {{DATE}}       — 발행일 표기 (예: 2026.08.02)
-    {{READ_MIN}}   — 읽는 시간 분 (예: 5)
-    {{ONE_LINER}}  — 한 줄 소개 (og:description 겸용)
-    본문은 <div class="story-body"> 안에 <p> 단락으로.
-    강조 인용은 <blockquote class="pull">, 장면 전환은 <hr class="wave">.
-  발행 후 static/story/index.json 의 items 맨 앞에 항목을 추가할 것.
-  URL: /story/<id>  (Worker 라우트가 /static/story/<id>.html 을 서빙)
--->
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{TITLE}} — 92스토리 · 92°C ROASTERY</title>
-    <meta name="description" content="{{ONE_LINER}}">
-    <meta property="og:title" content="{{TITLE}} — 92스토리">
-    <meta property="og:description" content="{{ONE_LINER}}">
+    <title>3초에 한 방울, 그날 내 우주가 열렸다 — 92스토리 · 92°C ROASTERY</title>
+    <meta name="description" content="취향이라는 건 늘 옆자리에서 슬쩍 넘어온다 — 밀크커피만 알던 남자가 커피에 빠지게 된 계기.">
+    <meta property="og:title" content="3초에 한 방울, 그날 내 우주가 열렸다 — 92스토리">
+    <meta property="og:description" content="취향이라는 건 늘 옆자리에서 슬쩍 넘어온다 — 밀크커피만 알던 남자가 커피에 빠지게 된 계기.">
     <meta property="og:type" content="article">
+    <meta property="og:image" content="https://92cafe.co.kr/static/img/story/01-1.jpg">
     <link rel="icon" type="image/png" href="/static/img/logo-92black.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -194,6 +182,8 @@
             .story-hero { padding: 60px 0 44px; }
             .story-article { padding: 48px 20px 24px; }
             .story-body { font-size: 1rem; line-height: 1.95; }
+            .story-body h3 { font-size: 1.35rem; }
+            .story-body figure img { max-height: 380px; }
             blockquote.pull { font-size: 1.25rem; padding-left: 20px; }
         }
     </style>
@@ -211,33 +201,76 @@
 
 <section class="story-hero">
     <div class="story-hero-inner">
-        <div class="story-eyebrow">— 92 STORY · 제 {{NO}} 화</div>
-        <h1 class="story-title">{{TITLE}}</h1>
+        <div class="story-eyebrow">— 92 STORY · 제 1 화</div>
+        <h1 class="story-title">3초에 한 방울,<br>그날 내 <em>우주</em>가 열렸다</h1>
         <div class="story-meta">
-            <span>{{DATE}}</span>
-            <span>읽는 시간 약 {{READ_MIN}}분</span>
+            <span>2026.08.02</span>
+            <span>읽는 시간 약 5분</span>
         </div>
     </div>
 </section>
 
 <article class="story-article">
     <div class="story-body">
-        <h3>소제목 (선택)</h3>
 
-        <p class="lead">본문 첫 단락 — class="lead" 를 붙이면 첫 글자가 드롭캡 처리된다.</p>
+        <h3>나의 커피는 원래 &lsquo;전자레인지 커피&rsquo;였다</h3>
 
-        <blockquote class="pull">강조하고 싶은 문장은 이렇게.</blockquote>
+        <p class="lead">고백하자면 나의 커피 인생 30년은 믹스커피와 함께였다. 아니, 더 정확히는 &lsquo;밀크커피&rsquo;다.</p>
 
-        <p>다음 단락…</p>
+        <p>우유 200ml를 머그에 붓고 전자레인지에 1분 30초. 커피 세 스푼, 설탕 두 스푼. 이 숫자들은 대충 정해진 게 아니다. 수많은 시행착오와 인고의 세월 끝에 얻어낸 나만의 황금 비율이었다. 물론 그 원본 레시피의 저작권자는 우리 어머니시다.</p>
 
         <figure>
-            <img src="/static/img/story/NN-1.jpg" alt="이미지 설명" loading="lazy">
-            <figcaption>캡션 (선택)</figcaption>
+            <img src="/static/img/story/01-1.jpg" alt="김이 오르는 밀크커피 한 잔" loading="lazy">
         </figure>
+
+        <p>전자레인지에서 꺼낸 우유 위에는 얇은 막이 생긴다. 그 막을 티스푼 끝으로 살살 걷어내는 순간이 이 의식의 시작이다. 이어서 커피와 설탕을 붓는다. 그런데 이 녀석들, 좀처럼 녹지 않는다. 커피 가루가 우유 위에 섬처럼 둥둥 떠서 아무리 휘저어도 요지부동이다. 결국 다시 전자레인지행.</p>
+
+        <p>여기서 초보자가 흔히 저지르는 실수가 있다. 타이머를 믿고 잠깐 딴짓을 하는 것이다. 그 짧은 방심 사이에 우유는 부글부글 끓어오르고, 유리문 너머로는 화산 폭발에 준하는 장관이 펼쳐진다. 내 우유의 3분의 1은 그렇게 전자레인지 내벽으로 이민을 떠난다. 남은 잔여물로 커피를 만들어야 하고, 심지어 새로 생긴 단백질 막을 한 번 더 걷어내야 한다.</p>
+
+        <p>그럼에도 불구하고, 그 커피는 달았다. 쓴맛이라고는 조금도 없는, 세상에서 가장 고급진 밀크커피. 주말마다 두 잔씩 마시며 나는 내 안의 행복을 찾은 것에 감사했다. 그렇게 나의 30년은 완성되었다. &hellip;라고 믿었다.</p>
+
+        <h3>어항과 피라냐, 그리고 이상한 유리 기구</h3>
+
+        <p>회사에 취미 부자 동료가 한 명 있었다. 사무실에 어항을 들여놓고 물고기를 키우는 사람. 작은 열대어부터 손바닥만 한 피라냐까지, 사무실 한복판에서 물질을 하던 그는 여러모로 대단한 인간이었다.</p>
+
+        <p>어느 날 그가 새 장비를 들고 왔다. 뮤제오에서 싸게 샀다는 이와키(IWAKI) 워터드립 세트와 에티오피아 예가체프 원두. 맨 위 물통에서 물이 한 방울씩 떨어져 원두를 적시고, 그게 다시 아래 서버로 모이는 3단 유리탑. 바로 옆자리였던 나는 그 광경을 곁눈질로 관찰하기 시작했다.</p>
+
+        <figure>
+            <img src="/static/img/story/01-2.jpg" alt="유리탑에서 한 방울씩 떨어지는 워터드립" loading="lazy">
+        </figure>
+
+        <p>관찰 일지는 대충 이랬다. 물이 너무 빨리 떨어지면 휴지를 뭉쳐 막는다. 그래도 안 되면 이쑤시개를 쪼개 구멍에 끼운다. 목표는 <strong>3초에 한 방울</strong>. 그렇게 여덟 시간을 내려야 비로소 새까만 액체가 완성된다.</p>
+
+        <p>여덟 시간. 커피 한 병을 위해 근무시간 전체를 헌납하는 인내였다. 그리고 그 결과물은 도저히 사람이 그대로 마실 수 없을 것 같은, 찐득하고 농후한 악마의 물방울이었다.</p>
+
+        <h3>탕비실에서 일어난 빅뱅</h3>
+
+        <p>다음 날, 우리는 탕비실에 모였다. 그가 그 검은 액체에 물과 얼음을 붓는 걸 다들 구경했다. 그런데 희석되는 순간 퍼지는 향이 &mdash; 이건 좀 반칙이었다. 화려했고, 놀랍게도 달았다. 설탕은 한 톨도 들어가지 않았는데 말이다.</p>
+
+        <blockquote class="pull">우유에 커피 세 스푼, 설탕 두 스푼을 인생 최고의 맛으로 여기던 남자에게, 그 한 잔은 빅뱅이었다.</blockquote>
+
+        <p>스타벅스에 가면 자바칩 프라푸치노를 시킬 줄 아는 남자. 그런 나에게 그 한 모금으로 머릿속에서 우주가 새로 열렸다. 커피가 이렇게 향기로울 수 있다는 걸, 단맛이 설탕 말고 다른 곳에서 올 수 있다는 걸 그날 처음 알았다.</p>
+
+        <figure>
+            <img src="/static/img/story/01-3.jpg" alt="얼음 위로 떨어지는 더치 커피" loading="lazy">
+        </figure>
+
+        <h3>그 후로 나는</h3>
+
+        <p>그때부터인 것 같다. 설탕 없이 쓰디쓴 아메리카노를 마시기 시작한 것도, 라떼라는 세계를 알게 된 것도.</p>
+
+        <p>얼마 지나지 않아 나도 더치 세트를 샀다. 원두도 똑같이 에티오피아 예가체프로. 집에는 드롱기 자동 머신을 들였고, 당시 &ldquo;왕싼커피&rdquo;라는 곳에서 저렴한 과테말라를 사다 마셨다. 시작은 언제나 어설프고, 어설퍼서 즐겁다.</p>
+
+        <p>그 이와키 유리탑은 그 뒤로 2년 넘게 내 곁을 지켰다. 동료의 휴지와 이쑤시개가 못내 아쉬웠던 나는 급기야 수액 미세조절 밸브를 달아 물방울 속도를 맞추는 지경에 이르렀고, 어느새 전날 직접 볶은 원두를 갈아 넣으며 기록을 남기고 있었다. 사람은 이렇게 서서히, 그러나 확실하게 빠져든다.</p>
 
         <hr class="wave">
 
-        <p>장면 전환 후 단락…</p>
+        <blockquote class="pull">취향이라는 건 늘 그렇게 옆자리에서 슬쩍 넘어온다.</blockquote>
+
+        <p>돌이켜보면 대단한 사건은 아니었다. 옆자리 동료가 휴지와 이쑤시개로 물방울 속도를 맞추던, 그 별것 아닌 장면. 하지만 어항 옆에서 떨어지던 3초에 한 방울이, 결국 지금의 92도씨를 만든 셈이다.</p>
+
+        <p>그러니 오늘 당신 옆자리에서 누군가 이상한 유리 기구를 꺼내 들거든, 한번쯤 곁눈질해 보시길. 인생의 취향은 대개 그런 식으로 바뀐다.</p>
+
     </div>
 </article>
 
