@@ -1,7 +1,24 @@
 {
   "version": 1,
-  "updated_at": "2026-08-01T12:37:28Z",
+  "updated_at": "2026-08-02T12:40:44Z",
   "items": [
+    {
+      "id": "2026-08-02-roast-levels",
+      "type": "trivia",
+      "date": "2026-08-02",
+      "title_ko": "라이트, 시티, 풀시티, 프렌치… 로스팅 단계 이름이 왜 이렇게 많아? 🔥",
+      "one_liner": "배전도는 '얼마나 오래 볶았나'가 아니라 '어디서 멈췄나' — 크랙 소리와 아그트론 숫자로 읽는 로스팅 단계 총정리!",
+      "categories_primary": [
+        "커피 상식"
+      ],
+      "categories_secondary": [
+        "가공·로스팅"
+      ],
+      "hero_image": "/static/img/insights/trivia/processing.svg",
+      "journal": null,
+      "pub_date": null,
+      "source_basis": null
+    },
     {
       "id": "2026-08-01-cherry-to-bean-yield",
       "type": "trivia",

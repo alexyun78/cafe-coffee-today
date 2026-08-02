@@ -166,5 +166,9 @@
       "term": "디벨롭먼트 타임(Development Time)",
       "ko": "1차 크랙 이후 로스팅을 끝낼 때까지의 시간. 같은 색이라도 이 시간이 다르면 맛이 크게 달라짐"
     }
-  ]
+  ],
+  "date": "2026-08-02",
+  "id": "2026-08-02-roast-levels",
+  "links": {},
+  "hero_image": "/static/img/insights/trivia/processing.svg"
 }
