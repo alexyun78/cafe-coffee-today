@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<!--
+  92스토리 본문 페이지 템플릿.
+  사용법: 이 파일을 static/story/<id>.html 로 복제한 뒤 {{...}} 자리를 채운다.
+    {{TITLE}}      — 글 제목 (예: 내가 커피를 좋아하게 된 계기)
+    {{NO}}         — 화수 숫자 (예: 1)
+    {{DATE}}       — 발행일 표기 (예: 2026.08.02)
+    {{READ_MIN}}   — 읽는 시간 분 (예: 5)
+    {{ONE_LINER}}  — 한 줄 소개 (og:description 겸용)
+    본문은 <div class="story-body"> 안에 <p> 단락으로.
+    강조 인용은 <blockquote class="pull">, 장면 전환은 <hr class="wave">.
+  발행 후 static/story/index.json 의 items 맨 앞에 항목을 추가할 것.
+  URL: /story/<id>  (Worker 라우트가 /static/story/<id>.html 을 서빙)
+-->
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{TITLE}} — 92스토리 · 92°C ROASTERY</title>
+    <meta name="description" content="{{ONE_LINER}}">
+    <meta property="og:title" content="{{TITLE}} — 92스토리">
+    <meta property="og:description" content="{{ONE_LINER}}">
+    <meta property="og:type" content="article">
+    <link rel="icon" type="image/png" href="/static/img/logo-92black.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --canvas: #FFFFFF;
+            --canvas-warm: #FAF7F2;
+            --canvas-stone: #F2ECE3;
+            --ink: #1A1410;
+            --ink-mute: #4A3F36;
+            --ink-soft: #6B5E52;
+            --espresso: #6F4E37;
+            --caramel: #C9986A;
+            --copper: #B5703D;
+            --line: #E8E0D5;
+            --line-soft: #F0E9DD;
+            --font-display: "Cormorant Garamond", "Pretendard", serif;
+            --font-body: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            --font-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", monospace;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body {
+            font-family: var(--font-body);
+            color: var(--ink);
+            background: var(--canvas-warm);
+            line-height: 1.55;
+            -webkit-font-smoothing: antialiased;
+        }
+        a { color: inherit; text-decoration: none; }
+
+        .site-nav {
+            position: sticky; top: 0; z-index: 50;
+            background: rgba(255,255,255,0.85);
+            backdrop-filter: saturate(140%) blur(14px);
+            -webkit-backdrop-filter: saturate(140%) blur(14px);
+            border-bottom: 1px solid var(--line-soft);
+        }
+        .nav-inner {
+            max-width: 1200px; margin: 0 auto; padding: 16px 32px;
+            display: flex; align-items: center; justify-content: space-between; gap: 24px;
+        }
+        .brand {
+            font-family: var(--font-display);
+            font-size: 1.3rem; font-weight: 700;
+            display: inline-flex; align-items: center; gap: 4px;
+        }
+        .brand-mark {
+            display: inline-flex; align-items: flex-start;
+            font-family: "Pretendard", sans-serif;
+            font-weight: 900; letter-spacing: -0.04em; line-height: 1;
+        }
+        .temp-mark { display: flex; flex-direction: column; align-items: flex-start; line-height: 0.82; margin: 0 0.05em 0 0.04em; }
+        .temp-mark .temp-deg { font-size: 0.42em; letter-spacing: -0.04em; }
+        .temp-mark .temp-c   { font-size: 0.58em; letter-spacing: -0.05em; margin-top: -0.05em; }
+        .nav-back {
+            font-family: var(--font-mono);
+            font-size: 0.75rem; letter-spacing: 0.14em;
+            color: var(--ink-mute);
+            transition: color 0.2s;
+        }
+        .nav-back:hover { color: var(--copper); }
+
+        .story-hero {
+            background: var(--canvas);
+            border-bottom: 1px solid var(--line-soft);
+            padding: 88px 0 64px;
+        }
+        .story-hero-inner { max-width: 760px; margin: 0 auto; padding: 0 24px; text-align: center; }
+        .story-eyebrow {
+            font-family: var(--font-mono);
+            font-size: 0.72rem; letter-spacing: 0.26em;
+            color: var(--copper);
+            margin-bottom: 26px;
+        }
+        .story-title {
+            font-family: var(--font-display);
+            font-weight: 600;
+            font-size: clamp(2rem, 5.5vw, 3.2rem);
+            line-height: 1.18; letter-spacing: -0.01em;
+            word-break: keep-all;
+        }
+        .story-title em { font-style: italic; color: var(--espresso); }
+        .story-meta {
+            margin-top: 30px;
+            font-family: var(--font-mono);
+            font-size: 0.72rem; letter-spacing: 0.18em;
+            color: var(--ink-soft);
+            display: flex; justify-content: center; gap: 18px; flex-wrap: wrap;
+        }
+
+        .story-article { max-width: 720px; margin: 0 auto; padding: 72px 24px 40px; }
+        .story-body { font-size: 1.05rem; line-height: 2.0; color: var(--ink-mute); word-break: keep-all; }
+        .story-body p { margin-bottom: 1.9em; }
+        .story-body strong { color: var(--ink); font-weight: 700; }
+        .story-body > p:first-of-type::first-letter {
+            font-family: var(--font-display);
+            font-size: 3.4em; font-weight: 600;
+            float: left; line-height: 0.85;
+            padding: 0.06em 0.12em 0 0;
+            color: var(--espresso);
+        }
+        blockquote.pull {
+            font-family: var(--font-display);
+            font-style: italic;
+            font-size: 1.45rem; line-height: 1.6;
+            color: var(--espresso);
+            border-left: 2px solid var(--caramel);
+            padding: 6px 0 6px 26px;
+            margin: 3em 0;
+            word-break: keep-all;
+        }
+        hr.wave {
+            border: none; margin: 3.4em auto;
+            text-align: center; overflow: visible; height: 1em;
+        }
+        hr.wave::before {
+            content: "☕";
+            font-size: 1rem;
+            color: var(--caramel);
+            letter-spacing: 1.2em; padding-left: 1.2em;
+        }
+
+        .story-foot {
+            max-width: 720px; margin: 0 auto; padding: 8px 24px 100px;
+        }
+        .story-foot-card {
+            border-top: 1px solid var(--line);
+            padding-top: 34px;
+            display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap;
+        }
+        .story-foot-note {
+            font-family: var(--font-display); font-style: italic;
+            color: var(--ink-soft); font-size: 1.02rem;
+        }
+        .story-foot-links { display: flex; gap: 20px; }
+        .story-foot-links a {
+            font-family: var(--font-mono);
+            font-size: 0.75rem; letter-spacing: 0.14em;
+            color: var(--copper);
+            border-bottom: 1px solid transparent; padding-bottom: 2px;
+            transition: border-color 0.2s;
+        }
+        .story-foot-links a:hover { border-bottom-color: var(--copper); }
+
+        @media (max-width: 600px) {
+            .story-hero { padding: 60px 0 44px; }
+            .story-article { padding: 48px 20px 24px; }
+            .story-body { font-size: 1rem; line-height: 1.95; }
+            blockquote.pull { font-size: 1.25rem; padding-left: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+<header class="site-nav">
+    <div class="nav-inner">
+        <a class="brand" href="/">
+            <span class="brand-mark">92<span class="temp-mark"><span class="temp-deg">°</span><span class="temp-c">C</span></span></span>ROASTERY
+        </a>
+        <a class="nav-back" href="/#story">← 92 STORY</a>
+    </div>
+</header>
+
+<section class="story-hero">
+    <div class="story-hero-inner">
+        <div class="story-eyebrow">— 92 STORY · 제 {{NO}} 화</div>
+        <h1 class="story-title">{{TITLE}}</h1>
+        <div class="story-meta">
+            <span>{{DATE}}</span>
+            <span>읽는 시간 약 {{READ_MIN}}분</span>
+        </div>
+    </div>
+</section>
+
+<article class="story-article">
+    <div class="story-body">
+        <p>본문 첫 단락. 첫 글자는 자동으로 드롭캡 처리된다.</p>
+
+        <blockquote class="pull">강조하고 싶은 문장은 이렇게.</blockquote>
+
+        <p>다음 단락…</p>
+
+        <hr class="wave">
+
+        <p>장면 전환 후 단락…</p>
+    </div>
+</article>
+
+<footer class="story-foot">
+    <div class="story-foot-card">
+        <div class="story-foot-note">92도씨의 이야기는 계속됩니다.</div>
+        <div class="story-foot-links">
+            <a href="/#story">홈으로 →</a>
+        </div>
+    </div>
+</footer>
+
+</body>
+</html>

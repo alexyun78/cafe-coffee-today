@@ -846,6 +846,108 @@
             .day92-theme { font-size: 1.25rem; }
         }
 
+        /* ========== 92 스토리 ========== */
+        .story-section { background: var(--canvas-stone); border-top: 1px solid var(--line-soft); }
+        .story-card {
+            display: grid;
+            grid-template-columns: 0.9fr 1.5fr;
+            background: var(--canvas);
+            border: 1px solid var(--line);
+            border-radius: var(--r-md);
+            overflow: hidden;
+            transition: transform 0.25s, box-shadow 0.25s, border-color 0.25s;
+            cursor: pointer;
+            color: inherit;
+        }
+        .story-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 18px 40px rgba(111, 78, 55, 0.14);
+            border-color: var(--caramel);
+        }
+        .story-card-side {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(155deg, #2A1F17 0%, #4A3325 55%, var(--espresso) 100%);
+            color: #F5EDE2;
+            padding: 44px 40px;
+            display: flex; flex-direction: column; justify-content: space-between; gap: 26px;
+            min-height: 300px;
+        }
+        .story-card-side::after {
+            content: "\201D";
+            position: absolute; right: 10px; bottom: -70px;
+            font-family: var(--font-display);
+            font-size: 14rem; line-height: 1;
+            color: rgba(255, 255, 255, 0.07);
+            pointer-events: none;
+        }
+        .story-card-ep {
+            font-family: var(--font-mono);
+            font-size: 0.7rem; letter-spacing: 0.24em;
+            color: var(--caramel);
+        }
+        .story-card-side-quote {
+            font-family: var(--font-display);
+            font-style: italic;
+            font-size: 1.4rem; line-height: 1.45;
+            word-break: keep-all;
+        }
+        .story-card-body {
+            padding: 44px 44px 40px;
+            display: flex; flex-direction: column; gap: 16px;
+        }
+        .story-card-meta {
+            font-family: var(--font-mono);
+            font-size: 0.7rem; letter-spacing: 0.18em;
+            color: var(--copper);
+            display: flex; gap: 14px; align-items: center; flex-wrap: wrap;
+        }
+        .story-card-title {
+            font-family: var(--font-display);
+            font-weight: 600;
+            font-size: clamp(1.5rem, 2.8vw, 2.1rem);
+            line-height: 1.22; letter-spacing: -0.01em;
+            color: var(--ink);
+            word-break: keep-all;
+        }
+        .story-card-excerpt {
+            color: var(--ink-mute);
+            line-height: 1.85;
+            word-break: keep-all;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        .story-card-foot {
+            margin-top: auto;
+            display: flex; justify-content: space-between; align-items: center;
+            padding-top: 18px;
+            border-top: 1px solid var(--line-soft);
+            font-family: var(--font-mono);
+            font-size: 0.72rem; letter-spacing: 0.14em;
+        }
+        .story-card-read { color: var(--ink-soft); }
+        .story-card-cta { color: var(--copper); font-weight: 600; }
+        .story-card-cta::after {
+            content: " →";
+            transition: transform 0.2s;
+            display: inline-block;
+        }
+        .story-card:hover .story-card-cta::after { transform: translateX(4px); }
+        @media (max-width: 900px) {
+            .story-card { grid-template-columns: 1fr; }
+            .story-card-side { min-height: 180px; padding: 30px 26px; }
+            .story-card-body { padding: 28px 24px; }
+        }
+        @media (max-width: 480px) {
+            .story-card-side { min-height: 150px; padding: 24px 20px; }
+            .story-card-side-quote { font-size: 1.2rem; }
+            .story-card-body { padding: 22px 20px; gap: 12px; }
+            .story-card-title { font-size: 1.35rem; }
+            .story-card-foot { font-size: 0.65rem; }
+        }
+
         /* ========== Coffee Insight ========== */
         .insight-section { background: var(--canvas-warm); border-top: 1px solid var(--line-soft); }
         .insight-card {
@@ -1416,6 +1518,7 @@
         <nav class="nav-links" id="nav-links">
             <a href="#now">오늘의 커피</a>
             <a href="#upcoming">곧 만날</a>
+            <a href="#story" id="nav-story" style="display:none">92스토리</a>
             <a href="/insight">인사이트</a>
             <a href="#day92">92 Day</a>
             <a href="#hours">영업</a>
@@ -1505,6 +1608,19 @@
         <div class="upcoming-rail" id="upcoming-rail">
             <!-- JS render -->
         </div>
+    </div>
+</section>
+
+<!-- ============== 92 STORY ============== -->
+<!-- static/story/index.json 에 스토리가 1편 이상 있으면 JS가 표시. 없으면 섹션·네비 링크 숨김 유지 -->
+<section class="section story-section" id="story" style="display:none">
+    <div class="container">
+        <div class="section-head">
+            <span class="eyebrow">— 92 STORY</span>
+            <h2>92 <em>스토리</em></h2>
+            <p class="section-sub">커피를 만나고, 볶고, 내리기까지 — 92도씨가 걸어온 길을 수필처럼 천천히 적어 내려갑니다.</p>
+        </div>
+        <div id="story-latest"></div>
     </div>
 </section>
 
@@ -1995,6 +2111,43 @@
     } else {
         loadLatestInsight();
     }
+
+    // ---------- 92 스토리 (최신 1편) ----------
+    // index.json 에 스토리가 있으면 섹션·네비 링크를 켜고 최신 1편 카드를 렌더.
+    // 섹션이 display:none 상태라 IntersectionObserver 지연 로드는 불가 — 즉시 로드 (파일이 작아 부담 없음).
+    fetch('/static/story/index.json')
+        .then(function (r) { return r.ok ? r.json() : null; })
+        .then(function (j) {
+            var items = (j && j.items) || [];
+            if (!items.length) return;
+            var s = items[0];
+            var el = document.getElementById('story-latest');
+            if (!el || !s.id) return;
+            var epNum = s.no != null ? ('0' + s.no).slice(-2) : '';
+            el.innerHTML = '' +
+                '<a class="story-card" href="/story/' + encodeURIComponent(s.id) + '">' +
+                    '<div class="story-card-side">' +
+                        '<span class="story-card-ep">92 STORY' + (epNum ? ' · ' + epNum : '') + '</span>' +
+                        (s.one_liner ? '<p class="story-card-side-quote">' + escapeHtml(s.one_liner) + '</p>' : '') +
+                    '</div>' +
+                    '<div class="story-card-body">' +
+                        '<div class="story-card-meta">' +
+                            (s.date ? '<span>' + escapeHtml(String(s.date).replace(/-/g, '.')) + '</span>' : '') +
+                            (s.no != null ? '<span>제 ' + s.no + ' 화</span>' : '') +
+                        '</div>' +
+                        '<h3 class="story-card-title">' + escapeHtml(s.title || '') + '</h3>' +
+                        (s.excerpt ? '<p class="story-card-excerpt">' + escapeHtml(s.excerpt) + '</p>' : '') +
+                        '<div class="story-card-foot">' +
+                            '<span class="story-card-read">' + (s.read_min ? '읽는 시간 약 ' + s.read_min + '분' : '92°C ESSAY') + '</span>' +
+                            '<span class="story-card-cta">READ</span>' +
+                        '</div>' +
+                    '</div>' +
+                '</a>';
+            document.getElementById('story').style.display = '';
+            var navStory = document.getElementById('nav-story');
+            if (navStory) navStory.style.display = '';
+        })
+        .catch(function () { /* 스토리 없음/로드 실패 — 섹션 숨김 유지 */ });
 
     function render(data) {
         var today = (data && data.today) || [];

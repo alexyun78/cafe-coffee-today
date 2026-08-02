@@ -15,7 +15,7 @@ const app = new Hono<{ Bindings: Env }>()
 const VISIT_COOKIE = 'vid'
 const VISIT_COOKIE_TTL = 86400
 const BOT_RE = /bot|crawler|spider|crawl|http:\/\/|googlebot|bingbot|yandex|duckduck|baiduspider|slurp|facebookexternalhit|whatsapp|telegrambot|applebot|amazonbot|petalbot|semrushbot|ahrefsbot|mj12bot|headlesschrome|phantomjs|puppeteer|playwright|selenium/i
-const TRACK_PATH_RE = /^\/(?:$|insight(?:\/|$)|apk(?:\/|$)|game(?:-apk)?(?:\/|$)|today(?:\/|$)|roastery(?:\/|$))/
+const TRACK_PATH_RE = /^\/(?:$|insight(?:\/|$)|story(?:\/|$)|apk(?:\/|$)|game(?:-apk)?(?:\/|$)|today(?:\/|$)|roastery(?:\/|$))/
 const VID_RE = /^[A-Za-z0-9_-]{8,40}$/
 
 function classifyDevice(ua: string): string {
@@ -197,6 +197,16 @@ app.get('/insight/:id', async (c) => {
       return c.redirect(`/insight?date=${id}`, 302)
     }
   }
+  return c.json({ success: false, error: 'not found' }, 404)
+})
+
+// /story — 92스토리. 목록 페이지는 아직 없어 홈 섹션으로, 본문은 /static/story/<slug>.html
+app.get('/story', (c) => c.redirect('/#story', 302))
+app.get('/story/:slug', async (c) => {
+  const slug = c.req.param('slug')
+  if (!/^[A-Za-z0-9_-]+$/.test(slug)) return c.json({ success: false, error: 'invalid id' }, 404)
+  const res = await c.env.ASSETS.fetch(new Request(new URL(`/static/story/${slug}.html`, c.req.url)))
+  if (res.ok) return res
   return c.json({ success: false, error: 'not found' }, 404)
 })
 

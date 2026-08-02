@@ -16,6 +16,7 @@
       "/roastery", "/roastery/",
       "/apk", "/apk/",
       "/insight", "/insight/*",
+      "/story", "/story/*",
       "/game", "/game/", "/game-apk", "/game-apk/",
       "/downloads/*", "/static/downloads/*"
     ]

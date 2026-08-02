@@ -430,6 +430,20 @@ journalctl -u cafe-coffee-ingest.service -n 100 --no-pager
 
 ---
 
+## 92스토리 — 수필 연재 (2026-08-02 추가)
+
+홈([static/roastery.html](static/roastery.html)) "곧 만날"과 "인사이트" 사이의 `#story` 섹션. 커피를 시작한 계기·로스팅·카페 운영 등 사용자의 수필을 비주기적으로 연재.
+
+- **표시 규칙**: [static/story/index.json](static/story/index.json) `items`가 비어 있으면 홈 섹션·네비 "92스토리" 링크가 자동 숨김. 1편 이상이면 최신 1편(`items[0]`) 카드 렌더.
+- **발행 절차 (LLM 호출 0, 정적 파일만)**:
+  1. [static/story/_template.html](static/story/_template.html) 복제 → `static/story/<id>.html` 작성 (`{{TITLE}}` 등 치환, id는 ASCII slug — `.assetsignore`가 `_template.html`은 서빙 제외)
+  2. `index.json` `items` **맨 앞**에 `{id, no(화수), date, title, one_liner(측면 인용구), excerpt(카드 발췌 3줄), read_min}` 추가
+  3. push → deploy-worker.yml 자동 반영
+- **URL**: `/story/<id>` (Worker가 `/static/story/<id>.html` 서빙), `/story` → `/#story` 리다이렉트. 라우트는 [worker/src/index.ts](worker/src/index.ts) + `wrangler.jsonc` `run_worker_first`.
+- **콘텐츠 소스**: 사용자 **개인** 노션에 습작 → 대화로 전달받아 다듬어 발행. ⚠️ Claude에 연결된 노션은 회사(SAIGE) 워크스페이스라 개인 페이지 직접 조회 불가 — 본문은 붙여넣기 또는 노션 "웹에 게시" 공개 링크로 받을 것. 과거 네이버 블로그 글도 참고 소스(URL 받으면 WebFetch).
+
+---
+
 ## APK ([cafe-coffee-apk/](cafe-coffee-apk/))
 
 - **프레임워크**: Capacitor (92cafe_pick의 `pick-apk` 구조 복제)
@@ -664,6 +678,7 @@ journalctl -u cafe-coffee-nearby.service -n 50 --no-pager
 | [scripts/collect_nearby.py](scripts/collect_nearby.py) | 주변 가게 네이버 리뷰 수집기 (requests-only) |
 | [scripts/seed_nearby_shops.sql](scripts/seed_nearby_shops.sql) | 주변 가게 초기 데이터 (init_schema에서 자동 실행) |
 | [static/roastery.html](static/roastery.html) | 92도씨 로스터리 메인 공개 페이지 |
+| [static/story/](static/story/) | 92스토리 수필 페이지 (`index.json` + `<id>.html`, `_template.html` 템플릿) |
 | [scripts/seed_green_beans.sql](scripts/seed_green_beans.sql) | 생두 초기 데이터 (init_schema에서 자동 실행) |
 | [scripts/migrate_spreadsheet.py](scripts/migrate_spreadsheet.py) | 구글 스프레드시트 → DB 마이그레이션 스크립트 |
 | [requirements.txt](requirements.txt) | 파이썬 의존성 |

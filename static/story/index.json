@@ -1,0 +1,4 @@
+{
+  "_readme": "92스토리 인덱스. items가 비어 있으면 홈 92스토리 섹션·네비 링크가 자동으로 숨겨진다. 새 스토리 발행 = ① static/story/<id>.html 작성(_template.html 복제) ② 여기 items 맨 앞에 항목 추가. id는 파일명(확장자 제외, ASCII slug). no는 화수(제N화).",
+  "items": []
+}

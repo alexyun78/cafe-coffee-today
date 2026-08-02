@@ -31,3 +31,5 @@
 /api_response.json
 # APK 바이너리는 GitHub Releases로 이전 예정 (파일당 25MiB 제한도 있음)
 /static/downloads
+# 92스토리 저작용 템플릿 — 서빙 불필요
+/static/story/_template.html
