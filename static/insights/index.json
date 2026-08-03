@@ -1,7 +1,24 @@
 {
   "version": 1,
-  "updated_at": "2026-08-02T12:40:44Z",
+  "updated_at": "2026-08-03T14:01:04Z",
   "items": [
+    {
+      "id": "2026-08-03-resting-degassing",
+      "type": "trivia",
+      "date": "2026-08-03",
+      "title_ko": "갓 볶은 원두를 왜 바로 안 마시고 며칠 재워둘까? 💨",
+      "one_liner": "로스팅이 만든 이산화탄소가 빠져나가야 커피가 제 맛을 낸다 — 레스팅·디개싱·블루밍의 정체 총정리!",
+      "categories_primary": [
+        "커피 상식"
+      ],
+      "categories_secondary": [
+        "가공·로스팅"
+      ],
+      "hero_image": "/static/img/insights/trivia/processing.svg",
+      "journal": null,
+      "pub_date": null,
+      "source_basis": null
+    },
     {
       "id": "2026-08-02-roast-levels",
       "type": "trivia",

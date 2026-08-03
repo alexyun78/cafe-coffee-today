@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>갓 볶은 원두를 왜 바로 안 마시고 며칠 재워둘까? 💨 — 92°C ROASTERY</title>
+<meta name="description" content="로스팅이 만든 이산화탄소가 빠져나가야 커피가 제 맛을 낸다 — 레스팅·디개싱·블루밍의 정체 총정리!">
+<link rel="icon" type="image/png" href="/static/img/logo-92black.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --canvas: #FFFFFF; --canvas-warm: #FAF7F2; --canvas-stone: #F2ECE3;
+  --ink: #1A1410; --ink-mute: #4A3F36; --ink-soft: #6B5E52;
+  --espresso: #6F4E37; --caramel: #C9986A; --copper: #B5703D;
+  --line: #E8E0D5; --line-soft: #F0E9DD;
+  --font-display: "Cormorant Garamond", "Pretendard", serif;
+  --font-body: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  --r-sm: 6px; --r-md: 12px; --r-pill: 999px;
+}
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color: transparent; }
+html { scroll-behavior: smooth; }
+body { font-family: var(--font-body); color: var(--ink); background: var(--canvas); font-feature-settings: "kern","ss01","lnum"; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+a { color: var(--copper); text-decoration: none; border-bottom: 1px solid transparent; transition: border-color .2s; }
+a:hover { border-bottom-color: var(--copper); }
+img { display: block; max-width: 100%; height: auto; }
+.container { max-width: 860px; margin: 0 auto; padding: 0 32px; }
+@media (max-width: 720px) { .container { padding: 0 20px; } }
+@media (max-width: 480px) { .container { padding: 0 16px; } }
+.site-nav { position: sticky; top: 0; z-index: 50; background: rgba(255,255,255,0.9); backdrop-filter: saturate(140%) blur(14px); -webkit-backdrop-filter: saturate(140%) blur(14px); border-bottom: 1px solid var(--line-soft); }
+.nav-inner { max-width: 1200px; margin: 0 auto; padding: 16px 32px; display: flex; align-items: center; justify-content: space-between; }
+.brand { font-family: var(--font-display); font-size: 1.3rem; font-weight: 700; color: var(--ink); display: inline-flex; align-items: center; gap: 4px; border-bottom: none; }
+.brand:hover { border-bottom: none; }
+.brand-mark { display: inline-flex; align-items: flex-start; font-family: "Pretendard", sans-serif; font-weight: 900; letter-spacing: -0.04em; line-height: 1; color: inherit; }
+.temp-mark { display: flex; flex-direction: column; line-height: .82; margin: 0 .05em 0 .04em; }
+.temp-mark .temp-deg { font-size: .42em; letter-spacing: -.04em; }
+.temp-mark .temp-c { font-size: .58em; letter-spacing: -.05em; margin-top: -.05em; }
+.nav-back { font-family: var(--font-mono); font-size: .75rem; letter-spacing: .18em; color: var(--ink-mute); border-bottom: none; }
+.nav-back:hover { color: var(--copper); border-bottom: none; }
+.article-hero { padding: 56px 0 48px; border-bottom: 1px solid var(--line-soft); }
+.eyebrow { font-family: var(--font-mono); font-size: .72rem; letter-spacing: .28em; color: var(--copper); margin-bottom: 18px; display: flex; align-items: center; gap: 12px; }
+.eyebrow::before { content: ""; display: inline-block; width: 28px; height: 1px; background: var(--copper); }
+.article-title { font-family: var(--font-display); font-weight: 500; font-size: clamp(2rem, 4.5vw, 3.2rem); line-height: 1.15; letter-spacing: -0.02em; color: var(--ink); margin-bottom: 20px; }
+.article-title em { font-style: italic; color: var(--espresso); font-weight: 600; }
+.article-one-liner { font-family: var(--font-display); font-style: italic; font-size: 1.3rem; line-height: 1.5; color: var(--espresso); margin-bottom: 28px; padding-left: 20px; border-left: 3px solid var(--caramel); }
+.article-meta { display: flex; gap: 24px; flex-wrap: wrap; font-family: var(--font-mono); font-size: .75rem; letter-spacing: .12em; color: var(--ink-soft); padding-top: 20px; border-top: 1px solid var(--line-soft); }
+.article-meta span { display: inline-flex; align-items: center; gap: 6px; }
+.article-meta span::before { content: "■"; color: var(--caramel); font-size: .55rem; }
+.hero-image { margin: 32px 0 0; border-radius: var(--r-md); overflow: hidden; border: 1px solid var(--line); }
+.hero-image img { width: 100%; }
+.article-body { padding: 56px 0 80px; }
+.article-footer { padding: 36px 0 56px; border-top: 1px solid var(--line-soft); text-align: center; font-family: var(--font-mono); font-size: .75rem; letter-spacing: .14em; color: var(--ink-soft); }
+.article-footer a { color: var(--ink-mute); border-bottom: 1px solid transparent; }
+.article-footer a:hover { color: var(--copper); border-bottom-color: var(--copper); }
+.source-basis { display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; background: rgba(201,152,106,.18); border: 1px solid rgba(181,112,61,.35); border-radius: var(--r-pill); font-family: var(--font-mono); font-size: .72rem; letter-spacing: .12em; color: var(--espresso); font-weight: 500; }
+.source-basis.abstract { background: rgba(107,94,82,.1); border-color: rgba(107,94,82,.3); color: var(--ink-soft); }
+.links-row { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 18px; }
+.link-pill { display: inline-flex; align-items: center; gap: 8px; padding: 9px 16px; background: var(--canvas-warm); border: 1px solid var(--line); border-radius: var(--r-pill); font-family: var(--font-mono); font-size: .78rem; letter-spacing: .08em; color: var(--ink-mute); border-bottom: 1px solid var(--line); transition: border-color .2s, color .2s; }
+.link-pill:hover { color: var(--copper); border-color: var(--copper); }
+
+/* ===== EZ: 쉬운 설명 스타일 ===== */
+.ez-hero { text-align: center; padding: 8px 0 32px; }
+.ez-hero-emoji { font-size: 3.4rem; line-height: 1; }
+.ez-hero-title { font-family: var(--font-display); font-size: clamp(1.6rem, 3.5vw, 2.2rem); font-weight: 600; color: var(--ink); margin-top: 14px; line-height: 1.3; }
+.ez-section { margin-bottom: 52px; }
+.ez-section h2 { font-family: var(--font-body); font-size: 1.5rem; font-weight: 700; color: var(--ink); margin-bottom: 18px; letter-spacing: -0.01em; }
+.ez-section h3 { font-size: 1.08rem; font-weight: 600; color: var(--espresso); margin: 22px 0 10px; }
+.ez-section p { font-size: 1.04rem; line-height: 1.85; color: var(--ink-mute); margin-bottom: 14px; }
+.ez-section p:last-child { margin-bottom: 0; }
+.ez-section ul { padding-left: 22px; margin-bottom: 14px; }
+.ez-section li { font-size: 1.02rem; line-height: 1.8; color: var(--ink-mute); margin-bottom: 8px; }
+.ez-callout { margin: 14px 0; padding: 14px 18px; background: var(--canvas-warm); border-left: 3px solid var(--caramel); border-radius: 4px; font-size: 0.98rem; color: var(--espresso); line-height: 1.75; }
+.ez-callout strong { color: var(--copper); }
+.ez-findings { list-style: none; padding: 0; }
+.ez-findings > li { padding: 18px 22px; margin-bottom: 14px; background: var(--canvas-warm); border: 1px solid var(--line); border-radius: 10px; font-size: 1.02rem; line-height: 1.7; color: var(--ink-mute); }
+.ez-findings > li strong { color: var(--ink); display: block; margin-bottom: 4px; font-size: 1.06rem; }
+.ez-findings > li.gold { background: linear-gradient(135deg, #FFF8E7, #FFEFCD); border-color: #F0D67A; }
+.ez-findings > li.silver { background: linear-gradient(135deg, #F6F6F6, #ECECEC); border-color: #C7C7C7; }
+.ez-findings > li.bronze { background: linear-gradient(135deg, #FFEEDD, #FFDCC0); border-color: #E4B07F; }
+.ez-findings > li.medal { background: linear-gradient(135deg, #F0E6FF, #E1D2FF); border-color: #BDA8E5; }
+.ez-table { width: 100%; border-collapse: collapse; margin: 16px 0 8px; font-size: 0.96rem; }
+.ez-table th, .ez-table td { padding: 11px 14px; border: 1px solid var(--line); text-align: left; vertical-align: top; }
+.ez-table thead th { background: var(--ink); color: #fff; font-weight: 600; letter-spacing: .02em; }
+.ez-table tbody th { background: var(--canvas-warm); color: var(--ink); font-weight: 600; }
+.ez-table tbody tr:nth-child(even) td { background: rgba(250, 247, 242, .55); }
+.ez-summary { padding: 26px 30px; background: linear-gradient(135deg, #FAF0E0, #F3E1C5); border-radius: 14px; font-size: 1.13rem; line-height: 1.75; font-weight: 500; color: var(--ink); border: 1px solid #E5C99B; }
+.ez-summary strong { color: var(--espresso); }
+.ez-citation { margin-top: 24px; padding: 18px 22px; background: var(--canvas-warm); border-radius: 8px; font-family: var(--font-mono); font-size: 0.82rem; color: var(--ink-soft); line-height: 1.7; }
+.ez-citation p { margin: 4px 0; }
+.ez-chart-card { padding: 22px 24px 18px; background: var(--canvas); border: 1px solid var(--line); border-radius: 12px; margin: 16px 0; }
+.ez-chart-card .ez-chart-title { font-size: 1rem; font-weight: 600; color: var(--ink); margin-bottom: 14px; }
+.ez-bar-row { display: flex; align-items: center; margin: 10px 0; font-size: 0.95rem; gap: 14px; }
+.ez-bar-label { width: 180px; flex-shrink: 0; color: var(--ink-mute); font-weight: 500; }
+.ez-bar-track { flex: 1; height: 32px; background: var(--canvas-warm); border-radius: 6px; overflow: hidden; position: relative; border: 1px solid var(--line); }
+.ez-bar-fill { height: 100%; background: linear-gradient(90deg, var(--caramel), var(--copper)); display: flex; align-items: center; justify-content: flex-end; padding: 0 12px; color: white; font-weight: 700; font-size: 0.92rem; min-width: 56px; }
+.ez-bar-fill.alt { background: linear-gradient(90deg, #6F4E37, #4A3F36); }
+.ez-glossary { display: grid; gap: 12px; }
+.ez-glossary-item { padding: 16px 20px; background: var(--canvas-warm); border: 1px solid var(--line); border-radius: 10px; border-left: 3px solid var(--caramel); }
+.ez-glossary-term { font-family: var(--font-display); font-style: italic; font-size: 1.1rem; font-weight: 600; color: var(--espresso); margin-bottom: 6px; }
+.ez-glossary-def { font-size: 0.98rem; color: var(--ink-mute); line-height: 1.7; }
+@media (max-width: 720px) {
+  .article-hero { padding: 36px 0 32px; }
+  .article-body { padding: 36px 0 56px; }
+  .ez-section { margin-bottom: 40px; }
+  .ez-section h2 { font-size: 1.3rem; }
+  .ez-bar-label { width: 100%; margin-bottom: 4px; }
+  .ez-bar-row { flex-direction: column; align-items: stretch; }
+  .article-meta { gap: 12px 18px; font-size: .68rem; }
+}
+</style>
+</head>
+<body>
+
+<header class="site-nav">
+  <div class="nav-inner">
+    <a class="brand" href="/">
+      <span class="brand-mark">92<span class="temp-mark"><span class="temp-deg">°</span><span class="temp-c">C</span></span></span>ROASTERY
+    </a>
+    <a class="nav-back" href="/insight">← INSIGHTS</a>
+  </div>
+</header>
+
+<article>
+  <section class="article-hero">
+    <div class="container">
+      <div class="eyebrow">— 오늘의 커피 상식 · 2026.08.03</div>
+      <h1 class="article-title">갓 볶은 원두를 왜 바로 안 마시고 며칠 재워둘까? 💨</h1>
+      <p class="article-one-liner">로스팅이 만든 이산화탄소가 빠져나가야 커피가 제 맛을 낸다 — 레스팅·디개싱·블루밍의 정체 총정리!</p>
+      <div class="article-meta">
+        
+        
+        
+        <span>커피 상식 · 가공·로스팅</span>
+      </div>
+      
+      <div class="hero-image">
+        <img src="/static/img/insights/trivia/processing.svg" alt="갓 볶은 원두를 왜 바로 안 마시고 며칠 재워둘까? 💨">
+      </div>
+      
+    </div>
+  </section>
+
+  <section class="article-body">
+    <div class="container">
+
+      
+      <div class="ez-hero">
+        <div class="ez-hero-emoji">💨</div>
+        <div class="ez-hero-title">갓 볶은 원두를 왜 바로 안 마시고 며칠 재워둘까?</div>
+      </div>
+
+      
+      <div class="ez-section">
+        <h2>🤔 무슨 연구야?</h2>
+        
+          <p>로스터리에서 방금 볶아 나온 따끈한 원두를 받으면 당장 갈아서 내려 마시고 싶잖아? 그런데 바리스타한테 물어보면 십중팔구 이렇게 말해. &#39;2~3일은 두고 드세요.&#39; 😮 어? 신선한 게 최고 아니었어? 채소도 생선도 빵도 갓 나온 게 제일 좋은데, 유독 커피만 왜 조금 기다리라고 하는 걸까?</p><p>이유는 커피콩 안에 갇혀 있는 기체 때문이야. 로스팅을 하면 콩 속에서 화학 반응이 활발하게 일어나면서 이산화탄소(CO₂)가 어마어마하게 만들어지는데, 이 기체가 빠져나가지 못하고 단단한 콩 조직 안에 압축된 채로 갇혀 있어. 그러니까 볶은 직후의 원두는 말하자면 아직 뚜껑을 따지 않은 탄산음료 캔 같은 상태인 셈이야 🥤</p><p>이 탄산이 적당히 빠져나가도록 기다리는 게 레스팅(resting), 기체가 빠져나가는 현상 자체가 디개싱(degassing)이야. 오늘은 이 CO₂가 커피 봉투의 동그란 단추와 무슨 관계인지, 물을 부었을 때 커피가 부풀어 오르는 이유가 뭔지, 그리고 언제부터 언제까지가 진짜 맛있는 구간인지 알아보자! ☕</p>
+        
+      </div>
+
+      
+      
+      <div class="ez-section">
+        <h2>🧪 핵심 개념 쉽게 풀어보면</h2>
+        
+          <h3>1️⃣ 커피콩 안에 갇힌 탄산 — 디개싱이 뭐야?</h3>
+          <p>로스팅 중 마이야르 반응과 카라멜화가 일어나면서 부산물로 이산화탄소가 대량 생성돼. 원두 1g에 대략 몇 mg 수준의 CO₂가 갇히는데, 부피로 환산하면 콩 자기 부피의 몇 배가 넘는 양이야. 이 기체가 시간을 두고 천천히 빠져나가는 게 디개싱이고, 그동안 원두를 그냥 두는 걸 레스팅이라고 불러. 배출은 첫 하루 이틀에 가장 격렬하고, 그 뒤로는 몇 주에 걸쳐 서서히 이어져.</p>
+          <div class="ez-callout">💡 비유: 탄산음료 뚜껑을 살짝 열어두면 처음엔 &#39;치익&#39; 하고 세게 나오다가 점점 잦아들잖아. 원두도 똑같아. 다만 커피는 김이 완전히 빠지기 직전, 살짝 남아 있을 때가 제일 맛있다는 게 차이점이야 🥤</div>
+        
+          <h3>2️⃣ 커피 봉투에 붙은 동그란 단추 — 원웨이 밸브</h3>
+          <p>원두 봉투 앞면에 붙은 플라스틱 단추, 이게 원웨이 밸브(one-way valve, 아로마 밸브)야. 안쪽 압력이 높아지면 열려서 CO₂를 내보내고, 바깥 공기는 못 들어오게 막는 일방통행 문이야. 대략 1960~70년대에 이탈리아 포장업계에서 상용화되면서 커피 유통이 완전히 바뀌었어. 밸브가 없으면 봉투가 빵빵하게 부풀다 터지거나, 반대로 구멍을 뚫으면 산소가 들어와 커피가 금방 산패해 버리거든.</p>
+          <div class="ez-callout">💡 비유: 압력밥솥의 김 빼는 추와 똑같아. 안의 압력이 세지면 알아서 김을 내보내지만, 밖의 것이 안으로 들어오진 않지. 그래서 밸브 부분을 손으로 눌러 냄새를 맡으면 신선도를 대충 가늠할 수 있어 👃</div>
+        
+          <h3>3️⃣ 물을 붓자마자 부풀어 오르는 거품 — 블루밍의 정체</h3>
+          <p>핸드드립을 할 때 처음 물을 조금 붓고 30초쯤 기다리는 걸 뜸들이기, 영어로 블루밍(blooming)이라고 해. 이때 커피가 빵처럼 부풀어 오르는 건 갇혀 있던 CO₂가 물을 만나 한꺼번에 터져 나오기 때문이야. 이 기체가 남아 있으면 물이 커피 가루 사이로 고르게 스미지 못하고 특정 길로만 새어 나가는 채널링이 생겨. 그래서 미리 뜸을 들여 기체를 빼주는 거야. 참고로 부푸는 정도는 신선도의 힌트지 맛의 보증서는 아니야.</p>
+          <div class="ez-callout">💡 비유: 마른 스펀지에 물을 부으면 공기 방울이 뽀글뽀글 올라오면서 처음엔 물이 겉돌잖아. 한 번 적셔 놓으면 그다음부터 물이 쑥 스며들지. 커피 뜸들이기가 딱 그 과정이야 🧽</div>
+        
+      </div>
+      
+
+      
+      
+      <div class="ez-section">
+        <h2>🎯 핵심 발견</h2>
+        <ul class="ez-findings">
+          
+          
+            
+              <li class="gold">
+                <strong>🥇 &#39;갓 볶은 게 최고&#39;는 커피에선 오해야</strong>로스팅 직후 하루 이틀 된 원두로 내리면 맛이 뾰족하고 거칠게 나오는 경우가 많아. CO₂가 너무 많이 뿜어져 나와 물이 커피 가루에 제대로 닿지 못하니 추출이 들쭉날쭉해지고, 에스프레소에서는 크레마가 과하게 부풀었다가 금방 꺼지면서 샷 시간도 불안정해져. 신선함 자체는 좋은 거지만, 커피는 &#39;신선하고 안정된&#39; 상태가 필요해. 그래서 최소 2~3일은 재우는 걸 권하는 거야 ⏳
+              </li>
+            
+              <li class="silver">
+                <strong>🥈 최적 구간은 배전도와 추출법에 따라 달라</strong>정답이 하나로 딱 정해진 건 아니야. 일반적으로 핸드드립 같은 필터 추출은 로스팅 후 대략 4~14일 사이가 가장 편안하고, 에스프레소는 압력이 세서 기체 영향을 더 받기 때문에 대략 7~21일 구간을 선호하는 사람이 많아. 강배전은 조직이 더 성글어서 기체가 빨리 빠지니 레스팅이 짧아도 되고, 약배전은 조직이 단단해 디개싱이 느려서 조금 더 기다리는 편이 좋아 📅
+              </li>
+            
+              <li class="bronze">
+                <strong>🥉 원두를 갈면 디개싱 속도가 폭발적으로 빨라져</strong>통원두는 몇 주에 걸쳐 천천히 기체를 내보내지만, 분쇄하는 순간 표면적이 수십 배로 늘어나면서 CO₂와 향 성분이 순식간에 날아가. 분쇄 커피는 몇 분에서 몇 시간 단위로 향이 눈에 띄게 빠져. &#39;마시기 직전에 갈아라&#39;는 조언이 괜히 있는 게 아니야. 미리 갈아둔 커피가 밍밍하게 느껴지는 이유의 상당 부분이 여기 있어 ⚙️
+              </li>
+            
+              <li class="medal">
+                <strong>🏅 진짜 적은 산소야 — 밸브는 나가는 문이자 막는 문</strong>CO₂가 빠지는 건 자연스러운 과정이지만, 그 자리를 산소가 채우면 얘기가 달라져. 커피의 지방 성분이 산소와 만나면 산패해서 눅눅한 종이 냄새, 오래된 견과류 같은 맛이 나. 아이러니하게도 원두 속 CO₂는 산소가 들어올 자리를 막아주는 방패 역할도 해. 그래서 밀폐 용기에 담아 실온 그늘에 두는 게 기본이고, 봉투째 보관할 땐 공기를 최대한 빼고 밸브를 살려두는 게 좋아 🛡️
+              </li>
+            
+              <li class="medal">
+                <strong>🏅 냉장고는 피하고, 냉동은 소분 밀폐로</strong>냉장실 보관은 추천하지 않아. 온도가 어중간해서 산패는 못 막으면서, 꺼낼 때마다 표면에 물이 맺히고 김치·반찬 냄새까지 흡착하기 딱 좋거든. 장기 보관이 필요하다면 한 번에 쓸 만큼 소분해 완전히 밀폐한 뒤 냉동하는 방법이 있어. 대신 꺼낸 봉지는 다시 넣지 말고, 실온으로 온도가 올라온 다음 개봉해야 결로를 피할 수 있어 ❄️
+              </li>
+            
+          
+        </ul>
+      </div>
+      
+
+      
+      
+      <div class="ez-section">
+        <h2>📊 숫자로 보기</h2>
+        
+          
+          
+          <div class="ez-chart-card">
+            <div class="ez-chart-title">로스팅 후 시간에 따른 원두 속 CO₂ 잔량 (대략적인 추이)</div>
+            
+              
+              <div class="ez-bar-row">
+                <div class="ez-bar-label">직후</div>
+                <div class="ez-bar-track"><div class="ez-bar-fill" style="width: 100.0%;">100.0%</div></div>
+              </div>
+            
+              
+              <div class="ez-bar-row">
+                <div class="ez-bar-label">1일</div>
+                <div class="ez-bar-track"><div class="ez-bar-fill" style="width: 60.0%;">60.0%</div></div>
+              </div>
+            
+              
+              <div class="ez-bar-row">
+                <div class="ez-bar-label">3일</div>
+                <div class="ez-bar-track"><div class="ez-bar-fill" style="width: 45.0%;">45.0%</div></div>
+              </div>
+            
+              
+              <div class="ez-bar-row">
+                <div class="ez-bar-label">7일</div>
+                <div class="ez-bar-track"><div class="ez-bar-fill" style="width: 32.0%;">32.0%</div></div>
+              </div>
+            
+              
+              <div class="ez-bar-row">
+                <div class="ez-bar-label">14일</div>
+                <div class="ez-bar-track"><div class="ez-bar-fill" style="width: 22.0%;">22.0%</div></div>
+              </div>
+            
+              
+              <div class="ez-bar-row">
+                <div class="ez-bar-label">30일</div>
+                <div class="ez-bar-track"><div class="ez-bar-fill" style="width: 12.0%;">12.0%</div></div>
+              </div>
+            
+          </div>
+        
+      </div>
+      
+
+      
+      
+      
+      <div class="ez-section">
+        <h2>🆚 상황별 레스팅 가이드 (대략적인 기준)</h2>
+        <table class="ez-table">
+          <thead><tr><th>상황</th><th>마시기 시작</th><th>가장 좋은 구간</th><th>주의할 점</th></tr></thead>
+          <tbody>
+            <tr>
+              <th>핸드드립 · 약~중배전</th><td>로스팅 후 3~4일</td><td>대략 5~14일</td><td>너무 이르면 뜸이 과하게 부풀고 맛이 뾰족함</td>
+            </tr><tr>
+              <th>핸드드립 · 강배전</th><td>로스팅 후 2~3일</td><td>대략 3~10일</td><td>기름기 때문에 산패가 빨라 오래 못 감</td>
+            </tr><tr>
+              <th>에스프레소</th><td>로스팅 후 5~7일</td><td>대략 7~21일</td><td>너무 신선하면 크레마가 거칠고 샷 시간이 흔들림</td>
+            </tr><tr>
+              <th>프렌치프레스 · 침지식</th><td>로스팅 후 3일</td><td>대략 4~20일</td><td>기체 영향이 적은 편이라 구간이 넓음</td>
+            </tr><tr>
+              <th>분쇄된 커피</th><td>간 직후</td><td>몇 시간 이내</td><td>향이 급속히 날아감 — 마시기 직전에 갈 것</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      
+      
+
+      
+      
+
+      
+      
+
+      
+      
+      <div class="ez-section">
+        <div class="ez-summary">💡 <strong>한 줄 요약</strong> — 볶은 커피는 뚜껑 안 딴 탄산음료 같아서, CO₂가 적당히 빠져야 물이 고르게 스민다 — 며칠 재우고, 통원두로 밀폐 보관하고, 마시기 직전에 갈자! 💨</div>
+      </div>
+      
+
+      
+      
+      
+      
+
+      
+      
+      <div class="ez-section">
+        <h2>📖 어려운 말 풀이 사전</h2>
+        <p>이 글에 나온 어려운 약어와 용어를 한 번에 정리했어. 의미만 알면 본문이 훨씬 쉬워져!</p>
+        <div class="ez-glossary">
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">디개싱(Degassing)</div>
+            <div class="ez-glossary-def">로스팅으로 생긴 이산화탄소가 원두 밖으로 빠져나가는 현상. 첫 하루 이틀에 가장 활발하고 이후 몇 주에 걸쳐 이어짐</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">레스팅(Resting)</div>
+            <div class="ez-glossary-def">디개싱이 어느 정도 진행되도록 볶은 원두를 며칠 재워두는 것. 맛과 추출을 안정시키는 과정</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">블루밍(Blooming, 뜸들이기)</div>
+            <div class="ez-glossary-def">추출 전 소량의 물을 부어 30초가량 기다리며 CO₂를 미리 빼내는 단계. 커피층이 부풀어 오름</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">원웨이 밸브(One-way Valve)</div>
+            <div class="ez-glossary-def">커피 봉투에 붙은 일방통행 배기 밸브. 안의 CO₂는 내보내고 바깥 산소는 막아 봉투 팽창과 산패를 함께 방지</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">채널링(Channeling)</div>
+            <div class="ez-glossary-def">물이 커피층을 고르게 통과하지 못하고 특정 통로로만 빠져나가는 현상. 기체가 많거나 다짐이 고르지 않을 때 발생</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">산패(Staling / Oxidation)</div>
+            <div class="ez-glossary-def">커피의 지방·향 성분이 산소와 반응해 눅눅한 종이·묵은 견과류 같은 맛으로 변질되는 것</div>
+          </div>
+          
+        </div>
+      </div>
+      
+
+    </div>
+  </section>
+
+  <footer class="article-footer">
+    <div class="container">
+      <a href="/insight">← BACK TO INSIGHTS</a>
+      <span style="margin: 0 16px;">·</span>
+      <a href="/">HOME</a>
+    </div>
+  </footer>
+</article>
+
+</body>
+</html>
