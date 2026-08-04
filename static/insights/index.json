@@ -1,7 +1,24 @@
 {
   "version": 1,
-  "updated_at": "2026-08-03T14:01:04Z",
+  "updated_at": "2026-08-04T13:21:13Z",
   "items": [
+    {
+      "id": "2026-08-04-cupping-protocol",
+      "type": "trivia",
+      "date": "2026-08-04",
+      "title_ko": "커피 점수 86점은 누가, 어떻게 매기는 걸까? ☕",
+      "one_liner": "향 맡고, 크러스트 깨고, 후루룩 슬러핑 — 전 세계가 같은 방식으로 커피를 채점하는 커핑의 모든 것!",
+      "categories_primary": [
+        "커피 상식"
+      ],
+      "categories_secondary": [
+        "커핑·평가"
+      ],
+      "hero_image": "/static/img/insights/trivia/competition.svg",
+      "journal": null,
+      "pub_date": null,
+      "source_basis": null
+    },
     {
       "id": "2026-08-03-resting-degassing",
       "type": "trivia",

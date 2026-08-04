@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>커피 점수 86점은 누가, 어떻게 매기는 걸까? ☕ — 92°C ROASTERY</title>
+<meta name="description" content="향 맡고, 크러스트 깨고, 후루룩 슬러핑 — 전 세계가 같은 방식으로 커피를 채점하는 커핑의 모든 것!">
+<link rel="icon" type="image/png" href="/static/img/logo-92black.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --canvas: #FFFFFF; --canvas-warm: #FAF7F2; --canvas-stone: #F2ECE3;
+  --ink: #1A1410; --ink-mute: #4A3F36; --ink-soft: #6B5E52;
+  --espresso: #6F4E37; --caramel: #C9986A; --copper: #B5703D;
+  --line: #E8E0D5; --line-soft: #F0E9DD;
+  --font-display: "Cormorant Garamond", "Pretendard", serif;
+  --font-body: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  --r-sm: 6px; --r-md: 12px; --r-pill: 999px;
+}
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color: transparent; }
+html { scroll-behavior: smooth; }
+body { font-family: var(--font-body); color: var(--ink); background: var(--canvas); font-feature-settings: "kern","ss01","lnum"; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+a { color: var(--copper); text-decoration: none; border-bottom: 1px solid transparent; transition: border-color .2s; }
+a:hover { border-bottom-color: var(--copper); }
+img { display: block; max-width: 100%; height: auto; }
+.container { max-width: 860px; margin: 0 auto; padding: 0 32px; }
+@media (max-width: 720px) { .container { padding: 0 20px; } }
+@media (max-width: 480px) { .container { padding: 0 16px; } }
+.site-nav { position: sticky; top: 0; z-index: 50; background: rgba(255,255,255,0.9); backdrop-filter: saturate(140%) blur(14px); -webkit-backdrop-filter: saturate(140%) blur(14px); border-bottom: 1px solid var(--line-soft); }
+.nav-inner { max-width: 1200px; margin: 0 auto; padding: 16px 32px; display: flex; align-items: center; justify-content: space-between; }
+.brand { font-family: var(--font-display); font-size: 1.3rem; font-weight: 700; color: var(--ink); display: inline-flex; align-items: center; gap: 4px; border-bottom: none; }
+.brand:hover { border-bottom: none; }
+.brand-mark { display: inline-flex; align-items: flex-start; font-family: "Pretendard", sans-serif; font-weight: 900; letter-spacing: -0.04em; line-height: 1; color: inherit; }
+.temp-mark { display: flex; flex-direction: column; line-height: .82; margin: 0 .05em 0 .04em; }
+.temp-mark .temp-deg { font-size: .42em; letter-spacing: -.04em; }
+.temp-mark .temp-c { font-size: .58em; letter-spacing: -.05em; margin-top: -.05em; }
+.nav-back { font-family: var(--font-mono); font-size: .75rem; letter-spacing: .18em; color: var(--ink-mute); border-bottom: none; }
+.nav-back:hover { color: var(--copper); border-bottom: none; }
+.article-hero { padding: 56px 0 48px; border-bottom: 1px solid var(--line-soft); }
+.eyebrow { font-family: var(--font-mono); font-size: .72rem; letter-spacing: .28em; color: var(--copper); margin-bottom: 18px; display: flex; align-items: center; gap: 12px; }
+.eyebrow::before { content: ""; display: inline-block; width: 28px; height: 1px; background: var(--copper); }
+.article-title { font-family: var(--font-display); font-weight: 500; font-size: clamp(2rem, 4.5vw, 3.2rem); line-height: 1.15; letter-spacing: -0.02em; color: var(--ink); margin-bottom: 20px; }
+.article-title em { font-style: italic; color: var(--espresso); font-weight: 600; }
+.article-one-liner { font-family: var(--font-display); font-style: italic; font-size: 1.3rem; line-height: 1.5; color: var(--espresso); margin-bottom: 28px; padding-left: 20px; border-left: 3px solid var(--caramel); }
+.article-meta { display: flex; gap: 24px; flex-wrap: wrap; font-family: var(--font-mono); font-size: .75rem; letter-spacing: .12em; color: var(--ink-soft); padding-top: 20px; border-top: 1px solid var(--line-soft); }
+.article-meta span { display: inline-flex; align-items: center; gap: 6px; }
+.article-meta span::before { content: "■"; color: var(--caramel); font-size: .55rem; }
+.hero-image { margin: 32px 0 0; border-radius: var(--r-md); overflow: hidden; border: 1px solid var(--line); }
+.hero-image img { width: 100%; }
+.article-body { padding: 56px 0 80px; }
+.article-footer { padding: 36px 0 56px; border-top: 1px solid var(--line-soft); text-align: center; font-family: var(--font-mono); font-size: .75rem; letter-spacing: .14em; color: var(--ink-soft); }
+.article-footer a { color: var(--ink-mute); border-bottom: 1px solid transparent; }
+.article-footer a:hover { color: var(--copper); border-bottom-color: var(--copper); }
+.source-basis { display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; background: rgba(201,152,106,.18); border: 1px solid rgba(181,112,61,.35); border-radius: var(--r-pill); font-family: var(--font-mono); font-size: .72rem; letter-spacing: .12em; color: var(--espresso); font-weight: 500; }
+.source-basis.abstract { background: rgba(107,94,82,.1); border-color: rgba(107,94,82,.3); color: var(--ink-soft); }
+.links-row { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 18px; }
+.link-pill { display: inline-flex; align-items: center; gap: 8px; padding: 9px 16px; background: var(--canvas-warm); border: 1px solid var(--line); border-radius: var(--r-pill); font-family: var(--font-mono); font-size: .78rem; letter-spacing: .08em; color: var(--ink-mute); border-bottom: 1px solid var(--line); transition: border-color .2s, color .2s; }
+.link-pill:hover { color: var(--copper); border-color: var(--copper); }
+
+/* ===== EZ: 쉬운 설명 스타일 ===== */
+.ez-hero { text-align: center; padding: 8px 0 32px; }
+.ez-hero-emoji { font-size: 3.4rem; line-height: 1; }
+.ez-hero-title { font-family: var(--font-display); font-size: clamp(1.6rem, 3.5vw, 2.2rem); font-weight: 600; color: var(--ink); margin-top: 14px; line-height: 1.3; }
+.ez-section { margin-bottom: 52px; }
+.ez-section h2 { font-family: var(--font-body); font-size: 1.5rem; font-weight: 700; color: var(--ink); margin-bottom: 18px; letter-spacing: -0.01em; }
+.ez-section h3 { font-size: 1.08rem; font-weight: 600; color: var(--espresso); margin: 22px 0 10px; }
+.ez-section p { font-size: 1.04rem; line-height: 1.85; color: var(--ink-mute); margin-bottom: 14px; }
+.ez-section p:last-child { margin-bottom: 0; }
+.ez-section ul { padding-left: 22px; margin-bottom: 14px; }
+.ez-section li { font-size: 1.02rem; line-height: 1.8; color: var(--ink-mute); margin-bottom: 8px; }
+.ez-callout { margin: 14px 0; padding: 14px 18px; background: var(--canvas-warm); border-left: 3px solid var(--caramel); border-radius: 4px; font-size: 0.98rem; color: var(--espresso); line-height: 1.75; }
+.ez-callout strong { color: var(--copper); }
+.ez-findings { list-style: none; padding: 0; }
+.ez-findings > li { padding: 18px 22px; margin-bottom: 14px; background: var(--canvas-warm); border: 1px solid var(--line); border-radius: 10px; font-size: 1.02rem; line-height: 1.7; color: var(--ink-mute); }
+.ez-findings > li strong { color: var(--ink); display: block; margin-bottom: 4px; font-size: 1.06rem; }
+.ez-findings > li.gold { background: linear-gradient(135deg, #FFF8E7, #FFEFCD); border-color: #F0D67A; }
+.ez-findings > li.silver { background: linear-gradient(135deg, #F6F6F6, #ECECEC); border-color: #C7C7C7; }
+.ez-findings > li.bronze { background: linear-gradient(135deg, #FFEEDD, #FFDCC0); border-color: #E4B07F; }
+.ez-findings > li.medal { background: linear-gradient(135deg, #F0E6FF, #E1D2FF); border-color: #BDA8E5; }
+.ez-table { width: 100%; border-collapse: collapse; margin: 16px 0 8px; font-size: 0.96rem; }
+.ez-table th, .ez-table td { padding: 11px 14px; border: 1px solid var(--line); text-align: left; vertical-align: top; }
+.ez-table thead th { background: var(--ink); color: #fff; font-weight: 600; letter-spacing: .02em; }
+.ez-table tbody th { background: var(--canvas-warm); color: var(--ink); font-weight: 600; }
+.ez-table tbody tr:nth-child(even) td { background: rgba(250, 247, 242, .55); }
+.ez-summary { padding: 26px 30px; background: linear-gradient(135deg, #FAF0E0, #F3E1C5); border-radius: 14px; font-size: 1.13rem; line-height: 1.75; font-weight: 500; color: var(--ink); border: 1px solid #E5C99B; }
+.ez-summary strong { color: var(--espresso); }
+.ez-citation { margin-top: 24px; padding: 18px 22px; background: var(--canvas-warm); border-radius: 8px; font-family: var(--font-mono); font-size: 0.82rem; color: var(--ink-soft); line-height: 1.7; }
+.ez-citation p { margin: 4px 0; }
+.ez-chart-card { padding: 22px 24px 18px; background: var(--canvas); border: 1px solid var(--line); border-radius: 12px; margin: 16px 0; }
+.ez-chart-card .ez-chart-title { font-size: 1rem; font-weight: 600; color: var(--ink); margin-bottom: 14px; }
+.ez-bar-row { display: flex; align-items: center; margin: 10px 0; font-size: 0.95rem; gap: 14px; }
+.ez-bar-label { width: 180px; flex-shrink: 0; color: var(--ink-mute); font-weight: 500; }
+.ez-bar-track { flex: 1; height: 32px; background: var(--canvas-warm); border-radius: 6px; overflow: hidden; position: relative; border: 1px solid var(--line); }
+.ez-bar-fill { height: 100%; background: linear-gradient(90deg, var(--caramel), var(--copper)); display: flex; align-items: center; justify-content: flex-end; padding: 0 12px; color: white; font-weight: 700; font-size: 0.92rem; min-width: 56px; }
+.ez-bar-fill.alt { background: linear-gradient(90deg, #6F4E37, #4A3F36); }
+.ez-glossary { display: grid; gap: 12px; }
+.ez-glossary-item { padding: 16px 20px; background: var(--canvas-warm); border: 1px solid var(--line); border-radius: 10px; border-left: 3px solid var(--caramel); }
+.ez-glossary-term { font-family: var(--font-display); font-style: italic; font-size: 1.1rem; font-weight: 600; color: var(--espresso); margin-bottom: 6px; }
+.ez-glossary-def { font-size: 0.98rem; color: var(--ink-mute); line-height: 1.7; }
+@media (max-width: 720px) {
+  .article-hero { padding: 36px 0 32px; }
+  .article-body { padding: 36px 0 56px; }
+  .ez-section { margin-bottom: 40px; }
+  .ez-section h2 { font-size: 1.3rem; }
+  .ez-bar-label { width: 100%; margin-bottom: 4px; }
+  .ez-bar-row { flex-direction: column; align-items: stretch; }
+  .article-meta { gap: 12px 18px; font-size: .68rem; }
+}
+</style>
+</head>
+<body>
+
+<header class="site-nav">
+  <div class="nav-inner">
+    <a class="brand" href="/">
+      <span class="brand-mark">92<span class="temp-mark"><span class="temp-deg">°</span><span class="temp-c">C</span></span></span>ROASTERY
+    </a>
+    <a class="nav-back" href="/insight">← INSIGHTS</a>
+  </div>
+</header>
+
+<article>
+  <section class="article-hero">
+    <div class="container">
+      <div class="eyebrow">— 오늘의 커피 상식 · 2026.08.04</div>
+      <h1 class="article-title">커피 점수 86점은 누가, 어떻게 매기는 걸까? ☕</h1>
+      <p class="article-one-liner">향 맡고, 크러스트 깨고, 후루룩 슬러핑 — 전 세계가 같은 방식으로 커피를 채점하는 커핑의 모든 것!</p>
+      <div class="article-meta">
+        
+        
+        
+        <span>커피 상식 · 커핑·평가</span>
+      </div>
+      
+      <div class="hero-image">
+        <img src="/static/img/insights/trivia/competition.svg" alt="커피 점수 86점은 누가, 어떻게 매기는 걸까? ☕">
+      </div>
+      
+    </div>
+  </section>
+
+  <section class="article-body">
+    <div class="container">
+
+      
+      <div class="ez-hero">
+        <div class="ez-hero-emoji">🥄</div>
+        <div class="ez-hero-title">커피 점수 86점은 누가, 어떻게 매기는 걸까?</div>
+      </div>
+
+      
+      <div class="ez-section">
+        <h2>🤔 무슨 연구야?</h2>
+        
+          <p>카페 메뉴판이나 원두 봉투에서 &#39;커핑 점수 86점&#39; 같은 숫자를 본 적 있어? 숫자가 붙어 있으면 왠지 믿음이 가는데, 정작 그 점수를 누가 어떤 기준으로 매겼는지는 잘 모르고 지나치잖아. 사실 그 숫자 뒤에는 커핑(cupping)이라는 꽤 깐깐한 절차가 숨어 있어. 오늘은 그 현장을 같이 들여다보자. 🥄</p><p>커핑은 쉽게 말하면 &#39;커피 시험 보기&#39;야. 사람마다 좋아하는 잔이 다르고 내리는 방법도 다르니까, 그대로 두면 누구 말이 맞는지 알 수가 없어. 그래서 전 세계 커피 업계는 원두 양·물 양·물 온도·분쇄 굵기·기다리는 시간까지 전부 똑같이 맞춰 놓고 맛을 본다는 규칙을 만들었어. 조건을 고정해야 원두 자체의 차이만 남거든.</p><p>그 표준을 가장 널리 쓰는 곳이 SCA(스페셜티커피협회)야. 커핑룸에서 사람들이 조용히 향을 맡다가 갑자기 다 같이 &#39;후루룩!&#39; 소리를 내는 장면, 영상으로 본 적 있지? 그게 장난치는 게 아니라 규칙에 들어 있는 정식 동작이야. 오늘은 커핑 한 세션이 어떤 순서로 흘러가는지, 왜 하필 그렇게 소리 내며 마시는지, 그리고 그 끝에 나오는 점수가 뭘 뜻하는지까지 차근차근 풀어줄게. 😆</p>
+        
+      </div>
+
+      
+      
+      <div class="ez-section">
+        <h2>🧪 핵심 개념 쉽게 풀어보면</h2>
+        
+          <h3>1️⃣ 왜 조건을 다 똑같이 맞출까? — 커핑은 &#39;통제된 실험&#39;이야</h3>
+          <p>커핑의 핵심은 &#39;커피 말고는 아무것도 다르지 않게 만들기&#39;야. SCA 방식에서는 물 150mL당 원두 약 8.25g을 쓰고, 갓 끓인 뒤 살짝 식힌 93℃ 근처의 물을 부어. 분쇄는 드립보다 살짝 굵게, 로스팅은 원두 성격이 잘 드러나는 밝은 편으로 하고 볶은 지 하루쯤 지난 걸 써. 게다가 어떤 원두인지 모르게 가려 놓고(블라인드) 평가하는 경우가 많아. 조건이 하나라도 흔들리면 &#39;이 커피가 좋은 것&#39;인지 &#39;내가 잘 내린 것&#39;인지 구분할 수 없으니까.</p>
+          <div class="ez-callout">💡 비유: 달리기 시합에서 어떤 선수는 언덕길, 어떤 선수는 평지를 뛰면 기록을 비교할 수 없잖아. 커핑은 모두를 같은 트랙에 세우는 일이야. 🏃</div>
+        
+          <h3>2️⃣ 크러스트 브레이크 — 향을 세 번에 나눠 맡는 이유</h3>
+          <p>물을 부으면 가루가 위로 떠올라 뚜껑처럼 굳는데, 이걸 크러스트(crust, 껍질)라고 불러. 향은 이 과정에서 세 번 맡아. 물 붓기 전 마른 가루 향(프래그런스), 물을 붓고 기다리는 동안 올라오는 젖은 향, 그리고 4분쯤 뒤 스푼으로 크러스트를 세 번 밀어 깨면서 코를 바짝 대고 확 터져 나오는 향(브레이크 아로마). 향 분자는 종류마다 날아가는 타이밍이 달라서, 한 번만 맡으면 절반은 놓쳐. 깬 뒤에는 위에 뜬 거품과 가루를 스푼 두 개로 걷어내고 식기를 기다려.</p>
+          <div class="ez-callout">💡 비유: 갓 지은 밥솥 뚜껑을 열 때 김이 확 올라오는 그 순간 냄새가 제일 좋잖아. 크러스트 브레이크가 딱 그 타이밍이야. 🍚</div>
+        
+          <h3>3️⃣ 슬러핑 — 후루룩 소리는 예의 없는 게 아니라 기술이야</h3>
+          <p>커핑 스푼으로 커피를 떠서 입에 넣을 때는 공기와 함께 세게 빨아들여. 이걸 슬러핑(slurping)이라고 해. 이렇게 하면 커피가 안개처럼 흩뿌려져서 혀 전체에 고르게 퍼지고, 동시에 향 성분이 목 뒤를 타고 콧속으로 올라가. 우리가 &#39;맛&#39;이라고 느끼는 것 대부분은 사실 이 뒤쪽 통로로 올라간 향(비후방 후각)이거든. 그리고 한 번만 마시고 끝내지 않아. 뜨거울 때, 미지근할 때, 거의 식었을 때 계속 맛을 봐. 온도가 내려가면서 단맛과 산미가 드러나는 방식이 완전히 달라지기 때문이야.</p>
+          <div class="ez-callout">💡 비유: 코를 막고 사탕을 먹으면 단맛만 나고 무슨 맛인지 모르겠지? 슬러핑은 그 코 쪽 통로를 일부러 활짝 열어주는 동작이야. 👃</div>
+        
+      </div>
+      
+
+      
+      
+      <div class="ez-section">
+        <h2>🎯 핵심 발견</h2>
+        <ul class="ez-findings">
+          
+          
+            
+              <li class="gold">
+                <strong>🥇 점수는 &#39;한 가지&#39;가 아니라 여러 항목의 합이야</strong>커핑 점수는 총점 하나만 툭 나오는 게 아니야. 향(프래그런스·아로마), 플레이버, 애프터테이스트(마신 뒤 남는 여운), 산미, 바디(입안 무게감), 밸런스처럼 항목별로 따로 점수를 매기고, 여기에 잔마다 맛이 같은지(균일성), 잡맛이 없는지(클린 컵), 단맛이 느껴지는지, 그리고 평가자의 종합 인상까지 더해. 결점이 있으면 감점도 해. 그래서 같은 86점이어도 &#39;산미로 번 86점&#39;과 &#39;바디로 번 86점&#39;은 성격이 전혀 다른 커피야.
+              </li>
+            
+              <li class="silver">
+                <strong>🥈 100점 척도, 그리고 &#39;80점 이상이면 스페셜티&#39;</strong>커핑은 보통 100점 만점 척도로 이야기해. 업계에서 가장 널리 알려진 기준선이 바로 80점이야. 80점을 넘으면 스페셜티 커피로 분류하고, 그 아래는 흔히 커머셜 등급으로 본다고들 해. 80점대 중반이면 아주 좋은 편, 90점을 넘기면 손에 꼽는 수준이라 값도 확 뛰어. 다만 평가 체계는 협회가 시간이 지나며 다듬어 왔으니, 세부 항목과 계산 방식은 어떤 버전을 쓰느냐에 따라 조금씩 다를 수 있어.
+              </li>
+            
+              <li class="bronze">
+                <strong>🥉 한 원두를 여러 잔 놓고 보는 이유 — 균일성</strong>커핑 테이블에 같은 원두가 여러 잔(보통 5잔) 나란히 놓인 걸 본 적 있을 거야. 낭비 같지만 이게 핵심이야. 생두 한 자루 안에 덜 익은 열매나 발효가 잘못된 콩이 섞여 있으면, 다섯 잔 중 한두 잔에서만 이상한 맛이 튀어나오거든. 한 잔만 마셨다면 운 좋게 지나쳤을 문제를 여러 잔으로 잡아내는 거야. 그래서 &#39;잔마다 똑같이 깨끗한가&#39;가 그 자체로 점수 항목이 돼.
+              </li>
+            
+              <li class="medal">
+                <strong>🏅 커핑은 &#39;내 취향&#39;을 말하는 자리가 아니야</strong>커핑에서 평가자는 &#39;나는 이 커피가 좋아&#39;가 아니라 &#39;이 커피는 이런 특징을 이만큼 잘 갖췄다&#39;를 말해야 해. 그래서 훈련받은 사람들은 향미를 표현할 때 개인적인 감상 대신 자몽·자두·아몬드처럼 누구나 아는 공통 어휘를 써. 국제적으로 자격을 인증받은 평가자를 큐 그레이더(Q Grader)라고 부르는데, 미각이 예민해서라기보다 &#39;같은 커피에 같은 점수를 반복해서 낼 수 있는지&#39;를 혹독하게 검증받은 사람들이야.
+              </li>
+            
+              <li class="medal">
+                <strong>🏅 집에서도 흉내 낼 수 있어 — 컵 두 개면 충분해</strong>장비가 없어도 원리는 따라 할 수 있어. 같은 크기 컵 두 개에 서로 다른 원두를 같은 양으로 담고, 같은 물을 같은 시간 부어두고, 4분 뒤 스푼으로 저어 향을 맡은 다음 거품을 걷고 식혀서 번갈아 마셔봐. 핵심은 &#39;동시에, 같은 조건으로&#39; 비교하는 거야. 어제 마신 커피와 오늘 마신 커피를 기억으로 비교하는 건 사실상 불가능하거든. 두 잔을 나란히 놓는 순간 차이가 갑자기 또렷하게 보일 거야. 🥄
+              </li>
+            
+          
+        </ul>
+      </div>
+      
+
+      
+      
+      <div class="ez-section">
+        <h2>📊 숫자로 보기</h2>
+        
+          
+          
+          <div class="ez-chart-card">
+            <div class="ez-chart-title">100점 척도에서 흔히 말하는 기준선</div>
+            
+              
+              <div class="ez-bar-row">
+                <div class="ez-bar-label">스페셜티 커트라인</div>
+                <div class="ez-bar-track"><div class="ez-bar-fill" style="width: 88.9%;">80.0점</div></div>
+              </div>
+            
+              
+              <div class="ez-bar-row">
+                <div class="ez-bar-label">아주 좋은 편</div>
+                <div class="ez-bar-track"><div class="ez-bar-fill" style="width: 94.4%;">85.0점</div></div>
+              </div>
+            
+              
+              <div class="ez-bar-row">
+                <div class="ez-bar-label">손에 꼽는 수준</div>
+                <div class="ez-bar-track"><div class="ez-bar-fill" style="width: 100.0%;">90.0점</div></div>
+              </div>
+            
+          </div>
+        
+      </div>
+      
+
+      
+      
+      
+      <div class="ez-section">
+        <h2>🆚 커핑 한 세션, 순서대로 따라가 보기</h2>
+        <table class="ez-table">
+          <thead><tr><th>순서</th><th>하는 일</th><th>무엇을 보나</th></tr></thead>
+          <tbody>
+            <tr>
+              <th>① 분쇄 직후</th><td>마른 가루에 코를 대고 향을 맡는다</td><td>프래그런스 — 원두의 첫인상</td>
+            </tr><tr>
+              <th>② 물 붓기</th><td>93℃ 근처의 물을 정해진 양만큼 붓는다</td><td>가루가 떠올라 크러스트가 생김</td>
+            </tr><tr>
+              <th>③ 약 4분 대기</th><td>건드리지 않고 그대로 둔다</td><td>젖은 향, 우러나는 정도</td>
+            </tr><tr>
+              <th>④ 크러스트 브레이크</th><td>스푼으로 세 번 밀며 코를 바짝 댄다</td><td>가장 강하게 터지는 향</td>
+            </tr><tr>
+              <th>⑤ 거품 걷어내기</th><td>스푼 두 개로 위에 뜬 거품·가루를 제거</td><td>잔을 깨끗하게 정리</td>
+            </tr><tr>
+              <th>⑥ 슬러핑</th><td>식혀가며 여러 번 후루룩 마신다</td><td>플레이버·산미·바디·애프터테이스트</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      
+      
+
+      
+      
+
+      
+      
+
+      
+      
+      <div class="ez-section">
+        <div class="ez-summary">💡 <strong>한 줄 요약</strong> — 조건을 전부 똑같이 맞추고, 향을 세 번 맡고, 식혀가며 후루룩 마신다 — 커핑은 커피에서 &#39;사람&#39;이라는 변수를 걷어내려는 약속이야. ☕</div>
+      </div>
+      
+
+      
+      
+      
+      
+
+      
+      
+      <div class="ez-section">
+        <h2>📖 어려운 말 풀이 사전</h2>
+        <p>이 글에 나온 어려운 약어와 용어를 한 번에 정리했어. 의미만 알면 본문이 훨씬 쉬워져!</p>
+        <div class="ez-glossary">
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">커핑(Cupping)</div>
+            <div class="ez-glossary-def">원두 양·물 온도·시간을 표준으로 고정해 놓고 커피의 향미를 평가하는 절차</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">크러스트 브레이크(Crust Break)</div>
+            <div class="ez-glossary-def">물 위에 뜬 커피 가루층을 스푼으로 밀어 깨며 갇혀 있던 향을 맡는 단계</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">슬러핑(Slurping)</div>
+            <div class="ez-glossary-def">공기와 함께 커피를 세게 빨아들여 입안에 분무하듯 퍼뜨리는 시음 동작</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">애프터테이스트(Aftertaste)</div>
+            <div class="ez-glossary-def">커피를 삼킨 뒤 입과 목에 남는 여운. 길고 기분 좋게 남을수록 좋은 평가</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">클린 컵(Clean Cup)</div>
+            <div class="ez-glossary-def">발효취·흙내 같은 잡맛 없이 깨끗한 정도. 여러 잔을 비교해 판단</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">큐 그레이더(Q Grader)</div>
+            <div class="ez-glossary-def">국제 인증을 받은 커피 평가자. 같은 커피에 일관된 점수를 낼 수 있는지 검증받는다</div>
+          </div>
+          
+        </div>
+      </div>
+      
+
+    </div>
+  </section>
+
+  <footer class="article-footer">
+    <div class="container">
+      <a href="/insight">← BACK TO INSIGHTS</a>
+      <span style="margin: 0 16px;">·</span>
+      <a href="/">HOME</a>
+    </div>
+  </footer>
+</article>
+
+</body>
+</html>
