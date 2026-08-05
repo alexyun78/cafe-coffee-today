@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>같은 원두인데 왜 기구마다 맛이 달라질까? ☕ — 92°C ROASTERY</title>
+<meta name="description" content="압력·시간·필터 이 세 가지만 알면 핸드드립부터 에스프레소, 콜드브루까지 맛의 차이가 한눈에 보여!">
+<link rel="icon" type="image/png" href="/static/img/logo-92black.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --canvas: #FFFFFF; --canvas-warm: #FAF7F2; --canvas-stone: #F2ECE3;
+  --ink: #1A1410; --ink-mute: #4A3F36; --ink-soft: #6B5E52;
+  --espresso: #6F4E37; --caramel: #C9986A; --copper: #B5703D;
+  --line: #E8E0D5; --line-soft: #F0E9DD;
+  --font-display: "Cormorant Garamond", "Pretendard", serif;
+  --font-body: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  --r-sm: 6px; --r-md: 12px; --r-pill: 999px;
+}
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color: transparent; }
+html { scroll-behavior: smooth; }
+body { font-family: var(--font-body); color: var(--ink); background: var(--canvas); font-feature-settings: "kern","ss01","lnum"; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+a { color: var(--copper); text-decoration: none; border-bottom: 1px solid transparent; transition: border-color .2s; }
+a:hover { border-bottom-color: var(--copper); }
+img { display: block; max-width: 100%; height: auto; }
+.container { max-width: 860px; margin: 0 auto; padding: 0 32px; }
+@media (max-width: 720px) { .container { padding: 0 20px; } }
+@media (max-width: 480px) { .container { padding: 0 16px; } }
+.site-nav { position: sticky; top: 0; z-index: 50; background: rgba(255,255,255,0.9); backdrop-filter: saturate(140%) blur(14px); -webkit-backdrop-filter: saturate(140%) blur(14px); border-bottom: 1px solid var(--line-soft); }
+.nav-inner { max-width: 1200px; margin: 0 auto; padding: 16px 32px; display: flex; align-items: center; justify-content: space-between; }
+.brand { font-family: var(--font-display); font-size: 1.3rem; font-weight: 700; color: var(--ink); display: inline-flex; align-items: center; gap: 4px; border-bottom: none; }
+.brand:hover { border-bottom: none; }
+.brand-mark { display: inline-flex; align-items: flex-start; font-family: "Pretendard", sans-serif; font-weight: 900; letter-spacing: -0.04em; line-height: 1; color: inherit; }
+.temp-mark { display: flex; flex-direction: column; line-height: .82; margin: 0 .05em 0 .04em; }
+.temp-mark .temp-deg { font-size: .42em; letter-spacing: -.04em; }
+.temp-mark .temp-c { font-size: .58em; letter-spacing: -.05em; margin-top: -.05em; }
+.nav-back { font-family: var(--font-mono); font-size: .75rem; letter-spacing: .18em; color: var(--ink-mute); border-bottom: none; }
+.nav-back:hover { color: var(--copper); border-bottom: none; }
+.article-hero { padding: 56px 0 48px; border-bottom: 1px solid var(--line-soft); }
+.eyebrow { font-family: var(--font-mono); font-size: .72rem; letter-spacing: .28em; color: var(--copper); margin-bottom: 18px; display: flex; align-items: center; gap: 12px; }
+.eyebrow::before { content: ""; display: inline-block; width: 28px; height: 1px; background: var(--copper); }
+.article-title { font-family: var(--font-display); font-weight: 500; font-size: clamp(2rem, 4.5vw, 3.2rem); line-height: 1.15; letter-spacing: -0.02em; color: var(--ink); margin-bottom: 20px; }
+.article-title em { font-style: italic; color: var(--espresso); font-weight: 600; }
+.article-one-liner { font-family: var(--font-display); font-style: italic; font-size: 1.3rem; line-height: 1.5; color: var(--espresso); margin-bottom: 28px; padding-left: 20px; border-left: 3px solid var(--caramel); }
+.article-meta { display: flex; gap: 24px; flex-wrap: wrap; font-family: var(--font-mono); font-size: .75rem; letter-spacing: .12em; color: var(--ink-soft); padding-top: 20px; border-top: 1px solid var(--line-soft); }
+.article-meta span { display: inline-flex; align-items: center; gap: 6px; }
+.article-meta span::before { content: "■"; color: var(--caramel); font-size: .55rem; }
+.hero-image { margin: 32px 0 0; border-radius: var(--r-md); overflow: hidden; border: 1px solid var(--line); }
+.hero-image img { width: 100%; }
+.article-body { padding: 56px 0 80px; }
+.article-footer { padding: 36px 0 56px; border-top: 1px solid var(--line-soft); text-align: center; font-family: var(--font-mono); font-size: .75rem; letter-spacing: .14em; color: var(--ink-soft); }
+.article-footer a { color: var(--ink-mute); border-bottom: 1px solid transparent; }
+.article-footer a:hover { color: var(--copper); border-bottom-color: var(--copper); }
+.source-basis { display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; background: rgba(201,152,106,.18); border: 1px solid rgba(181,112,61,.35); border-radius: var(--r-pill); font-family: var(--font-mono); font-size: .72rem; letter-spacing: .12em; color: var(--espresso); font-weight: 500; }
+.source-basis.abstract { background: rgba(107,94,82,.1); border-color: rgba(107,94,82,.3); color: var(--ink-soft); }
+.links-row { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 18px; }
+.link-pill { display: inline-flex; align-items: center; gap: 8px; padding: 9px 16px; background: var(--canvas-warm); border: 1px solid var(--line); border-radius: var(--r-pill); font-family: var(--font-mono); font-size: .78rem; letter-spacing: .08em; color: var(--ink-mute); border-bottom: 1px solid var(--line); transition: border-color .2s, color .2s; }
+.link-pill:hover { color: var(--copper); border-color: var(--copper); }
+
+/* ===== EZ: 쉬운 설명 스타일 ===== */
+.ez-hero { text-align: center; padding: 8px 0 32px; }
+.ez-hero-emoji { font-size: 3.4rem; line-height: 1; }
+.ez-hero-title { font-family: var(--font-display); font-size: clamp(1.6rem, 3.5vw, 2.2rem); font-weight: 600; color: var(--ink); margin-top: 14px; line-height: 1.3; }
+.ez-section { margin-bottom: 52px; }
+.ez-section h2 { font-family: var(--font-body); font-size: 1.5rem; font-weight: 700; color: var(--ink); margin-bottom: 18px; letter-spacing: -0.01em; }
+.ez-section h3 { font-size: 1.08rem; font-weight: 600; color: var(--espresso); margin: 22px 0 10px; }
+.ez-section p { font-size: 1.04rem; line-height: 1.85; color: var(--ink-mute); margin-bottom: 14px; }
+.ez-section p:last-child { margin-bottom: 0; }
+.ez-section ul { padding-left: 22px; margin-bottom: 14px; }
+.ez-section li { font-size: 1.02rem; line-height: 1.8; color: var(--ink-mute); margin-bottom: 8px; }
+.ez-callout { margin: 14px 0; padding: 14px 18px; background: var(--canvas-warm); border-left: 3px solid var(--caramel); border-radius: 4px; font-size: 0.98rem; color: var(--espresso); line-height: 1.75; }
+.ez-callout strong { color: var(--copper); }
+.ez-findings { list-style: none; padding: 0; }
+.ez-findings > li { padding: 18px 22px; margin-bottom: 14px; background: var(--canvas-warm); border: 1px solid var(--line); border-radius: 10px; font-size: 1.02rem; line-height: 1.7; color: var(--ink-mute); }
+.ez-findings > li strong { color: var(--ink); display: block; margin-bottom: 4px; font-size: 1.06rem; }
+.ez-findings > li.gold { background: linear-gradient(135deg, #FFF8E7, #FFEFCD); border-color: #F0D67A; }
+.ez-findings > li.silver { background: linear-gradient(135deg, #F6F6F6, #ECECEC); border-color: #C7C7C7; }
+.ez-findings > li.bronze { background: linear-gradient(135deg, #FFEEDD, #FFDCC0); border-color: #E4B07F; }
+.ez-findings > li.medal { background: linear-gradient(135deg, #F0E6FF, #E1D2FF); border-color: #BDA8E5; }
+.ez-table { width: 100%; border-collapse: collapse; margin: 16px 0 8px; font-size: 0.96rem; }
+.ez-table th, .ez-table td { padding: 11px 14px; border: 1px solid var(--line); text-align: left; vertical-align: top; }
+.ez-table thead th { background: var(--ink); color: #fff; font-weight: 600; letter-spacing: .02em; }
+.ez-table tbody th { background: var(--canvas-warm); color: var(--ink); font-weight: 600; }
+.ez-table tbody tr:nth-child(even) td { background: rgba(250, 247, 242, .55); }
+.ez-summary { padding: 26px 30px; background: linear-gradient(135deg, #FAF0E0, #F3E1C5); border-radius: 14px; font-size: 1.13rem; line-height: 1.75; font-weight: 500; color: var(--ink); border: 1px solid #E5C99B; }
+.ez-summary strong { color: var(--espresso); }
+.ez-citation { margin-top: 24px; padding: 18px 22px; background: var(--canvas-warm); border-radius: 8px; font-family: var(--font-mono); font-size: 0.82rem; color: var(--ink-soft); line-height: 1.7; }
+.ez-citation p { margin: 4px 0; }
+.ez-chart-card { padding: 22px 24px 18px; background: var(--canvas); border: 1px solid var(--line); border-radius: 12px; margin: 16px 0; }
+.ez-chart-card .ez-chart-title { font-size: 1rem; font-weight: 600; color: var(--ink); margin-bottom: 14px; }
+.ez-bar-row { display: flex; align-items: center; margin: 10px 0; font-size: 0.95rem; gap: 14px; }
+.ez-bar-label { width: 180px; flex-shrink: 0; color: var(--ink-mute); font-weight: 500; }
+.ez-bar-track { flex: 1; height: 32px; background: var(--canvas-warm); border-radius: 6px; overflow: hidden; position: relative; border: 1px solid var(--line); }
+.ez-bar-fill { height: 100%; background: linear-gradient(90deg, var(--caramel), var(--copper)); display: flex; align-items: center; justify-content: flex-end; padding: 0 12px; color: white; font-weight: 700; font-size: 0.92rem; min-width: 56px; }
+.ez-bar-fill.alt { background: linear-gradient(90deg, #6F4E37, #4A3F36); }
+.ez-glossary { display: grid; gap: 12px; }
+.ez-glossary-item { padding: 16px 20px; background: var(--canvas-warm); border: 1px solid var(--line); border-radius: 10px; border-left: 3px solid var(--caramel); }
+.ez-glossary-term { font-family: var(--font-display); font-style: italic; font-size: 1.1rem; font-weight: 600; color: var(--espresso); margin-bottom: 6px; }
+.ez-glossary-def { font-size: 0.98rem; color: var(--ink-mute); line-height: 1.7; }
+@media (max-width: 720px) {
+  .article-hero { padding: 36px 0 32px; }
+  .article-body { padding: 36px 0 56px; }
+  .ez-section { margin-bottom: 40px; }
+  .ez-section h2 { font-size: 1.3rem; }
+  .ez-bar-label { width: 100%; margin-bottom: 4px; }
+  .ez-bar-row { flex-direction: column; align-items: stretch; }
+  .article-meta { gap: 12px 18px; font-size: .68rem; }
+}
+</style>
+</head>
+<body>
+
+<header class="site-nav">
+  <div class="nav-inner">
+    <a class="brand" href="/">
+      <span class="brand-mark">92<span class="temp-mark"><span class="temp-deg">°</span><span class="temp-c">C</span></span></span>ROASTERY
+    </a>
+    <a class="nav-back" href="/insight">← INSIGHTS</a>
+  </div>
+</header>
+
+<article>
+  <section class="article-hero">
+    <div class="container">
+      <div class="eyebrow">— 오늘의 커피 상식 · 2026.08.05</div>
+      <h1 class="article-title">같은 원두인데 왜 기구마다 맛이 달라질까? ☕</h1>
+      <p class="article-one-liner">압력·시간·필터 이 세 가지만 알면 핸드드립부터 에스프레소, 콜드브루까지 맛의 차이가 한눈에 보여!</p>
+      <div class="article-meta">
+        
+        
+        
+        <span>커피 상식 · 추출·기구</span>
+      </div>
+      
+      <div class="hero-image">
+        <img src="/static/img/insights/trivia/terms.svg" alt="같은 원두인데 왜 기구마다 맛이 달라질까? ☕">
+      </div>
+      
+    </div>
+  </section>
+
+  <section class="article-body">
+    <div class="container">
+
+      
+      <div class="ez-hero">
+        <div class="ez-hero-emoji">⚗️</div>
+        <div class="ez-hero-title">같은 원두인데 왜 기구마다 맛이 달라질까?</div>
+      </div>
+
+      
+      <div class="ez-section">
+        <h2>🤔 무슨 연구야?</h2>
+        
+          <p>집에 커피 기구 하나쯤은 있지? 핸드드립 드리퍼, 프렌치프레스, 아니면 캠핑용 모카포트. 그런데 똑같은 원두 봉지를 뜯어서 기구만 바꿔 내려보면 정말 다른 커피가 나와. 어떤 건 홍차처럼 맑고 산뜻하고, 어떤 건 진하고 묵직해. 원두는 그대로인데 대체 뭐가 달라진 걸까? 🤔</p><p>답은 의외로 단순해. 커피 추출은 결국 &#39;뜨거운 물이 커피 가루에서 맛 성분을 녹여 꺼내오는 일&#39;이거든. 그러니까 물이 얼마나 뜨거운지, 얼마나 오래 머무는지, 얼마나 세게 밀고 지나가는지, 그리고 나올 때 무엇을 걸러내는지 — 이 조건만 바뀌어도 결과물은 완전히 달라져.</p><p>오늘은 핸드드립, 프렌치프레스, 에어로프레스, 모카포트, 에스프레소 머신, 콜드브루 여섯을 나란히 놓고 각각이 어떤 원리로 어떤 맛을 만드는지 정리해볼게. 다 읽고 나면 원두 봉투의 컵노트만 보고도 &#39;이건 프렌치프레스로 마시면 더 맛있겠는데?&#39; 하는 감이 생길 거야. 그게 이 글의 목표야. ⚗️</p>
+        
+      </div>
+
+      
+      
+      <div class="ez-section">
+        <h2>🧪 핵심 개념 쉽게 풀어보면</h2>
+        
+          <h3>1️⃣ 담가서 우릴까, 통과시킬까 — 침지식 vs 투과식</h3>
+          <p>추출 방식은 크게 둘로 나뉘어. 침지식은 물과 커피를 한 통에 담가 놓고 시간을 두고 우려내는 방식이야. 프렌치프레스, 에어로프레스, 콜드브루가 여기에 속해. 물 전체가 처음부터 끝까지 가루와 같이 있으니 결과가 균일하고, 초보가 해도 편차가 적어. 반대로 투과식은 새 물이 계속 가루층을 지나가며 씻어내듯 뽑는 방식이야. 핸드드립과 에스프레소가 여기 속하는데, 늘 신선한 물이 닿으니 성분이 잘 빠지고 향이 또렷한 대신 붓는 속도와 물길에 따라 맛이 확 달라져.</p>
+          <div class="ez-callout">💡 비유: 침지식은 티백을 컵에 담가 두는 것, 투과식은 채반에 담은 재료 위로 물을 계속 흘려보내는 것. 같은 재료라도 결과가 다르지. 🫖</div>
+        
+          <h3>2️⃣ 압력이 하는 일 — 짧은 시간에 많은 걸 뽑아낸다</h3>
+          <p>핸드드립과 프렌치프레스는 사실상 압력이 없어. 중력만으로 천천히 우러나니까 몇 분씩 걸리지. 반면 에스프레소 머신은 대략 9바(대기압의 9배쯤) 되는 압력으로 물을 밀어 넣어서 25~30초 만에 추출을 끝내. 압력이 있으면 물이 아주 곱게 갈린 가루 사이를 억지로 뚫고 지나가면서, 평소엔 잘 안 녹는 성분과 기름까지 끌고 나와. 그래서 에스프레소는 농도가 진하고, 기름과 가스가 섞여 만들어진 크레마라는 거품층이 위에 얹혀. 모카포트는 그 중간쯤이야.</p>
+          <div class="ez-callout">💡 비유: 약불에 오래 끓인 국물과 압력솥으로 짧게 뽑은 국물의 차이 같은 거야. 압력솥 쪽이 훨씬 진하고 걸쭉하잖아. 🍲</div>
+        
+          <h3>3️⃣ 필터가 맛의 절반을 결정해 — 종이냐 금속이냐</h3>
+          <p>다 뽑은 커피가 잔에 담기기 직전, 마지막 관문이 필터야. 종이 필터는 촘촘해서 커피의 기름 성분과 아주 미세한 가루(미분)까지 붙잡아. 그래서 잔이 맑고 깨끗하고, 산미와 향이 또렷하게 살아. 반대로 프렌치프레스의 금속 메시는 구멍이 크니까 기름과 미분이 그대로 잔으로 넘어와. 그 결과 혀에 닿는 느낌이 도톰하고 묵직해지지. 어느 쪽이 더 좋다기보다, 맑음을 원하면 종이·무게감을 원하면 금속이라고 기억하면 돼.</p>
+          <div class="ez-callout">💡 비유: 사골국을 고운 체에 거르면 맑은 국물, 그냥 국자로 뜨면 기름이 뜬 진한 국물이 되는 것과 같아. 🥣</div>
+        
+      </div>
+      
+
+      
+      
+      <div class="ez-section">
+        <h2>🎯 핵심 발견</h2>
+        <ul class="ez-findings">
+          
+          
+            
+              <li class="gold">
+                <strong>🥇 맛을 가르는 건 결국 변수 네 개야</strong>기구가 아무리 많아도 조절되는 건 사실 몇 가지뿐이야. 분쇄 굵기(물이 닿는 표면적), 물 온도, 물과 커피가 만나는 시간, 그리고 압력. 에스프레소는 밀가루처럼 곱게 갈고 30초 안에 끝내고, 프렌치프레스는 굵게 갈고 4분을 기다려. 정반대 같지만 둘 다 &#39;적당히 뽑힌 상태&#39;를 노리는 건 똑같아. 굵게 갈았으면 오래, 곱게 갈았으면 짧게 — 이 균형이 무너지면 시고 밍밍하거나(과소추출) 텁텁하게 쓰지(과다추출).
+              </li>
+            
+              <li class="silver">
+                <strong>🥈 모카포트로 뽑은 건 에스프레소가 아니야</strong>모카포트는 아래 칸 물이 끓으면서 생긴 수증기 압력이 물을 위로 밀어 올리는 구조야. 그런데 이때 걸리는 압력은 보통 1~2바 정도로, 에스프레소 머신의 9바에는 한참 못 미쳐. 그래서 크레마도 제대로 안 생기고 질감도 달라. 진하고 강한 커피인 건 맞지만 &#39;스토브탑 커피&#39;라고 부르는 게 정확해. 게다가 물이 계속 끓는 상태로 올라오다 보니 온도가 높아서, 불을 오래 두면 쓴맛이 확 올라와. 물이 다 올라오면 바로 불을 끄는 게 요령이야.
+              </li>
+            
+              <li class="bronze">
+                <strong>🥉 콜드브루가 덜 신 이유는 &#39;찬물&#39; 때문이야</strong>콜드브루는 찬물이나 실온의 물로 보통 8~24시간 우려내. 온도가 낮으면 성분이 녹아 나오는 속도가 크게 느려지는데, 특히 신맛을 내는 산 성분과 쓴맛을 내는 성분이 덜 뽑혀. 그래서 같은 원두라도 콜드브루로 만들면 산미가 얌전해지고 단맛·초콜릿 같은 인상이 앞으로 나와. &#39;부드럽다&#39;는 평이 많은 이유가 이거야. 다만 원액을 진하게 뽑는 경우가 많아서, 카페인이 적을 거라고 넘겨짚지는 말고 희석 비율을 보는 게 좋아.
+              </li>
+            
+              <li class="medal">
+                <strong>🏅 같은 핸드드립이라도 드리퍼 모양이 다르면 맛이 달라</strong>V60 같은 원뿔형 드리퍼는 바닥 구멍이 크고 안쪽에 나선형 홈이 있어서 물이 빠르게 빠져나가. 대신 붓는 속도와 방향으로 맛을 조절할 여지가 커서, 잘 내리면 향이 화사하고 층이 살아. 반면 칼리타 웨이브처럼 바닥이 평평하고 구멍이 작게 여러 개인 드리퍼는 물이 가루층에 좀 더 고르게 머물러. 손 기술의 영향이 덜해서 매번 비슷한 맛이 나오고, 균형 잡히고 단맛이 도드라지는 편이야.
+              </li>
+            
+              <li class="medal">
+                <strong>🏅 에어로프레스가 입문자에게 편한 이유</strong>에어로프레스는 통에 커피와 물을 넣고 잠깐 담가 뒀다가 피스톤을 눌러 짜내는 구조야. 침지식이라 결과가 균일하고, 손으로 미는 정도라 압력은 에스프레소에 한참 못 미치지만 마지막에 밀어주니 추출이 빨리 끝나. 게다가 기본은 종이 필터라 잔이 깨끗해. 총 시간이 1~2분이라 좀 잘못해도 크게 망하지 않고, 물 양만 바꿔서 진하게도 연하게도 만들 수 있어. 캠핑이나 사무실에서 인기 있는 이유가 다 있는 거야. 🎒
+              </li>
+            
+          
+        </ul>
+      </div>
+      
+
+      
+      
+      <div class="ez-section">
+        <h2>📊 숫자로 보기</h2>
+        
+          
+          
+          <div class="ez-chart-card">
+            <div class="ez-chart-title">기구별로 커피에 걸리는 압력 (대략)</div>
+            
+              
+              <div class="ez-bar-row">
+                <div class="ez-bar-label">핸드드립</div>
+                <div class="ez-bar-track"><div class="ez-bar-fill" style="width: 0.0%;">0.0바(bar)</div></div>
+              </div>
+            
+              
+              <div class="ez-bar-row">
+                <div class="ez-bar-label">프렌치프레스</div>
+                <div class="ez-bar-track"><div class="ez-bar-fill" style="width: 0.0%;">0.0바(bar)</div></div>
+              </div>
+            
+              
+              <div class="ez-bar-row">
+                <div class="ez-bar-label">에어로프레스</div>
+                <div class="ez-bar-track"><div class="ez-bar-fill" style="width: 5.6%;">0.5바(bar)</div></div>
+              </div>
+            
+              
+              <div class="ez-bar-row">
+                <div class="ez-bar-label">모카포트</div>
+                <div class="ez-bar-track"><div class="ez-bar-fill" style="width: 16.7%;">1.5바(bar)</div></div>
+              </div>
+            
+              
+              <div class="ez-bar-row">
+                <div class="ez-bar-label">에스프레소</div>
+                <div class="ez-bar-track"><div class="ez-bar-fill" style="width: 100.0%;">9.0바(bar)</div></div>
+              </div>
+            
+          </div>
+        
+      </div>
+      
+
+      
+      
+      
+      <div class="ez-section">
+        <h2>🆚 대표 추출 기구 여섯, 한 표로 비교하기</h2>
+        <table class="ez-table">
+          <thead><tr><th>기구</th><th>방식</th><th>대략의 압력</th><th>보통 걸리는 시간</th><th>필터</th><th>맛의 성격</th></tr></thead>
+          <tbody>
+            <tr>
+              <th>핸드드립 (V60·칼리타)</th><td>투과식</td><td>없음 (중력)</td><td>2~4분</td><td>종이</td><td>맑고 향이 또렷, 산미가 살아난다</td>
+            </tr><tr>
+              <th>프렌치프레스</th><td>침지식</td><td>없음</td><td>약 4분</td><td>금속 메시</td><td>묵직하고 기름진 질감, 편안한 단맛</td>
+            </tr><tr>
+              <th>에어로프레스</th><td>침지식 + 가압</td><td>아주 약함</td><td>1~2분</td><td>종이(기본)</td><td>깨끗하면서 농도 조절이 자유롭다</td>
+            </tr><tr>
+              <th>모카포트</th><td>투과식 (증기압)</td><td>대략 1~2바</td><td>3~5분</td><td>금속</td><td>진하고 강하다, 살짝 쓴 편</td>
+            </tr><tr>
+              <th>에스프레소 머신</th><td>투과식 (고압)</td><td>대략 9바</td><td>25~30초</td><td>금속</td><td>농축된 맛과 크레마, 우유와 잘 어울림</td>
+            </tr><tr>
+              <th>콜드브루</th><td>침지식 (저온)</td><td>없음</td><td>8~24시간</td><td>종이·천 등</td><td>산미가 얌전하고 부드러운 단맛</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      
+      
+
+      
+      
+
+      
+      
+
+      
+      
+      <div class="ez-section">
+        <div class="ez-summary">💡 <strong>한 줄 요약</strong> — 압력은 농도를, 시간은 균형을, 필터는 질감을 정한다 — 이 세 가지만 보면 어떤 기구가 어떤 맛을 낼지 미리 알 수 있어! ☕</div>
+      </div>
+      
+
+      
+      
+      
+      
+
+      
+      
+      <div class="ez-section">
+        <h2>📖 어려운 말 풀이 사전</h2>
+        <p>이 글에 나온 어려운 약어와 용어를 한 번에 정리했어. 의미만 알면 본문이 훨씬 쉬워져!</p>
+        <div class="ez-glossary">
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">침지식(Immersion)</div>
+            <div class="ez-glossary-def">물과 커피 가루를 함께 담가 두고 시간을 들여 우려내는 방식. 프렌치프레스·콜드브루</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">투과식(Percolation)</div>
+            <div class="ez-glossary-def">새 물이 커피 가루층을 계속 통과하며 성분을 뽑아내는 방식. 핸드드립·에스프레소</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">바(bar)</div>
+            <div class="ez-glossary-def">압력 단위. 1바가 대략 지구 대기압 정도이고, 에스프레소는 흔히 9바 안팎을 쓴다</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">크레마(Crema)</div>
+            <div class="ez-glossary-def">에스프레소 위에 뜨는 황금빛 거품층. 높은 압력에서 기름과 가스가 섞이며 생긴다</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">과소추출·과다추출</div>
+            <div class="ez-glossary-def">덜 뽑히면 시고 밍밍하고, 너무 뽑히면 텁텁하고 쓰다. 분쇄도와 시간으로 맞춘다</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">미분(Fines)</div>
+            <div class="ez-glossary-def">분쇄할 때 생기는 아주 고운 가루. 종이 필터는 걸러내고 금속 필터는 통과시킨다</div>
+          </div>
+          
+        </div>
+      </div>
+      
+
+    </div>
+  </section>
+
+  <footer class="article-footer">
+    <div class="container">
+      <a href="/insight">← BACK TO INSIGHTS</a>
+      <span style="margin: 0 16px;">·</span>
+      <a href="/">HOME</a>
+    </div>
+  </footer>
+</article>
+
+</body>
+</html>

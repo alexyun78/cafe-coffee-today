@@ -1,7 +1,24 @@
 {
   "version": 1,
-  "updated_at": "2026-08-04T13:21:13Z",
+  "updated_at": "2026-08-05T13:19:38Z",
   "items": [
+    {
+      "id": "2026-08-05-brew-gear-compare",
+      "type": "trivia",
+      "date": "2026-08-05",
+      "title_ko": "같은 원두인데 왜 기구마다 맛이 달라질까? ☕",
+      "one_liner": "압력·시간·필터 이 세 가지만 알면 핸드드립부터 에스프레소, 콜드브루까지 맛의 차이가 한눈에 보여!",
+      "categories_primary": [
+        "커피 상식"
+      ],
+      "categories_secondary": [
+        "추출·기구"
+      ],
+      "hero_image": "/static/img/insights/trivia/terms.svg",
+      "journal": null,
+      "pub_date": null,
+      "source_basis": null
+    },
     {
       "id": "2026-08-04-cupping-protocol",
       "type": "trivia",
