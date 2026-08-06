@@ -1,7 +1,24 @@
 {
   "version": 1,
-  "updated_at": "2026-08-05T13:19:38Z",
+  "updated_at": "2026-08-06T13:16:26Z",
   "items": [
+    {
+      "id": "2026-08-06-water-for-coffee",
+      "type": "trivia",
+      "date": "2026-08-06",
+      "title_ko": "같은 원두인데 집에서 내리면 왜 맛이 달라? 범인은 '물'이야 ☕",
+      "one_liner": "커피 한 잔의 98%는 물 — 칼슘·마그네슘과 알칼리도가 향미를 붙잡기도 하고 지워버리기도 해!",
+      "categories_primary": [
+        "커피 상식"
+      ],
+      "categories_secondary": [
+        "추출"
+      ],
+      "hero_image": "/static/img/insights/trivia/terms.svg",
+      "journal": null,
+      "pub_date": null,
+      "source_basis": null
+    },
     {
       "id": "2026-08-05-brew-gear-compare",
       "type": "trivia",
