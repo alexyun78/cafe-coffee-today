@@ -1,7 +1,24 @@
 {
   "version": 1,
-  "updated_at": "2026-08-06T13:16:26Z",
+  "updated_at": "2026-08-07T12:26:19Z",
   "items": [
+    {
+      "id": "2026-08-07-filter-paper-vs-metal",
+      "type": "trivia",
+      "date": "2026-08-07",
+      "title_ko": "종이 필터, 금속 필터, 프렌치프레스 — 같은 원두인데 왜 이렇게 다른 맛이 나? ☕",
+      "one_liner": "필터는 그냥 거름망이 아니라 커피 오일과 미분을 얼마나 통과시킬지 정하는 '맛의 스위치'야!",
+      "categories_primary": [
+        "커피 상식"
+      ],
+      "categories_secondary": [
+        "추출"
+      ],
+      "hero_image": "/static/img/insights/trivia/terms.svg",
+      "journal": null,
+      "pub_date": null,
+      "source_basis": null
+    },
     {
       "id": "2026-08-06-water-for-coffee",
       "type": "trivia",

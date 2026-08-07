@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>종이 필터, 금속 필터, 프렌치프레스 — 같은 원두인데 왜 이렇게 다른 맛이 나? ☕ — 92°C ROASTERY</title>
+<meta name="description" content="필터는 그냥 거름망이 아니라 커피 오일과 미분을 얼마나 통과시킬지 정하는 &#39;맛의 스위치&#39;야!">
+<link rel="icon" type="image/png" href="/static/img/logo-92black.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --canvas: #FFFFFF; --canvas-warm: #FAF7F2; --canvas-stone: #F2ECE3;
+  --ink: #1A1410; --ink-mute: #4A3F36; --ink-soft: #6B5E52;
+  --espresso: #6F4E37; --caramel: #C9986A; --copper: #B5703D;
+  --line: #E8E0D5; --line-soft: #F0E9DD;
+  --font-display: "Cormorant Garamond", "Pretendard", serif;
+  --font-body: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  --r-sm: 6px; --r-md: 12px; --r-pill: 999px;
+}
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color: transparent; }
+html { scroll-behavior: smooth; }
+body { font-family: var(--font-body); color: var(--ink); background: var(--canvas); font-feature-settings: "kern","ss01","lnum"; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+a { color: var(--copper); text-decoration: none; border-bottom: 1px solid transparent; transition: border-color .2s; }
+a:hover { border-bottom-color: var(--copper); }
+img { display: block; max-width: 100%; height: auto; }
+.container { max-width: 860px; margin: 0 auto; padding: 0 32px; }
+@media (max-width: 720px) { .container { padding: 0 20px; } }
+@media (max-width: 480px) { .container { padding: 0 16px; } }
+.site-nav { position: sticky; top: 0; z-index: 50; background: rgba(255,255,255,0.9); backdrop-filter: saturate(140%) blur(14px); -webkit-backdrop-filter: saturate(140%) blur(14px); border-bottom: 1px solid var(--line-soft); }
+.nav-inner { max-width: 1200px; margin: 0 auto; padding: 16px 32px; display: flex; align-items: center; justify-content: space-between; }
+.brand { font-family: var(--font-display); font-size: 1.3rem; font-weight: 700; color: var(--ink); display: inline-flex; align-items: center; gap: 4px; border-bottom: none; }
+.brand:hover { border-bottom: none; }
+.brand-mark { display: inline-flex; align-items: flex-start; font-family: "Pretendard", sans-serif; font-weight: 900; letter-spacing: -0.04em; line-height: 1; color: inherit; }
+.temp-mark { display: flex; flex-direction: column; line-height: .82; margin: 0 .05em 0 .04em; }
+.temp-mark .temp-deg { font-size: .42em; letter-spacing: -.04em; }
+.temp-mark .temp-c { font-size: .58em; letter-spacing: -.05em; margin-top: -.05em; }
+.nav-back { font-family: var(--font-mono); font-size: .75rem; letter-spacing: .18em; color: var(--ink-mute); border-bottom: none; }
+.nav-back:hover { color: var(--copper); border-bottom: none; }
+.article-hero { padding: 56px 0 48px; border-bottom: 1px solid var(--line-soft); }
+.eyebrow { font-family: var(--font-mono); font-size: .72rem; letter-spacing: .28em; color: var(--copper); margin-bottom: 18px; display: flex; align-items: center; gap: 12px; }
+.eyebrow::before { content: ""; display: inline-block; width: 28px; height: 1px; background: var(--copper); }
+.article-title { font-family: var(--font-display); font-weight: 500; font-size: clamp(2rem, 4.5vw, 3.2rem); line-height: 1.15; letter-spacing: -0.02em; color: var(--ink); margin-bottom: 20px; }
+.article-title em { font-style: italic; color: var(--espresso); font-weight: 600; }
+.article-one-liner { font-family: var(--font-display); font-style: italic; font-size: 1.3rem; line-height: 1.5; color: var(--espresso); margin-bottom: 28px; padding-left: 20px; border-left: 3px solid var(--caramel); }
+.article-meta { display: flex; gap: 24px; flex-wrap: wrap; font-family: var(--font-mono); font-size: .75rem; letter-spacing: .12em; color: var(--ink-soft); padding-top: 20px; border-top: 1px solid var(--line-soft); }
+.article-meta span { display: inline-flex; align-items: center; gap: 6px; }
+.article-meta span::before { content: "■"; color: var(--caramel); font-size: .55rem; }
+.hero-image { margin: 32px 0 0; border-radius: var(--r-md); overflow: hidden; border: 1px solid var(--line); }
+.hero-image img { width: 100%; }
+.article-body { padding: 56px 0 80px; }
+.article-footer { padding: 36px 0 56px; border-top: 1px solid var(--line-soft); text-align: center; font-family: var(--font-mono); font-size: .75rem; letter-spacing: .14em; color: var(--ink-soft); }
+.article-footer a { color: var(--ink-mute); border-bottom: 1px solid transparent; }
+.article-footer a:hover { color: var(--copper); border-bottom-color: var(--copper); }
+.source-basis { display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; background: rgba(201,152,106,.18); border: 1px solid rgba(181,112,61,.35); border-radius: var(--r-pill); font-family: var(--font-mono); font-size: .72rem; letter-spacing: .12em; color: var(--espresso); font-weight: 500; }
+.source-basis.abstract { background: rgba(107,94,82,.1); border-color: rgba(107,94,82,.3); color: var(--ink-soft); }
+.links-row { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 18px; }
+.link-pill { display: inline-flex; align-items: center; gap: 8px; padding: 9px 16px; background: var(--canvas-warm); border: 1px solid var(--line); border-radius: var(--r-pill); font-family: var(--font-mono); font-size: .78rem; letter-spacing: .08em; color: var(--ink-mute); border-bottom: 1px solid var(--line); transition: border-color .2s, color .2s; }
+.link-pill:hover { color: var(--copper); border-color: var(--copper); }
+
+/* ===== EZ: 쉬운 설명 스타일 ===== */
+.ez-hero { text-align: center; padding: 8px 0 32px; }
+.ez-hero-emoji { font-size: 3.4rem; line-height: 1; }
+.ez-hero-title { font-family: var(--font-display); font-size: clamp(1.6rem, 3.5vw, 2.2rem); font-weight: 600; color: var(--ink); margin-top: 14px; line-height: 1.3; }
+.ez-section { margin-bottom: 52px; }
+.ez-section h2 { font-family: var(--font-body); font-size: 1.5rem; font-weight: 700; color: var(--ink); margin-bottom: 18px; letter-spacing: -0.01em; }
+.ez-section h3 { font-size: 1.08rem; font-weight: 600; color: var(--espresso); margin: 22px 0 10px; }
+.ez-section p { font-size: 1.04rem; line-height: 1.85; color: var(--ink-mute); margin-bottom: 14px; }
+.ez-section p:last-child { margin-bottom: 0; }
+.ez-section ul { padding-left: 22px; margin-bottom: 14px; }
+.ez-section li { font-size: 1.02rem; line-height: 1.8; color: var(--ink-mute); margin-bottom: 8px; }
+.ez-callout { margin: 14px 0; padding: 14px 18px; background: var(--canvas-warm); border-left: 3px solid var(--caramel); border-radius: 4px; font-size: 0.98rem; color: var(--espresso); line-height: 1.75; }
+.ez-callout strong { color: var(--copper); }
+.ez-findings { list-style: none; padding: 0; }
+.ez-findings > li { padding: 18px 22px; margin-bottom: 14px; background: var(--canvas-warm); border: 1px solid var(--line); border-radius: 10px; font-size: 1.02rem; line-height: 1.7; color: var(--ink-mute); }
+.ez-findings > li strong { color: var(--ink); display: block; margin-bottom: 4px; font-size: 1.06rem; }
+.ez-findings > li.gold { background: linear-gradient(135deg, #FFF8E7, #FFEFCD); border-color: #F0D67A; }
+.ez-findings > li.silver { background: linear-gradient(135deg, #F6F6F6, #ECECEC); border-color: #C7C7C7; }
+.ez-findings > li.bronze { background: linear-gradient(135deg, #FFEEDD, #FFDCC0); border-color: #E4B07F; }
+.ez-findings > li.medal { background: linear-gradient(135deg, #F0E6FF, #E1D2FF); border-color: #BDA8E5; }
+.ez-table { width: 100%; border-collapse: collapse; margin: 16px 0 8px; font-size: 0.96rem; }
+.ez-table th, .ez-table td { padding: 11px 14px; border: 1px solid var(--line); text-align: left; vertical-align: top; }
+.ez-table thead th { background: var(--ink); color: #fff; font-weight: 600; letter-spacing: .02em; }
+.ez-table tbody th { background: var(--canvas-warm); color: var(--ink); font-weight: 600; }
+.ez-table tbody tr:nth-child(even) td { background: rgba(250, 247, 242, .55); }
+.ez-summary { padding: 26px 30px; background: linear-gradient(135deg, #FAF0E0, #F3E1C5); border-radius: 14px; font-size: 1.13rem; line-height: 1.75; font-weight: 500; color: var(--ink); border: 1px solid #E5C99B; }
+.ez-summary strong { color: var(--espresso); }
+.ez-citation { margin-top: 24px; padding: 18px 22px; background: var(--canvas-warm); border-radius: 8px; font-family: var(--font-mono); font-size: 0.82rem; color: var(--ink-soft); line-height: 1.7; }
+.ez-citation p { margin: 4px 0; }
+.ez-chart-card { padding: 22px 24px 18px; background: var(--canvas); border: 1px solid var(--line); border-radius: 12px; margin: 16px 0; }
+.ez-chart-card .ez-chart-title { font-size: 1rem; font-weight: 600; color: var(--ink); margin-bottom: 14px; }
+.ez-bar-row { display: flex; align-items: center; margin: 10px 0; font-size: 0.95rem; gap: 14px; }
+.ez-bar-label { width: 180px; flex-shrink: 0; color: var(--ink-mute); font-weight: 500; }
+.ez-bar-track { flex: 1; height: 32px; background: var(--canvas-warm); border-radius: 6px; overflow: hidden; position: relative; border: 1px solid var(--line); }
+.ez-bar-fill { height: 100%; background: linear-gradient(90deg, var(--caramel), var(--copper)); display: flex; align-items: center; justify-content: flex-end; padding: 0 12px; color: white; font-weight: 700; font-size: 0.92rem; min-width: 56px; }
+.ez-bar-fill.alt { background: linear-gradient(90deg, #6F4E37, #4A3F36); }
+.ez-glossary { display: grid; gap: 12px; }
+.ez-glossary-item { padding: 16px 20px; background: var(--canvas-warm); border: 1px solid var(--line); border-radius: 10px; border-left: 3px solid var(--caramel); }
+.ez-glossary-term { font-family: var(--font-display); font-style: italic; font-size: 1.1rem; font-weight: 600; color: var(--espresso); margin-bottom: 6px; }
+.ez-glossary-def { font-size: 0.98rem; color: var(--ink-mute); line-height: 1.7; }
+@media (max-width: 720px) {
+  .article-hero { padding: 36px 0 32px; }
+  .article-body { padding: 36px 0 56px; }
+  .ez-section { margin-bottom: 40px; }
+  .ez-section h2 { font-size: 1.3rem; }
+  .ez-bar-label { width: 100%; margin-bottom: 4px; }
+  .ez-bar-row { flex-direction: column; align-items: stretch; }
+  .article-meta { gap: 12px 18px; font-size: .68rem; }
+}
+</style>
+</head>
+<body>
+
+<header class="site-nav">
+  <div class="nav-inner">
+    <a class="brand" href="/">
+      <span class="brand-mark">92<span class="temp-mark"><span class="temp-deg">°</span><span class="temp-c">C</span></span></span>ROASTERY
+    </a>
+    <a class="nav-back" href="/insight">← INSIGHTS</a>
+  </div>
+</header>
+
+<article>
+  <section class="article-hero">
+    <div class="container">
+      <div class="eyebrow">— 오늘의 커피 상식 · 2026.08.07</div>
+      <h1 class="article-title">종이 필터, 금속 필터, 프렌치프레스 — 같은 원두인데 왜 이렇게 다른 맛이 나? ☕</h1>
+      <p class="article-one-liner">필터는 그냥 거름망이 아니라 커피 오일과 미분을 얼마나 통과시킬지 정하는 &#39;맛의 스위치&#39;야!</p>
+      <div class="article-meta">
+        
+        
+        
+        <span>커피 상식 · 추출</span>
+      </div>
+      
+      <div class="hero-image">
+        <img src="/static/img/insights/trivia/terms.svg" alt="종이 필터, 금속 필터, 프렌치프레스 — 같은 원두인데 왜 이렇게 다른 맛이 나? ☕">
+      </div>
+      
+    </div>
+  </section>
+
+  <section class="article-body">
+    <div class="container">
+
+      
+      <div class="ez-hero">
+        <div class="ez-hero-emoji">🧻</div>
+        <div class="ez-hero-title">종이 필터, 금속 필터, 프렌치프레스 — 같은 원두인데 왜 이렇게 다른 맛이 나?</div>
+      </div>
+
+      
+      <div class="ez-section">
+        <h2>🤔 무슨 연구야?</h2>
+        
+          <p>같은 원두, 같은 분쇄도, 같은 물, 같은 온도. 그런데 종이 필터로 내린 커피와 프렌치프레스로 내린 커피를 나란히 놓고 마셔보면 완전히 다른 음료 같아. 한쪽은 홍차처럼 맑고 깔끔해서 산미와 향이 또렷하게 들리고, 다른 한쪽은 진하고 묵직하면서 혀에 기름진 무게감이 남지. 처음 이걸 나란히 비교해보면 진짜 당황스러울 정도로 달라. 🤔</p><p>이 차이를 만드는 건 사실 아주 단순한 물건이야. 바로 필터. 사람들은 필터를 &#39;가루가 안 넘어오게 막는 거름망&#39; 정도로만 생각하는데, 실제로는 커피 오일과 아주 고운 가루를 얼마나 통과시킬지 결정하는 스위치에 가까워. 이 스위치를 어디에 두느냐에 따라 컵의 성격이 통째로 바뀌어.</p><p>오늘은 종이·금속·프렌치프레스 세 가지를 나란히 놓고, 각 필터가 무엇을 붙잡고 무엇을 흘려보내는지, 그래서 컵의 성격이 어떻게 갈리는지 알아볼게. 원리를 알고 나면 &#39;오늘은 이 원두니까 이 필터&#39; 하고 고를 수 있게 돼. 덤으로 &#39;종이 필터는 왜 굳이 물로 한 번 헹구고 쓰는지&#39;도 확실하게 정리해줄게. 🚿</p>
+        
+      </div>
+
+      
+      
+      <div class="ez-section">
+        <h2>🧪 핵심 개념 쉽게 풀어보면</h2>
+        
+          <h3>1️⃣ 커피 오일과 디테르펜(카페스톨·카월)</h3>
+          <p>볶은 원두에는 지용성 성분, 즉 커피 오일이 들어 있어. 이 오일은 향을 붙잡아 두는 그릇 역할을 하고, 입안에서 두께감(바디)과 매끈한 질감을 만들어. 그중에 카페스톨(cafestol)과 카월(kahweol)이라는 디테르펜 성분이 있는데, 이게 나중에 얘기할 건강 관련 화제의 주인공이야. 핵심은 이 오일이 종이 필터에는 상당량 붙잡히고, 금속 메시는 거의 그대로 통과한다는 거야.</p>
+          <div class="ez-callout">💡 비유: 사골국을 종이 행주로 걸러낸 것과 체로만 걸러낸 것의 차이야. 체로만 거르면 기름이 동동 떠서 진하고 고소하고, 종이로 거르면 국물이 훨씬 맑아지지. 🍲</div>
+        
+          <h3>2️⃣ 미분(fines) — 탁함과 떫음을 만드는 아주 고운 가루</h3>
+          <p>원두를 갈면 아무리 좋은 그라인더라도 아주 고운 가루가 같이 생겨. 이걸 미분이라고 불러. 미분은 표면적이 커서 성분이 과하게 빠져나오기 쉽고, 컵에 그대로 넘어오면 탁하게 보이고 뒷맛이 떫거나 텁텁해지기 쉬워. 게다가 잔 바닥에 가라앉아 마지막 한 모금을 &#39;흙탕물&#39;로 만들지. 종이 필터는 이걸 거의 다 잡아주고, 금속 메시는 상당 부분 그냥 통과시켜. 그래서 같은 원두라도 금속 필터로 내리면 살짝 탁하고 텍스처가 느껴지는 컵이 나오는 거야.</p>
+          <div class="ez-callout">💡 비유: 녹차 티백과 잎차를 그냥 컵에 넣고 우린 것의 차이랑 비슷해. 잎차를 통째로 우리면 향은 좋은데 마지막에 찌꺼기가 씹히잖아. 미분이 딱 그 역할이야. 🍵</div>
+        
+          <h3>3️⃣ 구멍 크기와 재질 — 종이는 &#39;거르는&#39; 동시에 &#39;흡착&#39;한다</h3>
+          <p>금속 필터의 메시 구멍은 대략 수백 마이크로미터(µm) 수준이고, 종이 필터의 구멍은 그보다 훨씬 작은 수십 µm 수준이야. 그래서 걸러지는 양이 크게 차이 나. 그런데 종이는 구멍 크기만으로 일하는 게 아니야. 섬유가 기름을 빨아들이는 성질이 있어서 오일을 흡착까지 해. 즉 종이 필터는 체이면서 동시에 기름종이인 셈이지. 천 필터(융 드립)는 딱 그 중간이라 오일은 통과시키고 미분은 꽤 잡아줘.</p>
+          <div class="ez-callout">💡 비유: 튀김을 키친타월에 올려두면 기름이 쫙 빠지지? 종이 필터도 커피 오일한테 똑같은 짓을 하고 있는 거야. 금속 채반에 올려두면 기름이 그대로 남는 것과 같고. 🍤</div>
+        
+      </div>
+      
+
+      
+      
+      <div class="ez-section">
+        <h2>🎯 핵심 발견</h2>
+        <ul class="ez-findings">
+          
+          
+            
+              <li class="gold">
+                <strong>🥇 클린컵이냐 바디냐 — 필터가 결정한다</strong>종이 필터로 내린 커피는 오일과 미분이 대부분 걸러져서 맑고 투명해. 산미와 향이 또렷하게 분리돼 들리기 때문에 원두의 개성을 관찰하기에 유리하지. 반대로 금속 필터와 프렌치프레스는 오일과 미분이 그대로 넘어와서 입안이 꽉 차는 묵직한 바디와 고소함이 살아나. 어느 쪽이 우월한 게 아니라, 뭘 듣고 싶은지에 따라 스피커를 바꾸는 것과 같아.
+              </li>
+            
+              <li class="silver">
+                <strong>🥈 프렌치프레스가 제일 진한 데는 두 가지 이유가 있다</strong>프렌치프레스가 묵직한 건 금속 메시 때문만이 아니야. 물을 통과시키는 투과식이 아니라 커피를 물에 통째로 담가두는 침지식이라, 오일과 성분이 물에 충분히 녹아 나올 시간이 확보되거든. 여기에 굵은 메시까지 더해지니 오일도 미분도 그대로 컵으로 들어와. 그래서 잔 바닥에 가라앉는 침전물이 생기고, 마지막 한 모금은 남기는 게 국룰인 거야.
+              </li>
+            
+              <li class="bronze">
+                <strong>🥉 종이 필터와 콜레스테롤 이야기 — 참고 정도로만</strong>커피 오일 속 카페스톨은 혈중 LDL 콜레스테롤 수치를 올리는 쪽으로 작용한다고 알려져 있고, 종이 필터가 이 성분을 상당 부분 걸러낸다는 점은 오래 연구돼 온 흐름이야. 그래서 종이 드립 커피가 프렌치프레스나 끓여 마시는 방식보다 카페스톨 섭취량이 훨씬 적어. 다만 이건 어디까지나 상식 차원의 참고 사항이고, 커피가 병을 예방하거나 유발한다는 식으로 단정할 문제는 전혀 아니야. 건강 관련 판단은 꼭 전문가와 상의하자.
+              </li>
+            
+              <li class="medal">
+                <strong>🏅 종이 필터 린싱, 진짜 이유는 두 개</strong>첫째는 종이 냄새 제거야. 특히 표백하지 않은 갈색 필터는 종이 향이 남아서 뜨거운 물로 헹궈주면 잡히는 경우가 많아. 요즘 잘 만든 흰색 필터는 종이 맛이 거의 안 난다는 의견도 많고. 둘째는 예열과 밀착이야. 뜨거운 물로 드리퍼와 서버를 데워두면 추출 중 온도가 덜 떨어지고, 젖은 필터가 드리퍼 벽에 착 붙어서 물이 옆으로 새는 걸 막아줘. 사실 이 두 번째 효과가 더 크다고 보는 사람도 많아.
+              </li>
+            
+              <li class="medal">
+                <strong>🏅 금속 필터를 잘 쓰는 요령</strong>금속 필터로 내리면 미분이 그대로 넘어오니까 분쇄를 평소보다 조금 굵게 하는 게 안전해. 그리고 다 내린 뒤 서버를 흔들지 말고 잠깐 두었다가 따르면 침전물이 가라앉아서 훨씬 깔끔하게 마실 수 있어. 관리도 중요해. 메시 구멍에 낀 커피 오일은 시간이 지나면 산패해서 쩐 냄새를 만들거든. 쓰고 나면 바로 헹구고, 가끔은 전용 세제로 담가 세척해주자. 반영구적으로 쓸 수 있고 쓰레기가 안 나오는 게 금속 필터의 진짜 장점이야.
+              </li>
+            
+          
+        </ul>
+      </div>
+      
+
+      
+      
+      <div class="ez-section">
+        <h2>📊 숫자로 보기</h2>
+        
+          
+          
+          <div class="ez-chart-card">
+            <div class="ez-chart-title">추출 방식별 한 잔 속 카페스톨 대략치 (원두·양에 따라 크게 달라짐)</div>
+            
+              
+              <div class="ez-bar-row">
+                <div class="ez-bar-label">종이 드립</div>
+                <div class="ez-bar-track"><div class="ez-bar-fill" style="width: 5.0%;">0.4mg/잔</div></div>
+              </div>
+            
+              
+              <div class="ez-bar-row">
+                <div class="ez-bar-label">에스프레소</div>
+                <div class="ez-bar-track"><div class="ez-bar-fill" style="width: 18.8%;">1.5mg/잔</div></div>
+              </div>
+            
+              
+              <div class="ez-bar-row">
+                <div class="ez-bar-label">프렌치프레스</div>
+                <div class="ez-bar-track"><div class="ez-bar-fill" style="width: 50.0%;">4.0mg/잔</div></div>
+              </div>
+            
+              
+              <div class="ez-bar-row">
+                <div class="ez-bar-label">끓인 커피</div>
+                <div class="ez-bar-track"><div class="ez-bar-fill" style="width: 100.0%;">8.0mg/잔</div></div>
+              </div>
+            
+          </div>
+        
+      </div>
+      
+
+      
+      
+      
+      <div class="ez-section">
+        <h2>🆚 필터별 성격 비교</h2>
+        <table class="ez-table">
+          <thead><tr><th>비교 항목</th><th>종이 필터</th><th>금속 필터</th><th>프렌치프레스</th></tr></thead>
+          <tbody>
+            <tr>
+              <th>커피 오일</th><td>상당량 흡착·차단</td><td>대부분 통과</td><td>대부분 통과</td>
+            </tr><tr>
+              <th>미분(고운 가루)</th><td>거의 차단</td><td>상당 부분 통과</td><td>가장 많이 통과</td>
+            </tr><tr>
+              <th>컵의 투명도</th><td>맑고 깨끗함</td><td>약간 탁함</td><td>탁하고 침전물 있음</td>
+            </tr><tr>
+              <th>바디감</th><td>가볍고 산뜻</td><td>중간~묵직</td><td>가장 묵직함</td>
+            </tr><tr>
+              <th>잘 어울리는 원두</th><td>산미·향 개성이 뚜렷한 원두</td><td>고소함·단맛 위주의 원두</td><td>다크 로스트, 진한 취향</td>
+            </tr><tr>
+              <th>관리와 비용</th><td>매번 소모, 뒷정리 쉬움</td><td>반영구적, 세척 신경 써야 함</td><td>반영구적, 찌꺼기 처리 번거로움</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      
+      
+
+      
+      
+
+      
+      
+
+      
+      
+      <div class="ez-section">
+        <div class="ez-summary">💡 <strong>한 줄 요약</strong> — 필터는 거름망이 아니라 맛의 스위치야. 오일과 미분을 잡으면 맑고 또렷한 컵, 흘려보내면 묵직하고 고소한 컵 — 오늘 마시고 싶은 쪽으로 고르면 돼. ☕</div>
+      </div>
+      
+
+      
+      
+      
+      
+
+      
+      
+      <div class="ez-section">
+        <h2>📖 어려운 말 풀이 사전</h2>
+        <p>이 글에 나온 어려운 약어와 용어를 한 번에 정리했어. 의미만 알면 본문이 훨씬 쉬워져!</p>
+        <div class="ez-glossary">
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">디테르펜(Diterpene)</div>
+            <div class="ez-glossary-def">커피 오일에 든 지용성 성분 계열. 대표적으로 카페스톨과 카월이 있음</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">카페스톨(Cafestol)</div>
+            <div class="ez-glossary-def">커피 오일 속 디테르펜. 종이 필터에 상당 부분 걸러지며 콜레스테롤 관련 연구에서 자주 다뤄짐</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">미분(Fines)</div>
+            <div class="ez-glossary-def">분쇄 시 생기는 아주 고운 커피 가루. 컵을 탁하게 하고 떫은 뒷맛의 원인이 되기도 함</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">클린컵(Clean Cup)</div>
+            <div class="ez-glossary-def">잡미 없이 맑고 또렷한 컵의 상태. 커핑 평가 항목 중 하나이기도 함</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">바디(Body)</div>
+            <div class="ez-glossary-def">입안에서 느껴지는 커피의 무게감·질감. 오일과 미세 입자가 많을수록 묵직해짐</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">린싱(Rinsing)</div>
+            <div class="ez-glossary-def">추출 전 뜨거운 물로 종이 필터를 헹구는 과정. 종이 냄새 제거와 드리퍼 예열·밀착이 목적</div>
+          </div>
+          
+        </div>
+      </div>
+      
+
+    </div>
+  </section>
+
+  <footer class="article-footer">
+    <div class="container">
+      <a href="/insight">← BACK TO INSIGHTS</a>
+      <span style="margin: 0 16px;">·</span>
+      <a href="/">HOME</a>
+    </div>
+  </footer>
+</article>
+
+</body>
+</html>
