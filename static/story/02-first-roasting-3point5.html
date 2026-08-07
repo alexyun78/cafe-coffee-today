@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>첫 커피의 평점은 3.5점이었다 — 92스토리 · 92°C ROASTERY</title>
+    <meta name="description" content="처음이라는 건 대개 그런 식으로 채점된다 — 2014년 여름, 팝콘 냄비로 시작한 나의 첫 로스팅 일지.">
+    <meta property="og:title" content="첫 커피의 평점은 3.5점이었다 — 92스토리">
+    <meta property="og:description" content="처음이라는 건 대개 그런 식으로 채점된다 — 2014년 여름, 팝콘 냄비로 시작한 나의 첫 로스팅 일지.">
+    <meta property="og:type" content="article">
+    <meta property="og:image" content="https://92cafe.co.kr/static/img/story/02-1.jpg">
+    <link rel="icon" type="image/png" href="/static/img/logo-92black.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --canvas: #FFFFFF;
+            --canvas-warm: #FAF7F2;
+            --canvas-stone: #F2ECE3;
+            --ink: #1A1410;
+            --ink-mute: #4A3F36;
+            --ink-soft: #6B5E52;
+            --espresso: #6F4E37;
+            --caramel: #C9986A;
+            --copper: #B5703D;
+            --line: #E8E0D5;
+            --line-soft: #F0E9DD;
+            --font-display: "Cormorant Garamond", "Pretendard", serif;
+            --font-body: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            --font-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", monospace;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body {
+            font-family: var(--font-body);
+            color: var(--ink);
+            background: var(--canvas-warm);
+            line-height: 1.55;
+            -webkit-font-smoothing: antialiased;
+        }
+        a { color: inherit; text-decoration: none; }
+
+        .site-nav {
+            position: sticky; top: 0; z-index: 50;
+            background: rgba(255,255,255,0.85);
+            backdrop-filter: saturate(140%) blur(14px);
+            -webkit-backdrop-filter: saturate(140%) blur(14px);
+            border-bottom: 1px solid var(--line-soft);
+        }
+        .nav-inner {
+            max-width: 1200px; margin: 0 auto; padding: 16px 32px;
+            display: flex; align-items: center; justify-content: space-between; gap: 24px;
+        }
+        .brand {
+            font-family: var(--font-display);
+            font-size: 1.3rem; font-weight: 700;
+            display: inline-flex; align-items: center; gap: 4px;
+        }
+        .brand-mark {
+            display: inline-flex; align-items: flex-start;
+            font-family: "Pretendard", sans-serif;
+            font-weight: 900; letter-spacing: -0.04em; line-height: 1;
+        }
+        .temp-mark { display: flex; flex-direction: column; align-items: flex-start; line-height: 0.82; margin: 0 0.05em 0 0.04em; }
+        .temp-mark .temp-deg { font-size: 0.42em; letter-spacing: -0.04em; }
+        .temp-mark .temp-c   { font-size: 0.58em; letter-spacing: -0.05em; margin-top: -0.05em; }
+        .nav-back {
+            font-family: var(--font-mono);
+            font-size: 0.75rem; letter-spacing: 0.14em;
+            color: var(--ink-mute);
+            transition: color 0.2s;
+        }
+        .nav-back:hover { color: var(--copper); }
+
+        .story-hero {
+            background: var(--canvas);
+            border-bottom: 1px solid var(--line-soft);
+            padding: 88px 0 64px;
+        }
+        .story-hero-inner { max-width: 760px; margin: 0 auto; padding: 0 24px; text-align: center; }
+        .story-eyebrow {
+            font-family: var(--font-mono);
+            font-size: 0.72rem; letter-spacing: 0.26em;
+            color: var(--copper);
+            margin-bottom: 26px;
+        }
+        .story-title {
+            font-family: var(--font-display);
+            font-weight: 600;
+            font-size: clamp(2rem, 5.5vw, 3.2rem);
+            line-height: 1.18; letter-spacing: -0.01em;
+            word-break: keep-all;
+        }
+        .story-title em { font-style: italic; color: var(--espresso); }
+        .story-meta {
+            margin-top: 30px;
+            font-family: var(--font-mono);
+            font-size: 0.72rem; letter-spacing: 0.18em;
+            color: var(--ink-soft);
+            display: flex; justify-content: center; gap: 18px; flex-wrap: wrap;
+        }
+
+        .story-article { max-width: 720px; margin: 0 auto; padding: 72px 24px 40px; }
+        .story-body { font-size: 1.05rem; line-height: 2.0; color: var(--ink-mute); word-break: keep-all; }
+        .story-body p { margin-bottom: 1.9em; }
+        .story-body strong { color: var(--ink); font-weight: 700; }
+        .story-body h3 {
+            font-family: var(--font-display);
+            font-weight: 600;
+            font-size: 1.55rem; line-height: 1.3;
+            color: var(--ink);
+            margin: 3.2em 0 1.3em;
+            word-break: keep-all;
+        }
+        .story-body h3:first-child { margin-top: 0; }
+        .story-body > p.lead::first-letter {
+            font-family: var(--font-display);
+            font-size: 3.4em; font-weight: 600;
+            float: left; line-height: 0.85;
+            padding: 0.06em 0.12em 0 0;
+            color: var(--espresso);
+        }
+        .story-body figure { margin: 2.6em 0; }
+        .story-body figure img {
+            display: block; width: 100%; height: auto;
+            max-height: 540px; object-fit: cover;
+            border-radius: 12px;
+            border: 1px solid var(--line);
+        }
+        .story-body figure.doc img {
+            max-height: none; object-fit: contain;
+            background: #fff;
+        }
+        .story-body figcaption {
+            margin-top: 12px;
+            text-align: center;
+            font-family: var(--font-mono);
+            font-size: 0.7rem; letter-spacing: 0.12em;
+            color: var(--ink-soft);
+        }
+        blockquote.pull {
+            font-family: var(--font-display);
+            font-style: italic;
+            font-size: 1.45rem; line-height: 1.6;
+            color: var(--espresso);
+            border-left: 2px solid var(--caramel);
+            padding: 6px 0 6px 26px;
+            margin: 3em 0;
+            word-break: keep-all;
+        }
+        hr.wave {
+            border: none; margin: 3.4em auto;
+            text-align: center; overflow: visible; height: 1em;
+        }
+        hr.wave::before {
+            content: "☕";
+            font-size: 1rem;
+            color: var(--caramel);
+            letter-spacing: 1.2em; padding-left: 1.2em;
+        }
+
+        .story-foot {
+            max-width: 720px; margin: 0 auto; padding: 8px 24px 100px;
+        }
+        .story-foot-card {
+            border-top: 1px solid var(--line);
+            padding-top: 34px;
+            display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap;
+        }
+        .story-foot-note {
+            font-family: var(--font-display); font-style: italic;
+            color: var(--ink-soft); font-size: 1.02rem;
+        }
+        .story-foot-links { display: flex; gap: 20px; }
+        .story-foot-links a {
+            font-family: var(--font-mono);
+            font-size: 0.75rem; letter-spacing: 0.14em;
+            color: var(--copper);
+            border-bottom: 1px solid transparent; padding-bottom: 2px;
+            transition: border-color 0.2s;
+        }
+        .story-foot-links a:hover { border-bottom-color: var(--copper); }
+
+        @media (max-width: 600px) {
+            .story-hero { padding: 60px 0 44px; }
+            .story-article { padding: 48px 20px 24px; }
+            .story-body { font-size: 1rem; line-height: 1.95; }
+            .story-body h3 { font-size: 1.35rem; }
+            .story-body figure img { max-height: 380px; }
+            blockquote.pull { font-size: 1.25rem; padding-left: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+<header class="site-nav">
+    <div class="nav-inner">
+        <a class="brand" href="/">
+            <span class="brand-mark">92<span class="temp-mark"><span class="temp-deg">°</span><span class="temp-c">C</span></span></span>ROASTERY
+        </a>
+        <a class="nav-back" href="/#story">← 92 STORY</a>
+    </div>
+</header>
+
+<section class="story-hero">
+    <div class="story-hero-inner">
+        <div class="story-eyebrow">— 92 STORY · 제 2 화</div>
+        <h1 class="story-title">첫 커피의 평점은<br><em>3.5점</em>이었다</h1>
+        <div class="story-meta">
+            <span>2026.08.08</span>
+            <span>로스팅 일지 ①</span>
+            <span>읽는 시간 약 6분</span>
+        </div>
+    </div>
+</section>
+
+<article class="story-article">
+    <div class="story-body">
+
+        <h3>팝콘부터 볶는 게 순서다</h3>
+
+        <p class="lead">커피를 볶아보겠다고 마음먹은 남자가 가장 먼저 볶은 것은 커피가 아니었다. 팝콘이었다.</p>
+
+        <p>사정은 이렇다. 제대로 된 로스터는 비쌌고, 수망은 팔이 빠질 것 같았다. 그래서 눈에 들어온 게 손잡이를 돌리면 속이 저절로 휘저어지는 팝콘 냄비였다. 문제는 내가 그 손잡이를 9분 내내 일정한 속도로 돌릴 만큼 성실한 인간이 아니라는 점이었다. 결론은 하나. 냄비 손잡이에 모터를 물렸다.</p>
+
+        <p>모터를 얹을 받침이 마땅치 않아 두꺼운 책을 쌓아 높이를 맞췄고, 불은 캠핑용 부탄 버너로 해결했다. 뚜껑에는 온도계를 꽂았다. 다 볶은 콩을 식힐 곳도 필요하니 생두가 담겨 온 상자 위에 채반을 올려두었다.</p>
+
+        <figure>
+            <img src="/static/img/story/02-1.jpg" alt="거실 바닥에 차려진 팝콘 냄비 로스터 세팅" loading="lazy">
+            <figcaption>2014년 여름, 거실 바닥에 차려진 첫 번째 로스터리</figcaption>
+        </figure>
+
+        <p>그렇게 완성된 것이 거실 바닥의 로스터리다. 옆에는 아이들 놀이 매트가 깔려 있고 뒤로는 장난감이 굴러다닌다. 지금 보면 어느 모로 봐도 아찔한 배치지만, 그때의 나는 이것이 대단히 합리적인 설계라고 믿었다.</p>
+
+        <p>어쨌든 이 물건이 열을 제대로 전달하는지는 확인해야 했다. 그래서 팝콘을 볶았다. 팝콘은 아주 잘 튀겨졌다. 예행연습 성공. &mdash; 이 팝콘이 나중에 아주 조용한 방식으로 복수해 온다는 건 그때는 몰랐다.</p>
+
+        <h3>생두 4킬로그램과 숨 쉬는 유리병</h3>
+
+        <p>장비가 준비됐으니 재료 차례다. 인터넷을 뒤지다 &ldquo;예가체프 + 만델링 + 엘살바도르가 환상의 조합&rdquo;이라는 문장을 발견했다. 출처도 근거도 확인하지 않았다. 환상이라는데 어쩌겠는가. 세 가지를 1kg씩 담았다. 거기에 브라질 옐로우버본이 할인 중이었고 평도 좋길래 한 봉지 더. 그렇게 첫 주문은 <strong>4킬로그램</strong>이 되었다. 커피를 한 번도 볶아본 적 없는 사람의 첫 장바구니치고는 대담한 숫자다.</p>
+
+        <p>생두는 숨을 쉬어야 한다길래 &lsquo;숨 쉬는 유리병&rsquo;도 샀다. 1.5리터짜리 두 개들이 세트로. 1kg을 부으니 목까지 꽉 찬다. 2리터가 필요했다. 첫 장바구니의 절반은 언제나 이런 식으로 다음 장바구니를 예약해 둔다.</p>
+
+        <figure>
+            <img src="/static/img/story/02-2.jpg" alt="생두를 담아 라벨을 붙인 유리병 네 개" loading="lazy">
+            <figcaption>라벨까지 붙이고 나면 절반은 다 한 것 같은 기분이 든다</figcaption>
+        </figure>
+
+        <p>라벨도 붙였다. 나름 예쁘게. 라고 나는 지금도 주장한다.</p>
+
+        <p>남은 건 핸드픽이다. 벌레 먹거나 깨진 콩을 골라내는 작업인데, 고작 160그램을 고르는 데도 눈이 빠진다. 다행히 우리 집에는 잉여 인력이 둘 있었다. 놀이 매트 위에 생두를 쏟아 놓으니 아이들이 달려들었다. 어른에게는 노동이지만 아이에게는 훌륭한 보물찾기다. 노동력의 질을 따지지만 않는다면 완벽한 인력 수급이었다.</p>
+
+        <figure>
+            <img src="/static/img/story/02-3.jpg" alt="놀이 매트 위에서 생두를 골라내는 아이들" loading="lazy">
+            <figcaption>인건비 0원, 지속 시간 약 15분</figcaption>
+        </figure>
+
+        <h3>9분, 그리고 24그램</h3>
+
+        <p>2014년 7월 12일. 일지 맨 윗줄에 그날의 거실 온도 28도, 습도 59%가 적혀 있다. 한여름 거실 바닥에서 부탄 버너에 불을 붙였다는 뜻이다.</p>
+
+        <p>목표는 브라질 옐로우버본 160그램. 미나스제라이스 술 데 미나스, 파젠다 하이냐, 내추럴 선드라이. 볶기도 전에 이 이름들을 외우고 있었다. 예열 90도에서 시작해 2분에 150도, 생두 투입. 4분까지 수분을 날리고 &mdash; <strong>6분 07초, 첫 번째 팝</strong>. 8분 40초에 팝 소리가 잦아들 무렵 불을 껐다. 10분에 쿨링 시작, 12분에 끝.</p>
+
+        <p>그 9분 동안 내가 한 일이라고는 온도계를 노려보며 불 세기를 만지작거린 것뿐이다. 연기는 예상보다 많이 났다. 나중에 알았는데 절반쯤은 팝콘 탓이었다. 냄비에 남아 있던 팝콘 기름이 예열 중에 타면서 연기와 냄새를 낸 것이다. 예행연습의 청구서는 이런 식으로 날아온다.</p>
+
+        <figure>
+            <img src="/static/img/story/02-4.jpg" alt="채반 위에서 식고 있는, 색이 고르지 않은 로스팅 원두" loading="lazy">
+            <figcaption>균일함과는 거리가 멀었지만, 분명히 커피콩이었다</figcaption>
+        </figure>
+
+        <p>색은 고르지 않았다. 어떤 콩은 시티, 어떤 콩은 조금 더 갔고, 몇 알은 확실히 탔다. 팝콘 잔재 탓인지 내 불 조절 탓인지는 끝까지 구분하지 못했다.</p>
+
+        <p>저울에 올리니 <strong>136그램</strong>. 24그램이 사라졌다. 수분이 날아간 자리다. 머리로는 알고 있었는데 눈으로 보니 좀 아까웠다.</p>
+
+        <h3>&ldquo;참 좋았다&rdquo;</h3>
+
+        <p>갓 볶은 원두는 가스가 빠지도록 사흘쯤 두었다 마시는 게 좋다고들 한다. 나는 사흘은커녕 삼십 분도 못 기다렸다.</p>
+
+        <p>바로 갈았다. 며칠 전 익힌 점드립을 해보겠다며 주전자 주둥이에 필터 비슷한 것을 만들어 끼운 참이었다. 물줄기를 가늘게 떨어뜨리겠다는 발상이었다. 분쇄도는 너무 곱게 갈렸고, 일지에는 &lsquo;다음에 조정 필요&rsquo;라고 적었다. 그리고 내렸다.</p>
+
+        <figure>
+            <img src="/static/img/story/02-5.jpg" alt="유리 서버에 내려진 첫 커피" loading="lazy">
+            <figcaption>내가 볶은 콩으로 내린, 첫 잔</figcaption>
+        </figure>
+
+        <p>그날 블로그에 나는 이렇게 적었다. &ldquo;처음으로 스스로 볶아서 내려 마셔본 커피 맛은&hellip; 참 좋았다.&rdquo;</p>
+
+        <blockquote class="pull">그런데 같은 날 로스팅 일지에 적힌 평점은, 10점 만점에 3.5점이었다.</blockquote>
+
+        <p>일지 속의 나는 훨씬 냉정했다. <em>산미가 강하며 약간의 쓴맛이 존재함. 주로 신맛이 주를 이루고 있음.</em> 심지어 마음에 들게 볶이지 않았다는 이유로 숙성 기간도 없이 다른 원두와 섞어버렸다고 쓰여 있다. 첫 로스팅으로 얻은 커피는 그렇게 딱 한 잔만 남기고 사라졌다.</p>
+
+        <p>두 기록 다 거짓말은 아니다. 맛은 3.5점이었고, 그 한 잔은 참 좋았다. 처음이라는 건 대개 그런 식으로 채점된다.</p>
+
+        <h3>귀찮은 것이 남는다</h3>
+
+        <p>그날 이후로 볶을 때마다 같은 표를 채웠다. 생두를 산 날짜와 농장 이름, 그날의 온도와 습도, 1분 단위 온도, 1팝이 시작된 초 단위 시각, 투입량과 배출량, 그리고 10점 만점의 평점.</p>
+
+        <figure class="doc">
+            <img src="/static/img/story/02-6.jpg" alt="2014년 첫 로스팅 일지 스프레드시트" loading="lazy">
+            <figcaption>2014년 7월 12일의 로스팅 일지. 원두 136g, 평가 3.5</figcaption>
+        </figure>
+
+        <p>두 달쯤 뒤, 아홉 번째 로스팅을 마치고 블로그에는 이렇게 썼다. &ldquo;기록을 남겼는데&hellip; 포스팅이 참 귀찮다.&rdquo; 귀찮다고 써 놓고는 그 표를 계속 채웠다.</p>
+
+        <hr class="wave">
+
+        <blockquote class="pull">그 귀찮은 표가, 12년째 이어지고 있다.</blockquote>
+
+        <p>지금 92도씨의 로스팅 기록은 종이 대신 데이터베이스에 쌓이고, 배출량을 적으면 수분 손실률이 알아서 계산된다. 그래도 칸의 이름은 그때와 거의 같다. 투입 g, 배출 g, 1팝, 평가.</p>
+
+        <p>팝콘 냄비 하나로 시작해서 나는 아직도 매주 같은 칸을 채우고 있다. 첫 판이 3.5점이었다는 건, 돌이켜보면 꽤 다행스러운 일이었다. 올라갈 자리밖에 없었으니까.</p>
+
+    </div>
+</article>
+
+<footer class="story-foot">
+    <div class="story-foot-card">
+        <div class="story-foot-note">92도씨의 이야기는 계속됩니다.</div>
+        <div class="story-foot-links">
+            <a href="/story/01-three-seconds-one-drop">← 제 1 화</a>
+            <a href="/#story">홈으로 →</a>
+        </div>
+    </div>
+</footer>
+
+</body>
+</html>
