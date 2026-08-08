@@ -880,17 +880,39 @@
             font-size: 14rem; line-height: 1;
             color: rgba(255, 255, 255, 0.07);
             pointer-events: none;
+            z-index: 2;
+        }
+        /* 화별 사진(index.json card_image)이 있으면 배경으로 깔고 그 위에 스크림 */
+        .story-card-photo {
+            position: absolute; inset: 0;
+            width: 100%; height: 100%;
+            object-fit: cover; object-position: center 22%;
+            z-index: 0;
+            transition: transform 0.5s;
+        }
+        .story-card:hover .story-card-photo { transform: scale(1.04); }
+        .story-card-side.has-photo::before {
+            content: "";
+            position: absolute; inset: 0; z-index: 1;
+            background: linear-gradient(180deg,
+                rgba(26, 20, 16, 0.72) 0%,
+                rgba(26, 20, 16, 0.18) 34%,
+                rgba(26, 20, 16, 0.62) 72%,
+                rgba(26, 20, 16, 0.9) 100%);
         }
         .story-card-ep {
+            position: relative; z-index: 2;
             font-family: var(--font-mono);
             font-size: 0.7rem; letter-spacing: 0.24em;
             color: var(--caramel);
         }
         .story-card-side-quote {
+            position: relative; z-index: 2;
             font-family: var(--font-display);
             font-style: italic;
             font-size: 1.4rem; line-height: 1.45;
             word-break: keep-all;
+            text-shadow: 0 1px 12px rgba(0, 0, 0, 0.45);
         }
         .story-card-body {
             padding: 44px 44px 40px;
@@ -2124,9 +2146,12 @@
             var el = document.getElementById('story-latest');
             if (!el || !s.id) return;
             var epNum = s.no != null ? ('0' + s.no).slice(-2) : '';
+            // card_image 는 사이트 내부 경로만 허용 (외부 URL 차단)
+            var photo = (typeof s.card_image === 'string' && /^\/static\/[\w./-]+$/.test(s.card_image)) ? s.card_image : '';
             el.innerHTML = '' +
                 '<a class="story-card" href="/story/' + encodeURIComponent(s.id) + '">' +
-                    '<div class="story-card-side">' +
+                    '<div class="story-card-side' + (photo ? ' has-photo' : '') + '">' +
+                        (photo ? '<img class="story-card-photo" src="' + photo + '" alt="' + escapeHtml(s.title || '92스토리') + '" loading="lazy">' : '') +
                         '<span class="story-card-ep">92 STORY' + (epNum ? ' · ' + epNum : '') + '</span>' +
                         (s.one_liner ? '<p class="story-card-side-quote">' + escapeHtml(s.one_liner) + '</p>' : '') +
                     '</div>' +
