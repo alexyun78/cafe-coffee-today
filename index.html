@@ -539,6 +539,26 @@
             border-radius: 6px;
             margin-left: auto;
         }
+        /* 휴무일 — 커피 소개 자리에 크게 안내 */
+        .hcal-wclosed {
+            flex: 1;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            gap: 4px; padding: 8px 6px;
+            text-align: center;
+        }
+        .hcal-wclosed-mark {
+            font-size: 1.75rem;
+            font-weight: 800;
+            letter-spacing: 0.08em;
+            color: #c62828;
+            line-height: 1.15;
+        }
+        .hcal-wclosed-sub {
+            font-size: 0.72rem;
+            color: #b07a7a;
+            letter-spacing: 0.02em;
+        }
 
         /* 8번째 셀: 로고 (+ 5초 슬라이드쇼: 로고 ↔ 메뉴 사진) */
         .hcal-wlogo {
@@ -645,6 +665,8 @@
             .hcal-wlogo-caption { font-size: 0.66rem; letter-spacing: 1px; }
             .hcal-wlogo-label { font-size: 0.82rem; top: 6px; right: 8px; }
             .hcal-wclosed-badge { font-size: 0.6rem; padding: 1px 5px; }
+            .hcal-wclosed-mark { font-size: 1.4rem; }
+            .hcal-wclosed-sub { font-size: 0.66rem; }
         }
 
         /* 데스크톱용 테이블 */
@@ -2318,7 +2340,7 @@
                     <div class="hcal-wcell-header">
                         <span class="hcal-wcell-date ${dayClsAll[dow]}">${cur.getDate()}</span>
                         <span class="hcal-wcell-day ${dayClsAll[dow]}">${dayLabelsAll[dow]}</span>
-                        ${isClosed ? '<span class="hcal-wclosed-badge">휴무</span>' : ''}
+                        ${isClosed && items.length ? '<span class="hcal-wclosed-badge">휴무</span>' : ''}
                     </div>
                 `;
                 if (items.length) {
@@ -2333,6 +2355,10 @@
                         cell += `</div>`;
                     }
                     cell += `</div>`;
+                } else if (isClosed) {
+                    // 휴무일은 커피 소개 자리에 "휴무"를 크게 안내
+                    cell += `<div class="hcal-wclosed"><div class="hcal-wclosed-mark">휴무</div>` +
+                            `<div class="hcal-wclosed-sub">쉬어 갑니다</div></div>`;
                 } else {
                     cell += `<div class="hcal-wempty">·</div>`;
                 }
