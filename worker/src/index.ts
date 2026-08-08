@@ -6,6 +6,7 @@ import { adminRoutes } from './auth'
 import { coffeeRoutes } from './coffee'
 import { beanRoutes } from './beans'
 import { nearbyRoutes } from './nearby'
+import { qgraderRoutes } from './qgrader'
 import versionJson from '../../cafe-coffee-apk/www/version.json'
 
 const app = new Hono<{ Bindings: Env }>()
@@ -68,6 +69,7 @@ app.use('*', async (c, next) => {
 app.route('/', adminRoutes)
 app.route('/', coffeeRoutes)
 app.route('/', nearbyRoutes) // beans보다 먼저 — /api/nearby/* 를 beans 의 use('/api/*') 가드보다 우선 매칭
+app.route('/', qgraderRoutes) // 같은 이유로 beans 앞
 app.route('/', beanRoutes)
 
 // ---------- 인사이트 (정적 자산 기반 — app.py 1228~1320) ----------
@@ -175,6 +177,7 @@ const serveAsset = (path: string) => async (c: any) =>
 app.get('/', serveAsset('/static/roastery.html'))
 app.get('/today', serveAsset('/index.html'))
 app.get('/admin', serveAsset('/static/admin.html'))
+app.get('/qgrader', serveAsset('/static/qgrader/index.html'))
 app.get('/roastery', serveAsset('/static/roastery.html'))
 app.get('/apk', serveAsset('/static/apk.html'))
 app.get('/game', serveAsset('/static/game.html'))

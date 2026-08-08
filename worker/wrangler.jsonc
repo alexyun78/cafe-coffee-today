@@ -13,6 +13,7 @@
       "/api/*",
       "/", "/today", "/today/",
       "/admin", "/admin/",
+      "/qgrader", "/qgrader/",
       "/roastery", "/roastery/",
       "/apk", "/apk/",
       "/insight", "/insight/*",

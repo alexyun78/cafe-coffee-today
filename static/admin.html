@@ -908,7 +908,7 @@
     border: 1px solid var(--line, #e7ddd0); border-radius: 12px; overflow: hidden;
     background: #fff;
   }
-  #roasting-study-frame {
+  #roasting-study-frame, #qgrader-frame {
     width: 100%; height: calc(100vh - 230px); min-height: 480px; border: 0; display: block;
   }
 
@@ -1426,6 +1426,7 @@
     <button class="admin-tab-btn" data-tab="inventory" role="tab" aria-selected="false">📦 재고</button>
     <button class="admin-tab-btn" data-tab="nearby" role="tab" aria-selected="false">📍 주변</button>
     <button class="admin-tab-btn" data-tab="roasting-study" role="tab" aria-selected="false">🔥 로스팅스터디</button>
+    <button class="admin-tab-btn" data-tab="qgrader" role="tab" aria-selected="false">🎓 Q-Grader</button>
   </nav>
 
   <!-- ===== 탭 패널: 오늘의 커피 ===== -->
@@ -2107,6 +2108,26 @@
       </div>
     </section>
   </div><!-- /tab-panel-roasting-study -->
+
+  <!-- ===== 탭 패널: Q-Grader ===== -->
+  <div id="tab-panel-qgrader" class="admin-tab-panel">
+    <section class="card">
+      <div class="list-header">
+        <h2>🎓 Q-Grader 훈련 관리</h2>
+        <div class="header-actions">
+          <a class="btn-text" href="/qgrader" target="_blank" rel="noopener">↗ 새 창으로</a>
+        </div>
+      </div>
+      <div class="nearby-note">
+        SCA Evolved Q Grader(CVA 기반) 대비 6개월 학습플랜과 훈련 일지입니다.
+        아로마·유기산·삼각 테스트 성적, 주간 루틴 체크, 커리큘럼·준비물·희석 레시피를 한곳에서 관리하고
+        <b>기록은 서버 DB(D1)에 저장</b>됩니다. 넓게 쓰려면 "↗ 새 창으로"(<code>92cafe.co.kr/qgrader</code>).
+      </div>
+      <div class="roasting-study-frame-wrap">
+        <iframe id="qgrader-frame" title="Q-Grader 훈련 관리" loading="lazy"></iframe>
+      </div>
+    </section>
+  </div><!-- /tab-panel-qgrader -->
 
 </div>
 
@@ -3866,6 +3887,10 @@ init();
       if (btn.dataset.tab === "roasting-study") {
         const frame = document.getElementById("roasting-study-frame");
         if (frame && !frame.src) frame.src = "/static/roasting-study/index.html";
+      }
+      if (btn.dataset.tab === "qgrader") {
+        const frame = document.getElementById("qgrader-frame");
+        if (frame && !frame.src) frame.src = "/qgrader";
       }
     });
   });

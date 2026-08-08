@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Q 그레이더 훈련 관리 · 92°C ROASTERY</title>
+<link rel="icon" type="image/png" href="/static/img/logo-92black.png">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<style>
+  :root{
+    --bg:#FAF7F3; --surface:#FFFFFF; --ink:#2B2118; --ink2:#6B5D50; --muted:#9A8C7E;
+    --accent:#6B4226; --accent-soft:#EFE5DB; --line:#E5DCD2; --good:#3E7C4F; --warn:#B0762A;
+    --danger:#B3453A; --radius:12px;
+    --mono:ui-monospace,"JetBrains Mono",SFMono-Regular,Menlo,monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  body{font-family:Pretendard,-apple-system,"Malgun Gothic",sans-serif;background:var(--bg);color:var(--ink);
+       padding:20px;max-width:1120px;margin:0 auto;line-height:1.5}
+  a{color:var(--accent)}
+  header.top{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;flex-wrap:wrap}
+  h1{font-size:21px;letter-spacing:-.3px}
+  h2{font-size:15px;margin-bottom:10px}
+  h3{font-size:13px;margin:16px 0 8px;color:var(--accent)}
+  .sub{color:var(--ink2);font-size:12.5px;margin-top:4px}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:16px}
+  .section{margin-top:16px}
+  .grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin:16px 0}
+  @media(max-width:860px){.grid{grid-template-columns:repeat(2,1fr)}}
+  .tile .label{font-size:11.5px;color:var(--ink2)}
+  .tile .value{font-size:24px;font-weight:700;margin-top:3px;font-variant-numeric:tabular-nums}
+  .tile .hint{font-size:11px;color:var(--muted);margin-top:3px}
+  label{font-size:11px;color:var(--ink2);display:block;margin-bottom:4px}
+  input,select,textarea{width:100%;padding:8px 10px;border:1px solid var(--line);border-radius:8px;
+       font-size:13px;background:#FFFDFB;color:var(--ink);font-family:inherit}
+  input:focus,select:focus,textarea:focus{outline:2px solid var(--accent-soft);border-color:var(--accent)}
+  button{padding:9px 14px;border:none;border-radius:8px;background:var(--accent);color:#fff;
+       font-size:13px;font-weight:600;cursor:pointer;font-family:inherit}
+  button:disabled{opacity:.5;cursor:default}
+  button.ghost{background:var(--accent-soft);color:var(--accent)}
+  button.small{padding:5px 9px;font-size:12px}
+  button.danger{background:transparent;color:var(--danger);border:1px solid var(--line)}
+  form.entry{display:grid;grid-template-columns:repeat(8,1fr);gap:10px;align-items:end}
+  @media(max-width:860px){form.entry{grid-template-columns:repeat(2,1fr)}}
+  .toolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:12px}
+  .toolbar h2{margin:0}
+  .spacer{flex:1}
+  .chartwrap{position:relative}
+  svg{display:block;width:100%;height:auto}
+  .tooltip{position:absolute;pointer-events:none;background:var(--ink);color:#fff;font-size:12px;
+       padding:6px 9px;border-radius:7px;opacity:0;transition:opacity .12s;white-space:nowrap;
+       transform:translate(-50%,-120%)}
+  table{width:100%;border-collapse:collapse;font-size:13px}
+  th{font-size:11px;color:var(--ink2);text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);font-weight:600}
+  td{padding:8px 10px;border-bottom:1px solid var(--line);font-variant-numeric:tabular-nums;vertical-align:top}
+  tbody tr:hover td{background:#FBF7F2}
+  .note-cell{max-width:280px;color:var(--ink2);white-space:pre-wrap;word-break:break-word}
+  .pill{display:inline-block;font-size:11px;padding:2px 8px;border-radius:99px;background:var(--accent-soft);
+       color:var(--accent);font-weight:600}
+  .routine{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+  @media(max-width:860px){.routine{grid-template-columns:1fr}}
+  .routine label.chk{display:flex;align-items:center;gap:9px;font-size:13px;color:var(--ink);background:#FFFDFB;
+       border:1px solid var(--line);border-radius:8px;padding:10px;cursor:pointer;margin:0}
+  .routine input[type=checkbox]{width:16px;height:16px;accent-color:var(--accent);flex:none}
+  .routine label.chk.done{background:#F3F8F3;border-color:#CFE3D2}
+  .daily{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+  .daily .item{font-size:12px;background:var(--accent-soft);color:var(--accent);border-radius:8px;padding:7px 10px}
+  .tabs{display:flex;gap:6px;flex-wrap:wrap;margin:18px 0 0}
+  .tabs button{background:transparent;color:var(--ink2);border:1px solid transparent;font-weight:600}
+  .tabs button.active{background:var(--surface);color:var(--accent);border-color:var(--line)}
+  .panel{display:none}.panel.active{display:block}
+  .muted{color:var(--muted);font-size:12px}
+  .md{white-space:pre-wrap;font-family:var(--mono);font-size:12px;line-height:1.75;color:var(--ink2);
+      max-height:70vh;overflow:auto;background:#FFFDFB;border:1px solid var(--line);border-radius:8px;padding:14px}
+  .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--ink);color:#fff;
+      font-size:13px;padding:10px 16px;border-radius:8px;opacity:0;pointer-events:none;transition:opacity .2s;z-index:80}
+  .toast.show{opacity:.95}
+  /* PIN */
+  .modal{position:fixed;inset:0;background:rgba(28,20,14,.55);display:flex;align-items:center;justify-content:center;z-index:100}
+  .modal.hidden{display:none}
+  .modal-box{background:var(--surface);border-radius:14px;padding:26px 24px;width:min(340px,90vw);text-align:center}
+  .modal-box h2{margin-bottom:6px}
+  .modal-box .err{color:var(--danger);font-size:12px;min-height:16px;margin-top:8px}
+  .modal-box input{text-align:center;letter-spacing:.4em;font-size:18px;margin-top:14px}
+  .modal-box button{width:100%;margin-top:12px}
+  .roadmap-now{background:#FBF4EC}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div>
+    <h1>☕ Q 그레이더 훈련 관리</h1>
+    <div class="sub">SCA Evolved Q Grader (CVA 기반) 대비 · 기록은 서버 DB에 저장됩니다</div>
+  </div>
+  <div style="display:flex;gap:8px;align-items:center">
+    <label style="margin:0">목표 응시일
+      <input type="date" id="examDate" style="width:150px;padding:5px 8px;margin-top:3px">
+    </label>
+    <a href="/admin" class="pill" style="text-decoration:none;padding:7px 12px">← 관리자</a>
+  </div>
+</header>
+
+<div class="grid" id="tiles"></div>
+
+<div class="tabs" id="tabs">
+  <button class="active" data-panel="log">📓 훈련 일지</button>
+  <button data-panel="curriculum">📚 커리큘럼</button>
+  <button data-panel="reference">🧪 준비물·용액</button>
+  <button data-panel="source">📄 원문</button>
+</div>
+
+<!-- ===================== 훈련 일지 ===================== -->
+<div class="panel active" id="panel-log">
+
+  <div class="card section">
+    <div class="toolbar"><h2>오늘 훈련 기록</h2><span class="muted" id="entryHint">날짜를 바꾸면 그날 기록을 불러옵니다</span></div>
+    <form class="entry" id="entryForm">
+      <div><label>날짜</label><input type="date" id="f-date" required></div>
+      <div><label>아로마 (/36)</label><input type="number" id="f-aroma" min="0" max="36" placeholder="24"></div>
+      <div><label>유기산 (%)</label><input type="number" id="f-acid" min="0" max="100" step="1" placeholder="70"></div>
+      <div><label>삼각 (/6)</label><input type="number" id="f-tri" min="0" max="6" placeholder="4"></div>
+      <div><label>커핑 (회)</label><input type="number" id="f-cup" min="0" max="20" placeholder="1"></div>
+      <div><label>결함분류 (%)</label><input type="number" id="f-defect" min="0" max="100" placeholder="80"></div>
+      <div><label>모의필기 (점)</label><input type="number" id="f-written" min="0" max="100" placeholder="80"></div>
+      <div><label>훈련시간 (분)</label><input type="number" id="f-minutes" min="0" max="1440" placeholder="45"></div>
+      <div style="grid-column:1/-1"><label>노트 (오답 향, 디스크립터, 컨디션)</label>
+        <input type="text" id="f-note" placeholder="예: 틀린 향 — 카다몬↔정향, 버터스카치. 내일 집중 반복"></div>
+      <div style="grid-column:1/-1;display:flex;gap:8px">
+        <button type="submit" id="saveBtn">저장</button>
+        <button type="button" class="ghost" id="clearBtn">입력 비우기</button>
+      </div>
+    </form>
+  </div>
+
+  <div class="card section">
+    <div class="toolbar">
+      <h2>진행 추이</h2>
+      <select id="metric" style="width:auto">
+        <option value="aroma">아로마 정답 수 (/36)</option>
+        <option value="acid">유기산 정답률 (%)</option>
+        <option value="tri">삼각 테스트 정답 (/6)</option>
+      </select>
+      <div class="spacer"></div>
+      <span class="muted" id="targetLegend"></span>
+    </div>
+    <div class="chartwrap">
+      <svg id="chart" viewBox="0 0 900 300" role="img" aria-label="훈련 성적 추이"></svg>
+      <div class="tooltip" id="tip"></div>
+    </div>
+  </div>
+
+  <div class="card section">
+    <div class="toolbar">
+      <h2>주간 루틴</h2><span class="pill" id="weekLabel"></span>
+      <div class="spacer"></div>
+      <button class="ghost small" id="weekPrev">← 이전 주</button>
+      <button class="ghost small" id="weekNext">다음 주 →</button>
+    </div>
+    <div class="daily" id="dailyList"></div>
+    <div class="routine" id="routine"></div>
+  </div>
+
+  <div class="card section">
+    <div class="toolbar"><h2>기록 전체</h2><span class="muted" id="logCount"></span></div>
+    <div style="overflow-x:auto">
+      <table>
+        <thead><tr><th>날짜</th><th>아로마</th><th>유기산</th><th>삼각</th><th>커핑</th><th>결함</th><th>필기</th><th>시간</th><th>노트</th><th></th></tr></thead>
+        <tbody id="rows"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== 커리큘럼 ===================== -->
+<div class="panel" id="panel-curriculum">
+  <div class="card section">
+    <h2>6개월 로드맵</h2>
+    <div style="overflow-x:auto"><table>
+      <thead><tr><th>기간</th><th>테마</th><th>핵심 활동</th><th>월말 목표</th></tr></thead>
+      <tbody id="roadmapRows"></tbody>
+    </table></div>
+  </div>
+  <div class="card section">
+    <h2>실기 8개 평가 컴포넌트</h2>
+    <div style="overflow-x:auto"><table>
+      <thead><tr><th>평가</th><th>내용</th><th>대비 훈련</th></tr></thead>
+      <tbody id="componentRows"></tbody>
+    </table></div>
+  </div>
+  <div class="card section">
+    <h2>시험 개요</h2>
+    <div style="overflow-x:auto"><table><tbody id="examRows"></tbody></table></div>
+  </div>
+  <div class="card section">
+    <h2>이번 주에 바로 할 일</h2>
+    <ul id="todoList" style="padding-left:18px;font-size:13px;color:var(--ink2);line-height:2"></ul>
+    <h3>참고 자료</h3>
+    <ul id="linkList" style="padding-left:18px;font-size:13px;line-height:2"></ul>
+  </div>
+</div>
+
+<!-- ===================== 준비물·용액 ===================== -->
+<div class="panel" id="panel-reference">
+  <div class="card section">
+    <h2>준비물</h2>
+    <div style="overflow-x:auto"><table>
+      <thead><tr><th>구분</th><th>품목</th><th>접근</th></tr></thead>
+      <tbody id="materialRows"></tbody>
+    </table></div>
+  </div>
+  <div class="card section">
+    <h2>유기산 구매 가이드</h2>
+    <div style="overflow-x:auto"><table>
+      <thead><tr><th>산</th><th>형태</th><th>구매처·검색어</th><th>예상 가격</th></tr></thead>
+      <tbody id="acidRows"></tbody>
+    </table></div>
+  </div>
+  <div class="card section">
+    <h2>훈련용 희석 레시피 <span class="muted">(생수 1L 기준)</span></h2>
+    <div style="overflow-x:auto"><table>
+      <thead><tr><th>산</th><th>저</th><th>중</th><th>고</th><th>특징</th></tr></thead>
+      <tbody id="dilutionRows"></tbody>
+    </table></div>
+    <p class="muted" style="margin-top:10px">기본 맛 용액: 설탕 4/8/12 g/L · 소금 0.4/0.7/1.0 g/L —
+      인산 원액은 부식성이라 장갑 착용, 물에 산을 넣는 순서로 희석. 희석액은 냉장 2~3일 내 사용.</p>
+  </div>
+</div>
+
+<!-- ===================== 원문 ===================== -->
+<div class="panel" id="panel-source">
+  <div class="card section">
+    <div class="toolbar"><h2>학습플랜 원문</h2><span class="muted" id="srcMeta"></span></div>
+    <div class="md" id="srcBody">불러오는 중…</div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<div class="modal hidden" id="pin-modal">
+  <div class="modal-box">
+    <h2>🔒 관리자 인증</h2>
+    <div class="muted">Q 그레이더 훈련 관리는 관리자 전용입니다</div>
+    <input type="password" id="pin-input" inputmode="numeric" autocomplete="off" placeholder="PIN">
+    <div class="err" id="pin-err"></div>
+    <button id="pin-submit">확인</button>
+  </div>
+</div>
+
+<script>
+const $ = (s) => document.querySelector(s);
+const esc = (s) => String(s == null ? "" : s).replace(/[&<>"']/g, (c) =>
+  ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+
+// ---------- auth (admin.html 과 동일 규약: 쿠키 + sessionStorage 토큰) ----------
+const TOKEN_KEY = "cafe_admin_token";
+const getTok = () => { try { return sessionStorage.getItem(TOKEN_KEY) || ""; } catch (e) { return ""; } };
+const setTok = (t) => { try { if (t) sessionStorage.setItem(TOKEN_KEY, t); } catch (e) {} };
+const clearTok = () => { try { sessionStorage.removeItem(TOKEN_KEY); } catch (e) {} };
+
+async function api(method, path, body) {
+  const headers = { "Content-Type": "application/json" };
+  const tok = getTok();
+  if (tok) headers["Authorization"] = "Bearer " + tok;
+  const opts = { method, credentials: "include", headers };
+  if (body !== undefined) opts.body = JSON.stringify(body);
+  const res = await fetch(path, opts);
+  if (res.status === 401) { clearTok(); showPin(); throw new Error("unauthorized"); }
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok || data.success === false) throw new Error(data.error || ("HTTP " + res.status));
+  return data;
+}
+
+const showPin = () => { $("#pin-modal").classList.remove("hidden"); $("#pin-input").focus(); };
+const hidePin = () => $("#pin-modal").classList.add("hidden");
+
+$("#pin-submit").addEventListener("click", async () => {
+  const pin = $("#pin-input").value.trim();
+  if (!pin) return;
+  try {
+    const res = await fetch("/api/admin/verify", {
+      method: "POST", credentials: "include",
+      headers: { "Content-Type": "application/json" }, body: JSON.stringify({ pin }),
+    });
+    const data = await res.json().catch(() => ({}));
+    if (res.ok && data.success) {
+      if (data.token) setTok(data.token);
+      $("#pin-input").value = ""; $("#pin-err").textContent = "";
+      hidePin(); init();
+      return;
+    }
+    if (res.status === 429 && data.retry_after) {
+      $("#pin-err").textContent = `잠금됨 — ${data.retry_after}초 후 다시 시도`;
+    } else if (typeof data.attempts_left === "number") {
+      $("#pin-err").textContent = `PIN이 올바르지 않습니다. ${data.attempts_left}회 남음`;
+    } else {
+      $("#pin-err").textContent = "PIN이 올바르지 않습니다.";
+    }
+    $("#pin-input").value = ""; $("#pin-input").focus();
+  } catch (e) { $("#pin-err").textContent = "네트워크 오류 — 다시 시도해 주세요."; }
+});
+$("#pin-input").addEventListener("keydown", (e) => { if (e.key === "Enter") $("#pin-submit").click(); });
+
+let toastTimer = null;
+function toast(msg) {
+  const t = $("#toast"); t.textContent = msg; t.classList.add("show");
+  clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove("show"), 2200);
+}
+
+// ---------- state ----------
+let LOGS = [];         // [{date, aroma, ...}]
+let CURR = null;       // 커리큘럼
+let WEEK = null;       // 현재 보고 있는 주(월요일)
+let SUMMARY = null;
+
+const METRIC_MAX = { aroma: 36, acid: 100, tri: 6 };
+const METRIC_UNIT = { aroma: "/36", acid: "%", tri: "/6" };
+const METRIC_NAME = { aroma: "아로마", acid: "유기산", tri: "삼각" };
+const FIELDS = ["aroma", "acid", "tri", "cup", "defect", "written", "minutes"];
+
+const kstToday = () => new Date(Date.now() + 9 * 3600e3).toISOString().slice(0, 10);
+function mondayOf(iso) {
+  const d = new Date(iso + "T00:00:00Z");
+  d.setUTCDate(d.getUTCDate() - ((d.getUTCDay() + 6) % 7));
+  return d.toISOString().slice(0, 10);
+}
+function shiftDays(iso, n) {
+  const d = new Date(iso + "T00:00:00Z"); d.setUTCDate(d.getUTCDate() + n);
+  return d.toISOString().slice(0, 10);
+}
+
+// ---------- 타일 ----------
+function renderTiles() {
+  const s = SUMMARY || {};
+  const exam = $("#examDate").value;
+  let dday = "—";
+  if (exam) {
+    const days = Math.ceil((new Date(exam + "T00:00:00Z") - new Date(kstToday() + "T00:00:00Z")) / 864e5);
+    dday = days >= 0 ? "D-" + days : "응시 완료";
+  }
+  const aroma = s.latest && s.latest.aroma;
+  const t = (s.month_targets || {}).aroma;
+  const rw = s.routine_week || {};
+  const tiles = [
+    { label: "시험까지", value: dday, hint: exam || "응시일을 설정하세요" },
+    { label: "연속 기록", value: (s.streak || 0) + "일", hint: "매일 아침 아로마 30분" },
+    { label: "아로마 최근", value: aroma ? aroma.value + " / 36" : "—", hint: t ? "이달 목표 " + t + "개" : (aroma ? aroma.date : "") },
+    { label: "이번 주 루틴", value: (rw.done || 0) + " / " + (rw.total || 0), hint: rw.week ? rw.week + " 주" : "" },
+    { label: "총 기록", value: (s.total_logs || 0) + "건", hint: "기록이 곧 실력입니다" },
+  ];
+  $("#tiles").innerHTML = tiles.map((x) =>
+    `<div class="card tile"><div class="label">${esc(x.label)}</div><div class="value">${esc(x.value)}</div><div class="hint">${esc(x.hint || "")}</div></div>`).join("");
+}
+
+// ---------- 차트 ----------
+function currentTarget(metric) {
+  const list = ((CURR && CURR.targets) || {})[metric] || [];
+  if (!list.length) return null;
+  const now = kstToday().slice(0, 7);
+  return list.find((x) => x.month >= now) || list[list.length - 1];
+}
+function renderChart() {
+  const key = $("#metric").value;
+  const data = LOGS.filter((e) => e[key] !== null && e[key] !== undefined).map((e) => ({ date: e.date, v: e[key] }));
+  const svg = $("#chart"), W = 900, H = 300, L = 46, R = 16, T = 18, B = 34, max = METRIC_MAX[key];
+  const ticks = key === "tri" ? [0, 2, 4, 6] : key === "aroma" ? [0, 12, 24, 36] : [0, 25, 50, 75, 100];
+  let h = "";
+  for (const t of ticks) {
+    const y = T + (H - T - B) * (1 - t / max);
+    h += `<line x1="${L}" y1="${y}" x2="${W - R}" y2="${y}" stroke="#EDE6DE"/>`;
+    h += `<text x="${L - 8}" y="${y + 4}" font-size="11" fill="#9A8C7E" text-anchor="end">${t}</text>`;
+  }
+  const tg = currentTarget(key);
+  if (tg) {
+    const y = T + (H - T - B) * (1 - tg.value / max);
+    h += `<line x1="${L}" y1="${y}" x2="${W - R}" y2="${y}" stroke="#B0762A" stroke-width="1.5" stroke-dasharray="5 4"/>`;
+    h += `<text x="${W - R}" y="${y - 6}" font-size="11" fill="#B0762A" text-anchor="end">${tg.month} 목표 ${tg.value}</text>`;
+  }
+  if (!data.length) {
+    h += `<text x="${W / 2}" y="${H / 2}" font-size="13" fill="#9A8C7E" text-anchor="middle">아직 기록이 없습니다 — 첫 훈련을 기록해 보세요</text>`;
+    svg.innerHTML = h; return;
+  }
+  const t0 = Date.parse(data[0].date), t1 = Date.parse(data[data.length - 1].date);
+  const x = (d) => data.length === 1 ? L + (W - L - R) / 2 : L + (W - L - R) * ((Date.parse(d) - t0) / Math.max(1, t1 - t0));
+  const y = (v) => T + (H - T - B) * (1 - v / max);
+  if (data.length > 1)
+    h += `<path d="${data.map((d, i) => (i ? "L" : "M") + x(d.date).toFixed(1) + " " + y(d.v).toFixed(1)).join(" ")}" fill="none" stroke="#6B4226" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>`;
+  data.forEach((d, i) => {
+    h += `<circle cx="${x(d.date).toFixed(1)}" cy="${y(d.v).toFixed(1)}" r="4.5" fill="#6B4226" stroke="#fff" stroke-width="2"/>`;
+    h += `<circle cx="${x(d.date).toFixed(1)}" cy="${y(d.v).toFixed(1)}" r="13" fill="transparent" data-i="${i}"/>`;
+  });
+  const n = data.length, step = Math.max(1, Math.floor(n / 4));
+  const lbl = (i) => { h += `<text x="${x(data[i].date).toFixed(1)}" y="${H - 10}" font-size="11" fill="#9A8C7E" text-anchor="middle">${data[i].date.slice(5)}</text>`; };
+  for (let i = 0; i < n; i += step) lbl(i);
+  if ((n - 1) % step !== 0) lbl(n - 1);
+  svg.innerHTML = h;
+
+  const tip = $("#tip"), wrap = svg.parentElement;
+  svg.querySelectorAll("[data-i]").forEach((el) => {
+    el.addEventListener("mousemove", (ev) => {
+      const d = data[+el.dataset.i], r = wrap.getBoundingClientRect();
+      tip.style.left = (ev.clientX - r.left) + "px"; tip.style.top = (ev.clientY - r.top) + "px";
+      tip.textContent = `${d.date} · ${METRIC_NAME[key]} ${d.v}${METRIC_UNIT[key]}`;
+      tip.style.opacity = 1;
+    });
+    el.addEventListener("mouseleave", () => tip.style.opacity = 0);
+  });
+  const all = ((CURR && CURR.targets) || {})[key] || [];
+  $("#targetLegend").textContent = all.length
+    ? "월별 목표 " + all.map((t) => t.month.slice(2) + " " + t.value).join(" · ")
+    : "";
+}
+
+// ---------- 기록 표 ----------
+function renderTable() {
+  const rows = LOGS.slice().reverse();
+  $("#logCount").textContent = rows.length + "건";
+  const cell = (v, suffix) => v === null || v === undefined ? "—" : v + (suffix || "");
+  $("#rows").innerHTML = rows.map((e) => `<tr>
+    <td><a href="#" data-edit="${e.date}">${e.date}</a></td>
+    <td>${cell(e.aroma)}</td><td>${cell(e.acid, "%")}</td><td>${cell(e.tri)}</td>
+    <td>${cell(e.cup)}</td><td>${cell(e.defect, "%")}</td><td>${cell(e.written)}</td>
+    <td>${cell(e.minutes, "분")}</td>
+    <td class="note-cell">${esc(e.note || "")}</td>
+    <td><button class="danger small" data-del="${e.date}">삭제</button></td></tr>`).join("")
+    || `<tr><td colspan="10" class="muted" style="padding:18px;text-align:center">아직 기록이 없습니다</td></tr>`;
+}
+
+// ---------- 주간 루틴 ----------
+async function loadRoutine() {
+  const d = await api("GET", "/api/qgrader/routine?week=" + WEEK);
+  WEEK = d.week;
+  $("#weekLabel").textContent = d.week + " 주";
+  const weekly = d.items.filter((i) => i.cadence === "weekly");
+  const daily = d.items.filter((i) => i.cadence === "daily");
+  $("#dailyList").innerHTML = daily.map((i) =>
+    `<div class="item" title="${esc(i.detail || "")}">매일 · ${esc(i.label)}</div>`).join("");
+  $("#routine").innerHTML = weekly.map((i) =>
+    `<label class="chk${i.done ? " done" : ""}" title="${esc(i.detail || "")}">
+       <input type="checkbox" data-item="${i.id}" ${i.done ? "checked" : ""}> ${esc(i.label)}</label>`).join("");
+}
+
+// ---------- 커리큘럼 ----------
+function renderCurriculum() {
+  if (!CURR) return;
+  const nowM = kstToday().slice(0, 7);
+  $("#roadmapRows").innerHTML = (CURR.roadmap || []).map((r) =>
+    `<tr class="${r.month === nowM ? "roadmap-now" : ""}">
+       <td><b>${esc(r.period || r.month)}</b></td><td>${esc(r.theme)}</td>
+       <td>${esc(r.activities)}</td><td>${esc(r.goal)}</td></tr>`).join("");
+  const ref = CURR.reference || {};
+  $("#componentRows").innerHTML = (ref.components || []).map((r) =>
+    `<tr><td><b>${esc(r["평가"])}</b></td><td>${esc(r["내용"])}</td><td>${esc(r["대비 훈련"])}</td></tr>`).join("");
+  $("#examRows").innerHTML = (ref.exam || []).map((r) =>
+    `<tr><th style="width:120px">${esc(r["항목"])}</th><td>${esc(r["내용"])}</td></tr>`).join("");
+  $("#todoList").innerHTML = (ref.todo || []).map((r) => `<li>${esc(r.task)}</li>`).join("");
+  $("#linkList").innerHTML = (ref.links || []).map((r) => r.url
+    ? `<li><a href="${esc(r.url)}" target="_blank" rel="noopener">${esc(r.label)}</a></li>`
+    : `<li>${esc(r.label)}</li>`).join("");
+  $("#materialRows").innerHTML = (ref.materials || []).map((r) =>
+    `<tr><td>${esc(r["구분"])}</td><td><b>${esc(r["품목"])}</b></td><td>${esc(r["접근"])}</td></tr>`).join("");
+  $("#acidRows").innerHTML = (ref.acids || []).map((r) =>
+    `<tr><td><b>${esc(r["산"])}</b></td><td>${esc(r["형태"])}</td><td>${esc(r["구매처·검색 키워드"])}</td><td>${esc(r["예상 가격"])}</td></tr>`).join("");
+  $("#dilutionRows").innerHTML = (ref.dilution || []).map((r) =>
+    `<tr><td><b>${esc(r["산"])}</b></td><td>${esc(r["저"])}</td><td>${esc(r["중"])}</td><td>${esc(r["고"])}</td><td>${esc(r["특징"])}</td></tr>`).join("");
+}
+
+// ---------- 폼 ----------
+function fillForm(date) {
+  const e = LOGS.find((x) => x.date === date);
+  FIELDS.forEach((f) => $("#f-" + f).value = e && e[f] !== null && e[f] !== undefined ? e[f] : "");
+  $("#f-note").value = (e && e.note) || "";
+  $("#entryHint").textContent = e ? `${date} 기록을 불러왔습니다 — 저장하면 덮어씁니다` : "새 기록";
+  $("#saveBtn").textContent = e ? "수정 저장" : "저장";
+}
+
+$("#entryForm").addEventListener("submit", async (ev) => {
+  ev.preventDefault();
+  const date = $("#f-date").value;
+  if (!date) return;
+  const payload = { date, note: $("#f-note").value.trim() };
+  FIELDS.forEach((f) => { const v = $("#f-" + f).value; payload[f] = v === "" ? null : Number(v); });
+  $("#saveBtn").disabled = true;
+  try {
+    await api("PUT", "/api/qgrader/logs/" + date, payload);
+    toast(date + " 기록 저장됨");
+    await refresh();
+    fillForm(date);
+  } catch (e) { toast("저장 실패: " + e.message); }
+  finally { $("#saveBtn").disabled = false; }
+});
+$("#clearBtn").addEventListener("click", () => {
+  FIELDS.forEach((f) => $("#f-" + f).value = "");
+  $("#f-note").value = "";
+});
+$("#f-date").addEventListener("change", () => fillForm($("#f-date").value));
+
+$("#rows").addEventListener("click", async (ev) => {
+  const del = ev.target.closest("[data-del]");
+  const edit = ev.target.closest("[data-edit]");
+  if (edit) {
+    ev.preventDefault();
+    $("#f-date").value = edit.dataset.edit;
+    fillForm(edit.dataset.edit);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    return;
+  }
+  if (!del) return;
+  if (!confirm(del.dataset.del + " 기록을 삭제할까요?")) return;
+  try {
+    await api("DELETE", "/api/qgrader/logs/" + del.dataset.del);
+    toast("삭제됨");
+    await refresh();
+  } catch (e) { toast("삭제 실패: " + e.message); }
+});
+
+$("#routine").addEventListener("change", async (ev) => {
+  const cb = ev.target.closest("[data-item]");
+  if (!cb) return;
+  try {
+    await api("POST", "/api/qgrader/routine", { week: WEEK, item_id: Number(cb.dataset.item), done: cb.checked });
+    cb.closest("label").classList.toggle("done", cb.checked);
+    SUMMARY = await api("GET", "/api/qgrader/summary");
+    renderTiles();
+  } catch (e) { toast("저장 실패: " + e.message); cb.checked = !cb.checked; }
+});
+$("#weekPrev").addEventListener("click", () => { WEEK = shiftDays(WEEK, -7); loadRoutine(); });
+$("#weekNext").addEventListener("click", () => { WEEK = shiftDays(WEEK, 7); loadRoutine(); });
+
+$("#examDate").addEventListener("change", async () => {
+  try {
+    await api("PUT", "/api/qgrader/settings", { exam_date: $("#examDate").value });
+    SUMMARY = await api("GET", "/api/qgrader/summary");
+    renderTiles();
+    toast("응시일 저장됨");
+  } catch (e) { toast("저장 실패: " + e.message); }
+});
+$("#metric").addEventListener("change", renderChart);
+
+$("#tabs").addEventListener("click", (ev) => {
+  const b = ev.target.closest("[data-panel]");
+  if (!b) return;
+  document.querySelectorAll("#tabs button").forEach((x) => x.classList.toggle("active", x === b));
+  document.querySelectorAll(".panel").forEach((p) => p.classList.toggle("active", p.id === "panel-" + b.dataset.panel));
+  if (b.dataset.panel === "source") loadSource();
+});
+
+let srcLoaded = false;
+async function loadSource() {
+  if (srcLoaded) return;
+  try {
+    const d = await api("GET", "/api/qgrader/curriculum/markdown");
+    $("#srcBody").textContent = d.body_md;
+    $("#srcMeta").textContent = `version ${d.version} · ${(d.created_at || "").slice(0, 10)}`;
+    srcLoaded = true;
+  } catch (e) { $("#srcBody").textContent = "불러오지 못했습니다: " + e.message; }
+}
+
+// ---------- load ----------
+async function refresh() {
+  const [logs, summary] = await Promise.all([
+    api("GET", "/api/qgrader/logs"),
+    api("GET", "/api/qgrader/summary"),
+  ]);
+  LOGS = logs.items || [];
+  SUMMARY = summary;
+  renderTiles(); renderChart(); renderTable();
+}
+
+async function init() {
+  try {
+    const st = await api("GET", "/api/qgrader/settings");
+    $("#examDate").value = (st.settings && st.settings.exam_date) || "2027-02-01";
+    CURR = await api("GET", "/api/qgrader/curriculum");
+    renderCurriculum();
+    WEEK = mondayOf(kstToday());
+    await Promise.all([refresh(), loadRoutine()]);
+    $("#f-date").value = kstToday();
+    fillForm(kstToday());
+  } catch (e) {
+    if (e.message !== "unauthorized") toast("불러오기 실패: " + e.message);
+  }
+}
+
+(async function boot() {
+  $("#f-date").value = kstToday();
+  try {
+    const r = await fetch("/api/admin/status", { credentials: "include" });
+    const d = await r.json().catch(() => ({}));
+    if (d && d.authenticated) init(); else showPin();
+  } catch (e) { showPin(); }
+})();
+</script>
+</body>
+</html>
