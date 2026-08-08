@@ -1,7 +1,24 @@
 {
   "version": 1,
-  "updated_at": "2026-08-07T12:26:19Z",
+  "updated_at": "2026-08-08T11:59:17Z",
   "items": [
+    {
+      "id": "2026-08-08-c-market-price",
+      "type": "trivia",
+      "date": "2026-08-08",
+      "title_ko": "커피 값은 도대체 누가 정하는 걸까? 📈",
+      "one_liner": "뉴욕과 런던의 선물시장이 세계 커피의 '기준가'를 만들고, 산지 프리미엄과 스페셜티 시장이 그 위에 얹힌다!",
+      "categories_primary": [
+        "커피 상식"
+      ],
+      "categories_secondary": [
+        "무역·시장"
+      ],
+      "hero_image": "/static/img/insights/trivia/trade.svg",
+      "journal": null,
+      "pub_date": null,
+      "source_basis": null
+    },
     {
       "id": "2026-08-07-filter-paper-vs-metal",
       "type": "trivia",

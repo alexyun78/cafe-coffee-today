@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>커피 값은 도대체 누가 정하는 걸까? 📈 — 92°C ROASTERY</title>
+<meta name="description" content="뉴욕과 런던의 선물시장이 세계 커피의 &#39;기준가&#39;를 만들고, 산지 프리미엄과 스페셜티 시장이 그 위에 얹힌다!">
+<link rel="icon" type="image/png" href="/static/img/logo-92black.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --canvas: #FFFFFF; --canvas-warm: #FAF7F2; --canvas-stone: #F2ECE3;
+  --ink: #1A1410; --ink-mute: #4A3F36; --ink-soft: #6B5E52;
+  --espresso: #6F4E37; --caramel: #C9986A; --copper: #B5703D;
+  --line: #E8E0D5; --line-soft: #F0E9DD;
+  --font-display: "Cormorant Garamond", "Pretendard", serif;
+  --font-body: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  --r-sm: 6px; --r-md: 12px; --r-pill: 999px;
+}
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color: transparent; }
+html { scroll-behavior: smooth; }
+body { font-family: var(--font-body); color: var(--ink); background: var(--canvas); font-feature-settings: "kern","ss01","lnum"; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+a { color: var(--copper); text-decoration: none; border-bottom: 1px solid transparent; transition: border-color .2s; }
+a:hover { border-bottom-color: var(--copper); }
+img { display: block; max-width: 100%; height: auto; }
+.container { max-width: 860px; margin: 0 auto; padding: 0 32px; }
+@media (max-width: 720px) { .container { padding: 0 20px; } }
+@media (max-width: 480px) { .container { padding: 0 16px; } }
+.site-nav { position: sticky; top: 0; z-index: 50; background: rgba(255,255,255,0.9); backdrop-filter: saturate(140%) blur(14px); -webkit-backdrop-filter: saturate(140%) blur(14px); border-bottom: 1px solid var(--line-soft); }
+.nav-inner { max-width: 1200px; margin: 0 auto; padding: 16px 32px; display: flex; align-items: center; justify-content: space-between; }
+.brand { font-family: var(--font-display); font-size: 1.3rem; font-weight: 700; color: var(--ink); display: inline-flex; align-items: center; gap: 4px; border-bottom: none; }
+.brand:hover { border-bottom: none; }
+.brand-mark { display: inline-flex; align-items: flex-start; font-family: "Pretendard", sans-serif; font-weight: 900; letter-spacing: -0.04em; line-height: 1; color: inherit; }
+.temp-mark { display: flex; flex-direction: column; line-height: .82; margin: 0 .05em 0 .04em; }
+.temp-mark .temp-deg { font-size: .42em; letter-spacing: -.04em; }
+.temp-mark .temp-c { font-size: .58em; letter-spacing: -.05em; margin-top: -.05em; }
+.nav-back { font-family: var(--font-mono); font-size: .75rem; letter-spacing: .18em; color: var(--ink-mute); border-bottom: none; }
+.nav-back:hover { color: var(--copper); border-bottom: none; }
+.article-hero { padding: 56px 0 48px; border-bottom: 1px solid var(--line-soft); }
+.eyebrow { font-family: var(--font-mono); font-size: .72rem; letter-spacing: .28em; color: var(--copper); margin-bottom: 18px; display: flex; align-items: center; gap: 12px; }
+.eyebrow::before { content: ""; display: inline-block; width: 28px; height: 1px; background: var(--copper); }
+.article-title { font-family: var(--font-display); font-weight: 500; font-size: clamp(2rem, 4.5vw, 3.2rem); line-height: 1.15; letter-spacing: -0.02em; color: var(--ink); margin-bottom: 20px; }
+.article-title em { font-style: italic; color: var(--espresso); font-weight: 600; }
+.article-one-liner { font-family: var(--font-display); font-style: italic; font-size: 1.3rem; line-height: 1.5; color: var(--espresso); margin-bottom: 28px; padding-left: 20px; border-left: 3px solid var(--caramel); }
+.article-meta { display: flex; gap: 24px; flex-wrap: wrap; font-family: var(--font-mono); font-size: .75rem; letter-spacing: .12em; color: var(--ink-soft); padding-top: 20px; border-top: 1px solid var(--line-soft); }
+.article-meta span { display: inline-flex; align-items: center; gap: 6px; }
+.article-meta span::before { content: "■"; color: var(--caramel); font-size: .55rem; }
+.hero-image { margin: 32px 0 0; border-radius: var(--r-md); overflow: hidden; border: 1px solid var(--line); }
+.hero-image img { width: 100%; }
+.article-body { padding: 56px 0 80px; }
+.article-footer { padding: 36px 0 56px; border-top: 1px solid var(--line-soft); text-align: center; font-family: var(--font-mono); font-size: .75rem; letter-spacing: .14em; color: var(--ink-soft); }
+.article-footer a { color: var(--ink-mute); border-bottom: 1px solid transparent; }
+.article-footer a:hover { color: var(--copper); border-bottom-color: var(--copper); }
+.source-basis { display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; background: rgba(201,152,106,.18); border: 1px solid rgba(181,112,61,.35); border-radius: var(--r-pill); font-family: var(--font-mono); font-size: .72rem; letter-spacing: .12em; color: var(--espresso); font-weight: 500; }
+.source-basis.abstract { background: rgba(107,94,82,.1); border-color: rgba(107,94,82,.3); color: var(--ink-soft); }
+.links-row { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 18px; }
+.link-pill { display: inline-flex; align-items: center; gap: 8px; padding: 9px 16px; background: var(--canvas-warm); border: 1px solid var(--line); border-radius: var(--r-pill); font-family: var(--font-mono); font-size: .78rem; letter-spacing: .08em; color: var(--ink-mute); border-bottom: 1px solid var(--line); transition: border-color .2s, color .2s; }
+.link-pill:hover { color: var(--copper); border-color: var(--copper); }
+
+/* ===== EZ: 쉬운 설명 스타일 ===== */
+.ez-hero { text-align: center; padding: 8px 0 32px; }
+.ez-hero-emoji { font-size: 3.4rem; line-height: 1; }
+.ez-hero-title { font-family: var(--font-display); font-size: clamp(1.6rem, 3.5vw, 2.2rem); font-weight: 600; color: var(--ink); margin-top: 14px; line-height: 1.3; }
+.ez-section { margin-bottom: 52px; }
+.ez-section h2 { font-family: var(--font-body); font-size: 1.5rem; font-weight: 700; color: var(--ink); margin-bottom: 18px; letter-spacing: -0.01em; }
+.ez-section h3 { font-size: 1.08rem; font-weight: 600; color: var(--espresso); margin: 22px 0 10px; }
+.ez-section p { font-size: 1.04rem; line-height: 1.85; color: var(--ink-mute); margin-bottom: 14px; }
+.ez-section p:last-child { margin-bottom: 0; }
+.ez-section ul { padding-left: 22px; margin-bottom: 14px; }
+.ez-section li { font-size: 1.02rem; line-height: 1.8; color: var(--ink-mute); margin-bottom: 8px; }
+.ez-callout { margin: 14px 0; padding: 14px 18px; background: var(--canvas-warm); border-left: 3px solid var(--caramel); border-radius: 4px; font-size: 0.98rem; color: var(--espresso); line-height: 1.75; }
+.ez-callout strong { color: var(--copper); }
+.ez-findings { list-style: none; padding: 0; }
+.ez-findings > li { padding: 18px 22px; margin-bottom: 14px; background: var(--canvas-warm); border: 1px solid var(--line); border-radius: 10px; font-size: 1.02rem; line-height: 1.7; color: var(--ink-mute); }
+.ez-findings > li strong { color: var(--ink); display: block; margin-bottom: 4px; font-size: 1.06rem; }
+.ez-findings > li.gold { background: linear-gradient(135deg, #FFF8E7, #FFEFCD); border-color: #F0D67A; }
+.ez-findings > li.silver { background: linear-gradient(135deg, #F6F6F6, #ECECEC); border-color: #C7C7C7; }
+.ez-findings > li.bronze { background: linear-gradient(135deg, #FFEEDD, #FFDCC0); border-color: #E4B07F; }
+.ez-findings > li.medal { background: linear-gradient(135deg, #F0E6FF, #E1D2FF); border-color: #BDA8E5; }
+.ez-table { width: 100%; border-collapse: collapse; margin: 16px 0 8px; font-size: 0.96rem; }
+.ez-table th, .ez-table td { padding: 11px 14px; border: 1px solid var(--line); text-align: left; vertical-align: top; }
+.ez-table thead th { background: var(--ink); color: #fff; font-weight: 600; letter-spacing: .02em; }
+.ez-table tbody th { background: var(--canvas-warm); color: var(--ink); font-weight: 600; }
+.ez-table tbody tr:nth-child(even) td { background: rgba(250, 247, 242, .55); }
+.ez-summary { padding: 26px 30px; background: linear-gradient(135deg, #FAF0E0, #F3E1C5); border-radius: 14px; font-size: 1.13rem; line-height: 1.75; font-weight: 500; color: var(--ink); border: 1px solid #E5C99B; }
+.ez-summary strong { color: var(--espresso); }
+.ez-citation { margin-top: 24px; padding: 18px 22px; background: var(--canvas-warm); border-radius: 8px; font-family: var(--font-mono); font-size: 0.82rem; color: var(--ink-soft); line-height: 1.7; }
+.ez-citation p { margin: 4px 0; }
+.ez-chart-card { padding: 22px 24px 18px; background: var(--canvas); border: 1px solid var(--line); border-radius: 12px; margin: 16px 0; }
+.ez-chart-card .ez-chart-title { font-size: 1rem; font-weight: 600; color: var(--ink); margin-bottom: 14px; }
+.ez-bar-row { display: flex; align-items: center; margin: 10px 0; font-size: 0.95rem; gap: 14px; }
+.ez-bar-label { width: 180px; flex-shrink: 0; color: var(--ink-mute); font-weight: 500; }
+.ez-bar-track { flex: 1; height: 32px; background: var(--canvas-warm); border-radius: 6px; overflow: hidden; position: relative; border: 1px solid var(--line); }
+.ez-bar-fill { height: 100%; background: linear-gradient(90deg, var(--caramel), var(--copper)); display: flex; align-items: center; justify-content: flex-end; padding: 0 12px; color: white; font-weight: 700; font-size: 0.92rem; min-width: 56px; }
+.ez-bar-fill.alt { background: linear-gradient(90deg, #6F4E37, #4A3F36); }
+.ez-glossary { display: grid; gap: 12px; }
+.ez-glossary-item { padding: 16px 20px; background: var(--canvas-warm); border: 1px solid var(--line); border-radius: 10px; border-left: 3px solid var(--caramel); }
+.ez-glossary-term { font-family: var(--font-display); font-style: italic; font-size: 1.1rem; font-weight: 600; color: var(--espresso); margin-bottom: 6px; }
+.ez-glossary-def { font-size: 0.98rem; color: var(--ink-mute); line-height: 1.7; }
+@media (max-width: 720px) {
+  .article-hero { padding: 36px 0 32px; }
+  .article-body { padding: 36px 0 56px; }
+  .ez-section { margin-bottom: 40px; }
+  .ez-section h2 { font-size: 1.3rem; }
+  .ez-bar-label { width: 100%; margin-bottom: 4px; }
+  .ez-bar-row { flex-direction: column; align-items: stretch; }
+  .article-meta { gap: 12px 18px; font-size: .68rem; }
+}
+</style>
+</head>
+<body>
+
+<header class="site-nav">
+  <div class="nav-inner">
+    <a class="brand" href="/">
+      <span class="brand-mark">92<span class="temp-mark"><span class="temp-deg">°</span><span class="temp-c">C</span></span></span>ROASTERY
+    </a>
+    <a class="nav-back" href="/insight">← INSIGHTS</a>
+  </div>
+</header>
+
+<article>
+  <section class="article-hero">
+    <div class="container">
+      <div class="eyebrow">— 오늘의 커피 상식 · 2026.08.08</div>
+      <h1 class="article-title">커피 값은 도대체 누가 정하는 걸까? 📈</h1>
+      <p class="article-one-liner">뉴욕과 런던의 선물시장이 세계 커피의 &#39;기준가&#39;를 만들고, 산지 프리미엄과 스페셜티 시장이 그 위에 얹힌다!</p>
+      <div class="article-meta">
+        
+        
+        
+        <span>커피 상식 · 무역·시장</span>
+      </div>
+      
+      <div class="hero-image">
+        <img src="/static/img/insights/trivia/trade.svg" alt="커피 값은 도대체 누가 정하는 걸까? 📈">
+      </div>
+      
+    </div>
+  </section>
+
+  <section class="article-body">
+    <div class="container">
+
+      
+      <div class="ez-hero">
+        <div class="ez-hero-emoji">📈</div>
+        <div class="ez-hero-title">커피 값은 도대체 누가 정하는 걸까?</div>
+      </div>
+
+      
+      <div class="ez-section">
+        <h2>🤔 무슨 연구야?</h2>
+        
+          <p>카페에서 아메리카노 한 잔 값은 가게가 정하지. 그럼 그 안에 들어가는 생두 값은 누가 정할까? 브라질 농부가 &#39;나 이만큼 받을래&#39; 하고 부르는 걸까, 아니면 로스터리가 &#39;이 값에 살게&#39; 하고 정하는 걸까? 사실 둘 다 아니야. 커피는 지구 반대편에 있는 시장의 숫자 하나를 같이 쳐다보면서 거래돼.</p><p>그 숫자가 바로 뉴욕에서 거래되는 아라비카 선물과 런던에서 거래되는 로부스타 선물이야. 배춧값이 가락시장 경매가를 기준으로 오르내리듯, 세계 커피는 이 두 시장의 시세를 &#39;기준자&#39;로 삼아. 콜롬비아 산골의 농부도, 베트남의 수출업자도, 유럽의 대형 로스터도 결국 같은 자를 들여다보면서 계약서를 쓰는 거야.</p><p>오늘은 그 구조를 하나씩 뜯어볼게. 기준가라는 게 어떻게 만들어지는지, 산지마다 따로 붙는 웃돈(디퍼렌셜)은 뭔지, 스페셜티 커피는 왜 그 시세와 따로 노는지, 그리고 우리가 낸 커피 한 잔 값 중에서 정작 농부 손에는 얼마가 남는지까지. 숫자가 나오는 이야기지만 하나도 어렵지 않아! ☕</p>
+        
+      </div>
+
+      
+      
+      <div class="ez-section">
+        <h2>🧪 핵심 개념 쉽게 풀어보면</h2>
+        
+          <h3>1️⃣ 뉴욕 C마켓과 런던 로부스타 — 세계 커피의 기준자</h3>
+          <p>커피의 대표 기준가는 두 개야. 하나는 뉴욕에서 거래되는 아라비카 선물, 흔히 &#39;C 마켓(Coffee C)&#39;이라고 불러. 다른 하나는 런던에서 거래되는 로부스타 선물이야. 둘 다 &#39;선물(futures)&#39; 계약인데, 미래 특정 시점에 정해진 품질·수량의 커피를 얼마에 주고받겠다고 미리 약속하는 표준 계약이지. 계약 규격이 딱 정해져 있어서(아라비카는 파운드 단위, 로부스타는 톤 단위) 누구와 거래하든 같은 물건을 이야기하게 돼. 이 표준화 덕분에 전 세계가 하나의 숫자를 공유할 수 있는 거야.</p>
+          <div class="ez-callout">💡 비유: 가락동 농수산물시장 경매가가 전국 배춧값의 기준이 되는 것과 똑같아. 우리 동네 마트가 경매장에 가지 않아도, 그날 경매가를 보고 가격표를 붙이잖아? 커피의 경매장이 뉴욕과 런던인 셈이야 🥬</div>
+        
+          <h3>2️⃣ 디퍼렌셜 — 기준가에 붙는 &#39;산지 웃돈&#39;</h3>
+          <p>그런데 세상 모든 커피가 같은 값일 리는 없잖아? 그래서 실제 계약서는 보통 &#39;기준가 ± 얼마&#39; 형태로 써. 이 ± 부분을 디퍼렌셜(differential), 우리말로 산지 프리미엄이라고 불러. 품질이 좋고 수요가 많은 산지의 커피는 기준가보다 비싸게(플러스 디퍼렌셜), 품질 편차가 크거나 물량이 넘치는 산지는 기준가보다 싸게(마이너스 디퍼렌셜) 붙어. 나라·등급·수확 시기·항구까지의 물류 사정에 따라 계속 조정돼서, 같은 나라 커피라도 등급이 다르면 디퍼렌셜이 달라져.</p>
+          <div class="ez-callout">💡 비유: 같은 날 경매장 사과 시세가 하나라도, &#39;청송 사과&#39;는 웃돈이 붙고 흠집 난 사과는 깎이잖아. 기준가는 하나지만 실제 값은 다 다른 것과 같아 🍎</div>
+        
+          <h3>3️⃣ 스페셜티는 왜 시세와 따로 놀까?</h3>
+          <p>선물시장은 기본적으로 &#39;커머디티(commodity)&#39;, 즉 규격만 맞으면 누구 것이든 상관없는 대량 상품을 다뤄. 그런데 스페셜티 커피는 정반대야. 누가, 어느 밭에서, 어떤 품종을 어떻게 가공했는지가 값을 결정해. 그래서 스페셜티는 선물 시세가 아니라 컵 품질 평가 점수와 직접 협상으로 값이 정해지는 경우가 많아. 시세가 떨어져도 좋은 로트 값은 잘 안 내려가고, 반대로 시세가 급등해도 이미 맺어둔 관계 가격이 유지되기도 해. 아예 시세와 무관하게 경매로 팔리는 최상위 로트도 있고.</p>
+          <div class="ez-callout">💡 비유: 쌀 시세는 매일 오르내려도, 이름 걸고 계약재배하는 농부의 쌀은 그해 시세와 상관없이 정해진 값에 팔리잖아. 스페셜티 커피가 딱 그 자리야 🌾</div>
+        
+      </div>
+      
+
+      
+      
+      <div class="ez-section">
+        <h2>🎯 핵심 발견</h2>
+        <ul class="ez-findings">
+          
+          
+            
+              <li class="gold">
+                <strong>🥇 실제 커피보다 &#39;종이 커피&#39;가 훨씬 많이 거래돼</strong>선물시장에서 오가는 계약 대부분은 진짜 커피 자루가 오가는 거래가 아니야. 만기 전에 계약을 되팔아 정산하고 끝내는 경우가 대부분이거든. 왜 그럴까? 수출업자와 로스터는 &#39;값이 예상 밖으로 움직여서 손해 보는 상황&#39;을 막으려고 미리 반대 방향 계약을 걸어두는데, 이걸 헤지(hedging)라고 해. 여기에 커피를 마실 생각이 전혀 없는 투자 자금까지 들어와서, 실제 생산량보다 훨씬 큰 규모의 계약이 매일 오가게 되는 거야.
+              </li>
+            
+              <li class="silver">
+                <strong>🥈 아라비카와 로부스타는 서로 다른 시장에서 논다</strong>뉴욕은 아라비카, 런던은 로부스타. 두 시세는 대체로 같은 방향으로 움직이지만 항상 붙어 다니지는 않아. 아라비카는 고지대에서 손이 많이 가게 재배돼 날씨에 민감하고, 로부스타는 저지대에서 더 튼튼하게 자라서 공급이 상대적으로 안정적이야. 그래서 아라비카 값이 크게 뛰면 인스턴트·블렌드 쪽 수요가 로부스타로 옮겨가고, 그러면 로부스타 값이 뒤따라 오르기도 해. 두 시장의 격차(스프레드)를 보면 세계 커피 수요가 어디로 기우는지가 보여.
+              </li>
+            
+              <li class="bronze">
+                <strong>🥉 커피값을 흔드는 건 커피 맛이 아니라 날씨와 돈이야</strong>시세를 움직이는 대표 요인은 크게 셋이야. 첫째, 주요 산지의 기상 이변 — 브라질의 서리나 가뭄 소식 하나에 시장이 크게 출렁여. 둘째, 환율 — 산지 통화가 달러 대비 약해지면 농가가 같은 달러값에도 더 많이 팔려 하니 공급 압력이 생겨. 셋째, 투기 자금의 방향 — 커피와 무관한 금융 흐름이 들어오고 나갈 때도 값은 움직여. 정작 &#39;커피가 맛있어졌는지&#39;는 시세에 거의 영향을 주지 않는다는 게 아이러니지.
+              </li>
+            
+              <li class="medal">
+                <strong>🏅 한 잔 값에서 농부 몫은 생각보다 작아</strong>우리가 내는 커피 한 잔 값에는 생두 값 말고도 정말 많은 게 들어 있어. 가공·운송·수입 관세·창고·로스팅·포장·매장 임대료·인건비까지. 그래서 최종 소비자가 중 생두가 차지하는 비중은 아주 작은 편이야. 게다가 산지에서 농부가 받는 값은 기준가에서 중간 수집상·가공비·수출 비용이 차례로 빠진 뒤의 금액이지. 커피 시세가 올랐다는 뉴스가 나와도, 그 상승분이 농가까지 온전히 내려가지 않는 이유가 여기 있어.
+              </li>
+            
+              <li class="medal">
+                <strong>🏅 그래서 나온 게 다이렉트 트레이드와 최저가격 장치야</strong>시세가 생산 원가 밑으로 떨어지면 농부는 팔수록 손해를 봐. 이런 구조를 보완하려고 여러 장치가 생겼어. 공정무역 인증은 시세가 아무리 낮아도 그 아래로는 내려가지 않는 최저가격과 별도 지원금을 두고, 다이렉트 트레이드는 로스터가 농장과 직접 만나 품질을 평가하고 값을 협상해. 관계가 이어지면 농부는 다음 해 계획을 세울 수 있고, 로스터는 그 맛을 계속 확보할 수 있어. 원두 봉투에 농장 이름이 적혀 있다면, 그 뒤엔 대체로 이런 거래가 있어 🤝
+              </li>
+            
+          
+        </ul>
+      </div>
+      
+
+      
+      
+
+      
+      
+      
+      <div class="ez-section">
+        <h2>🆚 커머디티 커피 vs 스페셜티 커피 — 값 정하는 방식이 이렇게 달라</h2>
+        <table class="ez-table">
+          <thead><tr><th>항목</th><th>커머디티 (선물시장 기반)</th><th>스페셜티 (품질·관계 기반)</th></tr></thead>
+          <tbody>
+            <tr>
+              <th>가격 기준</th><td>뉴욕·런던 선물 시세 ± 디퍼렌셜</td><td>컵 품질 평가 점수와 직접 협상</td>
+            </tr><tr>
+              <th>거래 단위</th><td>표준 규격 대량 로트</td><td>농장·구획별 소량 로트</td>
+            </tr><tr>
+              <th>생산자 정보</th><td>국가·등급 정도만 표시</td><td>농장명·품종·가공법까지 공개</td>
+            </tr><tr>
+              <th>시세 연동성</th><td>시세가 오르내리면 그대로 따라감</td><td>시세와 어긋나게 움직이는 경우가 많음</td>
+            </tr><tr>
+              <th>농가 수익 안정성</th><td>시세 급락 시 원가 이하로 떨어질 위험</td><td>장기 관계·최저가격 장치로 비교적 안정</td>
+            </tr><tr>
+              <th>우리가 만나는 곳</th><td>인스턴트, 대용량 블렌드, 저가 원두</td><td>스페셜티 카페 싱글 오리진 메뉴</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      
+      
+
+      
+      
+
+      
+      
+
+      
+      
+      <div class="ez-section">
+        <div class="ez-summary">💡 <strong>한 줄 요약</strong> — 커피값은 뉴욕·런던 선물시장이 만든 기준가에 산지 프리미엄이 붙어 정해지지만, 스페셜티는 그 자를 벗어나 품질과 관계로 값을 매긴다 ☕</div>
+      </div>
+      
+
+      
+      
+      
+      
+
+      
+      
+      <div class="ez-section">
+        <h2>📖 어려운 말 풀이 사전</h2>
+        <p>이 글에 나온 어려운 약어와 용어를 한 번에 정리했어. 의미만 알면 본문이 훨씬 쉬워져!</p>
+        <div class="ez-glossary">
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">C 마켓(Coffee C Market)</div>
+            <div class="ez-glossary-def">뉴욕에서 거래되는 아라비카 커피 선물시장. 세계 아라비카 생두 가격의 기준가 역할을 함</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">선물 계약(Futures Contract)</div>
+            <div class="ez-glossary-def">미래 특정 시점에 정해진 규격·수량의 상품을 미리 정한 값에 주고받기로 하는 표준화된 약속</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">디퍼렌셜(Differential)</div>
+            <div class="ez-glossary-def">기준 시세에 더하거나 빼는 산지·등급별 가격 차이. 품질과 수요에 따라 웃돈이 붙거나 깎임</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">헤지(Hedging)</div>
+            <div class="ez-glossary-def">가격이 불리하게 움직일 위험을 줄이려고 반대 방향 계약을 미리 걸어두는 것</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">커머디티(Commodity)</div>
+            <div class="ez-glossary-def">규격만 맞으면 생산자가 누구든 동일하게 취급되는 대량 거래 상품. 커피도 국제적으로는 대표적 커머디티</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">다이렉트 트레이드(Direct Trade)</div>
+            <div class="ez-glossary-def">로스터가 중간 유통을 줄이고 농장과 직접 품질·가격을 협상해 거래하는 방식</div>
+          </div>
+          
+        </div>
+      </div>
+      
+
+    </div>
+  </section>
+
+  <footer class="article-footer">
+    <div class="container">
+      <a href="/insight">← BACK TO INSIGHTS</a>
+      <span style="margin: 0 16px;">·</span>
+      <a href="/">HOME</a>
+    </div>
+  </footer>
+</article>
+
+</body>
+</html>
