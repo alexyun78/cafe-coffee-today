@@ -920,21 +920,32 @@ def sync_bean_cup_notes_from_coffee(coffee_id: int, cup_notes) -> bool:
         return True
 
 
-def find_active_by_name(name: str) -> Optional[dict]:
+def find_active_by_name(name: str, roast_date: str = None, mode: str = "gte") -> Optional[dict]:
     """같은 이름의 '실질 활성' 커피가 있으면 반환 (중복 등록 방지용).
 
     raw 상태가 '예정'/'진행 중'이어도 제공일이 이미 지났으면 화면에서는 완료로
     표시되므로(_compute_display_status) 활성으로 치지 않는다 — 상태 갱신 없이
-    남은 과거 항목이 새 로스팅의 커피 등록을 막는 일 방지."""
+    남은 과거 항목이 새 로스팅의 커피 등록을 막는 일 방지.
+
+    roast_date 를 주면 로트(로스팅일) 조건을 함께 건다. 이름만 보면 지금 제공
+    중인 묵은 로트가 새 로스팅분의 예정 등록을 삼켜버린다(2026-08-08 콩가 누락).
+      - mode "gte"(기본): 그 로스팅일 이후 로트를 이미 담고 있는 커피 — 중복 판정용
+      - mode "eq"       : 정확히 그 로스팅일 로트 — 등록 취소 대상 지정용
+    """
     if not name:
         return None
     today = date.today().isoformat()
+    args = [name, today]
+    lot = ""
+    if roast_date:
+        lot = " AND COALESCE(roast_date,'')=?" if mode == "eq" else " AND COALESCE(roast_date,'')>=?"
+        args.append(roast_date)
     with connect() as conn:
         row = conn.execute(
             "SELECT * FROM coffees WHERE name=? AND status IN ('예정','진행 중') "
-            "AND (serve_date IS NULL OR serve_date='' OR serve_date >= ?) "
-            "ORDER BY id DESC LIMIT 1",
-            (name, today),
+            "AND (serve_date IS NULL OR serve_date='' OR serve_date >= ?)" + lot +
+            " ORDER BY id DESC LIMIT 1",
+            tuple(args),
         ).fetchone()
     return dict(row) if row else None
 
@@ -1832,7 +1843,8 @@ def _norm_ymd(d):
 def list_roasting_logs(green_bean_id: Optional[int] = None, limit: int = 1000) -> list:
     # has_active_coffee: 같은 이름의 '실질 활성' 커피 존재 여부
     # (관리 UI에서 "☕ 예정 등록" 버튼 표시 판단용 — 없을 때만 나중 등록 가능)
-    # find_active_by_name 과 같은 기준: 제공일이 지난 항목은 활성으로 치지 않음.
+    # find_active_by_name 과 같은 기준: 제공일이 지난 항목은 활성으로 치지 않고,
+    # 그 로스팅일 이후 로트를 담은 커피만 '등록됨'으로 본다(묵은 로트 오인 방지).
     sql = """
         SELECT r.*, gb.name AS bean_name, gb.cup_notes AS cup_notes,
                gb.process AS bean_process,
@@ -1841,6 +1853,7 @@ def list_roasting_logs(green_bean_id: Optional[int] = None, limit: int = 1000) -
                    SELECT 1 FROM coffees c
                    WHERE c.name = gb.name AND c.status IN ('예정','진행 중')
                      AND (c.serve_date IS NULL OR c.serve_date='' OR c.serve_date >= ?)
+                     AND COALESCE(c.roast_date,'') >= COALESCE(r.roast_date,'')
                ) AS has_active_coffee
         FROM roasting_logs r
         JOIN green_beans gb ON gb.id = r.green_bean_id

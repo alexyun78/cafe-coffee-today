@@ -496,6 +496,7 @@ async function listRoastingLogs(db: D1Database, gbId: number | null, limit = 100
                  SELECT 1 FROM coffees c
                  WHERE c.name = gb.name AND c.status IN ('예정','진행 중')
                    AND (c.serve_date IS NULL OR c.serve_date='' OR c.serve_date >= ?)
+                   AND COALESCE(c.roast_date,'') >= COALESCE(r.roast_date,'')
              ) AS has_active_coffee
       FROM roasting_logs r
       JOIN green_beans gb ON gb.id = r.green_bean_id
@@ -536,18 +537,21 @@ async function getRoastingLog(db: D1Database, rid: number): Promise<Row | null> 
   return row
 }
 
-/** 로스팅한 생두를 '오늘의 커피 예정'으로 등록 (app.py _ensure_scheduled_coffee) */
+/** 로스팅한 생두를 '오늘의 커피 예정'으로 등록 (app.py _ensure_scheduled_coffee)
+ *  중복 판정은 이름 + 로트(로스팅일) 기준. 같은 날 여러 배치는 1건으로 묶이지만,
+ *  제공 중인 묵은 로트가 새 로스팅분을 막지는 않는다. */
 async function ensureScheduledCoffee(db: D1Database, greenBeanId: number, roastDate: string) {
   const bean = await getGreenBean(db, greenBeanId)
   if (!bean) return null
   const name = String(bean.name || '').trim()
   if (!name) return null
-  const existing = await findActiveByName(db, name)
+  const lot = normYmd(roastDate)
+  const existing = await findActiveByName(db, name, lot)
   if (existing) return { created: false, id: existing.id, name }
   const cid = await createCoffee(db, {
     name,
     roastery: '92도씨 로스터리',
-    roast_date: roastDate,
+    roast_date: lot,
     process: bean.process,
     cup_notes: bean.cup_notes,
     status: '예정',
@@ -601,7 +605,8 @@ beanRoutes.post('/api/roasting-logs/:id{[0-9]+}/unmake-coffee', async (c) => {
   const bean = log.green_bean_id ? await getGreenBean(c.env.DB, log.green_bean_id) : null
   const name = bean ? String(bean.name || '').trim() : ''
   let removed: Row | null = null
-  const existing = name ? await findActiveByName(c.env.DB, name) : null
+  // 그 로스팅일 로트만 정확히 지운다 — 이름만 보면 제공 중인 다른 로트를 지워버린다
+  const existing = name ? await findActiveByName(c.env.DB, name, normYmd(log.roast_date), 'eq') : null
   if (existing) {
     await c.env.DB.prepare('DELETE FROM coffees WHERE id=?').bind(existing.id).run()
     removed = { name, status: existing.status }

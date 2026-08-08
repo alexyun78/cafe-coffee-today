@@ -61,15 +61,33 @@ export async function getCurrentDecaf(db: D1Database) {
   return { id: bean.id, name: bean.name, process: bean.process, cup_notes: bean.cup_notes }
 }
 
-/** 같은 이름의 '실질 활성' 커피 (db.py find_active_by_name) */
-export async function findActiveByName(db: D1Database, name: string): Promise<Row | null> {
+/** 같은 이름의 '실질 활성' 커피 (db.py find_active_by_name)
+ *
+ *  roastDate 를 주면 로트(로스팅일) 조건을 함께 건다. 이름만 보면 지금 제공 중인
+ *  묵은 로트가 새 로스팅분의 예정 등록을 삼켜버린다(2026-08-08 콩가 누락).
+ *   - mode 'gte'(기본): 그 로스팅일 이후 로트를 이미 담고 있는 커피 — 중복 등록 판정용
+ *   - mode 'eq'       : 정확히 그 로스팅일 로트 — 등록 취소 대상 지정용
+ */
+export async function findActiveByName(
+  db: D1Database,
+  name: string,
+  roastDate?: string | null,
+  mode: 'gte' | 'eq' = 'gte',
+): Promise<Row | null> {
   if (!name) return null
+  const args: any[] = [name, kstTodayISO()]
+  let lot = ''
+  if (roastDate) {
+    lot = mode === 'eq' ? " AND COALESCE(roast_date,'')=?" : " AND COALESCE(roast_date,'')>=?"
+    args.push(roastDate)
+  }
   return db
     .prepare(
       "SELECT * FROM coffees WHERE name=? AND status IN ('예정','진행 중') " +
-        "AND (serve_date IS NULL OR serve_date='' OR serve_date >= ?) ORDER BY id DESC LIMIT 1",
+        "AND (serve_date IS NULL OR serve_date='' OR serve_date >= ?)" + lot +
+        ' ORDER BY id DESC LIMIT 1',
     )
-    .bind(name, kstTodayISO())
+    .bind(...args)
     .first<Row>()
 }
 

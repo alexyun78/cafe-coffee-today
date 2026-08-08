@@ -841,21 +841,23 @@ def api_roasting_logs_list():
     return jsonify({"success": True, "items": db.list_roasting_logs(gb_id)})
 
 def _ensure_scheduled_coffee(green_bean_id, roast_date):
-    """로스팅한 생두를 '오늘의 커피 예정'으로 등록. 같은 이름의 활성(예정/진행 중)
-    커피가 이미 있으면 중복 생성하지 않는다 (배치 로스팅 대비)."""
+    """로스팅한 생두를 '오늘의 커피 예정'으로 등록. 중복 판정은 이름 + 로트(로스팅일)
+    기준 — 같은 날 여러 배치는 1건으로 묶이지만, 제공 중인 묵은 로트가 새 로스팅분을
+    막지는 않는다."""
     bean = db.get_green_bean(int(green_bean_id))
     if not bean:
         return None
     name = (bean.get("name") or "").strip()
     if not name:
         return None
-    existing = db.find_active_by_name(name)
+    lot = db._norm_ymd(roast_date)
+    existing = db.find_active_by_name(name, lot)
     if existing:
         return {"created": False, "id": existing["id"], "name": name}
     cid = db.create({
         "name": name,
         "roastery": "92도씨 로스터리",
-        "roast_date": roast_date,
+        "roast_date": lot,
         "process": bean.get("process"),
         "cup_notes": bean.get("cup_notes"),
         "status": "예정",
@@ -910,7 +912,8 @@ def api_roasting_log_unmake_coffee(rid):
     bean = db.get_green_bean(log["green_bean_id"]) if log.get("green_bean_id") else None
     name = (bean.get("name") or "").strip() if bean else ""
     removed = None
-    existing = db.find_active_by_name(name) if name else None
+    # 그 로스팅일 로트만 정확히 지운다 — 이름만 보면 제공 중인 다른 로트를 지워버린다
+    existing = db.find_active_by_name(name, db._norm_ymd(log.get("roast_date")), "eq") if name else None
     if existing:
         db.delete(existing["id"])
         removed = {"name": name, "status": existing.get("status")}
