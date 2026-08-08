@@ -883,11 +883,15 @@
     display: flex; gap: 0;
     background: var(--card); border-radius: var(--radius);
     box-shadow: 0 4px 20px rgba(111,78,55,0.08);
-    margin-bottom: 16px; overflow: hidden;
+    margin-bottom: 16px;
+    /* 탭이 6개를 넘으면 잘리지 않게 가로 스크롤 (스크롤바는 숨김) */
+    overflow-x: auto; overflow-y: hidden;
+    -webkit-overflow-scrolling: touch; scrollbar-width: none;
     border: 1px solid var(--border);
   }
+  .admin-tabs::-webkit-scrollbar { display: none; }
   .admin-tab-btn {
-    flex: 1; padding: 14px 8px; border: none; background: transparent;
+    flex: 1 0 auto; padding: 14px 8px; border: none; background: transparent;
     font-size: 0.9rem; font-family: inherit; cursor: pointer;
     color: var(--muted); font-weight: 500; min-height: 48px;
     border-bottom: 3px solid transparent;

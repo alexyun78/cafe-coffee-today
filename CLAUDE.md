@@ -677,6 +677,37 @@ journalctl -u cafe-coffee-nearby.service -n 50 --no-pager
 
 ---
 
+## Q-Grader 훈련 관리 (2026-08-08 추가)
+
+SCA Evolved Q Grader(CVA 기반) 대비 6개월 학습플랜 + 훈련 일지. **관리자 전용**(기존 PIN 그대로).
+
+- **진입**: 관리자 `🎓 Q-Grader` 탭(로스팅스터디 옆, iframe) 또는 **https://92cafe.co.kr/qgrader** (새 창). 페이지는 [static/qgrader/index.html](static/qgrader/index.html), 라우트는 worker `/qgrader` + `wrangler.jsonc` `run_worker_first`.
+- **원본**: [content/qgrader/study-plan.md](content/qgrader/study-plan.md) — 작성 원본은 `D:/python/92/Q_Grader/Q그레이더_학습플랜.md`. **md 가 커리큘럼의 단일 소스**.
+- **커리큘럼 갱신 절차** (md 를 고쳤을 때):
+  ```bash
+  cp "D:/python/92/Q_Grader/Q그레이더_학습플랜.md" content/qgrader/study-plan.md
+  python scripts/qgrader_sync.py            # → scripts/qgrader_seed.sql 재생성 (--print 로 파싱만 확인)
+  cd worker && node_modules/.bin/wrangler d1 execute cafe-coffee --remote --file ../scripts/qgrader_seed.sql
+  ```
+  seed 는 커리큘럼 계열 테이블만 지우고 다시 채운다. **사용자 데이터(`qg_logs`·`qg_routine_checks`·`qg_settings`)는 건드리지 않는다.** 루틴 항목 id 는 label 해시라 md 를 고쳐도 같은 항목이면 체크 이력이 유지된다.
+- **D1 테이블**: `qg_curriculum`(md 원문 스냅샷) · `qg_roadmap`(월별) · `qg_targets`(지표별 월 목표) · `qg_routine_items` · `qg_reference`(시험개요·컴포넌트·준비물·유기산·희석·할일·링크 JSON) · **`qg_logs`(훈련 일지, 날짜 PK 하루 1행)** · `qg_routine_checks`(주간) · `qg_settings`. 스키마: [scripts/qgrader_schema.sql](scripts/qgrader_schema.sql)(멱등).
+- **API**: `/api/qgrader/*` 전부 `requirePin`. 구현 [worker/src/qgrader.ts](worker/src/qgrader.ts).
+
+  | 메서드 | 경로 | 설명 |
+  |---|---|---|
+  | GET | `/api/qgrader/curriculum` | 로드맵·목표·루틴·참고표 한 번에 |
+  | GET | `/api/qgrader/curriculum/markdown` | 학습플랜 원문 |
+  | GET/POST | `/api/qgrader/logs` | 조회 / 부분 UPSERT(보낸 필드만 갱신) |
+  | PUT/DELETE | `/api/qgrader/logs/<date>` | 전체 교체(빈 값 반영) / 삭제 |
+  | GET/POST | `/api/qgrader/routine` | 주간 루틴 조회 / 체크 토글 |
+  | GET/PUT | `/api/qgrader/settings` | `exam_date` 등 |
+  | GET | `/api/qgrader/summary` | 타일용 요약(D-day·연속기록·최근성적·주간 진행) |
+
+- 지표 단위: 아로마 `/36`, 유기산 `%`, 삼각 `/6`(목표는 md 의 % 를 6점 환산 — 60%→3.6), 결함분류 `%`, 모의필기 `점`. 범위 밖 입력은 서버에서 클램프.
+- 옛 프로토타입 `D:/python/92/Q_Grader/qgrader-tracker.html` 은 브라우저 메모리라 창을 닫으면 기록이 사라졌다. **이제 D1 에 저장되므로 그 파일은 쓰지 말 것.**
+
+---
+
 ## 주의사항
 
 - `.env`, `data/`, `__pycache__/`, `.venv/`, `node_modules/`, `cafe-coffee-apk/android/`는 gitignore 대상.
@@ -697,7 +728,10 @@ journalctl -u cafe-coffee-nearby.service -n 50 --no-pager
 | [generate_bean_images.py](generate_bean_images.py) | 커피 카드 이미지 생성 (PIL) |
 | [migrate_notion.py](migrate_notion.py) | Notion → SQLite 일회성 이전 |
 | [index.html](index.html) | 탭 기반 공개 뷰 (오늘의커피 + 누가쏠까?: 손가락 게임, 룰렛) |
-| [static/admin.html](static/admin.html) | 관리 폼 — 4탭 (오늘의커피 / 생두관리 / 재고 / 주변리뷰) |
+| [static/admin.html](static/admin.html) | 관리 폼 — 6탭 (오늘의커피 / 생두관리 / 재고 / 주변리뷰 / 로스팅스터디 / Q-Grader) |
+| [static/qgrader/index.html](static/qgrader/index.html) | Q-Grader 훈련 관리 페이지 (`/qgrader`, PIN) |
+| [worker/src/qgrader.ts](worker/src/qgrader.ts) | Q-Grader API (`/api/qgrader/*`) |
+| [scripts/qgrader_sync.py](scripts/qgrader_sync.py) | 학습플랜 md → D1 seed SQL 생성 |
 | [scripts/release_insight.py](scripts/release_insight.py) | **인사이트 백로그 릴리스 (토큰 0, 현재 채택)** — 큐에서 1편 발행 |
 | [scripts/release.sh](scripts/release.sh) | 서버 릴리스 래퍼: git pull → release_insight.py → commit/push |
 | [content/insight_queue/](content/insight_queue/) | 미리 작성한 사이드카 큐 (`q-NN-<slug>.json`, FIFO 발행) |
