@@ -434,13 +434,30 @@ journalctl -u cafe-coffee-ingest.service -n 100 --no-pager
 
 홈([static/roastery.html](static/roastery.html)) "곧 만날"과 "인사이트" 사이의 `#story` 섹션. 커피를 시작한 계기·로스팅·카페 운영 등 사용자의 수필을 비주기적으로 연재.
 
+### ⚠️ 작업 절차 (고정 — 순서를 건너뛰지 말 것)
+
+한 화는 **노션에서 만들고 사이트에는 마지막에 올린다.** 사용자가 노션 링크를 주면 그건 "바로 발행하라"가 아니라 "2번부터 시작하라"는 뜻이다.
+
+1. **노션에 초안** — 사용자가 개인 노션 `카페 스토리` 허브 아래 화별 child page 에 초안을 쓴다. 초안 대신 *지시서*(출처 블로그 URL + 톤 주문 몇 줄)만 있는 경우도 있음 — 그러면 출처를 직접 수집해 재료를 만든다.
+2. **노션에 후보글 (복수)** — Claude 가 **같은 노션 페이지 안에** `divider` + `## ✍️ 후보 A — <제목>` 형태로 후보를 **여러 개** append 한다. 톤(담백/유머/서정), 문체, 구성이 서로 다른 안을 올려 사용자가 고를 수 있게 한다. **이 단계에서 사이트에 손대지 않는다.**
+3. **최종 글 확정** — 사용자가 고른 안을 다듬어 `## ✍️ 최종본 — <제목>` 으로 노션에 남긴다. 노션이 원고의 기록처다.
+4. **홈페이지 포스팅** — 그제서야 아래 "발행 절차"대로 `static/story/<id>.html` + `index.json` 작성 → push.
+
+**노션 접근 (2026-08-08 검증)**: `.env` 의 `NOTION_TOKEN` = 개인 워크스페이스 통합 "오늘의 커피". **읽기·쓰기 모두 가능** (페이지 생성 / 블록 append / archive 확인됨). claude.ai 노션 커넥터는 회사(SAIGE) 워크스페이스라 개인 페이지가 안 보이니 **항상 `api.notion.com` 직접 호출** (`Notion-Version: 2022-06-28`). 토큰 값은 대화·문서에 노출 금지.
+- 허브 `카페 스토리` = `3b0692fc-7365-8077-bb25-d2fa3facda89`, 화별 child page 가 그 아래.
+- 옛 네이버 블로그(altairs7) 원문: `blog.naver.com/PostView.naver?blogId=altairs7&logNo=<번호>&redirect=Dlog&widgetTypeCall=true`. 사진은 `postfiles.pstatic.net/...?type=w966` (Referer 헤더 필요). **사진은 반드시 눈으로 확인할 것** — 본문에 없는 사실(로스팅 일지 수치 등)이 사진에만 있는 경우가 많다.
+- Windows 콘솔은 cp949 라 수집 스크립트는 `PYTHONIOENCODING=utf-8` + 파일 덤프 후 Read.
+
+---
+
 - **표시 규칙**: [static/story/index.json](static/story/index.json) `items`가 비어 있으면 홈 섹션·네비 "92스토리" 링크가 자동 숨김. 1편 이상이면 최신 1편(`items[0]`) 카드 렌더.
-- **발행 절차 (LLM 호출 0, 정적 파일만)**:
+- **발행 절차 (4단계 이후 — LLM 호출 0, 정적 파일만)**:
   1. [static/story/_template.html](static/story/_template.html) 복제 → `static/story/<id>.html` 작성 (`{{TITLE}}` 등 치환, id는 ASCII slug — `.assetsignore`가 `_template.html`은 서빙 제외)
   2. `index.json` `items` **맨 앞**에 `{id, no(화수), date, title, one_liner(측면 인용구), excerpt(카드 발췌 3줄), read_min}` 추가
   3. push → deploy-worker.yml 자동 반영
 - **URL**: `/story/<id>` (Worker가 `/static/story/<id>.html` 서빙), `/story` → `/#story` 리다이렉트. 라우트는 [worker/src/index.ts](worker/src/index.ts) + `wrangler.jsonc` `run_worker_first`.
-- **콘텐츠 소스**: 사용자 **개인** 노션에 습작 → 대화로 전달받아 다듬어 발행. ⚠️ Claude에 연결된 노션은 회사(SAIGE) 워크스페이스라 개인 페이지 직접 조회 불가 — 본문은 붙여넣기 또는 노션 "웹에 게시" 공개 링크로 받을 것. 과거 네이버 블로그 글도 참고 소스(URL 받으면 WebFetch).
+- **글 형식**: h3 4~5개 + 사진 5~6장 + `blockquote.pull` 2개 + `hr.wave` 1개. 첫 문단은 `class="lead"`(드롭캡). 세로로 긴 문서 사진(일지·표)은 `<figure class="doc">`(`object-fit: contain`)으로 잘리지 않게. 톤은 에세이체(`-다` 서술) + 유머 섞인 회고.
+- **발행 이력**: 제1화 `01-three-seconds-one-drop`(2026-08-02) / 제2화 `02-first-roasting-3point5`(2026-08-08, 부제 "로스팅 일지 ①"). 남은 소재는 블로그 "로스팅" 카테고리(28편)와 카페 개업기.
 
 ---
 
