@@ -458,13 +458,16 @@ journalctl -u cafe-coffee-ingest.service -n 100 --no-pager
 
 ---
 
-- **표시 규칙**: [static/story/index.json](static/story/index.json) `items`가 비어 있으면 홈 섹션·네비 "92스토리" 링크가 자동 숨김. 1편 이상이면 최신 1편(`items[0]`) 카드 렌더.
+- **표시 규칙**: [static/story/index.json](static/story/index.json) `items`가 비어 있으면 홈 섹션·네비 "92스토리" 링크가 자동 숨김. 1편 이상이면 최신 1편(`items[0]`) 카드 렌더. `card_image`(내부 `/static/...` 경로만 허용)를 넣으면 홈 카드 왼쪽 패널에 그 사진이 깔린다(스크림 + `object-position: center 40%`).
 - **발행 절차 (4단계 이후 — LLM 호출 0, 정적 파일만)**:
-  1. [static/story/_template.html](static/story/_template.html) 복제 → `static/story/<id>.html` 작성 (`{{TITLE}}` 등 치환, id는 ASCII slug — `.assetsignore`가 `_template.html`은 서빙 제외)
-  2. `index.json` `items` **맨 앞**에 `{id, no(화수), date, title, one_liner(측면 인용구), excerpt(카드 발췌 3줄), read_min}` 추가
+  1. [static/story/_template.html](static/story/_template.html) 복제 → `static/story/<id>.html` 작성 (`{{TITLE}}` 등 치환, id는 ASCII slug — `.assetsignore`가 `_template.html`은 서빙 제외). 템플릿의 `<nav id="story-episodes" data-current="{{ID}}">` 와 `episodes.js` 스크립트 태그를 **반드시 남길 것** — 이게 글 목록 위젯이다.
+  2. `index.json` `items` **맨 앞**에 `{id, no(화수), date, title, one_liner(측면 인용구), excerpt(카드 발췌 3줄), card_image(선택), read_min}` 추가
   3. push → deploy-worker.yml 자동 반영
+- **글 목록 위젯**: [static/story/episodes.js](static/story/episodes.js) 가 `index.json` 을 읽어 hero 아래에 "다른 이야기"(제 N 화 · 제목 · 작성일)를 **한 페이지 3편 + 이전/다음 페이지네이션**으로 렌더. 현재 글은 "읽는 중" 배지. **새 화를 추가해도 이 파일은 수정 불필요.**
+- **배포 반영 지연**: push 후 Deploy Worker 잡이 성공해도 엣지 캐시(`cf-cache-status: HIT`) 때문에 1~2분간 옛 HTML/이미지가 보일 수 있다. 검증은 `Cache-Control: no-cache` 헤더를 붙여 폴링할 것. 특히 **같은 파일명으로 내용만 바꾸면**(사진 재번호 등) 잠깐 옛 사진이 섞여 나온다.
 - **URL**: `/story/<id>` (Worker가 `/static/story/<id>.html` 서빙), `/story` → `/#story` 리다이렉트. 라우트는 [worker/src/index.ts](worker/src/index.ts) + `wrangler.jsonc` `run_worker_first`.
-- **글 형식**: h3 4~5개 + 사진 5~6장 + `blockquote.pull` 2개 + `hr.wave` 1개. 첫 문단은 `class="lead"`(드롭캡). 세로로 긴 문서 사진(일지·표)은 `<figure class="doc">`(`object-fit: contain`)으로 잘리지 않게. 톤은 에세이체(`-다` 서술) + 유머 섞인 회고.
+- **글 형식**: h3 4~5개 + 사진 5~10장 + `blockquote.pull` 2개 + `hr.wave` 1개. 첫 문단은 `class="lead"`(드롭캡). 세로로 긴 문서 사진(일지·표·그래프)은 `<figure class="doc">`(`object-fit: contain`)으로 잘리지 않게. 사진 파일명 `<no>-<i>.jpg` 는 **본문 등장 순서**와 일치시킨다. 톤은 에세이체(`-다` 서술) + 유머 섞인 회고.
+- **용어**: 드립용 주전자는 **"드립포트"**로 쓴다(사용자 지정, 2026-08-08).
 - **발행 이력**: 제1화 `01-three-seconds-one-drop`(2026-08-02) / 제2화 `02-first-roasting-3point5`(2026-08-08, 부제 "로스팅 일지 ①"). 남은 소재는 블로그 "로스팅" 카테고리(28편)와 카페 개업기.
 
 ---
