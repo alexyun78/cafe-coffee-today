@@ -2,6 +2,7 @@
 <!--
   92스토리 본문 페이지 템플릿.
   사용법: 이 파일을 static/story/<id>.html 로 복제한 뒤 {{...}} 자리를 채운다.
+    {{ID}}         — 이 파일의 id (파일명에서 .html 제외, 예: 03-my-first-cafe)
     {{TITLE}}      — 글 제목 (예: 내가 커피를 좋아하게 된 계기)
     {{NO}}         — 화수 숫자 (예: 1)
     {{DATE}}       — 발행일 표기 (예: 2026.08.02)
@@ -220,6 +221,9 @@
     </div>
 </section>
 
+<!-- 글 목록(제목+작성일, 3편씩 페이지네이션). data-current 에 이 글의 id 를 넣으면 "읽는 중" 표시 -->
+<nav id="story-episodes" data-current="{{ID}}"></nav>
+
 <article class="story-article">
     <div class="story-body">
         <h3>소제목 (선택)</h3>
@@ -249,6 +253,8 @@
         </div>
     </div>
 </footer>
+
+<script src="/static/story/episodes.js" defer></script>
 
 </body>
 </html>
