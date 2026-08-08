@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<!--
+  92도씨 원두 상세 — /beans/<id>
+  Worker 가 /beans/<id> 요청에 이 파일을 서빙하고, 여기서 경로의 <id> 로
+  /static/beans/index.json 의 항목을 찾아 렌더한다. 원두를 추가해도 이 파일은
+  수정할 필요 없다.
+-->
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>원두 — 92°C ROASTERY</title>
+    <meta name="description" content="92도씨 로스터리가 취급하는 스페셜티 생두의 농장·생산자·가공 이야기.">
+    <link rel="icon" type="image/png" href="/static/img/logo-92black.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --canvas: #FFFFFF;
+            --canvas-warm: #FAF7F2;
+            --canvas-stone: #F2ECE3;
+            --ink: #1A1410;
+            --ink-mute: #4A3F36;
+            --ink-soft: #6B5E52;
+            --espresso: #6F4E37;
+            --caramel: #C9986A;
+            --copper: #B5703D;
+            --line: #E8E0D5;
+            --line-soft: #F0E9DD;
+            --font-display: "Cormorant Garamond", "Pretendard", serif;
+            --font-body: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            --font-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", monospace;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body {
+            font-family: var(--font-body);
+            color: var(--ink);
+            background: var(--canvas-warm);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+        a { color: inherit; text-decoration: none; }
+        .wrap { max-width: 720px; margin: 0 auto; padding: 0 24px; }
+
+        .site-nav {
+            position: sticky; top: 0; z-index: 50;
+            background: rgba(255,255,255,0.85);
+            backdrop-filter: saturate(140%) blur(14px);
+            border-bottom: 1px solid var(--line-soft);
+        }
+        .nav-inner {
+            max-width: 1200px; margin: 0 auto; padding: 14px 32px;
+            display: flex; align-items: center; justify-content: space-between; gap: 16px;
+        }
+        .brand {
+            font-family: var(--font-display); font-size: 1.15rem; font-weight: 600;
+            letter-spacing: 0.08em; display: inline-flex; align-items: baseline; gap: 6px;
+        }
+        .brand-mark { color: var(--espresso); }
+        .temp-mark { font-size: 0.72em; }
+        .nav-back {
+            font-size: 0.8rem; letter-spacing: 0.08em; color: var(--ink-soft);
+            border: 1px solid var(--line); border-radius: 999px; padding: 7px 15px;
+            transition: background 0.18s ease, color 0.18s ease;
+        }
+        .nav-back:hover { background: var(--canvas-stone); color: var(--ink); }
+
+        .hero { padding: 60px 0 8px; }
+        .eyebrow {
+            font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.24em;
+            text-transform: uppercase; color: var(--copper); margin-bottom: 14px;
+        }
+        h1 {
+            font-size: clamp(1.7rem, 4.4vw, 2.5rem); font-weight: 700;
+            letter-spacing: -0.02em; line-height: 1.25;
+        }
+        .name-en {
+            font-family: var(--font-display); font-style: italic;
+            font-size: clamp(1rem, 2.4vw, 1.25rem); color: var(--ink-soft); margin-top: 6px;
+        }
+        .one-liner {
+            margin-top: 18px; font-size: 1rem; color: var(--ink-mute);
+            padding-left: 14px; border-left: 2px solid var(--caramel);
+        }
+
+        .fact-card {
+            margin-top: 34px; background: var(--canvas);
+            border: 1px solid var(--line); border-radius: 4px; padding: 24px 26px;
+        }
+        .fact-grid {
+            display: grid; grid-template-columns: auto 1fr; gap: 10px 18px; font-size: 0.9rem;
+        }
+        .fact-grid dt { color: var(--ink-soft); white-space: nowrap; }
+        .fact-grid dd { color: var(--ink-mute); }
+        .cupnotes {
+            margin-top: 22px; padding-top: 18px; border-top: 1px solid var(--line-soft);
+        }
+        .cupnotes .label {
+            font-family: var(--font-mono); font-size: 0.65rem; letter-spacing: 0.18em;
+            text-transform: uppercase; color: var(--copper); margin-bottom: 10px;
+        }
+        .note-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+        .note-chip {
+            font-size: 0.85rem; color: var(--ink-mute);
+            background: var(--canvas-warm); border: 1px solid var(--line-soft);
+            border-radius: 999px; padding: 5px 13px;
+        }
+
+        .body { padding: 46px 0 20px; }
+        .body section { margin-bottom: 38px; }
+        .body h2 {
+            font-size: 1.12rem; font-weight: 700; letter-spacing: -0.01em;
+            margin-bottom: 14px; padding-bottom: 10px;
+            border-bottom: 1px solid var(--line-soft);
+        }
+        .body p { font-size: 0.97rem; color: var(--ink-mute); margin-bottom: 14px; }
+        .body p:last-child { margin-bottom: 0; }
+
+        .foot-nav { padding: 8px 0 70px; }
+        .foot-nav a {
+            display: inline-block; font-family: var(--font-mono); font-size: 0.72rem;
+            letter-spacing: 0.14em; color: var(--ink-soft);
+            border: 1px solid var(--line); border-radius: 999px; padding: 10px 20px;
+            transition: background 0.18s ease, color 0.18s ease;
+        }
+        .foot-nav a:hover { background: var(--canvas-stone); color: var(--ink); }
+
+        .state { padding: 90px 0; text-align: center; color: var(--ink-soft); font-size: 0.92rem; }
+        .state a { color: var(--copper); border-bottom: 1px solid var(--caramel); }
+
+        @media (max-width: 560px) {
+            .wrap { padding: 0 18px; }
+            .nav-inner { padding: 11px 18px; }
+            .hero { padding: 40px 0 6px; }
+            .fact-card { padding: 20px 18px; }
+            .fact-grid { grid-template-columns: 1fr; gap: 2px; }
+            .fact-grid dt { margin-top: 8px; font-size: 0.8rem; }
+            .fact-grid dt:first-child { margin-top: 0; }
+        }
+    </style>
+</head>
+<body>
+
+<header class="site-nav">
+    <div class="nav-inner">
+        <a class="brand" href="/">
+            <span class="brand-mark">92<span class="temp-mark">°C</span></span>ROASTERY
+        </a>
+        <a class="nav-back" href="/beans">← 원두 목록</a>
+    </div>
+</header>
+
+<main class="wrap" id="main">
+    <div class="state">불러오는 중…</div>
+</main>
+
+<script>
+(function () {
+    var main = document.getElementById('main');
+
+    function esc(s) {
+        return String(s == null ? '' : s).replace(/[&<>"']/g, function (ch) {
+            return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch];
+        });
+    }
+
+    function currentId() {
+        var parts = window.location.pathname.split('/').filter(Boolean);
+        var last = parts[parts.length - 1] || '';
+        try { last = decodeURIComponent(last); } catch (e) { /* 잘못된 인코딩은 원문 그대로 */ }
+        return last === 'beans' ? '' : last;
+    }
+
+    function factRow(label, value) {
+        if (!value) return '';
+        return '<dt>' + esc(label) + '</dt><dd>' + esc(value) + '</dd>';
+    }
+
+    function render(b) {
+        var notes = Array.isArray(b.cup_notes) ? b.cup_notes : (b.cup_notes ? [b.cup_notes] : []);
+        var sections = (b.sections || []).map(function (s) {
+            var ps = (s.paragraphs || []).map(function (p) { return '<p>' + esc(p) + '</p>'; }).join('');
+            return '<section><h2>' + esc(s.title) + '</h2>' + ps + '</section>';
+        }).join('');
+
+        main.innerHTML = '' +
+            '<div class="hero">' +
+                '<div class="eyebrow">' + esc(b.country || 'Green Bean') + '</div>' +
+                '<h1>' + esc(b.name_ko) + '</h1>' +
+                (b.name_en ? '<div class="name-en">' + esc(b.name_en) + '</div>' : '') +
+                (b.one_liner ? '<div class="one-liner">' + esc(b.one_liner) + '</div>' : '') +
+            '</div>' +
+            '<div class="fact-card">' +
+                '<dl class="fact-grid">' +
+                    factRow('농장명', b.farm) +
+                    factRow('농장주', b.farmer) +
+                    factRow('재배고도', b.altitude) +
+                    factRow('품종', b.variety) +
+                    factRow('가공방식', b.process) +
+                    factRow('지역', b.region) +
+                '</dl>' +
+                (notes.length ? '<div class="cupnotes"><div class="label">컵노트</div><div class="note-chips">' +
+                    notes.map(function (n) { return '<span class="note-chip">' + esc(n) + '</span>'; }).join('') +
+                '</div></div>' : '') +
+            '</div>' +
+            (sections ? '<div class="body">' + sections + '</div>' : '') +
+            '<div class="foot-nav"><a href="/beans">← 다른 원두 보기</a></div>';
+
+        document.title = b.name_ko + ' — 원두 · 92°C ROASTERY';
+        var desc = document.querySelector('meta[name="description"]');
+        if (desc && b.one_liner) desc.setAttribute('content', b.one_liner);
+    }
+
+    function notFound() {
+        main.innerHTML = '<div class="state">찾는 원두가 없습니다. <a href="/beans">원두 목록으로</a></div>';
+    }
+
+    var id = currentId();
+    if (!id) { notFound(); return; }
+
+    fetch('/static/beans/index.json', { cache: 'no-cache' })
+        .then(function (r) { if (!r.ok) throw new Error('http ' + r.status); return r.json(); })
+        .then(function (data) {
+            var items = (data && data.items) || [];
+            var bean = null;
+            for (var i = 0; i < items.length; i++) {
+                if (items[i].id === id) { bean = items[i]; break; }
+            }
+            if (bean) render(bean); else notFound();
+        })
+        .catch(function () {
+            main.innerHTML = '<div class="state">원두 정보를 불러오지 못했습니다. <a href="/beans">원두 목록으로</a></div>';
+        });
+})();
+</script>
+
+</body>
+</html>

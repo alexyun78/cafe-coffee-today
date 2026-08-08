@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<!--
+  92도씨 원두 카드 — /beans
+  데이터는 /static/beans/index.json 한 곳. 원두를 추가하려면 그 파일의 items 에
+  항목을 넣기만 하면 되고 이 파일은 수정할 필요 없다.
+-->
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>원두 — 92°C ROASTERY</title>
+    <meta name="description" content="92도씨 로스터리가 취급하는 스페셜티 생두. 농장·품종·가공방식과 컵노트를 카드로 정리했습니다.">
+    <meta property="og:title" content="원두 — 92°C ROASTERY">
+    <meta property="og:description" content="92도씨 로스터리가 취급하는 스페셜티 생두 카드.">
+    <link rel="icon" type="image/png" href="/static/img/logo-92black.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --canvas: #FFFFFF;
+            --canvas-warm: #FAF7F2;
+            --canvas-stone: #F2ECE3;
+            --ink: #1A1410;
+            --ink-mute: #4A3F36;
+            --ink-soft: #6B5E52;
+            --espresso: #6F4E37;
+            --caramel: #C9986A;
+            --copper: #B5703D;
+            --line: #E8E0D5;
+            --line-soft: #F0E9DD;
+            --font-display: "Cormorant Garamond", "Pretendard", serif;
+            --font-body: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            --font-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", monospace;
+            --container: 1200px;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body {
+            font-family: var(--font-body);
+            color: var(--ink);
+            background: var(--canvas-warm);
+            line-height: 1.55;
+            -webkit-font-smoothing: antialiased;
+        }
+        a { color: inherit; text-decoration: none; }
+        .container { max-width: var(--container); margin: 0 auto; padding: 0 32px; }
+
+        /* ---------- 네비 ---------- */
+        .site-nav {
+            position: sticky; top: 0; z-index: 50;
+            background: rgba(255,255,255,0.85);
+            backdrop-filter: saturate(140%) blur(14px);
+            border-bottom: 1px solid var(--line-soft);
+        }
+        .nav-inner {
+            max-width: var(--container); margin: 0 auto; padding: 14px 32px;
+            display: flex; align-items: center; justify-content: space-between; gap: 16px;
+        }
+        .brand {
+            font-family: var(--font-display); font-size: 1.15rem; font-weight: 600;
+            letter-spacing: 0.08em; display: inline-flex; align-items: baseline; gap: 6px;
+        }
+        .brand-mark { color: var(--espresso); }
+        .temp-mark { font-size: 0.72em; }
+        .nav-back {
+            font-size: 0.8rem; letter-spacing: 0.08em; color: var(--ink-soft);
+            border: 1px solid var(--line); border-radius: 999px; padding: 7px 15px;
+            transition: background 0.18s ease, color 0.18s ease;
+        }
+        .nav-back:hover { background: var(--canvas-stone); color: var(--ink); }
+
+        /* ---------- 헤더 ---------- */
+        .page-head { padding: 64px 0 40px; text-align: center; }
+        .eyebrow {
+            font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.24em;
+            text-transform: uppercase; color: var(--copper); margin-bottom: 14px;
+        }
+        .page-head h1 {
+            font-family: var(--font-display); font-size: clamp(2.2rem, 5vw, 3.2rem);
+            font-weight: 500; letter-spacing: -0.01em; line-height: 1.15;
+        }
+        .page-head p {
+            margin-top: 14px; color: var(--ink-soft); font-size: 0.95rem;
+            max-width: 560px; margin-left: auto; margin-right: auto;
+        }
+        .count {
+            margin-top: 22px; font-family: var(--font-mono); font-size: 0.72rem;
+            letter-spacing: 0.16em; color: var(--ink-soft);
+        }
+
+        /* ---------- 카드 그리드 (3열) ---------- */
+        .bean-grid {
+            display: grid; grid-template-columns: repeat(3, 1fr);
+            gap: 22px; padding-bottom: 80px;
+        }
+        .bean-card {
+            display: block; background: var(--canvas);
+            border: 1px solid var(--line); border-radius: 4px;
+            padding: 22px 22px 20px;
+            transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+        }
+        .bean-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 28px rgba(26,20,16,0.09);
+            border-color: var(--caramel);
+        }
+        .bean-card h2 {
+            font-size: 1.02rem; font-weight: 700; letter-spacing: -0.01em; line-height: 1.35;
+        }
+        .bean-en {
+            font-family: var(--font-display); font-size: 0.88rem; font-style: italic;
+            color: var(--ink-soft); margin-top: 3px;
+        }
+        .spec {
+            margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--line-soft);
+            display: grid; grid-template-columns: auto 1fr; gap: 6px 10px;
+            font-size: 0.8rem;
+        }
+        .spec dt { color: var(--ink-soft); white-space: nowrap; }
+        .spec dd { color: var(--ink-mute); }
+        .cupnotes {
+            margin-top: 16px; padding: 12px 14px;
+            background: var(--canvas-warm); border: 1px solid var(--line-soft); border-radius: 3px;
+        }
+        .cupnotes .label {
+            font-family: var(--font-mono); font-size: 0.65rem; letter-spacing: 0.18em;
+            text-transform: uppercase; color: var(--copper); margin-bottom: 6px;
+        }
+        .cupnotes .notes { font-size: 0.85rem; color: var(--ink-mute); }
+        .card-more {
+            margin-top: 16px; font-family: var(--font-mono); font-size: 0.68rem;
+            letter-spacing: 0.14em; color: var(--ink-soft);
+        }
+        .bean-card:hover .card-more { color: var(--copper); }
+
+        .empty, .error {
+            grid-column: 1 / -1; text-align: center; padding: 70px 0;
+            color: var(--ink-soft); font-size: 0.9rem;
+        }
+
+        /* ---------- 푸터 ---------- */
+        .site-foot {
+            border-top: 1px solid var(--line-soft); padding: 30px 0 46px;
+            text-align: center; font-size: 0.78rem; color: var(--ink-soft);
+        }
+
+        @media (max-width: 900px) {
+            .bean-grid { grid-template-columns: repeat(2, 1fr); gap: 18px; }
+            .container { padding: 0 22px; }
+            .nav-inner { padding: 12px 22px; }
+            .page-head { padding: 46px 0 30px; }
+        }
+        @media (max-width: 560px) {
+            .bean-grid { grid-template-columns: 1fr; }
+            .container { padding: 0 16px; }
+            .nav-inner { padding: 11px 16px; }
+        }
+    </style>
+</head>
+<body>
+
+<header class="site-nav">
+    <div class="nav-inner">
+        <a class="brand" href="/">
+            <span class="brand-mark">92<span class="temp-mark">°C</span></span>ROASTERY
+        </a>
+        <a class="nav-back" href="/">← 홈</a>
+    </div>
+</header>
+
+<main class="container">
+    <div class="page-head">
+        <div class="eyebrow">Green Beans</div>
+        <h1>우리가 다루는 원두</h1>
+        <p>92도씨 로스터리가 취급하는 스페셜티 생두입니다. 카드를 누르면 농장과 생산자, 가공 이야기를 볼 수 있습니다.</p>
+        <div class="count" id="count"></div>
+    </div>
+
+    <div class="bean-grid" id="grid">
+        <div class="empty">불러오는 중…</div>
+    </div>
+</main>
+
+<footer class="site-foot">
+    <div class="container">92°C ROASTERY · 경기 남양주시 다산중앙로82번안길 115-8</div>
+</footer>
+
+<script>
+(function () {
+    var grid = document.getElementById('grid');
+    var countEl = document.getElementById('count');
+
+    function esc(s) {
+        return String(s == null ? '' : s).replace(/[&<>"']/g, function (ch) {
+            return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch];
+        });
+    }
+
+    function specRow(label, value) {
+        if (!value) return '';
+        return '<dt>' + esc(label) + '</dt><dd>' + esc(value) + '</dd>';
+    }
+
+    function cardHtml(b) {
+        var notes = Array.isArray(b.cup_notes) ? b.cup_notes.join(', ') : (b.cup_notes || '');
+        return '' +
+            '<a class="bean-card" href="/beans/' + encodeURIComponent(b.id) + '">' +
+                '<h2>' + esc(b.name_ko) + '</h2>' +
+                (b.name_en ? '<div class="bean-en">' + esc(b.name_en) + '</div>' : '') +
+                '<dl class="spec">' +
+                    specRow('농장명', b.farm) +
+                    specRow('농장주', b.farmer) +
+                    specRow('재배고도', b.altitude) +
+                    specRow('품종', b.variety) +
+                    specRow('가공방식', b.process) +
+                    specRow('지역', b.region) +
+                '</dl>' +
+                (notes ? '<div class="cupnotes"><div class="label">컵노트</div>' +
+                         '<div class="notes">' + esc(notes) + '</div></div>' : '') +
+                '<div class="card-more">자세히 보기 →</div>' +
+            '</a>';
+    }
+
+    fetch('/static/beans/index.json', { cache: 'no-cache' })
+        .then(function (r) { if (!r.ok) throw new Error('http ' + r.status); return r.json(); })
+        .then(function (data) {
+            var items = (data && data.items) || [];
+            if (!items.length) {
+                grid.innerHTML = '<div class="empty">준비 중입니다.</div>';
+                return;
+            }
+            grid.innerHTML = items.map(cardHtml).join('');
+            countEl.textContent = items.length + ' BEANS';
+        })
+        .catch(function () {
+            grid.innerHTML = '<div class="error">원두 정보를 불러오지 못했습니다. 잠시 후 다시 시도해 주세요.</div>';
+        });
+})();
+</script>
+
+</body>
+</html>

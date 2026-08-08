@@ -677,6 +677,29 @@ journalctl -u cafe-coffee-nearby.service -n 50 --no-pager
 
 ---
 
+## 원두 카드 — /beans (2026-08-08 추가)
+
+92도씨가 취급하는 생두를 카드로 보여주는 공개 페이지. 홈 네비 "원두" 링크로 진입.
+
+- **URL**: `/beans` 목록(3열 카드 그리드, 태블릿 2열·모바일 1열) · `/beans/<id>` 상세.
+  라우트는 [worker/src/index.ts](worker/src/index.ts) + `wrangler.jsonc` `run_worker_first`.
+- **단일 소스 = [static/beans/index.json](static/beans/index.json)** 하나뿐. 목록 페이지와 상세 페이지
+  모두 이 JSON 을 클라이언트에서 읽어 렌더한다. **원두를 추가하려면 `items` 에 항목 하나만 넣으면 되고
+  HTML 은 건드리지 않는다.**
+- 항목 스키마: `id`(ASCII slug, URL 이 됨) · `name_ko` · `name_en` · `country` · `farm`(농장명) ·
+  `farmer`(농장주) · `altitude`(재배고도) · `variety`(품종) · `process`(가공방식) · `region`(지역) ·
+  `cup_notes`(배열) · `one_liner` · `sections`(`[{title, paragraphs[]}]` — 농장·생산자·가공 이야기).
+- 카드에 표시되는 항목 순서는 농장명 → 농장주 → 재배고도 → 품종 → 가공방식 → 지역 → 컵노트.
+  값이 비면 그 줄은 자동으로 빠진다.
+- **생두사 원문을 옮길 때**: 입고일자·수입사(커피리브레 등) 관련 날짜/브랜드 정보는 넣지 않는다.
+  우리는 92도씨 로스터리다. 컵노트도 수입사 표기가 아니라 **우리가 정한 값**을 쓴다.
+- ⚠️ D1 `green_beans`(재고·로스팅용 생두 마스터)와는 **별개**다. 이쪽은 공개용 편집 콘텐츠라
+  관리자 UI 연동이 없다. 필요해지면 그때 연결.
+- 상세 페이지는 클라이언트 렌더라 `og:title`/`og:description` 이 원두별로 안 박힌다(공유 카드는 공통 문구).
+  SEO·공유가 중요해지면 원두별 정적 HTML 생성으로 바꿀 것.
+
+---
+
 ## Q-Grader 훈련 관리 (2026-08-08 추가)
 
 SCA Evolved Q Grader(CVA 기반) 대비 6개월 학습플랜 + 훈련 일지. **관리자 전용**(기존 PIN 그대로).
@@ -741,6 +764,7 @@ SCA Evolved Q Grader(CVA 기반) 대비 6개월 학습플랜 + 훈련 일지. **
 | [scripts/seed_nearby_shops.sql](scripts/seed_nearby_shops.sql) | 주변 가게 초기 데이터 (init_schema에서 자동 실행) |
 | [static/roastery.html](static/roastery.html) | 92도씨 로스터리 메인 공개 페이지 |
 | [static/story/](static/story/) | 92스토리 수필 페이지 (`index.json` + `<id>.html`, `_template.html` 템플릿) |
+| [static/beans/](static/beans/) | 원두 카드 (`/beans`) — `index.json`(단일 소스) + `index.html`(그리드) + `detail.html`(상세) |
 | [scripts/seed_green_beans.sql](scripts/seed_green_beans.sql) | 생두 초기 데이터 (init_schema에서 자동 실행) |
 | [scripts/migrate_spreadsheet.py](scripts/migrate_spreadsheet.py) | 구글 스프레드시트 → DB 마이그레이션 스크립트 |
 | [requirements.txt](requirements.txt) | 파이썬 의존성 |

@@ -203,6 +203,15 @@ app.get('/insight/:id', async (c) => {
   return c.json({ success: false, error: 'not found' }, 404)
 })
 
+// /beans — 원두 카드. 목록은 그리드 페이지, 상세는 공통 템플릿이 경로의 id 로 렌더한다
+// (원두 추가 = static/beans/index.json 편집만. 페이지 파일은 건드릴 필요 없음)
+app.get('/beans', serveAsset('/static/beans/index.html'))
+app.get('/beans/:id', (c) => {
+  const id = c.req.param('id')
+  if (!/^[A-Za-z0-9_-]+$/.test(id)) return c.json({ success: false, error: 'invalid id' }, 404)
+  return serveAsset('/static/beans/detail.html')(c)
+})
+
 // /story — 92스토리. 목록 페이지는 아직 없어 홈 섹션으로, 본문은 /static/story/<slug>.html
 app.get('/story', (c) => c.redirect('/#story', 302))
 app.get('/story/:slug', async (c) => {
