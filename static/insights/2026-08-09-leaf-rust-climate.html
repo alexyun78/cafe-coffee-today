@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>커피나무를 통째로 무너뜨리는 '녹슨 잎' 병이 있다고? 🍂 — 92°C ROASTERY</title>
+<meta name="description" content="곰팡이 한 종이 산지를 갈아엎고, 기후 변화가 그 곰팡이에게 유리한 판을 깔아주고 있다!">
+<link rel="icon" type="image/png" href="/static/img/logo-92black.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --canvas: #FFFFFF; --canvas-warm: #FAF7F2; --canvas-stone: #F2ECE3;
+  --ink: #1A1410; --ink-mute: #4A3F36; --ink-soft: #6B5E52;
+  --espresso: #6F4E37; --caramel: #C9986A; --copper: #B5703D;
+  --line: #E8E0D5; --line-soft: #F0E9DD;
+  --font-display: "Cormorant Garamond", "Pretendard", serif;
+  --font-body: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  --r-sm: 6px; --r-md: 12px; --r-pill: 999px;
+}
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color: transparent; }
+html { scroll-behavior: smooth; }
+body { font-family: var(--font-body); color: var(--ink); background: var(--canvas); font-feature-settings: "kern","ss01","lnum"; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+a { color: var(--copper); text-decoration: none; border-bottom: 1px solid transparent; transition: border-color .2s; }
+a:hover { border-bottom-color: var(--copper); }
+img { display: block; max-width: 100%; height: auto; }
+.container { max-width: 860px; margin: 0 auto; padding: 0 32px; }
+@media (max-width: 720px) { .container { padding: 0 20px; } }
+@media (max-width: 480px) { .container { padding: 0 16px; } }
+.site-nav { position: sticky; top: 0; z-index: 50; background: rgba(255,255,255,0.9); backdrop-filter: saturate(140%) blur(14px); -webkit-backdrop-filter: saturate(140%) blur(14px); border-bottom: 1px solid var(--line-soft); }
+.nav-inner { max-width: 1200px; margin: 0 auto; padding: 16px 32px; display: flex; align-items: center; justify-content: space-between; }
+.brand { font-family: var(--font-display); font-size: 1.3rem; font-weight: 700; color: var(--ink); display: inline-flex; align-items: center; gap: 4px; border-bottom: none; }
+.brand:hover { border-bottom: none; }
+.brand-mark { display: inline-flex; align-items: flex-start; font-family: "Pretendard", sans-serif; font-weight: 900; letter-spacing: -0.04em; line-height: 1; color: inherit; }
+.temp-mark { display: flex; flex-direction: column; line-height: .82; margin: 0 .05em 0 .04em; }
+.temp-mark .temp-deg { font-size: .42em; letter-spacing: -.04em; }
+.temp-mark .temp-c { font-size: .58em; letter-spacing: -.05em; margin-top: -.05em; }
+.nav-back { font-family: var(--font-mono); font-size: .75rem; letter-spacing: .18em; color: var(--ink-mute); border-bottom: none; }
+.nav-back:hover { color: var(--copper); border-bottom: none; }
+.article-hero { padding: 56px 0 48px; border-bottom: 1px solid var(--line-soft); }
+.eyebrow { font-family: var(--font-mono); font-size: .72rem; letter-spacing: .28em; color: var(--copper); margin-bottom: 18px; display: flex; align-items: center; gap: 12px; }
+.eyebrow::before { content: ""; display: inline-block; width: 28px; height: 1px; background: var(--copper); }
+.article-title { font-family: var(--font-display); font-weight: 500; font-size: clamp(2rem, 4.5vw, 3.2rem); line-height: 1.15; letter-spacing: -0.02em; color: var(--ink); margin-bottom: 20px; }
+.article-title em { font-style: italic; color: var(--espresso); font-weight: 600; }
+.article-one-liner { font-family: var(--font-display); font-style: italic; font-size: 1.3rem; line-height: 1.5; color: var(--espresso); margin-bottom: 28px; padding-left: 20px; border-left: 3px solid var(--caramel); }
+.article-meta { display: flex; gap: 24px; flex-wrap: wrap; font-family: var(--font-mono); font-size: .75rem; letter-spacing: .12em; color: var(--ink-soft); padding-top: 20px; border-top: 1px solid var(--line-soft); }
+.article-meta span { display: inline-flex; align-items: center; gap: 6px; }
+.article-meta span::before { content: "■"; color: var(--caramel); font-size: .55rem; }
+.hero-image { margin: 32px 0 0; border-radius: var(--r-md); overflow: hidden; border: 1px solid var(--line); }
+.hero-image img { width: 100%; }
+.article-body { padding: 56px 0 80px; }
+.article-footer { padding: 36px 0 56px; border-top: 1px solid var(--line-soft); text-align: center; font-family: var(--font-mono); font-size: .75rem; letter-spacing: .14em; color: var(--ink-soft); }
+.article-footer a { color: var(--ink-mute); border-bottom: 1px solid transparent; }
+.article-footer a:hover { color: var(--copper); border-bottom-color: var(--copper); }
+.source-basis { display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; background: rgba(201,152,106,.18); border: 1px solid rgba(181,112,61,.35); border-radius: var(--r-pill); font-family: var(--font-mono); font-size: .72rem; letter-spacing: .12em; color: var(--espresso); font-weight: 500; }
+.source-basis.abstract { background: rgba(107,94,82,.1); border-color: rgba(107,94,82,.3); color: var(--ink-soft); }
+.links-row { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 18px; }
+.link-pill { display: inline-flex; align-items: center; gap: 8px; padding: 9px 16px; background: var(--canvas-warm); border: 1px solid var(--line); border-radius: var(--r-pill); font-family: var(--font-mono); font-size: .78rem; letter-spacing: .08em; color: var(--ink-mute); border-bottom: 1px solid var(--line); transition: border-color .2s, color .2s; }
+.link-pill:hover { color: var(--copper); border-color: var(--copper); }
+
+/* ===== EZ: 쉬운 설명 스타일 ===== */
+.ez-hero { text-align: center; padding: 8px 0 32px; }
+.ez-hero-emoji { font-size: 3.4rem; line-height: 1; }
+.ez-hero-title { font-family: var(--font-display); font-size: clamp(1.6rem, 3.5vw, 2.2rem); font-weight: 600; color: var(--ink); margin-top: 14px; line-height: 1.3; }
+.ez-section { margin-bottom: 52px; }
+.ez-section h2 { font-family: var(--font-body); font-size: 1.5rem; font-weight: 700; color: var(--ink); margin-bottom: 18px; letter-spacing: -0.01em; }
+.ez-section h3 { font-size: 1.08rem; font-weight: 600; color: var(--espresso); margin: 22px 0 10px; }
+.ez-section p { font-size: 1.04rem; line-height: 1.85; color: var(--ink-mute); margin-bottom: 14px; }
+.ez-section p:last-child { margin-bottom: 0; }
+.ez-section ul { padding-left: 22px; margin-bottom: 14px; }
+.ez-section li { font-size: 1.02rem; line-height: 1.8; color: var(--ink-mute); margin-bottom: 8px; }
+.ez-callout { margin: 14px 0; padding: 14px 18px; background: var(--canvas-warm); border-left: 3px solid var(--caramel); border-radius: 4px; font-size: 0.98rem; color: var(--espresso); line-height: 1.75; }
+.ez-callout strong { color: var(--copper); }
+.ez-findings { list-style: none; padding: 0; }
+.ez-findings > li { padding: 18px 22px; margin-bottom: 14px; background: var(--canvas-warm); border: 1px solid var(--line); border-radius: 10px; font-size: 1.02rem; line-height: 1.7; color: var(--ink-mute); }
+.ez-findings > li strong { color: var(--ink); display: block; margin-bottom: 4px; font-size: 1.06rem; }
+.ez-findings > li.gold { background: linear-gradient(135deg, #FFF8E7, #FFEFCD); border-color: #F0D67A; }
+.ez-findings > li.silver { background: linear-gradient(135deg, #F6F6F6, #ECECEC); border-color: #C7C7C7; }
+.ez-findings > li.bronze { background: linear-gradient(135deg, #FFEEDD, #FFDCC0); border-color: #E4B07F; }
+.ez-findings > li.medal { background: linear-gradient(135deg, #F0E6FF, #E1D2FF); border-color: #BDA8E5; }
+.ez-table { width: 100%; border-collapse: collapse; margin: 16px 0 8px; font-size: 0.96rem; }
+.ez-table th, .ez-table td { padding: 11px 14px; border: 1px solid var(--line); text-align: left; vertical-align: top; }
+.ez-table thead th { background: var(--ink); color: #fff; font-weight: 600; letter-spacing: .02em; }
+.ez-table tbody th { background: var(--canvas-warm); color: var(--ink); font-weight: 600; }
+.ez-table tbody tr:nth-child(even) td { background: rgba(250, 247, 242, .55); }
+.ez-summary { padding: 26px 30px; background: linear-gradient(135deg, #FAF0E0, #F3E1C5); border-radius: 14px; font-size: 1.13rem; line-height: 1.75; font-weight: 500; color: var(--ink); border: 1px solid #E5C99B; }
+.ez-summary strong { color: var(--espresso); }
+.ez-citation { margin-top: 24px; padding: 18px 22px; background: var(--canvas-warm); border-radius: 8px; font-family: var(--font-mono); font-size: 0.82rem; color: var(--ink-soft); line-height: 1.7; }
+.ez-citation p { margin: 4px 0; }
+.ez-chart-card { padding: 22px 24px 18px; background: var(--canvas); border: 1px solid var(--line); border-radius: 12px; margin: 16px 0; }
+.ez-chart-card .ez-chart-title { font-size: 1rem; font-weight: 600; color: var(--ink); margin-bottom: 14px; }
+.ez-bar-row { display: flex; align-items: center; margin: 10px 0; font-size: 0.95rem; gap: 14px; }
+.ez-bar-label { width: 180px; flex-shrink: 0; color: var(--ink-mute); font-weight: 500; }
+.ez-bar-track { flex: 1; height: 32px; background: var(--canvas-warm); border-radius: 6px; overflow: hidden; position: relative; border: 1px solid var(--line); }
+.ez-bar-fill { height: 100%; background: linear-gradient(90deg, var(--caramel), var(--copper)); display: flex; align-items: center; justify-content: flex-end; padding: 0 12px; color: white; font-weight: 700; font-size: 0.92rem; min-width: 56px; }
+.ez-bar-fill.alt { background: linear-gradient(90deg, #6F4E37, #4A3F36); }
+.ez-glossary { display: grid; gap: 12px; }
+.ez-glossary-item { padding: 16px 20px; background: var(--canvas-warm); border: 1px solid var(--line); border-radius: 10px; border-left: 3px solid var(--caramel); }
+.ez-glossary-term { font-family: var(--font-display); font-style: italic; font-size: 1.1rem; font-weight: 600; color: var(--espresso); margin-bottom: 6px; }
+.ez-glossary-def { font-size: 0.98rem; color: var(--ink-mute); line-height: 1.7; }
+@media (max-width: 720px) {
+  .article-hero { padding: 36px 0 32px; }
+  .article-body { padding: 36px 0 56px; }
+  .ez-section { margin-bottom: 40px; }
+  .ez-section h2 { font-size: 1.3rem; }
+  .ez-bar-label { width: 100%; margin-bottom: 4px; }
+  .ez-bar-row { flex-direction: column; align-items: stretch; }
+  .article-meta { gap: 12px 18px; font-size: .68rem; }
+}
+</style>
+</head>
+<body>
+
+<header class="site-nav">
+  <div class="nav-inner">
+    <a class="brand" href="/">
+      <span class="brand-mark">92<span class="temp-mark"><span class="temp-deg">°</span><span class="temp-c">C</span></span></span>ROASTERY
+    </a>
+    <a class="nav-back" href="/insight">← INSIGHTS</a>
+  </div>
+</header>
+
+<article>
+  <section class="article-hero">
+    <div class="container">
+      <div class="eyebrow">— 오늘의 커피 상식 · 2026.08.09</div>
+      <h1 class="article-title">커피나무를 통째로 무너뜨리는 &#39;녹슨 잎&#39; 병이 있다고? 🍂</h1>
+      <p class="article-one-liner">곰팡이 한 종이 산지를 갈아엎고, 기후 변화가 그 곰팡이에게 유리한 판을 깔아주고 있다!</p>
+      <div class="article-meta">
+        
+        
+        
+        <span>커피 상식 · 기후·환경</span>
+      </div>
+      
+      <div class="hero-image">
+        <img src="/static/img/insights/trivia/trade.svg" alt="커피나무를 통째로 무너뜨리는 &#39;녹슨 잎&#39; 병이 있다고? 🍂">
+      </div>
+      
+    </div>
+  </section>
+
+  <section class="article-body">
+    <div class="container">
+
+      
+      <div class="ez-hero">
+        <div class="ez-hero-emoji">🍂</div>
+        <div class="ez-hero-title">커피나무를 통째로 무너뜨리는 녹슨 잎 병이 있다고?</div>
+      </div>
+
+      
+      <div class="ez-section">
+        <h2>🤔 무슨 연구야?</h2>
+        
+          <p>커피 농사에서 제일 무서운 게 뭘까? 가뭄? 태풍? 다들 무섭긴 한데, 산지 사람들이 이름만 들어도 표정이 굳는 건 따로 있어. 바로 &#39;로야(roya)&#39;라고 부르는 커피 잎녹병이야. 잎 뒷면에 노란 가루가 슬기 시작하면, 그 밭은 몇 달 안에 앙상한 가지만 남을 수도 있어.</p><p>이름이 좀 이상하지? 열매가 아니라 &#39;잎&#39;을 공격하는 병인데 왜 그렇게 치명적일까 싶잖아. 그런데 잎은 나무의 밥그릇이자 공장이야. 잎이 다 떨어지면 나무는 광합성을 못 하고, 그해 열매는 물론 다음 해 농사까지 망가져. 게다가 이 병은 바람과 빗방울을 타고 밭에서 밭으로, 산에서 산으로 번져.</p><p>더 골치 아픈 건 기후야. 예전엔 서늘한 고지대가 이 곰팡이에게 너무 추워서 커피의 &#39;피난처&#39; 역할을 했는데, 기온이 오르면서 그 안전지대가 점점 줄고 있어. 오늘은 로야가 정확히 뭔지, 왜 기후 위기 이야기에 꼭 같이 나오는지, 그리고 사람들이 어떻게 맞서고 있는지 같이 보자 🌱</p>
+        
+      </div>
+
+      
+      
+      <div class="ez-section">
+        <h2>🧪 핵심 개념 쉽게 풀어보면</h2>
+        
+          <h3>1️⃣ 로야(커피 잎녹병)가 대체 뭐야?</h3>
+          <p>커피 잎녹병은 헤밀레이아 바스타트릭스(Hemileia vastatrix)라는 곰팡이가 일으키는 병이야. 잎 뒷면에 주황빛이 도는 노란 가루가 동그랗게 번지는데, 이게 다음 세대로 퍼질 포자야. 병이 진행되면 잎이 우수수 떨어지고, 잎을 잃은 나뭇가지는 말라 죽어. 열매를 많이 달고 있는 나무일수록 영양을 열매에 몰아준 상태라 더 쉽게 무너져. 포자는 바람과 빗방울 튐, 그리고 사람의 옷·장비·차량을 타고도 옮겨 다녀서 한 밭에서 시작해도 지역 전체로 번지는 일이 잦아.</p>
+          <div class="ez-callout">💡 비유: 나무의 잎은 태양광 패널이야. 패널을 다 떼어내면 발전소가 멈추듯, 잎을 잃은 커피나무는 열매를 익힐 에너지를 못 만들어 ☀️</div>
+        
+          <h3>2️⃣ 왜 하필 기후 변화 이야기와 같이 나올까?</h3>
+          <p>이 곰팡이는 아무 데서나 잘 자라지 않아. 잎이 젖어 있는 시간이 충분하고 기온이 적당히 따뜻할 때 포자가 발아해서 잎 속으로 파고들어. 너무 춥거나 너무 건조하면 힘을 못 써. 그래서 예전에는 서늘한 고지대 밭이 상대적으로 안전했어. 그런데 평균 기온이 오르고 비 내리는 패턴이 불규칙해지면 이 &#39;적당히 따뜻하고 축축한 조건&#39;이 더 높은 고도에서도 만들어져. 곰팡이가 산을 따라 위로 올라오는 셈이지. 여기에 아라비카 자체가 온도에 예민해서 더위 스트레스를 받으면 병에 버티는 힘도 함께 떨어져.</p>
+          <div class="ez-callout">💡 비유: 여름 장마철에 욕실 곰팡이가 유독 심해지잖아. 따뜻하고 축축한 날이 길어질수록 곰팡이가 신나는 건 커피밭도 똑같아 🌧️</div>
+        
+          <h3>3️⃣ &#39;2050년 재배 적지가 줄어든다&#39;는 말은 어떻게 나온 거야?</h3>
+          <p>이건 점쟁이 예언이 아니라 모델 계산이야. 먼저 기후 모델로 미래의 기온·강수 분포를 그리고, 그 위에 &#39;아라비카가 잘 자라는 조건&#39;을 겹쳐서 지도에 색칠하는 방식이지. 아라비카는 연평균 기온이 대략 18~22도쯤 되는 좁은 구간을 좋아하는데, 이 구간이 지도에서 밀려나면 지금 커피밭인 곳이 부적합 지역으로 바뀌어. 여러 연구에서 이런 방식으로 2050년 무렵 아라비카 재배 적지가 상당히 줄어들 수 있다는 전망이 나와. 다만 전제와 시나리오에 따라 결과 폭이 크고, 반대로 고도가 높은 지역이 새로 적합해지는 경우도 함께 계산돼.</p>
+          <div class="ez-callout">💡 비유: 온난화로 사과 주산지가 대구에서 강원도 쪽으로 북상했다는 이야기 들어봤지? 커피도 지도 위에서 같은 일이 벌어지는 거야 🗺️</div>
+        
+      </div>
+      
+
+      
+      
+      <div class="ez-section">
+        <h2>🎯 핵심 발견</h2>
+        <ul class="ez-findings">
+          
+          
+            
+              <li class="gold">
+                <strong>🥇 스리랑카가 홍차의 나라가 된 건 이 곰팡이 때문이야</strong>19세기 후반, 당시 실론이라 불리던 스리랑카는 세계적인 커피 산지였어. 그런데 잎녹병이 섬을 덮치면서 커피 농장이 줄줄이 무너졌고, 농장주들은 커피를 포기하고 차나무로 갈아탔지. 우리가 지금 &#39;실론 티&#39;를 자연스럽게 떠올리는 건 그때 벌어진 병해의 결과야. 이후 이 병은 아시아와 아프리카를 거쳐 결국 아메리카 대륙까지 건너갔고, 지금은 사실상 전 세계 아라비카 산지가 공유하는 문제가 됐어. 곰팡이 하나가 한 나라의 농업 지도를 바꾼 셈이지 🍵
+              </li>
+            
+              <li class="silver">
+                <strong>🥈 대유행이 한번 터지면 산지 전체가 흔들려</strong>잎녹병은 매년 조금씩 있는 만성 질환 같다가도, 조건이 맞으면 지역 전체를 덮치는 대유행으로 번져. 2010년대 초 중미 산지가 겪은 대규모 발병이 대표적이야. 수확량이 크게 떨어지면서 농가 소득이 무너졌고, 수확 일자리가 사라지면서 계절 노동자들까지 타격을 받았어. 커피 병해가 단순히 &#39;올해 수확이 좀 줄었다&#39; 수준이 아니라, 마을 경제와 이주 문제로까지 이어진다는 걸 보여준 사건이야.
+              </li>
+            
+              <li class="bronze">
+                <strong>🥉 해법 1 — 병에 강한 품종을 심는다</strong>가장 근본적인 대응은 아예 병에 잘 안 걸리는 품종을 심는 거야. 여기서 핵심 역할을 한 게 티모르 하이브리드로, 아라비카와 로부스타가 자연적으로 섞인 계통이야. 로부스타 쪽에서 온 저항성 유전자를 물려받았거든. 이걸 아라비카 품종과 교배해서 만든 카티모르·사르치모르 계열, 콜롬비아에서 개발된 카스티요 같은 품종들이 산지에 널리 보급됐어. 다만 초기 내병성 품종은 컵 품질이 아쉽다는 평가가 많았고, 곰팡이도 계속 변이해서 저항성이 영원하지는 않다는 게 숙제야.
+              </li>
+            
+              <li class="medal">
+                <strong>🏅 해법 2 — 그늘과 고도, 밭을 다시 설계한다</strong>나무 사이에 큰 그늘나무를 심는 그늘 재배(애그로포레스트리)는 한낮 기온과 온도 변동을 눌러줘서 더위 스트레스를 줄이고 토양도 지켜줘. 다만 그늘이 지나치게 짙으면 잎이 마르는 시간이 길어져 오히려 곰팡이에게 유리해질 수 있어서, 가지치기와 간격 조절로 균형을 잡는 게 중요해. 여기에 더 서늘한 고지대로 밭을 옮기는 선택지도 있는데, 산에는 위쪽 한계가 있고 그 땅이 이미 숲이거나 남의 땅인 경우가 많아서 무한정 올라갈 수는 없어.
+              </li>
+            
+              <li class="medal">
+                <strong>🏅 해법 3 — 커피의 &#39;종&#39; 자체를 넓힌다</strong>우리가 마시는 커피는 사실 아라비카와 로부스타 두 종에 거의 몰려 있어. 유전적으로 다양성이 좁다는 건 새로운 병이나 기후 충격에 다 같이 무너질 위험이 크다는 뜻이지. 그래서 연구자들은 더 더운 환경을 견디면서도 맛이 괜찮은 다른 커피 종을 다시 들여다보고 있어. 서아프리카에서 재조명된 스테노필라 같은 종이 그런 후보야. 아직 상업적 규모와는 거리가 있지만, 산지 야생 커피의 유전자원을 지키는 일이 왜 중요한지 보여주는 대목이야 🌿
+              </li>
+            
+          
+        </ul>
+      </div>
+      
+
+      
+      
+
+      
+      
+      
+      <div class="ez-section">
+        <h2>🆚 아라비카 vs 로부스타 — 기후와 병 앞에서 이렇게 달라</h2>
+        <table class="ez-table">
+          <thead><tr><th>항목</th><th>아라비카</th><th>로부스타</th></tr></thead>
+          <tbody>
+            <tr>
+              <th>선호 재배 고도</th><td>대체로 고지대</td><td>저지대에서도 잘 자람</td>
+            </tr><tr>
+              <th>선호 기온대</th><td>연평균 18~22도 안팎의 좁은 구간</td><td>더 높은 기온까지 견딤</td>
+            </tr><tr>
+              <th>잎녹병 저항성</th><td>약함 — 대유행의 주된 피해자</td><td>상대적으로 강함</td>
+            </tr><tr>
+              <th>맛 특성</th><td>산미와 향이 풍부, 스페셜티의 주역</td><td>쓴맛·바디 중심, 블렌드와 인스턴트에 활용</td>
+            </tr><tr>
+              <th>기후 변화 영향</th><td>적지 축소 전망의 핵심 대상</td><td>상대적으로 여유 있지만 안전지대는 아님</td>
+            </tr><tr>
+              <th>품종 개량에서의 역할</th><td>품질을 담당</td><td>저항성 유전자를 공급 (티모르 하이브리드)</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      
+      
+
+      
+      
+
+      
+      
+
+      
+      
+      <div class="ez-section">
+        <div class="ez-summary">💡 <strong>한 줄 요약</strong> — 잎을 갉는 곰팡이 하나가 산지를 무너뜨릴 수 있고, 기온 상승은 그 곰팡이에게 더 넓은 무대를 열어준다 — 그래서 내병성 품종과 그늘, 그리고 커피의 유전적 다양성이 중요해 🌱</div>
+      </div>
+      
+
+      
+      
+      
+      
+
+      
+      
+      <div class="ez-section">
+        <h2>📖 어려운 말 풀이 사전</h2>
+        <p>이 글에 나온 어려운 약어와 용어를 한 번에 정리했어. 의미만 알면 본문이 훨씬 쉬워져!</p>
+        <div class="ez-glossary">
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">커피 잎녹병(Coffee Leaf Rust, roya)</div>
+            <div class="ez-glossary-def">커피나무 잎에 주황빛 포자가 번져 잎을 떨어뜨리는 곰팡이병. 산지에서는 스페인어로 &#39;로야&#39;라 부름</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">헤밀레이아 바스타트릭스(Hemileia vastatrix)</div>
+            <div class="ez-glossary-def">커피 잎녹병을 일으키는 곰팡이의 학명. 바람·빗방울·사람의 이동을 타고 퍼짐</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">티모르 하이브리드(Timor Hybrid)</div>
+            <div class="ez-glossary-def">아라비카와 로부스타가 자연적으로 섞인 계통. 잎녹병 저항성 품종 개량의 출발점이 됨</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">카티모르·카스티요(Catimor, Castillo)</div>
+            <div class="ez-glossary-def">티모르 하이브리드를 활용해 만든 대표적인 잎녹병 내병성 품종 계열</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">그늘 재배(Shade-grown, 애그로포레스트리)</div>
+            <div class="ez-glossary-def">큰 나무 아래에서 커피를 기르는 방식. 기온 변동과 토양 유실을 줄여주지만 습도 관리가 함께 필요함</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">재배 적지(Suitable Area)</div>
+            <div class="ez-glossary-def">특정 작물이 잘 자랄 수 있는 기후 조건을 갖춘 지역. 기후 모델과 겹쳐 미래 지도를 예측하는 데 쓰임</div>
+          </div>
+          
+        </div>
+      </div>
+      
+
+    </div>
+  </section>
+
+  <footer class="article-footer">
+    <div class="container">
+      <a href="/insight">← BACK TO INSIGHTS</a>
+      <span style="margin: 0 16px;">·</span>
+      <a href="/">HOME</a>
+    </div>
+  </footer>
+</article>
+
+</body>
+</html>

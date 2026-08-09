@@ -1,7 +1,24 @@
 {
   "version": 1,
-  "updated_at": "2026-08-08T11:59:17Z",
+  "updated_at": "2026-08-09T12:01:00Z",
   "items": [
+    {
+      "id": "2026-08-09-leaf-rust-climate",
+      "type": "trivia",
+      "date": "2026-08-09",
+      "title_ko": "커피나무를 통째로 무너뜨리는 '녹슨 잎' 병이 있다고? 🍂",
+      "one_liner": "곰팡이 한 종이 산지를 갈아엎고, 기후 변화가 그 곰팡이에게 유리한 판을 깔아주고 있다!",
+      "categories_primary": [
+        "커피 상식"
+      ],
+      "categories_secondary": [
+        "기후·환경"
+      ],
+      "hero_image": "/static/img/insights/trivia/trade.svg",
+      "journal": null,
+      "pub_date": null,
+      "source_basis": null
+    },
     {
       "id": "2026-08-08-c-market-price",
       "type": "trivia",
