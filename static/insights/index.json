@@ -1,7 +1,24 @@
 {
   "version": 1,
-  "updated_at": "2026-08-09T12:01:00Z",
+  "updated_at": "2026-08-10T12:29:30Z",
   "items": [
+    {
+      "id": "2026-08-10-milk-drinks-compare",
+      "type": "trivia",
+      "date": "2026-08-10",
+      "title_ko": "라떼·카푸치노·플랫화이트·마키아토, 도대체 뭐가 다른 거야? 🥛",
+      "one_liner": "재료는 똑같이 에스프레소와 우유인데, 우유 양과 거품 두께만 바뀌면 완전히 다른 메뉴가 된다!",
+      "categories_primary": [
+        "커피 상식"
+      ],
+      "categories_secondary": [
+        "메뉴"
+      ],
+      "hero_image": "/static/img/insights/trivia/terms.svg",
+      "journal": null,
+      "pub_date": null,
+      "source_basis": null
+    },
     {
       "id": "2026-08-09-leaf-rust-climate",
       "type": "trivia",

@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>라떼·카푸치노·플랫화이트·마키아토, 도대체 뭐가 다른 거야? 🥛 — 92°C ROASTERY</title>
+<meta name="description" content="재료는 똑같이 에스프레소와 우유인데, 우유 양과 거품 두께만 바뀌면 완전히 다른 메뉴가 된다!">
+<link rel="icon" type="image/png" href="/static/img/logo-92black.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --canvas: #FFFFFF; --canvas-warm: #FAF7F2; --canvas-stone: #F2ECE3;
+  --ink: #1A1410; --ink-mute: #4A3F36; --ink-soft: #6B5E52;
+  --espresso: #6F4E37; --caramel: #C9986A; --copper: #B5703D;
+  --line: #E8E0D5; --line-soft: #F0E9DD;
+  --font-display: "Cormorant Garamond", "Pretendard", serif;
+  --font-body: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  --r-sm: 6px; --r-md: 12px; --r-pill: 999px;
+}
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color: transparent; }
+html { scroll-behavior: smooth; }
+body { font-family: var(--font-body); color: var(--ink); background: var(--canvas); font-feature-settings: "kern","ss01","lnum"; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+a { color: var(--copper); text-decoration: none; border-bottom: 1px solid transparent; transition: border-color .2s; }
+a:hover { border-bottom-color: var(--copper); }
+img { display: block; max-width: 100%; height: auto; }
+.container { max-width: 860px; margin: 0 auto; padding: 0 32px; }
+@media (max-width: 720px) { .container { padding: 0 20px; } }
+@media (max-width: 480px) { .container { padding: 0 16px; } }
+.site-nav { position: sticky; top: 0; z-index: 50; background: rgba(255,255,255,0.9); backdrop-filter: saturate(140%) blur(14px); -webkit-backdrop-filter: saturate(140%) blur(14px); border-bottom: 1px solid var(--line-soft); }
+.nav-inner { max-width: 1200px; margin: 0 auto; padding: 16px 32px; display: flex; align-items: center; justify-content: space-between; }
+.brand { font-family: var(--font-display); font-size: 1.3rem; font-weight: 700; color: var(--ink); display: inline-flex; align-items: center; gap: 4px; border-bottom: none; }
+.brand:hover { border-bottom: none; }
+.brand-mark { display: inline-flex; align-items: flex-start; font-family: "Pretendard", sans-serif; font-weight: 900; letter-spacing: -0.04em; line-height: 1; color: inherit; }
+.temp-mark { display: flex; flex-direction: column; line-height: .82; margin: 0 .05em 0 .04em; }
+.temp-mark .temp-deg { font-size: .42em; letter-spacing: -.04em; }
+.temp-mark .temp-c { font-size: .58em; letter-spacing: -.05em; margin-top: -.05em; }
+.nav-back { font-family: var(--font-mono); font-size: .75rem; letter-spacing: .18em; color: var(--ink-mute); border-bottom: none; }
+.nav-back:hover { color: var(--copper); border-bottom: none; }
+.article-hero { padding: 56px 0 48px; border-bottom: 1px solid var(--line-soft); }
+.eyebrow { font-family: var(--font-mono); font-size: .72rem; letter-spacing: .28em; color: var(--copper); margin-bottom: 18px; display: flex; align-items: center; gap: 12px; }
+.eyebrow::before { content: ""; display: inline-block; width: 28px; height: 1px; background: var(--copper); }
+.article-title { font-family: var(--font-display); font-weight: 500; font-size: clamp(2rem, 4.5vw, 3.2rem); line-height: 1.15; letter-spacing: -0.02em; color: var(--ink); margin-bottom: 20px; }
+.article-title em { font-style: italic; color: var(--espresso); font-weight: 600; }
+.article-one-liner { font-family: var(--font-display); font-style: italic; font-size: 1.3rem; line-height: 1.5; color: var(--espresso); margin-bottom: 28px; padding-left: 20px; border-left: 3px solid var(--caramel); }
+.article-meta { display: flex; gap: 24px; flex-wrap: wrap; font-family: var(--font-mono); font-size: .75rem; letter-spacing: .12em; color: var(--ink-soft); padding-top: 20px; border-top: 1px solid var(--line-soft); }
+.article-meta span { display: inline-flex; align-items: center; gap: 6px; }
+.article-meta span::before { content: "■"; color: var(--caramel); font-size: .55rem; }
+.hero-image { margin: 32px 0 0; border-radius: var(--r-md); overflow: hidden; border: 1px solid var(--line); }
+.hero-image img { width: 100%; }
+.article-body { padding: 56px 0 80px; }
+.article-footer { padding: 36px 0 56px; border-top: 1px solid var(--line-soft); text-align: center; font-family: var(--font-mono); font-size: .75rem; letter-spacing: .14em; color: var(--ink-soft); }
+.article-footer a { color: var(--ink-mute); border-bottom: 1px solid transparent; }
+.article-footer a:hover { color: var(--copper); border-bottom-color: var(--copper); }
+.source-basis { display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; background: rgba(201,152,106,.18); border: 1px solid rgba(181,112,61,.35); border-radius: var(--r-pill); font-family: var(--font-mono); font-size: .72rem; letter-spacing: .12em; color: var(--espresso); font-weight: 500; }
+.source-basis.abstract { background: rgba(107,94,82,.1); border-color: rgba(107,94,82,.3); color: var(--ink-soft); }
+.links-row { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 18px; }
+.link-pill { display: inline-flex; align-items: center; gap: 8px; padding: 9px 16px; background: var(--canvas-warm); border: 1px solid var(--line); border-radius: var(--r-pill); font-family: var(--font-mono); font-size: .78rem; letter-spacing: .08em; color: var(--ink-mute); border-bottom: 1px solid var(--line); transition: border-color .2s, color .2s; }
+.link-pill:hover { color: var(--copper); border-color: var(--copper); }
+
+/* ===== EZ: 쉬운 설명 스타일 ===== */
+.ez-hero { text-align: center; padding: 8px 0 32px; }
+.ez-hero-emoji { font-size: 3.4rem; line-height: 1; }
+.ez-hero-title { font-family: var(--font-display); font-size: clamp(1.6rem, 3.5vw, 2.2rem); font-weight: 600; color: var(--ink); margin-top: 14px; line-height: 1.3; }
+.ez-section { margin-bottom: 52px; }
+.ez-section h2 { font-family: var(--font-body); font-size: 1.5rem; font-weight: 700; color: var(--ink); margin-bottom: 18px; letter-spacing: -0.01em; }
+.ez-section h3 { font-size: 1.08rem; font-weight: 600; color: var(--espresso); margin: 22px 0 10px; }
+.ez-section p { font-size: 1.04rem; line-height: 1.85; color: var(--ink-mute); margin-bottom: 14px; }
+.ez-section p:last-child { margin-bottom: 0; }
+.ez-section ul { padding-left: 22px; margin-bottom: 14px; }
+.ez-section li { font-size: 1.02rem; line-height: 1.8; color: var(--ink-mute); margin-bottom: 8px; }
+.ez-callout { margin: 14px 0; padding: 14px 18px; background: var(--canvas-warm); border-left: 3px solid var(--caramel); border-radius: 4px; font-size: 0.98rem; color: var(--espresso); line-height: 1.75; }
+.ez-callout strong { color: var(--copper); }
+.ez-findings { list-style: none; padding: 0; }
+.ez-findings > li { padding: 18px 22px; margin-bottom: 14px; background: var(--canvas-warm); border: 1px solid var(--line); border-radius: 10px; font-size: 1.02rem; line-height: 1.7; color: var(--ink-mute); }
+.ez-findings > li strong { color: var(--ink); display: block; margin-bottom: 4px; font-size: 1.06rem; }
+.ez-findings > li.gold { background: linear-gradient(135deg, #FFF8E7, #FFEFCD); border-color: #F0D67A; }
+.ez-findings > li.silver { background: linear-gradient(135deg, #F6F6F6, #ECECEC); border-color: #C7C7C7; }
+.ez-findings > li.bronze { background: linear-gradient(135deg, #FFEEDD, #FFDCC0); border-color: #E4B07F; }
+.ez-findings > li.medal { background: linear-gradient(135deg, #F0E6FF, #E1D2FF); border-color: #BDA8E5; }
+.ez-table { width: 100%; border-collapse: collapse; margin: 16px 0 8px; font-size: 0.96rem; }
+.ez-table th, .ez-table td { padding: 11px 14px; border: 1px solid var(--line); text-align: left; vertical-align: top; }
+.ez-table thead th { background: var(--ink); color: #fff; font-weight: 600; letter-spacing: .02em; }
+.ez-table tbody th { background: var(--canvas-warm); color: var(--ink); font-weight: 600; }
+.ez-table tbody tr:nth-child(even) td { background: rgba(250, 247, 242, .55); }
+.ez-summary { padding: 26px 30px; background: linear-gradient(135deg, #FAF0E0, #F3E1C5); border-radius: 14px; font-size: 1.13rem; line-height: 1.75; font-weight: 500; color: var(--ink); border: 1px solid #E5C99B; }
+.ez-summary strong { color: var(--espresso); }
+.ez-citation { margin-top: 24px; padding: 18px 22px; background: var(--canvas-warm); border-radius: 8px; font-family: var(--font-mono); font-size: 0.82rem; color: var(--ink-soft); line-height: 1.7; }
+.ez-citation p { margin: 4px 0; }
+.ez-chart-card { padding: 22px 24px 18px; background: var(--canvas); border: 1px solid var(--line); border-radius: 12px; margin: 16px 0; }
+.ez-chart-card .ez-chart-title { font-size: 1rem; font-weight: 600; color: var(--ink); margin-bottom: 14px; }
+.ez-bar-row { display: flex; align-items: center; margin: 10px 0; font-size: 0.95rem; gap: 14px; }
+.ez-bar-label { width: 180px; flex-shrink: 0; color: var(--ink-mute); font-weight: 500; }
+.ez-bar-track { flex: 1; height: 32px; background: var(--canvas-warm); border-radius: 6px; overflow: hidden; position: relative; border: 1px solid var(--line); }
+.ez-bar-fill { height: 100%; background: linear-gradient(90deg, var(--caramel), var(--copper)); display: flex; align-items: center; justify-content: flex-end; padding: 0 12px; color: white; font-weight: 700; font-size: 0.92rem; min-width: 56px; }
+.ez-bar-fill.alt { background: linear-gradient(90deg, #6F4E37, #4A3F36); }
+.ez-glossary { display: grid; gap: 12px; }
+.ez-glossary-item { padding: 16px 20px; background: var(--canvas-warm); border: 1px solid var(--line); border-radius: 10px; border-left: 3px solid var(--caramel); }
+.ez-glossary-term { font-family: var(--font-display); font-style: italic; font-size: 1.1rem; font-weight: 600; color: var(--espresso); margin-bottom: 6px; }
+.ez-glossary-def { font-size: 0.98rem; color: var(--ink-mute); line-height: 1.7; }
+@media (max-width: 720px) {
+  .article-hero { padding: 36px 0 32px; }
+  .article-body { padding: 36px 0 56px; }
+  .ez-section { margin-bottom: 40px; }
+  .ez-section h2 { font-size: 1.3rem; }
+  .ez-bar-label { width: 100%; margin-bottom: 4px; }
+  .ez-bar-row { flex-direction: column; align-items: stretch; }
+  .article-meta { gap: 12px 18px; font-size: .68rem; }
+}
+</style>
+</head>
+<body>
+
+<header class="site-nav">
+  <div class="nav-inner">
+    <a class="brand" href="/">
+      <span class="brand-mark">92<span class="temp-mark"><span class="temp-deg">°</span><span class="temp-c">C</span></span></span>ROASTERY
+    </a>
+    <a class="nav-back" href="/insight">← INSIGHTS</a>
+  </div>
+</header>
+
+<article>
+  <section class="article-hero">
+    <div class="container">
+      <div class="eyebrow">— 오늘의 커피 상식 · 2026.08.10</div>
+      <h1 class="article-title">라떼·카푸치노·플랫화이트·마키아토, 도대체 뭐가 다른 거야? 🥛</h1>
+      <p class="article-one-liner">재료는 똑같이 에스프레소와 우유인데, 우유 양과 거품 두께만 바뀌면 완전히 다른 메뉴가 된다!</p>
+      <div class="article-meta">
+        
+        
+        
+        <span>커피 상식 · 메뉴</span>
+      </div>
+      
+      <div class="hero-image">
+        <img src="/static/img/insights/trivia/terms.svg" alt="라떼·카푸치노·플랫화이트·마키아토, 도대체 뭐가 다른 거야? 🥛">
+      </div>
+      
+    </div>
+  </section>
+
+  <section class="article-body">
+    <div class="container">
+
+      
+      <div class="ez-hero">
+        <div class="ez-hero-emoji">🥛</div>
+        <div class="ez-hero-title">라떼·카푸치노·플랫화이트·마키아토, 도대체 뭐가 다른 거야?</div>
+      </div>
+
+      
+      <div class="ez-section">
+        <h2>🤔 무슨 연구야?</h2>
+        
+          <p>카페 메뉴판을 보면 카페라떼, 카푸치노, 플랫화이트, 마키아토가 나란히 적혀 있어. 재료를 뜯어보면 죄다 &#39;에스프레소 + 우유&#39;뿐인데 이름은 네 개나 되지. 처음엔 그냥 이름 장난 같아 보이지만, 실제로는 우유를 얼마나 붓고 거품을 얼마나 올리느냐가 메뉴마다 달라. 그리고 그 차이가 첫 모금에서 바로 느껴져. ☕</p><p>비율이 왜 그렇게 중요할까? 에스프레소는 아주 진한 커피 원액이야. 여기에 우유를 조금만 부으면 커피 맛이 그대로 살아 있고, 많이 부으면 우유의 고소함이 앞으로 나와. 거품도 마찬가지야. 두툼한 거품은 입에 닿는 첫 느낌을 폭신하게 만들고, 얇은 거품은 커피와 우유가 하나로 섞인 매끈한 질감을 만들어.</p><p>다만 미리 말해둘 게 있어. 이 비율은 나라마다, 카페마다, 심지어 같은 카페의 바리스타마다도 조금씩 달라. 잔 크기가 다르면 우유 양도 자연스럽게 달라지거든. 그러니까 아래 나오는 숫자는 &#39;대략 이 정도&#39;라는 감을 잡는 기준일 뿐이지 절대적인 정답표가 아니야. 오늘은 그 대략의 기준부터, 우유 거품이 어떤 원리로 만들어지는지, 그리고 식물성 우유가 왜 잘 분리되는지까지 같이 알아보자! 🤔</p>
+        
+      </div>
+
+      
+      
+      <div class="ez-section">
+        <h2>🧪 핵심 개념 쉽게 풀어보면</h2>
+        
+          <h3>1️⃣ 커피는 그대로, 우유만 늘어난다 — 비율의 마법</h3>
+          <p>네 메뉴의 출발점은 똑같아. 에스프레소 한 샷(대략 25~30ml)이야. 여기서 달라지는 건 우유 양이야. 마키아토는 거품을 한 스푼 얹는 정도라 커피 맛이 거의 그대로 남고, 플랫화이트는 우유를 100ml 남짓 부어서 커피와 우유가 팽팽하게 겨루고, 라떼는 우유를 훨씬 많이 부어 부드러움이 앞선다. 즉 커피 양은 비슷한데 우유만 늘어나면서 맛의 무게중심이 커피 쪽에서 우유 쪽으로 스르륵 옮겨가는 거야.</p>
+          <div class="ez-callout">💡 비유: 라면 스프 한 봉지에 물을 얼마나 붓느냐와 똑같아. 스프 양은 그대로인데 물이 늘어날수록 국물이 순해지잖아. 커피도 정확히 그 원리야 🍜</div>
+        
+          <h3>2️⃣ 스팀 우유의 미세 거품(마이크로폼)은 어떻게 생겨?</h3>
+          <p>스팀완드는 뜨거운 수증기를 뿜는 관이야. 우유에 살짝 담그면 &#39;치익&#39; 소리와 함께 공기가 빨려 들어가는데(공기 넣기), 그다음 완드를 조금 더 깊이 넣어 우유를 소용돌이처럼 돌리면 큰 공기 방울이 잘게 부서져(질감 잡기). 이때 우유 단백질이 방울 표면을 감싸 막을 만들어 거품이 무너지지 않게 붙잡아줘. 그래서 잘 만든 스팀 우유는 눈에 방울이 안 보이고 페인트처럼 반질반질해. 이걸 마이크로폼이라고 불러.</p>
+          <div class="ez-callout">💡 비유: 비눗방울이 그냥 물로는 안 만들어지고 비누가 있어야 유지되는 것처럼, 우유 거품도 단백질이 방울을 붙잡아줘야 오래 버텨 🫧</div>
+        
+          <h3>3️⃣ 설탕도 안 넣었는데 왜 달아? — 유당과 단백질</h3>
+          <p>우유에는 유당(젖당)이라는 우유 고유의 당이 들어 있어. 설탕만큼 강한 단맛은 아니지만 분명히 단맛을 내지. 여기에 우유 지방과 단백질이 만드는 매끈하고 묵직한 질감이 더해지면 우리 혀는 그걸 &#39;더 달다&#39;고 받아들여. 흔한 오해 하나 짚고 가자. 우유를 데운다고 유당이 분해돼서 단맛이 새로 생기는 건 아니야. 다만 차가울 때보다 따뜻할 때 단맛과 향을 더 잘 느끼기 때문에 스팀 우유가 훨씬 달게 느껴지는 거야.</p>
+          <div class="ez-callout">💡 비유: 아이스크림을 얼렸을 때보다 살짝 녹였을 때 훨씬 달게 느껴지는 것과 같아. 당분 양은 그대로인데 혀가 느끼는 강도가 달라지는 거지 🍦</div>
+        
+      </div>
+      
+
+      
+      
+      <div class="ez-section">
+        <h2>🎯 핵심 발견</h2>
+        <ul class="ez-findings">
+          
+          
+            
+              <li class="gold">
+                <strong>🥇 마키아토는 원래 &#39;점 찍다&#39;라는 뜻이야</strong>마키아토(macchiato)는 이탈리아어로 &#39;얼룩진, 점 찍은&#39;이라는 뜻이야. 에스프레소 위에 우유 거품을 한 점 톡 얹어서 얼룩을 남긴 모습에서 온 이름이지. 그래서 원래 에스프레소 마키아토는 아주 작은 잔에 나오는 진한 커피야. 반대로 라떼 마키아토는 우유를 먼저 채우고 그 위에 에스프레소를 부어 커피로 얼룩을 남기는 메뉴라 완전히 다른 음료야. 카페에서 &#39;마키아토&#39;만 보면 어느 쪽인지 한 번 물어보는 게 안전해 ☕
+              </li>
+            
+              <li class="silver">
+                <strong>🥈 플랫화이트와 라떼의 진짜 차이는 &#39;거품 두께&#39;</strong>이름부터 힌트야. 플랫(flat)은 평평하다는 뜻이거든. 플랫화이트는 거품층을 아주 얇게 유지해서 우유와 커피가 한 덩어리처럼 매끈하게 섞여. 잔도 라떼보다 작은 편이라 같은 커피 양이면 맛이 더 진하게 느껴지고, 리스트레토처럼 짧게 뽑은 샷을 쓰는 곳도 많아. 반면 라떼는 잔이 크고 우유가 많아서 훨씬 순하고 부드럽지. 커피 맛을 더 또렷하게 즐기고 싶으면 플랫화이트가 좋은 선택이야.
+              </li>
+            
+              <li class="bronze">
+                <strong>🥉 우유 스팀은 60도 근처가 마지노선</strong>우유를 무작정 뜨겁게 데우면 안 돼. 온도가 너무 올라가면 거품을 붙잡고 있던 단백질 구조가 망가져서 거품이 푸석해지고 금방 꺼져버려. 맛도 변해서 삶은 우유 같은 비릿한 냄새가 나기 시작하지. 그래서 많은 카페가 60도 안팎에서 스팀을 멈춰. 뜨거운 걸 좋아해서 &#39;아주 뜨겁게 해주세요&#39;라고 부탁하면 거품과 단맛을 조금 포기하게 된다는 뜻이기도 해 🌡️
+              </li>
+            
+              <li class="medal">
+                <strong>🏅 식물성 우유는 왜 커피에 넣으면 몽글몽글해질까</strong>귀리·아몬드·두유 같은 식물성 음료는 우유와 단백질 구조가 달라. 커피는 원래 약한 산성이라, 산성 환경과 높은 온도가 겹치면 식물성 단백질이 서로 뭉쳐 몽글몽글한 덩어리로 가라앉기 쉬워. 냉장고에서 갓 꺼낸 차가운 식물성 음료를 뜨거운 커피에 확 부으면 특히 잘 생기지. 그래서 카페용으로 나온 제품에는 산도를 완충하고 거품을 잡아주는 성분이 더해져 있는 경우가 많아 🌾
+              </li>
+            
+              <li class="medal">
+                <strong>🏅 지방이 적은 우유가 거품은 더 잘 서는데…</strong>재밌게도 저지방·무지방 우유가 일반 우유보다 거품 자체는 크고 단단하게 잘 서는 편이야. 지방이 거품 막을 방해하는 면이 있거든. 그런데 마셔보면 뭔가 허전해. 입안을 감싸는 크리미한 질감과 고소한 풍미는 결국 지방이 만들어주기 때문이야. 그래서 카페에서 라떼용으로는 일반 우유를 쓰는 경우가 많아. 거품 크기와 마시는 맛은 별개의 문제인 셈이지 🥛
+              </li>
+            
+          
+        </ul>
+      </div>
+      
+
+      
+      
+      <div class="ez-section">
+        <h2>📊 숫자로 보기</h2>
+        
+          
+          
+          <div class="ez-chart-card">
+            <div class="ez-chart-title">한 잔에서 우유가 차지하는 비중 (대략, 카페마다 다름)</div>
+            
+              
+              <div class="ez-bar-row">
+                <div class="ez-bar-label">에스프레소 마키아토</div>
+                <div class="ez-bar-track"><div class="ez-bar-fill" style="width: 18.8%;">15.0%</div></div>
+              </div>
+            
+              
+              <div class="ez-bar-row">
+                <div class="ez-bar-label">코르타도</div>
+                <div class="ez-bar-track"><div class="ez-bar-fill" style="width: 62.5%;">50.0%</div></div>
+              </div>
+            
+              
+              <div class="ez-bar-row">
+                <div class="ez-bar-label">카푸치노</div>
+                <div class="ez-bar-track"><div class="ez-bar-fill" style="width: 75.0%;">60.0%</div></div>
+              </div>
+            
+              
+              <div class="ez-bar-row">
+                <div class="ez-bar-label">플랫화이트</div>
+                <div class="ez-bar-track"><div class="ez-bar-fill" style="width: 87.5%;">70.0%</div></div>
+              </div>
+            
+              
+              <div class="ez-bar-row">
+                <div class="ez-bar-label">카페라떼</div>
+                <div class="ez-bar-track"><div class="ez-bar-fill" style="width: 100.0%;">80.0%</div></div>
+              </div>
+            
+          </div>
+        
+      </div>
+      
+
+      
+      
+      
+      <div class="ez-section">
+        <h2>🆚 우유 음료 한눈에 비교 (대략 기준, 카페마다 달라)</h2>
+        <table class="ez-table">
+          <thead><tr><th>메뉴</th><th>에스프레소</th><th>우유</th><th>거품</th></tr></thead>
+          <tbody>
+            <tr>
+              <th>에스프레소 마키아토</th><td>1샷 (약 25~30ml)</td><td>거의 없음</td><td>한 스푼 톡 얹는 정도</td>
+            </tr><tr>
+              <th>코르타도</th><td>1샷</td><td>샷과 비슷한 양 (약 1:1)</td><td>아주 얇게</td>
+            </tr><tr>
+              <th>플랫화이트</th><td>1~2샷 (짧게 뽑기도)</td><td>약 100~120ml</td><td>0.5cm 이하 미세거품</td>
+            </tr><tr>
+              <th>카푸치노</th><td>1샷</td><td>약 60~90ml</td><td>1~2cm 두툼하게</td>
+            </tr><tr>
+              <th>카페라떼</th><td>1~2샷</td><td>약 150~250ml</td><td>1cm 안팎 얇게</td>
+            </tr><tr>
+              <th>라떼 마키아토</th><td>나중에 붓는 1샷</td><td>잔의 대부분</td><td>위쪽에 두툼하게</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      
+      
+
+      
+      
+
+      
+      
+
+      
+      
+      <div class="ez-section">
+        <div class="ez-summary">💡 <strong>한 줄 요약</strong> — 네 메뉴의 재료는 똑같아. 우유를 얼마나 붓고 거품을 얼마나 두껍게 올리느냐가 이름을 가른다 — 진한 순서로 마키아토, 코르타도, 플랫화이트, 카푸치노, 라떼! 🥛</div>
+      </div>
+      
+
+      
+      
+      
+      
+
+      
+      
+      <div class="ez-section">
+        <h2>📖 어려운 말 풀이 사전</h2>
+        <p>이 글에 나온 어려운 약어와 용어를 한 번에 정리했어. 의미만 알면 본문이 훨씬 쉬워져!</p>
+        <div class="ez-glossary">
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">마이크로폼(Microfoam)</div>
+            <div class="ez-glossary-def">눈에 방울이 보이지 않을 만큼 곱게 잡힌 스팀 우유 거품. 표면이 페인트처럼 반질반질함</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">스티밍(Steaming)</div>
+            <div class="ez-glossary-def">수증기로 우유를 데우며 거품을 만드는 작업. 공기를 넣는 단계와 소용돌이로 방울을 잘게 부수는 단계로 나뉨</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">유당(Lactose)</div>
+            <div class="ez-glossary-def">우유에 들어 있는 고유의 당. 설탕보다 단맛은 약하지만 우유의 은은한 단맛을 담당함</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">우유 단백질(Milk protein)</div>
+            <div class="ez-glossary-def">거품 방울 표면을 감싸 막을 만들어 거품이 꺼지지 않게 붙잡아주는 성분</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">리스트레토(Ristretto)</div>
+            <div class="ez-glossary-def">같은 원두를 평소보다 짧게 뽑아 양은 적고 농도는 진한 에스프레소</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">코르타도(Cortado)</div>
+            <div class="ez-glossary-def">에스프레소와 데운 우유를 비슷한 양으로 맞춘 작은 잔 메뉴. 스페인어로 &#39;자르다&#39;에서 온 이름</div>
+          </div>
+          
+        </div>
+      </div>
+      
+
+    </div>
+  </section>
+
+  <footer class="article-footer">
+    <div class="container">
+      <a href="/insight">← BACK TO INSIGHTS</a>
+      <span style="margin: 0 16px;">·</span>
+      <a href="/">HOME</a>
+    </div>
+  </footer>
+</article>
+
+</body>
+</html>
