@@ -1,7 +1,24 @@
 {
   "version": 1,
-  "updated_at": "2026-08-10T12:29:30Z",
+  "updated_at": "2026-08-11T12:27:22Z",
   "items": [
+    {
+      "id": "2026-08-11-instant-coffee",
+      "type": "trivia",
+      "date": "2026-08-11",
+      "title_ko": "물만 부으면 커피가 되는 인스턴트, 도대체 어떻게 만드는 거야? ⚡",
+      "one_liner": "커피를 왕창 뽑아 진하게 졸인 다음 물만 날려버린 것 — 그 물을 어떻게 날리느냐가 맛을 가른다!",
+      "categories_primary": [
+        "커피 상식"
+      ],
+      "categories_secondary": [
+        "가공"
+      ],
+      "hero_image": "/static/img/insights/trivia/processing.svg",
+      "journal": null,
+      "pub_date": null,
+      "source_basis": null
+    },
     {
       "id": "2026-08-10-milk-drinks-compare",
       "type": "trivia",
