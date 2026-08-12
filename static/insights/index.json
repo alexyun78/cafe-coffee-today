@@ -1,7 +1,24 @@
 {
   "version": 1,
-  "updated_at": "2026-08-11T12:27:22Z",
+  "updated_at": "2026-08-12T12:29:45Z",
   "items": [
+    {
+      "id": "2026-08-12-espresso-channeling",
+      "type": "trivia",
+      "date": "2026-08-12",
+      "title_ko": "에스프레소 한 잔이 나오는 25초, 그 안에서 대체 무슨 일이 벌어지는 거야? ☕",
+      "one_liner": "9바 압력이 밀고 커피가 버티는 25~30초의 줄다리기 — 물길(채널링)이 생기는 순간 한 잔에 신맛과 쓴맛이 동시에 담긴다!",
+      "categories_primary": [
+        "커피 상식"
+      ],
+      "categories_secondary": [
+        "추출"
+      ],
+      "hero_image": "/static/img/insights/trivia/terms.svg",
+      "journal": null,
+      "pub_date": null,
+      "source_basis": null
+    },
     {
       "id": "2026-08-11-instant-coffee",
       "type": "trivia",
