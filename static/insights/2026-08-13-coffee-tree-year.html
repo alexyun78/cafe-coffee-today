@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>커피나무는 1년을 어떻게 살까? 하얀 꽃부터 빨간 체리까지 ☕ — 92°C ROASTERY</title>
+<meta name="description" content="비가 그친 뒤 하루아침에 자스민 향 하얀 꽃이 피고, 그 자리에 열매가 익기까지 반년이 넘게 걸린다 — 커피나무의 느린 한 해!">
+<link rel="icon" type="image/png" href="/static/img/logo-92black.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --canvas: #FFFFFF; --canvas-warm: #FAF7F2; --canvas-stone: #F2ECE3;
+  --ink: #1A1410; --ink-mute: #4A3F36; --ink-soft: #6B5E52;
+  --espresso: #6F4E37; --caramel: #C9986A; --copper: #B5703D;
+  --line: #E8E0D5; --line-soft: #F0E9DD;
+  --font-display: "Cormorant Garamond", "Pretendard", serif;
+  --font-body: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  --r-sm: 6px; --r-md: 12px; --r-pill: 999px;
+}
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color: transparent; }
+html { scroll-behavior: smooth; }
+body { font-family: var(--font-body); color: var(--ink); background: var(--canvas); font-feature-settings: "kern","ss01","lnum"; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+a { color: var(--copper); text-decoration: none; border-bottom: 1px solid transparent; transition: border-color .2s; }
+a:hover { border-bottom-color: var(--copper); }
+img { display: block; max-width: 100%; height: auto; }
+.container { max-width: 860px; margin: 0 auto; padding: 0 32px; }
+@media (max-width: 720px) { .container { padding: 0 20px; } }
+@media (max-width: 480px) { .container { padding: 0 16px; } }
+.site-nav { position: sticky; top: 0; z-index: 50; background: rgba(255,255,255,0.9); backdrop-filter: saturate(140%) blur(14px); -webkit-backdrop-filter: saturate(140%) blur(14px); border-bottom: 1px solid var(--line-soft); }
+.nav-inner { max-width: 1200px; margin: 0 auto; padding: 16px 32px; display: flex; align-items: center; justify-content: space-between; }
+.brand { font-family: var(--font-display); font-size: 1.3rem; font-weight: 700; color: var(--ink); display: inline-flex; align-items: center; gap: 4px; border-bottom: none; }
+.brand:hover { border-bottom: none; }
+.brand-mark { display: inline-flex; align-items: flex-start; font-family: "Pretendard", sans-serif; font-weight: 900; letter-spacing: -0.04em; line-height: 1; color: inherit; }
+.temp-mark { display: flex; flex-direction: column; line-height: .82; margin: 0 .05em 0 .04em; }
+.temp-mark .temp-deg { font-size: .42em; letter-spacing: -.04em; }
+.temp-mark .temp-c { font-size: .58em; letter-spacing: -.05em; margin-top: -.05em; }
+.nav-back { font-family: var(--font-mono); font-size: .75rem; letter-spacing: .18em; color: var(--ink-mute); border-bottom: none; }
+.nav-back:hover { color: var(--copper); border-bottom: none; }
+.article-hero { padding: 56px 0 48px; border-bottom: 1px solid var(--line-soft); }
+.eyebrow { font-family: var(--font-mono); font-size: .72rem; letter-spacing: .28em; color: var(--copper); margin-bottom: 18px; display: flex; align-items: center; gap: 12px; }
+.eyebrow::before { content: ""; display: inline-block; width: 28px; height: 1px; background: var(--copper); }
+.article-title { font-family: var(--font-display); font-weight: 500; font-size: clamp(2rem, 4.5vw, 3.2rem); line-height: 1.15; letter-spacing: -0.02em; color: var(--ink); margin-bottom: 20px; }
+.article-title em { font-style: italic; color: var(--espresso); font-weight: 600; }
+.article-one-liner { font-family: var(--font-display); font-style: italic; font-size: 1.3rem; line-height: 1.5; color: var(--espresso); margin-bottom: 28px; padding-left: 20px; border-left: 3px solid var(--caramel); }
+.article-meta { display: flex; gap: 24px; flex-wrap: wrap; font-family: var(--font-mono); font-size: .75rem; letter-spacing: .12em; color: var(--ink-soft); padding-top: 20px; border-top: 1px solid var(--line-soft); }
+.article-meta span { display: inline-flex; align-items: center; gap: 6px; }
+.article-meta span::before { content: "■"; color: var(--caramel); font-size: .55rem; }
+.hero-image { margin: 32px 0 0; border-radius: var(--r-md); overflow: hidden; border: 1px solid var(--line); }
+.hero-image img { width: 100%; }
+.article-body { padding: 56px 0 80px; }
+.article-footer { padding: 36px 0 56px; border-top: 1px solid var(--line-soft); text-align: center; font-family: var(--font-mono); font-size: .75rem; letter-spacing: .14em; color: var(--ink-soft); }
+.article-footer a { color: var(--ink-mute); border-bottom: 1px solid transparent; }
+.article-footer a:hover { color: var(--copper); border-bottom-color: var(--copper); }
+.source-basis { display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; background: rgba(201,152,106,.18); border: 1px solid rgba(181,112,61,.35); border-radius: var(--r-pill); font-family: var(--font-mono); font-size: .72rem; letter-spacing: .12em; color: var(--espresso); font-weight: 500; }
+.source-basis.abstract { background: rgba(107,94,82,.1); border-color: rgba(107,94,82,.3); color: var(--ink-soft); }
+.links-row { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 18px; }
+.link-pill { display: inline-flex; align-items: center; gap: 8px; padding: 9px 16px; background: var(--canvas-warm); border: 1px solid var(--line); border-radius: var(--r-pill); font-family: var(--font-mono); font-size: .78rem; letter-spacing: .08em; color: var(--ink-mute); border-bottom: 1px solid var(--line); transition: border-color .2s, color .2s; }
+.link-pill:hover { color: var(--copper); border-color: var(--copper); }
+
+/* ===== EZ: 쉬운 설명 스타일 ===== */
+.ez-hero { text-align: center; padding: 8px 0 32px; }
+.ez-hero-emoji { font-size: 3.4rem; line-height: 1; }
+.ez-hero-title { font-family: var(--font-display); font-size: clamp(1.6rem, 3.5vw, 2.2rem); font-weight: 600; color: var(--ink); margin-top: 14px; line-height: 1.3; }
+.ez-section { margin-bottom: 52px; }
+.ez-section h2 { font-family: var(--font-body); font-size: 1.5rem; font-weight: 700; color: var(--ink); margin-bottom: 18px; letter-spacing: -0.01em; }
+.ez-section h3 { font-size: 1.08rem; font-weight: 600; color: var(--espresso); margin: 22px 0 10px; }
+.ez-section p { font-size: 1.04rem; line-height: 1.85; color: var(--ink-mute); margin-bottom: 14px; }
+.ez-section p:last-child { margin-bottom: 0; }
+.ez-section ul { padding-left: 22px; margin-bottom: 14px; }
+.ez-section li { font-size: 1.02rem; line-height: 1.8; color: var(--ink-mute); margin-bottom: 8px; }
+.ez-callout { margin: 14px 0; padding: 14px 18px; background: var(--canvas-warm); border-left: 3px solid var(--caramel); border-radius: 4px; font-size: 0.98rem; color: var(--espresso); line-height: 1.75; }
+.ez-callout strong { color: var(--copper); }
+.ez-findings { list-style: none; padding: 0; }
+.ez-findings > li { padding: 18px 22px; margin-bottom: 14px; background: var(--canvas-warm); border: 1px solid var(--line); border-radius: 10px; font-size: 1.02rem; line-height: 1.7; color: var(--ink-mute); }
+.ez-findings > li strong { color: var(--ink); display: block; margin-bottom: 4px; font-size: 1.06rem; }
+.ez-findings > li.gold { background: linear-gradient(135deg, #FFF8E7, #FFEFCD); border-color: #F0D67A; }
+.ez-findings > li.silver { background: linear-gradient(135deg, #F6F6F6, #ECECEC); border-color: #C7C7C7; }
+.ez-findings > li.bronze { background: linear-gradient(135deg, #FFEEDD, #FFDCC0); border-color: #E4B07F; }
+.ez-findings > li.medal { background: linear-gradient(135deg, #F0E6FF, #E1D2FF); border-color: #BDA8E5; }
+.ez-table { width: 100%; border-collapse: collapse; margin: 16px 0 8px; font-size: 0.96rem; }
+.ez-table th, .ez-table td { padding: 11px 14px; border: 1px solid var(--line); text-align: left; vertical-align: top; }
+.ez-table thead th { background: var(--ink); color: #fff; font-weight: 600; letter-spacing: .02em; }
+.ez-table tbody th { background: var(--canvas-warm); color: var(--ink); font-weight: 600; }
+.ez-table tbody tr:nth-child(even) td { background: rgba(250, 247, 242, .55); }
+.ez-summary { padding: 26px 30px; background: linear-gradient(135deg, #FAF0E0, #F3E1C5); border-radius: 14px; font-size: 1.13rem; line-height: 1.75; font-weight: 500; color: var(--ink); border: 1px solid #E5C99B; }
+.ez-summary strong { color: var(--espresso); }
+.ez-citation { margin-top: 24px; padding: 18px 22px; background: var(--canvas-warm); border-radius: 8px; font-family: var(--font-mono); font-size: 0.82rem; color: var(--ink-soft); line-height: 1.7; }
+.ez-citation p { margin: 4px 0; }
+.ez-chart-card { padding: 22px 24px 18px; background: var(--canvas); border: 1px solid var(--line); border-radius: 12px; margin: 16px 0; }
+.ez-chart-card .ez-chart-title { font-size: 1rem; font-weight: 600; color: var(--ink); margin-bottom: 14px; }
+.ez-bar-row { display: flex; align-items: center; margin: 10px 0; font-size: 0.95rem; gap: 14px; }
+.ez-bar-label { width: 180px; flex-shrink: 0; color: var(--ink-mute); font-weight: 500; }
+.ez-bar-track { flex: 1; height: 32px; background: var(--canvas-warm); border-radius: 6px; overflow: hidden; position: relative; border: 1px solid var(--line); }
+.ez-bar-fill { height: 100%; background: linear-gradient(90deg, var(--caramel), var(--copper)); display: flex; align-items: center; justify-content: flex-end; padding: 0 12px; color: white; font-weight: 700; font-size: 0.92rem; min-width: 56px; }
+.ez-bar-fill.alt { background: linear-gradient(90deg, #6F4E37, #4A3F36); }
+.ez-glossary { display: grid; gap: 12px; }
+.ez-glossary-item { padding: 16px 20px; background: var(--canvas-warm); border: 1px solid var(--line); border-radius: 10px; border-left: 3px solid var(--caramel); }
+.ez-glossary-term { font-family: var(--font-display); font-style: italic; font-size: 1.1rem; font-weight: 600; color: var(--espresso); margin-bottom: 6px; }
+.ez-glossary-def { font-size: 0.98rem; color: var(--ink-mute); line-height: 1.7; }
+@media (max-width: 720px) {
+  .article-hero { padding: 36px 0 32px; }
+  .article-body { padding: 36px 0 56px; }
+  .ez-section { margin-bottom: 40px; }
+  .ez-section h2 { font-size: 1.3rem; }
+  .ez-bar-label { width: 100%; margin-bottom: 4px; }
+  .ez-bar-row { flex-direction: column; align-items: stretch; }
+  .article-meta { gap: 12px 18px; font-size: .68rem; }
+}
+</style>
+</head>
+<body>
+
+<header class="site-nav">
+  <div class="nav-inner">
+    <a class="brand" href="/">
+      <span class="brand-mark">92<span class="temp-mark"><span class="temp-deg">°</span><span class="temp-c">C</span></span></span>ROASTERY
+    </a>
+    <a class="nav-back" href="/insight">← INSIGHTS</a>
+  </div>
+</header>
+
+<article>
+  <section class="article-hero">
+    <div class="container">
+      <div class="eyebrow">— 오늘의 커피 상식 · 2026.08.13</div>
+      <h1 class="article-title">커피나무는 1년을 어떻게 살까? 하얀 꽃부터 빨간 체리까지 ☕</h1>
+      <p class="article-one-liner">비가 그친 뒤 하루아침에 자스민 향 하얀 꽃이 피고, 그 자리에 열매가 익기까지 반년이 넘게 걸린다 — 커피나무의 느린 한 해!</p>
+      <div class="article-meta">
+        
+        
+        
+        <span>커피 상식 · 원산지</span>
+      </div>
+      
+      <div class="hero-image">
+        <img src="/static/img/insights/trivia/origin.svg" alt="커피나무는 1년을 어떻게 살까? 하얀 꽃부터 빨간 체리까지 ☕">
+      </div>
+      
+    </div>
+  </section>
+
+  <section class="article-body">
+    <div class="container">
+
+      
+      <div class="ez-hero">
+        <div class="ez-hero-emoji">🌸</div>
+        <div class="ez-hero-title">커피나무는 1년을 어떻게 살까? 하얀 꽃부터 빨간 체리까지</div>
+      </div>
+
+      
+      <div class="ez-section">
+        <h2>🤔 무슨 연구야?</h2>
+        
+          <p>우리가 마시는 커피는 사실 나무 열매의 씨앗이야. 그런데 그 열매가 어떻게 생겨나는지, 나무가 1년 동안 뭘 하며 지내는지는 의외로 잘 안 알려져 있어. 원두 봉지에 적힌 &#39;2026년 수확&#39;이라는 한 줄 뒤에는 나무가 꽃을 피우고 열매를 익히며 보낸 긴 시간이 통째로 들어 있거든. 🌱</p><p>커피나무의 한 해는 비에서 시작해. 건기가 이어지다가 첫 비가 내리면, 나무는 며칠 안에 가지 마디마다 새하얀 꽃을 한꺼번에 터뜨려. 농장 전체가 갑자기 눈이 내린 것처럼 하얘지고, 공기에는 자스민 비슷한 달콤한 향이 가득 차. 커피 농부들이 1년 중 가장 좋아하는 순간으로 꼽는 장면이야.</p><p>오늘은 그 꽃이 열매가 되고, 열매가 우리 잔에 오기까지 나무가 보내는 시간을 따라가 볼게. 왜 수확기가 나라마다 제각각인지, 묘목을 심고 첫 커피를 얻기까지 몇 년을 기다려야 하는지, 한 그루가 얼마나 오래 열매를 내주는지까지 말이야. 원두 봉지에 적힌 수확 연도가 조금 다르게 보일 거야.</p>
+        
+      </div>
+
+      
+      
+      <div class="ez-section">
+        <h2>🧪 핵심 개념 쉽게 풀어보면</h2>
+        
+          <h3>1️⃣ 개화 — 비가 신호를 주면 하루아침에 하얗게</h3>
+          <p>커피나무는 아무 때나 꽃을 피우지 않아. 건기 동안 꽃봉오리를 만들어놓고 잠깐 멈춰 있다가, 첫 비로 물을 흠뻑 머금으면 며칠 안에 일제히 꽃을 열어. 그래서 농장 전체가 거의 같은 날 하얗게 변하는 장관이 벌어져. 꽃은 자스민이나 오렌지 꽃을 닮은 달콤한 향을 내는데, 아쉽게도 오래가지 않아. 보통 며칠이면 시들어 떨어지고, 그 자리에 아주 작은 초록 열매가 맺히기 시작해. 비가 여러 번 나눠 오는 지역에서는 개화도 여러 번 나눠 일어나서, 한 나무에 꽃과 초록 열매와 빨간 열매가 같이 달리기도 해.</p>
+          <div class="ez-callout">💡 비유: 벚꽃이 어느 날 갑자기 동네 전체에 한꺼번에 피는 것과 비슷해. 다만 커피는 달력이 아니라 &#39;첫 비&#39;가 개화 스위치를 누른다는 게 다르지. 🌧️🌸</div>
+        
+          <h3>2️⃣ 열매가 익는 시간 — 사과보다 훨씬 느긋해</h3>
+          <p>꽃이 진 자리에 맺힌 초록 열매는 아주 천천히 자라. 아라비카는 꽃이 핀 뒤 잘 익은 빨간 체리가 되기까지 대략 7~9개월이 걸리고, 로부스타는 그보다 더 느려서 9~11개월쯤 걸려. 열매는 초록에서 노랑을 거쳐 빨강으로 익는데(품종에 따라 노란색·주황색으로 익는 것도 있어), 이 색 변화가 수확 신호야. 고도가 높고 밤이 서늘한 곳일수록 익는 속도가 더 느려지는데, 천천히 익을수록 당분과 향 성분이 차곡차곡 쌓여서 맛이 좋아진다고 알려져 있어.</p>
+          <div class="ez-callout">💡 비유: 같은 사과라도 서늘한 산간 과수원에서 천천히 익은 게 더 달고 단단하잖아. 커피 체리도 똑같이 &#39;느리게 익을수록 알차게&#39; 쪽이야. 🍎</div>
+        
+          <h3>3️⃣ 수확기가 나라마다 다른 이유 — 반구와 우기 때문</h3>
+          <p>커피 수확기는 세계 공통이 아니야. 우선 남반구와 북반구는 계절이 반대라, 브라질 같은 남반구 산지는 대체로 우리 기준 봄에서 가을 사이에 수확하고, 중미나 에티오피아 같은 북반구 산지는 늦가을에서 이듬해 초봄 사이에 수확해. 게다가 개화 스위치가 &#39;비&#39;다 보니 같은 나라 안에서도 우기가 다른 지역은 수확 시기가 갈려. 적도 가까이에 있어 우기가 두 번 오는 곳에서는 주 수확기와 보조 수확기로 1년에 두 번 거두기도 하고. 덕분에 전 세계를 놓고 보면 사실상 1년 내내 어디선가 커피가 수확되고 있어.</p>
+          <div class="ez-callout">💡 비유: 지구 반대편의 계절이 반대라 한겨울에도 남반구산 과일을 마트에서 볼 수 있잖아. 커피도 같은 이유로 &#39;제철&#39;이 지역마다 다른 거야. 🌍</div>
+        
+      </div>
+      
+
+      
+      
+      <div class="ez-section">
+        <h2>🎯 핵심 발견</h2>
+        <ul class="ez-findings">
+          
+          
+            
+              <li class="gold">
+                <strong>🥇 커피 꽃은 며칠이면 진다 — 그래서 보기 어려워</strong>산지 여행을 가도 커피 꽃을 보기는 쉽지 않아. 개화는 비를 신호로 갑자기 시작되고, 활짝 핀 상태는 며칠이면 끝나거든. 향은 자스민이나 오렌지 꽃처럼 달고 화사한데, 그 향을 맡으려면 딱 그 며칠에 농장에 있어야 하는 셈이야. 참고로 커피 꽃의 이 향과, 우리가 에티오피아 커피에서 느끼는 &#39;자스민 같은 향&#39;은 서로 다른 이야기야. 컵에서 느끼는 꽃향은 품종과 가공, 로스팅이 만들어내는 향이지 꽃 자체가 옮겨간 게 아니거든. 🌼
+              </li>
+            
+              <li class="silver">
+                <strong>🥈 묘목을 심고 첫 수확까지 3~4년을 기다린다</strong>커피 농사는 시작이 느려. 씨앗을 뿌려 묘목장에서 키우는 데 반년에서 1년쯤 걸리고, 밭에 옮겨 심은 뒤에도 첫 열매를 제대로 거두기까지 보통 3~4년을 더 기다려야 해. 게다가 첫 수확은 양이 적어서, 나무가 본격적으로 힘을 내는 건 그보다 몇 해 더 지나서야. 커피 가격이 오른다고 바로 생산을 늘릴 수 없는 이유가 여기 있어. 오늘 심은 나무의 커피는 몇 년 뒤 시장에나 나오니까, 농부 입장에서는 매번 미래를 예측해서 결정해야 하는 셈이지.
+              </li>
+            
+              <li class="bronze">
+                <strong>🥉 나무의 전성기는 영원하지 않아 — 그루터기까지 자르는 이유</strong>커피나무는 심고 몇 해가 지나면 생산량이 올라와 한동안 전성기를 보내다가, 시간이 더 지나면 수확량과 품질이 서서히 떨어져. 그래서 농부들은 나무를 아예 뽑아내고 새로 심거나, 줄기를 낮게 잘라내 새 가지를 올리는 방법을 써. 이걸 스텀핑(stumping)이라고 불러. 잘라내면 한동안 수확을 통째로 포기해야 하지만, 새로 올라온 가지가 다시 왕성하게 열매를 맺어. 나무에게 &#39;리셋 버튼&#39;을 눌러주는 관리법이야. ✂️
+              </li>
+            
+              <li class="medal">
+                <strong>🏅 수확은 여전히 사람 손 — 잘 익은 것만 골라 따는 이유</strong>한 나무에 꽃과 초록 열매, 빨간 열매가 같이 달리는 일이 흔하다 보니, 기계로 한 번에 털면 덜 익은 열매까지 섞여 들어와. 덜 익은 체리가 섞이면 떫고 풋내 나는 맛이 잔에 그대로 나타나. 그래서 품질을 중시하는 산지에서는 잘 익은 열매만 골라 따는 손 수확을 여러 차례 반복해. 같은 나무를 몇 주에 걸쳐 여러 번 오가며 따는 거야. 반대로 평지에 넓게 심어 기계 수확이 가능한 지역도 있어서, 지형과 목표 품질에 따라 방식이 갈려.
+              </li>
+            
+              <li class="medal">
+                <strong>🏅 우리가 마시는 원두는 열매 속 &#39;씨앗&#39; 두 알</strong>빨간 커피 체리를 갈라보면 달콤한 과육 안에 씨앗이 보통 두 알 마주 보고 들어 있어. 이 씨앗을 꺼내 말리고 볶은 게 우리가 아는 원두야. 가끔 씨앗이 한 알만 둥글게 들어 있는 경우도 있는데, 이건 피베리(peaberry)라고 따로 부르며 골라내기도 해. 나무가 반년 넘게 공들여 익힌 열매에서, 우리가 쓰는 건 결국 그 안의 씨앗뿐인 셈이지. 한 잔에 들어가는 원두 수를 생각하면 나무 한 그루의 1년이 꽤 소중해져. 🌰
+              </li>
+            
+          
+        </ul>
+      </div>
+      
+
+      
+      
+      <div class="ez-section">
+        <h2>📊 숫자로 보기</h2>
+        
+          
+          
+          <div class="ez-chart-card">
+            <div class="ez-chart-title">묘목을 심고 나서 걸리는 시간 (대략)</div>
+            
+              
+              <div class="ez-bar-row">
+                <div class="ez-bar-label">묘목장에서 밭으로</div>
+                <div class="ez-bar-track"><div class="ez-bar-fill" style="width: 4.0%;">1.0년</div></div>
+              </div>
+            
+              
+              <div class="ez-bar-row">
+                <div class="ez-bar-label">첫 수확</div>
+                <div class="ez-bar-track"><div class="ez-bar-fill" style="width: 16.0%;">4.0년</div></div>
+              </div>
+            
+              
+              <div class="ez-bar-row">
+                <div class="ez-bar-label">생산 전성기 진입</div>
+                <div class="ez-bar-track"><div class="ez-bar-fill" style="width: 28.0%;">7.0년</div></div>
+              </div>
+            
+              
+              <div class="ez-bar-row">
+                <div class="ez-bar-label">갱신(재식·스텀핑) 검토</div>
+                <div class="ez-bar-track"><div class="ez-bar-fill" style="width: 100.0%;">25.0년</div></div>
+              </div>
+            
+          </div>
+        
+      </div>
+      
+
+      
+      
+      
+      <div class="ez-section">
+        <h2>🆚 커피나무의 1년, 단계별로 무슨 일이 일어날까?</h2>
+        <table class="ez-table">
+          <thead><tr><th>단계</th><th>무슨 일이 일어나?</th><th>걸리는 시간</th></tr></thead>
+          <tbody>
+            <tr>
+              <th>건기 · 꽃눈 준비</th><td>나무가 꽃봉오리를 만들어두고 비를 기다림</td><td>몇 주~몇 달</td>
+            </tr><tr>
+              <th>첫 비 · 개화</th><td>농장 전체가 하얀 꽃으로 덮이고 달콤한 향이 퍼짐</td><td>며칠이면 시듦</td>
+            </tr><tr>
+              <th>초록 열매 성장</th><td>꽃 진 자리에 작은 초록 체리가 맺혀 서서히 커짐</td><td>수개월</td>
+            </tr><tr>
+              <th>숙성 · 색 변화</th><td>초록 → 노랑 → 빨강(품종에 따라 노랑·주황)으로 익음</td><td>아라비카 총 7~9개월</td>
+            </tr><tr>
+              <th>수확</th><td>잘 익은 체리만 골라 손으로 여러 차례 수확</td><td>몇 주에 걸쳐 반복</td>
+            </tr><tr>
+              <th>가공 · 건조</th><td>과육을 벗기고 씨앗을 말려 생두로 만듦</td><td>수일~수주</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      
+      
+
+      
+      
+
+      
+      
+
+      
+      
+      <div class="ez-section">
+        <div class="ez-summary">💡 <strong>한 줄 요약</strong> — 커피나무의 1년은 첫 비에 하얗게 피는 꽃으로 시작해 반년 넘게 열매를 익히며 끝난다. 심고 첫 수확까지 3~4년, 수확기가 나라마다 다른 건 반구와 우기가 다르기 때문이다!</div>
+      </div>
+      
+
+      
+      
+      
+      
+
+      
+      
+      <div class="ez-section">
+        <h2>📖 어려운 말 풀이 사전</h2>
+        <p>이 글에 나온 어려운 약어와 용어를 한 번에 정리했어. 의미만 알면 본문이 훨씬 쉬워져!</p>
+        <div class="ez-glossary">
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">개화(Flowering)</div>
+            <div class="ez-glossary-def">건기 뒤 첫 비를 신호로 커피나무가 일제히 하얀 꽃을 피우는 현상. 며칠이면 시듦</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">커피 체리(Coffee Cherry)</div>
+            <div class="ez-glossary-def">커피나무의 열매. 달콤한 과육 안에 보통 두 알의 씨앗(생두)이 들어 있음</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">피베리(Peaberry)</div>
+            <div class="ez-glossary-def">체리 안에 씨앗이 두 알이 아니라 한 알만 둥글게 들어 있는 것. 따로 골라내기도 함</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">스텀핑(Stumping)</div>
+            <div class="ez-glossary-def">늙은 커피나무의 줄기를 낮게 잘라 새 가지를 올려 수세를 되살리는 관리법</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">핸드 피킹(Hand Picking)</div>
+            <div class="ez-glossary-def">잘 익은 체리만 골라 손으로 여러 차례 나눠 따는 수확 방식. 품질 산지의 기본</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">남반구·북반구 수확기</div>
+            <div class="ez-glossary-def">계절이 반대라 수확 시기가 갈리는 것. 우기 차이 때문에 같은 나라 안에서도 달라짐</div>
+          </div>
+          
+        </div>
+      </div>
+      
+
+    </div>
+  </section>
+
+  <footer class="article-footer">
+    <div class="container">
+      <a href="/insight">← BACK TO INSIGHTS</a>
+      <span style="margin: 0 16px;">·</span>
+      <a href="/">HOME</a>
+    </div>
+  </footer>
+</article>
+
+</body>
+</html>

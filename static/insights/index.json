@@ -1,7 +1,24 @@
 {
   "version": 1,
-  "updated_at": "2026-08-12T12:29:45Z",
+  "updated_at": "2026-08-13T12:30:23Z",
   "items": [
+    {
+      "id": "2026-08-13-coffee-tree-year",
+      "type": "trivia",
+      "date": "2026-08-13",
+      "title_ko": "커피나무는 1년을 어떻게 살까? 하얀 꽃부터 빨간 체리까지 ☕",
+      "one_liner": "비가 그친 뒤 하루아침에 자스민 향 하얀 꽃이 피고, 그 자리에 열매가 익기까지 반년이 넘게 걸린다 — 커피나무의 느린 한 해!",
+      "categories_primary": [
+        "커피 상식"
+      ],
+      "categories_secondary": [
+        "원산지"
+      ],
+      "hero_image": "/static/img/insights/trivia/origin.svg",
+      "journal": null,
+      "pub_date": null,
+      "source_basis": null
+    },
     {
       "id": "2026-08-12-espresso-channeling",
       "type": "trivia",
