@@ -2590,16 +2590,24 @@
 
 <script>
 // ===== Special Day 팝업 (매월 29일 스페셜티) =====
-// 노출 기간: SPECIAL_POPUP_START ~ SPECIAL_POPUP_END (당일 포함)
+// 노출 기간: 92 Day 5일 전 ~ 당일 (당일 포함)
 // "오늘 하루 보지 않기" → 그날 날짜 저장, 다음 날이면 다시 노출
 var SPECIAL_POPUP_ENABLED = true;    // 8/29 92 Day — 콜롬비아 핀카 엘파라이소 노출 중
-var SPECIAL_POPUP_START = '2026-08-26';   // 8/29 3일 전부터
-var SPECIAL_POPUP_END   = '2026-08-29';
-function specialTodayStr() {
-  var d = new Date();
+var SPECIAL_POPUP_DAY  = '2026-08-29';   // 92 Day 당일 — 날짜만 바꾸면 됨
+var SPECIAL_POPUP_LEAD = 5;              // 며칠 전부터 노출할지
+function specialYmd(d) {
   return d.getFullYear() + '-' +
     String(d.getMonth() + 1).padStart(2, '0') + '-' +
     String(d.getDate()).padStart(2, '0');
+}
+var SPECIAL_POPUP_START = (function () {
+  var s = new Date(SPECIAL_POPUP_DAY + 'T00:00:00');
+  s.setDate(s.getDate() - SPECIAL_POPUP_LEAD);
+  return specialYmd(s);
+})();
+var SPECIAL_POPUP_END = SPECIAL_POPUP_DAY;
+function specialTodayStr() {
+  return specialYmd(new Date());
 }
 function closeSpecialPopup() {
   var cb = document.getElementById('special-popup-dontshow');
@@ -2620,6 +2628,7 @@ function maybeShowSpecialPopup() {
 
 // ===== 휴무 안내 팝업 (날짜별 "다시 보지 않기" — 다음 휴무일이 다가오면 다시 노출) =====
 var NOTICE_DATES = ['2026-08-10', '2026-08-24'];   // 월별 지정 휴무일 — 각 날짜 3일 전부터 노출
+var NOTICE_LEAD = 3;                               // 휴무 며칠 전부터 노출할지
 var NOTICE_POPUP_ID = NOTICE_DATES[0];
 function closeNoticePopup() {
   var cb = document.getElementById('notice-popup-dontshow');
@@ -2632,9 +2641,9 @@ function maybeShowNoticePopup() {
   for (var i = 0; i < NOTICE_DATES.length; i++) {
     var ymd = NOTICE_DATES[i];
     if (localStorage.getItem('cafe-notice-dismissed') === ymd) continue;
-    // 휴무일 3일 전 ~ 휴무일(당일 자정까지)만 노출
+    // 휴무일 NOTICE_LEAD일 전 ~ 휴무일(당일 자정까지)만 노출
     var start = new Date(ymd + 'T00:00:00');
-    start.setDate(start.getDate() - 3);
+    start.setDate(start.getDate() - NOTICE_LEAD);
     var end = new Date(ymd + 'T23:59:59');
     if (now < start || now > end) continue;
     NOTICE_POPUP_ID = ymd;
