@@ -1,7 +1,24 @@
 {
   "version": 1,
-  "updated_at": "2026-08-13T12:30:23Z",
+  "updated_at": "2026-08-23T15:18:41Z",
   "items": [
+    {
+      "id": "2026-08-24-barista-championship",
+      "type": "trivia",
+      "date": "2026-08-24",
+      "title_ko": "바리스타 세계대회에서는 15분 동안 대체 뭘 하는 거야? 🏆",
+      "one_liner": "커피 12잔을 15분 안에 만들어 심사위원 앞에 내놓는 무대. 맛뿐 아니라 청소 상태와 말솜씨까지 점수가 매겨진다!",
+      "categories_primary": [
+        "커피 상식"
+      ],
+      "categories_secondary": [
+        "대회"
+      ],
+      "hero_image": "/static/img/insights/trivia/competition.svg",
+      "journal": null,
+      "pub_date": null,
+      "source_basis": null
+    },
     {
       "id": "2026-08-13-coffee-tree-year",
       "type": "trivia",

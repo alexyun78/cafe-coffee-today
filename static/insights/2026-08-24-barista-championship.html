@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>바리스타 세계대회에서는 15분 동안 대체 뭘 하는 거야? 🏆 — 92°C ROASTERY</title>
+<meta name="description" content="커피 12잔을 15분 안에 만들어 심사위원 앞에 내놓는 무대. 맛뿐 아니라 청소 상태와 말솜씨까지 점수가 매겨진다!">
+<link rel="icon" type="image/png" href="/static/img/logo-92black.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --canvas: #FFFFFF; --canvas-warm: #FAF7F2; --canvas-stone: #F2ECE3;
+  --ink: #1A1410; --ink-mute: #4A3F36; --ink-soft: #6B5E52;
+  --espresso: #6F4E37; --caramel: #C9986A; --copper: #B5703D;
+  --line: #E8E0D5; --line-soft: #F0E9DD;
+  --font-display: "Cormorant Garamond", "Pretendard", serif;
+  --font-body: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  --r-sm: 6px; --r-md: 12px; --r-pill: 999px;
+}
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color: transparent; }
+html { scroll-behavior: smooth; }
+body { font-family: var(--font-body); color: var(--ink); background: var(--canvas); font-feature-settings: "kern","ss01","lnum"; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+a { color: var(--copper); text-decoration: none; border-bottom: 1px solid transparent; transition: border-color .2s; }
+a:hover { border-bottom-color: var(--copper); }
+img { display: block; max-width: 100%; height: auto; }
+.container { max-width: 860px; margin: 0 auto; padding: 0 32px; }
+@media (max-width: 720px) { .container { padding: 0 20px; } }
+@media (max-width: 480px) { .container { padding: 0 16px; } }
+.site-nav { position: sticky; top: 0; z-index: 50; background: rgba(255,255,255,0.9); backdrop-filter: saturate(140%) blur(14px); -webkit-backdrop-filter: saturate(140%) blur(14px); border-bottom: 1px solid var(--line-soft); }
+.nav-inner { max-width: 1200px; margin: 0 auto; padding: 16px 32px; display: flex; align-items: center; justify-content: space-between; }
+.brand { font-family: var(--font-display); font-size: 1.3rem; font-weight: 700; color: var(--ink); display: inline-flex; align-items: center; gap: 4px; border-bottom: none; }
+.brand:hover { border-bottom: none; }
+.brand-mark { display: inline-flex; align-items: flex-start; font-family: "Pretendard", sans-serif; font-weight: 900; letter-spacing: -0.04em; line-height: 1; color: inherit; }
+.temp-mark { display: flex; flex-direction: column; line-height: .82; margin: 0 .05em 0 .04em; }
+.temp-mark .temp-deg { font-size: .42em; letter-spacing: -.04em; }
+.temp-mark .temp-c { font-size: .58em; letter-spacing: -.05em; margin-top: -.05em; }
+.nav-back { font-family: var(--font-mono); font-size: .75rem; letter-spacing: .18em; color: var(--ink-mute); border-bottom: none; }
+.nav-back:hover { color: var(--copper); border-bottom: none; }
+.article-hero { padding: 56px 0 48px; border-bottom: 1px solid var(--line-soft); }
+.eyebrow { font-family: var(--font-mono); font-size: .72rem; letter-spacing: .28em; color: var(--copper); margin-bottom: 18px; display: flex; align-items: center; gap: 12px; }
+.eyebrow::before { content: ""; display: inline-block; width: 28px; height: 1px; background: var(--copper); }
+.article-title { font-family: var(--font-display); font-weight: 500; font-size: clamp(2rem, 4.5vw, 3.2rem); line-height: 1.15; letter-spacing: -0.02em; color: var(--ink); margin-bottom: 20px; }
+.article-title em { font-style: italic; color: var(--espresso); font-weight: 600; }
+.article-one-liner { font-family: var(--font-display); font-style: italic; font-size: 1.3rem; line-height: 1.5; color: var(--espresso); margin-bottom: 28px; padding-left: 20px; border-left: 3px solid var(--caramel); }
+.article-meta { display: flex; gap: 24px; flex-wrap: wrap; font-family: var(--font-mono); font-size: .75rem; letter-spacing: .12em; color: var(--ink-soft); padding-top: 20px; border-top: 1px solid var(--line-soft); }
+.article-meta span { display: inline-flex; align-items: center; gap: 6px; }
+.article-meta span::before { content: "■"; color: var(--caramel); font-size: .55rem; }
+.hero-image { margin: 32px 0 0; border-radius: var(--r-md); overflow: hidden; border: 1px solid var(--line); }
+.hero-image img { width: 100%; }
+.article-body { padding: 56px 0 80px; }
+.article-footer { padding: 36px 0 56px; border-top: 1px solid var(--line-soft); text-align: center; font-family: var(--font-mono); font-size: .75rem; letter-spacing: .14em; color: var(--ink-soft); }
+.article-footer a { color: var(--ink-mute); border-bottom: 1px solid transparent; }
+.article-footer a:hover { color: var(--copper); border-bottom-color: var(--copper); }
+.source-basis { display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; background: rgba(201,152,106,.18); border: 1px solid rgba(181,112,61,.35); border-radius: var(--r-pill); font-family: var(--font-mono); font-size: .72rem; letter-spacing: .12em; color: var(--espresso); font-weight: 500; }
+.source-basis.abstract { background: rgba(107,94,82,.1); border-color: rgba(107,94,82,.3); color: var(--ink-soft); }
+.links-row { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 18px; }
+.link-pill { display: inline-flex; align-items: center; gap: 8px; padding: 9px 16px; background: var(--canvas-warm); border: 1px solid var(--line); border-radius: var(--r-pill); font-family: var(--font-mono); font-size: .78rem; letter-spacing: .08em; color: var(--ink-mute); border-bottom: 1px solid var(--line); transition: border-color .2s, color .2s; }
+.link-pill:hover { color: var(--copper); border-color: var(--copper); }
+
+/* ===== EZ: 쉬운 설명 스타일 ===== */
+.ez-hero { text-align: center; padding: 8px 0 32px; }
+.ez-hero-emoji { font-size: 3.4rem; line-height: 1; }
+.ez-hero-title { font-family: var(--font-display); font-size: clamp(1.6rem, 3.5vw, 2.2rem); font-weight: 600; color: var(--ink); margin-top: 14px; line-height: 1.3; }
+.ez-section { margin-bottom: 52px; }
+.ez-section h2 { font-family: var(--font-body); font-size: 1.5rem; font-weight: 700; color: var(--ink); margin-bottom: 18px; letter-spacing: -0.01em; }
+.ez-section h3 { font-size: 1.08rem; font-weight: 600; color: var(--espresso); margin: 22px 0 10px; }
+.ez-section p { font-size: 1.04rem; line-height: 1.85; color: var(--ink-mute); margin-bottom: 14px; }
+.ez-section p:last-child { margin-bottom: 0; }
+.ez-section ul { padding-left: 22px; margin-bottom: 14px; }
+.ez-section li { font-size: 1.02rem; line-height: 1.8; color: var(--ink-mute); margin-bottom: 8px; }
+.ez-callout { margin: 14px 0; padding: 14px 18px; background: var(--canvas-warm); border-left: 3px solid var(--caramel); border-radius: 4px; font-size: 0.98rem; color: var(--espresso); line-height: 1.75; }
+.ez-callout strong { color: var(--copper); }
+.ez-findings { list-style: none; padding: 0; }
+.ez-findings > li { padding: 18px 22px; margin-bottom: 14px; background: var(--canvas-warm); border: 1px solid var(--line); border-radius: 10px; font-size: 1.02rem; line-height: 1.7; color: var(--ink-mute); }
+.ez-findings > li strong { color: var(--ink); display: block; margin-bottom: 4px; font-size: 1.06rem; }
+.ez-findings > li.gold { background: linear-gradient(135deg, #FFF8E7, #FFEFCD); border-color: #F0D67A; }
+.ez-findings > li.silver { background: linear-gradient(135deg, #F6F6F6, #ECECEC); border-color: #C7C7C7; }
+.ez-findings > li.bronze { background: linear-gradient(135deg, #FFEEDD, #FFDCC0); border-color: #E4B07F; }
+.ez-findings > li.medal { background: linear-gradient(135deg, #F0E6FF, #E1D2FF); border-color: #BDA8E5; }
+.ez-table { width: 100%; border-collapse: collapse; margin: 16px 0 8px; font-size: 0.96rem; }
+.ez-table th, .ez-table td { padding: 11px 14px; border: 1px solid var(--line); text-align: left; vertical-align: top; }
+.ez-table thead th { background: var(--ink); color: #fff; font-weight: 600; letter-spacing: .02em; }
+.ez-table tbody th { background: var(--canvas-warm); color: var(--ink); font-weight: 600; }
+.ez-table tbody tr:nth-child(even) td { background: rgba(250, 247, 242, .55); }
+.ez-summary { padding: 26px 30px; background: linear-gradient(135deg, #FAF0E0, #F3E1C5); border-radius: 14px; font-size: 1.13rem; line-height: 1.75; font-weight: 500; color: var(--ink); border: 1px solid #E5C99B; }
+.ez-summary strong { color: var(--espresso); }
+.ez-citation { margin-top: 24px; padding: 18px 22px; background: var(--canvas-warm); border-radius: 8px; font-family: var(--font-mono); font-size: 0.82rem; color: var(--ink-soft); line-height: 1.7; }
+.ez-citation p { margin: 4px 0; }
+.ez-chart-card { padding: 22px 24px 18px; background: var(--canvas); border: 1px solid var(--line); border-radius: 12px; margin: 16px 0; }
+.ez-chart-card .ez-chart-title { font-size: 1rem; font-weight: 600; color: var(--ink); margin-bottom: 14px; }
+.ez-bar-row { display: flex; align-items: center; margin: 10px 0; font-size: 0.95rem; gap: 14px; }
+.ez-bar-label { width: 180px; flex-shrink: 0; color: var(--ink-mute); font-weight: 500; }
+.ez-bar-track { flex: 1; height: 32px; background: var(--canvas-warm); border-radius: 6px; overflow: hidden; position: relative; border: 1px solid var(--line); }
+.ez-bar-fill { height: 100%; background: linear-gradient(90deg, var(--caramel), var(--copper)); display: flex; align-items: center; justify-content: flex-end; padding: 0 12px; color: white; font-weight: 700; font-size: 0.92rem; min-width: 56px; }
+.ez-bar-fill.alt { background: linear-gradient(90deg, #6F4E37, #4A3F36); }
+.ez-glossary { display: grid; gap: 12px; }
+.ez-glossary-item { padding: 16px 20px; background: var(--canvas-warm); border: 1px solid var(--line); border-radius: 10px; border-left: 3px solid var(--caramel); }
+.ez-glossary-term { font-family: var(--font-display); font-style: italic; font-size: 1.1rem; font-weight: 600; color: var(--espresso); margin-bottom: 6px; }
+.ez-glossary-def { font-size: 0.98rem; color: var(--ink-mute); line-height: 1.7; }
+@media (max-width: 720px) {
+  .article-hero { padding: 36px 0 32px; }
+  .article-body { padding: 36px 0 56px; }
+  .ez-section { margin-bottom: 40px; }
+  .ez-section h2 { font-size: 1.3rem; }
+  .ez-bar-label { width: 100%; margin-bottom: 4px; }
+  .ez-bar-row { flex-direction: column; align-items: stretch; }
+  .article-meta { gap: 12px 18px; font-size: .68rem; }
+}
+</style>
+</head>
+<body>
+
+<header class="site-nav">
+  <div class="nav-inner">
+    <a class="brand" href="/">
+      <span class="brand-mark">92<span class="temp-mark"><span class="temp-deg">°</span><span class="temp-c">C</span></span></span>ROASTERY
+    </a>
+    <a class="nav-back" href="/insight">← INSIGHTS</a>
+  </div>
+</header>
+
+<article>
+  <section class="article-hero">
+    <div class="container">
+      <div class="eyebrow">— 오늘의 커피 상식 · 2026.08.24</div>
+      <h1 class="article-title">바리스타 세계대회에서는 15분 동안 대체 뭘 하는 거야? 🏆</h1>
+      <p class="article-one-liner">커피 12잔을 15분 안에 만들어 심사위원 앞에 내놓는 무대. 맛뿐 아니라 청소 상태와 말솜씨까지 점수가 매겨진다!</p>
+      <div class="article-meta">
+        
+        
+        
+        <span>커피 상식 · 대회</span>
+      </div>
+      
+      <div class="hero-image">
+        <img src="/static/img/insights/trivia/competition.svg" alt="바리스타 세계대회에서는 15분 동안 대체 뭘 하는 거야? 🏆">
+      </div>
+      
+    </div>
+  </section>
+
+  <section class="article-body">
+    <div class="container">
+
+      
+      <div class="ez-hero">
+        <div class="ez-hero-emoji">🏆</div>
+        <div class="ez-hero-title">바리스타 세계대회에서는 15분 동안 대체 뭘 하는 거야?</div>
+      </div>
+
+      
+      <div class="ez-section">
+        <h2>🤔 무슨 연구야?</h2>
+        
+          <p>커피에도 올림픽 같은 세계대회가 있다는 거 알고 있었어? 나라별 예선을 통과한 바리스타들이 한자리에 모여서, 딱 15분 동안 커피를 만들어 순위를 가리는 대회야. 이름은 월드 바리스타 챔피언십(WBC).</p><p>재밌는 건 이게 그냥 &#39;누가 커피를 맛있게 뽑나&#39; 시합이 아니라는 거야. 정해진 시간 안에 정해진 잔 수를 만들어야 하고, 그러면서 자기가 고른 원두 이야기를 심사위원에게 설명해야 해. 손이 바쁜 와중에 발표까지 하는 셈이지. 🎤</p><p>오늘은 그 15분 안에 무슨 일이 벌어지는지, 점수는 어디서 깎이는지 따라가 볼게. 다음에 대회 영상을 보면 선수가 왜 저렇게 행주를 자주 잡는지 이해될 거야.</p>
+        
+      </div>
+
+      
+      
+      <div class="ez-section">
+        <h2>🧪 핵심 개념 쉽게 풀어보면</h2>
+        
+          <h3>1️⃣ 15분에 12잔 — 세 가지 음료를 순서대로</h3>
+          <p>선수는 무대에 올라 준비 시간을 가진 뒤, 15분이라는 제한 시간 안에 세 종류의 음료를 각각 네 잔씩 만들어 심사위원에게 내야 해. 에스프레소 네 잔, 우유가 들어간 음료 네 잔, 그리고 자기가 직접 설계한 창작 음료(시그니처 음료) 네 잔이야. 합치면 12잔. 한 잔이라도 시간을 넘겨서 내면 감점이고, 아예 못 내면 그 항목 점수가 통째로 날아가.</p>
+          <div class="ez-callout">💡 비유: 요리 경연에서 애피타이저, 메인, 디저트를 정해진 시간 안에 심사위원 수만큼 내야 하는 것과 똑같아. 하나라도 늦으면 맛과 상관없이 깎여. ⏱️</div>
+        
+          <h3>2️⃣ 심사위원은 맛만 보는 게 아니야</h3>
+          <p>심사위원은 크게 두 부류로 나뉘어. 맛을 보는 심사위원은 음료의 향과 맛, 균형, 그리고 선수가 설명한 맛이 실제로 잔에서 느껴지는지를 채점해. 반면 기술 심사위원은 선수 옆에 붙어서 손을 봐. 포터필터를 닦았는지, 원두를 흘리지 않았는지, 우유를 남겨서 버리지 않았는지, 작업대가 깔끔한지를 본다는 뜻이야. 커피가 아무리 맛있어도 작업 습관이 지저분하면 점수가 안 나와.</p>
+          <div class="ez-callout">💡 비유: 운전면허 시험에서 목적지에 잘 도착하는 것만으로는 합격이 안 되고, 사이드미러를 봤는지 깜빡이를 켰는지까지 채점하는 것과 같아. 🚗</div>
+        
+          <h3>3️⃣ 말하기도 실력이다 — 원두 이야기를 파는 시간</h3>
+          <p>선수는 커피를 만드는 내내 자기가 쓰는 원두를 설명해. 어느 농장에서 왔고, 어떻게 가공했고, 왜 이 맛이 나는지를 이야기하지. 그냥 정보를 나열하는 게 아니라, 심사위원이 잔을 들었을 때 &#39;아, 아까 말한 그 맛이 이거구나&#39; 하고 연결되게 만들어야 점수가 올라가. 그래서 대회 준비는 원두를 고르는 순간부터 시작돼. 무대에서 할 이야기가 있는 커피를 찾아 산지까지 다녀오는 선수도 많아.</p>
+          <div class="ez-callout">💡 비유: 발표 수업에서 자료만 좋다고 A가 나오지 않잖아. 자료와 말이 딱 맞아떨어질 때 설득이 되는 것과 같아. 📊</div>
+        
+      </div>
+      
+
+      
+      
+      <div class="ez-section">
+        <h2>🎯 핵심 발견</h2>
+        <ul class="ez-findings">
+          
+          
+            
+              <li class="gold">
+                <strong>🥇 시간이 끝나도 잔을 못 내면 그 점수는 0점</strong>15분은 생각보다 훨씬 짧아. 그라인더 세팅이 어긋나 에스프레소를 다시 뽑기 시작하면 순식간에 몇 분이 사라져. 그래서 선수들은 연습할 때 초 단위로 동선을 짜. 어느 손으로 잔을 잡고, 몇 걸음 만에 머신 앞에 서고, 우유를 언제 스팀할지까지 정해두는 거야. 대회 영상에서 선수들의 움직임이 이상하리만치 군더더기 없어 보이는 이유가 이거야.
+              </li>
+            
+              <li class="silver">
+                <strong>🥈 창작 음료에는 알코올을 못 쓴다</strong>시그니처 음료는 선수가 자유롭게 설계하는 창작 메뉴야. 과일, 향신료, 차, 시럽 같은 재료를 섞어서 원두의 특정한 맛을 도드라지게 만드는 게 목적이지. 다만 규정상 알코올은 쓸 수 없고, 에스프레소가 반드시 들어가야 해. 이 제약 때문에 오히려 기발한 아이디어가 쏟아져. 재료를 얼려서 향만 옮기거나, 온도를 달리한 두 층을 겹쳐 내는 식이야. 🍹
+              </li>
+            
+              <li class="bronze">
+                <strong>🥉 대회에서 쓰인 방식이 카페 메뉴로 내려온다</strong>대회는 그들만의 리그처럼 보이지만, 사실 커피 유행이 시작되는 실험실이기도 해. 무산소 발효 원두, 특정 품종에 대한 관심, 물 조성을 바꿔 추출하는 방식 같은 것들이 대회 무대에서 화제가 된 뒤 동네 카페 메뉴판까지 내려온 경우가 많아. 지금 우리가 익숙하게 마시는 것들 중에도 몇 해 전 대회에서 낯설게 등장했던 게 섞여 있어.
+              </li>
+            
+              <li class="medal">
+                <strong>🏅 한국은 세계 챔피언을 배출한 나라야</strong>커피를 늦게 시작한 나라라고 생각하기 쉽지만, 한국은 이미 세계 무대 정상에 올라본 적이 있어. 국내 예선은 경쟁이 치열하기로 유명하고, 대회를 준비하는 문화 자체가 두껍게 자리 잡았지. 그래서 동네 카페에서 만나는 바리스타 중에도 대회를 준비해봤거나 심사 교육을 받은 사람이 적지 않아. 다음에 카페에 가면 슬쩍 물어봐도 재밌을 거야. 🇰🇷
+              </li>
+            
+          
+        </ul>
+      </div>
+      
+
+      
+      
+      <div class="ez-section">
+        <h2>📊 숫자로 보기</h2>
+        
+          
+          
+          <div class="ez-chart-card">
+            <div class="ez-chart-title">무대에서 만들어야 하는 잔 수 (총 12잔)</div>
+            
+              
+              <div class="ez-bar-row">
+                <div class="ez-bar-label">에스프레소</div>
+                <div class="ez-bar-track"><div class="ez-bar-fill" style="width: 100.0%;">4.0잔</div></div>
+              </div>
+            
+              
+              <div class="ez-bar-row">
+                <div class="ez-bar-label">우유 음료</div>
+                <div class="ez-bar-track"><div class="ez-bar-fill" style="width: 100.0%;">4.0잔</div></div>
+              </div>
+            
+              
+              <div class="ez-bar-row">
+                <div class="ez-bar-label">시그니처 음료</div>
+                <div class="ez-bar-track"><div class="ez-bar-fill" style="width: 100.0%;">4.0잔</div></div>
+              </div>
+            
+          </div>
+        
+      </div>
+      
+
+      
+      
+      
+      <div class="ez-section">
+        <h2>🆚 15분 무대에서 뭘 만들고, 뭘 보나?</h2>
+        <table class="ez-table">
+          <thead><tr><th>항목</th><th>내용</th><th>주로 보는 것</th></tr></thead>
+          <tbody>
+            <tr>
+              <th>에스프레소</th><td>심사위원 수만큼 네 잔</td><td>단맛과 균형, 뒷맛</td>
+            </tr><tr>
+              <th>우유 음료</th><td>우유를 스팀해 네 잔</td><td>커피와 우유의 조화, 질감</td>
+            </tr><tr>
+              <th>시그니처 음료</th><td>직접 설계한 창작 음료 네 잔</td><td>아이디어와 완성도</td>
+            </tr><tr>
+              <th>작업 기술</th><td>청소, 낭비, 동선</td><td>습관이 몸에 붙어 있는지</td>
+            </tr><tr>
+              <th>설명</th><td>원두 이야기와 맛 예고</td><td>말과 잔이 일치하는지</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      
+      
+
+      
+      
+
+      
+      
+
+      
+      
+      <div class="ez-section">
+        <div class="ez-summary">💡 <strong>한 줄 요약</strong> — 바리스타 세계대회는 15분 동안 세 종류의 음료를 네 잔씩, 총 12잔을 만들어 내는 무대다. 맛뿐 아니라 청소 습관과 설명까지 채점되고, 여기서 화제가 된 방식이 나중에 동네 카페까지 내려온다!</div>
+      </div>
+      
+
+      
+      
+      
+      
+
+      
+      
+      <div class="ez-section">
+        <h2>📖 어려운 말 풀이 사전</h2>
+        <p>이 글에 나온 어려운 약어와 용어를 한 번에 정리했어. 의미만 알면 본문이 훨씬 쉬워져!</p>
+        <div class="ez-glossary">
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">WBC</div>
+            <div class="ez-glossary-def">월드 바리스타 챔피언십. 나라별 예선을 거친 선수들이 겨루는 바리스타 세계대회</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">시그니처 음료</div>
+            <div class="ez-glossary-def">선수가 직접 설계하는 창작 음료. 에스프레소가 반드시 들어가고 알코올은 금지</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">기술 심사</div>
+            <div class="ez-glossary-def">맛이 아니라 손놀림과 청결, 낭비 여부를 채점하는 심사 영역</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">포터필터</div>
+            <div class="ez-glossary-def">에스프레소 머신에 끼우는 손잡이 달린 필터 바스켓. 원두를 담아 장착함</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">도징</div>
+            <div class="ez-glossary-def">포터필터에 원두 가루를 담는 것. 흘리거나 양이 들쭉날쭉하면 감점 요인</div>
+          </div>
+          
+        </div>
+      </div>
+      
+
+    </div>
+  </section>
+
+  <footer class="article-footer">
+    <div class="container">
+      <a href="/insight">← BACK TO INSIGHTS</a>
+      <span style="margin: 0 16px;">·</span>
+      <a href="/">HOME</a>
+    </div>
+  </footer>
+</article>
+
+</body>
+</html>
