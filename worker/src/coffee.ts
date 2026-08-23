@@ -45,22 +45,6 @@ export async function getById(db: D1Database, id: number): Promise<Row | null> {
   return row ? rowToApi(row) : null
 }
 
-/** 제공 중 디카페인 (db.py get_current_decaf) */
-export async function getCurrentDecaf(db: D1Database) {
-  const s = await db
-    .prepare("SELECT value FROM settings WHERE key='current_decaf_gb_id'")
-    .first<{ value: string }>()
-  if (!s || !s.value) return null
-  const id = parseInt(s.value, 10)
-  if (!Number.isFinite(id)) return null
-  const bean = await db
-    .prepare('SELECT id, name, process, cup_notes, is_decaf FROM green_beans WHERE id=?')
-    .bind(id)
-    .first<Row>()
-  if (!bean || !bean.is_decaf) return null
-  return { id: bean.id, name: bean.name, process: bean.process, cup_notes: bean.cup_notes }
-}
-
 /** 같은 이름의 '실질 활성' 커피 (db.py find_active_by_name)
  *
  *  roastDate 를 주면 로트(로스팅일) 조건을 함께 건다. 이름만 보면 지금 제공 중인
@@ -215,7 +199,7 @@ coffeeRoutes.get('/api/coffee', async (c) => {
       if (ka[1] !== kb[1]) return ka[1] - kb[1]
       return ka[2] < kb[2] ? -1 : ka[2] > kb[2] ? 1 : 0
     })
-    return c.json({ success: true, today, history, decaf: await getCurrentDecaf(c.env.DB) })
+    return c.json({ success: true, today, history })
   } catch (e: any) {
     return c.json({ success: false, error: String(e?.message || e) }, 500)
   }

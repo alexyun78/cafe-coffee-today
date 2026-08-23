@@ -2048,42 +2048,6 @@ def set_setting(key: str, value) -> None:
             )
 
 
-# ---------- 디카페인 (제공 중 표시) ----------
-
-DECAF_SETTING_KEY = "current_decaf_gb_id"
-
-
-def list_decaf_beans() -> list:
-    """디카페인 생두 목록 (관리자 드롭다운용). hidden 포함 — 드롭다운의
-    숨김 보기 토글이 처리하므로 활성이면 모두 반환."""
-    with connect() as conn:
-        rows = conn.execute(
-            "SELECT id, name, process, cup_notes, hidden FROM green_beans "
-            "WHERE is_decaf=1 AND status='활성' ORDER BY name"
-        ).fetchall()
-    return [dict(r) for r in rows]
-
-
-def get_current_decaf() -> Optional[dict]:
-    """제공 중으로 선택된 디카페인 생두 (공개 페이지 표시용)."""
-    raw = get_setting(DECAF_SETTING_KEY)
-    if not raw:
-        return None
-    try:
-        gb_id = int(raw)
-    except ValueError:
-        return None
-    bean = get_green_bean(gb_id)
-    if not bean or not bean.get("is_decaf"):
-        return None
-    return {
-        "id": bean["id"],
-        "name": bean["name"],
-        "process": bean.get("process"),
-        "cup_notes": bean.get("cup_notes"),
-    }
-
-
 # ---------- 가격 ----------
 
 def list_pricing(green_bean_id: Optional[int] = None) -> list:

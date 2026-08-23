@@ -1,9 +1,9 @@
 // 생두 관리 — app.py 658~1012 + db.py suppliers/green_beans/purchases/roasting_logs/
-// inventory/pricing/decaf 포팅. 재고 = computed query (구매 - 로스팅 + 보정) 동일 유지.
+// inventory/pricing 포팅. 재고 = computed query (구매 - 로스팅 + 보정) 동일 유지.
 import { Hono } from 'hono'
 import { Env, Row, kstTodayISO, utcNowISO, monthsAgoISO } from './util'
 import { requirePin } from './auth'
-import { createCoffee, findActiveByName, getCurrentDecaf } from './coffee'
+import { createCoffee, findActiveByName } from './coffee'
 
 export const beanRoutes = new Hono<{ Bindings: Env }>()
 // 관리자 전용 가드 — 이 라우터의 경로에만 정확히 적용
@@ -13,7 +13,7 @@ for (const p of [
   '/api/green-beans', '/api/green-beans/*',
   '/api/purchases', '/api/purchases/*',
   '/api/roasting-logs', '/api/roasting-logs/*',
-  '/api/decaf/*', '/api/inventory',
+  '/api/inventory',
   '/api/pricing', '/api/pricing/*',
 ]) beanRoutes.use(p, requirePin)
 
@@ -660,32 +660,6 @@ beanRoutes.delete('/api/roasting-logs/:id{[0-9]+}', async (c) => {
   const res = await c.env.DB.prepare('DELETE FROM roasting_logs WHERE id=?').bind(parseInt(c.req.param('id'), 10)).run()
   if (!(res.meta.changes ?? 0)) return c.json({ success: false, error: 'not found' }, 404)
   return c.json({ success: true })
-})
-
-// ---------- 디카페인 ----------
-
-beanRoutes.get('/api/decaf/options', async (c) => {
-  const cur = await getCurrentDecaf(c.env.DB)
-  const { results } = await c.env.DB
-    .prepare("SELECT id, name, process, cup_notes, hidden FROM green_beans WHERE is_decaf=1 AND status='활성' ORDER BY name")
-    .all<Row>()
-  return c.json({ success: true, items: results, current_id: cur ? cur.id : null })
-})
-
-beanRoutes.put('/api/decaf/current', async (c) => {
-  const data = (await c.req.json().catch(() => ({}))) as Row
-  const gbId = data.green_bean_id
-  if (gbId === null || gbId === undefined || gbId === '' || gbId === 0) {
-    await c.env.DB.prepare("DELETE FROM settings WHERE key='current_decaf_gb_id'").run()
-    return c.json({ success: true, current: null })
-  }
-  const bean = await getGreenBean(c.env.DB, parseInt(gbId, 10))
-  if (!bean || !bean.is_decaf) return c.json({ success: false, error: '디카페인 생두가 아닙니다' }, 400)
-  await c.env.DB
-    .prepare("INSERT OR REPLACE INTO settings (key, value) VALUES ('current_decaf_gb_id', ?)")
-    .bind(String(parseInt(gbId, 10)))
-    .run()
-  return c.json({ success: true, current: await getCurrentDecaf(c.env.DB) })
 })
 
 // ---------- Inventory ----------
