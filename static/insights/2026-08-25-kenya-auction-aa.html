@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>케냐 커피 봉지에 적힌 'AA'는 등급이 아니라고? 🇰🇪 — 92°C ROASTERY</title>
+<meta name="description" content="AA는 맛 등급이 아니라 콩의 크기다. 게다가 케냐 커피는 매주 열리는 경매장에서 값이 정해진다!">
+<link rel="icon" type="image/png" href="/static/img/logo-92black.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --canvas: #FFFFFF; --canvas-warm: #FAF7F2; --canvas-stone: #F2ECE3;
+  --ink: #1A1410; --ink-mute: #4A3F36; --ink-soft: #6B5E52;
+  --espresso: #6F4E37; --caramel: #C9986A; --copper: #B5703D;
+  --line: #E8E0D5; --line-soft: #F0E9DD;
+  --font-display: "Cormorant Garamond", "Pretendard", serif;
+  --font-body: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  --r-sm: 6px; --r-md: 12px; --r-pill: 999px;
+}
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color: transparent; }
+html { scroll-behavior: smooth; }
+body { font-family: var(--font-body); color: var(--ink); background: var(--canvas); font-feature-settings: "kern","ss01","lnum"; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+a { color: var(--copper); text-decoration: none; border-bottom: 1px solid transparent; transition: border-color .2s; }
+a:hover { border-bottom-color: var(--copper); }
+img { display: block; max-width: 100%; height: auto; }
+.container { max-width: 860px; margin: 0 auto; padding: 0 32px; }
+@media (max-width: 720px) { .container { padding: 0 20px; } }
+@media (max-width: 480px) { .container { padding: 0 16px; } }
+.site-nav { position: sticky; top: 0; z-index: 50; background: rgba(255,255,255,0.9); backdrop-filter: saturate(140%) blur(14px); -webkit-backdrop-filter: saturate(140%) blur(14px); border-bottom: 1px solid var(--line-soft); }
+.nav-inner { max-width: 1200px; margin: 0 auto; padding: 16px 32px; display: flex; align-items: center; justify-content: space-between; }
+.brand { font-family: var(--font-display); font-size: 1.3rem; font-weight: 700; color: var(--ink); display: inline-flex; align-items: center; gap: 4px; border-bottom: none; }
+.brand:hover { border-bottom: none; }
+.brand-mark { display: inline-flex; align-items: flex-start; font-family: "Pretendard", sans-serif; font-weight: 900; letter-spacing: -0.04em; line-height: 1; color: inherit; }
+.temp-mark { display: flex; flex-direction: column; line-height: .82; margin: 0 .05em 0 .04em; }
+.temp-mark .temp-deg { font-size: .42em; letter-spacing: -.04em; }
+.temp-mark .temp-c { font-size: .58em; letter-spacing: -.05em; margin-top: -.05em; }
+.nav-back { font-family: var(--font-mono); font-size: .75rem; letter-spacing: .18em; color: var(--ink-mute); border-bottom: none; }
+.nav-back:hover { color: var(--copper); border-bottom: none; }
+.article-hero { padding: 56px 0 48px; border-bottom: 1px solid var(--line-soft); }
+.eyebrow { font-family: var(--font-mono); font-size: .72rem; letter-spacing: .28em; color: var(--copper); margin-bottom: 18px; display: flex; align-items: center; gap: 12px; }
+.eyebrow::before { content: ""; display: inline-block; width: 28px; height: 1px; background: var(--copper); }
+.article-title { font-family: var(--font-display); font-weight: 500; font-size: clamp(2rem, 4.5vw, 3.2rem); line-height: 1.15; letter-spacing: -0.02em; color: var(--ink); margin-bottom: 20px; }
+.article-title em { font-style: italic; color: var(--espresso); font-weight: 600; }
+.article-one-liner { font-family: var(--font-display); font-style: italic; font-size: 1.3rem; line-height: 1.5; color: var(--espresso); margin-bottom: 28px; padding-left: 20px; border-left: 3px solid var(--caramel); }
+.article-meta { display: flex; gap: 24px; flex-wrap: wrap; font-family: var(--font-mono); font-size: .75rem; letter-spacing: .12em; color: var(--ink-soft); padding-top: 20px; border-top: 1px solid var(--line-soft); }
+.article-meta span { display: inline-flex; align-items: center; gap: 6px; }
+.article-meta span::before { content: "■"; color: var(--caramel); font-size: .55rem; }
+.hero-image { margin: 32px 0 0; border-radius: var(--r-md); overflow: hidden; border: 1px solid var(--line); }
+.hero-image img { width: 100%; }
+.article-body { padding: 56px 0 80px; }
+.article-footer { padding: 36px 0 56px; border-top: 1px solid var(--line-soft); text-align: center; font-family: var(--font-mono); font-size: .75rem; letter-spacing: .14em; color: var(--ink-soft); }
+.article-footer a { color: var(--ink-mute); border-bottom: 1px solid transparent; }
+.article-footer a:hover { color: var(--copper); border-bottom-color: var(--copper); }
+.source-basis { display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; background: rgba(201,152,106,.18); border: 1px solid rgba(181,112,61,.35); border-radius: var(--r-pill); font-family: var(--font-mono); font-size: .72rem; letter-spacing: .12em; color: var(--espresso); font-weight: 500; }
+.source-basis.abstract { background: rgba(107,94,82,.1); border-color: rgba(107,94,82,.3); color: var(--ink-soft); }
+.links-row { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 18px; }
+.link-pill { display: inline-flex; align-items: center; gap: 8px; padding: 9px 16px; background: var(--canvas-warm); border: 1px solid var(--line); border-radius: var(--r-pill); font-family: var(--font-mono); font-size: .78rem; letter-spacing: .08em; color: var(--ink-mute); border-bottom: 1px solid var(--line); transition: border-color .2s, color .2s; }
+.link-pill:hover { color: var(--copper); border-color: var(--copper); }
+
+/* ===== EZ: 쉬운 설명 스타일 ===== */
+.ez-hero { text-align: center; padding: 8px 0 32px; }
+.ez-hero-emoji { font-size: 3.4rem; line-height: 1; }
+.ez-hero-title { font-family: var(--font-display); font-size: clamp(1.6rem, 3.5vw, 2.2rem); font-weight: 600; color: var(--ink); margin-top: 14px; line-height: 1.3; }
+.ez-section { margin-bottom: 52px; }
+.ez-section h2 { font-family: var(--font-body); font-size: 1.5rem; font-weight: 700; color: var(--ink); margin-bottom: 18px; letter-spacing: -0.01em; }
+.ez-section h3 { font-size: 1.08rem; font-weight: 600; color: var(--espresso); margin: 22px 0 10px; }
+.ez-section p { font-size: 1.04rem; line-height: 1.85; color: var(--ink-mute); margin-bottom: 14px; }
+.ez-section p:last-child { margin-bottom: 0; }
+.ez-section ul { padding-left: 22px; margin-bottom: 14px; }
+.ez-section li { font-size: 1.02rem; line-height: 1.8; color: var(--ink-mute); margin-bottom: 8px; }
+.ez-callout { margin: 14px 0; padding: 14px 18px; background: var(--canvas-warm); border-left: 3px solid var(--caramel); border-radius: 4px; font-size: 0.98rem; color: var(--espresso); line-height: 1.75; }
+.ez-callout strong { color: var(--copper); }
+.ez-findings { list-style: none; padding: 0; }
+.ez-findings > li { padding: 18px 22px; margin-bottom: 14px; background: var(--canvas-warm); border: 1px solid var(--line); border-radius: 10px; font-size: 1.02rem; line-height: 1.7; color: var(--ink-mute); }
+.ez-findings > li strong { color: var(--ink); display: block; margin-bottom: 4px; font-size: 1.06rem; }
+.ez-findings > li.gold { background: linear-gradient(135deg, #FFF8E7, #FFEFCD); border-color: #F0D67A; }
+.ez-findings > li.silver { background: linear-gradient(135deg, #F6F6F6, #ECECEC); border-color: #C7C7C7; }
+.ez-findings > li.bronze { background: linear-gradient(135deg, #FFEEDD, #FFDCC0); border-color: #E4B07F; }
+.ez-findings > li.medal { background: linear-gradient(135deg, #F0E6FF, #E1D2FF); border-color: #BDA8E5; }
+.ez-table { width: 100%; border-collapse: collapse; margin: 16px 0 8px; font-size: 0.96rem; }
+.ez-table th, .ez-table td { padding: 11px 14px; border: 1px solid var(--line); text-align: left; vertical-align: top; }
+.ez-table thead th { background: var(--ink); color: #fff; font-weight: 600; letter-spacing: .02em; }
+.ez-table tbody th { background: var(--canvas-warm); color: var(--ink); font-weight: 600; }
+.ez-table tbody tr:nth-child(even) td { background: rgba(250, 247, 242, .55); }
+.ez-summary { padding: 26px 30px; background: linear-gradient(135deg, #FAF0E0, #F3E1C5); border-radius: 14px; font-size: 1.13rem; line-height: 1.75; font-weight: 500; color: var(--ink); border: 1px solid #E5C99B; }
+.ez-summary strong { color: var(--espresso); }
+.ez-citation { margin-top: 24px; padding: 18px 22px; background: var(--canvas-warm); border-radius: 8px; font-family: var(--font-mono); font-size: 0.82rem; color: var(--ink-soft); line-height: 1.7; }
+.ez-citation p { margin: 4px 0; }
+.ez-chart-card { padding: 22px 24px 18px; background: var(--canvas); border: 1px solid var(--line); border-radius: 12px; margin: 16px 0; }
+.ez-chart-card .ez-chart-title { font-size: 1rem; font-weight: 600; color: var(--ink); margin-bottom: 14px; }
+.ez-bar-row { display: flex; align-items: center; margin: 10px 0; font-size: 0.95rem; gap: 14px; }
+.ez-bar-label { width: 180px; flex-shrink: 0; color: var(--ink-mute); font-weight: 500; }
+.ez-bar-track { flex: 1; height: 32px; background: var(--canvas-warm); border-radius: 6px; overflow: hidden; position: relative; border: 1px solid var(--line); }
+.ez-bar-fill { height: 100%; background: linear-gradient(90deg, var(--caramel), var(--copper)); display: flex; align-items: center; justify-content: flex-end; padding: 0 12px; color: white; font-weight: 700; font-size: 0.92rem; min-width: 56px; }
+.ez-bar-fill.alt { background: linear-gradient(90deg, #6F4E37, #4A3F36); }
+.ez-glossary { display: grid; gap: 12px; }
+.ez-glossary-item { padding: 16px 20px; background: var(--canvas-warm); border: 1px solid var(--line); border-radius: 10px; border-left: 3px solid var(--caramel); }
+.ez-glossary-term { font-family: var(--font-display); font-style: italic; font-size: 1.1rem; font-weight: 600; color: var(--espresso); margin-bottom: 6px; }
+.ez-glossary-def { font-size: 0.98rem; color: var(--ink-mute); line-height: 1.7; }
+@media (max-width: 720px) {
+  .article-hero { padding: 36px 0 32px; }
+  .article-body { padding: 36px 0 56px; }
+  .ez-section { margin-bottom: 40px; }
+  .ez-section h2 { font-size: 1.3rem; }
+  .ez-bar-label { width: 100%; margin-bottom: 4px; }
+  .ez-bar-row { flex-direction: column; align-items: stretch; }
+  .article-meta { gap: 12px 18px; font-size: .68rem; }
+}
+</style>
+</head>
+<body>
+
+<header class="site-nav">
+  <div class="nav-inner">
+    <a class="brand" href="/">
+      <span class="brand-mark">92<span class="temp-mark"><span class="temp-deg">°</span><span class="temp-c">C</span></span></span>ROASTERY
+    </a>
+    <a class="nav-back" href="/insight">← INSIGHTS</a>
+  </div>
+</header>
+
+<article>
+  <section class="article-hero">
+    <div class="container">
+      <div class="eyebrow">— 오늘의 커피 상식 · 2026.08.25</div>
+      <h1 class="article-title">케냐 커피 봉지에 적힌 &#39;AA&#39;는 등급이 아니라고? 🇰🇪</h1>
+      <p class="article-one-liner">AA는 맛 등급이 아니라 콩의 크기다. 게다가 케냐 커피는 매주 열리는 경매장에서 값이 정해진다!</p>
+      <div class="article-meta">
+        
+        
+        
+        <span>커피 상식 · 원산지</span>
+      </div>
+      
+      <div class="hero-image">
+        <img src="/static/img/insights/trivia/origin.svg" alt="케냐 커피 봉지에 적힌 &#39;AA&#39;는 등급이 아니라고? 🇰🇪">
+      </div>
+      
+    </div>
+  </section>
+
+  <section class="article-body">
+    <div class="container">
+
+      
+      <div class="ez-hero">
+        <div class="ez-hero-emoji">🇰🇪</div>
+        <div class="ez-hero-title">케냐 커피 봉지에 적힌 &#39;AA&#39;는 등급이 아니라고?</div>
+      </div>
+
+      
+      <div class="ez-section">
+        <h2>🤔 무슨 연구야?</h2>
+        
+          <p>카페에서 &#39;케냐 AA&#39;라고 적힌 메뉴를 본 적 있을 거야. 많은 사람이 AA를 최고 등급, 그러니까 성적표의 A+ 같은 걸로 생각해. 그런데 사실 AA는 맛과 직접 관계가 없어. 콩이 얼마나 큰지를 나타내는 표시거든.</p><p>케냐 커피에는 또 하나 특이한 점이 있어. 대부분의 산지에서는 수출업자와 로스터가 직접 값을 흥정하는데, 케냐는 나이로비에 있는 경매장에서 공개 입찰로 값이 정해지는 물량이 많아. 매주 경매가 열리고, 그 주에 올라온 커피들이 번호를 달고 낙찰돼. 🔨</p><p>오늘은 AA가 정확히 무슨 뜻인지, 왜 케냐 커피가 유난히 새콤달콤하다는 평을 듣는지, 그리고 경매라는 방식이 농부에게 어떤 의미인지 알아볼게.</p>
+        
+      </div>
+
+      
+      
+      <div class="ez-section">
+        <h2>🧪 핵심 개념 쉽게 풀어보면</h2>
+        
+          <h3>1️⃣ AA는 체를 통과하지 못한 큰 콩이라는 뜻</h3>
+          <p>생두는 구멍 크기가 다른 체 여러 장에 차례로 걸러져. 구멍이 큰 체에도 걸릴 만큼 알이 굵은 콩이 AA, 그보다 한 단계 작으면 AB, 더 작으면 C로 분류돼. 둥근 한 알짜리 콩만 모은 PB(피베리), 가벼워서 날아간 콩을 모은 등급도 따로 있어. 그러니까 AA는 &#39;크다&#39;는 사실만 말해줄 뿐, 그 커피가 맛있다는 보증서는 아니야. 다만 알이 굵으면 대체로 잘 여문 경우가 많아 값이 더 나가는 편이긴 해.</p>
+          <div class="ez-callout">💡 비유: 사과를 특대, 대, 중으로 나누는 것과 똑같아. 특대 사과가 대체로 실하긴 하지만, 크다는 게 곧 달다는 뜻은 아니잖아. 🍎</div>
+        
+          <h3>2️⃣ 매주 열리는 경매장에서 값이 정해진다</h3>
+          <p>케냐에서는 가공을 마친 커피가 수도의 경매장으로 모여. 구매자들은 미리 샘플을 받아 맛을 보고, 마음에 드는 로트에 번호를 매겨 입찰해. 경매장에서 값이 오르면 그만큼이 농협 조합을 거쳐 농부에게 돌아가는 구조야. 좋은 커피를 만들면 값으로 바로 확인된다는 점에서 농부에게 동기가 되는 방식이지. 물론 경매를 거치지 않고 직접 거래하는 물량도 함께 존재해.</p>
+          <div class="ez-callout">💡 비유: 수산시장 새벽 경매랑 비슷해. 좋은 물건은 그날 값이 껑충 뛰고, 그 결과가 바로 잡아온 사람에게 돌아가잖아. 🐟</div>
+        
+          <h3>3️⃣ 새콤달콤한 맛의 배경 — 품종과 가공</h3>
+          <p>케냐 커피는 자몽이나 블랙커런트를 떠올리게 하는 진한 산미로 유명해. 여기에는 케냐에서 오래 재배해온 특유의 품종들과, 물로 씻어내는 가공 방식이 함께 작용해. 특히 케냐에서는 발효를 마친 뒤 깨끗한 물에 한 번 더 담가두는 과정을 거치는 곳이 많은데, 이 방식이 잔의 인상을 더 또렷하고 깔끔하게 만든다고 이야기돼. 재배 지역이 대체로 높은 고도에 있다는 점도 산미를 살리는 데 한몫해.</p>
+          <div class="ez-callout">💡 비유: 같은 귤이라도 일교차 큰 밭에서 자란 게 새콤달콤하고 맛이 또렷하잖아. 케냐 커피의 인상도 그런 쪽이야. 🍊</div>
+        
+      </div>
+      
+
+      
+      
+      <div class="ez-section">
+        <h2>🎯 핵심 발견</h2>
+        <ul class="ez-findings">
+          
+          
+            
+              <li class="gold">
+                <strong>🥇 AA보다 AB가 더 맛있는 경우도 흔하다</strong>알이 굵다고 맛까지 굵진 않아. 실제로 커핑을 해보면 같은 농장에서 나온 AB가 AA보다 점수가 높게 나오는 일이 종종 있어. 크기로 나누는 건 어디까지나 로스팅할 때 고르게 익히기 위한 실용적인 분류이지, 맛의 순위가 아니거든. 그래서 커피를 고를 때는 AA라는 글자보다 그 아래에 적힌 농장이나 조합 이름, 그리고 컵노트를 보는 게 훨씬 도움이 돼.
+              </li>
+            
+              <li class="silver">
+                <strong>🥈 케냐 봉지에 자주 보이는 이름은 농장이 아니라 조합</strong>케냐에서는 작은 농가들이 조합을 이뤄 함께 가공장을 운영하는 경우가 많아. 그래서 봉지에 적힌 이름이 한 농장주의 밭이 아니라, 수백에서 수천 농가가 체리를 가져오는 가공장 이름인 경우가 흔해. 같은 조합 안에서도 그날 모인 체리에 따라 로트가 나뉘고, 각 로트가 따로 평가돼. 이름이 같아도 해마다 인상이 달라지는 이유 중 하나야.
+              </li>
+            
+              <li class="bronze">
+                <strong>🥉 커피를 심는 땅이 계속 줄어들고 있다</strong>케냐 커피 산지 중 상당수는 수도 근처의 고지대에 있어. 그런데 도시가 커지면서 커피밭이 주택지로 바뀌는 일이 이어지고 있어. 커피보다 수익이 빨리 나는 다른 작물로 갈아타는 농가도 있고. 그래서 케냐 커피는 품질에 비해 물량이 넉넉하지 않은 편이고, 좋은 로트는 금세 팔려버려. 🏘️
+              </li>
+            
+              <li class="medal">
+                <strong>🏅 정작 케냐 안에서는 커피를 많이 안 마셨다</strong>생산국이라고 해서 국민이 그 커피를 실컷 마시는 건 아니야. 케냐도 좋은 커피는 대부분 수출로 나가고, 국내에서는 차를 마시는 문화가 더 두터웠어. 다만 최근에는 현지에도 스페셜티 카페가 늘면서 자기 나라 커피를 제대로 즐기는 흐름이 생기고 있어. 산지에서 마시는 그 나라 커피, 언젠가 한 번쯤 경험해 볼 만하지. ☕
+              </li>
+            
+          
+        </ul>
+      </div>
+      
+
+      
+      
+      <div class="ez-section">
+        <h2>📊 숫자로 보기</h2>
+        
+          
+          
+          <div class="ez-chart-card">
+            <div class="ez-chart-title">크기로 나눈 분류, 굵기 순서 (개념 비교)</div>
+            
+              
+              <div class="ez-bar-row">
+                <div class="ez-bar-label">AA</div>
+                <div class="ez-bar-track"><div class="ez-bar-fill" style="width: 100.0%;">4.0상대적 굵기</div></div>
+              </div>
+            
+              
+              <div class="ez-bar-row">
+                <div class="ez-bar-label">AB</div>
+                <div class="ez-bar-track"><div class="ez-bar-fill" style="width: 75.0%;">3.0상대적 굵기</div></div>
+              </div>
+            
+              
+              <div class="ez-bar-row">
+                <div class="ez-bar-label">C</div>
+                <div class="ez-bar-track"><div class="ez-bar-fill" style="width: 50.0%;">2.0상대적 굵기</div></div>
+              </div>
+            
+              
+              <div class="ez-bar-row">
+                <div class="ez-bar-label">PB</div>
+                <div class="ez-bar-track"><div class="ez-bar-fill" style="width: 50.0%;">2.0상대적 굵기</div></div>
+              </div>
+            
+          </div>
+        
+      </div>
+      
+
+      
+      
+      
+      <div class="ez-section">
+        <h2>🆚 케냐 생두 분류 표시, 뭘 뜻할까?</h2>
+        <table class="ez-table">
+          <thead><tr><th>표시</th><th>뜻</th><th>오해하기 쉬운 점</th></tr></thead>
+          <tbody>
+            <tr>
+              <th>AA</th><td>체에 걸러 가장 굵게 분류된 콩</td><td>맛 등급이 아니라 크기</td>
+            </tr><tr>
+              <th>AB</th><td>AA보다 한 단계 작은 콩</td><td>값은 낮아도 맛은 좋을 수 있음</td>
+            </tr><tr>
+              <th>PB</th><td>씨앗이 한 알만 든 둥근 콩</td><td>희소하지만 취향 차이</td>
+            </tr><tr>
+              <th>조합 이름</th><td>체리를 모아 가공한 가공장</td><td>한 농장이 아닌 경우가 많음</td>
+            </tr><tr>
+              <th>로트 번호</th><td>경매에 올라간 묶음 단위</td><td>같은 이름도 로트마다 다름</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      
+      
+
+      
+      
+
+      
+      
+
+      
+      
+      <div class="ez-section">
+        <div class="ez-summary">💡 <strong>한 줄 요약</strong> — 케냐 커피의 AA는 맛 등급이 아니라 콩의 크기 표시다. 값은 매주 열리는 경매에서 정해지고, 봉지에 적힌 이름은 대개 농장이 아니라 여러 농가가 함께 쓰는 가공장이다!</div>
+      </div>
+      
+
+      
+      
+      
+      
+
+      
+      
+      <div class="ez-section">
+        <h2>📖 어려운 말 풀이 사전</h2>
+        <p>이 글에 나온 어려운 약어와 용어를 한 번에 정리했어. 의미만 알면 본문이 훨씬 쉬워져!</p>
+        <div class="ez-glossary">
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">스크린 사이즈</div>
+            <div class="ez-glossary-def">구멍 크기가 다른 체로 생두를 걸러 굵기별로 나누는 분류 방식</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">AA</div>
+            <div class="ez-glossary-def">케냐에서 가장 굵게 분류된 생두 등급 표시. 맛의 등급은 아님</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">피베리(PB)</div>
+            <div class="ez-glossary-def">체리 안에 씨앗이 한 알만 둥글게 든 것. 따로 골라 분류함</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">경매(Auction)</div>
+            <div class="ez-glossary-def">구매자들이 샘플을 맛본 뒤 로트별로 입찰해 값을 정하는 거래 방식</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">가공장(Factory)</div>
+            <div class="ez-glossary-def">농가들이 딴 체리를 모아 껍질을 벗기고 말리는 시설. 케냐에서는 조합이 운영하는 곳이 많음</div>
+          </div>
+          
+        </div>
+      </div>
+      
+
+    </div>
+  </section>
+
+  <footer class="article-footer">
+    <div class="container">
+      <a href="/insight">← BACK TO INSIGHTS</a>
+      <span style="margin: 0 16px;">·</span>
+      <a href="/">HOME</a>
+    </div>
+  </footer>
+</article>
+
+</body>
+</html>

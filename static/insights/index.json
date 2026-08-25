@@ -1,7 +1,24 @@
 {
   "version": 1,
-  "updated_at": "2026-08-23T15:18:41Z",
+  "updated_at": "2026-08-25T11:59:56Z",
   "items": [
+    {
+      "id": "2026-08-25-kenya-auction-aa",
+      "type": "trivia",
+      "date": "2026-08-25",
+      "title_ko": "케냐 커피 봉지에 적힌 'AA'는 등급이 아니라고? 🇰🇪",
+      "one_liner": "AA는 맛 등급이 아니라 콩의 크기다. 게다가 케냐 커피는 매주 열리는 경매장에서 값이 정해진다!",
+      "categories_primary": [
+        "커피 상식"
+      ],
+      "categories_secondary": [
+        "원산지"
+      ],
+      "hero_image": "/static/img/insights/trivia/origin.svg",
+      "journal": null,
+      "pub_date": null,
+      "source_basis": null
+    },
     {
       "id": "2026-08-24-barista-championship",
       "type": "trivia",
