@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>커피 맛을 그린 알록달록한 원판, 플레이버 휠 읽는 법 🎨 — 92°C ROASTERY</title>
+<meta name="description" content="안쪽에서 바깥쪽으로 갈수록 표현이 구체적으로 쪼개진다. 순서만 알면 나도 컵노트를 말할 수 있어!">
+<link rel="icon" type="image/png" href="/static/img/logo-92black.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --canvas: #FFFFFF; --canvas-warm: #FAF7F2; --canvas-stone: #F2ECE3;
+  --ink: #1A1410; --ink-mute: #4A3F36; --ink-soft: #6B5E52;
+  --espresso: #6F4E37; --caramel: #C9986A; --copper: #B5703D;
+  --line: #E8E0D5; --line-soft: #F0E9DD;
+  --font-display: "Cormorant Garamond", "Pretendard", serif;
+  --font-body: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  --r-sm: 6px; --r-md: 12px; --r-pill: 999px;
+}
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color: transparent; }
+html { scroll-behavior: smooth; }
+body { font-family: var(--font-body); color: var(--ink); background: var(--canvas); font-feature-settings: "kern","ss01","lnum"; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+a { color: var(--copper); text-decoration: none; border-bottom: 1px solid transparent; transition: border-color .2s; }
+a:hover { border-bottom-color: var(--copper); }
+img { display: block; max-width: 100%; height: auto; }
+.container { max-width: 860px; margin: 0 auto; padding: 0 32px; }
+@media (max-width: 720px) { .container { padding: 0 20px; } }
+@media (max-width: 480px) { .container { padding: 0 16px; } }
+.site-nav { position: sticky; top: 0; z-index: 50; background: rgba(255,255,255,0.9); backdrop-filter: saturate(140%) blur(14px); -webkit-backdrop-filter: saturate(140%) blur(14px); border-bottom: 1px solid var(--line-soft); }
+.nav-inner { max-width: 1200px; margin: 0 auto; padding: 16px 32px; display: flex; align-items: center; justify-content: space-between; }
+.brand { font-family: var(--font-display); font-size: 1.3rem; font-weight: 700; color: var(--ink); display: inline-flex; align-items: center; gap: 4px; border-bottom: none; }
+.brand:hover { border-bottom: none; }
+.brand-mark { display: inline-flex; align-items: flex-start; font-family: "Pretendard", sans-serif; font-weight: 900; letter-spacing: -0.04em; line-height: 1; color: inherit; }
+.temp-mark { display: flex; flex-direction: column; line-height: .82; margin: 0 .05em 0 .04em; }
+.temp-mark .temp-deg { font-size: .42em; letter-spacing: -.04em; }
+.temp-mark .temp-c { font-size: .58em; letter-spacing: -.05em; margin-top: -.05em; }
+.nav-back { font-family: var(--font-mono); font-size: .75rem; letter-spacing: .18em; color: var(--ink-mute); border-bottom: none; }
+.nav-back:hover { color: var(--copper); border-bottom: none; }
+.article-hero { padding: 56px 0 48px; border-bottom: 1px solid var(--line-soft); }
+.eyebrow { font-family: var(--font-mono); font-size: .72rem; letter-spacing: .28em; color: var(--copper); margin-bottom: 18px; display: flex; align-items: center; gap: 12px; }
+.eyebrow::before { content: ""; display: inline-block; width: 28px; height: 1px; background: var(--copper); }
+.article-title { font-family: var(--font-display); font-weight: 500; font-size: clamp(2rem, 4.5vw, 3.2rem); line-height: 1.15; letter-spacing: -0.02em; color: var(--ink); margin-bottom: 20px; }
+.article-title em { font-style: italic; color: var(--espresso); font-weight: 600; }
+.article-one-liner { font-family: var(--font-display); font-style: italic; font-size: 1.3rem; line-height: 1.5; color: var(--espresso); margin-bottom: 28px; padding-left: 20px; border-left: 3px solid var(--caramel); }
+.article-meta { display: flex; gap: 24px; flex-wrap: wrap; font-family: var(--font-mono); font-size: .75rem; letter-spacing: .12em; color: var(--ink-soft); padding-top: 20px; border-top: 1px solid var(--line-soft); }
+.article-meta span { display: inline-flex; align-items: center; gap: 6px; }
+.article-meta span::before { content: "■"; color: var(--caramel); font-size: .55rem; }
+.hero-image { margin: 32px 0 0; border-radius: var(--r-md); overflow: hidden; border: 1px solid var(--line); }
+.hero-image img { width: 100%; }
+.article-body { padding: 56px 0 80px; }
+.article-footer { padding: 36px 0 56px; border-top: 1px solid var(--line-soft); text-align: center; font-family: var(--font-mono); font-size: .75rem; letter-spacing: .14em; color: var(--ink-soft); }
+.article-footer a { color: var(--ink-mute); border-bottom: 1px solid transparent; }
+.article-footer a:hover { color: var(--copper); border-bottom-color: var(--copper); }
+.source-basis { display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; background: rgba(201,152,106,.18); border: 1px solid rgba(181,112,61,.35); border-radius: var(--r-pill); font-family: var(--font-mono); font-size: .72rem; letter-spacing: .12em; color: var(--espresso); font-weight: 500; }
+.source-basis.abstract { background: rgba(107,94,82,.1); border-color: rgba(107,94,82,.3); color: var(--ink-soft); }
+.links-row { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 18px; }
+.link-pill { display: inline-flex; align-items: center; gap: 8px; padding: 9px 16px; background: var(--canvas-warm); border: 1px solid var(--line); border-radius: var(--r-pill); font-family: var(--font-mono); font-size: .78rem; letter-spacing: .08em; color: var(--ink-mute); border-bottom: 1px solid var(--line); transition: border-color .2s, color .2s; }
+.link-pill:hover { color: var(--copper); border-color: var(--copper); }
+
+/* ===== EZ: 쉬운 설명 스타일 ===== */
+.ez-hero { text-align: center; padding: 8px 0 32px; }
+.ez-hero-emoji { font-size: 3.4rem; line-height: 1; }
+.ez-hero-title { font-family: var(--font-display); font-size: clamp(1.6rem, 3.5vw, 2.2rem); font-weight: 600; color: var(--ink); margin-top: 14px; line-height: 1.3; }
+.ez-section { margin-bottom: 52px; }
+.ez-section h2 { font-family: var(--font-body); font-size: 1.5rem; font-weight: 700; color: var(--ink); margin-bottom: 18px; letter-spacing: -0.01em; }
+.ez-section h3 { font-size: 1.08rem; font-weight: 600; color: var(--espresso); margin: 22px 0 10px; }
+.ez-section p { font-size: 1.04rem; line-height: 1.85; color: var(--ink-mute); margin-bottom: 14px; }
+.ez-section p:last-child { margin-bottom: 0; }
+.ez-section ul { padding-left: 22px; margin-bottom: 14px; }
+.ez-section li { font-size: 1.02rem; line-height: 1.8; color: var(--ink-mute); margin-bottom: 8px; }
+.ez-callout { margin: 14px 0; padding: 14px 18px; background: var(--canvas-warm); border-left: 3px solid var(--caramel); border-radius: 4px; font-size: 0.98rem; color: var(--espresso); line-height: 1.75; }
+.ez-callout strong { color: var(--copper); }
+.ez-findings { list-style: none; padding: 0; }
+.ez-findings > li { padding: 18px 22px; margin-bottom: 14px; background: var(--canvas-warm); border: 1px solid var(--line); border-radius: 10px; font-size: 1.02rem; line-height: 1.7; color: var(--ink-mute); }
+.ez-findings > li strong { color: var(--ink); display: block; margin-bottom: 4px; font-size: 1.06rem; }
+.ez-findings > li.gold { background: linear-gradient(135deg, #FFF8E7, #FFEFCD); border-color: #F0D67A; }
+.ez-findings > li.silver { background: linear-gradient(135deg, #F6F6F6, #ECECEC); border-color: #C7C7C7; }
+.ez-findings > li.bronze { background: linear-gradient(135deg, #FFEEDD, #FFDCC0); border-color: #E4B07F; }
+.ez-findings > li.medal { background: linear-gradient(135deg, #F0E6FF, #E1D2FF); border-color: #BDA8E5; }
+.ez-table { width: 100%; border-collapse: collapse; margin: 16px 0 8px; font-size: 0.96rem; }
+.ez-table th, .ez-table td { padding: 11px 14px; border: 1px solid var(--line); text-align: left; vertical-align: top; }
+.ez-table thead th { background: var(--ink); color: #fff; font-weight: 600; letter-spacing: .02em; }
+.ez-table tbody th { background: var(--canvas-warm); color: var(--ink); font-weight: 600; }
+.ez-table tbody tr:nth-child(even) td { background: rgba(250, 247, 242, .55); }
+.ez-summary { padding: 26px 30px; background: linear-gradient(135deg, #FAF0E0, #F3E1C5); border-radius: 14px; font-size: 1.13rem; line-height: 1.75; font-weight: 500; color: var(--ink); border: 1px solid #E5C99B; }
+.ez-summary strong { color: var(--espresso); }
+.ez-citation { margin-top: 24px; padding: 18px 22px; background: var(--canvas-warm); border-radius: 8px; font-family: var(--font-mono); font-size: 0.82rem; color: var(--ink-soft); line-height: 1.7; }
+.ez-citation p { margin: 4px 0; }
+.ez-chart-card { padding: 22px 24px 18px; background: var(--canvas); border: 1px solid var(--line); border-radius: 12px; margin: 16px 0; }
+.ez-chart-card .ez-chart-title { font-size: 1rem; font-weight: 600; color: var(--ink); margin-bottom: 14px; }
+.ez-bar-row { display: flex; align-items: center; margin: 10px 0; font-size: 0.95rem; gap: 14px; }
+.ez-bar-label { width: 180px; flex-shrink: 0; color: var(--ink-mute); font-weight: 500; }
+.ez-bar-track { flex: 1; height: 32px; background: var(--canvas-warm); border-radius: 6px; overflow: hidden; position: relative; border: 1px solid var(--line); }
+.ez-bar-fill { height: 100%; background: linear-gradient(90deg, var(--caramel), var(--copper)); display: flex; align-items: center; justify-content: flex-end; padding: 0 12px; color: white; font-weight: 700; font-size: 0.92rem; min-width: 56px; }
+.ez-bar-fill.alt { background: linear-gradient(90deg, #6F4E37, #4A3F36); }
+.ez-glossary { display: grid; gap: 12px; }
+.ez-glossary-item { padding: 16px 20px; background: var(--canvas-warm); border: 1px solid var(--line); border-radius: 10px; border-left: 3px solid var(--caramel); }
+.ez-glossary-term { font-family: var(--font-display); font-style: italic; font-size: 1.1rem; font-weight: 600; color: var(--espresso); margin-bottom: 6px; }
+.ez-glossary-def { font-size: 0.98rem; color: var(--ink-mute); line-height: 1.7; }
+@media (max-width: 720px) {
+  .article-hero { padding: 36px 0 32px; }
+  .article-body { padding: 36px 0 56px; }
+  .ez-section { margin-bottom: 40px; }
+  .ez-section h2 { font-size: 1.3rem; }
+  .ez-bar-label { width: 100%; margin-bottom: 4px; }
+  .ez-bar-row { flex-direction: column; align-items: stretch; }
+  .article-meta { gap: 12px 18px; font-size: .68rem; }
+}
+</style>
+</head>
+<body>
+
+<header class="site-nav">
+  <div class="nav-inner">
+    <a class="brand" href="/">
+      <span class="brand-mark">92<span class="temp-mark"><span class="temp-deg">°</span><span class="temp-c">C</span></span></span>ROASTERY
+    </a>
+    <a class="nav-back" href="/insight">← INSIGHTS</a>
+  </div>
+</header>
+
+<article>
+  <section class="article-hero">
+    <div class="container">
+      <div class="eyebrow">— 오늘의 커피 상식 · 2026.08.26</div>
+      <h1 class="article-title">커피 맛을 그린 알록달록한 원판, 플레이버 휠 읽는 법 🎨</h1>
+      <p class="article-one-liner">안쪽에서 바깥쪽으로 갈수록 표현이 구체적으로 쪼개진다. 순서만 알면 나도 컵노트를 말할 수 있어!</p>
+      <div class="article-meta">
+        
+        
+        
+        <span>커피 상식 · 용어</span>
+      </div>
+      
+      <div class="hero-image">
+        <img src="/static/img/insights/trivia/terms.svg" alt="커피 맛을 그린 알록달록한 원판, 플레이버 휠 읽는 법 🎨">
+      </div>
+      
+    </div>
+  </section>
+
+  <section class="article-body">
+    <div class="container">
+
+      
+      <div class="ez-hero">
+        <div class="ez-hero-emoji">🎨</div>
+        <div class="ez-hero-title">커피 맛을 그린 알록달록한 원판, 플레이버 휠 읽는 법</div>
+      </div>
+
+      
+      <div class="ez-section">
+        <h2>🤔 무슨 연구야?</h2>
+        
+          <p>카페 벽이나 원두 봉지에서 무지개색 원판을 본 적 있어? 안쪽에 큰 단어가 있고 바깥으로 갈수록 잘게 쪼개진 그림 말이야. 그게 플레이버 휠, 우리말로 향미 표현 바퀴야.</p><p>이 원판은 장식이 아니라 사전에 가깝게 쓰여. 사람마다 &#39;좋다&#39;, &#39;고소하다&#39; 같은 말을 서로 다른 뜻으로 쓰면 대화가 안 되잖아. 그래서 커피 업계는 자주 쓰이는 표현을 정리해 지도처럼 만들어 뒀어. 🗺️</p><p>오늘은 이 원판을 어떻게 읽는지, 그리고 커피 초보가 자기 느낌을 말로 옮기는 가장 쉬운 순서를 알려줄게. 생각보다 훨씬 단순해.</p>
+        
+      </div>
+
+      
+      
+      <div class="ez-section">
+        <h2>🧪 핵심 개념 쉽게 풀어보면</h2>
+        
+          <h3>1️⃣ 안쪽은 큰 갈래, 바깥쪽은 구체적인 이름</h3>
+          <p>원판의 가장 안쪽에는 과일, 꽃, 견과, 단맛, 향신료, 탄 향처럼 큰 갈래가 놓여 있어. 거기서 한 칸 밖으로 나가면 과일이 베리류, 감귤류, 말린 과일 같은 중간 단계로 나뉘고, 다시 한 칸 나가면 딸기, 블루베리, 자몽 같은 구체적인 이름이 나와. 그러니까 읽는 방향은 언제나 안쪽에서 바깥쪽이야. 처음부터 &#39;블루베리&#39;를 맞히려 하지 말고, 먼저 &#39;과일 쪽인가?&#39;를 정하고 좁혀 나가면 돼.</p>
+          <div class="ez-callout">💡 비유: 동물 도감을 펼칠 때 포유류인지 조류인지부터 정하고, 그다음에 개인지 고양이인지로 좁히잖아. 딱 그 순서야. 🐾</div>
+        
+          <h3>2️⃣ 색깔은 예쁘라고 칠한 게 아니야</h3>
+          <p>원판의 색은 갈래마다 다르게 칠해져 있어서, 멀리서 봐도 어느 영역인지 눈에 들어와. 과일 쪽은 붉고 밝은 색, 견과나 초콜릿 쪽은 갈색 계열, 탄 향 쪽은 어두운 색 하는 식이야. 그리고 서로 가까이 붙어 있는 표현은 실제로도 헷갈리기 쉬운 이웃이야. 예를 들어 감귤류와 신 과일은 옆자리에 있어서, 잔에서 느낀 신맛이 그 둘 사이 어디쯤인지 고민하게 되는 게 자연스러운 일이라는 뜻이지.</p>
+          <div class="ez-callout">💡 비유: 지하철 노선도에서 같은 색 노선이 한 방향으로 이어지는 것과 비슷해. 색과 위치 자체가 정보인 거야. 🚇</div>
+        
+          <h3>3️⃣ &#39;블루베리 향&#39;은 진짜 블루베리를 넣은 게 아니야</h3>
+          <p>가장 흔한 오해가 이거야. 원두에 향료를 넣었다고 생각하는 사람이 많거든. 하지만 컵노트는 향료가 아니라 비유야. 커피가 익고 발효되고 볶이는 과정에서 만들어진 향 성분이, 우리 뇌 속에 저장된 블루베리 기억과 비슷하게 느껴졌다는 뜻이지. 그래서 사람마다 다르게 느끼는 게 당연해. 컵노트는 정답표가 아니라, 맛을 함께 이야기하기 위한 공통 언어에 가까워.</p>
+          <div class="ez-callout">💡 비유: 향수 설명에 &#39;비 온 뒤 흙냄새&#39;라고 적혀 있다고 흙을 넣은 게 아니잖아. 기억을 불러오는 비유인 거야. 🌧️</div>
+        
+      </div>
+      
+
+      
+      
+      <div class="ez-section">
+        <h2>🎯 핵심 발견</h2>
+        <ul class="ez-findings">
+          
+          
+            
+              <li class="gold">
+                <strong>🥇 초보는 세 단계만 따라가면 된다</strong>복잡해 보이지만 순서는 간단해. 첫째, 신맛이 있는지 없는지만 정해. 둘째, 단맛이 어느 쪽에 가까운지 골라. 설탕처럼 깔끔한지, 캐러멜이나 흑설탕처럼 진한지. 셋째, 남는 인상이 과일 쪽인지 견과나 초콜릿 쪽인지 정해. 이 세 가지만 말해도 이미 훌륭한 컵노트야. 처음부터 &#39;자스민과 백도&#39;를 말할 필요는 전혀 없어. 😌
+              </li>
+            
+              <li class="silver">
+                <strong>🥈 향은 코로만 맡는 게 아니다</strong>커피를 삼킬 때 목 뒤로 향이 올라오는 걸 느껴본 적 있을 거야. 그게 입 안쪽에서 코로 이어지는 통로를 타고 올라오는 향이야. 그래서 감기에 걸려 코가 막히면 커피 맛이 밋밋해져. 혀는 단맛, 신맛, 쓴맛 같은 기본 맛만 알려주고, 우리가 &#39;블루베리 같다&#39;고 느끼는 정교한 부분은 대부분 향이 만들어. 컵노트가 그렇게 다양한 이유가 여기 있어. 👃
+              </li>
+            
+              <li class="bronze">
+                <strong>🥉 나만의 기준 잔을 하나 정해두면 는다</strong>표현이 늘지 않는 가장 큰 이유는 비교 대상이 없어서야. 그래서 자주 마시는 커피 하나를 기준으로 삼는 게 좋아. 그 커피를 기준으로 &#39;이건 더 새콤하다&#39;, &#39;이건 더 묵직하다&#39;처럼 상대적으로 말하기 시작하면, 어느 순간 구체적인 이름이 떠오르기 시작해. 혼자 마실 때보다 두 잔을 나란히 놓고 비교할 때 훨씬 빨리 늘어.
+              </li>
+            
+              <li class="medal">
+                <strong>🏅 원판은 나라와 문화에 따라 달라질 수 있다</strong>널리 쓰이는 원판은 서구권 식재료를 기준으로 만들어졌어. 그래서 우리에게는 익숙하지 않은 과일 이름이 섞여 있기도 하지. 반대로 우리에게 딱 떠오르는 표현이 원판에는 없기도 해. 대추, 유자, 홍시 같은 표현이 그렇지. 실제로 여러 나라에서 자기 문화에 맞는 표현을 더한 지역판을 만들기도 해. 원판은 참고서일 뿐, 내 입이 느낀 걸 우선해도 괜찮아. 🍊
+              </li>
+            
+          
+        </ul>
+      </div>
+      
+
+      
+      
+      <div class="ez-section">
+        <h2>📊 숫자로 보기</h2>
+        
+          
+          
+          <div class="ez-chart-card">
+            <div class="ez-chart-title">초보가 컵노트를 말할 때 필요한 단계 수</div>
+            
+              
+              <div class="ez-bar-row">
+                <div class="ez-bar-label">신맛 유무</div>
+                <div class="ez-bar-track"><div class="ez-bar-fill" style="width: 25.0%;">1.0단계</div></div>
+              </div>
+            
+              
+              <div class="ez-bar-row">
+                <div class="ez-bar-label">단맛 성격</div>
+                <div class="ez-bar-track"><div class="ez-bar-fill" style="width: 50.0%;">2.0단계</div></div>
+              </div>
+            
+              
+              <div class="ez-bar-row">
+                <div class="ez-bar-label">남는 인상</div>
+                <div class="ez-bar-track"><div class="ez-bar-fill" style="width: 75.0%;">3.0단계</div></div>
+              </div>
+            
+              
+              <div class="ez-bar-row">
+                <div class="ez-bar-label">구체적 이름</div>
+                <div class="ez-bar-track"><div class="ez-bar-fill" style="width: 100.0%;">4.0단계</div></div>
+              </div>
+            
+          </div>
+        
+      </div>
+      
+
+      
+      
+      
+      <div class="ez-section">
+        <h2>🆚 안쪽 갈래에서 바깥쪽 표현으로, 이렇게 좁혀진다</h2>
+        <table class="ez-table">
+          <thead><tr><th>안쪽 갈래</th><th>중간 단계</th><th>바깥쪽 표현 예</th></tr></thead>
+          <tbody>
+            <tr>
+              <th>과일</th><td>베리류</td><td>딸기, 블루베리</td>
+            </tr><tr>
+              <th>과일</th><td>감귤류</td><td>레몬, 자몽</td>
+            </tr><tr>
+              <th>단맛</th><td>캐러멜 계열</td><td>흑설탕, 꿀</td>
+            </tr><tr>
+              <th>견과와 코코아</th><td>초콜릿</td><td>다크초콜릿, 코코아</td>
+            </tr><tr>
+              <th>향신료</th><td>따뜻한 향신료</td><td>계피, 정향</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      
+      
+
+      
+      
+
+      
+      
+
+      
+      
+      <div class="ez-section">
+        <div class="ez-summary">💡 <strong>한 줄 요약</strong> — 플레이버 휠은 안쪽 큰 갈래에서 바깥쪽 구체적인 이름으로 좁혀 읽는 지도다. 컵노트는 향료가 아니라 비유이고, 신맛과 단맛과 남는 인상 세 가지만 말해도 충분한 표현이 된다!</div>
+      </div>
+      
+
+      
+      
+      
+      
+
+      
+      
+      <div class="ez-section">
+        <h2>📖 어려운 말 풀이 사전</h2>
+        <p>이 글에 나온 어려운 약어와 용어를 한 번에 정리했어. 의미만 알면 본문이 훨씬 쉬워져!</p>
+        <div class="ez-glossary">
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">플레이버 휠</div>
+            <div class="ez-glossary-def">커피에서 자주 느껴지는 향과 맛 표현을 갈래별로 정리한 원판 모양 지도</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">컵노트</div>
+            <div class="ez-glossary-def">그 커피에서 느껴지는 향과 맛을 익숙한 재료에 빗대어 적은 설명</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">아로마</div>
+            <div class="ez-glossary-def">코로 맡는 향. 커피를 갈았을 때와 물을 부었을 때 특히 잘 드러남</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">애프터테이스트</div>
+            <div class="ez-glossary-def">삼킨 뒤 입에 남는 인상. 좋은 커피일수록 깔끔하고 길게 이어짐</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">센서리</div>
+            <div class="ez-glossary-def">감각으로 맛과 향을 평가하는 일. 커피에서는 커핑이 대표적인 방법</div>
+          </div>
+          
+        </div>
+      </div>
+      
+
+    </div>
+  </section>
+
+  <footer class="article-footer">
+    <div class="container">
+      <a href="/insight">← BACK TO INSIGHTS</a>
+      <span style="margin: 0 16px;">·</span>
+      <a href="/">HOME</a>
+    </div>
+  </footer>
+</article>
+
+</body>
+</html>

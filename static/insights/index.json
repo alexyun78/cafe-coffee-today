@@ -1,7 +1,24 @@
 {
   "version": 1,
-  "updated_at": "2026-08-25T11:59:56Z",
+  "updated_at": "2026-08-26T12:00:50Z",
   "items": [
+    {
+      "id": "2026-08-26-flavor-wheel",
+      "type": "trivia",
+      "date": "2026-08-26",
+      "title_ko": "커피 맛을 그린 알록달록한 원판, 플레이버 휠 읽는 법 🎨",
+      "one_liner": "안쪽에서 바깥쪽으로 갈수록 표현이 구체적으로 쪼개진다. 순서만 알면 나도 컵노트를 말할 수 있어!",
+      "categories_primary": [
+        "커피 상식"
+      ],
+      "categories_secondary": [
+        "용어"
+      ],
+      "hero_image": "/static/img/insights/trivia/terms.svg",
+      "journal": null,
+      "pub_date": null,
+      "source_basis": null
+    },
     {
       "id": "2026-08-25-kenya-auction-aa",
       "type": "trivia",
