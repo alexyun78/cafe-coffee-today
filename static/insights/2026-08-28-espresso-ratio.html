@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>바리스타가 말하는 '18그램에 36그램'이 대체 무슨 소리야? ⚖️ — 92°C ROASTERY</title>
+<meta name="description" content="원두 무게와 뽑힌 커피 무게의 비율, 이 숫자 하나만 알면 에스프레소 레시피가 전부 읽힌다!">
+<link rel="icon" type="image/png" href="/static/img/logo-92black.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --canvas: #FFFFFF; --canvas-warm: #FAF7F2; --canvas-stone: #F2ECE3;
+  --ink: #1A1410; --ink-mute: #4A3F36; --ink-soft: #6B5E52;
+  --espresso: #6F4E37; --caramel: #C9986A; --copper: #B5703D;
+  --line: #E8E0D5; --line-soft: #F0E9DD;
+  --font-display: "Cormorant Garamond", "Pretendard", serif;
+  --font-body: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  --r-sm: 6px; --r-md: 12px; --r-pill: 999px;
+}
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color: transparent; }
+html { scroll-behavior: smooth; }
+body { font-family: var(--font-body); color: var(--ink); background: var(--canvas); font-feature-settings: "kern","ss01","lnum"; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+a { color: var(--copper); text-decoration: none; border-bottom: 1px solid transparent; transition: border-color .2s; }
+a:hover { border-bottom-color: var(--copper); }
+img { display: block; max-width: 100%; height: auto; }
+.container { max-width: 860px; margin: 0 auto; padding: 0 32px; }
+@media (max-width: 720px) { .container { padding: 0 20px; } }
+@media (max-width: 480px) { .container { padding: 0 16px; } }
+.site-nav { position: sticky; top: 0; z-index: 50; background: rgba(255,255,255,0.9); backdrop-filter: saturate(140%) blur(14px); -webkit-backdrop-filter: saturate(140%) blur(14px); border-bottom: 1px solid var(--line-soft); }
+.nav-inner { max-width: 1200px; margin: 0 auto; padding: 16px 32px; display: flex; align-items: center; justify-content: space-between; }
+.brand { font-family: var(--font-display); font-size: 1.3rem; font-weight: 700; color: var(--ink); display: inline-flex; align-items: center; gap: 4px; border-bottom: none; }
+.brand:hover { border-bottom: none; }
+.brand-mark { display: inline-flex; align-items: flex-start; font-family: "Pretendard", sans-serif; font-weight: 900; letter-spacing: -0.04em; line-height: 1; color: inherit; }
+.temp-mark { display: flex; flex-direction: column; line-height: .82; margin: 0 .05em 0 .04em; }
+.temp-mark .temp-deg { font-size: .42em; letter-spacing: -.04em; }
+.temp-mark .temp-c { font-size: .58em; letter-spacing: -.05em; margin-top: -.05em; }
+.nav-back { font-family: var(--font-mono); font-size: .75rem; letter-spacing: .18em; color: var(--ink-mute); border-bottom: none; }
+.nav-back:hover { color: var(--copper); border-bottom: none; }
+.article-hero { padding: 56px 0 48px; border-bottom: 1px solid var(--line-soft); }
+.eyebrow { font-family: var(--font-mono); font-size: .72rem; letter-spacing: .28em; color: var(--copper); margin-bottom: 18px; display: flex; align-items: center; gap: 12px; }
+.eyebrow::before { content: ""; display: inline-block; width: 28px; height: 1px; background: var(--copper); }
+.article-title { font-family: var(--font-display); font-weight: 500; font-size: clamp(2rem, 4.5vw, 3.2rem); line-height: 1.15; letter-spacing: -0.02em; color: var(--ink); margin-bottom: 20px; }
+.article-title em { font-style: italic; color: var(--espresso); font-weight: 600; }
+.article-one-liner { font-family: var(--font-display); font-style: italic; font-size: 1.3rem; line-height: 1.5; color: var(--espresso); margin-bottom: 28px; padding-left: 20px; border-left: 3px solid var(--caramel); }
+.article-meta { display: flex; gap: 24px; flex-wrap: wrap; font-family: var(--font-mono); font-size: .75rem; letter-spacing: .12em; color: var(--ink-soft); padding-top: 20px; border-top: 1px solid var(--line-soft); }
+.article-meta span { display: inline-flex; align-items: center; gap: 6px; }
+.article-meta span::before { content: "■"; color: var(--caramel); font-size: .55rem; }
+.hero-image { margin: 32px 0 0; border-radius: var(--r-md); overflow: hidden; border: 1px solid var(--line); }
+.hero-image img { width: 100%; }
+.article-body { padding: 56px 0 80px; }
+.article-footer { padding: 36px 0 56px; border-top: 1px solid var(--line-soft); text-align: center; font-family: var(--font-mono); font-size: .75rem; letter-spacing: .14em; color: var(--ink-soft); }
+.article-footer a { color: var(--ink-mute); border-bottom: 1px solid transparent; }
+.article-footer a:hover { color: var(--copper); border-bottom-color: var(--copper); }
+.source-basis { display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; background: rgba(201,152,106,.18); border: 1px solid rgba(181,112,61,.35); border-radius: var(--r-pill); font-family: var(--font-mono); font-size: .72rem; letter-spacing: .12em; color: var(--espresso); font-weight: 500; }
+.source-basis.abstract { background: rgba(107,94,82,.1); border-color: rgba(107,94,82,.3); color: var(--ink-soft); }
+.links-row { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 18px; }
+.link-pill { display: inline-flex; align-items: center; gap: 8px; padding: 9px 16px; background: var(--canvas-warm); border: 1px solid var(--line); border-radius: var(--r-pill); font-family: var(--font-mono); font-size: .78rem; letter-spacing: .08em; color: var(--ink-mute); border-bottom: 1px solid var(--line); transition: border-color .2s, color .2s; }
+.link-pill:hover { color: var(--copper); border-color: var(--copper); }
+
+/* ===== EZ: 쉬운 설명 스타일 ===== */
+.ez-hero { text-align: center; padding: 8px 0 32px; }
+.ez-hero-emoji { font-size: 3.4rem; line-height: 1; }
+.ez-hero-title { font-family: var(--font-display); font-size: clamp(1.6rem, 3.5vw, 2.2rem); font-weight: 600; color: var(--ink); margin-top: 14px; line-height: 1.3; }
+.ez-section { margin-bottom: 52px; }
+.ez-section h2 { font-family: var(--font-body); font-size: 1.5rem; font-weight: 700; color: var(--ink); margin-bottom: 18px; letter-spacing: -0.01em; }
+.ez-section h3 { font-size: 1.08rem; font-weight: 600; color: var(--espresso); margin: 22px 0 10px; }
+.ez-section p { font-size: 1.04rem; line-height: 1.85; color: var(--ink-mute); margin-bottom: 14px; }
+.ez-section p:last-child { margin-bottom: 0; }
+.ez-section ul { padding-left: 22px; margin-bottom: 14px; }
+.ez-section li { font-size: 1.02rem; line-height: 1.8; color: var(--ink-mute); margin-bottom: 8px; }
+.ez-callout { margin: 14px 0; padding: 14px 18px; background: var(--canvas-warm); border-left: 3px solid var(--caramel); border-radius: 4px; font-size: 0.98rem; color: var(--espresso); line-height: 1.75; }
+.ez-callout strong { color: var(--copper); }
+.ez-findings { list-style: none; padding: 0; }
+.ez-findings > li { padding: 18px 22px; margin-bottom: 14px; background: var(--canvas-warm); border: 1px solid var(--line); border-radius: 10px; font-size: 1.02rem; line-height: 1.7; color: var(--ink-mute); }
+.ez-findings > li strong { color: var(--ink); display: block; margin-bottom: 4px; font-size: 1.06rem; }
+.ez-findings > li.gold { background: linear-gradient(135deg, #FFF8E7, #FFEFCD); border-color: #F0D67A; }
+.ez-findings > li.silver { background: linear-gradient(135deg, #F6F6F6, #ECECEC); border-color: #C7C7C7; }
+.ez-findings > li.bronze { background: linear-gradient(135deg, #FFEEDD, #FFDCC0); border-color: #E4B07F; }
+.ez-findings > li.medal { background: linear-gradient(135deg, #F0E6FF, #E1D2FF); border-color: #BDA8E5; }
+.ez-table { width: 100%; border-collapse: collapse; margin: 16px 0 8px; font-size: 0.96rem; }
+.ez-table th, .ez-table td { padding: 11px 14px; border: 1px solid var(--line); text-align: left; vertical-align: top; }
+.ez-table thead th { background: var(--ink); color: #fff; font-weight: 600; letter-spacing: .02em; }
+.ez-table tbody th { background: var(--canvas-warm); color: var(--ink); font-weight: 600; }
+.ez-table tbody tr:nth-child(even) td { background: rgba(250, 247, 242, .55); }
+.ez-summary { padding: 26px 30px; background: linear-gradient(135deg, #FAF0E0, #F3E1C5); border-radius: 14px; font-size: 1.13rem; line-height: 1.75; font-weight: 500; color: var(--ink); border: 1px solid #E5C99B; }
+.ez-summary strong { color: var(--espresso); }
+.ez-citation { margin-top: 24px; padding: 18px 22px; background: var(--canvas-warm); border-radius: 8px; font-family: var(--font-mono); font-size: 0.82rem; color: var(--ink-soft); line-height: 1.7; }
+.ez-citation p { margin: 4px 0; }
+.ez-chart-card { padding: 22px 24px 18px; background: var(--canvas); border: 1px solid var(--line); border-radius: 12px; margin: 16px 0; }
+.ez-chart-card .ez-chart-title { font-size: 1rem; font-weight: 600; color: var(--ink); margin-bottom: 14px; }
+.ez-bar-row { display: flex; align-items: center; margin: 10px 0; font-size: 0.95rem; gap: 14px; }
+.ez-bar-label { width: 180px; flex-shrink: 0; color: var(--ink-mute); font-weight: 500; }
+.ez-bar-track { flex: 1; height: 32px; background: var(--canvas-warm); border-radius: 6px; overflow: hidden; position: relative; border: 1px solid var(--line); }
+.ez-bar-fill { height: 100%; background: linear-gradient(90deg, var(--caramel), var(--copper)); display: flex; align-items: center; justify-content: flex-end; padding: 0 12px; color: white; font-weight: 700; font-size: 0.92rem; min-width: 56px; }
+.ez-bar-fill.alt { background: linear-gradient(90deg, #6F4E37, #4A3F36); }
+.ez-glossary { display: grid; gap: 12px; }
+.ez-glossary-item { padding: 16px 20px; background: var(--canvas-warm); border: 1px solid var(--line); border-radius: 10px; border-left: 3px solid var(--caramel); }
+.ez-glossary-term { font-family: var(--font-display); font-style: italic; font-size: 1.1rem; font-weight: 600; color: var(--espresso); margin-bottom: 6px; }
+.ez-glossary-def { font-size: 0.98rem; color: var(--ink-mute); line-height: 1.7; }
+@media (max-width: 720px) {
+  .article-hero { padding: 36px 0 32px; }
+  .article-body { padding: 36px 0 56px; }
+  .ez-section { margin-bottom: 40px; }
+  .ez-section h2 { font-size: 1.3rem; }
+  .ez-bar-label { width: 100%; margin-bottom: 4px; }
+  .ez-bar-row { flex-direction: column; align-items: stretch; }
+  .article-meta { gap: 12px 18px; font-size: .68rem; }
+}
+</style>
+</head>
+<body>
+
+<header class="site-nav">
+  <div class="nav-inner">
+    <a class="brand" href="/">
+      <span class="brand-mark">92<span class="temp-mark"><span class="temp-deg">°</span><span class="temp-c">C</span></span></span>ROASTERY
+    </a>
+    <a class="nav-back" href="/insight">← INSIGHTS</a>
+  </div>
+</header>
+
+<article>
+  <section class="article-hero">
+    <div class="container">
+      <div class="eyebrow">— 오늘의 커피 상식 · 2026.08.28</div>
+      <h1 class="article-title">바리스타가 말하는 &#39;18그램에 36그램&#39;이 대체 무슨 소리야? ⚖️</h1>
+      <p class="article-one-liner">원두 무게와 뽑힌 커피 무게의 비율, 이 숫자 하나만 알면 에스프레소 레시피가 전부 읽힌다!</p>
+      <div class="article-meta">
+        
+        
+        
+        <span>커피 상식 · 한 잔의 기술</span>
+      </div>
+      
+      <div class="hero-image">
+        <img src="/static/img/insights/trivia/bestcup.svg" alt="바리스타가 말하는 &#39;18그램에 36그램&#39;이 대체 무슨 소리야? ⚖️">
+      </div>
+      
+    </div>
+  </section>
+
+  <section class="article-body">
+    <div class="container">
+
+      
+      <div class="ez-hero">
+        <div class="ez-hero-emoji">⚖️</div>
+        <div class="ez-hero-title">바리스타가 말하는 &#39;18그램에 36그램&#39;이 대체 무슨 소리야?</div>
+      </div>
+
+      
+      <div class="ez-section">
+        <h2>🤔 무슨 연구야?</h2>
+        
+          <p>카페에서 바리스타끼리 &#39;18에 36, 27초&#39;같은 암호를 주고받는 걸 들어본 적 있어? 처음 들으면 무슨 비밀번호 같지만, 알고 보면 아주 단순한 요리 레시피야.</p><p>앞의 숫자는 포터필터에 담은 원두 가루의 무게, 뒤의 숫자는 잔에 뽑혀 나온 액체의 무게, 마지막은 걸린 시간이야. 즉 &#39;가루 18그램을 써서 커피 36그램을 27초 동안 받았다&#39;는 뜻이지. ☕</p><p>오늘은 이 비율이 왜 중요한지, 숫자를 어느 쪽으로 움직이면 맛이 어떻게 바뀌는지 알아볼게. 집에 머신이 없어도 카페에서 취향을 말할 때 바로 써먹을 수 있어.</p>
+        
+      </div>
+
+      
+      
+      <div class="ez-section">
+        <h2>🧪 핵심 개념 쉽게 풀어보면</h2>
+        
+          <h3>1️⃣ 비율은 &#39;진하기&#39;를 정하는 손잡이</h3>
+          <p>원두 무게 대 추출된 커피 무게의 비율을 브루 레이시오라고 불러. 18그램으로 36그램을 받으면 1대 2야. 같은 원두로 27그램만 받으면 1대 1.5가 되어 훨씬 진하고 걸쭉해지고, 54그램을 받으면 1대 3이 되어 묽고 가벼워져. 흔히 기준으로 삼는 건 1대 2 근처인데, 이건 법칙이 아니라 출발점이야. 원두와 로스팅 정도에 따라 더 짧게 혹은 더 길게 받는 게 맞을 때도 많아.</p>
+          <div class="ez-callout">💡 비유: 라면에 물을 얼마나 붓느냐랑 똑같아. 같은 스프라도 물이 적으면 짜고 진하고, 많으면 싱겁잖아. 🍜</div>
+        
+          <h3>2️⃣ 시간은 결과가 아니라 신호등</h3>
+          <p>많은 사람이 &#39;25초를 맞춰야 한다&#39;고 생각하는데, 시간은 목표가 아니라 상태를 알려주는 신호에 가까워. 같은 비율인데 시간이 너무 짧게 나왔다면 물이 너무 쉽게 빠져나갔다는 뜻이라 분쇄를 더 곱게 해야 하고, 너무 길게 나왔다면 물이 막혔다는 뜻이라 굵게 조정해야 해. 즉 바리스타는 시간을 보고 그라인더를 돌리는 거야. 시간을 억지로 맞추려고 원두 양을 바꾸는 건 순서가 거꾸로야.</p>
+          <div class="ez-callout">💡 비유: 체온계 숫자를 낮추려고 체온계를 흔드는 게 아니라, 몸 상태를 고치는 거잖아. 시간은 체온계 쪽이야. 🌡️</div>
+        
+          <h3>3️⃣ 세 개의 손잡이는 서로 연결돼 있다</h3>
+          <p>에스프레소를 조절하는 손잡이는 크게 세 개야. 원두 양, 분쇄도, 그리고 받는 양. 이 중 하나를 움직이면 나머지도 따라 움직여. 예를 들어 원두 양을 늘리면 물이 지나갈 길이 좁아져서 시간이 길어지고, 분쇄를 굵게 하면 시간이 짧아지지. 그래서 여러 개를 한꺼번에 바꾸면 뭐가 원인인지 알 수 없게 돼. 한 번에 하나씩만 바꾸는 게 실력이 느는 가장 빠른 길이야.</p>
+          <div class="ez-callout">💡 비유: 게임 캐릭터 능력치를 한꺼번에 다 올려버리면 뭐가 효과 있었는지 모르잖아. 하나씩 찍어봐야 알지. 🎮</div>
+        
+      </div>
+      
+
+      
+      
+      <div class="ez-section">
+        <h2>🎯 핵심 발견</h2>
+        <ul class="ez-findings">
+          
+          
+            
+              <li class="gold">
+                <strong>🥇 잔이 아니라 저울을 봐야 하는 이유</strong>예전에는 눈금이 그려진 잔에 어디까지 찼는지로 양을 쟀어. 그런데 에스프레소는 위에 크레마라는 거품층이 얹히는데, 이 거품의 양이 원두 상태에 따라 크게 달라져. 갓 볶은 원두는 거품이 부풀어서 실제 커피는 적은데도 많아 보이지. 그래서 요즘은 잔 밑에 저울을 놓고 무게로 재. 거품에 속지 않는 유일한 방법이거든. ⚖️
+              </li>
+            
+              <li class="silver">
+                <strong>🥈 신맛이 튀면 조금 더 받아 보면 된다</strong>에스프레소가 시고 날카롭게 느껴진다면, 물이 원두에서 뽑아내야 할 것을 덜 뽑아낸 상태일 가능성이 커. 이럴 때는 받는 양을 조금 늘리거나 분쇄를 조금 더 곱게 하면 단맛 쪽으로 옮겨가. 반대로 쓰고 텁텁하며 뒷맛이 텁텁하게 남는다면 너무 많이 뽑아낸 쪽이야. 이때는 받는 양을 줄이거나 분쇄를 굵게 하면 돼. 신맛과 쓴맛은 서로 반대 방향의 신호인 셈이지.
+              </li>
+            
+              <li class="bronze">
+                <strong>🥉 원두가 바뀌면 숫자도 바뀌는 게 정상</strong>어떤 카페에서 완벽했던 레시피를 그대로 다른 원두에 적용하면 대개 실패해. 로스팅이 진할수록 조직이 부서지기 쉬워 물이 빨리 통과하고, 밀도가 높은 고지대 원두는 더 단단해서 다르게 반응하거든. 게다가 볶은 지 며칠 지났는지, 그날 습도가 어떤지에 따라서도 달라져. 그래서 카페에서는 아침마다 첫 잔을 뽑아 맛을 보고 그라인더를 다시 맞춰. 이걸 세팅이라고 불러. 🔧
+              </li>
+            
+              <li class="medal">
+                <strong>🏅 리스트레토와 룽고도 결국 이 비율 이야기</strong>메뉴판에서 본 리스트레토는 짧게 받아 진한 것, 룽고는 길게 받아 연한 것을 말해. 결국 같은 원두로 비율만 다르게 가져간 거야. 그러니 카페에서 &#39;조금 진하게 부탁드려요&#39;라고 말하는 건, 바리스타에게 &#39;받는 양을 줄여 달라&#39;는 뜻으로 전달되는 셈이지. 취향을 말할 때 이 표현을 쓰면 훨씬 정확하게 통해. 😊
+              </li>
+            
+          
+        </ul>
+      </div>
+      
+
+      
+      
+      <div class="ez-section">
+        <h2>📊 숫자로 보기</h2>
+        
+          
+          
+          <div class="ez-chart-card">
+            <div class="ez-chart-title">원두 18그램일 때 받는 커피 양 (비율별)</div>
+            
+              
+              <div class="ez-bar-row">
+                <div class="ez-bar-label">1대 1</div>
+                <div class="ez-bar-track"><div class="ez-bar-fill" style="width: 33.3%;">18.0그램</div></div>
+              </div>
+            
+              
+              <div class="ez-bar-row">
+                <div class="ez-bar-label">1대 1.5</div>
+                <div class="ez-bar-track"><div class="ez-bar-fill" style="width: 50.0%;">27.0그램</div></div>
+              </div>
+            
+              
+              <div class="ez-bar-row">
+                <div class="ez-bar-label">1대 2</div>
+                <div class="ez-bar-track"><div class="ez-bar-fill" style="width: 66.7%;">36.0그램</div></div>
+              </div>
+            
+              
+              <div class="ez-bar-row">
+                <div class="ez-bar-label">1대 2.5</div>
+                <div class="ez-bar-track"><div class="ez-bar-fill" style="width: 83.3%;">45.0그램</div></div>
+              </div>
+            
+              
+              <div class="ez-bar-row">
+                <div class="ez-bar-label">1대 3</div>
+                <div class="ez-bar-track"><div class="ez-bar-fill" style="width: 100.0%;">54.0그램</div></div>
+              </div>
+            
+          </div>
+        
+      </div>
+      
+
+      
+      
+      
+      <div class="ez-section">
+        <h2>🆚 비율을 바꾸면 잔이 어떻게 달라질까?</h2>
+        <table class="ez-table">
+          <thead><tr><th>비율</th><th>예시</th><th>느껴지는 인상</th></tr></thead>
+          <tbody>
+            <tr>
+              <th>1대 1</th><td>18그램으로 18그램</td><td>아주 진하고 걸쭉함, 강한 인상</td>
+            </tr><tr>
+              <th>1대 1.5</th><td>18그램으로 27그램</td><td>묵직하고 단맛이 도드라짐</td>
+            </tr><tr>
+              <th>1대 2</th><td>18그램으로 36그램</td><td>가장 흔한 출발점, 균형형</td>
+            </tr><tr>
+              <th>1대 2.5</th><td>18그램으로 45그램</td><td>가볍고 향이 살아남</td>
+            </tr><tr>
+              <th>1대 3</th><td>18그램으로 54그램</td><td>묽어지고 쓴맛이 나기 쉬움</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      
+      
+
+      
+      
+
+      
+      
+
+      
+      
+      <div class="ez-section">
+        <div class="ez-summary">💡 <strong>한 줄 요약</strong> — 에스프레소 레시피는 원두 무게와 받은 커피 무게의 비율, 그리고 걸린 시간으로 적는다. 흔한 출발점은 1대 2이고, 시간은 목표가 아니라 분쇄를 조정하라는 신호다!</div>
+      </div>
+      
+
+      
+      
+      
+      
+
+      
+      
+      <div class="ez-section">
+        <h2>📖 어려운 말 풀이 사전</h2>
+        <p>이 글에 나온 어려운 약어와 용어를 한 번에 정리했어. 의미만 알면 본문이 훨씬 쉬워져!</p>
+        <div class="ez-glossary">
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">브루 레이시오</div>
+            <div class="ez-glossary-def">원두 가루 무게와 뽑아낸 커피 무게의 비율. 1대 2처럼 표기함</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">도스</div>
+            <div class="ez-glossary-def">포터필터에 담는 원두 가루의 무게</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">리스트레토</div>
+            <div class="ez-glossary-def">평소보다 짧게 받아 진하게 뽑은 에스프레소</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">룽고</div>
+            <div class="ez-glossary-def">평소보다 길게 받아 연하게 뽑은 에스프레소</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">세팅</div>
+            <div class="ez-glossary-def">그날의 원두와 환경에 맞춰 분쇄도와 레시피를 다시 맞추는 작업</div>
+          </div>
+          
+        </div>
+      </div>
+      
+
+    </div>
+  </section>
+
+  <footer class="article-footer">
+    <div class="container">
+      <a href="/insight">← BACK TO INSIGHTS</a>
+      <span style="margin: 0 16px;">·</span>
+      <a href="/">HOME</a>
+    </div>
+  </footer>
+</article>
+
+</body>
+</html>

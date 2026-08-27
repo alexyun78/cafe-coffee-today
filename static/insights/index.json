@@ -1,7 +1,24 @@
 {
   "version": 1,
-  "updated_at": "2026-08-26T12:00:50Z",
+  "updated_at": "2026-08-27T21:18:31Z",
   "items": [
+    {
+      "id": "2026-08-28-espresso-ratio",
+      "type": "trivia",
+      "date": "2026-08-28",
+      "title_ko": "바리스타가 말하는 '18그램에 36그램'이 대체 무슨 소리야? ⚖️",
+      "one_liner": "원두 무게와 뽑힌 커피 무게의 비율, 이 숫자 하나만 알면 에스프레소 레시피가 전부 읽힌다!",
+      "categories_primary": [
+        "커피 상식"
+      ],
+      "categories_secondary": [
+        "한 잔의 기술"
+      ],
+      "hero_image": "/static/img/insights/trivia/bestcup.svg",
+      "journal": null,
+      "pub_date": null,
+      "source_basis": null
+    },
     {
       "id": "2026-08-26-flavor-wheel",
       "type": "trivia",
