@@ -1,7 +1,24 @@
 {
   "version": 1,
-  "updated_at": "2026-08-27T21:18:31Z",
+  "updated_at": "2026-08-28T21:30:47Z",
   "items": [
+    {
+      "id": "2026-08-29-coffee-waves",
+      "type": "trivia",
+      "date": "2026-08-29",
+      "title_ko": "커피에 '물결'이 있다고? 1의 물결부터 요즘 이야기되는 4의 물결까지 🌊",
+      "one_liner": "인스턴트에서 카페 문화로, 다시 산지 이름을 따지는 시대로. 커피가 지나온 세 번의 큰 파도를 한눈에!",
+      "categories_primary": [
+        "커피 상식"
+      ],
+      "categories_secondary": [
+        "트렌드"
+      ],
+      "hero_image": "/static/img/insights/trivia/trend.svg",
+      "journal": null,
+      "pub_date": null,
+      "source_basis": null
+    },
     {
       "id": "2026-08-28-espresso-ratio",
       "type": "trivia",
