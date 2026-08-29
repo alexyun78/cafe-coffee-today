@@ -1764,14 +1764,14 @@
         <div class="hours-closed-row">
             <div class="hours-card hours-card--closed">
                 <span class="closed-badge">CLOSED</span>
-                <div class="hours-day-en">2ND &amp; 4TH MONDAY</div>
-                <div class="hours-day-ko">매월 둘째 · 넷째 월요일</div>
+                <div class="hours-day-en">CLOSED DAYS</div>
+                <div class="hours-day-ko">휴무일은 매달 공지</div>
                 <div class="hours-note">더 오래, 더 좋은 커피로 함께하기 위한 재정비 시간입니다.</div>
                 <div class="hours-next-closed" id="hours-next-closed"></div>
             </div>
         </div>
         <div class="hours-foot">
-            <span>정기휴무 — 매월 둘째·넷째 월요일 · 공휴일</span>
+            <span>휴무 — 매달 공지 · 공휴일</span>
             <span id="hours-now-status">— 오늘의 영업시간 확인 중</span>
         </div>
     </div>
@@ -1797,7 +1797,7 @@
             <div class="footer-cols">
                 <div class="footer-col">
                     <h4>HOURS</h4>
-                    <p>화·목·금·토·일 <span style="white-space: nowrap;">08:30 — 21:00</span><br>월요일 · 수요일 <span style="white-space: nowrap;">08:30 — 18:00</span><br>둘째·넷째 월요일 휴무</p>
+                    <p>화·목·금·토·일 <span style="white-space: nowrap;">08:30 — 21:00</span><br>월요일 · 수요일 <span style="white-space: nowrap;">08:30 — 18:00</span><br>휴무일 매달 공지</p>
                 </div>
                 <div class="footer-col">
                     <h4>VISIT</h4>
@@ -1937,14 +1937,17 @@
     };
     var DOW_KO = ['일', '월', '화', '수', '목', '금', '토'];
 
-    // 2026-08-03부터 새 영업 체계 — 월·수 ~18:00, 화·목·금·토·일 ~21:00, 둘째·넷째 월요일 정기휴무
+    // 2026-08-03부터 새 영업 체계 — 월·수 ~18:00, 화·목·금·토·일 ~21:00
     var NEW_HOURS_FROM = '2026-08-03';
 
-    // 월별 지정 휴무일 — 과거 이력 + 규칙 외 추가 휴무용
+    // 휴무일은 고정 규칙 없이 매달 공지한다 — 아래 목록이 유일한 기준
+    // (매달 갱신할 곳: 이 CLOSED_DAYS, 아래 NOTICE_DATES, index.html 의 같은 두 곳)
     var CLOSED_DAYS = {
         '2026-07-13': true, // 7월 휴무일 (월)
         '2026-08-10': true, // 8월 휴무일 (월)
         '2026-08-24': true, // 8월 휴무일 (월)
+        '2026-09-07': true, // 9월 휴무일 (월)
+        '2026-09-21': true, // 9월 휴무일 (월)
     };
 
     // 공휴일이지만 정상 영업하는 날 — 월별 휴무 안내 포스터 기준
@@ -1953,17 +1956,9 @@
         '2026-08-17': true, // 광복절 대체휴일 — 정상 영업
     };
 
-    // 매월 둘째·넷째 월요일 여부
-    function isSecondFourthMonday(dt) {
-        if (dt.getDay() !== 1) return false;
-        var nth = Math.floor((dt.getDate() - 1) / 7) + 1;
-        return nth === 2 || nth === 4;
-    }
-
-    // 휴무일 판별 — 공휴일 OR 지정 휴무일 OR (새 체계) 둘째·넷째 월요일 (정상 영업 예외 우선)
+    // 휴무일 판별 — 공휴일 OR 공지된 지정 휴무일 (정상 영업 예외 우선)
     function isDayOff(dt, ymd) {
         if (OPEN_OVERRIDES[ymd]) return false;
-        if (ymd >= NEW_HOURS_FROM && isSecondFourthMonday(dt)) return true;
         return !!KR_HOLIDAYS[ymd] || !!CLOSED_DAYS[ymd];
     }
 
@@ -2017,7 +2012,7 @@
     updateHoursStatus();
     setInterval(updateHoursStatus, 60000);
 
-    // 다음 정기 휴무일 표시
+    // 다음 휴무일 표시
     (function showNextClosed() {
         var el = document.getElementById('hours-next-closed');
         if (!el) return;
@@ -2026,7 +2021,7 @@
             var ymd = d.getFullYear() + '-' +
                 String(d.getMonth() + 1).padStart(2, '0') + '-' +
                 String(d.getDate()).padStart(2, '0');
-            if (CLOSED_DAYS[ymd] || (ymd >= NEW_HOURS_FROM && isSecondFourthMonday(d))) {
+            if (CLOSED_DAYS[ymd]) {
                 el.textContent = '다음 휴무 → ' +
                     (d.getMonth() + 1) + '월 ' + d.getDate() + '일 (' +
                     DOW_KO[d.getDay()] + ')';
@@ -2627,7 +2622,7 @@ function maybeShowSpecialPopup() {
 }
 
 // ===== 휴무 안내 팝업 (날짜별 "다시 보지 않기" — 다음 휴무일이 다가오면 다시 노출) =====
-var NOTICE_DATES = ['2026-08-10', '2026-08-24'];   // 월별 지정 휴무일 — 각 날짜 3일 전부터 노출
+var NOTICE_DATES = ['2026-08-10', '2026-08-24', '2026-09-07', '2026-09-21'];   // 공지된 휴무일 — 각 날짜 3일 전 ~ 당일만 노출
 var NOTICE_LEAD = 3;                               // 휴무 며칠 전부터 노출할지
 var NOTICE_POPUP_ID = NOTICE_DATES[0];
 function closeNoticePopup() {

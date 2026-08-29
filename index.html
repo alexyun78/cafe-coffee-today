@@ -1663,15 +1663,15 @@
 
 
     <script>
-        // 2026-08-03부터 정기휴무 = 매월 둘째·넷째 월요일
-        var NEW_HOURS_FROM = '2026-08-03';
-
-        // 월별 지정 휴무일 — 과거 이력 + 규칙 외 추가 휴무용
+        // 휴무일은 고정 규칙 없이 매달 공지한다 — 아래 목록이 유일한 기준
+        // (매달 갱신할 곳: 이 CLOSED_DAYS + static/roastery.html 의 CLOSED_DAYS / NOTICE_DATES. 팝업 NOTICE_DATES 는 여기서 자동 파생)
         var CLOSED_DAYS = {
             '2026-06-22': true, // 6월 휴무일 (월)
             '2026-07-13': true, // 7월 휴무일 (월)
             '2026-08-10': true, // 8월 휴무일 (월)
             '2026-08-24': true, // 8월 휴무일 (월)
+            '2026-09-07': true, // 9월 휴무일 (월)
+            '2026-09-21': true, // 9월 휴무일 (월)
         };
         var DOW_KO_IDX = ['일', '월', '화', '수', '목', '금', '토'];
 
@@ -1681,18 +1681,9 @@
                 String(dt.getDate()).padStart(2, '0');
         }
 
-        // 매월 둘째·넷째 월요일 여부
-        function isSecondFourthMonday(dt) {
-            if (dt.getDay() !== 1) return false;
-            var nth = Math.floor((dt.getDate() - 1) / 7) + 1;
-            return nth === 2 || nth === 4;
-        }
-
-        // 휴무일 판별 — 지정 휴무일 OR (새 체계) 둘째·넷째 월요일
+        // 휴무일 판별 — 공지된 지정 휴무일만
         function isClosedDay(dt) {
-            var ymd = ymdLocal(dt);
-            if (ymd >= NEW_HOURS_FROM && isSecondFourthMonday(dt)) return true;
-            return !!CLOSED_DAYS[ymd];
+            return !!CLOSED_DAYS[ymdLocal(dt)];
         }
 
         (function showNextClosedBanner() {
@@ -1700,7 +1691,7 @@
             if (!el) return;
             var d = new Date();
             if (isClosedDay(d)) {
-                el.innerHTML = '🚫 오늘은 <span class="closed-date">정기휴무</span>입니다';
+                el.innerHTML = '🚫 오늘은 <span class="closed-date">휴무일</span>입니다';
                 el.style.display = '';
                 return;
             }
@@ -2590,7 +2581,7 @@
 
         // ========== 휴무 안내 팝업 ==========
         // 날짜별 "다시 보지 않기" — 다음 휴무일이 다가오면 다시 노출됨
-        const NOTICE_DATES = ['2026-08-10', '2026-08-24'];   // 월별 지정 휴무일 — 각 날짜 3일 전부터 노출
+        const NOTICE_DATES = Object.keys(CLOSED_DAYS);       // 공지된 휴무일 — 각 날짜 3일 전 ~ 당일만 노출
         const NOTICE_LEAD = 3;                               // 휴무 며칠 전부터 노출할지
         let NOTICE_POPUP_ID = NOTICE_DATES[0];
         function closeNoticePopup() {
