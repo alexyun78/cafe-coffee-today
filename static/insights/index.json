@@ -1,7 +1,24 @@
 {
   "version": 1,
-  "updated_at": "2026-08-28T21:30:47Z",
+  "updated_at": "2026-08-29T15:44:47Z",
   "items": [
+    {
+      "id": "2026-08-30-coffee-bag-60kg",
+      "type": "trivia",
+      "date": "2026-08-30",
+      "title_ko": "커피 생두는 왜 하필 60킬로 자루에 담겨 올까? 🧺",
+      "one_liner": "사람이 짊어질 수 있는 무게에서 출발한 관습이 세계 무역의 단위가 됐다. 게다가 나라마다 무게가 다르다!",
+      "categories_primary": [
+        "커피 상식"
+      ],
+      "categories_secondary": [
+        "무역과 시장"
+      ],
+      "hero_image": "/static/img/insights/trivia/trade.svg",
+      "journal": null,
+      "pub_date": null,
+      "source_basis": null
+    },
     {
       "id": "2026-08-29-coffee-waves",
       "type": "trivia",

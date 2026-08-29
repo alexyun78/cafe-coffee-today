@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>커피 생두는 왜 하필 60킬로 자루에 담겨 올까? 🧺 — 92°C ROASTERY</title>
+<meta name="description" content="사람이 짊어질 수 있는 무게에서 출발한 관습이 세계 무역의 단위가 됐다. 게다가 나라마다 무게가 다르다!">
+<link rel="icon" type="image/png" href="/static/img/logo-92black.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --canvas: #FFFFFF; --canvas-warm: #FAF7F2; --canvas-stone: #F2ECE3;
+  --ink: #1A1410; --ink-mute: #4A3F36; --ink-soft: #6B5E52;
+  --espresso: #6F4E37; --caramel: #C9986A; --copper: #B5703D;
+  --line: #E8E0D5; --line-soft: #F0E9DD;
+  --font-display: "Cormorant Garamond", "Pretendard", serif;
+  --font-body: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  --r-sm: 6px; --r-md: 12px; --r-pill: 999px;
+}
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color: transparent; }
+html { scroll-behavior: smooth; }
+body { font-family: var(--font-body); color: var(--ink); background: var(--canvas); font-feature-settings: "kern","ss01","lnum"; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+a { color: var(--copper); text-decoration: none; border-bottom: 1px solid transparent; transition: border-color .2s; }
+a:hover { border-bottom-color: var(--copper); }
+img { display: block; max-width: 100%; height: auto; }
+.container { max-width: 860px; margin: 0 auto; padding: 0 32px; }
+@media (max-width: 720px) { .container { padding: 0 20px; } }
+@media (max-width: 480px) { .container { padding: 0 16px; } }
+.site-nav { position: sticky; top: 0; z-index: 50; background: rgba(255,255,255,0.9); backdrop-filter: saturate(140%) blur(14px); -webkit-backdrop-filter: saturate(140%) blur(14px); border-bottom: 1px solid var(--line-soft); }
+.nav-inner { max-width: 1200px; margin: 0 auto; padding: 16px 32px; display: flex; align-items: center; justify-content: space-between; }
+.brand { font-family: var(--font-display); font-size: 1.3rem; font-weight: 700; color: var(--ink); display: inline-flex; align-items: center; gap: 4px; border-bottom: none; }
+.brand:hover { border-bottom: none; }
+.brand-mark { display: inline-flex; align-items: flex-start; font-family: "Pretendard", sans-serif; font-weight: 900; letter-spacing: -0.04em; line-height: 1; color: inherit; }
+.temp-mark { display: flex; flex-direction: column; line-height: .82; margin: 0 .05em 0 .04em; }
+.temp-mark .temp-deg { font-size: .42em; letter-spacing: -.04em; }
+.temp-mark .temp-c { font-size: .58em; letter-spacing: -.05em; margin-top: -.05em; }
+.nav-back { font-family: var(--font-mono); font-size: .75rem; letter-spacing: .18em; color: var(--ink-mute); border-bottom: none; }
+.nav-back:hover { color: var(--copper); border-bottom: none; }
+.article-hero { padding: 56px 0 48px; border-bottom: 1px solid var(--line-soft); }
+.eyebrow { font-family: var(--font-mono); font-size: .72rem; letter-spacing: .28em; color: var(--copper); margin-bottom: 18px; display: flex; align-items: center; gap: 12px; }
+.eyebrow::before { content: ""; display: inline-block; width: 28px; height: 1px; background: var(--copper); }
+.article-title { font-family: var(--font-display); font-weight: 500; font-size: clamp(2rem, 4.5vw, 3.2rem); line-height: 1.15; letter-spacing: -0.02em; color: var(--ink); margin-bottom: 20px; }
+.article-title em { font-style: italic; color: var(--espresso); font-weight: 600; }
+.article-one-liner { font-family: var(--font-display); font-style: italic; font-size: 1.3rem; line-height: 1.5; color: var(--espresso); margin-bottom: 28px; padding-left: 20px; border-left: 3px solid var(--caramel); }
+.article-meta { display: flex; gap: 24px; flex-wrap: wrap; font-family: var(--font-mono); font-size: .75rem; letter-spacing: .12em; color: var(--ink-soft); padding-top: 20px; border-top: 1px solid var(--line-soft); }
+.article-meta span { display: inline-flex; align-items: center; gap: 6px; }
+.article-meta span::before { content: "■"; color: var(--caramel); font-size: .55rem; }
+.hero-image { margin: 32px 0 0; border-radius: var(--r-md); overflow: hidden; border: 1px solid var(--line); }
+.hero-image img { width: 100%; }
+.article-body { padding: 56px 0 80px; }
+.article-footer { padding: 36px 0 56px; border-top: 1px solid var(--line-soft); text-align: center; font-family: var(--font-mono); font-size: .75rem; letter-spacing: .14em; color: var(--ink-soft); }
+.article-footer a { color: var(--ink-mute); border-bottom: 1px solid transparent; }
+.article-footer a:hover { color: var(--copper); border-bottom-color: var(--copper); }
+.source-basis { display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; background: rgba(201,152,106,.18); border: 1px solid rgba(181,112,61,.35); border-radius: var(--r-pill); font-family: var(--font-mono); font-size: .72rem; letter-spacing: .12em; color: var(--espresso); font-weight: 500; }
+.source-basis.abstract { background: rgba(107,94,82,.1); border-color: rgba(107,94,82,.3); color: var(--ink-soft); }
+.links-row { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 18px; }
+.link-pill { display: inline-flex; align-items: center; gap: 8px; padding: 9px 16px; background: var(--canvas-warm); border: 1px solid var(--line); border-radius: var(--r-pill); font-family: var(--font-mono); font-size: .78rem; letter-spacing: .08em; color: var(--ink-mute); border-bottom: 1px solid var(--line); transition: border-color .2s, color .2s; }
+.link-pill:hover { color: var(--copper); border-color: var(--copper); }
+
+/* ===== EZ: 쉬운 설명 스타일 ===== */
+.ez-hero { text-align: center; padding: 8px 0 32px; }
+.ez-hero-emoji { font-size: 3.4rem; line-height: 1; }
+.ez-hero-title { font-family: var(--font-display); font-size: clamp(1.6rem, 3.5vw, 2.2rem); font-weight: 600; color: var(--ink); margin-top: 14px; line-height: 1.3; }
+.ez-section { margin-bottom: 52px; }
+.ez-section h2 { font-family: var(--font-body); font-size: 1.5rem; font-weight: 700; color: var(--ink); margin-bottom: 18px; letter-spacing: -0.01em; }
+.ez-section h3 { font-size: 1.08rem; font-weight: 600; color: var(--espresso); margin: 22px 0 10px; }
+.ez-section p { font-size: 1.04rem; line-height: 1.85; color: var(--ink-mute); margin-bottom: 14px; }
+.ez-section p:last-child { margin-bottom: 0; }
+.ez-section ul { padding-left: 22px; margin-bottom: 14px; }
+.ez-section li { font-size: 1.02rem; line-height: 1.8; color: var(--ink-mute); margin-bottom: 8px; }
+.ez-callout { margin: 14px 0; padding: 14px 18px; background: var(--canvas-warm); border-left: 3px solid var(--caramel); border-radius: 4px; font-size: 0.98rem; color: var(--espresso); line-height: 1.75; }
+.ez-callout strong { color: var(--copper); }
+.ez-findings { list-style: none; padding: 0; }
+.ez-findings > li { padding: 18px 22px; margin-bottom: 14px; background: var(--canvas-warm); border: 1px solid var(--line); border-radius: 10px; font-size: 1.02rem; line-height: 1.7; color: var(--ink-mute); }
+.ez-findings > li strong { color: var(--ink); display: block; margin-bottom: 4px; font-size: 1.06rem; }
+.ez-findings > li.gold { background: linear-gradient(135deg, #FFF8E7, #FFEFCD); border-color: #F0D67A; }
+.ez-findings > li.silver { background: linear-gradient(135deg, #F6F6F6, #ECECEC); border-color: #C7C7C7; }
+.ez-findings > li.bronze { background: linear-gradient(135deg, #FFEEDD, #FFDCC0); border-color: #E4B07F; }
+.ez-findings > li.medal { background: linear-gradient(135deg, #F0E6FF, #E1D2FF); border-color: #BDA8E5; }
+.ez-table { width: 100%; border-collapse: collapse; margin: 16px 0 8px; font-size: 0.96rem; }
+.ez-table th, .ez-table td { padding: 11px 14px; border: 1px solid var(--line); text-align: left; vertical-align: top; }
+.ez-table thead th { background: var(--ink); color: #fff; font-weight: 600; letter-spacing: .02em; }
+.ez-table tbody th { background: var(--canvas-warm); color: var(--ink); font-weight: 600; }
+.ez-table tbody tr:nth-child(even) td { background: rgba(250, 247, 242, .55); }
+.ez-summary { padding: 26px 30px; background: linear-gradient(135deg, #FAF0E0, #F3E1C5); border-radius: 14px; font-size: 1.13rem; line-height: 1.75; font-weight: 500; color: var(--ink); border: 1px solid #E5C99B; }
+.ez-summary strong { color: var(--espresso); }
+.ez-citation { margin-top: 24px; padding: 18px 22px; background: var(--canvas-warm); border-radius: 8px; font-family: var(--font-mono); font-size: 0.82rem; color: var(--ink-soft); line-height: 1.7; }
+.ez-citation p { margin: 4px 0; }
+.ez-chart-card { padding: 22px 24px 18px; background: var(--canvas); border: 1px solid var(--line); border-radius: 12px; margin: 16px 0; }
+.ez-chart-card .ez-chart-title { font-size: 1rem; font-weight: 600; color: var(--ink); margin-bottom: 14px; }
+.ez-bar-row { display: flex; align-items: center; margin: 10px 0; font-size: 0.95rem; gap: 14px; }
+.ez-bar-label { width: 180px; flex-shrink: 0; color: var(--ink-mute); font-weight: 500; }
+.ez-bar-track { flex: 1; height: 32px; background: var(--canvas-warm); border-radius: 6px; overflow: hidden; position: relative; border: 1px solid var(--line); }
+.ez-bar-fill { height: 100%; background: linear-gradient(90deg, var(--caramel), var(--copper)); display: flex; align-items: center; justify-content: flex-end; padding: 0 12px; color: white; font-weight: 700; font-size: 0.92rem; min-width: 56px; }
+.ez-bar-fill.alt { background: linear-gradient(90deg, #6F4E37, #4A3F36); }
+.ez-glossary { display: grid; gap: 12px; }
+.ez-glossary-item { padding: 16px 20px; background: var(--canvas-warm); border: 1px solid var(--line); border-radius: 10px; border-left: 3px solid var(--caramel); }
+.ez-glossary-term { font-family: var(--font-display); font-style: italic; font-size: 1.1rem; font-weight: 600; color: var(--espresso); margin-bottom: 6px; }
+.ez-glossary-def { font-size: 0.98rem; color: var(--ink-mute); line-height: 1.7; }
+@media (max-width: 720px) {
+  .article-hero { padding: 36px 0 32px; }
+  .article-body { padding: 36px 0 56px; }
+  .ez-section { margin-bottom: 40px; }
+  .ez-section h2 { font-size: 1.3rem; }
+  .ez-bar-label { width: 100%; margin-bottom: 4px; }
+  .ez-bar-row { flex-direction: column; align-items: stretch; }
+  .article-meta { gap: 12px 18px; font-size: .68rem; }
+}
+</style>
+</head>
+<body>
+
+<header class="site-nav">
+  <div class="nav-inner">
+    <a class="brand" href="/">
+      <span class="brand-mark">92<span class="temp-mark"><span class="temp-deg">°</span><span class="temp-c">C</span></span></span>ROASTERY
+    </a>
+    <a class="nav-back" href="/insight">← INSIGHTS</a>
+  </div>
+</header>
+
+<article>
+  <section class="article-hero">
+    <div class="container">
+      <div class="eyebrow">— 오늘의 커피 상식 · 2026.08.30</div>
+      <h1 class="article-title">커피 생두는 왜 하필 60킬로 자루에 담겨 올까? 🧺</h1>
+      <p class="article-one-liner">사람이 짊어질 수 있는 무게에서 출발한 관습이 세계 무역의 단위가 됐다. 게다가 나라마다 무게가 다르다!</p>
+      <div class="article-meta">
+        
+        
+        
+        <span>커피 상식 · 무역과 시장</span>
+      </div>
+      
+      <div class="hero-image">
+        <img src="/static/img/insights/trivia/trade.svg" alt="커피 생두는 왜 하필 60킬로 자루에 담겨 올까? 🧺">
+      </div>
+      
+    </div>
+  </section>
+
+  <section class="article-body">
+    <div class="container">
+
+      
+      <div class="ez-hero">
+        <div class="ez-hero-emoji">🧺</div>
+        <div class="ez-hero-title">커피 생두는 왜 하필 60킬로 자루에 담겨 올까?</div>
+      </div>
+
+      
+      <div class="ez-section">
+        <h2>🤔 무슨 연구야?</h2>
+        
+          <p>로스터리 창고에 가면 커다란 마대 자루가 쌓여 있어. 겉면에는 나라 이름과 농장 이름, 그리고 숫자가 큼직하게 찍혀 있지. 그 자루 하나가 보통 60킬로그램이야.</p><p>그런데 왜 하필 60일까? 50도 아니고 100도 아니고 말이야. 답은 의외로 단순해. 기계가 없던 시절, 사람이 어깨에 지고 배까지 나를 수 있는 현실적인 무게였거든. 그 관습이 그대로 굳어서 지금은 세계 커피 시장의 통계 단위가 됐어. 📦</p><p>오늘은 이 자루 이야기를 해볼게. 나라마다 무게가 다른 이유, 자루 안에 또 다른 봉지가 들어 있는 이유, 그리고 자루에 찍힌 글자를 읽는 법까지.</p>
+        
+      </div>
+
+      
+      
+      <div class="ez-section">
+        <h2>🧪 핵심 개념 쉽게 풀어보면</h2>
+        
+          <h3>1️⃣ 60킬로그램은 사람의 어깨에서 나온 숫자</h3>
+          <p>항구에서 배에 커피를 싣던 시절, 짐을 옮기는 건 전부 사람 몫이었어. 너무 무거우면 못 들고, 너무 가벼우면 자루 수가 늘어 손이 더 가지. 그 사이 어딘가에서 자리 잡은 게 60킬로그램 근처였어. 지금은 지게차와 컨테이너가 다 옮기지만, 통계와 계약은 여전히 이 자루 단위로 이야기해. 뉴스에서 &#39;올해 생산량 몇백만 자루&#39;라고 할 때의 자루가 바로 이거야.</p>
+          <div class="ez-callout">💡 비유: 우리가 쌀을 20킬로 포대로 사는 것과 비슷해. 특별한 과학적 이유가 있어서가 아니라, 사람이 들기 적당해서 굳은 단위잖아. 🍚</div>
+        
+          <h3>2️⃣ 사실 나라마다 무게가 다르다</h3>
+          <p>60킬로그램이 가장 흔하긴 하지만 세계 공통은 아니야. 콜롬비아는 70킬로그램 자루를 쓰고, 중미 여러 나라는 69킬로그램을 쓰는 곳이 많아. 예전에 쓰던 무게 단위를 킬로그램으로 환산하면서 어중간한 숫자가 남은 경우지. 그래서 &#39;자루 수&#39;만 듣고 물량을 계산하면 틀릴 수 있어. 거래에서는 늘 자루 수와 함께 자루당 무게를 확인해.</p>
+          <div class="ez-callout">💡 비유: 같은 &#39;한 되&#39;라도 지역마다 실제 양이 조금씩 달랐던 옛날 도량형과 비슷해. 이름은 같아도 속은 다른 거지. ⚖️</div>
+        
+          <h3>3️⃣ 자루 안에 또 봉지가 들어 있다</h3>
+          <p>요즘 좋은 생두는 마대 자루에 바로 담기지 않아. 안쪽에 특수한 비닐 안감을 한 겹 넣고 그 안에 생두를 담지. 이유는 습기야. 생두는 살아 있는 씨앗이라 주변 습기를 빨아들이고 내뱉는데, 배를 타고 적도를 지나 몇 주를 이동하는 동안 온도와 습도가 크게 흔들리거든. 안감이 없으면 도착했을 때 향이 빠지고 색이 바래. 그래서 이 한 겹이 품질을 지키는 핵심 장치가 됐어.</p>
+          <div class="ez-callout">💡 비유: 김을 봉지째 사도 안에 방습제와 속봉지가 들어 있잖아. 눅눅해지면 끝이니까. 생두도 똑같아. 🌊</div>
+        
+      </div>
+      
+
+      
+      
+      <div class="ez-section">
+        <h2>🎯 핵심 발견</h2>
+        <ul class="ez-findings">
+          
+          
+            
+              <li class="gold">
+                <strong>🥇 자루에 찍힌 글자에는 이력이 다 적혀 있다</strong>자루 겉면을 보면 생산국, 지역, 농장이나 조합 이름, 등급 표시, 수확 연도, 그리고 수출업자 이름이 찍혀 있어. 로스터가 창고에서 자루만 봐도 그 커피가 어디서 왔는지 알 수 있게 만든 일종의 명찰이야. 요즘은 QR 코드를 찍어두는 곳도 있어서, 스캔하면 농가 정보까지 나오기도 해. 카페에서 인테리어로 쓰이는 빈 자루에도 이 정보가 그대로 남아 있으니 한번 읽어봐. 🔍
+              </li>
+            
+              <li class="silver">
+                <strong>🥈 컨테이너 안에서 물방울이 맺힌다</strong>배가 적도를 지나면 낮에는 컨테이너 안이 뜨겁게 달아오르고 밤에는 식어. 그러면 천장에 물방울이 맺혀 아래로 떨어지는데, 이걸 컨테이너 비라고 불러. 이 물이 자루에 스며들면 곰팡이가 생기거나 향이 무너져. 그래서 방습 안감을 쓰고, 자루를 벽에 붙이지 않게 쌓고, 습기를 빨아들이는 자재를 함께 넣어. 커피가 바다를 건너는 일은 생각보다 험난해. 🚢
+              </li>
+            
+              <li class="bronze">
+                <strong>🥉 요즘은 자루보다 작은 단위도 흔해졌다</strong>소규모 농가의 특별한 로트는 60킬로그램을 채우지 못하는 경우가 많아. 그래서 30킬로그램이나 그보다 작은 단위로 포장해 파는 일이 늘었어. 작은 로스터리 입장에서도 한 자루를 다 소진하기 전에 신선도가 떨어지는 것보다, 작은 단위로 자주 들이는 편이 나을 때가 있고. 덕분에 예전이라면 시장에 나오기 어려웠을 소량의 개성 있는 커피가 우리 앞까지 오게 됐어. 🌾
+              </li>
+            
+              <li class="medal">
+                <strong>🏅 빈 자루는 버려지지 않는다</strong>속을 비운 마대 자루는 튼튼하고 통기성이 좋아서 쓸모가 많아. 카페 인테리어는 물론이고 가방이나 쿠션으로 다시 만들어지기도 하고, 텃밭에서 흙을 담거나 잡초를 덮는 데도 쓰여. 커피 한 잔이 남기는 흔적 중에 이 자루는 꽤 오래가는 편이지. 동네 로스터리에 물어보면 빈 자루를 나눠주는 곳도 있어. 🎒
+              </li>
+            
+          
+        </ul>
+      </div>
+      
+
+      
+      
+      <div class="ez-section">
+        <h2>📊 숫자로 보기</h2>
+        
+          
+          
+          <div class="ez-chart-card">
+            <div class="ez-chart-title">지역별 생두 한 자루의 무게</div>
+            
+              
+              <div class="ez-bar-row">
+                <div class="ez-bar-label">브라질</div>
+                <div class="ez-bar-track"><div class="ez-bar-fill" style="width: 85.7%;">60.0킬로그램</div></div>
+              </div>
+            
+              
+              <div class="ez-bar-row">
+                <div class="ez-bar-label">콜롬비아</div>
+                <div class="ez-bar-track"><div class="ez-bar-fill" style="width: 100.0%;">70.0킬로그램</div></div>
+              </div>
+            
+              
+              <div class="ez-bar-row">
+                <div class="ez-bar-label">중미</div>
+                <div class="ez-bar-track"><div class="ez-bar-fill" style="width: 98.6%;">69.0킬로그램</div></div>
+              </div>
+            
+              
+              <div class="ez-bar-row">
+                <div class="ez-bar-label">소량 로트</div>
+                <div class="ez-bar-track"><div class="ez-bar-fill" style="width: 42.9%;">30.0킬로그램</div></div>
+              </div>
+            
+          </div>
+        
+      </div>
+      
+
+      
+      
+      
+      <div class="ez-section">
+        <h2>🆚 나라마다 다른 생두 자루 무게</h2>
+        <table class="ez-table">
+          <thead><tr><th>지역</th><th>자루 무게</th><th>메모</th></tr></thead>
+          <tbody>
+            <tr>
+              <th>브라질과 다수 산지</th><td>60킬로그램</td><td>세계 통계의 기준 단위</td>
+            </tr><tr>
+              <th>콜롬비아</th><td>70킬로그램</td><td>전통적으로 더 큰 자루를 씀</td>
+            </tr><tr>
+              <th>중미 여러 나라</th><td>69킬로그램</td><td>옛 무게 단위를 환산한 값</td>
+            </tr><tr>
+              <th>소량 특별 로트</th><td>30킬로그램 안팎</td><td>작은 로스터리를 위한 포장</td>
+            </tr><tr>
+              <th>샘플</th><td>200에서 350그램</td><td>커핑용으로 먼저 보내는 견본</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      
+      
+
+      
+      
+
+      
+      
+
+      
+      
+      <div class="ez-section">
+        <div class="ez-summary">💡 <strong>한 줄 요약</strong> — 커피 생두 자루가 60킬로그램인 건 사람이 짊어질 수 있는 무게에서 굳은 관습이다. 나라마다 무게가 다르고, 안쪽에는 습기를 막는 안감이 한 겹 더 들어 있다!</div>
+      </div>
+      
+
+      
+      
+      
+      
+
+      
+      
+      <div class="ez-section">
+        <h2>📖 어려운 말 풀이 사전</h2>
+        <p>이 글에 나온 어려운 약어와 용어를 한 번에 정리했어. 의미만 알면 본문이 훨씬 쉬워져!</p>
+        <div class="ez-glossary">
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">백(Bag)</div>
+            <div class="ez-glossary-def">생두를 담는 자루이자 세계 커피 통계의 기본 단위. 보통 60킬로그램</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">방습 안감</div>
+            <div class="ez-glossary-def">자루 안쪽에 덧대는 특수 비닐. 이동 중 습기로부터 생두를 보호함</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">컨테이너 비</div>
+            <div class="ez-glossary-def">온도 차로 컨테이너 천장에 맺힌 물방울이 떨어지는 현상</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">로트</div>
+            <div class="ez-glossary-def">같은 조건에서 수확하고 가공해 하나로 묶은 커피 단위</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">샘플</div>
+            <div class="ez-glossary-def">구매 전에 맛을 보려고 먼저 받는 소량의 생두</div>
+          </div>
+          
+        </div>
+      </div>
+      
+
+    </div>
+  </section>
+
+  <footer class="article-footer">
+    <div class="container">
+      <a href="/insight">← BACK TO INSIGHTS</a>
+      <span style="margin: 0 16px;">·</span>
+      <a href="/">HOME</a>
+    </div>
+  </footer>
+</article>
+
+</body>
+</html>
