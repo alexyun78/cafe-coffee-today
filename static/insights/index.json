@@ -1,7 +1,24 @@
 {
   "version": 1,
-  "updated_at": "2026-08-29T15:44:47Z",
+  "updated_at": "2026-08-30T15:27:23Z",
   "items": [
+    {
+      "id": "2026-08-31-drying-methods",
+      "type": "trivia",
+      "date": "2026-08-31",
+      "title_ko": "커피를 말리는 데도 방식이 있다고? 바닥, 그물망, 기계의 차이 ☀️",
+      "one_liner": "며칠에 걸쳐 수분을 11퍼센트까지 떨어뜨리는 이 지루한 과정이, 사실 커피 맛을 좌우하는 결정적 구간이다!",
+      "categories_primary": [
+        "커피 상식"
+      ],
+      "categories_secondary": [
+        "가공"
+      ],
+      "hero_image": "/static/img/insights/trivia/processing.svg",
+      "journal": null,
+      "pub_date": null,
+      "source_basis": null
+    },
     {
       "id": "2026-08-30-coffee-bag-60kg",
       "type": "trivia",
