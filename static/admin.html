@@ -1357,6 +1357,19 @@
   }
   button.inv-remaining:hover { filter: brightness(0.96); }
 
+  /* 재고 뱃지를 탭했을 때 그 자리에 뜨는 인라인 입력창 (생두 카드·재고 행 공용) */
+  .stock-inline-input {
+    width: 72px; min-height: 32px; box-sizing: border-box;
+    font-family: inherit; font-size: 0.85rem; font-weight: 700; text-align: right;
+    padding: 3px 8px; border: 2px solid var(--coffee-dark); border-radius: 12px;
+    background: #fff; color: var(--text); vertical-align: middle;
+    -moz-appearance: textfield; appearance: textfield;
+  }
+  .stock-inline-input::-webkit-outer-spin-button,
+  .stock-inline-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+  .stock-inline-input:focus { outline: none; box-shadow: 0 0 0 3px rgba(111, 78, 55, 0.18); }
+  .stock-inline-input:disabled { opacity: 0.6; }
+
   /* Quick-entry form inside card */
   .quick-form { margin-top: 16px; }
   .quick-form .field { margin-bottom: 14px; }
@@ -4539,7 +4552,7 @@ function renderBeanList(items) {
   el.querySelectorAll(".bean-stock-btn").forEach(btn => {
     btn.addEventListener("click", (e) => {
       e.stopPropagation();
-      openStockEdit(parseInt(btn.dataset.id, 10));
+      beginStockInlineEdit(btn, "bean");
     });
   });
   el.querySelectorAll(".bean-hide-btn, .bean-unhide-btn").forEach(btn => {
@@ -4563,48 +4576,68 @@ document.getElementById("btn-bean-hidden-toggle").addEventListener("click", () =
 });
 wireListSearch("bean", _beanSearch, () => renderBeanList(_beanListCache));
 
-// 생두 목록에서 현재 재고(잔여 수량)를 직접 설정. 구매·로스팅 합계는 그대로 두고
-// 보정값만 갱신하므로 이후 구매(+)·로스팅(-)이 정상적으로 증감한다.
-async function openStockEdit(id) {
-  const b = (_beanListCache || []).find(x => x.id === id);
-  if (!b) return;
-  const cur = Number(b.remaining_kg) || 0;
-  const input = window.prompt(
-    `'${b.name}' 현재 재고(kg)\n구매·로스팅 합계는 그대로 두고 잔여 수량만 보정합니다.\n이후 구매·로스팅은 정상 반영됩니다.`,
-    cur.toFixed(1),
-  );
-  if (input === null) return;
-  const val = parseFloat(String(input).replace(",", "."));
-  if (isNaN(val)) { showBanner("숫자를 입력하세요.", "error"); return; }
-  try {
-    await api("PUT", "/api/green-beans/" + id + "/stock", { remaining_kg: val });
-    showToast(`재고가 ${val.toFixed(1)}kg 로 수정되었습니다`);
-    await loadBeanList();
-  } catch (err) {
-    if (err.message !== "unauthorized") showBanner("수정 실패: " + err.message, "error");
-  }
-}
+// 잔여 수량 인라인 수정 — 재고 뱃지를 탭하면 그 자리에서 입력창으로 바뀐다.
+// 엔터/포커스아웃 저장, ESC 취소. 구매·로스팅 합계는 그대로 두고 보정값만 갱신하므로
+// 이후 구매(+)·로스팅(-)이 정상적으로 증감한다.
+// scope: "bean" = 생두 관리 탭 카드, "inv" = 재고 탭 행.
+function beginStockInlineEdit(btn, scope) {
+  if (btn.dataset.editing === "1") return;
+  const id = parseInt(btn.dataset.id, 10);
+  const item = ((scope === "inv" ? _invItemsCache : _beanListCache) || []).find(x => x.id === id);
+  if (!item) return;
+  const cur = Number(item.remaining_kg) || 0;
 
-// 재고 탭에서 현재 재고(잔여 수량)를 직접 설정. 생두 목록의 openStockEdit 와 동일 로직.
-async function openInvStockEdit(id) {
-  const it = (_invItemsCache || []).find(x => x.id === id);
-  if (!it) return;
-  const cur = Number(it.remaining_kg) || 0;
-  const input = window.prompt(
-    `'${it.name}' 현재 재고(kg)\n구매·로스팅 합계는 그대로 두고 잔여 수량만 보정합니다.\n이후 구매·로스팅은 정상 반영됩니다.`,
-    cur.toFixed(1),
-  );
-  if (input === null) return;
-  const val = parseFloat(String(input).replace(",", "."));
-  if (isNaN(val)) { showBanner("숫자를 입력하세요.", "error"); return; }
-  try {
-    await api("PUT", "/api/green-beans/" + id + "/stock", { remaining_kg: val });
-    showToast(`재고가 ${val.toFixed(1)}kg 로 수정되었습니다`);
-    await loadInventory();      // 재고 탭 갱신
-    loadBeanList();             // 생두 목록 캐시도 최신화 (백그라운드)
-  } catch (err) {
-    if (err.message !== "unauthorized") showBanner("수정 실패: " + err.message, "error");
-  }
+  const input = document.createElement("input");
+  input.type = "number";
+  input.step = "0.1";
+  input.inputMode = "decimal";
+  input.className = "stock-inline-input";
+  input.value = cur.toFixed(1);
+  input.title = "엔터 저장 · ESC 취소";
+  input.setAttribute("aria-label", `${item.name} 재고(kg)`);
+  // 생두 카드 클릭 = 편집 폼 열기 이므로 입력창 클릭이 카드로 새지 않게 막는다.
+  ["click", "mousedown", "pointerdown"].forEach(ev =>
+    input.addEventListener(ev, e => e.stopPropagation()));
+
+  btn.dataset.editing = "1";
+  btn.replaceWith(input);
+  input.focus();
+  input.select();
+
+  let done = false;
+  const restore = () => {
+    if (done) return;
+    done = true;
+    btn.dataset.editing = "";
+    input.replaceWith(btn);
+  };
+  const commit = async () => {
+    if (done) return;
+    const val = parseFloat(String(input.value).replace(",", "."));
+    if (isNaN(val) || Math.abs(val - cur) < 0.0005) { restore(); return; }
+    done = true;
+    input.disabled = true;
+    try {
+      await api("PUT", "/api/green-beans/" + id + "/stock", { remaining_kg: val });
+      showToast(`재고가 ${val.toFixed(1)}kg 로 수정되었습니다`);
+      if (scope === "inv") {
+        await loadInventory();    // 재고 탭 갱신
+        loadBeanList();           // 생두 목록 캐시도 최신화 (백그라운드)
+      } else {
+        await loadBeanList();
+      }
+    } catch (err) {
+      done = false;
+      input.disabled = false;
+      if (err.message !== "unauthorized") showBanner("수정 실패: " + err.message, "error");
+      restore();
+    }
+  };
+  input.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") { e.preventDefault(); commit(); }
+    else if (e.key === "Escape") { e.preventDefault(); restore(); }
+  });
+  input.addEventListener("blur", () => commit());
 }
 
 // ---------- 관리자 폼 뒤로가기(Android back) 처리 ----------
@@ -5887,7 +5920,7 @@ function renderInventory(items) {
     scope.querySelectorAll(".inv-stock-btn").forEach(btn => {
       btn.addEventListener("click", (e) => {
         e.stopPropagation();
-        openInvStockEdit(parseInt(btn.dataset.id, 10));
+        beginStockInlineEdit(btn, "inv");
       });
     });
   }
