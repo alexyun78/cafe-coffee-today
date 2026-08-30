@@ -1721,6 +1721,7 @@
               <button type="button" data-bean-type="디카페인">🌙 디카페인</button>
             </div>
             <input type="hidden" id="bean-field-type" value="싱글">
+            <div class="auto-calc">생두 단위 설정이에요 — 바꾸면 재고, 구매 기록, 로스팅 기록에 모두 함께 적용됩니다. 🧩 블랜드는 오늘의 커피로 등록할 수 없어요.</div>
           </div>
 
           <div class="field">
@@ -1846,6 +1847,7 @@
               <button type="button" data-bean-type="디카페인">🌙 디카페인</button>
             </div>
             <input type="hidden" id="purchase-field-type" value="싱글">
+            <div class="auto-calc">생두 단위 설정이에요 — 바꾸면 재고, 구매 기록, 로스팅 기록에 모두 함께 적용됩니다. 🧩 블랜드는 오늘의 커피로 등록할 수 없어요.</div>
           </div>
 
           <div class="field">
@@ -1972,7 +1974,8 @@
               <button type="button" data-usage="디카페인">디카페인</button>
             </div>
             <input type="hidden" id="roast-field-usage-type" value="싱글">
-            <div class="auto-calc" id="roast-usage-hint" hidden>🧩 블랜드는 블렌딩 재료로만 쓰이며 오늘의 커피에 등록되지 않아요.</div>
+            <div class="auto-calc" id="roast-usage-hint" hidden>🧩 블랜드는 블렌딩 재료로만 쓰이며 오늘의 커피에 등록할 수 없어요.</div>
+            <div class="auto-calc">원두 종류는 <b>생두 단위</b> 설정이에요. 여기서 바꾸면 이 생두의 기존·이후 기록에 모두 적용됩니다.</div>
           </div>
 
           <div class="field" id="roast-make-coffee-field">
@@ -4875,6 +4878,10 @@ document.getElementById("bean-form").addEventListener("submit", async (e) => {
     hideBeanForm();
     await Promise.all([loadBeanList(), refreshSuppliers()]);
     populateBeanDropdowns();
+    // 원두 종류는 생두 단위 — 바꿨으면 로스팅·구매·재고 목록에도 즉시 반영
+    if (_roastListCache.length) loadRoastList();
+    if (_purchaseListCache.length) loadPurchaseList();
+    if (_invItemsCache.length) loadInventory();
   } catch (err) {
     if (err.message !== "unauthorized") showBanner("저장 실패: " + err.message, "error");
   } finally {
@@ -5253,6 +5260,9 @@ document.getElementById("purchase-form").addEventListener("submit", async (e) =>
     await Promise.all([loadBeanList(), refreshSuppliers()]);
     populateBeanDropdowns();
     loadPurchaseList();
+    // 원두 종류는 생두 단위 — 구매 폼에서 바꿨으면 로스팅·재고 목록에도 즉시 반영
+    if (_roastListCache.length) loadRoastList();
+    if (_invItemsCache.length) loadInventory();
   } catch (err) {
     if (err.message !== "unauthorized") showBanner("저장 실패: " + err.message, "error");
   } finally {
@@ -5585,6 +5595,8 @@ function setRoastUsageType(val) {
   });
   const isBlend = v === "블랜드";
   document.getElementById("roast-make-coffee-field").style.display = isBlend ? "none" : "";
+  // 블랜드는 오늘의 커피 등록 불가 — 숨기는 데 그치지 않고 연동 자체를 끈다
+  if (isBlend) document.getElementById("roast-field-make-coffee").checked = false;
   document.getElementById("roast-usage-hint").hidden = !isBlend;
 }
 document.querySelectorAll("#roast-usage-btns button").forEach(b => {
@@ -5764,6 +5776,7 @@ document.getElementById("roast-form").addEventListener("submit", async (e) => {
       const res = await api("PUT", "/api/roasting-logs/" + _roastEditingId, payload);
       const c = res && res.coffee;
       if (c && c.created) showToast(`로스팅 기록 수정 — '${c.name}' 오늘의 커피 예정 등록`);
+      else if (c && c.blocked) showToast("로스팅 기록 수정 — 🧩 블랜드라 오늘의 커피에는 등록되지 않아요");
       else showToast("로스팅 기록 수정됨");
     } else {
       // 복제 모드면 입력한 수량만큼 같은 내용으로 반복 저장
@@ -5773,7 +5786,8 @@ document.getElementById("roast-form").addEventListener("submit", async (e) => {
         const res = await api("POST", "/api/roasting-logs", payload);
         const c = res && res.coffee;
         if (c && !coffeeMsg) {
-          coffeeMsg = c.created ? `'${c.name}' 오늘의 커피 예정 등록` : `'${c.name}' 이미 예정 등록됨`;
+          coffeeMsg = c.blocked ? `🧩 블랜드라 오늘의 커피 미등록`
+            : c.created ? `'${c.name}' 오늘의 커피 예정 등록` : `'${c.name}' 이미 예정 등록됨`;
         }
       }
       const head = count > 1 ? `로스팅 기록 ${count}건 추가` : "로스팅 기록 추가";
@@ -5785,6 +5799,9 @@ document.getElementById("roast-form").addEventListener("submit", async (e) => {
     }
     hideRoastForm();
     loadRoastList();
+    // 원두 종류는 생두 단위 — 로스팅 폼에서 바꿨으면 생두/구매/재고 목록도 함께 갱신
+    loadBeanList().then(() => { if (_invItemsCache.length) loadInventory(); });
+    if (_purchaseListCache.length) loadPurchaseList();
   } catch (err) {
     if (err.message !== "unauthorized") showBanner("저장 실패: " + err.message, "error");
   } finally {

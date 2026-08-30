@@ -847,6 +847,10 @@ def _ensure_scheduled_coffee(green_bean_id, roast_date):
     name = (bean.get("name") or "").strip()
     if not name:
         return None
+    # 블랜드 생두는 블렌딩 재료로만 쓰이므로 오늘의 커피로 등록하지 않는다.
+    # 어느 경로로 들어와도 막히도록 생두 종류를 기준으로 여기서 한 번에 차단한다.
+    if db.norm_bean_type(bean.get("bean_type")) == "블랜드":
+        return {"blocked": True, "created": False, "name": name}
     lot = db._norm_ymd(roast_date)
     existing = db.find_active_by_name(name, lot)
     if existing:

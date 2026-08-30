@@ -28,6 +28,32 @@ export function normBeanType(v: any): string {
   return (BEAN_TYPES as readonly string[]).includes(s) ? s : '싱글'
 }
 
+/** 원두 종류의 창구는 생두 마스터(green_beans.bean_type) 하나뿐이다.
+ *  어디서 바꾸든(생두 폼·구매 폼·로스팅 폼) 그 생두의 모든 로스팅 기록을 같은 값으로 통일한다.
+ *  블랜드가 되면 오늘의 커피 연동도 전부 끈다(블랜드는 등록 불가). */
+async function syncRoastUsageToBean(db: D1Database, gbId: number): Promise<string> {
+  const bean = await db.prepare('SELECT bean_type FROM green_beans WHERE id=?').bind(gbId).first<Row>()
+  const t = normBeanType(bean?.bean_type)
+  if (!bean) return t
+  await db.prepare('UPDATE roasting_logs SET usage_type=? WHERE green_bean_id=?').bind(t, gbId).run()
+  if (t === '블랜드')
+    await db.prepare('UPDATE roasting_logs SET make_coffee=0 WHERE green_bean_id=?').bind(gbId).run()
+  return t
+}
+
+/** 로스팅 폼 등에서 온 사용 타입을 생두 마스터에 반영하고 전체를 통일한다. */
+async function setBeanTypeFrom(db: D1Database, gbId: number, type: any): Promise<string> {
+  const t = normBeanType(type)
+  await db
+    .prepare(
+      "UPDATE green_beans SET bean_type=?, is_decaf=?, updated_at=strftime('%Y-%m-%dT%H:%M:%SZ','now') " +
+        'WHERE id=? AND bean_type<>?',
+    )
+    .bind(t, t === '디카페인' ? 1 : 0, gbId, t)
+    .run()
+  return await syncRoastUsageToBean(db, gbId)
+}
+
 /** 요청 본문에서 bean_type / is_decaf 를 읽어 둘을 일관되게 맞춘 값을 돌려준다.
  *  is_decaf 는 레거시 Flask·기존 응답 호환을 위해 계속 동기화한다. */
 function beanTypeFields(data: Row): { bean_type: string; is_decaf: number } | null {
@@ -201,6 +227,7 @@ async function findOrCreateGreenBean(db: D1Database, data: Row): Promise<number>
       vals.push(gid)
       await db.prepare(`UPDATE green_beans SET ${sets.join(',')} WHERE id=?`).bind(...vals).run()
     }
+    if (bt) await syncRoastUsageToBean(db, gid)   // 종류가 바뀌면 이 생두의 모든 기록을 통일
     return gid
   }
 
@@ -384,6 +411,8 @@ beanRoutes.put('/api/green-beans/:id{[0-9]+}', async (c) => {
     if (isUniqueError(e)) return c.json({ success: false, error: DUP_BEAN_MSG }, 409)
     throw e
   }
+  // 종류를 바꿨으면 이 생두의 모든 로스팅 기록도 같은 값으로 통일한다
+  if (bt) await syncRoastUsageToBean(c.env.DB, gbId)
   return c.json({ success: true, item: await getGreenBean(c.env.DB, gbId) })
 })
 
@@ -584,6 +613,9 @@ async function ensureScheduledCoffee(db: D1Database, greenBeanId: number, roastD
   if (!bean) return null
   const name = String(bean.name || '').trim()
   if (!name) return null
+  // 블랜드 생두는 블렌딩 재료로만 쓰이므로 오늘의 커피로 등록하지 않는다.
+  // 어느 경로로 들어와도 막히도록 생두 종류를 기준으로 여기서 한 번에 차단한다.
+  if (normBeanType(bean.bean_type) === '블랜드') return { blocked: true, created: false, name }
   const lot = normYmd(roastDate)
   const existing = await findActiveByName(db, name, lot)
   if (existing) return { created: false, id: existing.id, name }
@@ -608,11 +640,15 @@ beanRoutes.post('/api/roasting-logs', async (c) => {
   const outputG = optFloat(data.output_weight_g)
   const effIn = actualG !== null ? actualG : inputG
   const loss = outputG !== null && effIn > 0 ? Math.round((1 - outputG / effIn) * 10000) / 100 : null
-  // 사용 타입 미지정이면 생두의 종류를 물려받는다.
-  const gbForType = await c.env.DB
-    .prepare('SELECT bean_type FROM green_beans WHERE id=?').bind(parseInt(data.green_bean_id, 10)).first<Row>()
-  const usageType = 'usage_type' in data ? normBeanType(data.usage_type) : normBeanType(gbForType?.bean_type)
-  // 블랜드용 로스팅은 블렌딩 재료로만 쓰이므로 오늘의 커피에 등록하지 않는다 (app.py 와 동일)
+  // 원두 종류의 창구는 생두 마스터 하나. 로스팅 폼에서 바꿔 보내면 생두에 반영하고
+  // 그 생두의 기존 기록까지 같은 값으로 통일한다. 안 보내면 생두 종류를 그대로 물려받는다.
+  const gbId0 = parseInt(data.green_bean_id, 10)
+  const usageType = 'usage_type' in data
+    ? await setBeanTypeFrom(c.env.DB, gbId0, data.usage_type)
+    : normBeanType(
+        (await c.env.DB.prepare('SELECT bean_type FROM green_beans WHERE id=?').bind(gbId0).first<Row>())?.bean_type,
+      )
+  // 블랜드는 블렌딩 재료로만 쓰이므로 오늘의 커피에 등록하지 않는다 (app.py 와 동일)
   const isBlend = usageType === '블랜드'
   const makeCoffee = !isBlend && (data.create_coffee ?? true) ? 1 : 0
   const outputAt = outputG !== null ? utcNowISO() : null
@@ -641,6 +677,8 @@ beanRoutes.post('/api/roasting-logs/:id{[0-9]+}/make-coffee', async (c) => {
     return c.json({ success: false, error: '블랜드용 로스팅은 오늘의 커피로 등록할 수 없습니다' }, 400)
   const coffee = await ensureScheduledCoffee(c.env.DB, log.green_bean_id, log.roast_date)
   if (!coffee) return c.json({ success: false, error: '생두 정보를 찾을 수 없음' }, 400)
+  if (coffee.blocked)
+    return c.json({ success: false, error: '블랜드 원두는 오늘의 커피로 등록할 수 없습니다' }, 400)
   await c.env.DB.prepare('UPDATE roasting_logs SET make_coffee=1 WHERE id=?').bind(rid).run()
   return c.json({ success: true, coffee })
 })
@@ -667,17 +705,18 @@ beanRoutes.put('/api/roasting-logs/:id{[0-9]+}', async (c) => {
   const data = (await c.req.json().catch(() => ({}))) as Row
   const prev = await getRoastingLog(c.env.DB, rid)
   if (!prev) return c.json({ success: false, error: 'not found' }, 404)
+  // 로스팅 폼에서 종류를 바꾸면 생두 마스터에 반영 → 그 생두의 모든 기록이 함께 통일된다.
+  let usageAfter: string | null = null
+  if ('usage_type' in data)
+    usageAfter = await setBeanTypeFrom(c.env.DB, parseInt(data.green_bean_id ?? prev.green_bean_id, 10), data.usage_type)
+  const isBlend = usageAfter === '블랜드'
   const allowed = ['green_bean_id', 'roast_date', 'input_weight_g', 'output_weight_g',
     'roast_level', 'notes', 'coffee_id', 'make_coffee']
   const sets: string[] = []
   const vals: any[] = []
-  for (const k of allowed) if (k in data) { sets.push(`${k}=?`); vals.push(data[k]) }
-  if ('usage_type' in data) {
-    const ut = normBeanType(data.usage_type)
-    sets.push('usage_type=?'); vals.push(ut)
-    // 블랜드로 바뀌면 오늘의 커피 연동을 끈다 (등록된 커피 정리는 unmake-coffee 로)
-    if (ut === '블랜드' && !('make_coffee' in data)) { sets.push('make_coffee=?'); vals.push(0) }
-  }
+  // 블랜드는 오늘의 커피 연동 불가 — 요청에 make_coffee 가 섞여 와도 꺼진 상태를 유지한다
+  for (const k of allowed) if (k in data && !(isBlend && k === 'make_coffee')) { sets.push(`${k}=?`); vals.push(data[k]) }
+  if (isBlend) { sets.push('make_coffee=?'); vals.push(0) }
   if ('input_weight_g' in data || 'output_weight_g' in data || 'actual_input_weight_g' in data) {
     const inp = parseFloat(data.input_weight_g ?? prev.input_weight_g)
     let actual: number | null
@@ -697,7 +736,11 @@ beanRoutes.put('/api/roasting-logs/:id{[0-9]+}', async (c) => {
       else if (!prev.output_at) { sets.push('output_at=?'); vals.push(utcNowISO()) }
     }
   }
-  if (!sets.length) return c.json({ success: false, error: 'not found' }, 404)
+  // 종류만 바꾼 요청이면 이 기록 자체에 쓸 필드가 없을 수 있다 (생두 반영은 이미 끝남)
+  if (!sets.length)
+    return usageAfter !== null
+      ? c.json({ success: true, coffee: null })
+      : c.json({ success: false, error: 'not found' }, 404)
   vals.push(rid)
   await c.env.DB.prepare(`UPDATE roasting_logs SET ${sets.join(',')} WHERE id=?`).bind(...vals).run()
   // 배출량이 '처음' 기입되는 시점에 오늘의 커피 예정 자동 등록 (연동 ON 기록만)
