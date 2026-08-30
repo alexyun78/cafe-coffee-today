@@ -108,6 +108,7 @@ CREATE TABLE IF NOT EXISTS green_beans (
     grade           TEXT,
     cup_notes       TEXT,
     description     TEXT,
+    bean_type       TEXT NOT NULL DEFAULT '싱글',
     is_decaf        INTEGER DEFAULT 0,
     status          TEXT DEFAULT '활성',
     hidden          INTEGER NOT NULL DEFAULT 0,
@@ -250,6 +251,8 @@ _EXTRA_COLUMNS = (
 _GB_EXTRA_COLUMNS = (
     ("hidden", "INTEGER NOT NULL DEFAULT 0"),
     ("stock_adjustment_kg", "REAL NOT NULL DEFAULT 0"),
+    # 원두 종류: 싱글/블랜드/디카페인. is_decaf 는 호환용으로 함께 동기화한다.
+    ("bean_type", "TEXT NOT NULL DEFAULT '싱글'"),
 )
 
 # 이미 생성된 suppliers 테이블에 나중에 추가된 컬럼 (기존 서버 DB 마이그레이션용)
@@ -1506,19 +1509,43 @@ def _resolve_supplier_id(conn, data: dict):
     return cur.lastrowid
 
 
+BEAN_TYPES = ("싱글", "블랜드", "디카페인")
+
+
+def norm_bean_type(v) -> str:
+    """원두 종류 정규화. 알 수 없는 값은 '싱글'."""
+    s = str(v or "").strip()
+    if s == "블렌드":
+        return "블랜드"
+    return s if s in BEAN_TYPES else "싱글"
+
+
+def _bean_type_fields(data: dict):
+    """요청 본문에서 bean_type / is_decaf 를 읽어 둘을 맞춘 값을 돌려준다.
+    둘 다 없으면 None. is_decaf 는 기존 응답·프런트 호환을 위해 계속 동기화한다."""
+    if "bean_type" in data:
+        t = norm_bean_type(data.get("bean_type"))
+        return t, (1 if t == "디카페인" else 0)
+    if "is_decaf" in data:
+        d = 1 if data.get("is_decaf") else 0
+        return ("디카페인" if d else "싱글"), d
+    return None
+
+
 def create_green_bean(data: dict) -> int:
     with connect() as conn:
         supplier_id = _resolve_supplier_id(conn, data)
         cur = conn.execute(
             "INSERT INTO green_beans "
             "(name, supplier_id, origin_country, origin_region, process, grade, "
-            " cup_notes, description, is_decaf, status) "
-            "VALUES (?,?,?,?,?,?,?,?,?,?)",
+            " cup_notes, description, bean_type, is_decaf, status) "
+            "VALUES (?,?,?,?,?,?,?,?,?,?,?)",
             (
                 data["name"], supplier_id, data.get("origin_country"),
                 data.get("origin_region"), data["process"], data.get("grade"),
                 data.get("cup_notes"), data.get("description"),
-                data.get("is_decaf", 0), data.get("status", "활성"),
+                *(_bean_type_fields(data) or ("싱글", 0)),
+                data.get("status", "활성"),
             ),
         )
         return cur.lastrowid
@@ -1603,8 +1630,10 @@ def find_or_create_green_bean(data: dict) -> int:
                 v = data.get(col)
                 if v is not None and str(v).strip() != "":
                     sets.append(f"{col}=?"); vals.append(str(v).strip())
-            if "is_decaf" in data:
-                sets.append("is_decaf=?"); vals.append(1 if data.get("is_decaf") else 0)
+            bt = _bean_type_fields(data)
+            if bt:
+                sets.append("bean_type=?"); vals.append(bt[0])
+                sets.append("is_decaf=?"); vals.append(bt[1])
             if sets:
                 sets.append("updated_at=strftime('%Y-%m-%dT%H:%M:%SZ','now')")
                 vals.append(gid)
@@ -1618,12 +1647,12 @@ def find_or_create_green_bean(data: dict) -> int:
             raise ValueError("가공방식(process)은 필수입니다.")
         cur = conn.execute(
             "INSERT INTO green_beans "
-            "(name, supplier_id, origin_country, process, grade, cup_notes, is_decaf, status) "
-            "VALUES (?,?,?,?,?,?,?,?)",
+            "(name, supplier_id, origin_country, process, grade, cup_notes, bean_type, is_decaf, status) "
+            "VALUES (?,?,?,?,?,?,?,?,?)",
             (
                 name, supplier_id, data.get("origin_country"), process,
                 data.get("grade"), data.get("cup_notes"),
-                1 if data.get("is_decaf") else 0, "활성",
+                *(_bean_type_fields(data) or ("싱글", 0)), "활성",
             ),
         )
         return cur.lastrowid
@@ -1631,7 +1660,7 @@ def find_or_create_green_bean(data: dict) -> int:
 
 def update_green_bean(gb_id: int, data: dict) -> bool:
     allowed = ("name", "supplier_id", "origin_country", "origin_region",
-               "process", "grade", "cup_notes", "description", "is_decaf", "status", "hidden")
+               "process", "grade", "cup_notes", "description", "status", "hidden")
     with connect() as conn:
         if "supplier_name" in data and not data.get("supplier_id"):
             data = {**data, "supplier_id": _resolve_supplier_id(conn, data)}
@@ -1640,6 +1669,11 @@ def update_green_bean(gb_id: int, data: dict) -> bool:
             if k in data:
                 sets.append(f"{k}=?")
                 vals.append(data[k])
+        # bean_type 과 is_decaf 는 항상 함께 맞춘다 (둘 중 무엇이 와도)
+        bt = _bean_type_fields(data)
+        if bt:
+            sets.append("bean_type=?"); vals.append(bt[0])
+            sets.append("is_decaf=?"); vals.append(bt[1])
         if not sets:
             return False
         sets.append("updated_at=strftime('%Y-%m-%dT%H:%M:%SZ','now')")
@@ -1757,7 +1791,8 @@ def green_bean_suggestions() -> dict:
 def list_purchases(green_bean_id: Optional[int] = None, limit: int = 200) -> list:
     sql = """
         SELECT p.*, gb.name AS bean_name, gb.process AS process,
-               gb.origin_country AS origin_country, s.short_name AS supplier_short
+               gb.origin_country AS origin_country, gb.bean_type AS bean_type,
+               s.short_name AS supplier_short
         FROM purchases p
         JOIN green_beans gb ON gb.id = p.green_bean_id
         LEFT JOIN suppliers s ON s.id = gb.supplier_id
@@ -1847,7 +1882,7 @@ def list_roasting_logs(green_bean_id: Optional[int] = None, limit: int = 1000) -
     # 그 로스팅일 이후 로트를 담은 커피만 '등록됨'으로 본다(묵은 로트 오인 방지).
     sql = """
         SELECT r.*, gb.name AS bean_name, gb.cup_notes AS cup_notes,
-               gb.process AS bean_process,
+               gb.process AS bean_process, gb.bean_type AS bean_type,
                s.short_name AS supplier_short,
                EXISTS(
                    SELECT 1 FROM coffees c
@@ -1987,7 +2022,7 @@ def inventory_list() -> list:
     """재고 목록. 정렬: 재고>0인 것 먼저 (최근 구매일→재고 많은 순), 재고≤0은 아래로.
     각 항목에 last_purchase_date, is_stale(재고0+구매1년이상) 포함."""
     sql = """
-        SELECT gb.id, gb.name, gb.process, gb.grade, gb.is_decaf, gb.status, gb.hidden,
+        SELECT gb.id, gb.name, gb.process, gb.grade, gb.bean_type, gb.is_decaf, gb.status, gb.hidden,
             s.name AS supplier_name, s.short_name AS supplier_short,
             COALESCE(p_sum.purchased_kg, 0) AS purchased_kg,
             COALESCE(r_sum.used_kg, 0) AS used_kg,

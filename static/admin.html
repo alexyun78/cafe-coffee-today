@@ -1052,6 +1052,16 @@
     font-weight: 700; margin-left: 6px; vertical-align: middle;
   }
 
+  /* 원두 종류 배지 — 생두 목록·재고·구매 기록·로스팅 기록 공용 (싱글/블랜드/디카페인) */
+  .bean-type-badge {
+    display: inline-block; padding: 2px 8px; border-radius: 999px;
+    font-size: 0.7rem; font-weight: 700; margin-left: 6px;
+    vertical-align: middle; white-space: nowrap;
+  }
+  .bean-type-badge.single { background: #f0ebe4; color: #7a6a58; }
+  .bean-type-badge.blend  { background: #F3E5F5; color: #6a1b9a; }
+  .bean-type-badge.decaf  { background: #E3F2FD; color: #1565c0; }
+
   /* ===== 생두 폼 ===== */
   .bean-form-wrap { display: none; }
   .bean-form-wrap.active { display: block; }
@@ -1716,12 +1726,13 @@
           </div>
 
           <div class="field">
-            <label>디카페인</label>
-            <label class="toggle-switch">
-              <input type="checkbox" id="bean-field-decaf">
-              <span class="toggle-track"></span>
-              디카페인 원두
-            </label>
+            <label>원두 종류</label>
+            <div class="segmented" id="bean-type-btns" role="radiogroup" aria-label="원두 종류">
+              <button type="button" data-bean-type="싱글">☕ 싱글</button>
+              <button type="button" data-bean-type="블랜드">🧩 블랜드</button>
+              <button type="button" data-bean-type="디카페인">🌙 디카페인</button>
+            </div>
+            <input type="hidden" id="bean-field-type" value="싱글">
           </div>
 
           <div class="field">
@@ -1837,6 +1848,16 @@
           <div class="field">
             <label for="purchase-field-cupnotes">컵노트</label>
             <textarea id="purchase-field-cupnotes" placeholder="예: 자몽, 블랙베리, 다크초콜릿"></textarea>
+          </div>
+
+          <div class="field">
+            <label>원두 종류</label>
+            <div class="segmented" id="purchase-type-btns" role="radiogroup" aria-label="원두 종류">
+              <button type="button" data-bean-type="싱글">☕ 싱글</button>
+              <button type="button" data-bean-type="블랜드">🧩 블랜드</button>
+              <button type="button" data-bean-type="디카페인">🌙 디카페인</button>
+            </div>
+            <input type="hidden" id="purchase-field-type" value="싱글">
           </div>
 
           <div class="field">
@@ -2026,6 +2047,12 @@
             <option value="ok">충분 (2kg 이상)</option>
             <option value="low">저재고 (2kg 미만)</option>
             <option value="zero">재고 없음</option>
+          </select>
+          <select id="inv-filter-type" aria-label="원두 종류 필터">
+            <option value="">종류 전체</option>
+            <option value="싱글">☕ 싱글</option>
+            <option value="블랜드">🧩 블랜드</option>
+            <option value="디카페인">🌙 디카페인</option>
           </select>
           <button type="button" id="inv-filter-reset" hidden>초기화 ✕</button>
         </div>
@@ -3886,6 +3913,51 @@ function beanById(id) {
   id = parseInt(id, 10);
   return _beanListCache.find(b => b.id === id) || null;
 }
+
+// ---------- 원두 종류 (싱글 / 블랜드 / 디카페인) ----------
+// green_beans.bean_type 이 단일 소스. 옛 데이터(is_decaf) 는 폴백으로만 읽는다.
+const BEAN_TYPES = ["싱글", "블랜드", "디카페인"];
+const BEAN_TYPE_META = {
+  "싱글":     { cls: "single", icon: "☕" },
+  "블랜드":   { cls: "blend",  icon: "🧩" },
+  "디카페인": { cls: "decaf",  icon: "🌙" },
+};
+
+/** 행/카드 데이터에서 원두 종류를 뽑는다. bean_type 우선, 없으면 is_decaf 로 추정. */
+function beanTypeOf(row) {
+  if (!row) return "싱글";
+  const t = String(row.bean_type || "").trim();
+  if (t === "블렌드") return "블랜드";          // 표기 흔들림 흡수
+  if (BEAN_TYPES.includes(t)) return t;
+  return row.is_decaf ? "디카페인" : "싱글";
+}
+
+/** 목록용 배지 HTML. 싱글도 표시해 네 화면 모두에서 종류가 한눈에 구분되게 한다. */
+function beanTypeBadge(row) {
+  const t = beanTypeOf(row);
+  const m = BEAN_TYPE_META[t] || BEAN_TYPE_META["싱글"];
+  return `<span class="bean-type-badge ${m.cls}">${m.icon} ${t}</span>`;
+}
+
+/** 세그먼트 버튼 그룹 + 숨김 input 을 값 하나로 동기화 (생두 폼·구매 폼 공용) */
+function setBeanTypeSegIn(containerId, hiddenId, val) {
+  const v = beanTypeOf({ bean_type: val });
+  const hidden = document.getElementById(hiddenId);
+  if (hidden) hidden.value = v;
+  document.querySelectorAll(`#${containerId} button`).forEach(b => {
+    b.classList.toggle("active", b.dataset.beanType === v);
+  });
+  return v;
+}
+const setBeanTypeSeg = (val) => setBeanTypeSegIn("bean-type-btns", "bean-field-type", val);
+const setPurchaseTypeSeg = (val) => setBeanTypeSegIn("purchase-type-btns", "purchase-field-type", val);
+
+document.querySelectorAll("#bean-type-btns button").forEach(b => {
+  b.addEventListener("click", () => setBeanTypeSeg(b.dataset.beanType));
+});
+document.querySelectorAll("#purchase-type-btns button").forEach(b => {
+  b.addEventListener("click", () => setPurchaseTypeSeg(b.dataset.beanType));
+});
 function isBeanHidden(id) {
   const b = beanById(id);
   return b ? !!b.hidden : false;
@@ -4127,9 +4199,11 @@ function createBeanSelect(root) {
     updateText();
     const field = root.closest(".field");
     if (field && hidden.value) field.classList.remove("error");
-    // 로스팅 폼: 생두를 고르면 현재 재고 힌트 갱신
+    // 로스팅 폼: 생두를 고르면 현재 재고 힌트 갱신 + 사용 타입을 생두 종류로 기본 설정
     if (targetId === "roast-field-bean" && typeof updateRoastStockHint === "function")
       updateRoastStockHint();
+    if (targetId === "roast-field-bean" && hidden.value && typeof setRoastUsageType === "function")
+      setRoastUsageType(beanTypeOf(beanById(hidden.value)));
   }
   function clearIfDeleted(deletedId) {
     if (hidden.value && parseInt(hidden.value, 10) === deletedId) setValue("");
@@ -4485,7 +4559,7 @@ function renderBeanList(items) {
   const q = _beanSearch.query.trim().toLowerCase();
   const shown = base.filter(b => listMatchesQuery(q, [
     b.name, b.supplier_name, b.supplier_short,
-    b.process, b.origin_country, b.grade, b.cup_notes,
+    b.process, b.origin_country, b.grade, b.cup_notes, beanTypeOf(b),
   ]));
   if (!shown.length) {
     el.innerHTML = `<div class="empty">${q ? "검색 결과가 없습니다." : (_beanShowHidden ? "숨긴 생두가 없습니다." : "등록된 생두가 없습니다.")}</div>`;
@@ -4518,7 +4592,7 @@ function renderBeanList(items) {
         <div class="bean-card-main">
           <div class="bean-card-name">
             ${prefix}${escapeHtml(b.name)}
-            ${b.is_decaf ? '<span class="bean-decaf-badge">디카페인</span>' : ''}
+            ${beanTypeBadge(b)}
             ${isInactive ? '<span class="status-chip status-완료">' + escapeHtml(b.status) + '</span>' : ''}
             ${b.hidden ? '<span class="bean-hidden-badge">숨김</span>' : ''}
           </div>
@@ -4700,7 +4774,7 @@ document.getElementById("btn-bean-new").addEventListener("click", () => {
   document.getElementById("bean-field-id").value = "";
   document.getElementById("bean-field-process").value = "";
   document.getElementById("bean-field-grade").value = "";
-  document.getElementById("bean-field-decaf").checked = false;
+  setBeanTypeSeg("싱글");
   document.getElementById("bean-form-title").textContent = "생두 등록";
   document.getElementById("btn-bean-delete").style.display = "none";
   clearBeanSegments();
@@ -4726,7 +4800,7 @@ async function openBeanEdit(id) {
     if (_comboSelects["bean-field-origin"]) _comboSelects["bean-field-origin"].setValue(b.origin_country || "");
     document.getElementById("bean-field-cup-notes").value = b.cup_notes || "";
     document.getElementById("bean-field-desc").value = b.description || "";
-    document.getElementById("bean-field-decaf").checked = !!b.is_decaf;
+    setBeanTypeSeg(beanTypeOf(b));
     document.getElementById("bean-form-title").textContent = "생두 편집";
     document.getElementById("btn-bean-delete").style.display = "";
     // 가공방식 선택 동기화
@@ -4800,7 +4874,7 @@ document.getElementById("bean-form").addEventListener("submit", async (e) => {
     origin_country: document.getElementById("bean-field-origin").value.trim() || null,
     cup_notes: document.getElementById("bean-field-cup-notes").value.trim() || null,
     description: document.getElementById("bean-field-desc").value.trim() || null,
-    is_decaf: document.getElementById("bean-field-decaf").checked ? 1 : 0,
+    bean_type: document.getElementById("bean-field-type").value || "싱글",
   };
 
   try {
@@ -4856,6 +4930,7 @@ function renderPurchaseList(items) {
   const q = _purchaseSearch.query.trim().toLowerCase();
   const shown = base.filter(p => listMatchesQuery(q, [
     p.bean_name, p.supplier_short, p.process, p.purchase_date,
+    beanTypeOf(p.bean_type ? p : beanById(p.green_bean_id)),
   ]));
   if (!shown.length) {
     el.innerHTML = `<div class="empty">${q ? "검색 결과가 없습니다." : (_purchaseShowHidden ? "숨긴 생두의 구매 기록이 없습니다." : "구매 기록이 없습니다.")}</div>`;
@@ -4871,7 +4946,9 @@ function renderPurchaseList(items) {
     return `
       <div class="record-row ${isBeanHidden(p.green_bean_id) ? 'is-hidden' : ''}" data-id="${p.id}">
         <div class="record-row-top">
-          <span class="record-row-name">${prefix}${escapeHtml(p.bean_name || "")}</span>
+          <span class="record-row-name">${prefix}${escapeHtml(p.bean_name || "")}${
+            beanTypeBadge(p.bean_type ? p : beanById(p.green_bean_id))
+          }</span>
           <span class="record-row-date">${escapeHtml(p.purchase_date || "")}</span>
         </div>
         <div class="record-row-detail">
@@ -5004,6 +5081,7 @@ function clearPurchaseSegments() {
   ["purchase-field-process-custom", "purchase-field-grade-custom"].forEach(id => {
     const e = document.getElementById(id); if (e) { e.style.display = "none"; e.value = ""; }
   });
+  setPurchaseTypeSeg("싱글");
 }
 
 function fillPurchaseBeanFields(b) {
@@ -5015,6 +5093,7 @@ function fillPurchaseBeanFields(b) {
   clearPurchaseSegments();
   syncSegmentedBtn("purchase-process-btns", "purchase-field-process", "purchase-field-process-custom", b.process || "");
   syncSegmentedBtn("purchase-grade-btns", "purchase-field-grade", "purchase-field-grade-custom", b.grade || "");
+  setPurchaseTypeSeg(beanTypeOf(b));
 }
 
 // 구매 기록 편집 — 연결된 생두 정보 + 구매값을 폼에 채우고 PUT 으로 저장
@@ -5038,6 +5117,7 @@ function fillPurchaseFormFrom(id, dup) {
     document.getElementById("purchase-field-gbid").value = p.green_bean_id || "";
     if (_comboSelects["purchase-field-name"]) _comboSelects["purchase-field-name"].setValue(p.bean_name || "");
     if (_comboSelects["purchase-field-origin"]) _comboSelects["purchase-field-origin"].setValue(p.origin_country || "");
+    setPurchaseTypeSeg(p.bean_type);
   }
   document.getElementById("purchase-field-date").value = dup ? todayStr() : (p.purchase_date || todayStr());
   document.getElementById("purchase-field-qty").value = p.quantity_kg != null ? p.quantity_kg : "";
@@ -5159,6 +5239,7 @@ document.getElementById("purchase-form").addEventListener("submit", async (e) =>
     grade: document.getElementById("purchase-field-grade").value.trim() || null,
     origin_country: document.getElementById("purchase-field-origin").value.trim() || null,
     cup_notes: document.getElementById("purchase-field-cupnotes").value.trim() || null,
+    bean_type: document.getElementById("purchase-field-type").value || "싱글",
     purchase_date: dateVal,
     quantity_kg: qtyVal,
     unit_price: priceVal,
@@ -5336,10 +5417,9 @@ function renderRoastList(items) {
     const cupHtml = cup
       ? `<div class="record-row-cupnotes" title="오늘의 커피 기준 컵노트">☕ ${escapeHtml(cup)}</div>`
       : "";
-    const usage = r.usage_type || "싱글";
-    const usageBadge = usage === "블랜드"
-      ? `<span class="usage-badge blend">🧩 블랜드</span>`
-      : usage === "디카페인" ? `<span class="usage-badge decaf">🌙 디카페인</span>` : "";
+    // 이 배치의 사용 타입. 기록에 없으면(옛 데이터) 생두 마스터의 종류를 따른다.
+    const usage = r.usage_type ? beanTypeOf({ bean_type: r.usage_type }) : beanTypeOf(r);
+    const usageBadge = beanTypeBadge({ bean_type: usage });
     return `
       <div class="record-row" data-id="${r.id}" style="border-left-color: var(--accent);">
         <div class="record-row-top">
@@ -5741,12 +5821,12 @@ async function loadInventory() {
 
 const INV_PAGE_SIZE = 30;
 
-// ---------- 재고 필터 (공급처/나라/가공/재고 상태) ----------
-const _invFilters = { supplier: "", country: "", process: "", stock: "" };
+// ---------- 재고 필터 (공급처/나라/가공/재고 상태/원두 종류) ----------
+const _invFilters = { supplier: "", country: "", process: "", stock: "", type: "" };
 
 function anyInvFilterActive() {
   const f = _invFilters;
-  return !!(f.supplier || f.country || f.process || f.stock);
+  return !!(f.supplier || f.country || f.process || f.stock || f.type);
 }
 
 function invMatchesFilters(it) {
@@ -5760,6 +5840,7 @@ function invMatchesFilters(it) {
     if (f.stock === "low" && (r <= 0 || r >= 2)) return false;
     if (f.stock === "zero" && r > 0) return false;
   }
+  if (f.type && beanTypeOf(it) !== f.type) return false;
   return true;
 }
 
@@ -5790,7 +5871,8 @@ function syncInvFiltersFromDom(rerender = true) {
   _invFilters.country = $("#inv-filter-country").value;
   _invFilters.process = $("#inv-filter-process").value;
   _invFilters.stock = $("#inv-filter-stock").value;
-  ["#inv-filter-supplier", "#inv-filter-country", "#inv-filter-process", "#inv-filter-stock"]
+  _invFilters.type = $("#inv-filter-type").value;
+  ["#inv-filter-supplier", "#inv-filter-country", "#inv-filter-process", "#inv-filter-stock", "#inv-filter-type"]
     .forEach((id) => $(id).classList.toggle("filter-on", !!$(id).value));
   $("#inv-filter-reset").hidden = !anyInvFilterActive();
   if (rerender) renderInventory(_invItemsCache);
@@ -5824,7 +5906,7 @@ function applyInvSort(pool) {
 }
 
 (function initInvFilters() {
-  ["inv-filter-supplier", "inv-filter-country", "inv-filter-process", "inv-filter-stock"]
+  ["inv-filter-supplier", "inv-filter-country", "inv-filter-process", "inv-filter-stock", "inv-filter-type"]
     .forEach((id) => {
       document.getElementById(id).addEventListener("change", () => syncInvFiltersFromDom());
     });
@@ -5837,7 +5919,7 @@ function applyInvSort(pool) {
     });
   });
   document.getElementById("inv-filter-reset").addEventListener("click", () => {
-    ["inv-filter-supplier", "inv-filter-country", "inv-filter-process", "inv-filter-stock"]
+    ["inv-filter-supplier", "inv-filter-country", "inv-filter-process", "inv-filter-stock", "inv-filter-type"]
       .forEach((id) => { document.getElementById(id).value = ""; });
     syncInvFiltersFromDom();
   });
@@ -5858,7 +5940,7 @@ function invRowHtml(it) {
   return `
     <div class="record-row inv-row ${it.hidden ? 'is-hidden' : ''}" data-id="${it.id}">
       <div class="record-row-top">
-        <span class="record-row-name">${prefix}${escapeHtml(it.name || "")}${it.is_decaf ? ' <span class="bean-decaf-badge">디카페인</span>' : ""}</span>
+        <span class="record-row-name">${prefix}${escapeHtml(it.name || "")}${beanTypeBadge(it)}</span>
         ${lpdShort ? `<span class="record-row-date">최근구매 ${lpdShort}</span>` : ""}
       </div>
       <div class="record-row-detail">

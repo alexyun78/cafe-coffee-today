@@ -17,6 +17,31 @@ for (const p of [
   '/api/pricing', '/api/pricing/*',
 ]) beanRoutes.use(p, requirePin)
 
+// ---------- 원두 종류 (싱글 / 블랜드 / 디카페인) ----------
+
+/** 생두의 원두 종류. 알 수 없는 값은 '싱글'로 정규화한다. */
+export const BEAN_TYPES = ['싱글', '블랜드', '디카페인'] as const
+
+export function normBeanType(v: any): string {
+  const s = String(v ?? '').trim()
+  if (s === '블렌드') return '블랜드'   // 표기 흔들림 흡수
+  return (BEAN_TYPES as readonly string[]).includes(s) ? s : '싱글'
+}
+
+/** 요청 본문에서 bean_type / is_decaf 를 읽어 둘을 일관되게 맞춘 값을 돌려준다.
+ *  is_decaf 는 레거시 Flask·기존 응답 호환을 위해 계속 동기화한다. */
+function beanTypeFields(data: Row): { bean_type: string; is_decaf: number } | null {
+  if ('bean_type' in data) {
+    const t = normBeanType(data.bean_type)
+    return { bean_type: t, is_decaf: t === '디카페인' ? 1 : 0 }
+  }
+  if ('is_decaf' in data) {
+    const d = data.is_decaf ? 1 : 0
+    return { bean_type: d ? '디카페인' : '싱글', is_decaf: d }
+  }
+  return null
+}
+
 // ---------- 공용 쿼리 조각 ----------
 
 const GB_LIST_SQL = (where: string) => `
@@ -166,7 +191,11 @@ async function findOrCreateGreenBean(db: D1Database, data: Row): Promise<number>
         vals.push(String(v).trim())
       }
     }
-    if ('is_decaf' in data) { sets.push('is_decaf=?'); vals.push(data.is_decaf ? 1 : 0) }
+    const bt = beanTypeFields(data)
+    if (bt) {
+      sets.push('bean_type=?'); vals.push(bt.bean_type)
+      sets.push('is_decaf=?'); vals.push(bt.is_decaf)
+    }
     if (sets.length) {
       sets.push("updated_at=strftime('%Y-%m-%dT%H:%M:%SZ','now')")
       vals.push(gid)
@@ -176,14 +205,15 @@ async function findOrCreateGreenBean(db: D1Database, data: Row): Promise<number>
   }
 
   if (!process) throw new ValidationError('가공방식(process)은 필수입니다.')
+  const newType = beanTypeFields(data) ?? { bean_type: '싱글', is_decaf: 0 }
   const res = await db
     .prepare(
-      'INSERT INTO green_beans (name, supplier_id, origin_country, process, grade, cup_notes, is_decaf, status) ' +
-        'VALUES (?,?,?,?,?,?,?,?)',
+      'INSERT INTO green_beans (name, supplier_id, origin_country, process, grade, cup_notes, bean_type, is_decaf, status) ' +
+        'VALUES (?,?,?,?,?,?,?,?,?)',
     )
     .bind(
       name, supplierId, data.origin_country ?? null, process, data.grade ?? null,
-      data.cup_notes ?? null, data.is_decaf ? 1 : 0, '활성',
+      data.cup_notes ?? null, newType.bean_type, newType.is_decaf, '활성',
     )
     .run()
   return res.meta.last_row_id as number
@@ -283,16 +313,17 @@ beanRoutes.post('/api/green-beans', async (c) => {
   const data = (await c.req.json().catch(() => ({}))) as Row
   if (!data.name || !data.process) return c.json({ success: false, error: 'name, process 필수' }, 400)
   const supplierId = await resolveSupplierId(c.env.DB, data)
+  const bt = beanTypeFields(data) ?? { bean_type: '싱글', is_decaf: 0 }
   try {
     const res = await c.env.DB
       .prepare(
         'INSERT INTO green_beans (name, supplier_id, origin_country, origin_region, process, grade, ' +
-          'cup_notes, description, is_decaf, status) VALUES (?,?,?,?,?,?,?,?,?,?)',
+          'cup_notes, description, bean_type, is_decaf, status) VALUES (?,?,?,?,?,?,?,?,?,?,?)',
       )
       .bind(
         data.name, supplierId, data.origin_country ?? null, data.origin_region ?? null,
         data.process, data.grade ?? null, data.cup_notes ?? null, data.description ?? null,
-        data.is_decaf ?? 0, data.status ?? '활성',
+        bt.bean_type, bt.is_decaf, data.status ?? '활성',
       )
       .run()
     const newId = res.meta.last_row_id as number
@@ -333,10 +364,16 @@ beanRoutes.put('/api/green-beans/:id{[0-9]+}', async (c) => {
   if ('supplier_name' in data && !data.supplier_id)
     data = { ...data, supplier_id: await resolveSupplierId(c.env.DB, data) }
   const allowed = ['name', 'supplier_id', 'origin_country', 'origin_region', 'process', 'grade',
-    'cup_notes', 'description', 'is_decaf', 'status', 'hidden']
+    'cup_notes', 'description', 'status', 'hidden']
   const sets: string[] = []
   const vals: any[] = []
   for (const k of allowed) if (k in data) { sets.push(`${k}=?`); vals.push(data[k]) }
+  // bean_type 과 is_decaf 는 항상 함께 맞춘다 (둘 중 무엇이 와도)
+  const bt = beanTypeFields(data)
+  if (bt) {
+    sets.push('bean_type=?'); vals.push(bt.bean_type)
+    sets.push('is_decaf=?'); vals.push(bt.is_decaf)
+  }
   if (!sets.length) return c.json({ success: false, error: 'not found' }, 404)
   sets.push("updated_at=strftime('%Y-%m-%dT%H:%M:%SZ','now')")
   vals.push(gbId)
@@ -395,7 +432,8 @@ beanRoutes.get('/api/green-beans/:id{[0-9]+}/for-coffee', async (c) => {
 async function listPurchases(db: D1Database, gbId: number | null, limit = 200): Promise<Row[]> {
   let sql = `
       SELECT p.*, gb.name AS bean_name, gb.process AS process,
-             gb.origin_country AS origin_country, s.short_name AS supplier_short
+             gb.origin_country AS origin_country, gb.bean_type AS bean_type,
+             s.short_name AS supplier_short
       FROM purchases p
       JOIN green_beans gb ON gb.id = p.green_bean_id
       LEFT JOIN suppliers s ON s.id = gb.supplier_id`
@@ -491,7 +529,8 @@ function normYmd(d: any): any {
 async function listRoastingLogs(db: D1Database, gbId: number | null, limit = 1000): Promise<Row[]> {
   let sql = `
       SELECT r.*, gb.name AS bean_name, gb.cup_notes AS cup_notes,
-             gb.process AS bean_process, s.short_name AS supplier_short,
+             gb.process AS bean_process, gb.bean_type AS bean_type,
+             s.short_name AS supplier_short,
              EXISTS(
                  SELECT 1 FROM coffees c
                  WHERE c.name = gb.name AND c.status IN ('예정','진행 중')
@@ -569,21 +608,27 @@ beanRoutes.post('/api/roasting-logs', async (c) => {
   const outputG = optFloat(data.output_weight_g)
   const effIn = actualG !== null ? actualG : inputG
   const loss = outputG !== null && effIn > 0 ? Math.round((1 - outputG / effIn) * 10000) / 100 : null
-  const makeCoffee = data.create_coffee ?? true ? 1 : 0
+  // 사용 타입 미지정이면 생두의 종류를 물려받는다.
+  const gbForType = await c.env.DB
+    .prepare('SELECT bean_type FROM green_beans WHERE id=?').bind(parseInt(data.green_bean_id, 10)).first<Row>()
+  const usageType = 'usage_type' in data ? normBeanType(data.usage_type) : normBeanType(gbForType?.bean_type)
+  // 블랜드용 로스팅은 블렌딩 재료로만 쓰이므로 오늘의 커피에 등록하지 않는다 (app.py 와 동일)
+  const isBlend = usageType === '블랜드'
+  const makeCoffee = !isBlend && (data.create_coffee ?? true) ? 1 : 0
   const outputAt = outputG !== null ? utcNowISO() : null
   const res = await c.env.DB
     .prepare(
       'INSERT INTO roasting_logs (green_bean_id, roast_date, input_weight_g, actual_input_weight_g, ' +
-        'output_weight_g, moisture_loss_pct, roast_level, notes, coffee_id, make_coffee, output_at) ' +
-        'VALUES (?,?,?,?,?,?,?,?,?,?,?)',
+        'output_weight_g, moisture_loss_pct, roast_level, notes, coffee_id, make_coffee, usage_type, output_at) ' +
+        'VALUES (?,?,?,?,?,?,?,?,?,?,?,?)',
     )
     .bind(
       parseInt(data.green_bean_id, 10), data.roast_date, inputG, actualG, outputG, loss,
-      data.roast_level ?? null, data.notes ?? null, data.coffee_id ?? null, makeCoffee, outputAt,
+      data.roast_level ?? null, data.notes ?? null, data.coffee_id ?? null, makeCoffee, usageType, outputAt,
     )
     .run()
   let coffee = null
-  if (data.create_coffee && data.output_weight_g !== null && data.output_weight_g !== undefined && data.output_weight_g !== '')
+  if (!isBlend && data.create_coffee && data.output_weight_g !== null && data.output_weight_g !== undefined && data.output_weight_g !== '')
     coffee = await ensureScheduledCoffee(c.env.DB, parseInt(data.green_bean_id, 10), data.roast_date)
   return c.json({ success: true, id: res.meta.last_row_id, coffee })
 })
@@ -592,6 +637,8 @@ beanRoutes.post('/api/roasting-logs/:id{[0-9]+}/make-coffee', async (c) => {
   const rid = parseInt(c.req.param('id'), 10)
   const log = await getRoastingLog(c.env.DB, rid)
   if (!log) return c.json({ success: false, error: 'not found' }, 404)
+  if (normBeanType(log.usage_type) === '블랜드')
+    return c.json({ success: false, error: '블랜드용 로스팅은 오늘의 커피로 등록할 수 없습니다' }, 400)
   const coffee = await ensureScheduledCoffee(c.env.DB, log.green_bean_id, log.roast_date)
   if (!coffee) return c.json({ success: false, error: '생두 정보를 찾을 수 없음' }, 400)
   await c.env.DB.prepare('UPDATE roasting_logs SET make_coffee=1 WHERE id=?').bind(rid).run()
@@ -625,6 +672,12 @@ beanRoutes.put('/api/roasting-logs/:id{[0-9]+}', async (c) => {
   const sets: string[] = []
   const vals: any[] = []
   for (const k of allowed) if (k in data) { sets.push(`${k}=?`); vals.push(data[k]) }
+  if ('usage_type' in data) {
+    const ut = normBeanType(data.usage_type)
+    sets.push('usage_type=?'); vals.push(ut)
+    // 블랜드로 바뀌면 오늘의 커피 연동을 끈다 (등록된 커피 정리는 unmake-coffee 로)
+    if (ut === '블랜드' && !('make_coffee' in data)) { sets.push('make_coffee=?'); vals.push(0) }
+  }
   if ('input_weight_g' in data || 'output_weight_g' in data || 'actual_input_weight_g' in data) {
     const inp = parseFloat(data.input_weight_g ?? prev.input_weight_g)
     let actual: number | null
@@ -651,7 +704,9 @@ beanRoutes.put('/api/roasting-logs/:id{[0-9]+}', async (c) => {
   let coffee = null
   if (prev.output_weight_g == null && data.output_weight_g !== null && data.output_weight_g !== undefined && data.output_weight_g !== '') {
     const log = await getRoastingLog(c.env.DB, rid)
-    if (log && log.make_coffee) coffee = await ensureScheduledCoffee(c.env.DB, log.green_bean_id, log.roast_date)
+    // 블랜드용 로스팅은 배출량을 기입해도 오늘의 커피에 등록하지 않는다
+    if (log && log.make_coffee && normBeanType(log.usage_type) !== '블랜드')
+      coffee = await ensureScheduledCoffee(c.env.DB, log.green_bean_id, log.roast_date)
   }
   return c.json({ success: true, coffee })
 })
@@ -666,7 +721,7 @@ beanRoutes.delete('/api/roasting-logs/:id{[0-9]+}', async (c) => {
 
 beanRoutes.get('/api/inventory', async (c) => {
   const sql = `
-      SELECT gb.id, gb.name, gb.process, gb.grade, gb.is_decaf, gb.status, gb.hidden,
+      SELECT gb.id, gb.name, gb.process, gb.grade, gb.bean_type, gb.is_decaf, gb.status, gb.hidden,
           s.name AS supplier_name, s.short_name AS supplier_short,
           COALESCE(p_sum.purchased_kg, 0) AS purchased_kg,
           COALESCE(r_sum.used_kg, 0) AS used_kg,

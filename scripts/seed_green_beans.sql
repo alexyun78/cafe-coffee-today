@@ -309,3 +309,6 @@ INSERT OR IGNORE INTO roasting_logs (id,green_bean_id,roast_date,input_weight_g,
 INSERT OR IGNORE INTO roasting_logs (id,green_bean_id,roast_date,input_weight_g,output_weight_g,moisture_loss_pct,roast_level,notes,coffee_id) VALUES (201,18,'2026-04-12',700.0,578.3,17.39,NULL,NULL,NULL);
 INSERT OR IGNORE INTO roasting_logs (id,green_bean_id,roast_date,input_weight_g,output_weight_g,moisture_loss_pct,roast_level,notes,coffee_id) VALUES (202,6,'2026-04-12',700.0,594.2,15.11,NULL,NULL,NULL);
 INSERT OR IGNORE INTO roasting_logs (id,green_bean_id,roast_date,input_weight_g,output_weight_g,moisture_loss_pct,roast_level,notes,coffee_id) VALUES (203,6,'2026-04-12',700.0,593.8,15.17,NULL,NULL,NULL);
+
+-- 원두 종류(bean_type) 동기화 — is_decaf 시드값 기준 (2026-08-30)
+UPDATE green_beans SET bean_type='디카페인' WHERE is_decaf=1;
