@@ -615,6 +615,23 @@ ssh-keyscan 49.247.207.115 2>/dev/null | grep -v '^#'  # 호스트키 복사
   - **공급업체·원두명은 공용 콤보 드롭다운**(`createComboSelect`, `.combo-select`): 기존 목록 표시 + 숨김 보기 토글/항목별 숨기기 + "직접 입력"(검색창에 새 값 입력 후 선택). 구매 폼·생두 폼이 같은 컴포넌트를 공유. 공급처 숨김은 `suppliers.hidden`(`PUT /api/suppliers/<id>` `{hidden}`), 원두 숨김은 기존 `green_beans.hidden`
 - **재고**: 최근구매일→재고량 정렬, 30개 페이징, 1년 이상 미구매+재고0 접힘
 
+### 원두 종류 — 싱글 / 블랜드 / 디카페인 (2026-08-30 추가)
+
+**단일 창구 = `green_beans.bean_type`.** 생두 폼, 구매 폼, 로스팅 폼 어디서 바꿔도 생두 마스터에
+write-through 되고, 그 생두의 모든 `roasting_logs.usage_type` 이 같은 값으로 통일된다
+(worker `setBeanTypeFrom` / `syncRoastUsageToBean`). 값은 셋 중 하나로 정규화(`normBeanType`),
+표기는 **블랜드**(블렌드가 아님 — 기존 `usage_type` 표기와 맞춤).
+
+- 배지는 생두 목록, 재고, 구매 기록, 로스팅 기록 네 화면에 모두 표시. 재고 탭에 종류 필터가 있다.
+- `is_decaf` 는 레거시 호환용으로 API 가 함께 동기화한다 (`bean_type='디카페인'` ⇔ `is_decaf=1`).
+  새 코드는 `bean_type` 만 읽을 것.
+- **블랜드는 오늘의 커피로 등록할 수 없다.** 차단은 `ensureScheduledCoffee`(생두 종류 기준) 한 곳에
+  모여 있어 로스팅 저장, 배출량 기입, "☕ 예정 등록" 어느 경로로 들어와도 막힌다. app.py 에도 같은 가드.
+- 마이그레이션: [scripts/bean_type_migration.sql](scripts/bean_type_migration.sql) (컬럼 추가, 1회) +
+  [scripts/bean_type_reconcile.sql](scripts/bean_type_reconcile.sql) (기록↔마스터 어긋남 복구, 멱등).
+  ⚠️ 첫 배포 때는 로스팅 폼 값이 배치별로만 저장돼 마스터로 안 올라갔다 — 그때 생긴 어긋남을
+  reconcile 로 정리했다. 비슷한 증상("한쪽만 블랜드로 보임")이 또 보이면 reconcile 을 다시 돌리면 된다.
+
 ### 생두 이름 규칙
 
 DB에서 분리 저장, UI에서 조합 표시:
