@@ -1201,6 +1201,55 @@
             color: #c62828;
             letter-spacing: 0.02em;
         }
+        .hours-special-row {
+            margin-top: 16px;
+        }
+        .hours-card--special {
+            background: var(--canvas-warm);
+            border-color: var(--copper);
+        }
+        .hours-card--special .hours-day-en { color: var(--copper); opacity: 1; }
+        .hours-card--special .hours-note { color: var(--ink-mute); opacity: 1; }
+        .special-badge {
+            position: absolute;
+            top: 28px; right: 28px;
+            font-family: var(--font-mono);
+            font-size: 0.66rem;
+            letter-spacing: 0.22em;
+            color: var(--copper);
+            border: 1px solid var(--copper);
+            padding: 5px 12px;
+            border-radius: var(--r-pill);
+            background: var(--canvas);
+        }
+        .hours-special-list {
+            list-style: none;
+            margin: 0 0 22px;
+            padding: 0;
+            display: grid;
+            gap: 10px;
+        }
+        .hours-special-list li {
+            display: flex; align-items: baseline; justify-content: space-between;
+            gap: 16px; flex-wrap: wrap;
+            padding: 12px 16px;
+            background: var(--canvas);
+            border: 1px solid var(--line);
+            border-radius: var(--r-md);
+        }
+        .hs-date {
+            font-family: var(--font-body);
+            font-size: 1rem;
+            font-weight: 600;
+        }
+        .hs-time {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-weight: 500;
+            letter-spacing: -0.01em;
+            color: var(--copper);
+            white-space: nowrap;
+        }
         .hours-foot {
             margin-top: 48px;
             padding-top: 32px;
@@ -1222,7 +1271,9 @@
             .hours-day-ko { font-size: 1.25rem; margin-bottom: 18px; }
             .hours-time { font-size: 2.2rem; margin-bottom: 16px; }
             .hours-note { font-size: 0.85rem; line-height: 1.55; }
-            .early-badge, .closed-badge { top: 18px; right: 18px; font-size: 0.6rem; padding: 4px 10px; letter-spacing: 0.18em; }
+            .hs-date { font-size: 0.9rem; }
+            .hs-time { font-size: 1.25rem; }
+            .early-badge, .closed-badge, .special-badge { top: 18px; right: 18px; font-size: 0.6rem; padding: 4px 10px; letter-spacing: 0.18em; }
             .hours-foot { margin-top: 32px; padding-top: 24px; font-size: 0.68rem; gap: 8px 14px; }
         }
 
@@ -1454,12 +1505,12 @@
     display:flex; flex-direction:column; max-height:calc(100dvh - 48px);
   ">
     <div style="background:linear-gradient(135deg,#6F4E37,#8B6F47); color:#fff; padding:22px 24px; text-align:center; flex-shrink:0;">
-      <div style="font-size:2.4rem; line-height:1;">📅</div>
-      <div style="font-size:1.15rem; font-weight:700; margin-top:10px;">휴무 안내</div>
+      <div id="notice-popup-icon" style="font-size:2.4rem; line-height:1;">📅</div>
+      <div id="notice-popup-head" style="font-size:1.15rem; font-weight:700; margin-top:10px;">휴무 안내</div>
     </div>
     <div style="padding:24px; text-align:center; color:#3a2e25; overflow-y:auto; flex:1 1 auto; min-height:0;">
       <p id="notice-popup-date" style="font-size:1.25rem; font-weight:700; margin:0 0 6px;">8월 10일 (월요일)</p>
-      <p style="font-size:1rem; margin:0; color:#6b5848;">휴무입니다.</p>
+      <p id="notice-popup-body" style="font-size:1rem; margin:0; color:#6b5848;">휴무입니다.</p>
     </div>
     <label style="display:flex; align-items:center; justify-content:center; gap:8px; padding:14px 24px 16px; color:#8a7866; font-size:0.85rem; cursor:pointer; flex-shrink:0; background:#fff; border-top:1px solid #f0eae2;">
       <input type="checkbox" id="notice-popup-dontshow" onchange="if(this.checked)closeNoticePopup()" style="width:16px; height:16px; cursor:pointer;">
@@ -1770,6 +1821,7 @@
                 <div class="hours-next-closed" id="hours-next-closed"></div>
             </div>
         </div>
+        <div class="hours-special-row" id="hours-special-row" hidden></div>
         <div class="hours-foot">
             <span>휴무 — 매달 공지 · 공휴일</span>
             <span id="hours-now-status">— 오늘의 영업시간 확인 중</span>
@@ -1954,6 +2006,25 @@
     var OPEN_OVERRIDES = {
         '2026-08-15': true, // 광복절 — 8월 안내상 정상 영업
         '2026-08-17': true, // 광복절 대체휴일 — 정상 영업
+        '2026-09-24': true, // 추석 연휴 (목) — 10시 오픈
+        '2026-09-25': true, // 추석 (금) — 10시 오픈, 18시 마감
+        '2026-09-26': true, // 추석 연휴 (토) — 정상 영업
+        '2026-09-28': true, // 추석 대체휴일 (월) — 정상 영업
+    };
+
+    // 그날만 영업시간이 다른 날 — 9월 안내 포스터 기준
+    var SPECIAL_HOURS = {
+        '2026-09-24': { open: '10:00', close: '21:00' },
+        '2026-09-25': { open: '10:00', close: '18:00' },
+    };
+
+    // 특별 영업 안내 카드 — days 가 모두 지나면 카드는 저절로 사라진다
+    var SPECIAL_NOTICE = {
+        badge: 'CHUSEOK',
+        title_en: 'SPECIAL HOURS',
+        title_ko: '추석 연휴 특별 영업',
+        note: '추석 연휴 이틀은 오전 10시에 문을 엽니다. 25일은 18시에 마감하고, 그 밖의 날짜는 정상 영업합니다.',
+        days: ['2026-09-24', '2026-09-25'],
     };
 
     // 휴무일 판별 — 공휴일 OR 공지된 지정 휴무일 (정상 영업 예외 우선)
@@ -1977,6 +2048,13 @@
     }
 
     // ---------- 영업시간 안내 ----------
+    function hmToMin(hm) {
+        var parts = String(hm).split(':');
+        return parseInt(parts[0], 10) * 60 + parseInt(parts[1] || '0', 10);
+    }
+    function minToHm(m) {
+        return String(Math.floor(m / 60)).padStart(2, '0') + ':' + String(m % 60).padStart(2, '0');
+    }
     function updateHoursStatus() {
         var now = new Date();
         var dow = now.getDay(); // 0=Sun..6=Sat
@@ -1999,6 +2077,16 @@
             close = (dow === 1 || dow === 3) ? 18 * 60 : 21 * 60; // 월·수 18시 조기 마감, 그 외 21시
         } else {
             close = (dow === 3 || dow === 0) ? 18 * 60 : 22 * 60; // (구 체계) 수·일 18시 조기 마감, 그 외 22시
+        }
+        var special = SPECIAL_HOURS[ymd];
+        if (special) {                       // 추석 연휴처럼 그날만 다른 시간
+            open = hmToMin(special.open);
+            close = hmToMin(special.close);
+        }
+        if (t < open) {
+            status.textContent = '\u25CB CLOSED \u00B7 오늘은 ' + minToHm(open) + '에 문을 엽니다';
+            status.style.color = '';
+            return;
         }
         if (t >= open && t < close) {
             var rem = close - t;
@@ -2030,6 +2118,34 @@
             d.setDate(d.getDate() + 1);
         }
         el.textContent = '예정된 휴무일이 없습니다';
+    })();
+
+    // 특별 영업 안내 카드 — 마지막 날이 지나면 렌더하지 않는다
+    (function showSpecialHours() {
+        var row = document.getElementById('hours-special-row');
+        if (!row) return;
+        var now = new Date();
+        var today = now.getFullYear() + '-' +
+            String(now.getMonth() + 1).padStart(2, '0') + '-' +
+            String(now.getDate()).padStart(2, '0');
+        var days = (SPECIAL_NOTICE.days || []).filter(function (ymd) { return ymd >= today; });
+        if (!days.length) return;
+        var rows = days.map(function (ymd) {
+            var d = new Date(ymd + 'T00:00:00');
+            var h = SPECIAL_HOURS[ymd] || {};
+            return '<li><span class="hs-date">' +
+                (d.getMonth() + 1) + '월 ' + d.getDate() + '일 (' + DOW_KO[d.getDay()] + ')</span>' +
+                '<span class="hs-time">' + h.open + ' \u2014 ' + h.close + '</span></li>';
+        }).join('');
+        row.innerHTML =
+            '<div class="hours-card hours-card--special">' +
+            '<span class="special-badge">' + SPECIAL_NOTICE.badge + '</span>' +
+            '<div class="hours-day-en">' + SPECIAL_NOTICE.title_en + '</div>' +
+            '<div class="hours-day-ko">' + SPECIAL_NOTICE.title_ko + '</div>' +
+            '<ul class="hours-special-list">' + rows + '</ul>' +
+            '<div class="hours-note">' + SPECIAL_NOTICE.note + '</div>' +
+            '</div>';
+        row.hidden = false;
     })();
 
     // ---------- 데이터 로드 (지연) ----------
@@ -2621,10 +2737,21 @@ function maybeShowSpecialPopup() {
   return true;
 }
 
-// ===== 휴무 안내 팝업 (날짜별 "다시 보지 않기" — 다음 휴무일이 다가오면 다시 노출) =====
-var NOTICE_DATES = ['2026-08-10', '2026-08-24', '2026-09-07', '2026-09-21'];   // 공지된 휴무일 — 각 날짜 3일 전 ~ 당일만 노출
+// ===== 안내 팝업 (항목별 "다시 보지 않기" — 다음 안내가 다가오면 다시 노출) =====
+// 휴무 안내는 { date } 만 적으면 되고, 특별 영업 안내는 { from, to } 로 노출 기간을 준다.
+// (매달 갱신할 곳: 위 CLOSED_DAYS / SPECIAL_HOURS / SPECIAL_NOTICE, 이 NOTICES, index.html 의 같은 자리)
+var NOTICES = [
+  { id: '2026-09-07', date: '2026-09-07' },   // 9월 정기휴무 (월)
+  { id: '2026-09-21', date: '2026-09-21' },   // 9월 정기휴무 (월)
+  {
+    id: '2026-chuseok', from: '2026-09-22', to: '2026-09-25',
+    icon: '🌕', head: '추석 연휴 안내',
+    date_text: '9월 24일 (목)과 25일 (금)',
+    body: '오전 10시에 문을 엽니다.<br>25일은 18시에 마감합니다.'
+  },
+];
 var NOTICE_LEAD = 3;                               // 휴무 며칠 전부터 노출할지
-var NOTICE_POPUP_ID = NOTICE_DATES[0];
+var NOTICE_POPUP_ID = NOTICES.length ? NOTICES[0].id : '';
 function closeNoticePopup() {
   var cb = document.getElementById('notice-popup-dontshow');
   if (cb && cb.checked) localStorage.setItem('cafe-notice-dismissed', NOTICE_POPUP_ID);
@@ -2633,18 +2760,34 @@ function closeNoticePopup() {
 function maybeShowNoticePopup() {
   var DOW = ['일', '월', '화', '수', '목', '금', '토'];
   var now = new Date();
-  for (var i = 0; i < NOTICE_DATES.length; i++) {
-    var ymd = NOTICE_DATES[i];
-    if (localStorage.getItem('cafe-notice-dismissed') === ymd) continue;
-    // 휴무일 NOTICE_LEAD일 전 ~ 휴무일(당일 자정까지)만 노출
-    var start = new Date(ymd + 'T00:00:00');
-    start.setDate(start.getDate() - NOTICE_LEAD);
-    var end = new Date(ymd + 'T23:59:59');
+  for (var i = 0; i < NOTICES.length; i++) {
+    var n = NOTICES[i];
+    if (localStorage.getItem('cafe-notice-dismissed') === n.id) continue;
+    // 휴무는 NOTICE_LEAD일 전 ~ 당일 자정까지, 특별 안내는 from ~ to 자정까지
+    var start, end;
+    if (n.date) {
+      start = new Date(n.date + 'T00:00:00');
+      start.setDate(start.getDate() - NOTICE_LEAD);
+      end = new Date(n.date + 'T23:59:59');
+    } else {
+      start = new Date(n.from + 'T00:00:00');
+      end = new Date(n.to + 'T23:59:59');
+    }
     if (now < start || now > end) continue;
-    NOTICE_POPUP_ID = ymd;
-    var d = new Date(ymd + 'T00:00:00');
+    NOTICE_POPUP_ID = n.id;
+    var dateText = n.date_text;
+    if (!dateText && n.date) {
+      var d = new Date(n.date + 'T00:00:00');
+      dateText = (d.getMonth() + 1) + '월 ' + d.getDate() + '일 (' + DOW[d.getDay()] + '요일)';
+    }
+    var iconEl = document.getElementById('notice-popup-icon');
+    var headEl = document.getElementById('notice-popup-head');
     var dateEl = document.getElementById('notice-popup-date');
-    if (dateEl) dateEl.textContent = (d.getMonth() + 1) + '월 ' + d.getDate() + '일 (' + DOW[d.getDay()] + '요일)';
+    var bodyEl = document.getElementById('notice-popup-body');
+    if (iconEl) iconEl.textContent = n.icon || '📅';
+    if (headEl) headEl.textContent = n.head || '휴무 안내';
+    if (dateEl) dateEl.textContent = dateText || '';
+    if (bodyEl) bodyEl.innerHTML = n.body || '휴무입니다.';
     var overlay = document.getElementById('notice-popup-overlay');
     if (overlay) overlay.style.display = 'flex';
     return;

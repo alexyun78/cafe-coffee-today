@@ -490,6 +490,39 @@
             border-radius: 6px;
             margin-left: auto;
         }
+        .hcal-wcell-special {
+            border-color: #f0b27a;
+            background: #fff9f2;
+        }
+        .hcal-wspecial-badge {
+            font-size: 0.72rem;
+            color: #b5651d;
+            font-weight: 700;
+            padding: 2px 8px;
+            background: rgba(181,101,29,0.09);
+            border-radius: 6px;
+            margin-left: auto;
+        }
+        /* 영업시간이 다른 날 — 커피 소개 자리에 시간 안내 */
+        .hcal-wspecial {
+            flex: 1;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            gap: 4px; padding: 8px 6px;
+            text-align: center;
+        }
+        .hcal-wspecial-mark {
+            font-size: 1.35rem;
+            font-weight: 800;
+            letter-spacing: 0.02em;
+            color: #b5651d;
+            line-height: 1.15;
+        }
+        .hcal-wspecial-sub {
+            font-size: 0.72rem;
+            color: #b08a5f;
+            letter-spacing: 0.02em;
+        }
         /* 휴무일 — 커피 소개 자리에 크게 안내 */
         .hcal-wclosed {
             flex: 1;
@@ -615,7 +648,8 @@
             .hcal-week-nav button { width: 36px; height: 36px; font-size: 1.15rem; }
             .hcal-wlogo-caption { font-size: 0.66rem; letter-spacing: 1px; }
             .hcal-wlogo-label { font-size: 0.82rem; top: 6px; right: 8px; }
-            .hcal-wclosed-badge { font-size: 0.6rem; padding: 1px 5px; }
+            .hcal-wclosed-badge, .hcal-wspecial-badge { font-size: 0.6rem; padding: 1px 5px; }
+            .hcal-wspecial-mark { font-size: 1.1rem; }
             .hcal-wclosed-mark { font-size: 1.4rem; }
             .hcal-wclosed-sub { font-size: 0.66rem; }
         }
@@ -1474,12 +1508,12 @@
           background:linear-gradient(135deg,#6F4E37,#8B6F47); color:#fff;
           padding:22px 24px; text-align:center; flex-shrink:0;
         ">
-          <div style="font-size:2.4rem; line-height:1;">📅</div>
-          <div style="font-size:1.15rem; font-weight:700; margin-top:10px;">휴무 안내</div>
+          <div id="notice-popup-icon" style="font-size:2.4rem; line-height:1;">📅</div>
+          <div id="notice-popup-head" style="font-size:1.15rem; font-weight:700; margin-top:10px;">휴무 안내</div>
         </div>
         <div style="padding:24px; text-align:center; color:#3a2e25; overflow-y:auto; flex:1 1 auto; min-height:0;">
           <p id="notice-popup-date" style="font-size:1.25rem; font-weight:700; margin:0 0 6px;">8월 10일 (월요일)</p>
-          <p style="font-size:1rem; margin:0; color:#6b5848;">휴무입니다.</p>
+          <p id="notice-popup-body" style="font-size:1rem; margin:0; color:#6b5848;">휴무입니다.</p>
         </div>
         <label style="
           display:flex; align-items:center; justify-content:center; gap:8px;
@@ -1672,6 +1706,11 @@
             '2026-08-24': true, // 8월 휴무일 (월)
             '2026-09-07': true, // 9월 휴무일 (월)
             '2026-09-21': true, // 9월 휴무일 (월)
+        };
+        // 그날만 영업시간이 다른 날 — 9월 안내 포스터 기준
+        var SPECIAL_HOURS = {
+            '2026-09-24': { open: '10:00', close: '21:00', label: '추석 연휴' },
+            '2026-09-25': { open: '10:00', close: '18:00', label: '추석' },
         };
         var DOW_KO_IDX = ['일', '월', '화', '수', '목', '금', '토'];
 
@@ -2251,17 +2290,20 @@
                 const ymd = ymdLocalCal(cur);
                 const isToday = (ymd === today);
                 const isClosed = isClosedDay(cur);
+                const special = !isClosed ? SPECIAL_HOURS[ymd] : null;
                 const items = byDate[ymd] || [];
                 const dow = cur.getDay();
                 let cellCls = 'hcal-wcell';
                 if (isToday) cellCls += ' hcal-wcell-today';
                 if (isClosed) cellCls += ' hcal-wcell-closed';
+                if (special) cellCls += ' hcal-wcell-special';
                 let cell = `<div class="${cellCls}">`;
                 cell += `
                     <div class="hcal-wcell-header">
                         <span class="hcal-wcell-date ${dayClsAll[dow]}">${cur.getDate()}</span>
                         <span class="hcal-wcell-day ${dayClsAll[dow]}">${dayLabelsAll[dow]}</span>
                         ${isClosed && items.length ? '<span class="hcal-wclosed-badge">휴무</span>' : ''}
+                        ${special ? `<span class="hcal-wspecial-badge">${special.open} 오픈</span>` : ''}
                     </div>
                 `;
                 if (items.length) {
@@ -2280,6 +2322,10 @@
                     // 휴무일은 커피 소개 자리에 "휴무"를 크게 안내
                     cell += `<div class="hcal-wclosed"><div class="hcal-wclosed-mark">휴무</div>` +
                             `<div class="hcal-wclosed-sub">쉬어 갑니다</div></div>`;
+                } else if (special) {
+                    // 영업시간이 다른 날은 몇 시에 열고 닫는지를 크게 안내
+                    cell += `<div class="hcal-wspecial"><div class="hcal-wspecial-mark">${special.open} 오픈</div>` +
+                            `<div class="hcal-wspecial-sub">${special.label} — ${special.close} 마감</div></div>`;
                 } else {
                     cell += `<div class="hcal-wempty">·</div>`;
                 }
@@ -2579,11 +2625,20 @@
           return true;
         }
 
-        // ========== 휴무 안내 팝업 ==========
-        // 날짜별 "다시 보지 않기" — 다음 휴무일이 다가오면 다시 노출됨
-        const NOTICE_DATES = Object.keys(CLOSED_DAYS);       // 공지된 휴무일 — 각 날짜 3일 전 ~ 당일만 노출
+        // ========== 안내 팝업 (휴무 + 특별 영업) ==========
+        // 항목별 "다시 보지 않기" — 다음 안내가 다가오면 다시 노출됨
+        // 휴무일은 CLOSED_DAYS 에서 자동으로 만들고, 특별 영업 안내만 아래에 손으로 적는다.
+        const NOTICES = [
+          ...Object.keys(CLOSED_DAYS).map(ymd => ({ id: ymd, date: ymd })),
+          {
+            id: '2026-chuseok', from: '2026-09-22', to: '2026-09-25',
+            icon: '🌕', head: '추석 연휴 안내',
+            date_text: '9월 24일 (목)과 25일 (금)',
+            body: '오전 10시에 문을 엽니다.<br>25일은 18시에 마감합니다.'
+          },
+        ];
         const NOTICE_LEAD = 3;                               // 휴무 며칠 전부터 노출할지
-        let NOTICE_POPUP_ID = NOTICE_DATES[0];
+        let NOTICE_POPUP_ID = NOTICES.length ? NOTICES[0].id : '';
         function closeNoticePopup() {
           const cb = document.getElementById('notice-popup-dontshow');
           if (cb && cb.checked) {
@@ -2593,17 +2648,33 @@
         }
         function maybeShowNoticePopup() {
           const now = new Date();
-          for (const ymd of NOTICE_DATES) {
-            if (localStorage.getItem('cafe-notice-dismissed') === ymd) continue;
-            // 휴무일 NOTICE_LEAD일 전 ~ 휴무일(당일 자정까지)만 노출
-            const start = new Date(ymd + 'T00:00:00');
-            start.setDate(start.getDate() - NOTICE_LEAD);
-            const end = new Date(ymd + 'T23:59:59');
+          for (const n of NOTICES) {
+            if (localStorage.getItem('cafe-notice-dismissed') === n.id) continue;
+            // 휴무는 NOTICE_LEAD일 전 ~ 당일 자정까지, 특별 안내는 from ~ to 자정까지
+            let start, end;
+            if (n.date) {
+              start = new Date(n.date + 'T00:00:00');
+              start.setDate(start.getDate() - NOTICE_LEAD);
+              end = new Date(n.date + 'T23:59:59');
+            } else {
+              start = new Date(n.from + 'T00:00:00');
+              end = new Date(n.to + 'T23:59:59');
+            }
             if (now < start || now > end) continue;
-            NOTICE_POPUP_ID = ymd;
-            const d = new Date(ymd + 'T00:00:00');
+            NOTICE_POPUP_ID = n.id;
+            let dateText = n.date_text;
+            if (!dateText && n.date) {
+              const d = new Date(n.date + 'T00:00:00');
+              dateText = (d.getMonth() + 1) + '월 ' + d.getDate() + '일 (' + DOW_KO_IDX[d.getDay()] + '요일)';
+            }
+            const iconEl = document.getElementById('notice-popup-icon');
+            const headEl = document.getElementById('notice-popup-head');
             const dateEl = document.getElementById('notice-popup-date');
-            if (dateEl) dateEl.textContent = (d.getMonth() + 1) + '월 ' + d.getDate() + '일 (' + DOW_KO_IDX[d.getDay()] + '요일)';
+            const bodyEl = document.getElementById('notice-popup-body');
+            if (iconEl) iconEl.textContent = n.icon || '📅';
+            if (headEl) headEl.textContent = n.head || '휴무 안내';
+            if (dateEl) dateEl.textContent = dateText || '';
+            if (bodyEl) bodyEl.innerHTML = n.body || '휴무입니다.';
             const overlay = document.getElementById('notice-popup-overlay');
             if (overlay) overlay.style.display = 'flex';
             return;
