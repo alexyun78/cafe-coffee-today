@@ -1,7 +1,24 @@
 {
   "version": 1,
-  "updated_at": "2026-08-30T15:27:23Z",
+  "updated_at": "2026-08-31T18:07:26Z",
   "items": [
+    {
+      "id": "2026-09-01-brewers-cup",
+      "type": "trivia",
+      "date": "2026-09-01",
+      "title_ko": "손으로 커피를 내려서 세계 1등을 가리는 대회가 있다고? 🫖",
+      "one_liner": "머신도 우유도 없이 오직 드리퍼와 물로만 겨룬다. 게다가 심사위원이 누구 커피인지 모른 채 맛보는 순서도 있다!",
+      "categories_primary": [
+        "커피 상식"
+      ],
+      "categories_secondary": [
+        "대회"
+      ],
+      "hero_image": "/static/img/insights/trivia/competition.svg",
+      "journal": null,
+      "pub_date": null,
+      "source_basis": null
+    },
     {
       "id": "2026-08-31-drying-methods",
       "type": "trivia",
