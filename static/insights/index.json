@@ -1,7 +1,24 @@
 {
   "version": 1,
-  "updated_at": "2026-08-31T18:07:26Z",
+  "updated_at": "2026-09-01T15:32:08Z",
   "items": [
+    {
+      "id": "2026-09-02-brazil-number-one",
+      "type": "trivia",
+      "date": "2026-09-02",
+      "title_ko": "브라질은 어떻게 150년 넘게 커피 1위 자리를 지킬까? 🇧🇷",
+      "one_liner": "평평한 땅, 기계 수확, 그리고 어마어마한 규모. 세계 커피의 3분의 1이 이 나라에서 나온다!",
+      "categories_primary": [
+        "커피 상식"
+      ],
+      "categories_secondary": [
+        "원산지"
+      ],
+      "hero_image": "/static/img/insights/trivia/origin.svg",
+      "journal": null,
+      "pub_date": null,
+      "source_basis": null
+    },
     {
       "id": "2026-09-01-brewers-cup",
       "type": "trivia",
