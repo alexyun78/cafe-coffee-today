@@ -1313,6 +1313,18 @@
     background: #f0ebe4; color: var(--muted); font-size: 0.7rem;
     font-weight: 700; margin-left: 6px; vertical-align: middle;
   }
+  /* 품절 — status(활성/단종)와 별개. 목록에는 남되 지금 안 파는 상태 */
+  .bean-soldout-badge {
+    display: inline-block; padding: 2px 8px; border-radius: 10px;
+    background: #FFEBEE; color: #c62828; font-size: 0.7rem;
+    font-weight: 700; margin-left: 6px; vertical-align: middle;
+  }
+  .record-row-actions button.soldout { background: #FFEBEE; color: #c62828; }
+  .record-row-actions button.restock { background: #E8F5E9; color: #2E7D32; }
+  .bean-card-btn.soldout { background: #FFEBEE; color: #c62828; }
+  .bean-card-btn.restock { background: #E8F5E9; color: #2E7D32; }
+  .inv-row.is-soldout .record-row-name,
+  .bean-card.is-soldout .bean-card-name { opacity: 0.62; }
 
   /* 실시간 총액 표시 */
   .calc-total {
@@ -3953,6 +3965,22 @@ function isBeanHidden(id) {
   const b = beanById(id);
   return b ? !!b.hidden : false;
 }
+/** 생두 품절 토글. 생두 목록·재고·공개 원두 카드가 같은 값을 본다. */
+async function setBeanSoldOut(id, soldOut) {
+  await api("PUT", "/api/green-beans/" + id + "/sold-out", { sold_out: soldOut ? 1 : 0 });
+  const flag = soldOut ? 1 : 0;
+  const b = beanById(id);
+  if (b) b.sold_out = flag;
+  const inv = _invItemsCache.find(x => x.id === parseInt(id, 10));
+  if (inv) inv.sold_out = flag;
+  showToast(soldOut ? "품절로 표시됨" : "판매중으로 되돌림");
+  refreshAllBeanViews();
+}
+
+function soldOutBadge(row) {
+  return row && row.sold_out ? '<span class="bean-soldout-badge">⛔ 품절</span>' : "";
+}
+
 async function setBeanHidden(id, hidden) {
   await api("PUT", "/api/green-beans/" + id, { hidden: hidden ? 1 : 0 });
   const b = beanById(id);
@@ -4573,17 +4601,22 @@ function renderBeanList(items) {
     } else if (origPrice > 0) {
       priceHtml = `<div class="bean-card-price">₩${origPrice.toLocaleString()}/kg</div>`;
     }
+    const soldBtn = b.sold_out
+      ? `<button type="button" class="bean-card-btn restock bean-soldout-btn" data-id="${b.id}" data-to="0">🟢 판매중</button>`
+      : `<button type="button" class="bean-card-btn soldout bean-soldout-btn" data-id="${b.id}" data-to="1">⛔ 품절</button>`;
     const actionBtns = _beanShowHidden
       ? `<button type="button" class="bean-card-btn unhide bean-unhide-btn" data-id="${b.id}">보이기</button>
          <button type="button" class="bean-card-btn delete bean-del-btn" data-id="${b.id}">삭제</button>`
       : `<button type="button" class="bean-card-btn bean-edit-btn" data-id="${b.id}">편집</button>
+         ${soldBtn}
          <button type="button" class="bean-card-btn bean-hide-btn" data-id="${b.id}">숨기기</button>`;
     return `
-      <div class="bean-card ${isInactive ? 'sold-out' : ''} ${b.hidden ? 'is-hidden' : ''}" data-id="${b.id}">
+      <div class="bean-card ${isInactive ? 'sold-out' : ''} ${b.sold_out ? 'is-soldout' : ''} ${b.hidden ? 'is-hidden' : ''}" data-id="${b.id}">
         <div class="bean-card-main">
           <div class="bean-card-name">
             ${prefix}${escapeHtml(b.name)}
             ${beanTypeBadge(b)}
+            ${soldOutBadge(b)}
             ${isInactive ? '<span class="status-chip status-완료">' + escapeHtml(b.status) + '</span>' : ''}
             ${b.hidden ? '<span class="bean-hidden-badge">숨김</span>' : ''}
           </div>
@@ -4618,6 +4651,13 @@ function renderBeanList(items) {
     btn.addEventListener("click", (e) => {
       e.stopPropagation();
       beginStockInlineEdit(btn, "bean");
+    });
+  });
+  el.querySelectorAll(".bean-soldout-btn").forEach(btn => {
+    btn.addEventListener("click", async (e) => {
+      e.stopPropagation();
+      try { await setBeanSoldOut(btn.dataset.id, btn.dataset.to === "1"); }
+      catch (err) { if (err.message !== "unauthorized") showBanner("변경 실패: " + err.message, "error"); }
     });
   });
   el.querySelectorAll(".bean-hide-btn, .bean-unhide-btn").forEach(btn => {
@@ -5942,10 +5982,13 @@ function invRowHtml(it) {
   const hideBtn = _invShowHidden
     ? `<button type="button" class="unhide" data-bean="${it.id}">보이기</button>`
     : `<button type="button" class="hide" data-bean="${it.id}">숨기기</button>`;
+  const soldBtn = it.sold_out
+    ? `<button type="button" class="restock" data-soldout="${it.id}" data-to="0">🟢 판매중으로</button>`
+    : `<button type="button" class="soldout" data-soldout="${it.id}" data-to="1">⛔ 품절로</button>`;
   return `
-    <div class="record-row inv-row ${it.hidden ? 'is-hidden' : ''}" data-id="${it.id}">
+    <div class="record-row inv-row ${it.hidden ? 'is-hidden' : ''} ${it.sold_out ? 'is-soldout' : ''}" data-id="${it.id}">
       <div class="record-row-top">
-        <span class="record-row-name">${prefix}${escapeHtml(it.name || "")}${beanTypeBadge(it)}</span>
+        <span class="record-row-name">${prefix}${escapeHtml(it.name || "")}${beanTypeBadge(it)}${soldOutBadge(it)}</span>
         ${lpdShort ? `<span class="record-row-date">최근구매 ${lpdShort}</span>` : ""}
       </div>
       <div class="record-row-detail">
@@ -5955,7 +5998,7 @@ function invRowHtml(it) {
         ${Number(it.avg_unit_price) > 0 ? `<span>단가 ₩${Number(it.avg_unit_price).toLocaleString()}</span>` : ""}
         <span>잔여 <button type="button" class="inv-remaining inv-stock-btn ${cls}" data-id="${it.id}" title="탭하여 재고 수정">${remaining.toFixed(1)}<span class="bean-stock-pencil">✎</span></button> kg</span>
       </div>
-      <div class="record-row-actions">${hideBtn}</div>
+      <div class="record-row-actions">${soldBtn}${hideBtn}</div>
     </div>`;
 }
 
@@ -5998,6 +6041,12 @@ function renderInventory(items) {
   body.innerHTML = html;
 
   function bindRowActions(scope) {
+    scope.querySelectorAll(".record-row-actions [data-soldout]").forEach(btn => {
+      btn.addEventListener("click", async () => {
+        try { await setBeanSoldOut(btn.dataset.soldout, btn.dataset.to === "1"); }
+        catch (err) { if (err.message !== "unauthorized") showBanner("변경 실패: " + err.message, "error"); }
+      });
+    });
     scope.querySelectorAll(".record-row-actions .hide, .record-row-actions .unhide").forEach(btn => {
       btn.addEventListener("click", async () => {
         try { await setBeanHidden(btn.dataset.bean, btn.classList.contains("hide")); }

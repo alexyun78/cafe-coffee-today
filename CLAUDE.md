@@ -589,6 +589,8 @@ ssh-keyscan 49.247.207.115 2>/dev/null | grep -v '^#'  # 호스트키 복사
 | | `/api/green-beans/suggestions` | GET |
 | | `/api/green-beans/<id>/for-coffee` | GET (오늘의커피 폼 자동완성용) |
 | | `/api/green-beans/<id>/stock` | PUT (최종 수량 직접 설정 → stock_adjustment_kg 보정) |
+| | `/api/green-beans/<id>/sold-out` | PUT (품절 토글 `{sold_out}`) |
+| | `/api/beans/sold-out` | GET (**공개** 품절 id 목록 — 원두 카드·인쇄용) |
 | 구매 | `/api/purchases[/<id>]` | GET/POST/PUT/DELETE |
 | | ↳ POST/PUT 은 `green_bean_id` 대신 생두 정보(name+process+supplier_name+origin_country+grade+cup_notes)를 보내면 `db.find_or_create_green_bean()`으로 생두를 찾거나 새로 만든 뒤 연결 | |
 | 로스팅 | `/api/roasting-logs[/<id>]` | GET/POST/PUT/DELETE |
@@ -631,6 +633,23 @@ write-through 되고, 그 생두의 모든 `roasting_logs.usage_type` 이 같은
   [scripts/bean_type_reconcile.sql](scripts/bean_type_reconcile.sql) (기록↔마스터 어긋남 복구, 멱등).
   ⚠️ 첫 배포 때는 로스팅 폼 값이 배치별로만 저장돼 마스터로 안 올라갔다 — 그때 생긴 어긋남을
   reconcile 로 정리했다. 비슷한 증상("한쪽만 블랜드로 보임")이 또 보이면 reconcile 을 다시 돌리면 된다.
+
+### 품절 표시 (2026-09-01 추가)
+
+`green_beans.sold_out` (0/1) 하나가 창구다. **`status`(활성/단종)와 별개** — status 는 소프트 삭제라
+생두 목록과 재고가 `WHERE gb.status='활성'` 로 거른다. 품절을 status 에 넣으면 목록에서 통째로 사라지므로
+별도 컬럼을 뒀다. 품절은 "목록에 남되 지금 안 파는 상태"다.
+
+- 토글 위치: 관리자 **재고** 탭 행의 `⛔ 품절로 / 🟢 판매중으로`, **생두 관리** 탭 카드의 `⛔ 품절 / 🟢 판매중`.
+  두 화면이 같은 API 를 부르고 `refreshAllBeanViews()` 로 함께 갱신된다.
+- 공개 반영: `/beans` 목록과 상세가 `GET /api/beans/sold-out`(공개, 읽기 전용)을 읽어
+  품절 배지를 달고 **목록 맨 뒤로 밀어낸다**. 카드와 D1 을 잇는 키는 `index.json` 의 `green_bean_id`.
+  **원두 카드를 새로 추가할 때 `green_bean_id` 를 빠뜨리면 품절이 영영 반영되지 않는다.**
+- 인쇄: `scripts/build_bean_print.py` 가 같은 API 를 읽어 품절을 **제외**하고 시트를 만든다.
+  API 를 못 읽으면 경고만 남기고 전부 인쇄한다(조용히 빠지지 않게).
+- 마이그레이션: [scripts/sold_out_migration.sql](scripts/sold_out_migration.sql) (컬럼 추가, 1회).
+- 오늘의 커피의 품절(`coffees.availability` = 운영/품절)과는 **다른 축**이다. 저건 그날 내리는 커피,
+  이건 생두 재고. 둘을 연동하지 않았다.
 
 ### 생두 이름 규칙
 
@@ -712,6 +731,8 @@ journalctl -u cafe-coffee-nearby.service -n 50 --no-pager
   관리자 UI 연동이 없다. 필요해지면 그때 연결.
 - 상세 페이지는 클라이언트 렌더라 `og:title`/`og:description` 이 원두별로 안 박힌다(공유 카드는 공통 문구).
   SEO·공유가 중요해지면 원두별 정적 HTML 생성으로 바꿀 것.
+- **품절**: D1 `green_beans.sold_out` 을 `green_bean_id` 로 연결해 배지 표시 + 목록 하단 정렬 + 인쇄 제외.
+  자세한 내용은 위 "품절 표시" 절.
 - **인쇄용 시트**: `python scripts/build_bean_print.py` → `static/beans/print.html` 생성.
   A4 세로 격자로 카드를 뽑는다(기본 3열 4행 = 12장/쪽, 카드 약 62 x 68mm). `--cols`/`--rows` 로 격자를 바꾸면
   카드 크기와 글자 크기, 표시 항목 수가 자동으로 맞춰진다. 출력물은 `index.json` 을 그대로 읽으므로
@@ -797,6 +818,7 @@ SCA Evolved Q Grader(CVA 기반) 대비 6개월 학습플랜 + 훈련 일지. **
 | [static/story/](static/story/) | 92스토리 수필 페이지 (`index.json` + `<id>.html`, `_template.html` 템플릿) |
 | [static/beans/](static/beans/) | 원두 카드 (`/beans`) — `index.json`(단일 소스) + `index.html`(그리드) + `detail.html`(상세) |
 | [scripts/build_bean_print.py](scripts/build_bean_print.py) | 원두 카드 A4 인쇄 시트 생성 (`static/beans/print.html`) |
+| [scripts/sold_out_migration.sql](scripts/sold_out_migration.sql) | green_beans.sold_out 컬럼 추가 (1회) |
 | [scripts/seed_green_beans.sql](scripts/seed_green_beans.sql) | 생두 초기 데이터 (init_schema에서 자동 실행) |
 | [scripts/migrate_spreadsheet.py](scripts/migrate_spreadsheet.py) | 구글 스프레드시트 → DB 마이그레이션 스크립트 |
 | [requirements.txt](requirements.txt) | 파이썬 의존성 |

@@ -385,13 +385,27 @@ beanRoutes.put('/api/green-beans/:id{[0-9]+}/stock', async (c) => {
   return c.json({ success: true, item: await getGreenBean(c.env.DB, gbId) })
 })
 
+/** 품절 토글. status(활성/단종)와 별개다 — 품절은 목록에서 사라지지 않고
+ *  재고 관리에 그대로 남되, 공개 원두 카드에서 뒤로 밀리고 인쇄에서 빠진다. */
+beanRoutes.put('/api/green-beans/:id{[0-9]+}/sold-out', async (c) => {
+  const gbId = parseInt(c.req.param('id'), 10)
+  const data = (await c.req.json().catch(() => ({}))) as Row
+  const soldOut = data.sold_out ? 1 : 0
+  const res = await c.env.DB
+    .prepare("UPDATE green_beans SET sold_out=?, updated_at=strftime('%Y-%m-%dT%H:%M:%SZ','now') WHERE id=?")
+    .bind(soldOut, gbId)
+    .run()
+  if (!res.meta.changes) return c.json({ success: false, error: 'not found' }, 404)
+  return c.json({ success: true, item: await getGreenBean(c.env.DB, gbId) })
+})
+
 beanRoutes.put('/api/green-beans/:id{[0-9]+}', async (c) => {
   const gbId = parseInt(c.req.param('id'), 10)
   let data = (await c.req.json().catch(() => ({}))) as Row
   if ('supplier_name' in data && !data.supplier_id)
     data = { ...data, supplier_id: await resolveSupplierId(c.env.DB, data) }
   const allowed = ['name', 'supplier_id', 'origin_country', 'origin_region', 'process', 'grade',
-    'cup_notes', 'description', 'status', 'hidden']
+    'cup_notes', 'description', 'status', 'hidden', 'sold_out']
   const sets: string[] = []
   const vals: any[] = []
   for (const k of allowed) if (k in data) { sets.push(`${k}=?`); vals.push(data[k]) }
@@ -765,6 +779,7 @@ beanRoutes.delete('/api/roasting-logs/:id{[0-9]+}', async (c) => {
 beanRoutes.get('/api/inventory', async (c) => {
   const sql = `
       SELECT gb.id, gb.name, gb.process, gb.grade, gb.bean_type, gb.is_decaf, gb.status, gb.hidden,
+          gb.sold_out,
           s.name AS supplier_name, s.short_name AS supplier_short,
           COALESCE(p_sum.purchased_kg, 0) AS purchased_kg,
           COALESCE(r_sum.used_kg, 0) AS used_kg,
@@ -862,4 +877,15 @@ beanRoutes.get('/api/pricing/cost-analysis/:id{[0-9]+}', async (c) => {
     espresso_20g_cost: Math.round(roastedCostPerG * 20),
     pricing: await listPricing(c.env.DB, gbId),
   })
+})
+
+// ---------- 공개 읽기 전용 ----------
+// 원두 카드(/beans)와 인쇄 스크립트가 품절 상태를 가져가는 창구.
+// 관리자 재고 탭에서 토글한 값이 그대로 공개 페이지에 반영된다.
+// 위 requirePin 가드 목록에 /api/beans 는 없으므로 인증 없이 열린다.
+beanRoutes.get('/api/beans/sold-out', async (c) => {
+  const { results } = await c.env.DB
+    .prepare("SELECT id FROM green_beans WHERE sold_out=1 AND status='활성' ORDER BY id")
+    .all<Row>()
+  return c.json({ success: true, sold_out: results.map((r) => r.id) })
 })

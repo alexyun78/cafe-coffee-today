@@ -3,6 +3,7 @@
   "items": [
     {
       "id": "ethiopia-yirgacheffe-konga-g1-natural",
+      "green_bean_id": 61,
       "name_ko": "에티오피아 예가체프 콩가 G1",
       "name_en": "Ethiopia Yirgacheffe Konga G1 Natural",
       "country": "에티오피아",
@@ -36,6 +37,7 @@
     },
     {
       "id": "ethiopia-abaya-geisha-g1-natural",
+      "green_bean_id": 57,
       "name_ko": "에티오피아 아바야 게이샤 G1",
       "name_en": "Ethiopia Abaya Geisha G1 Natural",
       "country": "에티오피아",
@@ -69,6 +71,7 @@
     },
     {
       "id": "ethiopia-yirgacheffe-aricha-g1-washed",
+      "green_bean_id": 37,
       "name_ko": "에티오피아 예가체프 아리차 G1 워시드",
       "name_en": "Ethiopia Yirgacheffe Aricha G1 Washed",
       "country": "에티오피아",
@@ -102,6 +105,7 @@
     },
     {
       "id": "ethiopia-yirgacheffe-kochere-g1-washed",
+      "green_bean_id": 36,
       "name_ko": "에티오피아 예가체프 코체레 G1 워시드",
       "name_en": "Ethiopia Yirgacheffe Kochere G1 Washed",
       "country": "에티오피아",
@@ -135,6 +139,7 @@
     },
     {
       "id": "ethiopia-yirgacheffe-g2-washed",
+      "green_bean_id": 39,
       "name_ko": "에티오피아 예가체프 G2 워시드",
       "name_en": "Ethiopia Yirgacheffe G2 Washed",
       "country": "에티오피아",
@@ -168,6 +173,7 @@
     },
     {
       "id": "ethiopia-yirgacheffe-gedeb-chorso",
+      "green_bean_id": 69,
       "name_ko": "에티오피아 예가체프 게뎁 초르소",
       "name_en": "Ethiopia Yirgacheffe Gedeb Chorso Washed",
       "country": "에티오피아",
@@ -200,6 +206,7 @@
     },
     {
       "id": "ethiopia-koke-honey-natural",
+      "green_bean_id": 13,
       "name_ko": "에티오피아 코케 허니 내추럴",
       "name_en": "Ethiopia Koke Honey Natural",
       "country": "에티오피아",
@@ -234,6 +241,7 @@
     },
     {
       "id": "ethiopia-guji-momora-g1-natural",
+      "green_bean_id": 58,
       "name_ko": "에티오피아 모모라 G1",
       "name_en": "Ethiopia Guji Momora G1 Natural",
       "country": "에티오피아",
@@ -266,6 +274,7 @@
     },
     {
       "id": "ethiopia-kaffa-vita-libre-selection",
+      "green_bean_id": 34,
       "name_ko": "에티오피아 카파 비타 리브레 셀렉션",
       "name_en": "Ethiopia Kaffa Vita Libre Selection Washed",
       "country": "에티오피아",
@@ -300,6 +309,7 @@
     },
     {
       "id": "ethiopia-sidamo-aida-g2-washed",
+      "green_bean_id": 38,
       "name_ko": "에티오피아 시다모 아이다 G2 워시드",
       "name_en": "Ethiopia Sidamo Aida G2 Washed",
       "country": "에티오피아",
@@ -332,6 +342,7 @@
     },
     {
       "id": "ethiopia-west-arsi-nensebo-g1-washed",
+      "green_bean_id": 73,
       "name_ko": "에티오피아 오로미아 웨스트 아르시 넨세보 G1 워시드",
       "name_en": "Ethiopia Oromia West Arsi Nensebo G1 Washed",
       "country": "에티오피아",
@@ -364,6 +375,7 @@
     },
     {
       "id": "ethiopia-west-arsi-nensebo-g1-natural",
+      "green_bean_id": 74,
       "name_ko": "에티오피아 오로미아 웨스트 아르시 넨세보 G1 내추럴",
       "name_en": "Ethiopia Oromia West Arsi Nensebo G1 Natural",
       "country": "에티오피아",
@@ -396,6 +408,7 @@
     },
     {
       "id": "ethiopia-sidama-bensa-hamasho-g1-washed",
+      "green_bean_id": 75,
       "name_ko": "에티오피아 시다마 벤사 하마쇼 G1 워시드",
       "name_en": "Ethiopia Sidama Bensa Hamasho G1 Washed",
       "country": "에티오피아",
@@ -428,6 +441,7 @@
     },
     {
       "id": "ethiopia-halo-beriti-decaf-natural",
+      "green_bean_id": 33,
       "name_ko": "디카페인 에티오피아 예가체프 할로 베리티 내추럴",
       "name_en": "Decaf Ethiopia Yirgacheffe Halo Beriti Natural",
       "country": "에티오피아",
@@ -461,6 +475,7 @@
     },
     {
       "id": "kenya-aa-top-ragati",
+      "green_bean_id": 60,
       "name_ko": "케냐 AA TOP 라가티",
       "name_en": "Kenya AA TOP Ragati Washed",
       "country": "케냐",
@@ -493,6 +508,7 @@
     },
     {
       "id": "kenya-aa-plus-othaya",
+      "green_bean_id": 44,
       "name_ko": "케냐 AA Plus 오타야",
       "name_en": "Kenya AA Plus Othaya Washed",
       "country": "케냐",
@@ -526,6 +542,7 @@
     },
     {
       "id": "kenya-ab-nyeri",
+      "green_bean_id": 16,
       "name_ko": "케냐 AB 니에리",
       "name_en": "Kenya AB Nyeri Washed",
       "country": "케냐",
@@ -560,6 +577,7 @@
     },
     {
       "id": "colombia-el-paraiso-castillo-lychee-peach",
+      "green_bean_id": 45,
       "name_ko": "콜롬비아 핀카 엘파라이소 카스티요 워시드 리치피치",
       "name_en": "Colombia Finca El Paraiso Castillo Washed Lychee Peach",
       "country": "콜롬비아",
@@ -619,6 +637,7 @@
     },
     {
       "id": "colombia-el-paraiso-double-anaerobic-rose-tea",
+      "green_bean_id": 78,
       "name_ko": "콜롬비아 엘 파라이소 더블 무산소 로즈티",
       "name_en": "Colombia El Paraíso Double Anaerobic Rose Tea",
       "country": "콜롬비아",
@@ -655,6 +674,7 @@
     },
     {
       "id": "colombia-el-diviso-aji-bourbon-natural",
+      "green_bean_id": 76,
       "name_ko": "콜롬비아 엘 디비소 아지 버번 내추럴",
       "name_en": "Colombia El Diviso Ají Bourbon Natural",
       "country": "콜롬비아",
@@ -688,6 +708,7 @@
     },
     {
       "id": "colombia-el-diviso-typica-mejorado-natural",
+      "green_bean_id": 77,
       "name_ko": "콜롬비아 엘 디비소 티피카 메호라도 내추럴",
       "name_en": "Colombia El Diviso Typica Mejorado Natural",
       "country": "콜롬비아",
@@ -722,6 +743,7 @@
     },
     {
       "id": "colombia-el-porvenir-strawberry",
+      "green_bean_id": 79,
       "name_ko": "콜롬비아 엘 포르베니르 스트로베리",
       "name_en": "Colombia El Porvenir Strawberry Co-Fermentation",
       "country": "콜롬비아",
@@ -755,6 +777,7 @@
     },
     {
       "id": "colombia-narino-el-tablon-late-harvest",
+      "green_bean_id": 64,
       "name_ko": "콜롬비아 나리뇨 엘 타블론 레이트 하비스트",
       "name_en": "Colombia Nariño El Tablón Late Harvest Washed",
       "country": "콜롬비아",
@@ -788,6 +811,7 @@
     },
     {
       "id": "colombia-sugarcane-ea-decaf",
+      "green_bean_id": 26,
       "name_ko": "디카페인 콜롬비아 사탕수수 EA",
       "name_en": "Decaf Colombia Sugarcane EA",
       "country": "콜롬비아",
@@ -818,6 +842,7 @@
     },
     {
       "id": "panama-janson-hacienda-geisha-217",
+      "green_bean_id": 71,
       "name_ko": "파나마 잰슨 하시엔다 게이샤 내추럴 #217",
       "name_en": "Panama Janson Hacienda Geisha Natural #217",
       "country": "파나마",
@@ -878,6 +903,7 @@
     },
     {
       "id": "peru-la-primavera-geisha",
+      "green_bean_id": 32,
       "name_ko": "페루 라 프리마베라 게이샤",
       "name_en": "Peru La Primavera Geisha",
       "country": "페루",
@@ -920,6 +946,7 @@
     },
     {
       "id": "guatemala-genuine-antigua",
+      "green_bean_id": 3,
       "name_ko": "과테말라 제뉴인 안티구아",
       "name_en": "Guatemala Genuine Antigua Washed",
       "country": "과테말라",
@@ -952,6 +979,7 @@
     },
     {
       "id": "guatemala-shb-mountain-water-decaf",
+      "green_bean_id": 63,
       "name_ko": "과테말라 SHB 마운틴워터 디카페인",
       "name_en": "Guatemala SHB Mountain Water Decaf",
       "country": "과테말라",
@@ -984,6 +1012,7 @@
     },
     {
       "id": "costa-rica-tarrazu-pastora-shb-ep",
+      "green_bean_id": 27,
       "name_ko": "코스타리카 따라주 파스토라 SHB EP",
       "name_en": "Costa Rica Tarrazú La Pastora SHB EP Washed",
       "country": "코스타리카",
@@ -1016,6 +1045,7 @@
     },
     {
       "id": "costa-rica-shb-fancy-tarrazu-la-pastora-primera",
+      "green_bean_id": 17,
       "name_ko": "코스타리카 SHB 팬시 따라주 라파스토라 프리메라",
       "name_en": "Costa Rica SHB Fancy Tarrazú La Pastora Primera Washed",
       "country": "코스타리카",
@@ -1048,6 +1078,7 @@
     },
     {
       "id": "costa-rica-via-sarchi-finca-jessy",
+      "green_bean_id": 56,
       "name_ko": "코스타리카 비아 사치 핀카 제시",
       "name_en": "Costa Rica Villa Sarchí Finca Jessy Natural",
       "country": "코스타리카",
@@ -1081,6 +1112,7 @@
     },
     {
       "id": "nicaragua-betania-maracaturra",
+      "green_bean_id": 41,
       "name_ko": "니카라과 베타니아 마라카투라",
       "name_en": "Nicaragua Betania Maracaturra Washed",
       "country": "니카라과",
@@ -1113,6 +1145,7 @@
     },
     {
       "id": "brazil-bsca-yellow-bourbon-sul-de-minas",
+      "green_bean_id": 29,
       "name_ko": "브라질 BSCA 옐로우버본 술데미나스",
       "name_en": "Brazil BSCA Yellow Bourbon Sul de Minas",
       "country": "브라질",
@@ -1146,6 +1179,7 @@
     },
     {
       "id": "hawaii-kona-extra-fancy",
+      "green_bean_id": 72,
       "name_ko": "하와이 코나 엑스트라 팬시",
       "name_en": "Hawaii Kona Extra Fancy",
       "country": "미국 하와이",
@@ -1205,6 +1239,7 @@
     },
     {
       "id": "indonesia-sumatra-mandheling-g1-dp",
+      "green_bean_id": 28,
       "name_ko": "인도네시아 수마트라 만델링 G1 DP",
       "name_en": "Indonesia Sumatra Mandheling G1 DP Wet Hulled",
       "country": "인도네시아",
@@ -1238,6 +1273,7 @@
     },
     {
       "id": "india-mysore-nuggets",
+      "green_bean_id": 65,
       "name_ko": "인도 마이소르 너겟",
       "name_en": "India Mysore Nuggets Extra Bold Washed",
       "country": "인도",
@@ -1270,6 +1306,7 @@
     },
     {
       "id": "yemen-mocha-mattari",
+      "green_bean_id": 54,
       "name_ko": "예멘 모카 마타리",
       "name_en": "Yemen Mocha Mattari Natural",
       "country": "예멘",
@@ -1304,6 +1341,7 @@
     },
     {
       "id": "yemen-jambia-mocha-mattari",
+      "green_bean_id": 46,
       "name_ko": "예멘 잠비야 모카 마타리",
       "name_en": "Yemen Jambia Mocha Mattari Natural",
       "country": "예멘",

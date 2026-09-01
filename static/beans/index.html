@@ -135,6 +135,33 @@
         }
         .bean-card:hover .card-more { color: var(--copper); }
 
+        /* 품절 — 카드는 남기되 눌러서 뒤로 보낸다 */
+        .sold-badge {
+            display: inline-block; vertical-align: middle;
+            margin-left: 7px; padding: 2px 7px; border-radius: 3px;
+            background: #f2e6e4; color: #9d4b3f;
+            font-family: var(--font-mono); font-size: 0.6rem;
+            letter-spacing: 0.12em; font-weight: 700;
+            white-space: nowrap;
+        }
+        .bean-card.is-sold-out { background: #faf7f3; border-color: var(--line-soft); }
+        .bean-card.is-sold-out h2,
+        .bean-card.is-sold-out .bean-en,
+        .bean-card.is-sold-out .spec,
+        .bean-card.is-sold-out .cupnotes { opacity: 0.5; }
+        .bean-card.is-sold-out:hover { border-color: var(--line); box-shadow: none; }
+
+        .grid-divider {
+            grid-column: 1 / -1;
+            margin: 26px 0 2px;
+            display: flex; align-items: center; gap: 14px;
+            font-family: var(--font-mono); font-size: 0.68rem;
+            letter-spacing: 0.16em; color: var(--ink-soft);
+        }
+        .grid-divider::after {
+            content: ''; flex: 1; height: 1px; background: var(--line);
+        }
+
         .empty, .error {
             grid-column: 1 / -1; text-align: center; padding: 70px 0;
             color: var(--ink-soft); font-size: 0.9rem;
@@ -205,9 +232,11 @@
 
     function cardHtml(b) {
         var notes = Array.isArray(b.cup_notes) ? b.cup_notes.join(', ') : (b.cup_notes || '');
+        var sold = b.sold_out ? '<span class="sold-badge">품절</span>' : '';
         return '' +
-            '<a class="bean-card" href="/beans/' + encodeURIComponent(b.id) + '">' +
-                '<h2>' + esc(b.name_ko) + '</h2>' +
+            '<a class="bean-card' + (b.sold_out ? ' is-sold-out' : '') + '"' +
+               ' href="/beans/' + encodeURIComponent(b.id) + '">' +
+                '<h2>' + esc(b.name_ko) + sold + '</h2>' +
                 (b.name_en ? '<div class="bean-en">' + esc(b.name_en) + '</div>' : '') +
                 '<dl class="spec">' +
                     specRow('농장명', b.farm) +
@@ -223,16 +252,46 @@
             '</a>';
     }
 
-    fetch('/static/beans/index.json', { cache: 'no-cache' })
-        .then(function (r) { if (!r.ok) throw new Error('http ' + r.status); return r.json(); })
-        .then(function (data) {
-            var items = (data && data.items) || [];
+    // 품절은 관리자 재고 탭에서 토글한 값을 그대로 가져온다.
+    // 실패해도 카드는 그대로 보여야 하므로 빈 목록으로 넘어간다.
+    function fetchSoldOut() {
+        return fetch('/api/beans/sold-out', { cache: 'no-cache' })
+            .then(function (r) { return r.ok ? r.json() : null; })
+            .then(function (d) { return (d && d.sold_out) || []; })
+            .catch(function () { return []; });
+    }
+
+    Promise.all([
+        fetch('/static/beans/index.json', { cache: 'no-cache' })
+            .then(function (r) { if (!r.ok) throw new Error('http ' + r.status); return r.json(); }),
+        fetchSoldOut(),
+    ])
+        .then(function (res) {
+            var items = (res[0] && res[0].items) || [];
+            var soldIds = res[1] || [];
             if (!items.length) {
                 grid.innerHTML = '<div class="empty">준비 중입니다.</div>';
                 return;
             }
-            grid.innerHTML = items.map(cardHtml).join('');
-            countEl.textContent = items.length + ' BEANS';
+
+            var soldSet = {};
+            for (var i = 0; i < soldIds.length; i++) soldSet[soldIds[i]] = true;
+
+            var onSale = [];
+            var soldOut = [];
+            items.forEach(function (b) {
+                b.sold_out = !!soldSet[b.green_bean_id];
+                (b.sold_out ? soldOut : onSale).push(b);   // 원래 순서 유지하며 품절만 뒤로
+            });
+
+            var html = onSale.map(cardHtml).join('');
+            if (soldOut.length) {
+                html += '<div class="grid-divider">품절 ' + soldOut.length + '종</div>';
+                html += soldOut.map(cardHtml).join('');
+            }
+            grid.innerHTML = html;
+            countEl.textContent = onSale.length + ' BEANS' +
+                (soldOut.length ? ' · ' + soldOut.length + ' SOLD OUT' : '');
         })
         .catch(function () {
             grid.innerHTML = '<div class="error">원두 정보를 불러오지 못했습니다. 잠시 후 다시 시도해 주세요.</div>';

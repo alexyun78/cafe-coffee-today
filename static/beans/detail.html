@@ -84,6 +84,17 @@
             margin-top: 18px; font-size: 1rem; color: var(--ink-mute);
             padding-left: 14px; border-left: 2px solid var(--caramel);
         }
+        /* 품절 — 지금은 안 나가는 원두. 카드는 그대로 두고 상태만 알린다 */
+        .sold-note {
+            margin-top: 18px; display: inline-flex; align-items: center; gap: 9px;
+            padding: 9px 15px; border-radius: 4px;
+            background: #f7ecea; border: 1px solid #e6d2ce; color: #9d4b3f;
+            font-size: 0.86rem;
+        }
+        .sold-note strong {
+            font-family: var(--font-mono); font-size: 0.66rem;
+            letter-spacing: 0.14em; font-weight: 700;
+        }
 
         .fact-card {
             margin-top: 34px; background: var(--canvas);
@@ -191,6 +202,8 @@
                 '<h1>' + esc(b.name_ko) + '</h1>' +
                 (b.name_en ? '<div class="name-en">' + esc(b.name_en) + '</div>' : '') +
                 (b.one_liner ? '<div class="one-liner">' + esc(b.one_liner) + '</div>' : '') +
+                (b.sold_out ? '<div class="sold-note"><strong>품절</strong>' +
+                    '지금은 준비되지 않은 원두입니다. 다음 입고를 기다려 주세요.</div>' : '') +
             '</div>' +
             '<div class="fact-card">' +
                 '<dl class="fact-grid">' +
@@ -220,15 +233,25 @@
     var id = currentId();
     if (!id) { notFound(); return; }
 
-    fetch('/static/beans/index.json', { cache: 'no-cache' })
-        .then(function (r) { if (!r.ok) throw new Error('http ' + r.status); return r.json(); })
-        .then(function (data) {
-            var items = (data && data.items) || [];
+    Promise.all([
+        fetch('/static/beans/index.json', { cache: 'no-cache' })
+            .then(function (r) { if (!r.ok) throw new Error('http ' + r.status); return r.json(); }),
+        fetch('/api/beans/sold-out', { cache: 'no-cache' })
+            .then(function (r) { return r.ok ? r.json() : null; })
+            .then(function (d) { return (d && d.sold_out) || []; })
+            .catch(function () { return []; }),
+    ])
+        .then(function (res) {
+            var items = (res[0] && res[0].items) || [];
+            var soldIds = res[1] || [];
             var bean = null;
             for (var i = 0; i < items.length; i++) {
                 if (items[i].id === id) { bean = items[i]; break; }
             }
-            if (bean) render(bean); else notFound();
+            if (bean) {
+                bean.sold_out = soldIds.indexOf(bean.green_bean_id) !== -1;
+                render(bean);
+            } else notFound();
         })
         .catch(function () {
             main.innerHTML = '<div class="state">원두 정보를 불러오지 못했습니다. <a href="/beans">원두 목록으로</a></div>';
