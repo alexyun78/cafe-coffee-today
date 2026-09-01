@@ -712,6 +712,10 @@ journalctl -u cafe-coffee-nearby.service -n 50 --no-pager
   관리자 UI 연동이 없다. 필요해지면 그때 연결.
 - 상세 페이지는 클라이언트 렌더라 `og:title`/`og:description` 이 원두별로 안 박힌다(공유 카드는 공통 문구).
   SEO·공유가 중요해지면 원두별 정적 HTML 생성으로 바꿀 것.
+- **인쇄용 시트**: `python scripts/build_bean_print.py` → `static/beans/print.html` 생성.
+  A4 세로 격자로 카드를 뽑는다(기본 3열 4행 = 12장/쪽, 카드 약 62 x 68mm). `--cols`/`--rows` 로 격자를 바꾸면
+  카드 크기와 글자 크기, 표시 항목 수가 자동으로 맞춰진다. 출력물은 `index.json` 을 그대로 읽으므로
+  원두를 추가한 뒤 다시 실행만 하면 된다. 인쇄는 브라우저에서 열고 용지 A4, 배율 100%, 여백 없음.
 
 ---
 
@@ -792,6 +796,7 @@ SCA Evolved Q Grader(CVA 기반) 대비 6개월 학습플랜 + 훈련 일지. **
 | [static/roastery.html](static/roastery.html) | 92도씨 로스터리 메인 공개 페이지 |
 | [static/story/](static/story/) | 92스토리 수필 페이지 (`index.json` + `<id>.html`, `_template.html` 템플릿) |
 | [static/beans/](static/beans/) | 원두 카드 (`/beans`) — `index.json`(단일 소스) + `index.html`(그리드) + `detail.html`(상세) |
+| [scripts/build_bean_print.py](scripts/build_bean_print.py) | 원두 카드 A4 인쇄 시트 생성 (`static/beans/print.html`) |
 | [scripts/seed_green_beans.sql](scripts/seed_green_beans.sql) | 생두 초기 데이터 (init_schema에서 자동 실행) |
 | [scripts/migrate_spreadsheet.py](scripts/migrate_spreadsheet.py) | 구글 스프레드시트 → DB 마이그레이션 스크립트 |
 | [requirements.txt](requirements.txt) | 파이썬 의존성 |
