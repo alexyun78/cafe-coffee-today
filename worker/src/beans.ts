@@ -880,12 +880,23 @@ beanRoutes.get('/api/pricing/cost-analysis/:id{[0-9]+}', async (c) => {
 })
 
 // ---------- 공개 읽기 전용 ----------
-// 원두 카드(/beans)와 인쇄 스크립트가 품절 상태를 가져가는 창구.
-// 관리자 재고 탭에서 토글한 값이 그대로 공개 페이지에 반영된다.
+// 원두 카드(/beans)와 인쇄 스크립트가 공개 노출 상태를 가져가는 창구.
+// 관리자에서 바꾼 값이 그대로 공개 페이지에 반영된다.
 // 위 requirePin 가드 목록에 /api/beans 는 없으므로 인증 없이 열린다.
-beanRoutes.get('/api/beans/sold-out', async (c) => {
+//
+//   sold_out — 품절. 카드는 남기되 배지를 달고 목록 맨 뒤로 밀린다.
+//   blend    — 블랜드. 산지 소개가 아니라 우리 배합이므로 카드에서 아예 뺀다.
+//              (오늘의 커피 등록 불가와 같은 이유. 창구는 green_beans.bean_type 하나)
+beanRoutes.get('/api/beans/status', async (c) => {
   const { results } = await c.env.DB
-    .prepare("SELECT id FROM green_beans WHERE sold_out=1 AND status='활성' ORDER BY id")
+    .prepare(
+      "SELECT id, sold_out, bean_type FROM green_beans WHERE status='활성' " +
+        "AND (sold_out=1 OR bean_type='블랜드') ORDER BY id",
+    )
     .all<Row>()
-  return c.json({ success: true, sold_out: results.map((r) => r.id) })
+  return c.json({
+    success: true,
+    sold_out: results.filter((r) => r.sold_out).map((r) => r.id),
+    blend: results.filter((r) => r.bean_type === '블랜드').map((r) => r.id),
+  })
 })

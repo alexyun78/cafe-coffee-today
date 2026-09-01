@@ -236,20 +236,22 @@
     Promise.all([
         fetch('/static/beans/index.json', { cache: 'no-cache' })
             .then(function (r) { if (!r.ok) throw new Error('http ' + r.status); return r.json(); }),
-        fetch('/api/beans/sold-out', { cache: 'no-cache' })
+        fetch('/api/beans/status', { cache: 'no-cache' })
             .then(function (r) { return r.ok ? r.json() : null; })
-            .then(function (d) { return (d && d.sold_out) || []; })
-            .catch(function () { return []; }),
+            .then(function (d) { return d || {}; })
+            .catch(function () { return {}; }),
     ])
         .then(function (res) {
             var items = (res[0] && res[0].items) || [];
-            var soldIds = res[1] || [];
+            var status = res[1] || {};
             var bean = null;
             for (var i = 0; i < items.length; i++) {
                 if (items[i].id === id) { bean = items[i]; break; }
             }
+            // 블랜드는 목록에서 빠지므로 주소를 직접 쳐도 열리지 않게 한다.
+            if (bean && (status.blend || []).indexOf(bean.green_bean_id) !== -1) bean = null;
             if (bean) {
-                bean.sold_out = soldIds.indexOf(bean.green_bean_id) !== -1;
+                bean.sold_out = (status.sold_out || []).indexOf(bean.green_bean_id) !== -1;
                 render(bean);
             } else notFound();
         })

@@ -5865,6 +5865,10 @@ async function loadInventory() {
 }
 
 const INV_PAGE_SIZE = 30;
+// 사용자가 직접 펼친 상태는 다시 그려도 유지한다.
+// (품절 토글·숨김 토글처럼 목록을 재렌더하는 동작에서 접히면 하던 작업을 놓친다)
+let _invExpanded = false;    // "더 보기"로 전체를 펼침
+let _invStaleOpen = false;   // "재고 없음 · 1년 이상 미구매" 를 펼침
 
 // ---------- 재고 필터 (공급처/나라/가공/재고 상태/원두 종류) ----------
 const _invFilters = { supplier: "", country: "", process: "", stock: "", type: "" };
@@ -6019,8 +6023,8 @@ function renderInventory(items) {
   }
   const active = pool.filter(it => !it.is_stale);
   const stale = pool.filter(it => it.is_stale);
-  const visibleCount = Math.min(active.length, INV_PAGE_SIZE);
-  const hasMore = active.length > INV_PAGE_SIZE;
+  const visibleCount = _invExpanded ? active.length : Math.min(active.length, INV_PAGE_SIZE);
+  const hasMore = !_invExpanded && active.length > INV_PAGE_SIZE;
 
   let html = filterActive
     ? `<div class="filter-result-count">필터 결과 ${pool.length}개</div>` : "";
@@ -6035,8 +6039,8 @@ function renderInventory(items) {
   if (stale.length) {
     html += `<div style="text-align:center;margin:18px 0 8px;">
       <button type="button" class="btn-text" id="btn-inv-stale" style="color:#999;font-size:0.82rem;">
-        ▼ 재고 없음 · 1년 이상 미구매 (${stale.length}건)</button></div>
-      <div id="inv-stale-wrap" style="display:none;"><div class="record-list">${stale.map(invRowHtml).join("")}</div></div>`;
+        ${_invStaleOpen ? "▲" : "▼"} 재고 없음 · 1년 이상 미구매 (${stale.length}건)</button></div>
+      <div id="inv-stale-wrap" style="display:${_invStaleOpen ? "" : "none"};"><div class="record-list">${stale.map(invRowHtml).join("")}</div></div>`;
   }
   body.innerHTML = html;
 
@@ -6064,6 +6068,7 @@ function renderInventory(items) {
 
   if (hasMore) {
     document.getElementById("btn-inv-more").addEventListener("click", function() {
+      _invExpanded = true;
       const list = body.querySelector(".record-list");
       let extra = "";
       for (let i = INV_PAGE_SIZE; i < active.length; i++) extra += invRowHtml(active[i]);
@@ -6076,6 +6081,7 @@ function renderInventory(items) {
     document.getElementById("btn-inv-stale").addEventListener("click", function() {
       const wrap = document.getElementById("inv-stale-wrap");
       const shown = wrap.style.display !== "none";
+      _invStaleOpen = !shown;
       wrap.style.display = shown ? "none" : "";
       this.textContent = (shown ? "▼" : "▲") + ` 재고 없음 · 1년 이상 미구매 (${stale.length}건)`;
     });

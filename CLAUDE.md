@@ -590,7 +590,7 @@ ssh-keyscan 49.247.207.115 2>/dev/null | grep -v '^#'  # 호스트키 복사
 | | `/api/green-beans/<id>/for-coffee` | GET (오늘의커피 폼 자동완성용) |
 | | `/api/green-beans/<id>/stock` | PUT (최종 수량 직접 설정 → stock_adjustment_kg 보정) |
 | | `/api/green-beans/<id>/sold-out` | PUT (품절 토글 `{sold_out}`) |
-| | `/api/beans/sold-out` | GET (**공개** 품절 id 목록 — 원두 카드·인쇄용) |
+| | `/api/beans/status` | GET (**공개** 품절·블랜드 id 목록 — 원두 카드·인쇄용) |
 | 구매 | `/api/purchases[/<id>]` | GET/POST/PUT/DELETE |
 | | ↳ POST/PUT 은 `green_bean_id` 대신 생두 정보(name+process+supplier_name+origin_country+grade+cup_notes)를 보내면 `db.find_or_create_green_bean()`으로 생두를 찾거나 새로 만든 뒤 연결 | |
 | 로스팅 | `/api/roasting-logs[/<id>]` | GET/POST/PUT/DELETE |
@@ -642,11 +642,19 @@ write-through 되고, 그 생두의 모든 `roasting_logs.usage_type` 이 같은
 
 - 토글 위치: 관리자 **재고** 탭 행의 `⛔ 품절로 / 🟢 판매중으로`, **생두 관리** 탭 카드의 `⛔ 품절 / 🟢 판매중`.
   두 화면이 같은 API 를 부르고 `refreshAllBeanViews()` 로 함께 갱신된다.
-- 공개 반영: `/beans` 목록과 상세가 `GET /api/beans/sold-out`(공개, 읽기 전용)을 읽어
+- 공개 반영: `/beans` 목록과 상세가 `GET /api/beans/status`(공개, 읽기 전용)을 읽어
   품절 배지를 달고 **목록 맨 뒤로 밀어낸다**. 카드와 D1 을 잇는 키는 `index.json` 의 `green_bean_id`.
   **원두 카드를 새로 추가할 때 `green_bean_id` 를 빠뜨리면 품절이 영영 반영되지 않는다.**
 - 인쇄: `scripts/build_bean_print.py` 가 같은 API 를 읽어 품절을 **제외**하고 시트를 만든다.
   API 를 못 읽으면 경고만 남기고 전부 인쇄한다(조용히 빠지지 않게).
+
+**블랜드는 원두 소개에서 아예 뺀다** (2026-09-01). `/beans` 는 산지와 농장 이야기를 다루는 자리라
+우리 배합인 블랜드는 성격이 다르다. 오늘의 커피 등록 불가와 같은 이유이고, 창구도 같은
+`green_beans.bean_type` 하나다. 같은 `/api/beans/status` 의 `blend` 목록으로 처리한다.
+
+- 목록에서 카드가 빠지고, 주소를 직접 쳐도 상세가 "찾는 원두가 없습니다" 로 떨어진다.
+- 인쇄에서도 빠진다. `--include-sold-out` 을 줘도 블랜드는 계속 제외된다.
+- index.json 을 손댈 필요가 없다. 관리자에서 어떤 생두를 블랜드로 바꾸면 그 카드가 자동으로 사라진다.
 - 마이그레이션: [scripts/sold_out_migration.sql](scripts/sold_out_migration.sql) (컬럼 추가, 1회).
 - 오늘의 커피의 품절(`coffees.availability` = 운영/품절)과는 **다른 축**이다. 저건 그날 내리는 커피,
   이건 생두 재고. 둘을 연동하지 않았다.
@@ -731,8 +739,8 @@ journalctl -u cafe-coffee-nearby.service -n 50 --no-pager
   관리자 UI 연동이 없다. 필요해지면 그때 연결.
 - 상세 페이지는 클라이언트 렌더라 `og:title`/`og:description` 이 원두별로 안 박힌다(공유 카드는 공통 문구).
   SEO·공유가 중요해지면 원두별 정적 HTML 생성으로 바꿀 것.
-- **품절**: D1 `green_beans.sold_out` 을 `green_bean_id` 로 연결해 배지 표시 + 목록 하단 정렬 + 인쇄 제외.
-  자세한 내용은 위 "품절 표시" 절.
+- **품절과 블랜드**: D1 을 `green_bean_id` 로 연결해 품절은 배지 표시 + 목록 하단 정렬 + 인쇄 제외,
+  블랜드는 목록에서 아예 제외. 자세한 내용은 위 "품절 표시" 절.
 - **인쇄용 시트**: `python scripts/build_bean_print.py` → `static/beans/print.html` 생성.
   A4 세로 격자로 카드를 뽑는다(기본 3열 4행 = 12장/쪽, 카드 약 62 x 68mm). `--cols`/`--rows` 로 격자를 바꾸면
   카드 크기와 글자 크기, 표시 항목 수가 자동으로 맞춰진다. 출력물은 `index.json` 을 그대로 읽으므로

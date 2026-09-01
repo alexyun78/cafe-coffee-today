@@ -252,30 +252,43 @@
             '</a>';
     }
 
-    // 품절은 관리자 재고 탭에서 토글한 값을 그대로 가져온다.
+    // 품절과 블랜드는 관리자에서 정한 값을 그대로 가져온다.
     // 실패해도 카드는 그대로 보여야 하므로 빈 목록으로 넘어간다.
-    function fetchSoldOut() {
-        return fetch('/api/beans/sold-out', { cache: 'no-cache' })
+    function fetchStatus() {
+        return fetch('/api/beans/status', { cache: 'no-cache' })
             .then(function (r) { return r.ok ? r.json() : null; })
-            .then(function (d) { return (d && d.sold_out) || []; })
-            .catch(function () { return []; });
+            .then(function (d) { return d || {}; })
+            .catch(function () { return {}; });
+    }
+
+    function idSet(list) {
+        var set = {};
+        for (var i = 0; i < (list || []).length; i++) set[list[i]] = true;
+        return set;
     }
 
     Promise.all([
         fetch('/static/beans/index.json', { cache: 'no-cache' })
             .then(function (r) { if (!r.ok) throw new Error('http ' + r.status); return r.json(); }),
-        fetchSoldOut(),
+        fetchStatus(),
     ])
         .then(function (res) {
             var items = (res[0] && res[0].items) || [];
-            var soldIds = res[1] || [];
+            var status = res[1] || {};
             if (!items.length) {
                 grid.innerHTML = '<div class="empty">준비 중입니다.</div>';
                 return;
             }
 
-            var soldSet = {};
-            for (var i = 0; i < soldIds.length; i++) soldSet[soldIds[i]] = true;
+            var soldSet = idSet(status.sold_out);
+            var blendSet = idSet(status.blend);
+
+            // 블랜드는 산지 소개가 아니라 우리 배합이라 목록에서 아예 뺀다.
+            items = items.filter(function (b) { return !blendSet[b.green_bean_id]; });
+            if (!items.length) {
+                grid.innerHTML = '<div class="empty">준비 중입니다.</div>';
+                return;
+            }
 
             var onSale = [];
             var soldOut = [];

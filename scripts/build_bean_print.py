@@ -8,8 +8,8 @@ static/beans/index.json 하나만 읽어서 자르기 좋은 격자 HTML 을 뽑
     python scripts/build_bean_print.py --cols 4 --rows 5
     python scripts/build_bean_print.py --out build/cards.html --no-cut-lines
 
-품절(관리자 재고 탭에서 토글)인 원두는 기본으로 빠진다. 상태는 공개 API
-/api/beans/sold-out 에서 가져오며, 못 가져오면 경고만 남기고 전부 인쇄한다.
+품절(관리자 재고 탭에서 토글)과 블랜드는 기본으로 빠진다. 상태는 공개 API
+/api/beans/status 에서 가져오며, 못 가져오면 경고만 남기고 전부 인쇄한다.
 
 카드 크기는 A4(210x297mm)에서 여백과 간격을 뺀 값으로 자동 계산된다.
 기본값 3x4 는 한 장이 약 62 x 68mm 로, 명함(90x50mm)보다 조금 크다.
@@ -39,18 +39,18 @@ SPEC_FIELDS = [
 ]
 
 
-def fetch_sold_out(base):
-    """공개 API 에서 품절 생두 id 목록을 가져온다.
+def fetch_status(base):
+    """공개 API 에서 인쇄에서 뺄 생두 id 를 가져온다.
 
-    실패하면 None 을 돌려준다 (호출부가 경고하고 전부 인쇄한다).
-    품절이 하나도 없으면 빈 집합이라 None 과 구분해야 한다.
+    (품절 id 집합, 블랜드 id 집합) 을 돌려주고, 실패하면 None.
+    빼야 할 게 하나도 없으면 빈 집합이라 None 과 구분해야 한다.
     """
-    url = base.rstrip('/') + '/api/beans/sold-out'
+    url = base.rstrip('/') + '/api/beans/status'
     try:
         req = urllib.request.Request(url, headers={'User-Agent': 'cafe-bean-print/1.0'})
         with urllib.request.urlopen(req, timeout=10) as resp:
             data = json.loads(resp.read().decode('utf-8'))
-        return set(data.get('sold_out') or [])
+        return set(data.get('sold_out') or []), set(data.get('blend') or [])
     except (urllib.error.URLError, ValueError, OSError):
         return None
 
@@ -331,7 +331,7 @@ def main():
     ap.add_argument('--no-en', action='store_true', help='영문명 숨김')
     ap.add_argument('--no-one-liner', action='store_true', help='한 줄 소개 숨김')
     ap.add_argument('--api', default=DEFAULT_API, help='품절 상태를 읽어올 서버 (기본 %s)' % DEFAULT_API)
-    ap.add_argument('--include-sold-out', action='store_true', help='품절 원두도 인쇄')
+    ap.add_argument('--include-sold-out', action='store_true', help='품절 원두도 인쇄 (블랜드는 그래도 제외)')
     ap.add_argument('--offline', action='store_true', help='서버 조회 없이 전부 인쇄')
     args = ap.parse_args()
 
@@ -343,17 +343,28 @@ def main():
     if not items:
         raise SystemExit('원두가 없습니다: %s' % args.input)
 
-    dropped = 0
-    if not args.include_sold_out and not args.offline:
-        sold = fetch_sold_out(args.api)
-        if sold is None:
-            print('경고: 품절 상태를 가져오지 못했습니다 (%s). 품절 포함해 전부 인쇄합니다.' % args.api)
+    dropped_sold = 0
+    dropped_blend = 0
+    if not args.offline:
+        status = fetch_status(args.api)
+        if status is None:
+            print('경고: 원두 상태를 가져오지 못했습니다 (%s). 품절과 블랜드까지 전부 인쇄합니다.' % args.api)
         else:
-            kept = [b for b in items if b.get('green_bean_id') not in sold]
-            dropped = len(items) - len(kept)
+            sold, blend = status
+            if args.include_sold_out:
+                sold = set()
+            kept = []
+            for b in items:
+                gid = b.get('green_bean_id')
+                if gid in blend:
+                    dropped_blend += 1
+                elif gid in sold:
+                    dropped_sold += 1
+                else:
+                    kept.append(b)
             items = kept
             if not items:
-                raise SystemExit('전부 품절이라 인쇄할 원두가 없습니다.')
+                raise SystemExit('인쇄할 원두가 없습니다 (전부 품절이거나 블랜드).')
 
     doc, card_w, card_h, pages = build(
         items, args.cols, args.rows, args.margin, args.gap,
@@ -366,9 +377,14 @@ def main():
     with open(args.out, 'w', encoding='utf-8') as f:
         f.write(doc)
 
+    excluded = []
+    if dropped_sold:
+        excluded.append('품절 %d종' % dropped_sold)
+    if dropped_blend:
+        excluded.append('블랜드 %d종' % dropped_blend)
     print('원두 %d종%s → %s'
           % (len(items),
-             ' (품절 %d종 제외)' % dropped if dropped else '',
+             ' (%s 제외)' % ', '.join(excluded) if excluded else '',
              os.path.relpath(args.out, ROOT).replace(os.sep, '/')))
     print('카드 %.1f x %.1fmm, %d열 %d행, %d장/쪽, 총 %d쪽'
           % (card_w, card_h, args.cols, args.rows, args.cols * args.rows, pages))
