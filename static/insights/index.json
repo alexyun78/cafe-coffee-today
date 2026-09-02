@@ -1,7 +1,24 @@
 {
   "version": 1,
-  "updated_at": "2026-09-01T15:32:08Z",
+  "updated_at": "2026-09-02T15:16:56Z",
   "items": [
+    {
+      "id": "2026-09-03-bean-bag-label",
+      "type": "trivia",
+      "date": "2026-09-03",
+      "title_ko": "원두 봉지에 빼곡한 글자들, 어디부터 봐야 할까? 🏷️",
+      "one_liner": "농장, 품종, 고도, 가공, 로스팅 날짜. 다섯 줄만 읽을 줄 알면 내 취향에 맞는 원두를 고를 수 있다!",
+      "categories_primary": [
+        "커피 상식"
+      ],
+      "categories_secondary": [
+        "용어"
+      ],
+      "hero_image": "/static/img/insights/trivia/terms.svg",
+      "journal": null,
+      "pub_date": null,
+      "source_basis": null
+    },
     {
       "id": "2026-09-02-brazil-number-one",
       "type": "trivia",

@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>원두 봉지에 빼곡한 글자들, 어디부터 봐야 할까? 🏷️ — 92°C ROASTERY</title>
+<meta name="description" content="농장, 품종, 고도, 가공, 로스팅 날짜. 다섯 줄만 읽을 줄 알면 내 취향에 맞는 원두를 고를 수 있다!">
+<link rel="icon" type="image/png" href="/static/img/logo-92black.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --canvas: #FFFFFF; --canvas-warm: #FAF7F2; --canvas-stone: #F2ECE3;
+  --ink: #1A1410; --ink-mute: #4A3F36; --ink-soft: #6B5E52;
+  --espresso: #6F4E37; --caramel: #C9986A; --copper: #B5703D;
+  --line: #E8E0D5; --line-soft: #F0E9DD;
+  --font-display: "Cormorant Garamond", "Pretendard", serif;
+  --font-body: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  --r-sm: 6px; --r-md: 12px; --r-pill: 999px;
+}
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color: transparent; }
+html { scroll-behavior: smooth; }
+body { font-family: var(--font-body); color: var(--ink); background: var(--canvas); font-feature-settings: "kern","ss01","lnum"; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+a { color: var(--copper); text-decoration: none; border-bottom: 1px solid transparent; transition: border-color .2s; }
+a:hover { border-bottom-color: var(--copper); }
+img { display: block; max-width: 100%; height: auto; }
+.container { max-width: 860px; margin: 0 auto; padding: 0 32px; }
+@media (max-width: 720px) { .container { padding: 0 20px; } }
+@media (max-width: 480px) { .container { padding: 0 16px; } }
+.site-nav { position: sticky; top: 0; z-index: 50; background: rgba(255,255,255,0.9); backdrop-filter: saturate(140%) blur(14px); -webkit-backdrop-filter: saturate(140%) blur(14px); border-bottom: 1px solid var(--line-soft); }
+.nav-inner { max-width: 1200px; margin: 0 auto; padding: 16px 32px; display: flex; align-items: center; justify-content: space-between; }
+.brand { font-family: var(--font-display); font-size: 1.3rem; font-weight: 700; color: var(--ink); display: inline-flex; align-items: center; gap: 4px; border-bottom: none; }
+.brand:hover { border-bottom: none; }
+.brand-mark { display: inline-flex; align-items: flex-start; font-family: "Pretendard", sans-serif; font-weight: 900; letter-spacing: -0.04em; line-height: 1; color: inherit; }
+.temp-mark { display: flex; flex-direction: column; line-height: .82; margin: 0 .05em 0 .04em; }
+.temp-mark .temp-deg { font-size: .42em; letter-spacing: -.04em; }
+.temp-mark .temp-c { font-size: .58em; letter-spacing: -.05em; margin-top: -.05em; }
+.nav-back { font-family: var(--font-mono); font-size: .75rem; letter-spacing: .18em; color: var(--ink-mute); border-bottom: none; }
+.nav-back:hover { color: var(--copper); border-bottom: none; }
+.article-hero { padding: 56px 0 48px; border-bottom: 1px solid var(--line-soft); }
+.eyebrow { font-family: var(--font-mono); font-size: .72rem; letter-spacing: .28em; color: var(--copper); margin-bottom: 18px; display: flex; align-items: center; gap: 12px; }
+.eyebrow::before { content: ""; display: inline-block; width: 28px; height: 1px; background: var(--copper); }
+.article-title { font-family: var(--font-display); font-weight: 500; font-size: clamp(2rem, 4.5vw, 3.2rem); line-height: 1.15; letter-spacing: -0.02em; color: var(--ink); margin-bottom: 20px; }
+.article-title em { font-style: italic; color: var(--espresso); font-weight: 600; }
+.article-one-liner { font-family: var(--font-display); font-style: italic; font-size: 1.3rem; line-height: 1.5; color: var(--espresso); margin-bottom: 28px; padding-left: 20px; border-left: 3px solid var(--caramel); }
+.article-meta { display: flex; gap: 24px; flex-wrap: wrap; font-family: var(--font-mono); font-size: .75rem; letter-spacing: .12em; color: var(--ink-soft); padding-top: 20px; border-top: 1px solid var(--line-soft); }
+.article-meta span { display: inline-flex; align-items: center; gap: 6px; }
+.article-meta span::before { content: "■"; color: var(--caramel); font-size: .55rem; }
+.hero-image { margin: 32px 0 0; border-radius: var(--r-md); overflow: hidden; border: 1px solid var(--line); }
+.hero-image img { width: 100%; }
+.article-body { padding: 56px 0 80px; }
+.article-footer { padding: 36px 0 56px; border-top: 1px solid var(--line-soft); text-align: center; font-family: var(--font-mono); font-size: .75rem; letter-spacing: .14em; color: var(--ink-soft); }
+.article-footer a { color: var(--ink-mute); border-bottom: 1px solid transparent; }
+.article-footer a:hover { color: var(--copper); border-bottom-color: var(--copper); }
+.source-basis { display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; background: rgba(201,152,106,.18); border: 1px solid rgba(181,112,61,.35); border-radius: var(--r-pill); font-family: var(--font-mono); font-size: .72rem; letter-spacing: .12em; color: var(--espresso); font-weight: 500; }
+.source-basis.abstract { background: rgba(107,94,82,.1); border-color: rgba(107,94,82,.3); color: var(--ink-soft); }
+.links-row { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 18px; }
+.link-pill { display: inline-flex; align-items: center; gap: 8px; padding: 9px 16px; background: var(--canvas-warm); border: 1px solid var(--line); border-radius: var(--r-pill); font-family: var(--font-mono); font-size: .78rem; letter-spacing: .08em; color: var(--ink-mute); border-bottom: 1px solid var(--line); transition: border-color .2s, color .2s; }
+.link-pill:hover { color: var(--copper); border-color: var(--copper); }
+
+/* ===== EZ: 쉬운 설명 스타일 ===== */
+.ez-hero { text-align: center; padding: 8px 0 32px; }
+.ez-hero-emoji { font-size: 3.4rem; line-height: 1; }
+.ez-hero-title { font-family: var(--font-display); font-size: clamp(1.6rem, 3.5vw, 2.2rem); font-weight: 600; color: var(--ink); margin-top: 14px; line-height: 1.3; }
+.ez-section { margin-bottom: 52px; }
+.ez-section h2 { font-family: var(--font-body); font-size: 1.5rem; font-weight: 700; color: var(--ink); margin-bottom: 18px; letter-spacing: -0.01em; }
+.ez-section h3 { font-size: 1.08rem; font-weight: 600; color: var(--espresso); margin: 22px 0 10px; }
+.ez-section p { font-size: 1.04rem; line-height: 1.85; color: var(--ink-mute); margin-bottom: 14px; }
+.ez-section p:last-child { margin-bottom: 0; }
+.ez-section ul { padding-left: 22px; margin-bottom: 14px; }
+.ez-section li { font-size: 1.02rem; line-height: 1.8; color: var(--ink-mute); margin-bottom: 8px; }
+.ez-callout { margin: 14px 0; padding: 14px 18px; background: var(--canvas-warm); border-left: 3px solid var(--caramel); border-radius: 4px; font-size: 0.98rem; color: var(--espresso); line-height: 1.75; }
+.ez-callout strong { color: var(--copper); }
+.ez-findings { list-style: none; padding: 0; }
+.ez-findings > li { padding: 18px 22px; margin-bottom: 14px; background: var(--canvas-warm); border: 1px solid var(--line); border-radius: 10px; font-size: 1.02rem; line-height: 1.7; color: var(--ink-mute); }
+.ez-findings > li strong { color: var(--ink); display: block; margin-bottom: 4px; font-size: 1.06rem; }
+.ez-findings > li.gold { background: linear-gradient(135deg, #FFF8E7, #FFEFCD); border-color: #F0D67A; }
+.ez-findings > li.silver { background: linear-gradient(135deg, #F6F6F6, #ECECEC); border-color: #C7C7C7; }
+.ez-findings > li.bronze { background: linear-gradient(135deg, #FFEEDD, #FFDCC0); border-color: #E4B07F; }
+.ez-findings > li.medal { background: linear-gradient(135deg, #F0E6FF, #E1D2FF); border-color: #BDA8E5; }
+.ez-table { width: 100%; border-collapse: collapse; margin: 16px 0 8px; font-size: 0.96rem; }
+.ez-table th, .ez-table td { padding: 11px 14px; border: 1px solid var(--line); text-align: left; vertical-align: top; }
+.ez-table thead th { background: var(--ink); color: #fff; font-weight: 600; letter-spacing: .02em; }
+.ez-table tbody th { background: var(--canvas-warm); color: var(--ink); font-weight: 600; }
+.ez-table tbody tr:nth-child(even) td { background: rgba(250, 247, 242, .55); }
+.ez-summary { padding: 26px 30px; background: linear-gradient(135deg, #FAF0E0, #F3E1C5); border-radius: 14px; font-size: 1.13rem; line-height: 1.75; font-weight: 500; color: var(--ink); border: 1px solid #E5C99B; }
+.ez-summary strong { color: var(--espresso); }
+.ez-citation { margin-top: 24px; padding: 18px 22px; background: var(--canvas-warm); border-radius: 8px; font-family: var(--font-mono); font-size: 0.82rem; color: var(--ink-soft); line-height: 1.7; }
+.ez-citation p { margin: 4px 0; }
+.ez-chart-card { padding: 22px 24px 18px; background: var(--canvas); border: 1px solid var(--line); border-radius: 12px; margin: 16px 0; }
+.ez-chart-card .ez-chart-title { font-size: 1rem; font-weight: 600; color: var(--ink); margin-bottom: 14px; }
+.ez-bar-row { display: flex; align-items: center; margin: 10px 0; font-size: 0.95rem; gap: 14px; }
+.ez-bar-label { width: 180px; flex-shrink: 0; color: var(--ink-mute); font-weight: 500; }
+.ez-bar-track { flex: 1; height: 32px; background: var(--canvas-warm); border-radius: 6px; overflow: hidden; position: relative; border: 1px solid var(--line); }
+.ez-bar-fill { height: 100%; background: linear-gradient(90deg, var(--caramel), var(--copper)); display: flex; align-items: center; justify-content: flex-end; padding: 0 12px; color: white; font-weight: 700; font-size: 0.92rem; min-width: 56px; }
+.ez-bar-fill.alt { background: linear-gradient(90deg, #6F4E37, #4A3F36); }
+.ez-glossary { display: grid; gap: 12px; }
+.ez-glossary-item { padding: 16px 20px; background: var(--canvas-warm); border: 1px solid var(--line); border-radius: 10px; border-left: 3px solid var(--caramel); }
+.ez-glossary-term { font-family: var(--font-display); font-style: italic; font-size: 1.1rem; font-weight: 600; color: var(--espresso); margin-bottom: 6px; }
+.ez-glossary-def { font-size: 0.98rem; color: var(--ink-mute); line-height: 1.7; }
+@media (max-width: 720px) {
+  .article-hero { padding: 36px 0 32px; }
+  .article-body { padding: 36px 0 56px; }
+  .ez-section { margin-bottom: 40px; }
+  .ez-section h2 { font-size: 1.3rem; }
+  .ez-bar-label { width: 100%; margin-bottom: 4px; }
+  .ez-bar-row { flex-direction: column; align-items: stretch; }
+  .article-meta { gap: 12px 18px; font-size: .68rem; }
+}
+</style>
+</head>
+<body>
+
+<header class="site-nav">
+  <div class="nav-inner">
+    <a class="brand" href="/">
+      <span class="brand-mark">92<span class="temp-mark"><span class="temp-deg">°</span><span class="temp-c">C</span></span></span>ROASTERY
+    </a>
+    <a class="nav-back" href="/insight">← INSIGHTS</a>
+  </div>
+</header>
+
+<article>
+  <section class="article-hero">
+    <div class="container">
+      <div class="eyebrow">— 오늘의 커피 상식 · 2026.09.03</div>
+      <h1 class="article-title">원두 봉지에 빼곡한 글자들, 어디부터 봐야 할까? 🏷️</h1>
+      <p class="article-one-liner">농장, 품종, 고도, 가공, 로스팅 날짜. 다섯 줄만 읽을 줄 알면 내 취향에 맞는 원두를 고를 수 있다!</p>
+      <div class="article-meta">
+        
+        
+        
+        <span>커피 상식 · 용어</span>
+      </div>
+      
+      <div class="hero-image">
+        <img src="/static/img/insights/trivia/terms.svg" alt="원두 봉지에 빼곡한 글자들, 어디부터 봐야 할까? 🏷️">
+      </div>
+      
+    </div>
+  </section>
+
+  <section class="article-body">
+    <div class="container">
+
+      
+      <div class="ez-hero">
+        <div class="ez-hero-emoji">🏷️</div>
+        <div class="ez-hero-title">원두 봉지에 빼곡한 글자들, 어디부터 봐야 할까?</div>
+      </div>
+
+      
+      <div class="ez-section">
+        <h2>🤔 무슨 연구야?</h2>
+        
+          <p>원두를 사려고 봉지를 집어 들면 글자가 참 많아. 나라 이름, 알 수 없는 농장 이름, 숫자, 영어 단어들. 뭘 기준으로 골라야 할지 막막해지지.</p><p>그런데 사실 봉지에 적힌 정보는 순서가 있어. 우리가 옷을 살 때 사이즈부터 보고 그다음에 소재를 보는 것처럼, 원두도 보는 순서를 정해두면 훨씬 쉬워져. 👀</p><p>오늘은 봉지에서 꼭 챙겨봐야 할 항목을 중요한 순서대로 정리해 볼게. 이 다섯 줄만 읽어도 원두 고르기가 완전히 달라져.</p>
+        
+      </div>
+
+      
+      
+      <div class="ez-section">
+        <h2>🧪 핵심 개념 쉽게 풀어보면</h2>
+        
+          <h3>1️⃣ 가장 먼저 볼 것은 로스팅 날짜</h3>
+          <p>품질을 좌우하는 정보 중 가장 실용적인 게 이거야. 원두는 볶은 순간부터 향이 서서히 빠져나가거든. 보통 볶은 지 며칠 지나 가스가 어느 정도 빠졌을 때부터 맛이 열리고, 몇 주가 지나면 향이 눈에 띄게 줄어. 그래서 유통기한보다 로스팅 날짜를 봐야 해. 유통기한은 상하지 않는 기한이지 맛있는 기한이 아니거든. 날짜가 아예 없는 봉지라면 조금 조심해도 좋아.</p>
+          <div class="ez-callout">💡 비유: 빵을 살 때 유통기한보다 언제 구웠는지가 중요하잖아. 원두도 정확히 그래. 🥖</div>
+        
+          <h3>2️⃣ 가공 방식이 맛의 방향을 알려준다</h3>
+          <p>워시드라고 적혀 있으면 깔끔하고 산미가 또렷한 쪽, 내추럴이면 과일 향과 단맛이 진한 쪽, 허니면 그 중간쯤이라고 생각하면 대체로 맞아. 요즘은 무산소 발효처럼 특별한 방식도 자주 보이는데, 이런 건 개성이 강해서 호불호가 갈려. 그러니까 봉지에서 가공 방식 한 단어만 읽어도 그 커피가 어느 방향인지 감이 잡혀. 초보에게 가장 실용적인 힌트야.</p>
+          <div class="ez-callout">💡 비유: 같은 돼지고기라도 삶았는지 구웠는지 훈제했는지에 따라 완전히 다른 음식이 되잖아. 커피의 가공도 같은 역할이야. 🔥</div>
+        
+          <h3>3️⃣ 고도와 품종은 조금 더 깊이 들어갈 때</h3>
+          <p>1800미터처럼 적힌 숫자는 재배 고도야. 높을수록 밤낮 기온 차가 커서 열매가 천천히 익고, 그만큼 단단하고 향이 촘촘한 생두가 되는 경향이 있어. 품종은 게이샤, 부르봉, 카투아이 같은 이름으로 적히는데, 커피나무의 품종을 말해. 사과에 부사와 홍옥이 있는 것과 같아. 처음에는 몰라도 괜찮지만, 마음에 든 커피의 품종을 기억해 두면 다음 선택이 훨씬 정확해져.</p>
+          <div class="ez-callout">💡 비유: 와인 라벨의 포도 품종과 똑같은 역할이야. 카베르네를 좋아한다는 걸 알면 고르기 쉬워지잖아. 🍷</div>
+        
+      </div>
+      
+
+      
+      
+      <div class="ez-section">
+        <h2>🎯 핵심 발견</h2>
+        <ul class="ez-findings">
+          
+          
+            
+              <li class="gold">
+                <strong>🥇 컵노트는 약속이 아니라 안내판이다</strong>&#39;블루베리, 다크초콜릿&#39;이라고 적혀 있다고 그 맛이 딱 나야 하는 건 아니야. 로스터가 그 커피를 커핑했을 때 느낀 인상을 적어둔 거고, 내리는 방법과 물, 마시는 사람에 따라 다르게 느껴질 수 있거든. 그래도 방향을 알려주는 안내판으로는 아주 유용해. 과일 이름이 많으면 산뜻한 쪽, 견과와 초콜릿이 많으면 고소하고 묵직한 쪽이라고 읽으면 대체로 맞아. 🫐
+              </li>
+            
+              <li class="silver">
+                <strong>🥈 로스팅 정도 표시는 기준이 제각각이다</strong>봉지에 적힌 라이트, 미디엄, 다크는 편리하지만 절대적인 기준이 아니야. 어떤 로스터리의 미디엄이 다른 곳의 라이트보다 진할 수 있거든. 그래서 이 표시는 같은 로스터리 안에서 비교할 때 가장 쓸모 있어. 처음 가는 곳이라면 표시보다 컵노트와 가공 방식을 보는 편이 안전해. 원두 색을 직접 볼 수 있다면 그것도 좋은 참고가 되고. 🎚️
+              </li>
+            
+              <li class="bronze">
+                <strong>🥉 봉지의 작은 단추는 장식이 아니다</strong>원두 봉지 옆면에 동그란 단추 같은 게 붙어 있는 걸 본 적 있지? 그건 안에서 밖으로만 열리는 밸브야. 갓 볶은 원두는 이산화탄소를 계속 내뿜는데, 밀봉만 하면 봉지가 빵빵하게 부풀다 터질 수 있거든. 그렇다고 구멍을 뚫으면 산소가 들어가 산패가 빨라지고. 그래서 가스는 내보내고 공기는 막는 이 작은 장치가 붙어 있어. 코를 대고 눌러보면 향이 훅 나와. 🔘
+              </li>
+            
+              <li class="medal">
+                <strong>🏅 수확 연도가 적혀 있으면 좋은 신호다</strong>생두에도 제철이 있어. 수확한 지 오래된 생두는 아무리 잘 볶아도 향이 무뎌지고 색이 바래거든. 그래서 봉지에 수확 연도나 입고 시기를 적어두는 로스터리는 그만큼 신선한 생두를 쓰고 있다는 신호로 읽을 수 있어. 반대로 아무 날짜도 없는 봉지는 언제 딴 커피인지 알 길이 없지. 정보를 많이 적는다는 건 자신이 있다는 뜻이기도 해. 📅
+              </li>
+            
+          
+        </ul>
+      </div>
+      
+
+      
+      
+      <div class="ez-section">
+        <h2>📊 숫자로 보기</h2>
+        
+          
+          
+          <div class="ez-chart-card">
+            <div class="ez-chart-title">로스팅 후 시간에 따른 향의 만족도 (개념 곡선)</div>
+            
+              
+              <div class="ez-bar-row">
+                <div class="ez-bar-label">1일</div>
+                <div class="ez-bar-track"><div class="ez-bar-fill" style="width: 55.6%;">5.0점</div></div>
+              </div>
+            
+              
+              <div class="ez-bar-row">
+                <div class="ez-bar-label">5일</div>
+                <div class="ez-bar-track"><div class="ez-bar-fill" style="width: 100.0%;">9.0점</div></div>
+              </div>
+            
+              
+              <div class="ez-bar-row">
+                <div class="ez-bar-label">14일</div>
+                <div class="ez-bar-track"><div class="ez-bar-fill" style="width: 88.9%;">8.0점</div></div>
+              </div>
+            
+              
+              <div class="ez-bar-row">
+                <div class="ez-bar-label">30일</div>
+                <div class="ez-bar-track"><div class="ez-bar-fill" style="width: 55.6%;">5.0점</div></div>
+              </div>
+            
+              
+              <div class="ez-bar-row">
+                <div class="ez-bar-label">60일</div>
+                <div class="ez-bar-track"><div class="ez-bar-fill" style="width: 33.3%;">3.0점</div></div>
+              </div>
+            
+          </div>
+        
+      </div>
+      
+
+      
+      
+      
+      <div class="ez-section">
+        <h2>🆚 봉지에서 확인할 항목과 읽는 법</h2>
+        <table class="ez-table">
+          <thead><tr><th>항목</th><th>무엇을 알려주나</th><th>우선순위</th></tr></thead>
+          <tbody>
+            <tr>
+              <th>로스팅 날짜</th><td>지금 마시기 좋은 상태인지</td><td>가장 먼저</td>
+            </tr><tr>
+              <th>가공 방식</th><td>깔끔한 쪽인지 과일 쪽인지</td><td>두 번째</td>
+            </tr><tr>
+              <th>컵노트</th><td>맛의 방향에 대한 안내</td><td>세 번째</td>
+            </tr><tr>
+              <th>고도와 품종</th><td>밀도와 향의 성격</td><td>익숙해진 뒤</td>
+            </tr><tr>
+              <th>농장과 지역</th><td>누가 어떻게 길렀는지</td><td>취향이 생긴 뒤</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      
+      
+
+      
+      
+
+      
+      
+
+      
+      
+      <div class="ez-section">
+        <div class="ez-summary">💡 <strong>한 줄 요약</strong> — 원두 봉지는 로스팅 날짜, 가공 방식, 컵노트 순으로 읽으면 된다. 고도와 품종은 취향이 생긴 뒤에 봐도 늦지 않고, 봉지 옆 작은 단추는 가스만 내보내는 밸브다!</div>
+      </div>
+      
+
+      
+      
+      
+      
+
+      
+      
+      <div class="ez-section">
+        <h2>📖 어려운 말 풀이 사전</h2>
+        <p>이 글에 나온 어려운 약어와 용어를 한 번에 정리했어. 의미만 알면 본문이 훨씬 쉬워져!</p>
+        <div class="ez-glossary">
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">로스팅 날짜</div>
+            <div class="ez-glossary-def">원두를 볶은 날. 유통기한보다 훨씬 중요한 신선도 지표</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">아로마 밸브</div>
+            <div class="ez-glossary-def">가스는 내보내고 공기는 막는 봉지의 일방향 밸브</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">재배 고도</div>
+            <div class="ez-glossary-def">커피나무가 자란 해발 높이. 높을수록 천천히 익어 밀도가 높아지는 경향</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">품종</div>
+            <div class="ez-glossary-def">게이샤, 부르봉처럼 커피나무의 종류를 가리키는 이름</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">수확 연도</div>
+            <div class="ez-glossary-def">생두를 딴 해. 오래되면 향이 무뎌져 신선도의 기준이 됨</div>
+          </div>
+          
+        </div>
+      </div>
+      
+
+    </div>
+  </section>
+
+  <footer class="article-footer">
+    <div class="container">
+      <a href="/insight">← BACK TO INSIGHTS</a>
+      <span style="margin: 0 16px;">·</span>
+      <a href="/">HOME</a>
+    </div>
+  </footer>
+</article>
+
+</body>
+</html>
