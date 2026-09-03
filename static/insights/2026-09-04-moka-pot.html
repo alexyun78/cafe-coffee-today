@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>가스레인지 위 팔각형 주전자, 모카포트는 에스프레소 머신이 아니야 ⛽ — 92°C ROASTERY</title>
+<meta name="description" content="압력은 머신의 10분의 1 남짓. 그래서 태우지 않고 내리는 요령이 따로 있다!">
+<link rel="icon" type="image/png" href="/static/img/logo-92black.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --canvas: #FFFFFF; --canvas-warm: #FAF7F2; --canvas-stone: #F2ECE3;
+  --ink: #1A1410; --ink-mute: #4A3F36; --ink-soft: #6B5E52;
+  --espresso: #6F4E37; --caramel: #C9986A; --copper: #B5703D;
+  --line: #E8E0D5; --line-soft: #F0E9DD;
+  --font-display: "Cormorant Garamond", "Pretendard", serif;
+  --font-body: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  --r-sm: 6px; --r-md: 12px; --r-pill: 999px;
+}
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color: transparent; }
+html { scroll-behavior: smooth; }
+body { font-family: var(--font-body); color: var(--ink); background: var(--canvas); font-feature-settings: "kern","ss01","lnum"; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+a { color: var(--copper); text-decoration: none; border-bottom: 1px solid transparent; transition: border-color .2s; }
+a:hover { border-bottom-color: var(--copper); }
+img { display: block; max-width: 100%; height: auto; }
+.container { max-width: 860px; margin: 0 auto; padding: 0 32px; }
+@media (max-width: 720px) { .container { padding: 0 20px; } }
+@media (max-width: 480px) { .container { padding: 0 16px; } }
+.site-nav { position: sticky; top: 0; z-index: 50; background: rgba(255,255,255,0.9); backdrop-filter: saturate(140%) blur(14px); -webkit-backdrop-filter: saturate(140%) blur(14px); border-bottom: 1px solid var(--line-soft); }
+.nav-inner { max-width: 1200px; margin: 0 auto; padding: 16px 32px; display: flex; align-items: center; justify-content: space-between; }
+.brand { font-family: var(--font-display); font-size: 1.3rem; font-weight: 700; color: var(--ink); display: inline-flex; align-items: center; gap: 4px; border-bottom: none; }
+.brand:hover { border-bottom: none; }
+.brand-mark { display: inline-flex; align-items: flex-start; font-family: "Pretendard", sans-serif; font-weight: 900; letter-spacing: -0.04em; line-height: 1; color: inherit; }
+.temp-mark { display: flex; flex-direction: column; line-height: .82; margin: 0 .05em 0 .04em; }
+.temp-mark .temp-deg { font-size: .42em; letter-spacing: -.04em; }
+.temp-mark .temp-c { font-size: .58em; letter-spacing: -.05em; margin-top: -.05em; }
+.nav-back { font-family: var(--font-mono); font-size: .75rem; letter-spacing: .18em; color: var(--ink-mute); border-bottom: none; }
+.nav-back:hover { color: var(--copper); border-bottom: none; }
+.article-hero { padding: 56px 0 48px; border-bottom: 1px solid var(--line-soft); }
+.eyebrow { font-family: var(--font-mono); font-size: .72rem; letter-spacing: .28em; color: var(--copper); margin-bottom: 18px; display: flex; align-items: center; gap: 12px; }
+.eyebrow::before { content: ""; display: inline-block; width: 28px; height: 1px; background: var(--copper); }
+.article-title { font-family: var(--font-display); font-weight: 500; font-size: clamp(2rem, 4.5vw, 3.2rem); line-height: 1.15; letter-spacing: -0.02em; color: var(--ink); margin-bottom: 20px; }
+.article-title em { font-style: italic; color: var(--espresso); font-weight: 600; }
+.article-one-liner { font-family: var(--font-display); font-style: italic; font-size: 1.3rem; line-height: 1.5; color: var(--espresso); margin-bottom: 28px; padding-left: 20px; border-left: 3px solid var(--caramel); }
+.article-meta { display: flex; gap: 24px; flex-wrap: wrap; font-family: var(--font-mono); font-size: .75rem; letter-spacing: .12em; color: var(--ink-soft); padding-top: 20px; border-top: 1px solid var(--line-soft); }
+.article-meta span { display: inline-flex; align-items: center; gap: 6px; }
+.article-meta span::before { content: "■"; color: var(--caramel); font-size: .55rem; }
+.hero-image { margin: 32px 0 0; border-radius: var(--r-md); overflow: hidden; border: 1px solid var(--line); }
+.hero-image img { width: 100%; }
+.article-body { padding: 56px 0 80px; }
+.article-footer { padding: 36px 0 56px; border-top: 1px solid var(--line-soft); text-align: center; font-family: var(--font-mono); font-size: .75rem; letter-spacing: .14em; color: var(--ink-soft); }
+.article-footer a { color: var(--ink-mute); border-bottom: 1px solid transparent; }
+.article-footer a:hover { color: var(--copper); border-bottom-color: var(--copper); }
+.source-basis { display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; background: rgba(201,152,106,.18); border: 1px solid rgba(181,112,61,.35); border-radius: var(--r-pill); font-family: var(--font-mono); font-size: .72rem; letter-spacing: .12em; color: var(--espresso); font-weight: 500; }
+.source-basis.abstract { background: rgba(107,94,82,.1); border-color: rgba(107,94,82,.3); color: var(--ink-soft); }
+.links-row { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 18px; }
+.link-pill { display: inline-flex; align-items: center; gap: 8px; padding: 9px 16px; background: var(--canvas-warm); border: 1px solid var(--line); border-radius: var(--r-pill); font-family: var(--font-mono); font-size: .78rem; letter-spacing: .08em; color: var(--ink-mute); border-bottom: 1px solid var(--line); transition: border-color .2s, color .2s; }
+.link-pill:hover { color: var(--copper); border-color: var(--copper); }
+
+/* ===== EZ: 쉬운 설명 스타일 ===== */
+.ez-hero { text-align: center; padding: 8px 0 32px; }
+.ez-hero-emoji { font-size: 3.4rem; line-height: 1; }
+.ez-hero-title { font-family: var(--font-display); font-size: clamp(1.6rem, 3.5vw, 2.2rem); font-weight: 600; color: var(--ink); margin-top: 14px; line-height: 1.3; }
+.ez-section { margin-bottom: 52px; }
+.ez-section h2 { font-family: var(--font-body); font-size: 1.5rem; font-weight: 700; color: var(--ink); margin-bottom: 18px; letter-spacing: -0.01em; }
+.ez-section h3 { font-size: 1.08rem; font-weight: 600; color: var(--espresso); margin: 22px 0 10px; }
+.ez-section p { font-size: 1.04rem; line-height: 1.85; color: var(--ink-mute); margin-bottom: 14px; }
+.ez-section p:last-child { margin-bottom: 0; }
+.ez-section ul { padding-left: 22px; margin-bottom: 14px; }
+.ez-section li { font-size: 1.02rem; line-height: 1.8; color: var(--ink-mute); margin-bottom: 8px; }
+.ez-callout { margin: 14px 0; padding: 14px 18px; background: var(--canvas-warm); border-left: 3px solid var(--caramel); border-radius: 4px; font-size: 0.98rem; color: var(--espresso); line-height: 1.75; }
+.ez-callout strong { color: var(--copper); }
+.ez-findings { list-style: none; padding: 0; }
+.ez-findings > li { padding: 18px 22px; margin-bottom: 14px; background: var(--canvas-warm); border: 1px solid var(--line); border-radius: 10px; font-size: 1.02rem; line-height: 1.7; color: var(--ink-mute); }
+.ez-findings > li strong { color: var(--ink); display: block; margin-bottom: 4px; font-size: 1.06rem; }
+.ez-findings > li.gold { background: linear-gradient(135deg, #FFF8E7, #FFEFCD); border-color: #F0D67A; }
+.ez-findings > li.silver { background: linear-gradient(135deg, #F6F6F6, #ECECEC); border-color: #C7C7C7; }
+.ez-findings > li.bronze { background: linear-gradient(135deg, #FFEEDD, #FFDCC0); border-color: #E4B07F; }
+.ez-findings > li.medal { background: linear-gradient(135deg, #F0E6FF, #E1D2FF); border-color: #BDA8E5; }
+.ez-table { width: 100%; border-collapse: collapse; margin: 16px 0 8px; font-size: 0.96rem; }
+.ez-table th, .ez-table td { padding: 11px 14px; border: 1px solid var(--line); text-align: left; vertical-align: top; }
+.ez-table thead th { background: var(--ink); color: #fff; font-weight: 600; letter-spacing: .02em; }
+.ez-table tbody th { background: var(--canvas-warm); color: var(--ink); font-weight: 600; }
+.ez-table tbody tr:nth-child(even) td { background: rgba(250, 247, 242, .55); }
+.ez-summary { padding: 26px 30px; background: linear-gradient(135deg, #FAF0E0, #F3E1C5); border-radius: 14px; font-size: 1.13rem; line-height: 1.75; font-weight: 500; color: var(--ink); border: 1px solid #E5C99B; }
+.ez-summary strong { color: var(--espresso); }
+.ez-citation { margin-top: 24px; padding: 18px 22px; background: var(--canvas-warm); border-radius: 8px; font-family: var(--font-mono); font-size: 0.82rem; color: var(--ink-soft); line-height: 1.7; }
+.ez-citation p { margin: 4px 0; }
+.ez-chart-card { padding: 22px 24px 18px; background: var(--canvas); border: 1px solid var(--line); border-radius: 12px; margin: 16px 0; }
+.ez-chart-card .ez-chart-title { font-size: 1rem; font-weight: 600; color: var(--ink); margin-bottom: 14px; }
+.ez-bar-row { display: flex; align-items: center; margin: 10px 0; font-size: 0.95rem; gap: 14px; }
+.ez-bar-label { width: 180px; flex-shrink: 0; color: var(--ink-mute); font-weight: 500; }
+.ez-bar-track { flex: 1; height: 32px; background: var(--canvas-warm); border-radius: 6px; overflow: hidden; position: relative; border: 1px solid var(--line); }
+.ez-bar-fill { height: 100%; background: linear-gradient(90deg, var(--caramel), var(--copper)); display: flex; align-items: center; justify-content: flex-end; padding: 0 12px; color: white; font-weight: 700; font-size: 0.92rem; min-width: 56px; }
+.ez-bar-fill.alt { background: linear-gradient(90deg, #6F4E37, #4A3F36); }
+.ez-glossary { display: grid; gap: 12px; }
+.ez-glossary-item { padding: 16px 20px; background: var(--canvas-warm); border: 1px solid var(--line); border-radius: 10px; border-left: 3px solid var(--caramel); }
+.ez-glossary-term { font-family: var(--font-display); font-style: italic; font-size: 1.1rem; font-weight: 600; color: var(--espresso); margin-bottom: 6px; }
+.ez-glossary-def { font-size: 0.98rem; color: var(--ink-mute); line-height: 1.7; }
+@media (max-width: 720px) {
+  .article-hero { padding: 36px 0 32px; }
+  .article-body { padding: 36px 0 56px; }
+  .ez-section { margin-bottom: 40px; }
+  .ez-section h2 { font-size: 1.3rem; }
+  .ez-bar-label { width: 100%; margin-bottom: 4px; }
+  .ez-bar-row { flex-direction: column; align-items: stretch; }
+  .article-meta { gap: 12px 18px; font-size: .68rem; }
+}
+</style>
+</head>
+<body>
+
+<header class="site-nav">
+  <div class="nav-inner">
+    <a class="brand" href="/">
+      <span class="brand-mark">92<span class="temp-mark"><span class="temp-deg">°</span><span class="temp-c">C</span></span></span>ROASTERY
+    </a>
+    <a class="nav-back" href="/insight">← INSIGHTS</a>
+  </div>
+</header>
+
+<article>
+  <section class="article-hero">
+    <div class="container">
+      <div class="eyebrow">— 오늘의 커피 상식 · 2026.09.04</div>
+      <h1 class="article-title">가스레인지 위 팔각형 주전자, 모카포트는 에스프레소 머신이 아니야 ⛽</h1>
+      <p class="article-one-liner">압력은 머신의 10분의 1 남짓. 그래서 태우지 않고 내리는 요령이 따로 있다!</p>
+      <div class="article-meta">
+        
+        
+        
+        <span>커피 상식 · 한 잔의 기술</span>
+      </div>
+      
+      <div class="hero-image">
+        <img src="/static/img/insights/trivia/bestcup.svg" alt="가스레인지 위 팔각형 주전자, 모카포트는 에스프레소 머신이 아니야 ⛽">
+      </div>
+      
+    </div>
+  </section>
+
+  <section class="article-body">
+    <div class="container">
+
+      
+      <div class="ez-hero">
+        <div class="ez-hero-emoji">⛽</div>
+        <div class="ez-hero-title">가스레인지 위 팔각형 주전자, 모카포트는 에스프레소 머신이 아니야</div>
+      </div>
+
+      
+      <div class="ez-section">
+        <h2>🤔 무슨 연구야?</h2>
+        
+          <p>은색 팔각형에 검은 손잡이가 달린 그 주전자, 한 번쯤 봤을 거야. 이탈리아 가정에서 오래 써온 모카포트야. 불에 올려두면 부글부글 소리를 내며 진한 커피가 올라오지.</p><p>많은 사람이 이걸 &#39;집에서 에스프레소 내리는 도구&#39;라고 생각해. 그런데 엄밀히 말하면 아니야. 에스프레소 머신은 상당히 높은 압력으로 물을 밀어내는데, 모카포트는 그에 한참 못 미치는 압력으로 물을 밀어 올리거든. ☕</p><p>그래서 모카포트 커피는 에스프레소보다 연하고, 대신 잘못 다루면 쉽게 탄맛이 나. 오늘은 왜 그런지, 그리고 어떻게 하면 훨씬 맛있어지는지 알아볼게.</p>
+        
+      </div>
+
+      
+      
+      <div class="ez-section">
+        <h2>🧪 핵심 개념 쉽게 풀어보면</h2>
+        
+          <h3>1️⃣ 원리는 아주 단순한 물리 실험</h3>
+          <p>모카포트는 아래칸, 가운데 바스켓, 위칸의 세 부분으로 나뉘어. 아래칸에 물을 넣고 불에 올리면 물이 끓으면서 수증기가 생겨. 이 수증기가 아래칸 안의 공기를 밀어내면서 압력이 올라가고, 그 힘이 뜨거운 물을 위로 밀어 올려. 밀려 올라간 물은 가운데 바스켓의 커피 가루를 통과해서 위칸에 모이지. 전기도 펌프도 없이 열만으로 압력을 만드는 셈이야.</p>
+          <div class="ez-callout">💡 비유: 주전자 뚜껑이 김에 밀려 달그락거리는 것과 같은 힘이야. 그 힘의 방향을 위로 잡아준 게 모카포트지. 🔥</div>
+        
+          <h3>2️⃣ 압력이 낮아서 에스프레소가 아니다</h3>
+          <p>에스프레소 머신은 아주 높은 압력으로 짧은 시간에 물을 밀어 넣어서 진하고 걸쭉한 액체를 뽑아내. 모카포트가 만드는 압력은 그보다 훨씬 낮아서, 결과물은 에스프레소보다 묽고 크레마도 거의 없어. 그렇다고 못한 게 아니라 다른 음료인 거야. 진한 드립 커피와 에스프레소 사이 어딘가에 있는 독자적인 스타일이라고 보면 딱 맞아.</p>
+          <div class="ez-callout">💡 비유: 자전거와 오토바이 둘 다 바퀴 두 개로 굴러가지만 완전히 다른 탈것이잖아. 같은 잣대로 비교할 필요가 없어. 🚲</div>
+        
+          <h3>3️⃣ 탄맛의 원인은 대부분 온도야</h3>
+          <p>모카포트 커피가 쓰고 탄 맛이 나는 가장 큰 이유는 물이 너무 오래 가열되면서 온도가 계속 올라가기 때문이야. 아래칸에서 물이 끓어 넘칠 때까지 두면 지나치게 뜨거운 물과 수증기가 커피 가루를 통과하면서 쓴 성분을 뽑아내지. 그래서 요령은 열을 일찍 끊는 거야. 커피가 다 올라오기 직전에 불을 끄고, 아래칸을 찬물에 살짝 담가 압력을 멈추면 훨씬 깔끔해져.</p>
+          <div class="ez-callout">💡 비유: 고기를 굽다가 겉이 타기 직전에 불을 줄이는 것과 같아. 타이밍 하나가 맛을 갈라. ⏰</div>
+        
+      </div>
+      
+
+      
+      
+      <div class="ez-section">
+        <h2>🎯 핵심 발견</h2>
+        <ul class="ez-findings">
+          
+          
+            
+              <li class="gold">
+                <strong>🥇 물을 미리 데워서 넣으면 확 달라진다</strong>가장 효과가 큰 요령이야. 찬물을 넣고 불에 올리면 아래칸이 뜨거워지는 동안 위쪽 바스켓의 커피 가루도 함께 오래 달궈져. 커피가 물을 만나기 전부터 익어버리는 셈이지. 그래서 끓기 직전의 뜨거운 물을 아래칸에 부어 시작하면, 가열 시간이 짧아져서 탄맛이 크게 줄어. 손잡이가 뜨거워지니 행주를 꼭 쓰고. 🧤
+              </li>
+            
+              <li class="silver">
+                <strong>🥈 가루는 꾹 누르지 말고 평평하게만</strong>에스프레소처럼 힘껏 눌러 담는 사람이 많은데, 모카포트에서는 오히려 역효과야. 압력이 낮아서 물이 빽빽한 가루층을 통과하지 못하고, 무리하게 밀어붙이다 안전밸브가 작동하기도 해. 바스켓에 가루를 수북이 담고 손가락이나 숟가락 등으로 표면만 평평하게 고르면 충분해. 분쇄도는 드립보다 조금 곱고 에스프레소보다는 굵은 정도가 무난해.
+              </li>
+            
+              <li class="bronze">
+                <strong>🥉 고무 패킹과 안전밸브는 소모품이다</strong>아래칸과 위칸 사이에는 고무 패킹이 들어 있어. 이게 굳거나 갈라지면 압력이 새서 커피가 제대로 올라오지 않아. 보통 오래 쓰면 교체해야 하는 소모품이고, 부품만 따로 팔아. 또 아래칸 옆에 붙은 작은 밸브는 압력이 위험할 만큼 높아졌을 때 김을 빼주는 안전장치야. 여기가 막히면 위험하니까 세척할 때 늘 확인해야 해. 🔧
+              </li>
+            
+              <li class="medal">
+                <strong>🏅 세제로 박박 닦지 않는 게 전통이다</strong>이탈리아 가정에서는 모카포트를 세제로 씻지 않고 뜨거운 물로만 헹구는 경우가 많아. 금속 표면에 밴 커피 기름이 맛을 부드럽게 해준다고 여기거든. 다만 이건 자주 쓰는 경우 이야기고, 오래 방치하면 기름이 산패해서 오히려 불쾌한 냄새가 나. 자주 쓴다면 물로 헹구고 잘 말리기, 가끔 쓴다면 깨끗이 씻어 보관하기가 현실적인 절충이야. 🧽
+              </li>
+            
+          
+        </ul>
+      </div>
+      
+
+      
+      
+      <div class="ez-section">
+        <h2>📊 숫자로 보기</h2>
+        
+          
+          
+          <div class="ez-chart-card">
+            <div class="ez-chart-title">모카포트를 맛있게 내리는 순서</div>
+            
+              
+              <div class="ez-bar-row">
+                <div class="ez-bar-label">뜨거운 물 붓기</div>
+                <div class="ez-bar-track"><div class="ez-bar-fill" style="width: 20.0%;">1.0단계</div></div>
+              </div>
+            
+              
+              <div class="ez-bar-row">
+                <div class="ez-bar-label">가루 평평하게</div>
+                <div class="ez-bar-track"><div class="ez-bar-fill" style="width: 40.0%;">2.0단계</div></div>
+              </div>
+            
+              
+              <div class="ez-bar-row">
+                <div class="ez-bar-label">중약불 가열</div>
+                <div class="ez-bar-track"><div class="ez-bar-fill" style="width: 60.0%;">3.0단계</div></div>
+              </div>
+            
+              
+              <div class="ez-bar-row">
+                <div class="ez-bar-label">올라오면 불 끄기</div>
+                <div class="ez-bar-track"><div class="ez-bar-fill" style="width: 80.0%;">4.0단계</div></div>
+              </div>
+            
+              
+              <div class="ez-bar-row">
+                <div class="ez-bar-label">아래칸 식히기</div>
+                <div class="ez-bar-track"><div class="ez-bar-fill" style="width: 100.0%;">5.0단계</div></div>
+              </div>
+            
+          </div>
+        
+      </div>
+      
+
+      
+      
+      
+      <div class="ez-section">
+        <h2>🆚 모카포트 vs 에스프레소 머신</h2>
+        <table class="ez-table">
+          <thead><tr><th>항목</th><th>모카포트</th><th>에스프레소 머신</th></tr></thead>
+          <tbody>
+            <tr>
+              <th>압력을 만드는 힘</th><td>끓는 물의 수증기</td><td>펌프</td>
+            </tr><tr>
+              <th>압력 크기</th><td>낮음</td><td>훨씬 높음</td>
+            </tr><tr>
+              <th>크레마</th><td>거의 없거나 옅음</td><td>두껍게 생김</td>
+            </tr><tr>
+              <th>결과물</th><td>진한 커피</td><td>에스프레소</td>
+            </tr><tr>
+              <th>실패 원인</th><td>과열로 인한 탄맛</td><td>분쇄와 도징 편차</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      
+      
+
+      
+      
+
+      
+      
+
+      
+      
+      <div class="ez-section">
+        <div class="ez-summary">💡 <strong>한 줄 요약</strong> — 모카포트는 수증기의 힘으로 물을 밀어 올리는 도구라 에스프레소 머신과는 다른 음료를 만든다. 뜨거운 물로 시작하고, 가루를 누르지 말고, 다 올라오기 전에 불을 끄면 탄맛이 사라진다!</div>
+      </div>
+      
+
+      
+      
+      
+      
+
+      
+      
+      <div class="ez-section">
+        <h2>📖 어려운 말 풀이 사전</h2>
+        <p>이 글에 나온 어려운 약어와 용어를 한 번에 정리했어. 의미만 알면 본문이 훨씬 쉬워져!</p>
+        <div class="ez-glossary">
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">모카포트</div>
+            <div class="ez-glossary-def">불에 올려 수증기 압력으로 커피를 뽑는 이탈리아식 추출 도구</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">바스켓</div>
+            <div class="ez-glossary-def">모카포트 가운데에 있는 커피 가루를 담는 깔때기 모양 부품</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">안전밸브</div>
+            <div class="ez-glossary-def">압력이 지나치게 높아지면 김을 빼주는 아래칸의 작은 장치</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">패킹</div>
+            <div class="ez-glossary-def">아래칸과 위칸 사이를 밀폐하는 고무 링. 오래 쓰면 교체가 필요한 소모품</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">크레마</div>
+            <div class="ez-glossary-def">에스프레소 위에 뜨는 황금빛 거품층. 모카포트에서는 거의 생기지 않음</div>
+          </div>
+          
+        </div>
+      </div>
+      
+
+    </div>
+  </section>
+
+  <footer class="article-footer">
+    <div class="container">
+      <a href="/insight">← BACK TO INSIGHTS</a>
+      <span style="margin: 0 16px;">·</span>
+      <a href="/">HOME</a>
+    </div>
+  </footer>
+</article>
+
+</body>
+</html>

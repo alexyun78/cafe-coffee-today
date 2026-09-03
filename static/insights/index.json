@@ -1,7 +1,24 @@
 {
   "version": 1,
-  "updated_at": "2026-09-02T15:16:56Z",
+  "updated_at": "2026-09-03T15:09:51Z",
   "items": [
+    {
+      "id": "2026-09-04-moka-pot",
+      "type": "trivia",
+      "date": "2026-09-04",
+      "title_ko": "가스레인지 위 팔각형 주전자, 모카포트는 에스프레소 머신이 아니야 ⛽",
+      "one_liner": "압력은 머신의 10분의 1 남짓. 그래서 태우지 않고 내리는 요령이 따로 있다!",
+      "categories_primary": [
+        "커피 상식"
+      ],
+      "categories_secondary": [
+        "한 잔의 기술"
+      ],
+      "hero_image": "/static/img/insights/trivia/bestcup.svg",
+      "journal": null,
+      "pub_date": null,
+      "source_basis": null
+    },
     {
       "id": "2026-09-03-bean-bag-label",
       "type": "trivia",
