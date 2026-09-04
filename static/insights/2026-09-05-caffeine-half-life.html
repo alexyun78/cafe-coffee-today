@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>오후 3시에 마신 커피가 밤잠을 방해하는 진짜 이유 🌙 — 92°C ROASTERY</title>
+<meta name="description" content="카페인은 몸에서 절반이 사라지는 데만 다섯 시간쯤 걸린다. 자정에도 여전히 남아 있다는 뜻!">
+<link rel="icon" type="image/png" href="/static/img/logo-92black.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --canvas: #FFFFFF; --canvas-warm: #FAF7F2; --canvas-stone: #F2ECE3;
+  --ink: #1A1410; --ink-mute: #4A3F36; --ink-soft: #6B5E52;
+  --espresso: #6F4E37; --caramel: #C9986A; --copper: #B5703D;
+  --line: #E8E0D5; --line-soft: #F0E9DD;
+  --font-display: "Cormorant Garamond", "Pretendard", serif;
+  --font-body: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  --r-sm: 6px; --r-md: 12px; --r-pill: 999px;
+}
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color: transparent; }
+html { scroll-behavior: smooth; }
+body { font-family: var(--font-body); color: var(--ink); background: var(--canvas); font-feature-settings: "kern","ss01","lnum"; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+a { color: var(--copper); text-decoration: none; border-bottom: 1px solid transparent; transition: border-color .2s; }
+a:hover { border-bottom-color: var(--copper); }
+img { display: block; max-width: 100%; height: auto; }
+.container { max-width: 860px; margin: 0 auto; padding: 0 32px; }
+@media (max-width: 720px) { .container { padding: 0 20px; } }
+@media (max-width: 480px) { .container { padding: 0 16px; } }
+.site-nav { position: sticky; top: 0; z-index: 50; background: rgba(255,255,255,0.9); backdrop-filter: saturate(140%) blur(14px); -webkit-backdrop-filter: saturate(140%) blur(14px); border-bottom: 1px solid var(--line-soft); }
+.nav-inner { max-width: 1200px; margin: 0 auto; padding: 16px 32px; display: flex; align-items: center; justify-content: space-between; }
+.brand { font-family: var(--font-display); font-size: 1.3rem; font-weight: 700; color: var(--ink); display: inline-flex; align-items: center; gap: 4px; border-bottom: none; }
+.brand:hover { border-bottom: none; }
+.brand-mark { display: inline-flex; align-items: flex-start; font-family: "Pretendard", sans-serif; font-weight: 900; letter-spacing: -0.04em; line-height: 1; color: inherit; }
+.temp-mark { display: flex; flex-direction: column; line-height: .82; margin: 0 .05em 0 .04em; }
+.temp-mark .temp-deg { font-size: .42em; letter-spacing: -.04em; }
+.temp-mark .temp-c { font-size: .58em; letter-spacing: -.05em; margin-top: -.05em; }
+.nav-back { font-family: var(--font-mono); font-size: .75rem; letter-spacing: .18em; color: var(--ink-mute); border-bottom: none; }
+.nav-back:hover { color: var(--copper); border-bottom: none; }
+.article-hero { padding: 56px 0 48px; border-bottom: 1px solid var(--line-soft); }
+.eyebrow { font-family: var(--font-mono); font-size: .72rem; letter-spacing: .28em; color: var(--copper); margin-bottom: 18px; display: flex; align-items: center; gap: 12px; }
+.eyebrow::before { content: ""; display: inline-block; width: 28px; height: 1px; background: var(--copper); }
+.article-title { font-family: var(--font-display); font-weight: 500; font-size: clamp(2rem, 4.5vw, 3.2rem); line-height: 1.15; letter-spacing: -0.02em; color: var(--ink); margin-bottom: 20px; }
+.article-title em { font-style: italic; color: var(--espresso); font-weight: 600; }
+.article-one-liner { font-family: var(--font-display); font-style: italic; font-size: 1.3rem; line-height: 1.5; color: var(--espresso); margin-bottom: 28px; padding-left: 20px; border-left: 3px solid var(--caramel); }
+.article-meta { display: flex; gap: 24px; flex-wrap: wrap; font-family: var(--font-mono); font-size: .75rem; letter-spacing: .12em; color: var(--ink-soft); padding-top: 20px; border-top: 1px solid var(--line-soft); }
+.article-meta span { display: inline-flex; align-items: center; gap: 6px; }
+.article-meta span::before { content: "■"; color: var(--caramel); font-size: .55rem; }
+.hero-image { margin: 32px 0 0; border-radius: var(--r-md); overflow: hidden; border: 1px solid var(--line); }
+.hero-image img { width: 100%; }
+.article-body { padding: 56px 0 80px; }
+.article-footer { padding: 36px 0 56px; border-top: 1px solid var(--line-soft); text-align: center; font-family: var(--font-mono); font-size: .75rem; letter-spacing: .14em; color: var(--ink-soft); }
+.article-footer a { color: var(--ink-mute); border-bottom: 1px solid transparent; }
+.article-footer a:hover { color: var(--copper); border-bottom-color: var(--copper); }
+.source-basis { display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; background: rgba(201,152,106,.18); border: 1px solid rgba(181,112,61,.35); border-radius: var(--r-pill); font-family: var(--font-mono); font-size: .72rem; letter-spacing: .12em; color: var(--espresso); font-weight: 500; }
+.source-basis.abstract { background: rgba(107,94,82,.1); border-color: rgba(107,94,82,.3); color: var(--ink-soft); }
+.links-row { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 18px; }
+.link-pill { display: inline-flex; align-items: center; gap: 8px; padding: 9px 16px; background: var(--canvas-warm); border: 1px solid var(--line); border-radius: var(--r-pill); font-family: var(--font-mono); font-size: .78rem; letter-spacing: .08em; color: var(--ink-mute); border-bottom: 1px solid var(--line); transition: border-color .2s, color .2s; }
+.link-pill:hover { color: var(--copper); border-color: var(--copper); }
+
+/* ===== EZ: 쉬운 설명 스타일 ===== */
+.ez-hero { text-align: center; padding: 8px 0 32px; }
+.ez-hero-emoji { font-size: 3.4rem; line-height: 1; }
+.ez-hero-title { font-family: var(--font-display); font-size: clamp(1.6rem, 3.5vw, 2.2rem); font-weight: 600; color: var(--ink); margin-top: 14px; line-height: 1.3; }
+.ez-section { margin-bottom: 52px; }
+.ez-section h2 { font-family: var(--font-body); font-size: 1.5rem; font-weight: 700; color: var(--ink); margin-bottom: 18px; letter-spacing: -0.01em; }
+.ez-section h3 { font-size: 1.08rem; font-weight: 600; color: var(--espresso); margin: 22px 0 10px; }
+.ez-section p { font-size: 1.04rem; line-height: 1.85; color: var(--ink-mute); margin-bottom: 14px; }
+.ez-section p:last-child { margin-bottom: 0; }
+.ez-section ul { padding-left: 22px; margin-bottom: 14px; }
+.ez-section li { font-size: 1.02rem; line-height: 1.8; color: var(--ink-mute); margin-bottom: 8px; }
+.ez-callout { margin: 14px 0; padding: 14px 18px; background: var(--canvas-warm); border-left: 3px solid var(--caramel); border-radius: 4px; font-size: 0.98rem; color: var(--espresso); line-height: 1.75; }
+.ez-callout strong { color: var(--copper); }
+.ez-findings { list-style: none; padding: 0; }
+.ez-findings > li { padding: 18px 22px; margin-bottom: 14px; background: var(--canvas-warm); border: 1px solid var(--line); border-radius: 10px; font-size: 1.02rem; line-height: 1.7; color: var(--ink-mute); }
+.ez-findings > li strong { color: var(--ink); display: block; margin-bottom: 4px; font-size: 1.06rem; }
+.ez-findings > li.gold { background: linear-gradient(135deg, #FFF8E7, #FFEFCD); border-color: #F0D67A; }
+.ez-findings > li.silver { background: linear-gradient(135deg, #F6F6F6, #ECECEC); border-color: #C7C7C7; }
+.ez-findings > li.bronze { background: linear-gradient(135deg, #FFEEDD, #FFDCC0); border-color: #E4B07F; }
+.ez-findings > li.medal { background: linear-gradient(135deg, #F0E6FF, #E1D2FF); border-color: #BDA8E5; }
+.ez-table { width: 100%; border-collapse: collapse; margin: 16px 0 8px; font-size: 0.96rem; }
+.ez-table th, .ez-table td { padding: 11px 14px; border: 1px solid var(--line); text-align: left; vertical-align: top; }
+.ez-table thead th { background: var(--ink); color: #fff; font-weight: 600; letter-spacing: .02em; }
+.ez-table tbody th { background: var(--canvas-warm); color: var(--ink); font-weight: 600; }
+.ez-table tbody tr:nth-child(even) td { background: rgba(250, 247, 242, .55); }
+.ez-summary { padding: 26px 30px; background: linear-gradient(135deg, #FAF0E0, #F3E1C5); border-radius: 14px; font-size: 1.13rem; line-height: 1.75; font-weight: 500; color: var(--ink); border: 1px solid #E5C99B; }
+.ez-summary strong { color: var(--espresso); }
+.ez-citation { margin-top: 24px; padding: 18px 22px; background: var(--canvas-warm); border-radius: 8px; font-family: var(--font-mono); font-size: 0.82rem; color: var(--ink-soft); line-height: 1.7; }
+.ez-citation p { margin: 4px 0; }
+.ez-chart-card { padding: 22px 24px 18px; background: var(--canvas); border: 1px solid var(--line); border-radius: 12px; margin: 16px 0; }
+.ez-chart-card .ez-chart-title { font-size: 1rem; font-weight: 600; color: var(--ink); margin-bottom: 14px; }
+.ez-bar-row { display: flex; align-items: center; margin: 10px 0; font-size: 0.95rem; gap: 14px; }
+.ez-bar-label { width: 180px; flex-shrink: 0; color: var(--ink-mute); font-weight: 500; }
+.ez-bar-track { flex: 1; height: 32px; background: var(--canvas-warm); border-radius: 6px; overflow: hidden; position: relative; border: 1px solid var(--line); }
+.ez-bar-fill { height: 100%; background: linear-gradient(90deg, var(--caramel), var(--copper)); display: flex; align-items: center; justify-content: flex-end; padding: 0 12px; color: white; font-weight: 700; font-size: 0.92rem; min-width: 56px; }
+.ez-bar-fill.alt { background: linear-gradient(90deg, #6F4E37, #4A3F36); }
+.ez-glossary { display: grid; gap: 12px; }
+.ez-glossary-item { padding: 16px 20px; background: var(--canvas-warm); border: 1px solid var(--line); border-radius: 10px; border-left: 3px solid var(--caramel); }
+.ez-glossary-term { font-family: var(--font-display); font-style: italic; font-size: 1.1rem; font-weight: 600; color: var(--espresso); margin-bottom: 6px; }
+.ez-glossary-def { font-size: 0.98rem; color: var(--ink-mute); line-height: 1.7; }
+@media (max-width: 720px) {
+  .article-hero { padding: 36px 0 32px; }
+  .article-body { padding: 36px 0 56px; }
+  .ez-section { margin-bottom: 40px; }
+  .ez-section h2 { font-size: 1.3rem; }
+  .ez-bar-label { width: 100%; margin-bottom: 4px; }
+  .ez-bar-row { flex-direction: column; align-items: stretch; }
+  .article-meta { gap: 12px 18px; font-size: .68rem; }
+}
+</style>
+</head>
+<body>
+
+<header class="site-nav">
+  <div class="nav-inner">
+    <a class="brand" href="/">
+      <span class="brand-mark">92<span class="temp-mark"><span class="temp-deg">°</span><span class="temp-c">C</span></span></span>ROASTERY
+    </a>
+    <a class="nav-back" href="/insight">← INSIGHTS</a>
+  </div>
+</header>
+
+<article>
+  <section class="article-hero">
+    <div class="container">
+      <div class="eyebrow">— 오늘의 커피 상식 · 2026.09.05</div>
+      <h1 class="article-title">오후 3시에 마신 커피가 밤잠을 방해하는 진짜 이유 🌙</h1>
+      <p class="article-one-liner">카페인은 몸에서 절반이 사라지는 데만 다섯 시간쯤 걸린다. 자정에도 여전히 남아 있다는 뜻!</p>
+      <div class="article-meta">
+        
+        
+        
+        <span>커피 상식 · 디카페인</span>
+      </div>
+      
+      <div class="hero-image">
+        <img src="/static/img/insights/trivia/decaf.svg" alt="오후 3시에 마신 커피가 밤잠을 방해하는 진짜 이유 🌙">
+      </div>
+      
+    </div>
+  </section>
+
+  <section class="article-body">
+    <div class="container">
+
+      
+      <div class="ez-hero">
+        <div class="ez-hero-emoji">🌙</div>
+        <div class="ez-hero-title">오후 3시에 마신 커피가 밤잠을 방해하는 진짜 이유</div>
+      </div>
+
+      
+      <div class="ez-section">
+        <h2>🤔 무슨 연구야?</h2>
+        
+          <p>낮에 마신 커피 한 잔 때문에 밤에 뒤척인 적 있어? 나는 커피를 마셔도 잘 잔다고 자신하던 사람도, 어느 날 갑자기 잠이 안 오는 경험을 하곤 해.</p><p>여기에는 꽤 명확한 이유가 있어. 카페인은 마신 뒤 금방 사라지는 물질이 아니거든. 몸에서 절반이 빠져나가는 데만 대략 다섯 시간쯤 걸려. 사람에 따라 세 시간에서 일곱 시간까지 차이가 크고. ⏳</p><p>오늘은 카페인이 몸에서 어떻게 움직이는지, 왜 사람마다 반응이 다른지, 그리고 커피를 즐기면서도 잠을 지키는 방법을 알아볼게.</p>
+        
+      </div>
+
+      
+      
+      <div class="ez-section">
+        <h2>🧪 핵심 개념 쉽게 풀어보면</h2>
+        
+          <h3>1️⃣ 반감기 — 절반이 사라지는 데 걸리는 시간</h3>
+          <p>카페인의 양이 몸에서 절반으로 줄어드는 데 걸리는 시간을 반감기라고 해. 보통 다섯 시간 안팎으로 이야기돼. 오후 3시에 커피를 마셨다면 저녁 8시쯤 절반이 남고, 밤 1시쯤에도 4분의 1이 남아 있는 셈이지. 4분의 1이라고 얕볼 게 아니야. 잠들기 직전의 예민한 상태에서는 그 정도만으로도 깊은 잠을 방해할 수 있거든.</p>
+          <div class="ez-callout">💡 비유: 방에 켜둔 등을 절반씩 어둡게 줄여나가는 것과 같아. 완전히 꺼지기까지는 생각보다 오래 걸리잖아. 💡</div>
+        
+          <h3>2️⃣ 카페인은 졸음 신호를 가로막는 방식으로 작동한다</h3>
+          <p>우리 몸은 깨어 있는 동안 졸음을 부르는 물질을 조금씩 쌓아. 이 물질이 뇌의 특정 자리에 붙으면 &#39;이제 쉬자&#39;는 신호가 켜지지. 카페인은 이 자리에 대신 앉아서 신호가 전달되지 못하게 막아. 그러니까 카페인은 에너지를 새로 만들어주는 게 아니라, 피곤하다는 알림을 잠깐 꺼두는 거야. 그래서 카페인이 빠지고 나면 그동안 쌓인 졸음이 한꺼번에 몰려오는 느낌이 들어.</p>
+          <div class="ez-callout">💡 비유: 휴대폰 알림을 무음으로 해두는 것과 같아. 알림이 사라진 게 아니라 안 보이게 해둔 거라, 나중에 몰아서 확인하게 되잖아. 🔕</div>
+        
+          <h3>3️⃣ 사람마다 분해 속도가 크게 다르다</h3>
+          <p>같은 커피를 마셔도 누구는 멀쩡하고 누구는 밤새 뒤척여. 카페인을 분해하는 속도가 사람마다 다르기 때문이야. 타고난 체질도 영향을 주고, 나이나 복용 중인 약, 임신 여부에 따라서도 달라져. 흡연 여부도 분해 속도에 영향을 준다고 알려져 있고. 그래서 &#39;몇 시 이후에는 마시지 마라&#39;는 일률적인 기준보다, 자기 몸이 보내는 신호를 관찰하는 게 훨씬 정확해.</p>
+          <div class="ez-callout">💡 비유: 같은 양의 술을 마셔도 사람마다 취하는 정도가 다르잖아. 분해하는 속도가 다르니까. 그거랑 똑같은 이야기야. 🍶</div>
+        
+      </div>
+      
+
+      
+      
+      <div class="ez-section">
+        <h2>🎯 핵심 발견</h2>
+        <ul class="ez-findings">
+          
+          
+            
+              <li class="gold">
+                <strong>🥇 디카페인도 카페인이 완전히 0은 아니다</strong>디카페인은 카페인을 대부분 제거한 커피지, 하나도 없는 커피가 아니야. 기준에 따라 소량이 남아 있어. 그래서 카페인에 아주 민감한 사람은 디카페인에도 반응할 수 있어. 다만 일반 커피에 비하면 양이 훨씬 적어서, 늦은 시간에 커피 한 잔의 기분을 즐기고 싶을 때 좋은 선택지가 되는 건 분명해. ☕
+              </li>
+            
+              <li class="silver">
+                <strong>🥈 잠들었어도 잠의 질이 떨어질 수 있다</strong>카페인을 마시고도 잘 잤다고 느끼는 경우가 있어. 그런데 잠들었다는 것과 푹 잤다는 건 다른 이야기야. 카페인이 남아 있으면 깊은 잠의 비중이 줄어드는 경향이 있다고 알려져 있어. 그래서 아침에 개운하지 않고, 그 피로를 다시 커피로 밀어내는 순환이 생기기 쉬워. 며칠만 오후 커피를 끊어보면 차이를 느끼는 사람이 많아. 😴
+              </li>
+            
+              <li class="bronze">
+                <strong>🥉 커피 종류에 따라 카페인 양이 꽤 다르다</strong>같은 한 잔이라도 들어 있는 카페인 양은 제각각이야. 에스프레소 한 샷은 양이 적지만 농도가 진하고, 아메리카노는 샷 수에 따라 달라지지. 드립 커피는 한 잔의 부피가 크다 보니 총량이 오히려 많을 수 있고, 콜드브루는 원두를 많이 쓰고 오래 우려서 진한 경우가 흔해. 그러니까 &#39;커피 한 잔&#39;이라는 말만으로는 카페인 양을 가늠하기 어려워. 📏
+              </li>
+            
+              <li class="medal">
+                <strong>🏅 아침에 마시는 시간도 옮겨볼 만하다</strong>잠에서 깬 직후에는 몸이 스스로 각성 상태를 만들고 있어서, 그때 마신 커피의 효과를 덜 느끼는 경우가 있어. 그래서 기상 직후보다 조금 시간을 두고 마시면 같은 한 잔이 더 잘 듣는다고 이야기되기도 해. 사람마다 다르니 정답은 아니지만, 커피를 줄이지 않고도 효율을 올리는 방법으로 한번 실험해 볼 만해. 🌅
+              </li>
+            
+          
+        </ul>
+      </div>
+      
+
+      
+      
+      <div class="ez-section">
+        <h2>📊 숫자로 보기</h2>
+        
+          
+          
+          <div class="ez-chart-card">
+            <div class="ez-chart-title">커피를 마신 뒤 몸에 남는 카페인 비율 (반감기 5시간 가정)</div>
+            
+              
+              <div class="ez-bar-row">
+                <div class="ez-bar-label">0시간</div>
+                <div class="ez-bar-track"><div class="ez-bar-fill" style="width: 100.0%;">100.0퍼센트</div></div>
+              </div>
+            
+              
+              <div class="ez-bar-row">
+                <div class="ez-bar-label">5시간</div>
+                <div class="ez-bar-track"><div class="ez-bar-fill" style="width: 50.0%;">50.0퍼센트</div></div>
+              </div>
+            
+              
+              <div class="ez-bar-row">
+                <div class="ez-bar-label">10시간</div>
+                <div class="ez-bar-track"><div class="ez-bar-fill" style="width: 25.0%;">25.0퍼센트</div></div>
+              </div>
+            
+              
+              <div class="ez-bar-row">
+                <div class="ez-bar-label">15시간</div>
+                <div class="ez-bar-track"><div class="ez-bar-fill" style="width: 13.0%;">13.0퍼센트</div></div>
+              </div>
+            
+              
+              <div class="ez-bar-row">
+                <div class="ez-bar-label">20시간</div>
+                <div class="ez-bar-track"><div class="ez-bar-fill" style="width: 6.0%;">6.0퍼센트</div></div>
+              </div>
+            
+          </div>
+        
+      </div>
+      
+
+      
+      
+      
+      <div class="ez-section">
+        <h2>🆚 오후 3시에 마신 커피, 시간이 지나면?</h2>
+        <table class="ez-table">
+          <thead><tr><th>시각</th><th>남아 있는 양(대략)</th><th>메모</th></tr></thead>
+          <tbody>
+            <tr>
+              <th>오후 3시</th><td>100퍼센트</td><td>마신 직후</td>
+            </tr><tr>
+              <th>오후 8시</th><td>절반</td><td>저녁 식사 무렵</td>
+            </tr><tr>
+              <th>새벽 1시</th><td>4분의 1</td><td>잠들기 예민한 구간</td>
+            </tr><tr>
+              <th>다음 날 아침</th><td>아주 적음</td><td>대부분 빠져나감</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      
+      
+
+      
+      
+
+      
+      
+
+      
+      
+      <div class="ez-section">
+        <div class="ez-summary">💡 <strong>한 줄 요약</strong> — 카페인은 절반이 사라지는 데만 다섯 시간쯤 걸려서, 오후에 마신 커피가 밤까지 남는다. 분해 속도는 사람마다 크게 다르니 시간을 정하기보다 내 몸의 반응을 관찰하는 게 정확하다!</div>
+      </div>
+      
+
+      
+      
+      
+      
+
+      
+      
+      <div class="ez-section">
+        <h2>📖 어려운 말 풀이 사전</h2>
+        <p>이 글에 나온 어려운 약어와 용어를 한 번에 정리했어. 의미만 알면 본문이 훨씬 쉬워져!</p>
+        <div class="ez-glossary">
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">반감기</div>
+            <div class="ez-glossary-def">몸속 물질의 양이 절반으로 줄어드는 데 걸리는 시간</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">아데노신</div>
+            <div class="ez-glossary-def">깨어 있는 동안 쌓여 졸음 신호를 만드는 물질. 카페인이 그 자리를 대신 차지함</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">디카페인</div>
+            <div class="ez-glossary-def">카페인을 대부분 제거한 커피. 완전히 0은 아님</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">카페인 내성</div>
+            <div class="ez-glossary-def">자주 섭취해 같은 양으로는 효과를 덜 느끼게 되는 상태</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">수면의 질</div>
+            <div class="ez-glossary-def">잠든 시간이 아니라 깊은 잠의 비중 등 잠의 내용</div>
+          </div>
+          
+        </div>
+      </div>
+      
+
+    </div>
+  </section>
+
+  <footer class="article-footer">
+    <div class="container">
+      <a href="/insight">← BACK TO INSIGHTS</a>
+      <span style="margin: 0 16px;">·</span>
+      <a href="/">HOME</a>
+    </div>
+  </footer>
+</article>
+
+</body>
+</html>

@@ -1,7 +1,24 @@
 {
   "version": 1,
-  "updated_at": "2026-09-03T15:09:51Z",
+  "updated_at": "2026-09-04T15:05:11Z",
   "items": [
+    {
+      "id": "2026-09-05-caffeine-half-life",
+      "type": "trivia",
+      "date": "2026-09-05",
+      "title_ko": "오후 3시에 마신 커피가 밤잠을 방해하는 진짜 이유 🌙",
+      "one_liner": "카페인은 몸에서 절반이 사라지는 데만 다섯 시간쯤 걸린다. 자정에도 여전히 남아 있다는 뜻!",
+      "categories_primary": [
+        "커피 상식"
+      ],
+      "categories_secondary": [
+        "디카페인"
+      ],
+      "hero_image": "/static/img/insights/trivia/decaf.svg",
+      "journal": null,
+      "pub_date": null,
+      "source_basis": null
+    },
     {
       "id": "2026-09-04-moka-pot",
       "type": "trivia",
