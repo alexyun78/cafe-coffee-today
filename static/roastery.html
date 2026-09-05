@@ -1799,15 +1799,15 @@
         </div>
         <div class="hours-grid">
             <div class="hours-card hours-card--main">
-                <div class="hours-day-en">TUE · THU · FRI · SAT · SUN</div>
-                <div class="hours-day-ko">화 · 목 · 금 · 토 · 일</div>
+                <div class="hours-day-en">TUE · THU · FRI · SAT</div>
+                <div class="hours-day-ko">화 · 목 · 금 · 토</div>
                 <div class="hours-time">08:30 — 21:00</div>
                 <div class="hours-note">오전 8시 30분 첫 잔부터, 밤 9시 마지막 잔까지.</div>
             </div>
             <div class="hours-card hours-card--early">
                 <span class="early-badge">EARLY CLOSE</span>
-                <div class="hours-day-en">MON · WED</div>
-                <div class="hours-day-ko">월요일 · 수요일</div>
+                <div class="hours-day-en">MON · WED · SUN</div>
+                <div class="hours-day-ko">월요일 · 수요일 · 일요일</div>
                 <div class="hours-time">08:30 — <em>18:00</em></div>
                 <div class="hours-note">좋은 컨디션으로 서비스를 제공하기 위해서 단축 근무를 진행합니다.</div>
             </div>
@@ -1849,7 +1849,7 @@
             <div class="footer-cols">
                 <div class="footer-col">
                     <h4>HOURS</h4>
-                    <p>화·목·금·토·일 <span style="white-space: nowrap;">08:30 — 21:00</span><br>월요일 · 수요일 <span style="white-space: nowrap;">08:30 — 18:00</span><br>휴무일 매달 공지</p>
+                    <p>화·목·금·토 <span style="white-space: nowrap;">08:30 — 21:00</span><br>월·수·일 <span style="white-space: nowrap;">08:30 — 18:00</span><br>휴무일 매달 공지</p>
                 </div>
                 <div class="footer-col">
                     <h4>VISIT</h4>
@@ -1990,6 +1990,7 @@
     var DOW_KO = ['일', '월', '화', '수', '목', '금', '토'];
 
     // 2026-08-03부터 새 영업 체계 — 월·수 ~18:00, 화·목·금·토·일 ~21:00
+    // 2026-09-05부터 일요일도 18:00 마감 — 월·수·일 ~18:00, 화·목·금·토 ~21:00
     var NEW_HOURS_FROM = '2026-08-03';
 
     // 휴무일은 고정 규칙 없이 매달 공지한다 — 아래 목록이 유일한 기준
@@ -2074,7 +2075,7 @@
         var open = 8 * 60 + 30;
         var close;
         if (ymd >= NEW_HOURS_FROM) {
-            close = (dow === 1 || dow === 3) ? 18 * 60 : 21 * 60; // 월·수 18시 조기 마감, 그 외 21시
+            close = (dow === 1 || dow === 3 || dow === 0) ? 18 * 60 : 21 * 60; // 월·수·일 18시 조기 마감, 그 외 21시
         } else {
             close = (dow === 3 || dow === 0) ? 18 * 60 : 22 * 60; // (구 체계) 수·일 18시 조기 마감, 그 외 22시
         }
