@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>농장에서 우리 동네 로스터리까지, 생두는 어떻게 올까? 🚢 — 92°C ROASTERY</title>
+<meta name="description" content="수확한 커피가 배를 타고 바다를 건너 창고에 들어오기까지, 짧아도 두세 달이 걸린다!">
+<link rel="icon" type="image/png" href="/static/img/logo-92black.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --canvas: #FFFFFF; --canvas-warm: #FAF7F2; --canvas-stone: #F2ECE3;
+  --ink: #1A1410; --ink-mute: #4A3F36; --ink-soft: #6B5E52;
+  --espresso: #6F4E37; --caramel: #C9986A; --copper: #B5703D;
+  --line: #E8E0D5; --line-soft: #F0E9DD;
+  --font-display: "Cormorant Garamond", "Pretendard", serif;
+  --font-body: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  --r-sm: 6px; --r-md: 12px; --r-pill: 999px;
+}
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color: transparent; }
+html { scroll-behavior: smooth; }
+body { font-family: var(--font-body); color: var(--ink); background: var(--canvas); font-feature-settings: "kern","ss01","lnum"; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+a { color: var(--copper); text-decoration: none; border-bottom: 1px solid transparent; transition: border-color .2s; }
+a:hover { border-bottom-color: var(--copper); }
+img { display: block; max-width: 100%; height: auto; }
+.container { max-width: 860px; margin: 0 auto; padding: 0 32px; }
+@media (max-width: 720px) { .container { padding: 0 20px; } }
+@media (max-width: 480px) { .container { padding: 0 16px; } }
+.site-nav { position: sticky; top: 0; z-index: 50; background: rgba(255,255,255,0.9); backdrop-filter: saturate(140%) blur(14px); -webkit-backdrop-filter: saturate(140%) blur(14px); border-bottom: 1px solid var(--line-soft); }
+.nav-inner { max-width: 1200px; margin: 0 auto; padding: 16px 32px; display: flex; align-items: center; justify-content: space-between; }
+.brand { font-family: var(--font-display); font-size: 1.3rem; font-weight: 700; color: var(--ink); display: inline-flex; align-items: center; gap: 4px; border-bottom: none; }
+.brand:hover { border-bottom: none; }
+.brand-mark { display: inline-flex; align-items: flex-start; font-family: "Pretendard", sans-serif; font-weight: 900; letter-spacing: -0.04em; line-height: 1; color: inherit; }
+.temp-mark { display: flex; flex-direction: column; line-height: .82; margin: 0 .05em 0 .04em; }
+.temp-mark .temp-deg { font-size: .42em; letter-spacing: -.04em; }
+.temp-mark .temp-c { font-size: .58em; letter-spacing: -.05em; margin-top: -.05em; }
+.nav-back { font-family: var(--font-mono); font-size: .75rem; letter-spacing: .18em; color: var(--ink-mute); border-bottom: none; }
+.nav-back:hover { color: var(--copper); border-bottom: none; }
+.article-hero { padding: 56px 0 48px; border-bottom: 1px solid var(--line-soft); }
+.eyebrow { font-family: var(--font-mono); font-size: .72rem; letter-spacing: .28em; color: var(--copper); margin-bottom: 18px; display: flex; align-items: center; gap: 12px; }
+.eyebrow::before { content: ""; display: inline-block; width: 28px; height: 1px; background: var(--copper); }
+.article-title { font-family: var(--font-display); font-weight: 500; font-size: clamp(2rem, 4.5vw, 3.2rem); line-height: 1.15; letter-spacing: -0.02em; color: var(--ink); margin-bottom: 20px; }
+.article-title em { font-style: italic; color: var(--espresso); font-weight: 600; }
+.article-one-liner { font-family: var(--font-display); font-style: italic; font-size: 1.3rem; line-height: 1.5; color: var(--espresso); margin-bottom: 28px; padding-left: 20px; border-left: 3px solid var(--caramel); }
+.article-meta { display: flex; gap: 24px; flex-wrap: wrap; font-family: var(--font-mono); font-size: .75rem; letter-spacing: .12em; color: var(--ink-soft); padding-top: 20px; border-top: 1px solid var(--line-soft); }
+.article-meta span { display: inline-flex; align-items: center; gap: 6px; }
+.article-meta span::before { content: "■"; color: var(--caramel); font-size: .55rem; }
+.hero-image { margin: 32px 0 0; border-radius: var(--r-md); overflow: hidden; border: 1px solid var(--line); }
+.hero-image img { width: 100%; }
+.article-body { padding: 56px 0 80px; }
+.article-footer { padding: 36px 0 56px; border-top: 1px solid var(--line-soft); text-align: center; font-family: var(--font-mono); font-size: .75rem; letter-spacing: .14em; color: var(--ink-soft); }
+.article-footer a { color: var(--ink-mute); border-bottom: 1px solid transparent; }
+.article-footer a:hover { color: var(--copper); border-bottom-color: var(--copper); }
+.source-basis { display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; background: rgba(201,152,106,.18); border: 1px solid rgba(181,112,61,.35); border-radius: var(--r-pill); font-family: var(--font-mono); font-size: .72rem; letter-spacing: .12em; color: var(--espresso); font-weight: 500; }
+.source-basis.abstract { background: rgba(107,94,82,.1); border-color: rgba(107,94,82,.3); color: var(--ink-soft); }
+.links-row { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 18px; }
+.link-pill { display: inline-flex; align-items: center; gap: 8px; padding: 9px 16px; background: var(--canvas-warm); border: 1px solid var(--line); border-radius: var(--r-pill); font-family: var(--font-mono); font-size: .78rem; letter-spacing: .08em; color: var(--ink-mute); border-bottom: 1px solid var(--line); transition: border-color .2s, color .2s; }
+.link-pill:hover { color: var(--copper); border-color: var(--copper); }
+
+/* ===== EZ: 쉬운 설명 스타일 ===== */
+.ez-hero { text-align: center; padding: 8px 0 32px; }
+.ez-hero-emoji { font-size: 3.4rem; line-height: 1; }
+.ez-hero-title { font-family: var(--font-display); font-size: clamp(1.6rem, 3.5vw, 2.2rem); font-weight: 600; color: var(--ink); margin-top: 14px; line-height: 1.3; }
+.ez-section { margin-bottom: 52px; }
+.ez-section h2 { font-family: var(--font-body); font-size: 1.5rem; font-weight: 700; color: var(--ink); margin-bottom: 18px; letter-spacing: -0.01em; }
+.ez-section h3 { font-size: 1.08rem; font-weight: 600; color: var(--espresso); margin: 22px 0 10px; }
+.ez-section p { font-size: 1.04rem; line-height: 1.85; color: var(--ink-mute); margin-bottom: 14px; }
+.ez-section p:last-child { margin-bottom: 0; }
+.ez-section ul { padding-left: 22px; margin-bottom: 14px; }
+.ez-section li { font-size: 1.02rem; line-height: 1.8; color: var(--ink-mute); margin-bottom: 8px; }
+.ez-callout { margin: 14px 0; padding: 14px 18px; background: var(--canvas-warm); border-left: 3px solid var(--caramel); border-radius: 4px; font-size: 0.98rem; color: var(--espresso); line-height: 1.75; }
+.ez-callout strong { color: var(--copper); }
+.ez-findings { list-style: none; padding: 0; }
+.ez-findings > li { padding: 18px 22px; margin-bottom: 14px; background: var(--canvas-warm); border: 1px solid var(--line); border-radius: 10px; font-size: 1.02rem; line-height: 1.7; color: var(--ink-mute); }
+.ez-findings > li strong { color: var(--ink); display: block; margin-bottom: 4px; font-size: 1.06rem; }
+.ez-findings > li.gold { background: linear-gradient(135deg, #FFF8E7, #FFEFCD); border-color: #F0D67A; }
+.ez-findings > li.silver { background: linear-gradient(135deg, #F6F6F6, #ECECEC); border-color: #C7C7C7; }
+.ez-findings > li.bronze { background: linear-gradient(135deg, #FFEEDD, #FFDCC0); border-color: #E4B07F; }
+.ez-findings > li.medal { background: linear-gradient(135deg, #F0E6FF, #E1D2FF); border-color: #BDA8E5; }
+.ez-table { width: 100%; border-collapse: collapse; margin: 16px 0 8px; font-size: 0.96rem; }
+.ez-table th, .ez-table td { padding: 11px 14px; border: 1px solid var(--line); text-align: left; vertical-align: top; }
+.ez-table thead th { background: var(--ink); color: #fff; font-weight: 600; letter-spacing: .02em; }
+.ez-table tbody th { background: var(--canvas-warm); color: var(--ink); font-weight: 600; }
+.ez-table tbody tr:nth-child(even) td { background: rgba(250, 247, 242, .55); }
+.ez-summary { padding: 26px 30px; background: linear-gradient(135deg, #FAF0E0, #F3E1C5); border-radius: 14px; font-size: 1.13rem; line-height: 1.75; font-weight: 500; color: var(--ink); border: 1px solid #E5C99B; }
+.ez-summary strong { color: var(--espresso); }
+.ez-citation { margin-top: 24px; padding: 18px 22px; background: var(--canvas-warm); border-radius: 8px; font-family: var(--font-mono); font-size: 0.82rem; color: var(--ink-soft); line-height: 1.7; }
+.ez-citation p { margin: 4px 0; }
+.ez-chart-card { padding: 22px 24px 18px; background: var(--canvas); border: 1px solid var(--line); border-radius: 12px; margin: 16px 0; }
+.ez-chart-card .ez-chart-title { font-size: 1rem; font-weight: 600; color: var(--ink); margin-bottom: 14px; }
+.ez-bar-row { display: flex; align-items: center; margin: 10px 0; font-size: 0.95rem; gap: 14px; }
+.ez-bar-label { width: 180px; flex-shrink: 0; color: var(--ink-mute); font-weight: 500; }
+.ez-bar-track { flex: 1; height: 32px; background: var(--canvas-warm); border-radius: 6px; overflow: hidden; position: relative; border: 1px solid var(--line); }
+.ez-bar-fill { height: 100%; background: linear-gradient(90deg, var(--caramel), var(--copper)); display: flex; align-items: center; justify-content: flex-end; padding: 0 12px; color: white; font-weight: 700; font-size: 0.92rem; min-width: 56px; }
+.ez-bar-fill.alt { background: linear-gradient(90deg, #6F4E37, #4A3F36); }
+.ez-glossary { display: grid; gap: 12px; }
+.ez-glossary-item { padding: 16px 20px; background: var(--canvas-warm); border: 1px solid var(--line); border-radius: 10px; border-left: 3px solid var(--caramel); }
+.ez-glossary-term { font-family: var(--font-display); font-style: italic; font-size: 1.1rem; font-weight: 600; color: var(--espresso); margin-bottom: 6px; }
+.ez-glossary-def { font-size: 0.98rem; color: var(--ink-mute); line-height: 1.7; }
+@media (max-width: 720px) {
+  .article-hero { padding: 36px 0 32px; }
+  .article-body { padding: 36px 0 56px; }
+  .ez-section { margin-bottom: 40px; }
+  .ez-section h2 { font-size: 1.3rem; }
+  .ez-bar-label { width: 100%; margin-bottom: 4px; }
+  .ez-bar-row { flex-direction: column; align-items: stretch; }
+  .article-meta { gap: 12px 18px; font-size: .68rem; }
+}
+</style>
+</head>
+<body>
+
+<header class="site-nav">
+  <div class="nav-inner">
+    <a class="brand" href="/">
+      <span class="brand-mark">92<span class="temp-mark"><span class="temp-deg">°</span><span class="temp-c">C</span></span></span>ROASTERY
+    </a>
+    <a class="nav-back" href="/insight">← INSIGHTS</a>
+  </div>
+</header>
+
+<article>
+  <section class="article-hero">
+    <div class="container">
+      <div class="eyebrow">— 오늘의 커피 상식 · 2026.09.06</div>
+      <h1 class="article-title">농장에서 우리 동네 로스터리까지, 생두는 어떻게 올까? 🚢</h1>
+      <p class="article-one-liner">수확한 커피가 배를 타고 바다를 건너 창고에 들어오기까지, 짧아도 두세 달이 걸린다!</p>
+      <div class="article-meta">
+        
+        
+        
+        <span>커피 상식 · 무역과 시장</span>
+      </div>
+      
+      <div class="hero-image">
+        <img src="/static/img/insights/trivia/trade.svg" alt="농장에서 우리 동네 로스터리까지, 생두는 어떻게 올까? 🚢">
+      </div>
+      
+    </div>
+  </section>
+
+  <section class="article-body">
+    <div class="container">
+
+      
+      <div class="ez-hero">
+        <div class="ez-hero-emoji">🚢</div>
+        <div class="ez-hero-title">농장에서 우리 동네 로스터리까지, 생두는 어떻게 올까?</div>
+      </div>
+
+      
+      <div class="ez-section">
+        <h2>🤔 무슨 연구야?</h2>
+        
+          <p>우리가 마시는 커피는 대부분 지구 반대편에서 자란 열매야. 그렇다면 그 무거운 생두가 어떻게 여기까지 올까? 비행기로 오는 것도 아니고, 하루 이틀 만에 오는 것도 아니야.</p><p>커피는 거의 전부 배를 타고 와. 컨테이너에 실려 바다를 건너고, 항구에서 통관을 거쳐 창고로 들어가지. 수확한 날부터 로스터리 문 앞에 도착하기까지 짧아도 두세 달, 길면 반년이 걸리기도 해. ⏳</p><p>오늘은 그 긴 여정을 순서대로 따라가 볼게. 왜 커피 가격에 운임과 환율이 그렇게 크게 작용하는지도 자연스럽게 이해될 거야.</p>
+        
+      </div>
+
+      
+      
+      <div class="ez-section">
+        <h2>🧪 핵심 개념 쉽게 풀어보면</h2>
+        
+          <h3>1️⃣ 농장에서 항구까지가 의외로 험난하다</h3>
+          <p>수확과 가공을 마친 커피는 먼저 산에서 내려와야 해. 많은 산지가 도로 사정이 좋지 않은 고지대에 있어서, 작은 트럭으로 몇 시간씩 굽이길을 내려오는 게 첫 관문이야. 그다음 수출업자의 창고에 모여 마지막으로 껍질을 벗기고, 크기와 결점을 골라내고, 자루에 담겨 포장돼. 여기까지가 산지 안에서 벌어지는 일인데, 시간으로 치면 수확 뒤 몇 주에서 몇 달이 걸려.</p>
+          <div class="ez-callout">💡 비유: 택배가 집을 나서기 전에 포장하고 분류센터로 가는 과정이 있잖아. 커피도 배에 실리기 전 단계가 만만치 않아. 📦</div>
+        
+          <h3>2️⃣ 바다를 건너는 몇 주가 품질의 고비다</h3>
+          <p>컨테이너에 실린 커피는 짧게는 몇 주, 항로에 따라 그보다 긴 시간을 배 위에서 보내. 문제는 그 사이 기후대가 크게 바뀐다는 거야. 적도 근처를 지날 때 컨테이너 안은 낮에 뜨겁게 달아오르고 밤에 식으면서, 천장에 물방울이 맺혀 떨어질 수 있어. 그래서 방습 안감을 쓰고, 습기를 흡수하는 자재를 함께 넣고, 자루가 벽에 닿지 않게 쌓아. 도착한 생두의 상태가 출발할 때와 다른 경우가 실제로 생기거든.</p>
+          <div class="ez-callout">💡 비유: 여름에 김을 차 트렁크에 두고 며칠 다니면 눅눅해지잖아. 컨테이너 안은 그보다 훨씬 가혹한 환경이야. 🌡️</div>
+        
+          <h3>3️⃣ 항구에 도착해도 바로 못 가져간다</h3>
+          <p>배가 항구에 닿으면 컨테이너를 내리고, 수입 신고와 검사 절차를 거쳐야 해. 식품으로 들어오는 만큼 확인하는 항목이 있고, 서류가 하나라도 어긋나면 며칠씩 지연되기도 해. 통관을 마치면 보세창고나 수입사 창고로 옮겨지고, 그제야 로스터리가 필요한 만큼 주문해 가져갈 수 있어. 그래서 로스터리가 새 커피를 소개하는 시점은 산지의 수확기보다 한참 뒤일 수밖에 없어.</p>
+          <div class="ez-callout">💡 비유: 해외 직구 물건이 국내 도착 후에도 통관 때문에 며칠 더 걸리는 것과 똑같아. 규모만 훨씬 클 뿐이지. 🛃</div>
+        
+      </div>
+      
+
+      
+      
+      <div class="ez-section">
+        <h2>🎯 핵심 발견</h2>
+        <ul class="ez-findings">
+          
+          
+            
+              <li class="gold">
+                <strong>🥇 커피값에는 운임과 환율이 통째로 얹힌다</strong>산지에서 정해진 생두 가격이 그대로 우리 손에 오는 게 아니야. 내륙 운송비, 수출 비용, 해상 운임, 보험료, 통관 비용, 창고 보관료가 차례로 붙고, 여기에 환율이 곱해져. 그래서 산지 가격이 그대로여도 운임이 오르거나 환율이 흔들리면 원두 가격이 움직여. 몇 해 전 물류 대란 때 커피값이 들썩였던 것도 이 구조 때문이야. 💸
+              </li>
+            
+              <li class="silver">
+                <strong>🥈 그래서 생두에도 제철이 있다</strong>커피는 농산물이라 수확 시기가 정해져 있고, 그 뒤 배를 타고 오는 시간이 더해져. 그래서 각 산지의 커피가 시장에 들어오는 시기가 대략 정해져 있어. 갓 도착한 생두는 향이 살아 있어서 &#39;뉴 크롭&#39;이라 부르고, 해를 넘겨 오래된 것은 향이 무뎌지지. 로스터리가 특정 시기에 특정 산지를 밀어주는 데는 이런 사정이 있어. 🗓️
+              </li>
+            
+              <li class="bronze">
+                <strong>🥉 소량 로트는 다른 짐과 컨테이너를 나눠 쓴다</strong>컨테이너 하나를 가득 채우려면 상당한 물량이 필요해. 그런데 작은 농장의 특별한 로트는 그만큼이 안 나오지. 그래서 여러 수입 건이 한 컨테이너를 나눠 싣는 방식을 써. 덕분에 소규모 로스터리도 개성 있는 소량 커피를 들여올 수 있게 됐어. 대신 관리해야 할 서류와 손이 늘어나서, 작은 물량일수록 킬로그램당 비용은 올라가. 🧩
+              </li>
+            
+              <li class="medal">
+                <strong>🏅 커피는 배 위에서도 계약이 오간다</strong>커피 거래는 물건이 도착하기 훨씬 전에 이뤄지는 경우가 많아. 수확도 하기 전에 다음 해 물량을 미리 약속하는 계약도 흔하지. 농부 입장에서는 값을 미리 확정해 위험을 줄일 수 있고, 로스터리 입장에서는 원하는 커피를 확보할 수 있어. 즉 우리가 내년에 마실 커피의 상당 부분은 이미 어딘가에서 약속이 끝나 있는 셈이야. 🤝
+              </li>
+            
+          
+        </ul>
+      </div>
+      
+
+      
+      
+      <div class="ez-section">
+        <h2>📊 숫자로 보기</h2>
+        
+          
+          
+          <div class="ez-chart-card">
+            <div class="ez-chart-title">수확부터 로스터리 도착까지 걸리는 시간 (대략)</div>
+            
+              
+              <div class="ez-bar-row">
+                <div class="ez-bar-label">산지 가공</div>
+                <div class="ez-bar-track"><div class="ez-bar-fill" style="width: 100.0%;">8.0주</div></div>
+              </div>
+            
+              
+              <div class="ez-bar-row">
+                <div class="ez-bar-label">선별과 포장</div>
+                <div class="ez-bar-track"><div class="ez-bar-fill" style="width: 37.5%;">3.0주</div></div>
+              </div>
+            
+              
+              <div class="ez-bar-row">
+                <div class="ez-bar-label">해상 운송</div>
+                <div class="ez-bar-track"><div class="ez-bar-fill" style="width: 75.0%;">6.0주</div></div>
+              </div>
+            
+              
+              <div class="ez-bar-row">
+                <div class="ez-bar-label">통관과 입고</div>
+                <div class="ez-bar-track"><div class="ez-bar-fill" style="width: 25.0%;">2.0주</div></div>
+              </div>
+            
+          </div>
+        
+      </div>
+      
+
+      
+      
+      
+      <div class="ez-section">
+        <h2>🆚 생두가 거치는 단계와 걸리는 시간</h2>
+        <table class="ez-table">
+          <thead><tr><th>단계</th><th>무슨 일이 벌어지나</th><th>대략의 기간</th></tr></thead>
+          <tbody>
+            <tr>
+              <th>수확과 가공</th><td>체리를 따서 말리고 재움</td><td>몇 주에서 몇 달</td>
+            </tr><tr>
+              <th>선별과 포장</th><td>껍질을 벗기고 골라 자루에 담음</td><td>며칠에서 몇 주</td>
+            </tr><tr>
+              <th>해상 운송</th><td>컨테이너로 바다를 건넘</td><td>몇 주</td>
+            </tr><tr>
+              <th>통관</th><td>수입 신고와 검사</td><td>며칠</td>
+            </tr><tr>
+              <th>창고 보관</th><td>로스터리 주문을 기다림</td><td>수시</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      
+      
+
+      
+      
+
+      
+      
+
+      
+      
+      <div class="ez-section">
+        <div class="ez-summary">💡 <strong>한 줄 요약</strong> — 생두는 산길을 내려와 자루에 담기고 배로 바다를 건넌 뒤 통관을 거쳐 창고에 들어온다. 이 여정이 두세 달이라 커피값에는 운임과 환율이 그대로 얹히고, 생두에도 제철이 생긴다!</div>
+      </div>
+      
+
+      
+      
+      
+      
+
+      
+      
+      <div class="ez-section">
+        <h2>📖 어려운 말 풀이 사전</h2>
+        <p>이 글에 나온 어려운 약어와 용어를 한 번에 정리했어. 의미만 알면 본문이 훨씬 쉬워져!</p>
+        <div class="ez-glossary">
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">뉴 크롭</div>
+            <div class="ez-glossary-def">그해 갓 수확해 들어온 신선한 생두</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">통관</div>
+            <div class="ez-glossary-def">수입 물품이 검사와 신고 절차를 거쳐 국내로 반입되는 과정</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">보세창고</div>
+            <div class="ez-glossary-def">통관 절차가 끝나기 전 물품을 보관하는 창고</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">해상 운임</div>
+            <div class="ez-glossary-def">컨테이너를 배로 옮기는 비용. 커피 원가에 직접 반영됨</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">선물 계약</div>
+            <div class="ez-glossary-def">수확 전에 물량과 가격을 미리 약속하는 거래 방식</div>
+          </div>
+          
+        </div>
+      </div>
+      
+
+    </div>
+  </section>
+
+  <footer class="article-footer">
+    <div class="container">
+      <a href="/insight">← BACK TO INSIGHTS</a>
+      <span style="margin: 0 16px;">·</span>
+      <a href="/">HOME</a>
+    </div>
+  </footer>
+</article>
+
+</body>
+</html>

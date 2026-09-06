@@ -1,7 +1,24 @@
 {
   "version": 1,
-  "updated_at": "2026-09-04T15:05:11Z",
+  "updated_at": "2026-09-06T14:23:07Z",
   "items": [
+    {
+      "id": "2026-09-06-container-journey",
+      "type": "trivia",
+      "date": "2026-09-06",
+      "title_ko": "농장에서 우리 동네 로스터리까지, 생두는 어떻게 올까? 🚢",
+      "one_liner": "수확한 커피가 배를 타고 바다를 건너 창고에 들어오기까지, 짧아도 두세 달이 걸린다!",
+      "categories_primary": [
+        "커피 상식"
+      ],
+      "categories_secondary": [
+        "무역과 시장"
+      ],
+      "hero_image": "/static/img/insights/trivia/trade.svg",
+      "journal": null,
+      "pub_date": null,
+      "source_basis": null
+    },
     {
       "id": "2026-09-05-caffeine-half-life",
       "type": "trivia",
