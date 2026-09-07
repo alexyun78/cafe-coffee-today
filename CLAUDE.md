@@ -748,6 +748,29 @@ journalctl -u cafe-coffee-nearby.service -n 50 --no-pager
 
 ---
 
+## A4 커피 메뉴판 — 인쇄물 (2026-09-07 추가)
+
+매장에서 손님에게 내는 **인쇄용** 메뉴판. 홈페이지 콘텐츠가 아니다(주소로 열 수는 있다).
+A4 세로 2장: **1장 = SPECIALTY + COLOMBIA ANAEROBIC**, **2장 = FILTER COFFEE**(2단).
+
+- **단일 소스 = [content/menu/filter-menu.json](content/menu/filter-menu.json)**.
+  `python scripts/build_menu.py` → [static/menu/filter-menu.html](static/menu/filter-menu.html) 생성.
+  **HTML 은 생성물이라 직접 고치지 말 것** — 다음 빌드에 덮어써진다. 디자인을 바꿀 땐 `build_menu.py` 의 `CSS`.
+- 인쇄: 브라우저에서 열고 용지 A4 세로, 배율 100%, 여백 없음, **배경 그래픽 켜기**(가공 배지·금색 라인이 배경색이다).
+- 페이지 옵션: `big_items`(1장처럼 항목을 크게), `columns: 2`(2단), `fill`(항목 수와 무관하게 남는 세로 공간을
+  행에 고르게 나눠 페이지를 꽉 채움 — 2장이 이걸 쓴다). 2단 페이지는 **items 배열의 앞 절반이 왼쪽 단**이다.
+- **컵노트는 3개까지**가 규칙(사용자 지정). 가공 배지 `tag`: 없으면 검정, `ana`=금색(무산소), `decaf`=녹색.
+- **구글 시트로 편집**: `python scripts/menu_sheet.py push` 로 시트를 현재 메뉴로 채우고,
+  시트에서 고친 뒤 `pull` 하면 JSON 갱신 + HTML 재생성까지 한 번에 된다. 시트는
+  `1aIdaUaNGI-TtugPLEnj47l2wVZOdjx7wJr_bkFUQCK0`("92도씨 원두 라인업"), 탭 이름 `메뉴`.
+  ⚠️ 기존 `GOOGLE_REFRESH_TOKEN` 은 **drive.readonly 라 시트 쓰기가 안 된다.**
+  `python scripts/google_sheets_auth.py` 를 1회 실행해 `GOOGLE_SHEETS_REFRESH_TOKEN` 을 따로 발급받아야 한다
+  (기존 토큰은 인사이트 ingest 가 계속 쓰므로 건드리지 않는다).
+- 원두 후보와 재고는 D1 `green_beans` 에서 확인한다. **재고 0 이거나 `sold_out=1` 인 원두는 인쇄하지 말 것** —
+  손님에게 못 내는 메뉴가 인쇄물에 박힌다.
+
+---
+
 ## Q-Grader 훈련 관리 (2026-08-08 추가)
 
 SCA Evolved Q Grader(CVA 기반) 대비 6개월 학습플랜 + 훈련 일지. **관리자 전용**(기존 PIN 그대로).
@@ -826,6 +849,10 @@ SCA Evolved Q Grader(CVA 기반) 대비 6개월 학습플랜 + 훈련 일지. **
 | [static/story/](static/story/) | 92스토리 수필 페이지 (`index.json` + `<id>.html`, `_template.html` 템플릿) |
 | [static/beans/](static/beans/) | 원두 카드 (`/beans`) — `index.json`(단일 소스) + `index.html`(그리드) + `detail.html`(상세) |
 | [scripts/build_bean_print.py](scripts/build_bean_print.py) | 원두 카드 A4 인쇄 시트 생성 (`static/beans/print.html`) |
+| [content/menu/filter-menu.json](content/menu/filter-menu.json) | A4 메뉴판 단일 소스 (스페셜티 / 필터) |
+| [scripts/build_menu.py](scripts/build_menu.py) | 메뉴 JSON → `static/menu/filter-menu.html` (A4 2장) |
+| [scripts/menu_sheet.py](scripts/menu_sheet.py) | 메뉴 JSON ↔ 구글 시트 동기화 (`push` / `pull`) |
+| [scripts/google_sheets_auth.py](scripts/google_sheets_auth.py) | 시트 쓰기용 OAuth 토큰 1회 발급 |
 | [scripts/sold_out_migration.sql](scripts/sold_out_migration.sql) | green_beans.sold_out 컬럼 추가 (1회) |
 | [scripts/seed_green_beans.sql](scripts/seed_green_beans.sql) | 생두 초기 데이터 (init_schema에서 자동 실행) |
 | [scripts/migrate_spreadsheet.py](scripts/migrate_spreadsheet.py) | 구글 스프레드시트 → DB 마이그레이션 스크립트 |
