@@ -119,7 +119,42 @@ CSS = """
   .foot .msg b{color:var(--ink);font-weight:700;}
   .foot .pg{margin-left:auto;font-family:"Oswald",sans-serif;font-size:9pt;color:#b5b5b5;white-space:nowrap;}
 
+  /* ── 3장: A4 가로 한 장 전체 라인업 ── */
+  .page.land{width:297mm;height:210mm;padding:9mm 11mm 7mm;}
+  .page.land .head h1{font-size:26pt;}
+  .page.land .head h1 .ko{font-size:19pt;}
+  .page.land .head .tag{font-size:9.5pt;margin-top:1.8mm;}
+  .page.land .rule{margin-top:3mm;height:2.2pt;}
+  .page.land .foot{padding-top:2.5mm;margin-top:3mm;}
+  .page.land .foot .logo img{width:13mm;}
+  .page.land .foot .msg{font-size:8pt;}
+
+  .cols{display:grid;grid-template-columns:1.06fr 1fr 1fr;column-gap:7mm;flex:1;margin-top:4mm;}
+  .col{display:flex;flex-direction:column;border-left:.7pt solid #e4e4e4;padding-left:6mm;}
+  .col:first-child{border-left:none;padding-left:0;}
+  .col .schead{
+    display:flex;align-items:baseline;gap:2mm;
+    border-bottom:1.4pt solid var(--ink);padding-bottom:1.2mm;margin-bottom:.5mm;
+  }
+  .col .schead + .item{border-top:none;}
+  .col .schead h3{
+    font-family:"Oswald","Noto Sans KR",sans-serif;
+    font-size:11.5pt;font-weight:700;margin:0;letter-spacing:.2px;white-space:nowrap;
+  }
+  .col .schead .p{margin-left:auto;font-size:8.4pt;font-weight:700;color:var(--gold-d);white-space:nowrap;}
+  .col .schead.cont h3{font-weight:500;color:#999;}
+  .col .item{
+    flex:1;display:flex;flex-direction:column;justify-content:center;
+    padding:0 0 .3mm;border-top:.7pt solid #e0e0e0;
+  }
+  .col .item .nm{font-size:9.1pt;line-height:1.2;}
+  .col .item .nm .won{font-size:8.4pt;}
+  .col .item .notes{font-size:7.3pt;margin-top:.6mm;line-height:1.25;}
+  .col .item .proc{font-size:6.3pt;padding:.3mm 1.2mm;margin-right:1.3mm;}
+
   @page{size:A4 portrait;margin:0;}
+  @page land{size:A4 landscape;margin:0;}
+  .page.land{page:land;}
   @media print{
     html,body{background:#fff;}
     .page{margin:0;box-shadow:none;page-break-after:always;}
@@ -163,6 +198,79 @@ def order_for_grid(items, cols):
         if i < len(right):
             out.append((right[i], i == 0))
     return out
+
+
+def page_head(brand, title_en, title_ko):
+    tag = esc(brand["tagline"])
+    if "," in tag:
+        left, _, right = tag.partition(",")
+        tag = "%s, <b>%s</b>" % (left, right.strip())
+    return (
+        '  <div class="site">%s</div>\n'
+        '  <div class="head">\n'
+        '    <h1>%s<span class="ko">%s</span></h1>\n'
+        '    <p class="tag">%s</p>\n'
+        "  </div>\n"
+        '  <div class="rule"></div>\n'
+    ) % (esc(brand["site"]), esc(title_en), esc(title_ko), tag)
+
+
+def page_foot(brand, footer, page_no, page_total):
+    return (
+        '  <div class="foot">\n'
+        '    <div class="logo">\n'
+        '      <img src="../img/logo-92black.png" alt="92도씨 로스터리">\n'
+        '      <div class="han">%s</div>\n'
+        "    </div>\n"
+        '    <div class="msg">%s</div>\n'
+        '    <div class="pg">%d / %d</div>\n'
+        "  </div>\n"
+    ) % (esc(brand["handle"]), footer, page_no, page_total)
+
+
+def summary_columns(sections, ncols):
+    """전체 라인업 페이지의 단 배분.
+
+    앞쪽 섹션들을 첫 단에 모으고, 마지막(가장 큰) 섹션을 남은 단에 고르게 나눈다.
+    스페셜티처럼 짧은 섹션이 단 경계에서 쪼개지지 않는다.
+    """
+    if ncols < 2 or len(sections) < 2:
+        return [[(s, s["items"], False) for s in sections]]
+    head, last = sections[:-1], sections[-1]
+    cols = [[(s, s["items"], False) for s in head]]
+    rest = ncols - 1
+    items = last["items"]
+    size = -(-len(items) // rest)  # ceil
+    for i in range(rest):
+        chunk = items[i * size:(i + 1) * size]
+        if chunk:
+            cols.append([(last, chunk, i > 0)])
+    return cols
+
+
+def render_summary_page(spec, sections, brand, page_no, page_total):
+    ncols = spec.get("columns", 3)
+    parts = ['<section class="page land">\n']
+    parts.append(page_head(brand, spec["title_en"], spec["title_ko"]))
+    parts.append('\n  <div class="cols">\n')
+    for col in summary_columns(sections, ncols):
+        parts.append('    <div class="col">\n')
+        for sec, items, is_cont in col:
+            parts.append('      <div class="schead%s">\n' % (" cont" if is_cont else ""))
+            parts.append(
+                "        <h3>%s</h3>\n"
+                % esc(sec["heading"] + (" (계속)" if is_cont else ""))
+            )
+            if sec.get("price_note") and not is_cont:
+                parts.append('        <div class="p">%s 원</div>\n' % esc(sec["price_note"]))
+            parts.append("      </div>\n")
+            for it in items:
+                parts.append(render_item(it, False))
+        parts.append("    </div>\n")
+    parts.append("  </div>\n\n")
+    parts.append(page_foot(brand, spec["footer"], page_no, page_total))
+    parts.append("</section>\n")
+    return "".join(parts)
 
 
 def render_page(page, brand, page_no, page_total):
@@ -223,9 +331,15 @@ def main():
     data = json.loads(SRC.read_text(encoding="utf-8"))
     brand = data["brand"]
     pages = data["pages"]
-    body = "\n".join(
-        render_page(p, brand, i + 1, len(pages)) for i, p in enumerate(pages)
-    )
+    summary = data.get("summary_page")
+    total = len(pages) + (1 if summary else 0)
+
+    blocks = [render_page(p, brand, i + 1, total) for i, p in enumerate(pages)]
+    if summary:
+        # 3장은 1·2장의 섹션을 그대로 다시 쓴다 — 원두 목록의 소스는 하나뿐이다.
+        all_sections = [s for p in pages for s in p["sections"]]
+        blocks.append(render_summary_page(summary, all_sections, brand, total, total))
+    body = "\n".join(blocks)
     doc = (
         '<!doctype html>\n<html lang="ko">\n<head>\n<meta charset="utf-8">\n'
         "<title>92도씨 커피 메뉴 (A4 %d장)</title>\n"
@@ -234,12 +348,12 @@ def main():
         '<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900'
         '&family=Oswald:wght@500;600;700&display=swap" rel="stylesheet">\n'
         "<style>%s</style>\n</head>\n<body>\n\n%s\n</body>\n</html>\n"
-    ) % (len(pages), CSS, body)
+    ) % (total, CSS, body)
 
     OUT.parent.mkdir(parents=True, exist_ok=True)
     OUT.write_text(doc, encoding="utf-8")
-    total = sum(len(s["items"]) for p in pages for s in p["sections"])
-    print("[OK] %s — %d쪽, %d종" % (OUT.relative_to(ROOT), len(pages), total))
+    kinds = sum(len(s["items"]) for p in pages for s in p["sections"])
+    print("[OK] %s — %d쪽, %d종" % (OUT.relative_to(ROOT), total, kinds))
     return 0
 
 

@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
 <meta charset="utf-8">
-<title>92도씨 커피 메뉴 (A4 2장)</title>
+<title>92도씨 커피 메뉴 (A4 3장)</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Oswald:wght@500;600;700&display=swap" rel="stylesheet">
@@ -105,7 +105,42 @@
   .foot .msg b{color:var(--ink);font-weight:700;}
   .foot .pg{margin-left:auto;font-family:"Oswald",sans-serif;font-size:9pt;color:#b5b5b5;white-space:nowrap;}
 
+  /* ── 3장: A4 가로 한 장 전체 라인업 ── */
+  .page.land{width:297mm;height:210mm;padding:9mm 11mm 7mm;}
+  .page.land .head h1{font-size:26pt;}
+  .page.land .head h1 .ko{font-size:19pt;}
+  .page.land .head .tag{font-size:9.5pt;margin-top:1.8mm;}
+  .page.land .rule{margin-top:3mm;height:2.2pt;}
+  .page.land .foot{padding-top:2.5mm;margin-top:3mm;}
+  .page.land .foot .logo img{width:13mm;}
+  .page.land .foot .msg{font-size:8pt;}
+
+  .cols{display:grid;grid-template-columns:1.06fr 1fr 1fr;column-gap:7mm;flex:1;margin-top:4mm;}
+  .col{display:flex;flex-direction:column;border-left:.7pt solid #e4e4e4;padding-left:6mm;}
+  .col:first-child{border-left:none;padding-left:0;}
+  .col .schead{
+    display:flex;align-items:baseline;gap:2mm;
+    border-bottom:1.4pt solid var(--ink);padding-bottom:1.2mm;margin-bottom:.5mm;
+  }
+  .col .schead + .item{border-top:none;}
+  .col .schead h3{
+    font-family:"Oswald","Noto Sans KR",sans-serif;
+    font-size:11.5pt;font-weight:700;margin:0;letter-spacing:.2px;white-space:nowrap;
+  }
+  .col .schead .p{margin-left:auto;font-size:8.4pt;font-weight:700;color:var(--gold-d);white-space:nowrap;}
+  .col .schead.cont h3{font-weight:500;color:#999;}
+  .col .item{
+    flex:1;display:flex;flex-direction:column;justify-content:center;
+    padding:0 0 .3mm;border-top:.7pt solid #e0e0e0;
+  }
+  .col .item .nm{font-size:9.1pt;line-height:1.2;}
+  .col .item .nm .won{font-size:8.4pt;}
+  .col .item .notes{font-size:7.3pt;margin-top:.6mm;line-height:1.25;}
+  .col .item .proc{font-size:6.3pt;padding:.3mm 1.2mm;margin-right:1.3mm;}
+
   @page{size:A4 portrait;margin:0;}
+  @page land{size:A4 landscape;margin:0;}
+  .page.land{page:land;}
   @media print{
     html,body{background:#fff;}
     .page{margin:0;box-shadow:none;page-break-after:always;}
@@ -187,7 +222,7 @@
       <div class="han">@92doc_cafe</div>
     </div>
     <div class="msg"><b>92도씨의 스페셜티 커피는 로스터가 직접 볶고 선별한 원두를 사용합니다.</b><br>한 잔 한 잔 핸드드립으로 내려 드리며, 원두 소진 시 다른 원두로 안내해 드릴 수 있습니다.</div>
-    <div class="pg">1 / 2</div>
+    <div class="pg">1 / 3</div>
   </div>
 </section>
 
@@ -283,7 +318,161 @@
       <div class="han">@92doc_cafe</div>
     </div>
     <div class="msg"><b>92도씨의 모든 필터커피는 로스터가 직접 볶고 선별한 원두를 사용합니다.</b><br>가장 맛있는 온도에서 내린 최상의 커피를 함께 즐겨보세요.</div>
-    <div class="pg">2 / 2</div>
+    <div class="pg">2 / 3</div>
+  </div>
+</section>
+
+<section class="page land">
+  <div class="site">https://92cafe.co.kr</div>
+  <div class="head">
+    <h1>COFFEE<span class="ko">(전체 라인업)</span></h1>
+    <p class="tag">커피가 가장 맛있는 온도, <b>92℃ ROASTERY</b></p>
+  </div>
+  <div class="rule"></div>
+
+  <div class="cols">
+    <div class="col">
+      <div class="schead">
+        <h3>SPECIALTY COFFEE</h3>
+        <div class="p">파나마 10,000 / 하와이 9,000 / 그 외 7,000 원</div>
+      </div>
+    <div class="item">
+      <div class="nm"><span class="txt">파나마 젠슨 게이샤 내추럴 #217</span><span class="won">10,000</span></div>
+      <div class="notes"><span class="proc">내추럴</span>블랙베리, 체리, 장미</div>
+    </div>
+    <div class="item">
+      <div class="nm"><span class="txt">하와이 코나 엑스트라 팬시</span><span class="won">9,000</span></div>
+      <div class="notes"><span class="proc">워시드</span>만다린, 아몬드, 초콜릿</div>
+    </div>
+    <div class="item">
+      <div class="nm"><span class="txt">페루 라 프리마베라 게이샤</span><span class="won">7,000</span></div>
+      <div class="notes"><span class="proc">워시드</span>플로럴, 자스민, 살구</div>
+    </div>
+    <div class="item">
+      <div class="nm"><span class="txt">예멘 모카 마타리</span><span class="won">7,000</span></div>
+      <div class="notes"><span class="proc">내추럴</span>다크초콜릿, 마카다미아, 자몽</div>
+    </div>
+      <div class="schead">
+        <h3>COLOMBIA ANAEROBIC</h3>
+        <div class="p">7,000 원</div>
+      </div>
+    <div class="item">
+      <div class="nm"><span class="txt">콜롬비아 엘 디비소 아지 버번 내추럴 2026</span><span class="won">7,000</span></div>
+      <div class="notes"><span class="proc ana">무산소 발효</span>청사과, 망고, 패션프룻</div>
+    </div>
+    <div class="item">
+      <div class="nm"><span class="txt">콜롬비아 엘 디비소 티피카 메호라도 내추럴 2026</span><span class="won">7,000</span></div>
+      <div class="notes"><span class="proc ana">무산소 발효</span>멜론, 잭프룻, 망고</div>
+    </div>
+    <div class="item">
+      <div class="nm"><span class="txt">콜롬비아 엘 파라이소 더블 무산소 로즈티</span><span class="won">7,000</span></div>
+      <div class="notes"><span class="proc ana">더블 무산소</span>장미, 자두, 꿀</div>
+    </div>
+    <div class="item">
+      <div class="nm"><span class="txt">콜롬비아 엘 포르베니르 스트로베리 2026</span><span class="won">7,000</span></div>
+      <div class="notes"><span class="proc ana">코퍼멘테이션</span>딸기, 꽃, 꿀</div>
+    </div>
+    <div class="item">
+      <div class="nm"><span class="txt">콜롬비아 핀카 엘파라이소 카스티요 워시드 리치피치</span><span class="won">7,000</span></div>
+      <div class="notes"><span class="proc ana">무산소 발효</span>복숭아, 리치, 블루베리</div>
+    </div>
+    <div class="item">
+      <div class="nm"><span class="txt">콜롬비아 퀸디오 파라이소 카스틸로 럼에이즈드</span><span class="won">7,000</span></div>
+      <div class="notes"><span class="proc ana">럼 배럴 숙성</span>숙성체리, 럼, 토피</div>
+    </div>
+    </div>
+    <div class="col">
+      <div class="schead">
+        <h3>FILTER COFFEE</h3>
+        <div class="p">전 품목 6,000 원</div>
+      </div>
+    <div class="item">
+      <div class="nm"><span class="txt">에티오피아 예가체프 콩가 내추럴 G1</span></div>
+      <div class="notes"><span class="proc">내추럴</span>블루베리, 꽃향, 파인애플</div>
+    </div>
+    <div class="item">
+      <div class="nm"><span class="txt">에티오피아 예가체프 게뎁 초르소 워시드</span></div>
+      <div class="notes"><span class="proc">워시드</span>청포도, 베르가못, 살구</div>
+    </div>
+    <div class="item">
+      <div class="nm"><span class="txt">에티오피아 예가체프 코체레 워시드 G1</span></div>
+      <div class="notes"><span class="proc">워시드</span>블랙베리, 시트러스, 오렌지필</div>
+    </div>
+    <div class="item">
+      <div class="nm"><span class="txt">에티오피아 예가체프 아리차 워시드 G1</span></div>
+      <div class="notes"><span class="proc">워시드</span>그린티, 자몽, 자두</div>
+    </div>
+    <div class="item">
+      <div class="nm"><span class="txt">에티오피아 구지 함벨라 게넷 워시드 G1</span></div>
+      <div class="notes"><span class="proc">워시드</span>라벤더, 베르가못, 오렌지필</div>
+    </div>
+    <div class="item">
+      <div class="nm"><span class="txt">에티오피아 모모라 내추럴 G1</span></div>
+      <div class="notes"><span class="proc">내추럴</span>블루베리, 피치, 부드러운 단맛</div>
+    </div>
+    <div class="item">
+      <div class="nm"><span class="txt">에티오피아 코케 허니 내추럴 G1</span></div>
+      <div class="notes"><span class="proc">허니 내추럴</span>복숭아, 자두, 장미</div>
+    </div>
+    <div class="item">
+      <div class="nm"><span class="txt">에티오피아 아바야 게이샤 내추럴 G1</span></div>
+      <div class="notes"><span class="proc">내추럴</span>블루베리, 망고, 밀크초코</div>
+    </div>
+    <div class="item">
+      <div class="nm"><span class="txt">에티오피아 카파 비타 워시드</span></div>
+      <div class="notes"><span class="proc">워시드</span>플로럴, 오렌지, 살구</div>
+    </div>
+    </div>
+    <div class="col">
+      <div class="schead cont">
+        <h3>FILTER COFFEE (계속)</h3>
+      </div>
+    <div class="item">
+      <div class="nm"><span class="txt">에티오피아 웨스트 아르시 넨세보 워시드 G1</span></div>
+      <div class="notes"><span class="proc">워시드</span>황도, 얼그레이, 블랙티</div>
+    </div>
+    <div class="item">
+      <div class="nm"><span class="txt">디카페인 에티오피아 할로 베리티 내추럴</span></div>
+      <div class="notes"><span class="proc decaf">마운틴워터 디카페인</span>군고구마, 오렌지, 플로럴</div>
+    </div>
+    <div class="item">
+      <div class="nm"><span class="txt">케냐 AA TOP 라가티</span></div>
+      <div class="notes"><span class="proc">워시드</span>오렌지, 홍차, 조청</div>
+    </div>
+    <div class="item">
+      <div class="nm"><span class="txt">콜롬비아 나리뇨 엘 타블론 레이트 하비스트</span></div>
+      <div class="notes"><span class="proc">워시드</span>포도, 체리, 시럽</div>
+    </div>
+    <div class="item">
+      <div class="nm"><span class="txt">과테말라 제뉴인 안티구아 파스토랄</span></div>
+      <div class="notes"><span class="proc">워시드</span>오렌지, 피칸, 초콜릿</div>
+    </div>
+    <div class="item">
+      <div class="nm"><span class="txt">코스타리카 따라주 파스토라 SHB EP</span></div>
+      <div class="notes"><span class="proc">워시드</span>초콜릿, 아몬드, 흑설탕</div>
+    </div>
+    <div class="item">
+      <div class="nm"><span class="txt">니카라과 베타니아 마라카투라</span></div>
+      <div class="notes"><span class="proc">워시드</span>구운캐슈넛, 달고나, 미숫가루</div>
+    </div>
+    <div class="item">
+      <div class="nm"><span class="txt">브라질 BSCA 옐로우버본 술데미나스</span></div>
+      <div class="notes"><span class="proc">워시드</span>아몬드, 메이플, 밀크초콜릿</div>
+    </div>
+    <div class="item">
+      <div class="nm"><span class="txt">인도네시아 수마트라 만델링 G1 DP</span></div>
+      <div class="notes"><span class="proc">웻 훌링</span>다크초콜릿, 구운땅콩, 갈색설탕</div>
+    </div>
+    </div>
+  </div>
+
+  <div class="foot">
+    <div class="logo">
+      <img src="../img/logo-92black.png" alt="92도씨 로스터리">
+      <div class="han">@92doc_cafe</div>
+    </div>
+    <div class="msg"><b>92도씨의 모든 커피는 로스터가 직접 볶고 선별한 원두를 사용합니다.</b><br>한 잔 한 잔 핸드드립으로 내려 드리며, 원두 소진 시 다른 원두로 안내해 드릴 수 있습니다.</div>
+    <div class="pg">3 / 3</div>
   </div>
 </section>
 

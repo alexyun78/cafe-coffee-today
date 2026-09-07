@@ -751,7 +751,8 @@ journalctl -u cafe-coffee-nearby.service -n 50 --no-pager
 ## A4 커피 메뉴판 — 인쇄물 (2026-09-07 추가)
 
 매장에서 손님에게 내는 **인쇄용** 메뉴판. 홈페이지 콘텐츠가 아니다(주소로 열 수는 있다).
-A4 세로 2장: **1장 = SPECIALTY + COLOMBIA ANAEROBIC**, **2장 = FILTER COFFEE**(2단).
+**1장 = SPECIALTY + COLOMBIA ANAEROBIC**(A4 세로), **2장 = FILTER COFFEE**(A4 세로, 2단),
+**3장 = 전체 라인업 28종 한 장**(A4 **가로**, 3단).
 
 - **단일 소스 = [content/menu/filter-menu.json](content/menu/filter-menu.json)**.
   `python scripts/build_menu.py` → [static/menu/filter-menu.html](static/menu/filter-menu.html) 생성.
@@ -759,6 +760,13 @@ A4 세로 2장: **1장 = SPECIALTY + COLOMBIA ANAEROBIC**, **2장 = FILTER COFFE
 - 인쇄: 브라우저에서 열고 용지 A4 세로, 배율 100%, 여백 없음, **배경 그래픽 켜기**(가공 배지·금색 라인이 배경색이다).
 - 페이지 옵션: `big_items`(1장처럼 항목을 크게), `columns: 2`(2단), `fill`(항목 수와 무관하게 남는 세로 공간을
   행에 고르게 나눠 페이지를 꽉 채움 — 2장이 이걸 쓴다). 2단 페이지는 **items 배열의 앞 절반이 왼쪽 단**이다.
+- **3장(전체 라인업)은 원두 목록을 따로 갖지 않는다.** JSON 의 `summary_page` 는 제목·푸터만 있고,
+  항목은 1·2장 섹션을 그대로 다시 렌더한다 — 원두를 한 곳만 고치면 세 장이 함께 바뀐다.
+  단 배분은 `summary_columns()`: **앞 섹션들 → 1단, 마지막(가장 큰) 섹션 → 남은 단에 균등 분할**
+  (분할된 뒷단은 "(계속)" 회색 헤더). 3장 헤더의 가격은 좁아서 `price_short` 를 쓴다(없으면 `price_note`).
+- **혼합 방향 인쇄**: 3장만 가로다. CSS 이름 붙은 페이지(`@page land{size:A4 landscape}` + `.page.land{page:land}`)로
+  한 파일에서 처리하며, 크롬 인쇄에서 실제로 3쪽만 가로로 나오는 것을 확인했다. 혹시 인쇄 대화상자에서
+  방향을 강제해 3장이 잘리면 1~2쪽(세로)과 3쪽(가로)을 나눠 인쇄하면 된다.
 - **컵노트는 3개까지**가 규칙(사용자 지정). 가공 배지 `tag`: 없으면 검정, `ana`=금색(무산소), `decaf`=녹색.
 - **구글 시트로 편집**: `python scripts/menu_sheet.py push` 로 시트를 현재 메뉴로 채우고,
   시트에서 고친 뒤 `pull` 하면 JSON 갱신 + HTML 재생성까지 한 번에 된다. 시트는
