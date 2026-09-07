@@ -42,7 +42,13 @@ CSS = """
     box-shadow:0 3px 18px rgba(0,0,0,.35);
     position:relative;overflow:hidden;
   }
-  .site{position:absolute;top:6mm;right:12mm;font-size:8pt;color:#4a7fd4;letter-spacing:.2px;}
+  .site{
+    position:absolute;top:6mm;right:12mm;
+    font-size:11pt;font-weight:700;color:var(--ink);letter-spacing:.2px;
+    background:#FDF0D8;border:1pt solid var(--gold);border-radius:1.5mm;
+    padding:1.1mm 3mm;line-height:1.2;
+  }
+  .page.land .site{font-size:10pt;top:5mm;}
   .head{text-align:center;padding-top:2mm;}
   .head h1{
     font-family:"Oswald","Noto Sans KR",sans-serif;
@@ -117,7 +123,6 @@ CSS = """
   .foot .logo .han{font-size:7pt;color:#777;letter-spacing:.3px;}
   .foot .msg{font-size:8.8pt;color:#444;line-height:1.55;}
   .foot .msg b{color:var(--ink);font-weight:700;}
-  .foot .pg{margin-left:auto;font-family:"Oswald",sans-serif;font-size:9pt;color:#b5b5b5;white-space:nowrap;}
 
   /* ── 3장: A4 가로 한 장 전체 라인업 ── */
   .page.land{width:297mm;height:210mm;padding:9mm 11mm 7mm;}
@@ -215,7 +220,7 @@ def page_head(brand, title_en, title_ko):
     ) % (esc(brand["site"]), esc(title_en), esc(title_ko), tag)
 
 
-def page_foot(brand, footer, page_no, page_total):
+def page_foot(brand, footer):
     return (
         '  <div class="foot">\n'
         '    <div class="logo">\n'
@@ -223,9 +228,8 @@ def page_foot(brand, footer, page_no, page_total):
         '      <div class="han">%s</div>\n'
         "    </div>\n"
         '    <div class="msg">%s</div>\n'
-        '    <div class="pg">%d / %d</div>\n'
         "  </div>\n"
-    ) % (esc(brand["handle"]), footer, page_no, page_total)
+    ) % (esc(brand["handle"]), footer)
 
 
 def summary_columns(sections, ncols):
@@ -248,7 +252,7 @@ def summary_columns(sections, ncols):
     return cols
 
 
-def render_summary_page(spec, sections, brand, page_no, page_total):
+def render_summary_page(spec, sections, brand):
     ncols = spec.get("columns", 3)
     parts = ['<section class="page land">\n']
     parts.append(page_head(brand, spec["title_en"], spec["title_ko"]))
@@ -268,12 +272,12 @@ def render_summary_page(spec, sections, brand, page_no, page_total):
                 parts.append(render_item(it, False))
         parts.append("    </div>\n")
     parts.append("  </div>\n\n")
-    parts.append(page_foot(brand, spec["footer"], page_no, page_total))
+    parts.append(page_foot(brand, spec["footer"]))
     parts.append("</section>\n")
     return "".join(parts)
 
 
-def render_page(page, brand, page_no, page_total):
+def render_page(page, brand):
     cols = page.get("columns", 1)
     parts = []
     cls = ""
@@ -316,14 +320,8 @@ def render_page(page, brand, page_no, page_total):
 
     if not page.get("fill"):
         parts.append('\n  <div class="spacer"></div>\n')
-    parts.append('  <div class="foot">\n')
-    parts.append('    <div class="logo">\n')
-    parts.append('      <img src="../img/logo-92black.png" alt="92도씨 로스터리">\n')
-    parts.append('      <div class="han">%s</div>\n' % esc(brand["handle"]))
-    parts.append("    </div>\n")
-    parts.append('    <div class="msg">%s</div>\n' % page["footer"])
-    parts.append('    <div class="pg">%d / %d</div>\n' % (page_no, page_total))
-    parts.append("  </div>\n</section>\n")
+    parts.append(page_foot(brand, page["footer"]))
+    parts.append("</section>\n")
     return "".join(parts)
 
 
@@ -334,11 +332,11 @@ def main():
     summary = data.get("summary_page")
     total = len(pages) + (1 if summary else 0)
 
-    blocks = [render_page(p, brand, i + 1, total) for i, p in enumerate(pages)]
+    blocks = [render_page(p, brand) for p in pages]
     if summary:
         # 3장은 1·2장의 섹션을 그대로 다시 쓴다 — 원두 목록의 소스는 하나뿐이다.
         all_sections = [s for p in pages for s in p["sections"]]
-        blocks.append(render_summary_page(summary, all_sections, brand, total, total))
+        blocks.append(render_summary_page(summary, all_sections, brand))
     body = "\n".join(blocks)
     doc = (
         '<!doctype html>\n<html lang="ko">\n<head>\n<meta charset="utf-8">\n'

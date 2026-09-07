@@ -28,7 +28,13 @@
     box-shadow:0 3px 18px rgba(0,0,0,.35);
     position:relative;overflow:hidden;
   }
-  .site{position:absolute;top:6mm;right:12mm;font-size:8pt;color:#4a7fd4;letter-spacing:.2px;}
+  .site{
+    position:absolute;top:6mm;right:12mm;
+    font-size:11pt;font-weight:700;color:var(--ink);letter-spacing:.2px;
+    background:#FDF0D8;border:1pt solid var(--gold);border-radius:1.5mm;
+    padding:1.1mm 3mm;line-height:1.2;
+  }
+  .page.land .site{font-size:10pt;top:5mm;}
   .head{text-align:center;padding-top:2mm;}
   .head h1{
     font-family:"Oswald","Noto Sans KR",sans-serif;
@@ -103,7 +109,6 @@
   .foot .logo .han{font-size:7pt;color:#777;letter-spacing:.3px;}
   .foot .msg{font-size:8.8pt;color:#444;line-height:1.55;}
   .foot .msg b{color:var(--ink);font-weight:700;}
-  .foot .pg{margin-left:auto;font-family:"Oswald",sans-serif;font-size:9pt;color:#b5b5b5;white-space:nowrap;}
 
   /* ── 3장: A4 가로 한 장 전체 라인업 ── */
   .page.land{width:297mm;height:210mm;padding:9mm 11mm 7mm;}
@@ -220,7 +225,6 @@
       <div class="han">@92doc_cafe</div>
     </div>
     <div class="msg"><b>92도씨의 스페셜티 커피는 로스터가 직접 볶고 선별한 원두를 사용합니다.</b><br>한 잔 한 잔 핸드드립으로 내려 드리며, 원두 소진 시 다른 원두로 안내해 드릴 수 있습니다.</div>
-    <div class="pg">1 / 3</div>
   </div>
 </section>
 
@@ -316,7 +320,6 @@
       <div class="han">@92doc_cafe</div>
     </div>
     <div class="msg"><b>92도씨의 모든 필터커피는 로스터가 직접 볶고 선별한 원두를 사용합니다.</b><br>가장 맛있는 온도에서 내린 최상의 커피를 함께 즐겨보세요.</div>
-    <div class="pg">2 / 3</div>
   </div>
 </section>
 
@@ -468,7 +471,6 @@
       <div class="han">@92doc_cafe</div>
     </div>
     <div class="msg"><b>92도씨의 모든 커피는 로스터가 직접 볶고 선별한 원두를 사용합니다.</b><br>한 잔 한 잔 핸드드립으로 내려 드리며, 원두 소진 시 다른 원두로 안내해 드릴 수 있습니다.</div>
-    <div class="pg">3 / 3</div>
   </div>
 </section>
 
