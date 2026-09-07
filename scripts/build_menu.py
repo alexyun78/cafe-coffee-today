@@ -59,7 +59,7 @@ CSS = """
   .head .tag b{font-weight:900;color:var(--ink);}
   .rule{height:2.6pt;background:var(--gold);margin-top:4mm;border-radius:1pt;}
 
-  .sect{display:flex;align-items:baseline;gap:4mm;margin:5mm 0 2.5mm;}
+  .sect{display:flex;align-items:baseline;gap:4mm;margin:4mm 0 2.2mm;}
   .sect h2{
     font-family:"Oswald","Noto Sans KR",sans-serif;
     font-size:16.5pt;font-weight:700;margin:0;letter-spacing:.3px;white-space:nowrap;
@@ -97,9 +97,9 @@ CSS = """
   .proc.ana{background:var(--gold-d);}
   .proc.decaf{background:#5b7a3f;}
 
-  .page.big .item{padding:3.1mm 0 2.9mm;}
-  .page.big .item .nm{font-size:12.4pt;}
-  .page.big .item .notes{font-size:9.3pt;margin-top:1.3mm;}
+  .page.big .item{padding:2.3mm 0 2.2mm;}
+  .page.big .item .nm{font-size:12pt;}
+  .page.big .item .notes{font-size:9pt;margin-top:1.1mm;}
 
   /* 항목 수와 무관하게 남는 세로 공간을 행에 고르게 나눠 페이지를 채운다 */
   .page.fill .grid{flex:1;grid-auto-rows:1fr;align-content:stretch;}
@@ -110,7 +110,7 @@ CSS = """
   .spacer{flex:1;}
   .note{
     border:.7pt solid #e2e2e2;border-left:3pt solid var(--gold);
-    padding:2.8mm 3.5mm;font-size:8.5pt;color:#555;line-height:1.55;margin-top:5mm;
+    padding:2.6mm 3.5mm;font-size:8.4pt;color:#555;line-height:1.5;margin-top:3.5mm;
   }
   .note b{color:var(--ink);}
 
