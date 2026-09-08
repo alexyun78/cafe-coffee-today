@@ -1,7 +1,24 @@
 {
   "version": 1,
-  "updated_at": "2026-09-07T16:38:55Z",
+  "updated_at": "2026-09-08T15:17:46Z",
   "items": [
+    {
+      "id": "2026-09-09-vietnam-robusta",
+      "type": "trivia",
+      "date": "2026-09-09",
+      "title_ko": "베트남은 어떻게 30년 만에 커피 2위 국가가 됐을까? 🇻🇳",
+      "one_liner": "연유를 넣은 진한 커피 뒤에는 세계 로부스타의 중심이 된 나라의 이야기가 있다!",
+      "categories_primary": [
+        "커피 상식"
+      ],
+      "categories_secondary": [
+        "원산지"
+      ],
+      "hero_image": "/static/img/insights/trivia/origin.svg",
+      "journal": null,
+      "pub_date": null,
+      "source_basis": null
+    },
     {
       "id": "2026-09-08-green-grading-defects",
       "type": "trivia",

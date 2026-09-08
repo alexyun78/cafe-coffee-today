@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>베트남은 어떻게 30년 만에 커피 2위 국가가 됐을까? 🇻🇳 — 92°C ROASTERY</title>
+<meta name="description" content="연유를 넣은 진한 커피 뒤에는 세계 로부스타의 중심이 된 나라의 이야기가 있다!">
+<link rel="icon" type="image/png" href="/static/img/logo-92black.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --canvas: #FFFFFF; --canvas-warm: #FAF7F2; --canvas-stone: #F2ECE3;
+  --ink: #1A1410; --ink-mute: #4A3F36; --ink-soft: #6B5E52;
+  --espresso: #6F4E37; --caramel: #C9986A; --copper: #B5703D;
+  --line: #E8E0D5; --line-soft: #F0E9DD;
+  --font-display: "Cormorant Garamond", "Pretendard", serif;
+  --font-body: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  --r-sm: 6px; --r-md: 12px; --r-pill: 999px;
+}
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color: transparent; }
+html { scroll-behavior: smooth; }
+body { font-family: var(--font-body); color: var(--ink); background: var(--canvas); font-feature-settings: "kern","ss01","lnum"; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+a { color: var(--copper); text-decoration: none; border-bottom: 1px solid transparent; transition: border-color .2s; }
+a:hover { border-bottom-color: var(--copper); }
+img { display: block; max-width: 100%; height: auto; }
+.container { max-width: 860px; margin: 0 auto; padding: 0 32px; }
+@media (max-width: 720px) { .container { padding: 0 20px; } }
+@media (max-width: 480px) { .container { padding: 0 16px; } }
+.site-nav { position: sticky; top: 0; z-index: 50; background: rgba(255,255,255,0.9); backdrop-filter: saturate(140%) blur(14px); -webkit-backdrop-filter: saturate(140%) blur(14px); border-bottom: 1px solid var(--line-soft); }
+.nav-inner { max-width: 1200px; margin: 0 auto; padding: 16px 32px; display: flex; align-items: center; justify-content: space-between; }
+.brand { font-family: var(--font-display); font-size: 1.3rem; font-weight: 700; color: var(--ink); display: inline-flex; align-items: center; gap: 4px; border-bottom: none; }
+.brand:hover { border-bottom: none; }
+.brand-mark { display: inline-flex; align-items: flex-start; font-family: "Pretendard", sans-serif; font-weight: 900; letter-spacing: -0.04em; line-height: 1; color: inherit; }
+.temp-mark { display: flex; flex-direction: column; line-height: .82; margin: 0 .05em 0 .04em; }
+.temp-mark .temp-deg { font-size: .42em; letter-spacing: -.04em; }
+.temp-mark .temp-c { font-size: .58em; letter-spacing: -.05em; margin-top: -.05em; }
+.nav-back { font-family: var(--font-mono); font-size: .75rem; letter-spacing: .18em; color: var(--ink-mute); border-bottom: none; }
+.nav-back:hover { color: var(--copper); border-bottom: none; }
+.article-hero { padding: 56px 0 48px; border-bottom: 1px solid var(--line-soft); }
+.eyebrow { font-family: var(--font-mono); font-size: .72rem; letter-spacing: .28em; color: var(--copper); margin-bottom: 18px; display: flex; align-items: center; gap: 12px; }
+.eyebrow::before { content: ""; display: inline-block; width: 28px; height: 1px; background: var(--copper); }
+.article-title { font-family: var(--font-display); font-weight: 500; font-size: clamp(2rem, 4.5vw, 3.2rem); line-height: 1.15; letter-spacing: -0.02em; color: var(--ink); margin-bottom: 20px; }
+.article-title em { font-style: italic; color: var(--espresso); font-weight: 600; }
+.article-one-liner { font-family: var(--font-display); font-style: italic; font-size: 1.3rem; line-height: 1.5; color: var(--espresso); margin-bottom: 28px; padding-left: 20px; border-left: 3px solid var(--caramel); }
+.article-meta { display: flex; gap: 24px; flex-wrap: wrap; font-family: var(--font-mono); font-size: .75rem; letter-spacing: .12em; color: var(--ink-soft); padding-top: 20px; border-top: 1px solid var(--line-soft); }
+.article-meta span { display: inline-flex; align-items: center; gap: 6px; }
+.article-meta span::before { content: "■"; color: var(--caramel); font-size: .55rem; }
+.hero-image { margin: 32px 0 0; border-radius: var(--r-md); overflow: hidden; border: 1px solid var(--line); }
+.hero-image img { width: 100%; }
+.article-body { padding: 56px 0 80px; }
+.article-footer { padding: 36px 0 56px; border-top: 1px solid var(--line-soft); text-align: center; font-family: var(--font-mono); font-size: .75rem; letter-spacing: .14em; color: var(--ink-soft); }
+.article-footer a { color: var(--ink-mute); border-bottom: 1px solid transparent; }
+.article-footer a:hover { color: var(--copper); border-bottom-color: var(--copper); }
+.source-basis { display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; background: rgba(201,152,106,.18); border: 1px solid rgba(181,112,61,.35); border-radius: var(--r-pill); font-family: var(--font-mono); font-size: .72rem; letter-spacing: .12em; color: var(--espresso); font-weight: 500; }
+.source-basis.abstract { background: rgba(107,94,82,.1); border-color: rgba(107,94,82,.3); color: var(--ink-soft); }
+.links-row { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 18px; }
+.link-pill { display: inline-flex; align-items: center; gap: 8px; padding: 9px 16px; background: var(--canvas-warm); border: 1px solid var(--line); border-radius: var(--r-pill); font-family: var(--font-mono); font-size: .78rem; letter-spacing: .08em; color: var(--ink-mute); border-bottom: 1px solid var(--line); transition: border-color .2s, color .2s; }
+.link-pill:hover { color: var(--copper); border-color: var(--copper); }
+
+/* ===== EZ: 쉬운 설명 스타일 ===== */
+.ez-hero { text-align: center; padding: 8px 0 32px; }
+.ez-hero-emoji { font-size: 3.4rem; line-height: 1; }
+.ez-hero-title { font-family: var(--font-display); font-size: clamp(1.6rem, 3.5vw, 2.2rem); font-weight: 600; color: var(--ink); margin-top: 14px; line-height: 1.3; }
+.ez-section { margin-bottom: 52px; }
+.ez-section h2 { font-family: var(--font-body); font-size: 1.5rem; font-weight: 700; color: var(--ink); margin-bottom: 18px; letter-spacing: -0.01em; }
+.ez-section h3 { font-size: 1.08rem; font-weight: 600; color: var(--espresso); margin: 22px 0 10px; }
+.ez-section p { font-size: 1.04rem; line-height: 1.85; color: var(--ink-mute); margin-bottom: 14px; }
+.ez-section p:last-child { margin-bottom: 0; }
+.ez-section ul { padding-left: 22px; margin-bottom: 14px; }
+.ez-section li { font-size: 1.02rem; line-height: 1.8; color: var(--ink-mute); margin-bottom: 8px; }
+.ez-callout { margin: 14px 0; padding: 14px 18px; background: var(--canvas-warm); border-left: 3px solid var(--caramel); border-radius: 4px; font-size: 0.98rem; color: var(--espresso); line-height: 1.75; }
+.ez-callout strong { color: var(--copper); }
+.ez-findings { list-style: none; padding: 0; }
+.ez-findings > li { padding: 18px 22px; margin-bottom: 14px; background: var(--canvas-warm); border: 1px solid var(--line); border-radius: 10px; font-size: 1.02rem; line-height: 1.7; color: var(--ink-mute); }
+.ez-findings > li strong { color: var(--ink); display: block; margin-bottom: 4px; font-size: 1.06rem; }
+.ez-findings > li.gold { background: linear-gradient(135deg, #FFF8E7, #FFEFCD); border-color: #F0D67A; }
+.ez-findings > li.silver { background: linear-gradient(135deg, #F6F6F6, #ECECEC); border-color: #C7C7C7; }
+.ez-findings > li.bronze { background: linear-gradient(135deg, #FFEEDD, #FFDCC0); border-color: #E4B07F; }
+.ez-findings > li.medal { background: linear-gradient(135deg, #F0E6FF, #E1D2FF); border-color: #BDA8E5; }
+.ez-table { width: 100%; border-collapse: collapse; margin: 16px 0 8px; font-size: 0.96rem; }
+.ez-table th, .ez-table td { padding: 11px 14px; border: 1px solid var(--line); text-align: left; vertical-align: top; }
+.ez-table thead th { background: var(--ink); color: #fff; font-weight: 600; letter-spacing: .02em; }
+.ez-table tbody th { background: var(--canvas-warm); color: var(--ink); font-weight: 600; }
+.ez-table tbody tr:nth-child(even) td { background: rgba(250, 247, 242, .55); }
+.ez-summary { padding: 26px 30px; background: linear-gradient(135deg, #FAF0E0, #F3E1C5); border-radius: 14px; font-size: 1.13rem; line-height: 1.75; font-weight: 500; color: var(--ink); border: 1px solid #E5C99B; }
+.ez-summary strong { color: var(--espresso); }
+.ez-citation { margin-top: 24px; padding: 18px 22px; background: var(--canvas-warm); border-radius: 8px; font-family: var(--font-mono); font-size: 0.82rem; color: var(--ink-soft); line-height: 1.7; }
+.ez-citation p { margin: 4px 0; }
+.ez-chart-card { padding: 22px 24px 18px; background: var(--canvas); border: 1px solid var(--line); border-radius: 12px; margin: 16px 0; }
+.ez-chart-card .ez-chart-title { font-size: 1rem; font-weight: 600; color: var(--ink); margin-bottom: 14px; }
+.ez-bar-row { display: flex; align-items: center; margin: 10px 0; font-size: 0.95rem; gap: 14px; }
+.ez-bar-label { width: 180px; flex-shrink: 0; color: var(--ink-mute); font-weight: 500; }
+.ez-bar-track { flex: 1; height: 32px; background: var(--canvas-warm); border-radius: 6px; overflow: hidden; position: relative; border: 1px solid var(--line); }
+.ez-bar-fill { height: 100%; background: linear-gradient(90deg, var(--caramel), var(--copper)); display: flex; align-items: center; justify-content: flex-end; padding: 0 12px; color: white; font-weight: 700; font-size: 0.92rem; min-width: 56px; }
+.ez-bar-fill.alt { background: linear-gradient(90deg, #6F4E37, #4A3F36); }
+.ez-glossary { display: grid; gap: 12px; }
+.ez-glossary-item { padding: 16px 20px; background: var(--canvas-warm); border: 1px solid var(--line); border-radius: 10px; border-left: 3px solid var(--caramel); }
+.ez-glossary-term { font-family: var(--font-display); font-style: italic; font-size: 1.1rem; font-weight: 600; color: var(--espresso); margin-bottom: 6px; }
+.ez-glossary-def { font-size: 0.98rem; color: var(--ink-mute); line-height: 1.7; }
+@media (max-width: 720px) {
+  .article-hero { padding: 36px 0 32px; }
+  .article-body { padding: 36px 0 56px; }
+  .ez-section { margin-bottom: 40px; }
+  .ez-section h2 { font-size: 1.3rem; }
+  .ez-bar-label { width: 100%; margin-bottom: 4px; }
+  .ez-bar-row { flex-direction: column; align-items: stretch; }
+  .article-meta { gap: 12px 18px; font-size: .68rem; }
+}
+</style>
+</head>
+<body>
+
+<header class="site-nav">
+  <div class="nav-inner">
+    <a class="brand" href="/">
+      <span class="brand-mark">92<span class="temp-mark"><span class="temp-deg">°</span><span class="temp-c">C</span></span></span>ROASTERY
+    </a>
+    <a class="nav-back" href="/insight">← INSIGHTS</a>
+  </div>
+</header>
+
+<article>
+  <section class="article-hero">
+    <div class="container">
+      <div class="eyebrow">— 오늘의 커피 상식 · 2026.09.09</div>
+      <h1 class="article-title">베트남은 어떻게 30년 만에 커피 2위 국가가 됐을까? 🇻🇳</h1>
+      <p class="article-one-liner">연유를 넣은 진한 커피 뒤에는 세계 로부스타의 중심이 된 나라의 이야기가 있다!</p>
+      <div class="article-meta">
+        
+        
+        
+        <span>커피 상식 · 원산지</span>
+      </div>
+      
+      <div class="hero-image">
+        <img src="/static/img/insights/trivia/origin.svg" alt="베트남은 어떻게 30년 만에 커피 2위 국가가 됐을까? 🇻🇳">
+      </div>
+      
+    </div>
+  </section>
+
+  <section class="article-body">
+    <div class="container">
+
+      
+      <div class="ez-hero">
+        <div class="ez-hero-emoji">🇻🇳</div>
+        <div class="ez-hero-title">베트남은 어떻게 30년 만에 커피 2위 국가가 됐을까?</div>
+      </div>
+
+      
+      <div class="ez-section">
+        <h2>🤔 무슨 연구야?</h2>
+        
+          <p>베트남 여행에서 연유가 깔린 진한 커피를 마셔본 적 있어? 작은 금속 필터를 컵 위에 올려두고 한 방울씩 떨어지길 기다리는 그 커피 말이야.</p><p>그런데 베트남이 세계에서 커피를 두 번째로 많이 만드는 나라라는 건 의외로 덜 알려져 있어. 그것도 아주 짧은 기간에 이 자리에 올라섰지. 몇십 년 전만 해도 세계 시장에서 존재감이 크지 않았거든. 📈</p><p>오늘은 베트남 커피 이야기를 해볼게. 왜 이 나라가 로부스타의 중심이 됐는지, 그 선택이 세계 커피 시장에 어떤 변화를 가져왔는지까지.</p>
+        
+      </div>
+
+      
+      
+      <div class="ez-section">
+        <h2>🧪 핵심 개념 쉽게 풀어보면</h2>
+        
+          <h3>1️⃣ 아라비카가 아니라 로부스타를 골랐다</h3>
+          <p>커피나무에는 크게 두 종류가 있어. 향이 섬세하지만 재배가 까다로운 아라비카와, 병충해에 강하고 잘 자라는 로부스타야. 베트남은 로부스타에 집중했어. 주요 산지가 고도가 아주 높지는 않고 기온이 따뜻해서 로부스타에 잘 맞았거든. 게다가 로부스타는 같은 면적에서 더 많이 수확되고 관리가 쉬워서 빠르게 규모를 키우기에 유리했어.</p>
+          <div class="ez-callout">💡 비유: 까다로운 품종 대신 잘 자라고 수확량 많은 품종을 심는 선택이야. 빠르게 규모를 키워야 할 때 합리적인 판단이지. 🌱</div>
+        
+          <h3>2️⃣ 국가적인 확장이 짧은 기간에 이뤄졌다</h3>
+          <p>베트남의 커피 확장은 개별 농가가 각자 늘린 결과가 아니라, 나라 차원의 방향과 맞물려 빠르게 진행됐어. 중부 고원 지역으로 사람들이 이주해 커피밭을 일구고, 수출 인프라가 함께 갖춰지면서 생산량이 가파르게 올라갔지. 그 결과 세계 로부스타 공급의 큰 축을 담당하게 됐어. 커피 산업이 한 세대 만에 나라의 주요 수출 품목으로 자리 잡은 드문 사례야.</p>
+          <div class="ez-callout">💡 비유: 한 도시가 계획적으로 산업단지를 만들어 몇십 년 만에 수출 중심지가 되는 것과 비슷한 흐름이야. 🏗️</div>
+        
+          <h3>3️⃣ 로부스타가 향하는 곳 — 인스턴트와 블렌드</h3>
+          <p>로부스타는 카페인이 많고 쓴맛과 묵직함이 강해. 그래서 그대로 마시기보다 인스턴트 커피의 원료나 에스프레소 블렌드의 재료로 많이 쓰여. 특히 에스프레소에서는 크레마를 두껍게 만들고 우유에 지지 않는 힘을 더해주는 역할을 해. 이탈리아식 진한 에스프레소 블렌드에 로부스타가 섞이는 경우가 많은 것도 이 때문이야.</p>
+          <div class="ez-callout">💡 비유: 요리에 넣는 진한 육수 같아. 혼자 마시기엔 세지만, 섞으면 전체를 든든하게 받쳐주잖아. 🍜</div>
+        
+      </div>
+      
+
+      
+      
+      <div class="ez-section">
+        <h2>🎯 핵심 발견</h2>
+        <ul class="ez-findings">
+          
+          
+            
+              <li class="gold">
+                <strong>🥇 베트남식 커피는 도구부터 다르다</strong>베트남에서는 작은 금속 필터를 컵 위에 올리고 물을 부어 한 방울씩 내려. 시간이 오래 걸리는 만큼 아주 진한 커피가 나오고, 여기에 연유를 넣어 단맛과 부드러움을 더하지. 로부스타의 강한 쓴맛과 연유의 진한 단맛이 만나 균형을 이루는 조합이야. 얼음을 가득 넣은 형태도 인기가 많고, 달걀노른자를 올린 독특한 메뉴도 있어. ☕
+              </li>
+            
+              <li class="silver">
+                <strong>🥈 요즘은 아라비카와 스페셜티도 늘고 있다</strong>베트남에도 고도가 높은 지역이 있어서, 그런 곳을 중심으로 아라비카를 기르는 시도가 이어지고 있어. 가공을 세심하게 하고 품질로 승부하는 소규모 생산자도 늘었지. 또 로부스타 자체를 정성껏 가공해 품질을 끌어올리는 흐름도 생겼어. 로부스타는 무조건 저급이라는 인식이 흔들리고 있는 셈이야. 실제로 잘 만든 로부스타를 따로 평가하는 자리도 생겼어. 🌟
+              </li>
+            
+              <li class="bronze">
+                <strong>🥉 세계 커피값에 미치는 영향이 크다</strong>베트남의 작황은 세계 로부스타 가격에 직접 영향을 줘. 가뭄이 들거나 태풍이 지나가면 공급이 줄어 값이 오르고, 인스턴트 커피와 저가 커피의 원가가 함께 움직이지. 브라질이 아라비카 쪽 시장의 기상도라면, 베트남은 로부스타 쪽 기상도인 셈이야. 커피 시장 뉴스에 이 두 나라가 나란히 등장하는 이유가 여기 있어. 🌪️
+              </li>
+            
+              <li class="medal">
+                <strong>🏅 커피는 원래 이 지역의 작물이 아니었다</strong>커피나무는 아프리카에서 시작된 식물이야. 베트남에 커피가 들어온 건 19세기 무렵으로, 처음에는 규모가 아주 작았어. 그러다 20세기 후반에 들어 본격적으로 확대된 거지. 지금은 국민 음료라고 할 만큼 커피 문화가 두터워졌고, 도시마다 개성 있는 카페가 넘쳐. 백몇십 년 만에 외래 작물이 나라의 상징이 된 셈이야. 🌏
+              </li>
+            
+          
+        </ul>
+      </div>
+      
+
+      
+      
+      <div class="ez-section">
+        <h2>📊 숫자로 보기</h2>
+        
+          
+          
+          <div class="ez-chart-card">
+            <div class="ez-chart-title">커피 생산량 상위 국가 (대략적인 비중)</div>
+            
+              
+              <div class="ez-bar-row">
+                <div class="ez-bar-label">브라질</div>
+                <div class="ez-bar-track"><div class="ez-bar-fill" style="width: 100.0%;">33.0퍼센트</div></div>
+              </div>
+            
+              
+              <div class="ez-bar-row">
+                <div class="ez-bar-label">베트남</div>
+                <div class="ez-bar-track"><div class="ez-bar-fill" style="width: 51.5%;">17.0퍼센트</div></div>
+              </div>
+            
+              
+              <div class="ez-bar-row">
+                <div class="ez-bar-label">콜롬비아</div>
+                <div class="ez-bar-track"><div class="ez-bar-fill" style="width: 24.2%;">8.0퍼센트</div></div>
+              </div>
+            
+              
+              <div class="ez-bar-row">
+                <div class="ez-bar-label">인도네시아</div>
+                <div class="ez-bar-track"><div class="ez-bar-fill" style="width: 21.2%;">7.0퍼센트</div></div>
+              </div>
+            
+          </div>
+        
+      </div>
+      
+
+      
+      
+      
+      <div class="ez-section">
+        <h2>🆚 아라비카와 로부스타, 뭐가 다를까?</h2>
+        <table class="ez-table">
+          <thead><tr><th>항목</th><th>아라비카</th><th>로부스타</th></tr></thead>
+          <tbody>
+            <tr>
+              <th>맛의 인상</th><td>산미와 향이 섬세함</td><td>쓴맛과 묵직함이 강함</td>
+            </tr><tr>
+              <th>카페인</th><td>상대적으로 적음</td><td>상대적으로 많음</td>
+            </tr><tr>
+              <th>재배 조건</th><td>높은 고도, 서늘한 기후</td><td>낮은 고도에서도 잘 자람</td>
+            </tr><tr>
+              <th>병충해</th><td>약한 편</td><td>강한 편</td>
+            </tr><tr>
+              <th>주 용도</th><td>싱글 오리진, 드립</td><td>인스턴트, 에스프레소 블렌드</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      
+      
+
+      
+      
+
+      
+      
+
+      
+      
+      <div class="ez-section">
+        <div class="ez-summary">💡 <strong>한 줄 요약</strong> — 베트남은 로부스타에 집중해 짧은 기간에 세계 2위 생산국이 됐다. 진한 커피에 연유를 더한 문화가 자리 잡았고, 최근에는 아라비카와 고품질 로부스타 시도도 늘고 있다!</div>
+      </div>
+      
+
+      
+      
+      
+      
+
+      
+      
+      <div class="ez-section">
+        <h2>📖 어려운 말 풀이 사전</h2>
+        <p>이 글에 나온 어려운 약어와 용어를 한 번에 정리했어. 의미만 알면 본문이 훨씬 쉬워져!</p>
+        <div class="ez-glossary">
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">로부스타</div>
+            <div class="ez-glossary-def">병충해에 강하고 수확량이 많은 커피 종. 쓴맛과 카페인이 강함</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">아라비카</div>
+            <div class="ez-glossary-def">향이 섬세하지만 재배가 까다로운 커피 종. 스페셜티의 주류</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">핀(Phin)</div>
+            <div class="ez-glossary-def">베트남에서 쓰는 작은 금속 드립 필터</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">연유 커피</div>
+            <div class="ez-glossary-def">진한 커피에 연유를 넣어 마시는 베트남식 음료</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">작황</div>
+            <div class="ez-glossary-def">그해 농사의 잘되고 못된 정도. 시장 가격에 직접 영향을 줌</div>
+          </div>
+          
+        </div>
+      </div>
+      
+
+    </div>
+  </section>
+
+  <footer class="article-footer">
+    <div class="container">
+      <a href="/insight">← BACK TO INSIGHTS</a>
+      <span style="margin: 0 16px;">·</span>
+      <a href="/">HOME</a>
+    </div>
+  </footer>
+</article>
+
+</body>
+</html>
