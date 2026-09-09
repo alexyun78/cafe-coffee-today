@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>티피카, 부르봉, 카투아이… 커피 품종 이름은 어디서 왔을까? 🌳 — 92°C ROASTERY</title>
+<meta name="description" content="세상의 아라비카는 대부분 두 갈래에서 뻗어 나왔다. 족보를 알면 봉지 위 낯선 이름이 읽힌다!">
+<link rel="icon" type="image/png" href="/static/img/logo-92black.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --canvas: #FFFFFF; --canvas-warm: #FAF7F2; --canvas-stone: #F2ECE3;
+  --ink: #1A1410; --ink-mute: #4A3F36; --ink-soft: #6B5E52;
+  --espresso: #6F4E37; --caramel: #C9986A; --copper: #B5703D;
+  --line: #E8E0D5; --line-soft: #F0E9DD;
+  --font-display: "Cormorant Garamond", "Pretendard", serif;
+  --font-body: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  --r-sm: 6px; --r-md: 12px; --r-pill: 999px;
+}
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color: transparent; }
+html { scroll-behavior: smooth; }
+body { font-family: var(--font-body); color: var(--ink); background: var(--canvas); font-feature-settings: "kern","ss01","lnum"; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+a { color: var(--copper); text-decoration: none; border-bottom: 1px solid transparent; transition: border-color .2s; }
+a:hover { border-bottom-color: var(--copper); }
+img { display: block; max-width: 100%; height: auto; }
+.container { max-width: 860px; margin: 0 auto; padding: 0 32px; }
+@media (max-width: 720px) { .container { padding: 0 20px; } }
+@media (max-width: 480px) { .container { padding: 0 16px; } }
+.site-nav { position: sticky; top: 0; z-index: 50; background: rgba(255,255,255,0.9); backdrop-filter: saturate(140%) blur(14px); -webkit-backdrop-filter: saturate(140%) blur(14px); border-bottom: 1px solid var(--line-soft); }
+.nav-inner { max-width: 1200px; margin: 0 auto; padding: 16px 32px; display: flex; align-items: center; justify-content: space-between; }
+.brand { font-family: var(--font-display); font-size: 1.3rem; font-weight: 700; color: var(--ink); display: inline-flex; align-items: center; gap: 4px; border-bottom: none; }
+.brand:hover { border-bottom: none; }
+.brand-mark { display: inline-flex; align-items: flex-start; font-family: "Pretendard", sans-serif; font-weight: 900; letter-spacing: -0.04em; line-height: 1; color: inherit; }
+.temp-mark { display: flex; flex-direction: column; line-height: .82; margin: 0 .05em 0 .04em; }
+.temp-mark .temp-deg { font-size: .42em; letter-spacing: -.04em; }
+.temp-mark .temp-c { font-size: .58em; letter-spacing: -.05em; margin-top: -.05em; }
+.nav-back { font-family: var(--font-mono); font-size: .75rem; letter-spacing: .18em; color: var(--ink-mute); border-bottom: none; }
+.nav-back:hover { color: var(--copper); border-bottom: none; }
+.article-hero { padding: 56px 0 48px; border-bottom: 1px solid var(--line-soft); }
+.eyebrow { font-family: var(--font-mono); font-size: .72rem; letter-spacing: .28em; color: var(--copper); margin-bottom: 18px; display: flex; align-items: center; gap: 12px; }
+.eyebrow::before { content: ""; display: inline-block; width: 28px; height: 1px; background: var(--copper); }
+.article-title { font-family: var(--font-display); font-weight: 500; font-size: clamp(2rem, 4.5vw, 3.2rem); line-height: 1.15; letter-spacing: -0.02em; color: var(--ink); margin-bottom: 20px; }
+.article-title em { font-style: italic; color: var(--espresso); font-weight: 600; }
+.article-one-liner { font-family: var(--font-display); font-style: italic; font-size: 1.3rem; line-height: 1.5; color: var(--espresso); margin-bottom: 28px; padding-left: 20px; border-left: 3px solid var(--caramel); }
+.article-meta { display: flex; gap: 24px; flex-wrap: wrap; font-family: var(--font-mono); font-size: .75rem; letter-spacing: .12em; color: var(--ink-soft); padding-top: 20px; border-top: 1px solid var(--line-soft); }
+.article-meta span { display: inline-flex; align-items: center; gap: 6px; }
+.article-meta span::before { content: "■"; color: var(--caramel); font-size: .55rem; }
+.hero-image { margin: 32px 0 0; border-radius: var(--r-md); overflow: hidden; border: 1px solid var(--line); }
+.hero-image img { width: 100%; }
+.article-body { padding: 56px 0 80px; }
+.article-footer { padding: 36px 0 56px; border-top: 1px solid var(--line-soft); text-align: center; font-family: var(--font-mono); font-size: .75rem; letter-spacing: .14em; color: var(--ink-soft); }
+.article-footer a { color: var(--ink-mute); border-bottom: 1px solid transparent; }
+.article-footer a:hover { color: var(--copper); border-bottom-color: var(--copper); }
+.source-basis { display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; background: rgba(201,152,106,.18); border: 1px solid rgba(181,112,61,.35); border-radius: var(--r-pill); font-family: var(--font-mono); font-size: .72rem; letter-spacing: .12em; color: var(--espresso); font-weight: 500; }
+.source-basis.abstract { background: rgba(107,94,82,.1); border-color: rgba(107,94,82,.3); color: var(--ink-soft); }
+.links-row { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 18px; }
+.link-pill { display: inline-flex; align-items: center; gap: 8px; padding: 9px 16px; background: var(--canvas-warm); border: 1px solid var(--line); border-radius: var(--r-pill); font-family: var(--font-mono); font-size: .78rem; letter-spacing: .08em; color: var(--ink-mute); border-bottom: 1px solid var(--line); transition: border-color .2s, color .2s; }
+.link-pill:hover { color: var(--copper); border-color: var(--copper); }
+
+/* ===== EZ: 쉬운 설명 스타일 ===== */
+.ez-hero { text-align: center; padding: 8px 0 32px; }
+.ez-hero-emoji { font-size: 3.4rem; line-height: 1; }
+.ez-hero-title { font-family: var(--font-display); font-size: clamp(1.6rem, 3.5vw, 2.2rem); font-weight: 600; color: var(--ink); margin-top: 14px; line-height: 1.3; }
+.ez-section { margin-bottom: 52px; }
+.ez-section h2 { font-family: var(--font-body); font-size: 1.5rem; font-weight: 700; color: var(--ink); margin-bottom: 18px; letter-spacing: -0.01em; }
+.ez-section h3 { font-size: 1.08rem; font-weight: 600; color: var(--espresso); margin: 22px 0 10px; }
+.ez-section p { font-size: 1.04rem; line-height: 1.85; color: var(--ink-mute); margin-bottom: 14px; }
+.ez-section p:last-child { margin-bottom: 0; }
+.ez-section ul { padding-left: 22px; margin-bottom: 14px; }
+.ez-section li { font-size: 1.02rem; line-height: 1.8; color: var(--ink-mute); margin-bottom: 8px; }
+.ez-callout { margin: 14px 0; padding: 14px 18px; background: var(--canvas-warm); border-left: 3px solid var(--caramel); border-radius: 4px; font-size: 0.98rem; color: var(--espresso); line-height: 1.75; }
+.ez-callout strong { color: var(--copper); }
+.ez-findings { list-style: none; padding: 0; }
+.ez-findings > li { padding: 18px 22px; margin-bottom: 14px; background: var(--canvas-warm); border: 1px solid var(--line); border-radius: 10px; font-size: 1.02rem; line-height: 1.7; color: var(--ink-mute); }
+.ez-findings > li strong { color: var(--ink); display: block; margin-bottom: 4px; font-size: 1.06rem; }
+.ez-findings > li.gold { background: linear-gradient(135deg, #FFF8E7, #FFEFCD); border-color: #F0D67A; }
+.ez-findings > li.silver { background: linear-gradient(135deg, #F6F6F6, #ECECEC); border-color: #C7C7C7; }
+.ez-findings > li.bronze { background: linear-gradient(135deg, #FFEEDD, #FFDCC0); border-color: #E4B07F; }
+.ez-findings > li.medal { background: linear-gradient(135deg, #F0E6FF, #E1D2FF); border-color: #BDA8E5; }
+.ez-table { width: 100%; border-collapse: collapse; margin: 16px 0 8px; font-size: 0.96rem; }
+.ez-table th, .ez-table td { padding: 11px 14px; border: 1px solid var(--line); text-align: left; vertical-align: top; }
+.ez-table thead th { background: var(--ink); color: #fff; font-weight: 600; letter-spacing: .02em; }
+.ez-table tbody th { background: var(--canvas-warm); color: var(--ink); font-weight: 600; }
+.ez-table tbody tr:nth-child(even) td { background: rgba(250, 247, 242, .55); }
+.ez-summary { padding: 26px 30px; background: linear-gradient(135deg, #FAF0E0, #F3E1C5); border-radius: 14px; font-size: 1.13rem; line-height: 1.75; font-weight: 500; color: var(--ink); border: 1px solid #E5C99B; }
+.ez-summary strong { color: var(--espresso); }
+.ez-citation { margin-top: 24px; padding: 18px 22px; background: var(--canvas-warm); border-radius: 8px; font-family: var(--font-mono); font-size: 0.82rem; color: var(--ink-soft); line-height: 1.7; }
+.ez-citation p { margin: 4px 0; }
+.ez-chart-card { padding: 22px 24px 18px; background: var(--canvas); border: 1px solid var(--line); border-radius: 12px; margin: 16px 0; }
+.ez-chart-card .ez-chart-title { font-size: 1rem; font-weight: 600; color: var(--ink); margin-bottom: 14px; }
+.ez-bar-row { display: flex; align-items: center; margin: 10px 0; font-size: 0.95rem; gap: 14px; }
+.ez-bar-label { width: 180px; flex-shrink: 0; color: var(--ink-mute); font-weight: 500; }
+.ez-bar-track { flex: 1; height: 32px; background: var(--canvas-warm); border-radius: 6px; overflow: hidden; position: relative; border: 1px solid var(--line); }
+.ez-bar-fill { height: 100%; background: linear-gradient(90deg, var(--caramel), var(--copper)); display: flex; align-items: center; justify-content: flex-end; padding: 0 12px; color: white; font-weight: 700; font-size: 0.92rem; min-width: 56px; }
+.ez-bar-fill.alt { background: linear-gradient(90deg, #6F4E37, #4A3F36); }
+.ez-glossary { display: grid; gap: 12px; }
+.ez-glossary-item { padding: 16px 20px; background: var(--canvas-warm); border: 1px solid var(--line); border-radius: 10px; border-left: 3px solid var(--caramel); }
+.ez-glossary-term { font-family: var(--font-display); font-style: italic; font-size: 1.1rem; font-weight: 600; color: var(--espresso); margin-bottom: 6px; }
+.ez-glossary-def { font-size: 0.98rem; color: var(--ink-mute); line-height: 1.7; }
+@media (max-width: 720px) {
+  .article-hero { padding: 36px 0 32px; }
+  .article-body { padding: 36px 0 56px; }
+  .ez-section { margin-bottom: 40px; }
+  .ez-section h2 { font-size: 1.3rem; }
+  .ez-bar-label { width: 100%; margin-bottom: 4px; }
+  .ez-bar-row { flex-direction: column; align-items: stretch; }
+  .article-meta { gap: 12px 18px; font-size: .68rem; }
+}
+</style>
+</head>
+<body>
+
+<header class="site-nav">
+  <div class="nav-inner">
+    <a class="brand" href="/">
+      <span class="brand-mark">92<span class="temp-mark"><span class="temp-deg">°</span><span class="temp-c">C</span></span></span>ROASTERY
+    </a>
+    <a class="nav-back" href="/insight">← INSIGHTS</a>
+  </div>
+</header>
+
+<article>
+  <section class="article-hero">
+    <div class="container">
+      <div class="eyebrow">— 오늘의 커피 상식 · 2026.09.10</div>
+      <h1 class="article-title">티피카, 부르봉, 카투아이… 커피 품종 이름은 어디서 왔을까? 🌳</h1>
+      <p class="article-one-liner">세상의 아라비카는 대부분 두 갈래에서 뻗어 나왔다. 족보를 알면 봉지 위 낯선 이름이 읽힌다!</p>
+      <div class="article-meta">
+        
+        
+        
+        <span>커피 상식 · 용어</span>
+      </div>
+      
+      <div class="hero-image">
+        <img src="/static/img/insights/trivia/terms.svg" alt="티피카, 부르봉, 카투아이… 커피 품종 이름은 어디서 왔을까? 🌳">
+      </div>
+      
+    </div>
+  </section>
+
+  <section class="article-body">
+    <div class="container">
+
+      
+      <div class="ez-hero">
+        <div class="ez-hero-emoji">🌳</div>
+        <div class="ez-hero-title">티피카, 부르봉, 카투아이… 커피 품종 이름은 어디서 왔을까?</div>
+      </div>
+
+      
+      <div class="ez-section">
+        <h2>🤔 무슨 연구야?</h2>
+        
+          <p>원두 봉지에 적힌 품종 이름들, 처음 보면 외계어 같아. 티피카, 부르봉, 카투라, 카투아이, 문도노보, SL28. 사과에 부사와 홍옥이 있는 것처럼 커피나무에도 품종이 있는 건데, 이름이 워낙 낯설어서 그냥 넘기게 되지.</p><p>그런데 이 이름들에는 규칙이 있어. 대부분의 아라비카 품종은 크게 두 갈래에서 뻗어 나왔고, 나머지는 그 둘의 자손이거나 돌연변이거나 다른 종과 섞인 결과야. 족보 한 장만 머릿속에 있으면 낯선 이름도 대충 어느 자리쯤인지 짐작이 돼. 📜</p><p>오늘은 그 족보를 아주 단순하게 그려볼게. 봉지를 읽는 눈이 확 달라질 거야.</p>
+        
+      </div>
+
+      
+      
+      <div class="ez-section">
+        <h2>🧪 핵심 개념 쉽게 풀어보면</h2>
+        
+          <h3>1️⃣ 뿌리는 티피카와 부르봉, 두 갈래</h3>
+          <p>에티오피아에서 시작된 커피가 세계로 퍼질 때, 결정적인 역할을 한 두 갈래가 있어. 하나가 티피카, 다른 하나가 부르봉이야. 티피카는 잎끝이 붉고 키가 큰 편이며 수확량은 적지만 맛이 깔끔하다는 평이 있고, 부르봉은 상대적으로 열매가 많이 달리고 단맛이 좋다는 평을 들어. 오늘날 중남미의 수많은 품종이 이 둘 중 하나에서 갈라져 나왔거나, 둘을 교배한 결과야.</p>
+          <div class="ez-callout">💡 비유: 가문의 시조가 둘 있고 그 아래로 자손들이 갈라져 나온 족보와 똑같아. 이름만 달라도 결국 한 뿌리인 경우가 많지. 👨‍👩‍👧</div>
+        
+          <h3>2️⃣ 카투라와 카투아이 — 키를 줄이려는 노력</h3>
+          <p>커피나무가 키가 크면 수확이 힘들어. 사다리를 놓고 따야 하니까 시간과 인건비가 더 들지. 그래서 키가 작게 자라는 나무가 발견되면 아주 귀하게 여겼어. 부르봉에서 자연적으로 생긴 키 작은 돌연변이가 카투라야. 여기에 다른 품종을 교배해 만든 게 카투아이고. 이름 끝에 붙는 차이는 대개 이런 개량의 방향을 담고 있어. 수확 효율과 병 저항성을 높이려는 시도가 대부분이야.</p>
+          <div class="ez-callout">💡 비유: 과수원에서 사과나무를 낮게 키우는 왜성 품종을 쓰는 것과 같아. 사다리 없이 따면 훨씬 수월하잖아. 🪜</div>
+        
+          <h3>3️⃣ 알파벳과 숫자로 된 이름은 연구소 출신</h3>
+          <p>SL28처럼 알파벳과 숫자로 된 이름은 연구 기관에서 선발한 품종이라는 뜻이야. 여러 나무 중 좋은 형질을 가진 개체를 골라 번호를 붙인 거지. 케냐 커피의 특징적인 산미를 이야기할 때 자주 등장하는 이름이야. 비슷하게 특정 연구소나 국가 기관에서 개발한 품종들이 알파벳 약자와 번호로 불리는 경우가 많아. 이름이 무미건조할수록 연구소 출신일 가능성이 높다고 보면 돼.</p>
+          <div class="ez-callout">💡 비유: 실험실에서 만든 시제품에 번호를 붙이는 것과 같아. 나중에 성공하면 그 번호가 그대로 이름이 되는 거지. 🔬</div>
+        
+      </div>
+      
+
+      
+      
+      <div class="ez-section">
+        <h2>🎯 핵심 발견</h2>
+        <ul class="ez-findings">
+          
+          
+            
+              <li class="gold">
+                <strong>🥇 게이샤는 원래 무명이었다</strong>지금은 가장 비싼 커피 이야기에 늘 등장하는 게이샤지만, 원래는 특별 대접을 받던 품종이 아니었어. 에티오피아에서 옮겨져 여러 나라를 거치는 동안 수확량이 적고 키가 커서 인기가 없었거든. 그러다 한 농장이 높은 곳에 심어둔 이 나무의 커피를 대회에 냈고, 화사한 꽃향과 홍차 같은 인상으로 단숨에 유명해졌어. 같은 품종도 어디에 심느냐에 따라 완전히 달라진다는 걸 보여준 사례야. 🌸
+              </li>
+            
+              <li class="silver">
+                <strong>🥈 병에 강한 품종은 다른 종의 피를 빌렸다</strong>잎이 녹슨 것처럼 변해 나무를 무너뜨리는 병이 커피 농사의 오랜 골칫거리였어. 이 병에 강한 나무를 만들려고, 병에 잘 견디는 다른 커피 종과 아라비카를 교배한 품종들이 나왔지. 이런 계열은 농가에게 큰 도움이 됐지만, 맛에서는 아라비카 고유의 섬세함이 덜하다는 평을 듣기도 했어. 최근에는 저항성과 맛을 함께 잡으려는 개량이 계속되고 있어. 🛡️
+              </li>
+            
+              <li class="bronze">
+                <strong>🥉 에티오피아 커피는 품종 대신 다른 말을 쓴다</strong>에티오피아는 커피의 고향이라 야생에 가까운 품종이 어마어마하게 많아. 한 농장 안에도 수십 가지가 섞여 자라는 일이 흔하지. 그래서 봉지에 품종을 하나로 적기가 어려워. 대신 그 지역의 토착 품종들이라는 뜻의 표현을 쓰거나, 지역 이름으로 대신하는 경우가 많아. 품종 칸이 비어 있다고 정보가 부족한 게 아니라, 애초에 하나로 적을 수 없는 커피인 거야. 🌍
+              </li>
+            
+              <li class="medal">
+                <strong>🏅 품종만으로 맛이 결정되지는 않는다</strong>같은 게이샤라도 어느 고도에서 자랐는지, 어떻게 가공했는지, 누가 볶았는지에 따라 완전히 다른 잔이 돼. 품종은 그 커피가 가진 잠재력의 방향을 알려줄 뿐, 결과를 보장하지 않아. 그래서 품종 이름 하나만 보고 값을 지불하는 건 위험해. 품종은 고도, 가공, 로스팅과 함께 읽을 때 비로소 쓸모 있는 정보가 돼. ⚖️
+              </li>
+            
+          
+        </ul>
+      </div>
+      
+
+      
+      
+      <div class="ez-section">
+        <h2>📊 숫자로 보기</h2>
+        
+          
+          
+          <div class="ez-chart-card">
+            <div class="ez-chart-title">품종 정보를 읽을 때 함께 봐야 할 항목</div>
+            
+              
+              <div class="ez-bar-row">
+                <div class="ez-bar-label">품종</div>
+                <div class="ez-bar-track"><div class="ez-bar-fill" style="width: 100.0%;">4.0중요도</div></div>
+              </div>
+            
+              
+              <div class="ez-bar-row">
+                <div class="ez-bar-label">재배 고도</div>
+                <div class="ez-bar-track"><div class="ez-bar-fill" style="width: 100.0%;">4.0중요도</div></div>
+              </div>
+            
+              
+              <div class="ez-bar-row">
+                <div class="ez-bar-label">가공 방식</div>
+                <div class="ez-bar-track"><div class="ez-bar-fill" style="width: 100.0%;">4.0중요도</div></div>
+              </div>
+            
+              
+              <div class="ez-bar-row">
+                <div class="ez-bar-label">로스팅 정도</div>
+                <div class="ez-bar-track"><div class="ez-bar-fill" style="width: 100.0%;">4.0중요도</div></div>
+              </div>
+            
+          </div>
+        
+      </div>
+      
+
+      
+      
+      
+      <div class="ez-section">
+        <h2>🆚 자주 보이는 품종, 어디서 왔나?</h2>
+        <table class="ez-table">
+          <thead><tr><th>품종</th><th>출신</th><th>특징으로 이야기되는 것</th></tr></thead>
+          <tbody>
+            <tr>
+              <th>티피카</th><td>가장 오래된 갈래 중 하나</td><td>깔끔하지만 수확량이 적음</td>
+            </tr><tr>
+              <th>부르봉</th><td>또 하나의 큰 갈래</td><td>단맛이 좋고 열매가 잘 달림</td>
+            </tr><tr>
+              <th>카투라</th><td>부르봉의 키 작은 돌연변이</td><td>수확이 수월함</td>
+            </tr><tr>
+              <th>카투아이</th><td>교배로 만든 품종</td><td>바람에 열매가 잘 안 떨어짐</td>
+            </tr><tr>
+              <th>게이샤</th><td>에티오피아에서 옮겨온 계열</td><td>꽃향과 홍차 같은 인상</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      
+      
+
+      
+      
+
+      
+      
+
+      
+      
+      <div class="ez-section">
+        <div class="ez-summary">💡 <strong>한 줄 요약</strong> — 아라비카 품종은 대부분 티피카와 부르봉 두 갈래에서 갈라져 나왔다. 키를 줄이거나 병에 강하게 만들려는 개량의 결과가 지금의 이름들이고, 품종은 고도와 가공과 함께 읽어야 쓸모가 있다!</div>
+      </div>
+      
+
+      
+      
+      
+      
+
+      
+      
+      <div class="ez-section">
+        <h2>📖 어려운 말 풀이 사전</h2>
+        <p>이 글에 나온 어려운 약어와 용어를 한 번에 정리했어. 의미만 알면 본문이 훨씬 쉬워져!</p>
+        <div class="ez-glossary">
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">품종</div>
+            <div class="ez-glossary-def">같은 종 안에서 형질이 구분되는 갈래. 사과의 부사와 홍옥 같은 관계</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">티피카</div>
+            <div class="ez-glossary-def">가장 오래된 아라비카 갈래 중 하나. 많은 품종의 조상</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">부르봉</div>
+            <div class="ez-glossary-def">티피카와 함께 세계로 퍼진 또 하나의 큰 갈래</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">돌연변이</div>
+            <div class="ez-glossary-def">자연적으로 형질이 바뀐 개체. 카투라가 대표적인 예</div>
+          </div>
+          
+          <div class="ez-glossary-item">
+            <div class="ez-glossary-term">교배종</div>
+            <div class="ez-glossary-def">서로 다른 품종을 인위적으로 교배해 만든 품종</div>
+          </div>
+          
+        </div>
+      </div>
+      
+
+    </div>
+  </section>
+
+  <footer class="article-footer">
+    <div class="container">
+      <a href="/insight">← BACK TO INSIGHTS</a>
+      <span style="margin: 0 16px;">·</span>
+      <a href="/">HOME</a>
+    </div>
+  </footer>
+</article>
+
+</body>
+</html>

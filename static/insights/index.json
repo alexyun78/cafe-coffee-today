@@ -1,7 +1,24 @@
 {
   "version": 1,
-  "updated_at": "2026-09-08T15:17:46Z",
+  "updated_at": "2026-09-09T15:16:06Z",
   "items": [
+    {
+      "id": "2026-09-10-coffee-varieties-family",
+      "type": "trivia",
+      "date": "2026-09-10",
+      "title_ko": "티피카, 부르봉, 카투아이… 커피 품종 이름은 어디서 왔을까? 🌳",
+      "one_liner": "세상의 아라비카는 대부분 두 갈래에서 뻗어 나왔다. 족보를 알면 봉지 위 낯선 이름이 읽힌다!",
+      "categories_primary": [
+        "커피 상식"
+      ],
+      "categories_secondary": [
+        "용어"
+      ],
+      "hero_image": "/static/img/insights/trivia/terms.svg",
+      "journal": null,
+      "pub_date": null,
+      "source_basis": null
+    },
     {
       "id": "2026-09-09-vietnam-robusta",
       "type": "trivia",
