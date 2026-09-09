@@ -183,8 +183,19 @@ async function memberBeanState(db: D1Database, memberId: number | null) {
 
 // ---------- 구글 OAuth ----------
 
-/** 리디렉션 URI 는 요청 오리진에서 만든다 — 구글 콘솔에 프로덕션과 로컬 둘 다 등록해야 한다 */
-const redirectUri = (c: any) => new URL('/auth/google/callback', c.req.url).toString()
+/** 구글에 넘길 리디렉션 URI. **구글 콘솔에 등록한 값과 한 글자도 다르면 안 되므로**
+ *  요청이 어떻게 들어왔든 정규 주소 하나로 고정한다.
+ *   - www 는 떼고 (www 로 들어온 손님도 같은 URI 를 쓰게)
+ *   - http 는 https 로 (구글은 localhost 말고는 http 리디렉션을 거부한다)
+ *   - SITE_HOST 를 주면 그 호스트로 강제 (wrangler.jsonc 의 vars)
+ *  로컬 개발(localhost)만 요청 주소 그대로 둔다. */
+const redirectUri = (c: any) => {
+  const u = new URL(c.req.url)
+  if (u.hostname === 'localhost' || u.hostname === '127.0.0.1')
+    return new URL('/auth/google/callback', c.req.url).toString()
+  const host = (c.env.SITE_HOST || u.host).replace(/^www\./, '')
+  return `https://${host}/auth/google/callback`
+}
 
 /** 로그인 후 돌아갈 경로. 외부 사이트로 튕기지 않도록 내부 절대경로만 허용한다 */
 function safeNext(v: any): string {

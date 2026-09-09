@@ -25,6 +25,9 @@
       "/downloads/*", "/static/downloads/*"
     ]
   },
+  // 구글 OAuth 리디렉션에 쓰는 정규 호스트. www 나 http 로 들어와도 이 주소로 돌아온다
+  // → 구글 콘솔에는 https://92cafe.co.kr/auth/google/callback 하나만 등록하면 된다.
+  "vars": { "SITE_HOST": "92cafe.co.kr" },
   "d1_databases": [
     {
       "binding": "DB",

@@ -9,6 +9,7 @@ export type Env = {
   GITHUB_DISPATCH_TOKEN?: string // nearby 수집 워크플로 트리거용 (actions:write PAT)
   GOOGLE_CLIENT_ID?: string      // 회원 구글 로그인 (없으면 로그인 기능 자체가 꺼진다)
   GOOGLE_CLIENT_SECRET?: string
+  SITE_HOST?: string             // 구글 리디렉션에 쓰는 정규 호스트 (wrangler.jsonc vars)
 }
 
 export type Row = Record<string, any>

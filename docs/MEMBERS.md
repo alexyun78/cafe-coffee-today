@@ -121,35 +121,144 @@ node_modules/.bin/wrangler d1 execute cafe-coffee --remote --file ../scripts/mem
 
 ### 2. 구글 OAuth 클라이언트 (사장님이 직접)
 
-[Google Cloud Console](https://console.cloud.google.com/) →
+끝나면 손에 남는 건 문자열 **두 개**다. 그 둘을 3단계에서 워커에 넣으면 로그인이 켜진다.
 
-1. 프로젝트 생성 (이름 아무거나, 예: `92cafe`)
-2. **API 및 서비스 → OAuth 동의 화면**
-   - User Type: **외부(External)**
-   - 앱 이름 `92도씨 로스터리`, 지원 이메일, 개발자 연락처
-   - **승인된 도메인**: `92cafe.co.kr`
-   - **개인정보처리방침 URL**: `https://92cafe.co.kr/privacy`
-   - 범위(scope)는 `openid`, `email`, `profile` 만. 이 셋은 **비민감(non-sensitive)** 이라
-     구글 앱 심사 없이 프로덕션 게시가 된다.
-   - 마지막에 **게시(PUBLISH)** 를 눌러 "프로덕션" 상태로 바꾼다.
-     테스트 상태로 두면 등록한 테스트 사용자만 로그인된다.
-3. **사용자 인증 정보 → 사용자 인증 정보 만들기 → OAuth 클라이언트 ID**
-   - 애플리케이션 유형: **웹 애플리케이션**
-   - **승인된 리디렉션 URI**:
-     - `https://92cafe.co.kr/auth/google/callback`
-     - (로컬 테스트도 할 거면) `http://localhost:8787/auth/google/callback`
-   - 만들면 나오는 **클라이언트 ID** 와 **클라이언트 보안 비밀번호**를 복사
+- **클라이언트 ID** — `1234567890-abcdefg....apps.googleusercontent.com` 처럼 생겼다
+- **클라이언트 보안 비밀번호(Client secret)** — `GOCSPX-...` 처럼 생겼다
 
-### 3. 워커 비밀값
+> ⚠️ **기존 `.env` 의 `GOOGLE_CLIENT_ID` 를 재사용하지 말 것.** 그건 인사이트 인제스트와
+> 메뉴 시트가 쓰는 Drive 용이고, `drive` 는 구글이 말하는 **민감 권한**이다. 손님 로그인에
+> 얹으면 앱 심사 대상이 되어 버린다. **새 프로젝트, 새 클라이언트**로 만든다.
+
+#### 2-1. 프로젝트 만들기
+
+1. https://console.cloud.google.com 에 매장 구글 계정으로 로그인
+2. 화면 맨 위 왼쪽, 로고 옆의 **프로젝트 선택기**를 누른다 → **새 프로젝트**
+3. 이름 `92cafe-login` (아무거나) → **만들기**. 30초쯤 걸린다
+4. 만들어지면 **프로젝트 선택기에서 그 프로젝트로 전환**한다. (이게 빠지면 다음 단계가
+   엉뚱한 프로젝트에 저장된다)
+
+#### 2-2. 동의 화면 (손님에게 보이는 구글 화면)
+
+왼쪽 메뉴 **API 및 서비스 → OAuth 동의 화면**. 최근 콘솔에서는 **Google 인증 플랫폼**
+(Google Auth Platform)으로 넘어가고 항목이 `개요 / 브랜딩 / 대상 / 클라이언트 / 데이터 액세스`
+로 나뉜다. 둘 중 어느 화면이든 채울 값은 같다.
+
+| 항목 | 넣을 값 |
+|---|---|
+| User Type / 대상(Audience) | **외부(External)** |
+| 앱 이름 | `92도씨 로스터리` — 손님이 로그인할 때 이 이름을 본다 |
+| 사용자 지원 이메일 | 매장 구글 계정 |
+| 앱 로고 (선택) | 넣으면 브랜드 심사가 붙을 수 있다. **비워두는 쪽을 권한다** |
+| 앱 도메인 → 홈페이지 | `https://92cafe.co.kr` |
+| 개인정보처리방침 링크 | `https://92cafe.co.kr/privacy` |
+| 서비스 약관 링크 | 비워도 된다 |
+| 승인된 도메인 | `92cafe.co.kr` |
+| 개발자 연락처 이메일 | 매장 구글 계정 |
+
+**범위(Scopes)**: `데이터 액세스` 또는 `범위 추가 또는 삭제`에서 아래 셋만 고른다.
+
+```
+openid
+.../auth/userinfo.email
+.../auth/userinfo.profile
+```
+
+이 셋은 **비민감(non-sensitive)** 이라 구글 심사 없이 프로덕션으로 게시된다. 목록에
+`drive`, `gmail` 같은 게 섞이면 그때부터 심사 대상이니 **절대 추가하지 말 것**.
+
+#### 2-3. ⚠️ 반드시 "게시" 하기 (제일 많이 빠뜨리는 단계)
+
+동의 화면 **개요** 또는 **대상(Audience)** 에 게시 상태가 있다.
+
+- `테스트(Testing)` 상태면 → **따로 등록한 테스트 사용자 100명만** 로그인된다. 손님은 못 들어온다.
+  게다가 이 상태에서는 발급된 토큰이 **7일 만에 만료**된다.
+- **`앱 게시` / `PUBLISH APP` 를 눌러 `프로덕션(In production)` 으로 바꾼다.**
+
+확인 문구가 뜨면 확인. 비민감 범위만 쓰므로 심사 요청 화면은 안 나온다.
+
+#### 2-4. 클라이언트 만들기
+
+왼쪽 메뉴 **클라이언트(Clients)** 또는 **API 및 서비스 → 사용자 인증 정보** →
+**사용자 인증 정보 만들기 → OAuth 클라이언트 ID**
+
+| 항목 | 넣을 값 |
+|---|---|
+| 애플리케이션 유형 | **웹 애플리케이션** |
+| 이름 | `92cafe web` (내부용, 손님에게 안 보인다) |
+| 승인된 자바스크립트 원본 | **비워둔다** (서버끼리 주고받는 방식이라 필요 없다) |
+| 승인된 리디렉션 URI | 아래 값 **하나** |
+
+```
+https://92cafe.co.kr/auth/google/callback
+```
+
+**한 글자도 다르면 안 된다.** 끝에 슬래시(`/`)를 붙이지 말 것. `www.` 를 붙이지 말 것.
+`http` 가 아니라 `https` 일 것.
+
+> www 나 http 로 들어온 손님도 워커가 위 주소 하나로 고정해서 구글에 보낸다
+> (`worker/src/members.ts` 의 `redirectUri`, `wrangler.jsonc` 의 `SITE_HOST`).
+> 그래서 등록할 URI 는 이 하나면 충분하다.
+
+로컬에서도 테스트하고 싶으면 `http://localhost:8787/auth/google/callback` 을 한 줄 더 넣는다.
+localhost 는 구글이 http 를 허용한다.
+
+**만들기** 를 누르면 **클라이언트 ID** 와 **클라이언트 보안 비밀번호**가 뜬다.
+창을 닫아도 클라이언트 목록에서 다시 볼 수 있다.
+
+### 3. 워커에 넣기
+
+두 값을 워커의 **비밀값(Secret)** 으로 넣는다. 방법은 둘 중 아무거나.
+
+#### 방법 A — 클라우드플레어 대시보드 (권장, 실수할 여지가 적다)
+
+1. https://dash.cloudflare.com → **Workers & Pages** → **cafe-coffee**
+2. **Settings** → **Variables and Secrets**
+3. **Add** → Type 을 **Secret** 으로 → 이름 `GOOGLE_CLIENT_ID`, 값 붙여넣기 → **Save**
+4. 같은 방법으로 `GOOGLE_CLIENT_SECRET` 하나 더
+5. 값 앞뒤에 **공백이나 줄바꿈이 섞이지 않게** 붙여넣는다 (제일 흔한 실수다)
+
+비밀값은 이후 배포에도 그대로 남는다. 코드를 푸시해도 지워지지 않는다.
+
+#### 방법 B — 명령줄 (Git Bash)
 
 ```bash
-cd worker
-node_modules/.bin/wrangler secret put GOOGLE_CLIENT_ID
+cd /d/python/92/cafe-today-coffee/worker
+export CLOUDFLARE_API_TOKEN=$(grep '^CLOUDFLARE_API_TOKEN=' ../.env | cut -d= -f2- | tr -d '"')
+node_modules/.bin/wrangler secret put GOOGLE_CLIENT_ID       # 물어보면 값 붙여넣고 Enter
 node_modules/.bin/wrangler secret put GOOGLE_CLIENT_SECRET
 ```
 
-`GOOGLE_CLIENT_ID` 가 없으면 로그인 기능 전체가 조용히 꺼진다
-(`/api/member/me` 의 `login_enabled: false`, 초대 랜딩은 "준비 중" 안내).
+`Authentication error` 가 나면 `.env` 의 토큰에 Workers 편집 권한이 없는 것이다.
+방법 A 로 넣거나, `node_modules/.bin/wrangler login` 으로 브라우저 로그인을 한 번 하면 된다.
+
+### 3-1. 켜졌는지 확인
+
+```bash
+curl -s https://92cafe.co.kr/api/member/me
+```
+
+`"login_enabled":true` 가 나오면 끝이다. (비밀값을 넣으면 워커가 알아서 새 값을 쓰므로
+따로 배포할 필요 없다. 바로 안 바뀌면 1분쯤 뒤 다시.)
+
+그다음 눈으로 확인할 것:
+
+1. https://92cafe.co.kr 홈 오른쪽 위에 **로그인** 버튼이 나타난다
+2. 관리자 `👤 회원` 탭에서 아무 원두로 카드 1장 발급 → `/member-cards` 에서 인쇄나 화면으로 QR 확인
+3. 그 QR 을 폰으로 찍어 실제로 가입해 본다 → `/me` 에 그 원두가 뜨면 전 과정이 산 것이다
+
+### 3-2. 안 될 때
+
+| 화면에 뜨는 것 | 원인과 조치 |
+|---|---|
+| `오류 400: redirect_uri_mismatch` | 리디렉션 URI 오타. 끝 슬래시, `www.`, `http` 를 확인. 구글에 저장한 값과 `https://92cafe.co.kr/auth/google/callback` 이 정확히 같아야 한다 |
+| `액세스 차단됨: 이 앱의 요청이 잘못되었습니다` | 대개 같은 원인(리디렉션 URI)이거나 클라이언트 유형이 "웹 애플리케이션"이 아닌 경우 |
+| `앱이 차단됨` / 테스트 사용자만 가능 | 동의 화면이 아직 **테스트** 상태다. 2-3 의 게시를 안 했다 |
+| `오류 401: invalid_client` | 클라이언트 보안 비밀번호가 틀렸거나 공백이 섞였다. 비밀값을 다시 넣는다 |
+| `/login?error=not_configured` | 워커에 `GOOGLE_CLIENT_ID` 가 아직 없다. 이름 철자 확인 |
+| `/login?error=token` | 보안 비밀번호 불일치이거나 구글과 통신 실패. 비밀값 재입력 |
+| `/login?error=state` | 로그인 시작 후 10분이 지났거나 쿠키가 막혔다. 다시 시도 |
+| `/login?error=invite_required` | 가입한 적 없는 계정으로 `/login` 에서 로그인하려 한 것. **정상 동작이다** — 가입은 카드 QR 로만 된다 |
 
 ### 4. 개인정보 처리방침 채우기
 
