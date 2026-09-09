@@ -863,16 +863,15 @@
 
   /* ===== 관리 탭 바 ===== */
   .admin-tabs {
-    display: flex; gap: 0;
+    display: flex; gap: 0; flex-wrap: wrap;
     background: var(--card); border-radius: var(--radius);
     box-shadow: 0 4px 20px rgba(111,78,55,0.08);
     margin-bottom: 16px;
-    /* 탭이 6개를 넘으면 잘리지 않게 가로 스크롤 (스크롤바는 숨김) */
-    overflow-x: auto; overflow-y: hidden;
-    -webkit-overflow-scrolling: touch; scrollbar-width: none;
+    /* 폭이 모자라면 줄을 바꾼다. 예전엔 가로 스크롤이었는데 스크롤바를 숨겨둬서
+       화면 밖으로 밀린 탭이 아예 없는 것처럼 보였다 (회원 탭이 그랬다). */
+    overflow: hidden;
     border: 1px solid var(--border);
   }
-  .admin-tabs::-webkit-scrollbar { display: none; }
   .admin-tab-btn {
     flex: 1 0 auto; padding: 14px 8px; border: none; background: transparent;
     font-size: 0.9rem; font-family: inherit; cursor: pointer;
