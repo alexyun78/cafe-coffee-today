@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<!--
+  92도씨 회원 로그인 — /login
+  가입은 여기서 안 된다. 매장에서 받은 QR 카드(/join/<code>)가 유일한 가입 경로다.
+-->
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>로그인 — 92°C ROASTERY</title>
+    <meta name="robots" content="noindex">
+    <link rel="icon" type="image/png" href="/static/img/logo-92black.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/member/member.css">
+    <style>[hidden] { display: none !important; }</style>
+</head>
+<body>
+<nav class="site-nav">
+    <div class="nav-inner">
+        <a class="brand" href="/"><span class="brand-mark">92</span><span class="temp-mark">°C</span> ROASTERY</a>
+        <a class="nav-back" href="/">홈</a>
+    </div>
+</nav>
+
+<main class="shell">
+    <p class="eyebrow">Member</p>
+    <h1>로그인</h1>
+    <p class="sub">92도씨 필터 커피와 함께 받은 시크릿 카드로 가입한 분들의 자리입니다.</p>
+
+    <div class="panel stack" style="margin-top: 32px;">
+        <div class="notice notice-warn" id="err" hidden></div>
+
+        <a class="btn btn-primary btn-google" id="go" href="/auth/google/start">
+            <svg viewBox="0 0 48 48" aria-hidden="true"><path fill="#fff" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5zm22.98 15.05c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65zM10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24s.92 7.54 2.56 10.78l7.97-6.19zM24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+            구글 계정으로 로그인
+        </a>
+
+        <p class="muted center">
+            아직 카드가 없으신가요? 매장에서 필터 커피를 주문하시면 시크릿 카드를 드립니다.
+        </p>
+    </div>
+
+    <p class="muted" style="margin-top: 24px; text-align: center;">
+        <a href="/privacy" style="text-decoration: underline; text-underline-offset: 3px;">개인정보 처리방침</a>
+    </p>
+</main>
+
+<script>
+(function () {
+    var MESSAGES = {
+        not_configured:   ['준비 중입니다', '구글 로그인이 아직 설정되지 않았습니다. 매장에 알려주세요.'],
+        state:            ['다시 시도해 주세요', '로그인 요청이 만료되었거나 확인되지 않았습니다.'],
+        cancelled:        ['로그인이 취소되었습니다', '구글 화면에서 취소하셨습니다.'],
+        token:            ['구글과 연결하지 못했습니다', '잠시 후 다시 시도해 주세요.'],
+        email_unverified: ['이메일이 확인되지 않은 계정입니다', '구글에서 이메일 인증을 마친 뒤 다시 시도해 주세요.'],
+        invite_required:  ['가입에는 시크릿 카드가 필요합니다', '매장에서 받으신 QR을 찍어 들어와 주세요. 이 화면은 이미 가입한 분들의 로그인 자리입니다.'],
+        invite_not_found: ['없는 초대 코드입니다', 'QR을 다시 찍어보시고, 그래도 안 되면 매장에 알려주세요.'],
+        invite_used:      ['이미 쓰인 카드입니다', '카드 한 장은 한 번만 쓸 수 있습니다.'],
+        invite_expired:   ['기한이 지난 카드입니다', '매장에 말씀해 주시면 새 카드를 드립니다.'],
+        suspended:        ['이용이 정지된 계정입니다', '매장에 문의해 주세요.'],
+        server:           ['처리 중 문제가 생겼습니다', '잠시 후 다시 시도해 주세요.']
+    };
+
+    var params = new URLSearchParams(location.search);
+    var err = params.get('error');
+    if (err) {
+        var m = MESSAGES[err] || ['로그인하지 못했습니다', '잠시 후 다시 시도해 주세요.'];
+        var box = document.getElementById('err');
+        box.innerHTML = '<strong>' + m[0] + '</strong><br>' + m[1];
+        box.hidden = false;
+    }
+
+    var next = params.get('next');
+    if (next && /^\/(?!\/)/.test(next)) {
+        document.getElementById('go').href = '/auth/google/start?next=' + encodeURIComponent(next);
+    }
+
+    // 이미 로그인돼 있으면 마이페이지로
+    fetch('/api/member/me', { credentials: 'same-origin' })
+        .then(function (r) { return r.json(); })
+        .then(function (d) {
+            if (d && d.member) location.replace(next && /^\/(?!\/)/.test(next) ? next : '/me');
+            if (d && d.login_enabled === false) document.getElementById('go').setAttribute('disabled', '');
+        })
+        .catch(function () {});
+})();
+</script>
+</body>
+</html>

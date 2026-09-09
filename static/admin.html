@@ -890,6 +890,34 @@
   .admin-tab-panel { display: none; }
   .admin-tab-panel.active { display: block; }
 
+  /* 회원 탭 */
+  .member-summary { display: flex; gap: 10px; flex-wrap: wrap; margin: 14px 0 4px; }
+  .member-stat {
+    background: #faf6f0; border: 1px solid #ece2d5; border-radius: 10px;
+    padding: 10px 14px; font-size: 0.85rem; color: #6b5e52;
+  }
+  .member-stat b { display: block; font-size: 1.25rem; color: #3b2f26; }
+  .member-invite-form {
+    margin: 16px 0; padding: 16px; border: 1px solid #ece2d5; border-radius: 12px; background: #fffdfa;
+  }
+  .member-invite-row { display: flex; gap: 12px; flex-wrap: wrap; }
+  .member-invite-row label { display: flex; flex-direction: column; font-size: 0.78rem; color: #6b5e52; gap: 5px; }
+  .member-invite-row input {
+    padding: 8px 10px; border: 1px solid #e0d6c8; border-radius: 8px; font: inherit; font-size: 0.9rem;
+  }
+  .member-invite-actions { display: flex; gap: 8px; margin-top: 12px; }
+  .member-invite-result { margin-top: 12px; font-size: 0.85rem; color: #6b5e52; }
+  .member-invite-result code {
+    display: inline-block; margin: 3px 5px 0 0; padding: 3px 8px; border-radius: 6px;
+    background: #f2ece3; font-family: ui-monospace, monospace; letter-spacing: 0.08em;
+  }
+  .member-table { width: 100%; border-collapse: collapse; margin-top: 14px; font-size: 0.88rem; }
+  .member-table th, .member-table td { border-bottom: 1px solid #f0e9dd; padding: 10px 8px; text-align: left; }
+  .member-table th { font-size: 0.75rem; color: #8a7c6e; font-weight: 600; }
+  .member-table td.num { color: #8a7c6e; font-variant-numeric: tabular-nums; }
+  .member-suspended { opacity: 0.5; }
+  .member-batches { margin-top: 18px; font-size: 0.82rem; color: #8a7c6e; }
+
   /* ===== 로스팅 스터디 ===== */
   .roasting-study-frame-wrap {
     border: 1px solid var(--line, #e7ddd0); border-radius: 12px; overflow: hidden;
@@ -1437,6 +1465,7 @@
     <button class="admin-tab-btn" data-tab="nearby" role="tab" aria-selected="false">📍 주변</button>
     <button class="admin-tab-btn" data-tab="roasting-study" role="tab" aria-selected="false">🔥 로스팅스터디</button>
     <button class="admin-tab-btn" data-tab="qgrader" role="tab" aria-selected="false">🎓 Q-Grader</button>
+    <button class="admin-tab-btn" data-tab="members" role="tab" aria-selected="false">👤 회원</button>
   </nav>
 
   <!-- ===== 탭 패널: 오늘의 커피 ===== -->
@@ -2139,6 +2168,41 @@
       </div>
     </section>
   </div><!-- /tab-panel-qgrader -->
+
+  <div id="tab-panel-members" class="admin-tab-panel">
+    <section class="card">
+      <div class="list-header">
+        <h2>👤 회원</h2>
+        <div class="header-actions">
+          <button class="btn-text" type="button" id="btn-invite-new">🎟️ 코드 발급</button>
+          <a class="btn-text" href="/member-cards" target="_blank" rel="noopener">🖨️ 카드 인쇄</a>
+        </div>
+      </div>
+      <div class="nearby-note">
+        가입은 <b>시크릿 QR 카드가 있어야만</b> 됩니다. 카드에 인쇄할 만큼 코드를 미리 발급해 두고,
+        인쇄 시트에서 뽑아 필터 커피와 함께 건네세요. 카드 한 장은 한 번만 쓰입니다.
+      </div>
+
+      <div id="member-summary" class="member-summary"></div>
+
+      <div id="invite-form" class="member-invite-form" style="display:none;">
+        <div class="member-invite-row">
+          <label>발급 수<input type="number" id="invite-count" min="1" max="200" value="12"></label>
+          <label>묶음 이름<input type="text" id="invite-batch" placeholder="2026-09 1차" maxlength="40"></label>
+          <label>유효기간(선택)<input type="date" id="invite-expires"></label>
+        </div>
+        <div class="member-invite-actions">
+          <button class="btn-primary" type="button" id="btn-invite-create">발급</button>
+          <button class="btn-text" type="button" id="btn-invite-cancel">취소</button>
+        </div>
+        <div id="invite-result" class="member-invite-result"></div>
+      </div>
+
+      <div id="member-body">
+        <div class="empty">탭을 선택하면 불러옵니다.</div>
+      </div>
+    </section>
+  </div><!-- /tab-panel-members -->
 
 </div>
 
@@ -3834,6 +3898,7 @@ init();
         const frame = document.getElementById("roasting-study-frame");
         if (frame && !frame.src) frame.src = "/static/roasting-study/index.html";
       }
+      if (btn.dataset.tab === "members") loadMembers();
       if (btn.dataset.tab === "qgrader") {
         const frame = document.getElementById("qgrader-frame");
         if (frame && !frame.src) frame.src = "/qgrader";
@@ -6435,6 +6500,114 @@ function todayStr() {
   const d = new Date();
   return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
 }
+
+// =========================================================================
+// ============  회원 탭 — 초대 코드 발급 + 회원 목록  =======================
+// ============  API: worker/src/members.ts (/api/member/admin/*)  ==========
+// =========================================================================
+
+function memberDate(iso) {
+  if (!iso) return "—";
+  const d = new Date(iso);
+  if (isNaN(d)) return String(iso).slice(0, 10);
+  return `${d.getFullYear()}.${String(d.getMonth() + 1).padStart(2, "0")}.${String(d.getDate()).padStart(2, "0")}`;
+}
+
+async function loadMembers() {
+  const body = document.getElementById("member-body");
+  const summary = document.getElementById("member-summary");
+  body.innerHTML = `<div class="empty">불러오는 중...</div>`;
+  let data;
+  try {
+    data = await api("GET", "/api/member/admin/overview");
+  } catch (e) {
+    if (e.message !== "unauthorized") body.innerHTML = `<div class="empty">불러오지 못했습니다.</div>`;
+    return;
+  }
+
+  summary.innerHTML = `
+    <div class="member-stat"><b>${data.members.length}</b>가입 회원</div>
+    <div class="member-stat"><b>${data.invite_unused}</b>안 쓴 코드</div>
+    <div class="member-stat"><b>${data.invite_total}</b>발급한 코드</div>`;
+
+  const batches = (data.batches || [])
+    .map(b => `${escapeHtml(b.batch)} ${b.unused}/${b.total}`)
+    .join(" · ");
+
+  if (!data.members.length) {
+    body.innerHTML = `<div class="empty">아직 가입한 회원이 없습니다.</div>` +
+      (batches ? `<div class="member-batches">코드 묶음: ${batches}</div>` : "");
+    return;
+  }
+
+  const rows = data.members.map(m => `
+    <tr class="${m.status === "정지" ? "member-suspended" : ""}">
+      <td>${escapeHtml(m.nickname || m.name || "(이름 없음)")}${m.nickname && m.name ? `<br><span class="member-batches">${escapeHtml(m.name)}</span>` : ""}</td>
+      <td class="num">${escapeHtml(m.email || "")}</td>
+      <td class="num">${memberDate(m.joined_at)}</td>
+      <td class="num">${memberDate(m.last_login_at)}</td>
+      <td class="num">${escapeHtml(m.invite_code || "")}</td>
+      <td><button class="btn-text" type="button" data-member="${m.id}" data-next="${m.status === "정지" ? "활성" : "정지"}">${m.status === "정지" ? "🟢 복구" : "⛔ 정지"}</button></td>
+    </tr>`).join("");
+
+  body.innerHTML = `
+    <table class="member-table">
+      <thead><tr><th>회원</th><th>이메일</th><th>가입</th><th>최근 로그인</th><th>초대 코드</th><th></th></tr></thead>
+      <tbody>${rows}</tbody>
+    </table>` +
+    (batches ? `<div class="member-batches">코드 묶음: ${batches}</div>` : "");
+
+  body.querySelectorAll("button[data-member]").forEach(btn => {
+    btn.addEventListener("click", async () => {
+      btn.disabled = true;
+      try {
+        await api("PUT", `/api/member/admin/members/${btn.dataset.member}`, { status: btn.dataset.next });
+        showToast(btn.dataset.next === "정지" ? "정지했습니다" : "복구했습니다");
+        loadMembers();
+      } catch (e) {
+        btn.disabled = false;
+        if (e.message !== "unauthorized") showToast("변경하지 못했습니다");
+      }
+    });
+  });
+}
+
+(function initMemberTab() {
+  const form = document.getElementById("invite-form");
+  if (!form) return;
+  const result = document.getElementById("invite-result");
+
+  document.getElementById("btn-invite-new").addEventListener("click", () => {
+    form.style.display = form.style.display === "none" ? "block" : "none";
+    result.innerHTML = "";
+  });
+  document.getElementById("btn-invite-cancel").addEventListener("click", () => {
+    form.style.display = "none";
+    result.innerHTML = "";
+  });
+
+  document.getElementById("btn-invite-create").addEventListener("click", async () => {
+    const btn = document.getElementById("btn-invite-create");
+    const payload = {
+      count: Number(document.getElementById("invite-count").value) || 0,
+      batch: document.getElementById("invite-batch").value.trim(),
+      expires_at: document.getElementById("invite-expires").value || ""
+    };
+    if (payload.count < 1 || payload.count > 200) { showToast("발급 수는 1~200 사이"); return; }
+    btn.disabled = true;
+    try {
+      const d = await api("POST", "/api/member/admin/invites", payload);
+      result.innerHTML = `<b>${d.count}개 발급했습니다.</b> 인쇄는 “🖨️ 카드 인쇄”에서.<br>` +
+        d.codes.map(c => `<code>${escapeHtml(c.pretty)}</code>`).join("");
+      showToast(`${d.count}개 발급`);
+      loadMembers();
+    } catch (e) {
+      if (e.message !== "unauthorized") showToast("발급하지 못했습니다");
+    } finally {
+      btn.disabled = false;
+    }
+  });
+})();
 </script>
 
 </body>

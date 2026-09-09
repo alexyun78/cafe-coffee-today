@@ -7,6 +7,7 @@ import { coffeeRoutes } from './coffee'
 import { beanRoutes } from './beans'
 import { nearbyRoutes } from './nearby'
 import { qgraderRoutes } from './qgrader'
+import { memberRoutes } from './members'
 import versionJson from '../../cafe-coffee-apk/www/version.json'
 
 const app = new Hono<{ Bindings: Env }>()
@@ -70,6 +71,7 @@ app.route('/', adminRoutes)
 app.route('/', coffeeRoutes)
 app.route('/', nearbyRoutes) // beans보다 먼저 — /api/nearby/* 를 beans 의 use('/api/*') 가드보다 우선 매칭
 app.route('/', qgraderRoutes) // 같은 이유로 beans 앞
+app.route('/', memberRoutes) // 회원(구글 로그인) — /api/member/*, /auth/google/*
 app.route('/', beanRoutes)
 
 // ---------- 인사이트 (정적 자산 기반 — app.py 1228~1320) ----------
@@ -183,6 +185,17 @@ app.get('/apk', serveAsset('/static/apk.html'))
 app.get('/game', serveAsset('/static/game.html'))
 app.get('/game-apk', serveAsset('/static/game-apk.html'))
 app.get('/insight', serveAsset('/static/insight-list.html'))
+
+// 회원 페이지 — 가입은 /join/<초대코드> 로만 들어온다 (worker/src/members.ts)
+app.get('/login', serveAsset('/static/member/login.html'))
+app.get('/me', serveAsset('/static/member/me.html'))
+app.get('/member-cards', serveAsset('/static/member/cards.html')) // 초대 카드 인쇄 시트 (PIN)
+app.get('/privacy', serveAsset('/static/member/privacy.html'))
+app.get('/join', (c) => c.redirect('/login', 302))
+app.get('/join/:code', (c) => {
+  if (!/^[A-Za-z0-9-]{1,32}$/.test(c.req.param('code'))) return c.json({ success: false, error: 'invalid code' }, 404)
+  return serveAsset('/static/member/join.html')(c)
+})
 
 // /insight/<id> — 풀 슬러그 → HTML, 날짜만 → index.json 해석 (app.py insight_article_page)
 app.get('/insight/:id', async (c) => {

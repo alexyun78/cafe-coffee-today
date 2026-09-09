@@ -7,6 +7,8 @@ export type Env = {
   SESSION_SECRET: string // 구 FLASK_SECRET — 같은 값을 넣어 ip_hash 연속성 유지
   ADMIN_ALIAS_PATH?: string
   GITHUB_DISPATCH_TOKEN?: string // nearby 수집 워크플로 트리거용 (actions:write PAT)
+  GOOGLE_CLIENT_ID?: string      // 회원 구글 로그인 (없으면 로그인 기능 자체가 꺼진다)
+  GOOGLE_CLIENT_SECRET?: string
 }
 
 export type Row = Record<string, any>

@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<!--
+  시크릿 초대 카드 인쇄 시트 — /member-cards (관리자 PIN)
+  코드는 D1 invite_codes 에서 읽어 온다. 아직 안 쓴 코드만 뽑는 게 기본.
+  인쇄: A4 세로, 배율 100%, 여백 없음, 배경 그래픽 켜기.
+-->
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>초대 카드 인쇄 — 92°C ROASTERY</title>
+    <meta name="robots" content="noindex">
+    <link rel="icon" type="image/png" href="/static/img/logo-92black.png">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.4/build/qrcode.min.js"></script>
+    <style>
+        :root {
+            --ink: #1A1410; --ink-soft: #6B5E52; --line: #E8E0D5;
+            --espresso: #6F4E37; --caramel: #C9986A;
+            --font-display: "Cormorant Garamond", serif;
+            --font-body: "Pretendard", -apple-system, sans-serif;
+            --font-mono: "JetBrains Mono", ui-monospace, monospace;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: var(--font-body); color: var(--ink); background: #EFEAE3; }
+
+        .bar {
+            position: sticky; top: 0; z-index: 20; background: #fff;
+            border-bottom: 1px solid var(--line); padding: 14px 20px;
+            display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+        }
+        .bar h1 { font-size: 1rem; font-weight: 700; margin-right: 8px; }
+        .bar select, .bar input, .bar button {
+            font-family: var(--font-body); font-size: 0.88rem; padding: 8px 12px;
+            border: 1px solid var(--line); border-radius: 8px; background: #fff; color: var(--ink);
+        }
+        .bar button { cursor: pointer; font-weight: 600; }
+        .bar button.primary { background: var(--espresso); border-color: var(--espresso); color: #fff; }
+        .bar .msg { font-size: 0.85rem; color: var(--ink-soft); margin-left: auto; }
+
+        /* ---------- A4 격자 (3열 x 4행 = 12장) ---------- */
+        .page {
+            width: 210mm; min-height: 297mm; margin: 20px auto; background: #fff;
+            padding: 10mm; display: grid;
+            grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(4, 1fr);
+            gap: 0; box-shadow: 0 2px 16px rgba(0,0,0,0.1);
+        }
+        .card {
+            border: 0.4mm dashed #D8CFC1; padding: 5mm 4mm;
+            display: flex; flex-direction: column; align-items: center; justify-content: space-between;
+            text-align: center; break-inside: avoid;
+        }
+        .card-top { display: flex; flex-direction: column; align-items: center; gap: 1.5mm; }
+        .card-brand {
+            font-family: var(--font-display); font-size: 11pt; font-weight: 700; letter-spacing: 0.06em;
+        }
+        .card-brand .t { font-size: 0.7em; }
+        .card-eyebrow {
+            font-family: var(--font-mono); font-size: 5.2pt; letter-spacing: 0.2em;
+            text-transform: uppercase; color: var(--caramel);
+        }
+        .card-qr { width: 27mm; height: 27mm; }
+        .card-qr svg { width: 100%; height: 100%; display: block; }
+        .card-code {
+            font-family: var(--font-mono); font-size: 8.5pt; font-weight: 700;
+            letter-spacing: 0.12em;
+        }
+        .card-help { font-size: 5.6pt; line-height: 1.5; color: var(--ink-soft); }
+        .card-help strong { color: var(--ink); }
+
+        .empty { text-align: center; padding: 80px 20px; color: var(--ink-soft); }
+
+        @page { size: A4 portrait; margin: 0; }
+        @media print {
+            body { background: #fff; }
+            .bar { display: none; }
+            .page { margin: 0; box-shadow: none; page-break-after: always; }
+        }
+    </style>
+</head>
+<body>
+<div class="bar">
+    <h1>🎟️ 초대 카드 인쇄</h1>
+    <label>묶음
+        <select id="batch"><option value="">(전체)</option></select>
+    </label>
+    <label><input type="checkbox" id="unused" checked> 안 쓴 코드만</label>
+    <button id="reload">불러오기</button>
+    <button class="primary" id="print">인쇄</button>
+    <span class="msg" id="msg">불러오는 중…</span>
+</div>
+
+<div id="pages"></div>
+
+<script>
+(function () {
+    var PER_PAGE = 12;
+    var msg = document.getElementById('msg');
+
+    function esc(s) {
+        return String(s).replace(/[&<>"]/g, function (ch) {
+            return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[ch];
+        });
+    }
+
+    function cardHTML(item) {
+        return '<div class="card">' +
+            '<div class="card-top">' +
+                '<div class="card-brand">92<span class="t">°C</span> ROASTERY</div>' +
+                '<div class="card-eyebrow">Secret Invitation</div>' +
+            '</div>' +
+            '<div class="card-qr" data-code="' + esc(item.code) + '"></div>' +
+            '<div class="card-code">' + esc(item.pretty) + '</div>' +
+            '<div class="card-help"><strong>QR을 찍고 구글 계정으로 가입하세요.</strong><br>' +
+                '카드 한 장은 한 번만 쓸 수 있습니다.</div>' +
+        '</div>';
+    }
+
+    function render(items) {
+        var host = document.getElementById('pages');
+        if (!items.length) {
+            host.innerHTML = '<div class="empty">인쇄할 코드가 없습니다. 관리자 화면의 회원 탭에서 먼저 발급하세요.</div>';
+            return;
+        }
+        var html = '';
+        for (var i = 0; i < items.length; i += PER_PAGE) {
+            var slice = items.slice(i, i + PER_PAGE);
+            html += '<div class="page">' + slice.map(cardHTML).join('');
+            // 마지막 쪽의 빈 칸은 점선만 남겨 자를 때 기준이 되게 둔다
+            for (var k = slice.length; k < PER_PAGE; k++) html += '<div class="card"></div>';
+            html += '</div>';
+        }
+        host.innerHTML = html;
+
+        Array.prototype.forEach.call(host.querySelectorAll('.card-qr'), function (el) {
+            var url = location.origin + '/join/' + el.dataset.code;
+            QRCode.toString(url, { type: 'svg', margin: 0, errorCorrectionLevel: 'M' }, function (err, svg) {
+                if (!err) el.innerHTML = svg;
+            });
+        });
+    }
+
+    function load() {
+        var batch = document.getElementById('batch').value;
+        var unused = document.getElementById('unused').checked ? '1' : '0';
+        msg.textContent = '불러오는 중…';
+        fetch('/api/member/admin/invites?unused=' + unused + (batch ? '&batch=' + encodeURIComponent(batch) : ''),
+              { credentials: 'same-origin' })
+            .then(function (r) {
+                if (r.status === 401) throw new Error('unauthorized');
+                return r.json();
+            })
+            .then(function (d) {
+                render(d.items || []);
+                msg.textContent = (d.items || []).length + '장 · ' +
+                    Math.ceil((d.items || []).length / PER_PAGE) + '쪽';
+            })
+            .catch(function (e) {
+                document.getElementById('pages').innerHTML =
+                    '<div class="empty">' + (e.message === 'unauthorized'
+                        ? '관리자 로그인이 필요합니다. <a href="/admin">/admin</a> 에서 PIN 을 입력한 뒤 다시 열어주세요.'
+                        : '불러오지 못했습니다.') + '</div>';
+                msg.textContent = '';
+            });
+    }
+
+    // 묶음 목록 채우기
+    fetch('/api/member/admin/overview', { credentials: 'same-origin' })
+        .then(function (r) { return r.json(); })
+        .then(function (d) {
+            var sel = document.getElementById('batch');
+            (d.batches || []).forEach(function (b) {
+                var o = document.createElement('option');
+                o.value = b.batch === '(묶음 없음)' ? '' : b.batch;
+                o.textContent = b.batch + ' (남은 ' + b.unused + '/' + b.total + ')';
+                sel.appendChild(o);
+            });
+        })
+        .catch(function () {});
+
+    document.getElementById('reload').addEventListener('click', load);
+    document.getElementById('print').addEventListener('click', function () { window.print(); });
+    load();
+})();
+</script>
+</body>
+</html>

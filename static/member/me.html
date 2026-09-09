@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<!--
+  92도씨 마이페이지 — /me
+  1단계는 로그인 뼈대까지다. 정복 기록과 원두 노트는 2단계에서 이 페이지에 붙는다.
+-->
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>내 기록 — 92°C ROASTERY</title>
+    <meta name="robots" content="noindex">
+    <link rel="icon" type="image/png" href="/static/img/logo-92black.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/member/member.css">
+    <style>
+        .profile { display: flex; align-items: center; gap: 18px; }
+        .avatar {
+            width: 62px; height: 62px; border-radius: 50%; flex: none;
+            background: var(--canvas-stone); object-fit: cover;
+            display: grid; place-items: center; font-size: 1.5rem; color: var(--ink-soft);
+        }
+        .profile-name { font-family: var(--font-display); font-size: 1.55rem; font-weight: 600; line-height: 1.2; }
+        .profile-mail { font-size: 0.85rem; color: var(--ink-soft); word-break: break-all; }
+
+        .nick-row { display: flex; gap: 10px; margin-top: 8px; }
+        .nick-row .field { flex: 1; }
+        .nick-row .btn { width: auto; padding: 12px 20px; }
+
+        /* 아직 안 열린 구역 — 정복 기록이 붙을 자리 */
+        .locked { position: relative; overflow: hidden; }
+        .locked-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(74px, 1fr));
+            gap: 10px; margin-top: 18px; filter: blur(1.5px); opacity: 0.45;
+        }
+        .locked-cell {
+            aspect-ratio: 1; border-radius: 12px; background: var(--canvas-stone);
+            display: grid; place-items: center; font-size: 1.35rem;
+        }
+        [hidden] { display: none !important; }
+    </style>
+</head>
+<body>
+<nav class="site-nav">
+    <div class="nav-inner">
+        <a class="brand" href="/"><span class="brand-mark">92</span><span class="temp-mark">°C</span> ROASTERY</a>
+        <a class="nav-back" href="/">홈</a>
+    </div>
+</nav>
+
+<main class="shell shell-wide" id="app" hidden>
+    <p class="eyebrow">My Record</p>
+    <h1 id="hello">내 기록</h1>
+
+    <div class="notice notice-ok" id="welcome" hidden style="margin-top: 22px;">
+        <strong>가입을 환영합니다.</strong><br>
+        이제부터 92도씨에서 마신 필터 커피가 여기에 쌓입니다.
+    </div>
+
+    <div class="panel" style="margin-top: 28px;">
+        <div class="profile">
+            <img class="avatar" id="avatar" alt="" hidden>
+            <div class="avatar" id="avatar-fallback">🫘</div>
+            <div>
+                <div class="profile-name" id="name">—</div>
+                <div class="profile-mail" id="mail"></div>
+            </div>
+        </div>
+
+        <div style="margin-top: 24px;">
+            <label class="lbl" for="nick">매장에서 불러드릴 이름</label>
+            <div class="nick-row">
+                <input class="field" id="nick" maxlength="20" placeholder="예: 준호, 라떼러버">
+                <button class="btn" id="save-nick">저장</button>
+            </div>
+            <p class="muted" id="nick-msg" style="margin-top: 8px;"></p>
+        </div>
+    </div>
+
+    <div class="panel locked">
+        <h2>정복한 콩</h2>
+        <p class="muted">
+            원두마다 놓인 QR을 찍으면 그 콩이 여기 채워지고, 마신 느낌을 기록으로 남길 수 있게 됩니다.
+            이 구역은 곧 열립니다.
+        </p>
+        <div class="locked-grid">
+            <div class="locked-cell">🫘</div><div class="locked-cell">?</div><div class="locked-cell">?</div>
+            <div class="locked-cell">?</div><div class="locked-cell">?</div><div class="locked-cell">?</div>
+            <div class="locked-cell">?</div><div class="locked-cell">?</div>
+        </div>
+    </div>
+
+    <div class="panel">
+        <h2>계정</h2>
+        <p class="muted" id="joined"></p>
+        <div style="margin-top: 16px; display: flex; gap: 10px; flex-wrap: wrap;">
+            <button class="btn btn-quiet" id="logout">로그아웃</button>
+            <a class="btn btn-quiet" href="/privacy">개인정보 처리방침</a>
+        </div>
+    </div>
+</main>
+
+<script>
+(function () {
+    var app = document.getElementById('app');
+
+    function fmtDate(iso) {
+        if (!iso) return '';
+        var d = new Date(iso);
+        if (isNaN(d)) return iso.slice(0, 10);
+        return d.getFullYear() + '년 ' + (d.getMonth() + 1) + '월 ' + d.getDate() + '일';
+    }
+
+    function render(m) {
+        var display = m.nickname || m.name || '회원';
+        document.getElementById('hello').textContent = display + '님의 기록';
+        document.getElementById('name').textContent = m.name || display;
+        document.getElementById('mail').textContent = m.email || '';
+        document.getElementById('nick').value = m.nickname || '';
+        document.getElementById('joined').textContent = '가입일 ' + fmtDate(m.joined_at);
+        if (m.picture) {
+            var img = document.getElementById('avatar');
+            img.src = m.picture;
+            img.referrerPolicy = 'no-referrer';
+            img.hidden = false;
+            document.getElementById('avatar-fallback').hidden = true;
+        }
+        app.hidden = false;
+    }
+
+    fetch('/api/member/me', { credentials: 'same-origin' })
+        .then(function (r) { return r.json(); })
+        .then(function (d) {
+            if (!d || !d.member) { location.replace('/login?next=/me'); return; }
+            render(d.member);
+            if (new URLSearchParams(location.search).get('welcome')) {
+                document.getElementById('welcome').hidden = false;
+                history.replaceState(null, '', '/me');
+            }
+        })
+        .catch(function () { location.replace('/login?next=/me'); });
+
+    document.getElementById('save-nick').addEventListener('click', function () {
+        var btn = this;
+        var msg = document.getElementById('nick-msg');
+        btn.disabled = true;
+        fetch('/api/member/me', {
+            method: 'PUT',
+            credentials: 'same-origin',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ nickname: document.getElementById('nick').value })
+        })
+            .then(function (r) { return r.json(); })
+            .then(function (d) {
+                btn.disabled = false;
+                if (!d || !d.success) { msg.textContent = '저장하지 못했습니다.'; return; }
+                msg.textContent = '저장했습니다.';
+                document.getElementById('hello').textContent =
+                    (d.member.nickname || d.member.name || '회원') + '님의 기록';
+            })
+            .catch(function () { btn.disabled = false; msg.textContent = '저장하지 못했습니다.'; });
+    });
+
+    document.getElementById('logout').addEventListener('click', function () {
+        fetch('/api/member/logout', { method: 'POST', credentials: 'same-origin' })
+            .then(function () { location.replace('/'); })
+            .catch(function () { location.replace('/'); });
+    });
+})();
+</script>
+</body>
+</html>

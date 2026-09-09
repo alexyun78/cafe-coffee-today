@@ -1596,6 +1596,7 @@
             <a href="/insight">인사이트</a>
             <a href="#day92">92 Day</a>
             <a href="#hours">영업</a>
+            <a href="/me" id="nav-member" style="display:none">내 기록</a>
         </nav>
         <button type="button" class="nav-toggle" id="nav-toggle"
                 aria-label="메뉴 열기" aria-expanded="false" aria-controls="nav-links">
@@ -2286,6 +2287,20 @@
             if (navStory) navStory.style.display = '';
         })
         .catch(function () { /* 스토리 없음/로드 실패 — 섹션 숨김 유지 */ });
+
+    // 회원 네비 — 로그인한 사람에게만 "내 기록"이 보인다. 가입 문은 매장의 QR 카드뿐이라
+    // 비회원에게는 로그인 링크를 노출하지 않는다 (worker/src/members.ts).
+    fetch('/api/member/me', { credentials: 'same-origin' })
+        .then(function (r) { return r.json(); })
+        .then(function (d) {
+            if (!d || !d.member) return;
+            var el = document.getElementById('nav-member');
+            if (el) {
+                el.style.display = '';
+                el.textContent = (d.member.nickname || '내') + ' 기록';
+            }
+        })
+        .catch(function () { /* 회원 기능 미설정 — 링크 숨김 유지 */ });
 
     function render(data) {
         var today = (data && data.today) || [];

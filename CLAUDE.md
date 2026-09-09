@@ -719,6 +719,28 @@ journalctl -u cafe-coffee-nearby.service -n 50 --no-pager
 
 ---
 
+## 회원 — 시크릿 QR 초대 가입 (2026-09-09 추가)
+
+매장에서 필터 커피와 함께 건네는 **시크릿 QR 카드**가 유일한 가입 경로다. 카드를 찍은 사람만
+구글 계정으로 가입하고, 그 뒤로는 코드 없이 로그인한다. 상세는 [docs/MEMBERS.md](docs/MEMBERS.md).
+
+- **현재 1단계(로그인 뼈대)까지만 만들었다.** 정복 스탬프와 원두 노트는 2단계.
+- 페이지: `/join/<코드>`(초대 랜딩) · `/login` · `/me`(마이페이지) · `/privacy` · `/member-cards`(카드 인쇄, PIN)
+- 관리자 `👤 회원` 탭에서 코드 발급, 회원 목록, 정지·복구.
+- 구현: [worker/src/members.ts](worker/src/members.ts) · 스키마 [scripts/members_schema.sql](scripts/members_schema.sql)
+  (`members`, `invite_codes`).
+- 세션은 관리자와 같은 HMAC 서명 쿠키(`util.signToken`)를 salt 만 바꿔 쓴다(`member-token-v1`, 쿠키 `mem`, 90일).
+  D1 에 세션 테이블을 두지 않는다.
+- 코드 소진은 조건부 UPDATE(`WHERE redeemed_by IS NULL`) 한 곳이라 같은 코드를 동시에 써도 한 명만 성공한다.
+  이미 가입한 계정이 코드를 다시 들고 와도 코드는 소진되지 않고 그냥 로그인된다.
+- **비밀값**: `wrangler secret put GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET`.
+  없으면 로그인 기능 전체가 조용히 꺼진다(`login_enabled: false`).
+- ⚠️ **APK(Capacitor WebView)에서는 구글 로그인이 막힌다** — 구글이 임베디드 WebView OAuth 를 차단(`disallowed_useragent`).
+  앱에서 쓰려면 로그인만 외부 브라우저/Custom Tabs 로 띄워야 하는데 **아직 안 했다.**
+- 홈 네비 "내 기록"은 **로그인한 사람에게만** 보인다. 비회원에게 로그인 링크를 노출하면 시크릿 카드의 의미가 옅어져서다.
+
+---
+
 ## 원두 카드 — /beans (2026-08-08 추가)
 
 92도씨가 취급하는 생두를 카드로 보여주는 공개 페이지. 홈 네비 "원두" 링크로 진입.
@@ -842,9 +864,12 @@ SCA Evolved Q Grader(CVA 기반) 대비 6개월 학습플랜 + 훈련 일지. **
 | [generate_bean_images.py](generate_bean_images.py) | 커피 카드 이미지 생성 (PIL) |
 | [migrate_notion.py](migrate_notion.py) | Notion → SQLite 일회성 이전 |
 | [index.html](index.html) | 탭 기반 공개 뷰 (오늘의커피 + 누가쏠까?: 손가락 게임, 룰렛) |
-| [static/admin.html](static/admin.html) | 관리 폼 — 6탭 (오늘의커피 / 생두관리 / 재고 / 주변리뷰 / 로스팅스터디 / Q-Grader) |
+| [static/admin.html](static/admin.html) | 관리 폼 — 7탭 (오늘의커피 / 생두관리 / 재고 / 주변리뷰 / 로스팅스터디 / Q-Grader / 회원) |
 | [static/qgrader/index.html](static/qgrader/index.html) | Q-Grader 훈련 관리 페이지 (`/qgrader`, PIN) |
 | [worker/src/qgrader.ts](worker/src/qgrader.ts) | Q-Grader API (`/api/qgrader/*`) |
+| [worker/src/members.ts](worker/src/members.ts) | 회원 — 초대 코드, 구글 OAuth, 세션 (`/api/member/*`, `/auth/google/*`) |
+| [static/member/](static/member/) | 회원 페이지 (`join`, `login`, `me`, `privacy`, `cards` + 공용 `member.css`) |
+| [scripts/members_schema.sql](scripts/members_schema.sql) | 회원 D1 스키마 (`members`, `invite_codes`, 1회) |
 | [scripts/qgrader_sync.py](scripts/qgrader_sync.py) | 학습플랜 md → D1 seed SQL 생성 |
 | [scripts/release_insight.py](scripts/release_insight.py) | **인사이트 백로그 릴리스 (토큰 0, 현재 채택)** — 큐에서 1편 발행 |
 | [scripts/release.sh](scripts/release.sh) | 서버 릴리스 래퍼: git pull → release_insight.py → commit/push |

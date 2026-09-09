@@ -79,3 +79,6 @@ static/downloads/
 # Cloudflare Worker (Phase 2)
 worker/node_modules/
 worker/.wrangler/
+
+# 로컬 wrangler dev 전용 비밀값 (커밋 금지)
+worker/.dev.vars

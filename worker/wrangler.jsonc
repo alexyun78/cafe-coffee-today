@@ -19,6 +19,8 @@
       "/insight", "/insight/*",
       "/beans", "/beans/*",
       "/story", "/story/*",
+      "/login", "/login/", "/me", "/me/", "/join", "/join/*",
+      "/member-cards", "/member-cards/", "/auth/*", "/privacy", "/privacy/",
       "/game", "/game/", "/game-apk", "/game-apk/",
       "/downloads/*", "/static/downloads/*"
     ]
@@ -31,5 +33,6 @@
     }
   ],
   "observability": { "enabled": true }
-  // 비밀값(wrangler secret put): ADMIN_PIN, SESSION_SECRET(구 FLASK_SECRET), ADMIN_ALIAS_PATH(선택)
+  // 비밀값(wrangler secret put): ADMIN_PIN, SESSION_SECRET(구 FLASK_SECRET), ADMIN_ALIAS_PATH(선택),
+  //                              GOOGLE_CLIENT_ID / GOOGLE_CLIENT_SECRET (회원 구글 로그인 — docs/MEMBERS.md)
 }
