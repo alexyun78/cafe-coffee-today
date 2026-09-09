@@ -200,8 +200,9 @@ https://92cafe.co.kr/auth/google/callback
 > (`worker/src/members.ts` 의 `redirectUri`, `wrangler.jsonc` 의 `SITE_HOST`).
 > 그래서 등록할 URI 는 이 하나면 충분하다.
 
-로컬에서도 테스트하고 싶으면 `http://localhost:8787/auth/google/callback` 을 한 줄 더 넣는다.
-localhost 는 구글이 http 를 허용한다.
+로컬에서도 테스트하고 싶으면 `wrangler dev` 가 찍어주는 주소 그대로 한 줄 더 넣는다
+(예: `http://127.0.0.1:8787/auth/google/callback`). **호스트와 포트가 정확히 같아야 한다** —
+`localhost` 와 `127.0.0.1` 은 구글에게 서로 다른 값이다. 로컬만 http 가 허용된다.
 
 **만들기** 를 누르면 **클라이언트 ID** 와 **클라이언트 보안 비밀번호**가 뜬다.
 창을 닫아도 클라이언트 목록에서 다시 볼 수 있다.
@@ -224,7 +225,8 @@ localhost 는 구글이 http 를 허용한다.
 
 ```bash
 cd /d/python/92/cafe-today-coffee/worker
-export CLOUDFLARE_API_TOKEN=$(grep '^CLOUDFLARE_API_TOKEN=' ../.env | cut -d= -f2- | tr -d '"')
+export CLOUDFLARE_API_TOKEN=$(grep '^CLOUDFLARE_API_TOKEN=' ../.env | cut -d= -f2- | tr -d '
+"')
 node_modules/.bin/wrangler secret put GOOGLE_CLIENT_ID       # 물어보면 값 붙여넣고 Enter
 node_modules/.bin/wrangler secret put GOOGLE_CLIENT_SECRET
 ```
