@@ -937,6 +937,7 @@ beanRoutes.get('/api/beans/cards', async (c) => {
     items,
     locked,
     logged_in: Boolean(m),
+    login_enabled: Boolean(c.env.GOOGLE_CLIENT_ID),
     mission: { total: missions.length, unlocked: missions.filter((id) => unlocked.has(id)).length },
   })
 })

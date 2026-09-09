@@ -305,7 +305,9 @@
         var msg;
         if (!d.logged_in) {
             msg = '시크릿 원두 <b>' + d.mission.total + '종</b>이 잠겨 있습니다. ' +
-                  '매장에서 그 커피를 마시면 받는 원두 카드의 QR로 하나씩 열립니다.';
+                  '매장에서 그 커피를 마시면 받는 원두 카드의 QR로 하나씩 열립니다.' +
+                  // 폰을 바꿨거나 캐시를 지운 회원도 여기서 다시 들어올 수 있게
+                  (d.login_enabled ? ' 이미 가입하셨다면 <a href="/login">로그인</a>하세요.' : '');
         } else if (d.mission.unlocked >= d.mission.total) {
             msg = '시크릿 원두 <b>' + d.mission.total + '종</b>을 모두 열었습니다. ' +
                   '<a href="/me">내 기록 보기 →</a>';

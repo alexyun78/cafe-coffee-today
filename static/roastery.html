@@ -114,6 +114,12 @@
             transition: color 0.2s;
         }
         .nav-links a:hover { color: var(--ink); }
+        .nav-links a.nav-member {
+            border: 1px solid var(--line); border-radius: var(--r-pill);
+            padding: 8px 16px; color: var(--ink); font-weight: 600;
+            transition: background 0.2s, border-color 0.2s;
+        }
+        .nav-links a.nav-member:hover { background: var(--canvas-warm); border-color: var(--ink-soft); }
 
         /* ===== 모바일 햄버거 ===== */
         .nav-toggle {
@@ -181,6 +187,11 @@
                 color: var(--ink-mute);
             }
             .nav-links a:last-child { border-bottom: 0; }
+            .nav-links a.nav-member {
+                border: 0; border-bottom: 1px solid var(--line-soft); border-radius: 0;
+                padding: 14px 22px; font-weight: 600; color: var(--ink);
+            }
+            .nav-links a.nav-member:last-child { border-bottom: 0; }
             .nav-links a:active { background: var(--canvas-warm); color: var(--ink); }
             .nav-inner { padding: 12px 18px; position: relative; }
             .brand { font-size: 1.05rem; }
@@ -1596,7 +1607,7 @@
             <a href="/insight">인사이트</a>
             <a href="#day92">92 Day</a>
             <a href="#hours">영업</a>
-            <a href="/me" id="nav-member" style="display:none">내 기록</a>
+            <a href="/login" id="nav-member" class="nav-member" style="display:none">로그인</a>
         </nav>
         <button type="button" class="nav-toggle" id="nav-toggle"
                 aria-label="메뉴 열기" aria-expanded="false" aria-controls="nav-links">
@@ -2288,17 +2299,23 @@
         })
         .catch(function () { /* 스토리 없음/로드 실패 — 섹션 숨김 유지 */ });
 
-    // 회원 네비 — 로그인한 사람에게만 "내 기록"이 보인다. 가입 문은 매장의 QR 카드뿐이라
-    // 비회원에게는 로그인 링크를 노출하지 않는다 (worker/src/members.ts).
+    // 회원 네비 — 가입은 매장의 QR 카드로만 되지만, 이미 가입한 사람은 폰을 바꾸거나
+    // 캐시를 지워도 구글 계정으로 다시 들어올 수 있어야 해서 로그인 링크를 항상 노출한다.
+    // 구글 로그인이 아직 설정되지 않았으면(login_enabled=false) 막다른 길이라 숨긴다.
     fetch('/api/member/me', { credentials: 'same-origin' })
         .then(function (r) { return r.json(); })
         .then(function (d) {
-            if (!d || !d.member) return;
+            if (!d || !d.login_enabled) return;
             var el = document.getElementById('nav-member');
-            if (el) {
-                el.style.display = '';
+            if (!el) return;
+            if (d.member) {
+                el.href = '/me';
                 el.textContent = (d.member.nickname || '내') + ' 기록';
+            } else {
+                el.href = '/login';
+                el.textContent = '로그인';
             }
+            el.style.display = '';
         })
         .catch(function () { /* 회원 기능 미설정 — 링크 숨김 유지 */ });
 
