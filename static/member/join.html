@@ -97,13 +97,13 @@
 
     <!-- 비회원: 가입하면서 첫 원두가 열린다 -->
     <div id="join" hidden>
-        <h1>첫 번째 열쇠를<br>손에 쥐셨습니다</h1>
-        <p class="sub">
+        <h1 id="join-title">첫 번째 열쇠를<br>손에 쥐셨습니다</h1>
+        <p class="sub" id="join-sub">
             구글 계정으로 가입하면 이 원두 카드가 열립니다.
-            앞으로 매장에서 만나는 시크릿 원두를 하나씩 모아가게 됩니다.
+            앞으로 매장에서 만나는 원두를 하나씩 기록으로 모아가게 됩니다.
         </p>
         <div class="bean-plate">
-            <div class="cap">This card opens</div>
+            <div class="cap" id="join-cap">This card opens</div>
             <div class="nm" id="join-bean">—</div>
             <div class="code-line" id="join-code"></div>
         </div>
@@ -195,19 +195,34 @@
                 return;
             }
 
+            // 원두 없이 가입만 시키는 초대 카드인데 이미 회원이면 쓸 일이 없다
+            if (d.logged_in && !d.bean) {
+                bad('이미 회원이십니다',
+                    '<strong>이 카드는 가입 초대장입니다</strong>이미 가입하셨으니 쓰실 필요가 없습니다. ' +
+                    '아직 회원이 아닌 분께 넘겨주세요.<br><br>' +
+                    '<a href="/me">내 기록</a> · <a href="/beans">원두 보기</a>');
+                return;
+            }
+
             if (d.logged_in) {
                 document.getElementById('unlock-bean').textContent = beanName || '원두 카드';
                 document.getElementById('unlock-code').textContent = d.code_pretty || '';
-                if (!d.bean) {
-                    document.getElementById('unlock-sub').textContent = '이 카드에는 원두가 묶여 있지 않습니다.';
-                    document.getElementById('btn-open').disabled = true;
-                }
                 show('unlock');
                 return;
             }
 
-            document.getElementById('join-bean').textContent = beanName || '원두 카드';
-            document.getElementById('join-code').textContent = d.code_pretty || '';
+            if (d.bean) {
+                document.getElementById('join-bean').textContent = beanName;
+                document.getElementById('join-code').textContent = d.code_pretty || '';
+            } else {
+                // 원두 없는 초대 카드 — 열쇠 이야기 대신 가입 이야기로
+                document.getElementById('join-title').innerHTML = '92도씨의<br>기록에 초대합니다';
+                document.getElementById('join-sub').textContent =
+                    '구글 계정으로 가입하면, 앞으로 매장에서 만나는 원두를 하나씩 기록으로 모아가게 됩니다.';
+                document.getElementById('join-cap').textContent = 'Invitation';
+                document.getElementById('join-bean').textContent = '회원 초대';
+                document.getElementById('join-code').textContent = d.code_pretty || '';
+            }
             document.getElementById('go').href = '/auth/google/start?invite=' + encodeURIComponent(code);
             show('join');
         })

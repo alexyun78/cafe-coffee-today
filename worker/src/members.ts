@@ -550,7 +550,9 @@ memberRoutes.get('/api/member/admin/invites', async (c) => {
     where.push('batch=?')
     binds.push(batch)
   }
-  if (beanId) {
+  if (beanId === 'none') {
+    where.push('bean_id IS NULL') // 원두 없이 가입만 시키는 초대 카드
+  } else if (beanId) {
     where.push('bean_id=?')
     binds.push(beanId)
   }

@@ -13,7 +13,9 @@
     <link rel="icon" type="image/png" href="/static/img/logo-92black.png">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.4/build/qrcode.min.js"></script>
+    <!-- QR 생성기는 저장소에 넣어 쓴다 (MIT, kazuhikoarase/qrcode-generator).
+         CDN 을 쓰다가 주소가 죽으면 QR 없는 카드가 조용히 인쇄돼 종이만 버린다. -->
+    <script src="/static/member/vendor/qrcode-generator.js"></script>
     <style>
         :root {
             --ink: #1A1410; --ink-soft: #6B5E52; --line: #E8E0D5;
@@ -57,6 +59,8 @@
             line-height: 1.2; margin-top: 0.8mm;
         }
         .card-notes { font-size: 5.6pt; color: var(--ink-soft); line-height: 1.4; }
+        .card.invite-only .card-eyebrow { color: var(--espresso); }
+        .card.invite-only .card-bean { font-size: 11.5pt; }
         .card-brand {
             font-family: var(--font-display); font-size: 11pt; font-weight: 700; letter-spacing: 0.06em;
         }
@@ -88,7 +92,10 @@
 <div class="bar">
     <h1>🎟️ 시크릿 원두 카드 인쇄</h1>
     <label>원두
-        <select id="bean"><option value="">(전체)</option></select>
+        <select id="bean">
+            <option value="">(전체)</option>
+            <option value="none">(원두 없음 — 초대 전용)</option>
+        </select>
     </label>
     <label>묶음
         <select id="batch"><option value="">(전체)</option></select>
@@ -112,19 +119,27 @@
         });
     }
 
+    // 카드는 두 종류다.
+    //  · 원두 카드   — 원두가 묶여 있어 찍으면 그 원두가 열린다
+    //  · 초대 카드   — 원두 없이 가입만 시킨다 (bean_id 가 비어 있는 코드)
     function cardHTML(item) {
         var notes = Array.isArray(item.bean_cup_notes) ? item.bean_cup_notes.slice(0, 3).join(', ') : '';
-        return '<div class="card">' +
+        var hasBean = Boolean(item.bean_name);
+        return '<div class="card' + (hasBean ? '' : ' invite-only') + '">' +
             '<div class="card-top">' +
                 '<div class="card-brand">92<span class="t">°C</span> ROASTERY</div>' +
-                '<div class="card-eyebrow">Secret Card</div>' +
-                (item.bean_name ? '<div class="card-bean">' + esc(item.bean_name) + '</div>' : '') +
-                (notes ? '<div class="card-notes">' + esc(notes) + '</div>' : '') +
+                '<div class="card-eyebrow">' + (hasBean ? 'Secret Card' : 'Invitation') + '</div>' +
+                (hasBean
+                    ? '<div class="card-bean">' + esc(item.bean_name) + '</div>' +
+                      (notes ? '<div class="card-notes">' + esc(notes) + '</div>' : '')
+                    : '<div class="card-bean">회원 초대</div>' +
+                      '<div class="card-notes">마신 원두의 이야기를 기록으로</div>') +
             '</div>' +
             '<div class="card-qr" data-code="' + esc(item.code) + '"></div>' +
             '<div class="card-code">' + esc(item.pretty) + '</div>' +
-            '<div class="card-help"><strong>QR을 찍으면 이 원두가 열립니다.</strong><br>' +
-                '카드 한 장은 한 번만 쓸 수 있습니다.</div>' +
+            '<div class="card-help"><strong>' +
+                (hasBean ? 'QR을 찍으면 이 원두가 열립니다.' : 'QR을 찍고 구글 계정으로 가입하세요.') +
+            '</strong><br>카드 한 장은 한 번만 쓸 수 있습니다.</div>' +
         '</div>';
     }
 
@@ -146,9 +161,14 @@
 
         Array.prototype.forEach.call(host.querySelectorAll('.card-qr'), function (el) {
             var url = location.origin + '/join/' + el.dataset.code;
-            QRCode.toString(url, { type: 'svg', margin: 0, errorCorrectionLevel: 'M' }, function (err, svg) {
-                if (!err) el.innerHTML = svg;
-            });
+            try {
+                var qr = qrcode(0, 'M');          // 0 = 데이터 길이에 맞춰 자동
+                qr.addData(url);
+                qr.make();
+                el.innerHTML = qr.createSvgTag({ cellSize: 4, margin: 0, scalable: true });
+            } catch (e) {
+                el.innerHTML = '<div style="font-size:6pt;color:#a5432f">QR 생성 실패</div>';
+            }
         });
     }
 
@@ -167,8 +187,10 @@
             })
             .then(function (d) {
                 render(d.items || []);
-                msg.textContent = (d.items || []).length + '장 · ' +
-                    Math.ceil((d.items || []).length / PER_PAGE) + '쪽';
+                var n = (d.items || []).length;
+                var drawn = document.querySelectorAll('.card-qr svg').length;
+                msg.textContent = n + '장 · ' + Math.ceil(n / PER_PAGE) + '쪽' +
+                    (n && drawn < n ? ' · ⚠️ QR ' + (n - drawn) + '개 실패 — 인쇄하지 마세요' : '');
             })
             .catch(function (e) {
                 document.getElementById('pages').innerHTML =

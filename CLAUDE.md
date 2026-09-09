@@ -770,6 +770,10 @@ QR 을 찍으면 `bean_unlocks` 에 원두와 **찍은 시각**이 남는다. �
   이미 가입한 사람은 폰을 바꾸거나 브라우저 기록을 지워도 구글 계정으로 돌아올 수 있어야 한다 — 계정이 구글에 묶여 있어
   로그인만 하면 `bean_unlocks` 가 그대로 따라온다. `login_enabled=false`(구글 secret 미설정)일 때는 막다른 길이라 숨긴다.
 - `/beans/print.html`(진열용 시트)은 미션 여부를 모른다 — 시크릿 원두도 그대로 인쇄된다.
+- 카드는 두 종류다. 발급 시 원두를 고르면 **원두 카드**(찍으면 그 원두가 열림), `(원두 없음)` 을 고르면
+  **초대 카드**(가입만). 인쇄물 문구와 배지가 서로 다르고, `/member-cards` 에서 `(원두 없음 — 초대 전용)` 으로 걸러 뽑는다.
+- 인쇄 시트의 QR 은 [static/member/vendor/qrcode-generator.js](static/member/vendor/qrcode-generator.js)(MIT, 저장소에 포함)로 그린다.
+  **CDN 으로 되돌리지 말 것** — jsdelivr 의 `qrcode@1.5.4/build/qrcode.min.js` 가 404 라 QR 없는 카드가 조용히 인쇄됐었다.
 
 ---
 
