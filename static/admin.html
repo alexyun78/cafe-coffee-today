@@ -925,6 +925,18 @@
     display: flex; align-items: center; gap: 8px; font-size: 0.86rem; padding: 5px 0; cursor: pointer;
   }
   .mission-list label span.cnt { margin-left: auto; font-size: 0.75rem; color: #8a7c6e; }
+  .note-card {
+    border: 1px solid #ece2d5; border-radius: 10px; padding: 12px 14px; margin-bottom: 10px;
+    background: #fffdfa;
+  }
+  .note-card .top {
+    display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap;
+    font-size: 0.85rem; margin-bottom: 6px;
+  }
+  .note-card .who { font-weight: 700; }
+  .note-card .bean { color: #6b5e52; }
+  .note-card .when { margin-left: auto; font-size: 0.75rem; color: #8a7c6e; }
+  .note-card .body { font-size: 0.88rem; line-height: 1.65; color: #3b2f26; white-space: pre-wrap; }
   .mission-chip {
     display: inline-block; margin: 3px 5px 0 0; padding: 3px 9px; border-radius: 6px;
     background: #f2ece3; font-size: 0.8rem;
@@ -2186,6 +2198,7 @@
       <div class="list-header">
         <h2>👤 회원</h2>
         <div class="header-actions">
+          <button class="btn-text" type="button" id="btn-notes">💬 손님 감상</button>
           <button class="btn-text" type="button" id="btn-invite-new">🎟️ 코드 발급</button>
           <a class="btn-text" href="/member-cards" target="_blank" rel="noopener">🖨️ 카드 인쇄</a>
         </div>
@@ -2230,6 +2243,13 @@
           <button class="btn-text" type="button" id="btn-invite-cancel">취소</button>
         </div>
         <div id="invite-result" class="member-invite-result"></div>
+      </div>
+
+      <div id="notes-panel" style="display:none;">
+        <div class="member-batches" style="margin:10px 0;">
+          손님이 남긴 감상입니다. <b>손님끼리는 서로 볼 수 없고</b> 관리자만 봅니다.
+        </div>
+        <div id="notes-body"><div class="empty">불러오는 중...</div></div>
       </div>
 
       <div id="member-body">
@@ -6540,6 +6560,8 @@ function todayStr() {
 // ============  API: worker/src/members.ts (/api/member/admin/*)  ==========
 // =========================================================================
 
+const RATING_MARK = { "좋아요": "👍", "중간": "😐", "싫어요": "👎" };
+
 function memberDate(iso) {
   if (!iso) return "—";
   const d = new Date(iso);
@@ -6651,6 +6673,30 @@ async function refreshMissionViews(force) {
   if (!form) return;
   const result = document.getElementById("invite-result");
   const picker = document.getElementById("mission-picker");
+
+  const notesPanel = document.getElementById("notes-panel");
+  document.getElementById("btn-notes").addEventListener("click", async () => {
+    const open = notesPanel.style.display === "none";
+    notesPanel.style.display = open ? "block" : "none";
+    if (!open) return;
+    const body = document.getElementById("notes-body");
+    body.innerHTML = `<div class="empty">불러오는 중...</div>`;
+    try {
+      const d = await api("GET", "/api/member/admin/notes");
+      if (!d.items.length) { body.innerHTML = `<div class="empty">아직 남긴 감상이 없습니다.</div>`; return; }
+      body.innerHTML = d.items.map(n => `
+        <div class="note-card">
+          <div class="top">
+            <span class="who">${escapeHtml(n.nickname || n.name || "회원 " + n.member_id)}</span>
+            <span class="bean">${RATING_MARK[n.rating] || ""} ${escapeHtml(n.bean_name)}</span>
+            <span class="when">맛본 날 ${memberDate(n.tasted_at)} · 쓴 날 ${memberDate(n.updated_at)}</span>
+          </div>
+          ${n.body ? `<div class="body">${escapeHtml(n.body)}</div>` : `<div class="body" style="color:#8a7c6e">(평가만 남김)</div>`}
+        </div>`).join("");
+    } catch (e) {
+      if (e.message !== "unauthorized") body.innerHTML = `<div class="empty">불러오지 못했습니다.</div>`;
+    }
+  });
 
   document.getElementById("btn-mission-toggle").addEventListener("click", () => {
     picker.style.display = picker.style.display === "none" ? "block" : "none";

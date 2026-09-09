@@ -11,7 +11,7 @@
 import { Hono } from 'hono'
 import { Env, Row, utcNowISO, signToken, verifyToken, getCookie, b64urlDecode, b64urlEncode } from './util'
 import { requirePin } from './auth'
-import { BEAN_CARDS, beanBrief, beanById, activeMissionIds, unlockedIds } from './beancat'
+import { BEAN_CARDS, beanBrief, beanById, activeMissionIds, myBeanRecords } from './beancat'
 
 export type MemberEnv = { Bindings: Env; Variables: { member: Row } }
 export const memberRoutes = new Hono<MemberEnv>()
@@ -139,18 +139,46 @@ async function redeemForBean(db: D1Database, memberId: number, code: string): Pr
   return { ok: true, already: false, bean_id: beanId }
 }
 
-/** 마이페이지·네비가 쓰는 진행 상황 */
-async function missionProgress(db: D1Database, memberId: number | null) {
-  const [missions, unlocked] = await Promise.all([activeMissionIds(db), unlockedIds(db, memberId)])
+/** 마이페이지가 쓰는 상태 — 미션 진행 + 내가 맛본 원두 전체 */
+async function memberBeanState(db: D1Database, memberId: number | null) {
+  const [missions, mine] = await Promise.all([activeMissionIds(db), myBeanRecords(db, memberId)])
+
   const slots = missions.map((id) => {
-    const opened = unlocked.has(id)
+    const rec = mine.get(id)
     const card = beanById(id)
-    return opened
-      ? { locked: false, id, name_ko: card?.name_ko ?? '', one_liner: card?.one_liner ?? '' }
+    return rec
+      ? {
+          locked: false,
+          id,
+          name_ko: card?.name_ko ?? '',
+          tasted_at: rec.tasted_at,
+          rating: rec.rating,
+          has_note: Boolean(rec.body),
+        }
       : { locked: true }
   })
   const opened = slots.filter((s) => !s.locked).length
-  return { total: missions.length, unlocked: opened, complete: missions.length > 0 && opened === missions.length, slots }
+
+  // 미션이 아닌 원두도 QR 을 찍었으면 기록에 남는다 — 최근 맛본 순
+  const tasted = [...mine.entries()]
+    .map(([id, rec]) => ({
+      id,
+      name_ko: beanById(id)?.name_ko ?? id,
+      mission: missions.includes(id),
+      tasted_at: rec.tasted_at,
+      rating: rec.rating,
+      has_note: Boolean(rec.body),
+    }))
+    .sort((a, b) => (a.tasted_at < b.tasted_at ? 1 : a.tasted_at > b.tasted_at ? -1 : 0))
+
+  return {
+    total: missions.length,
+    unlocked: opened,
+    complete: missions.length > 0 && opened === missions.length,
+    slots,
+    tasted,
+    tasted_count: tasted.length,
+  }
 }
 
 // ---------- 구글 OAuth ----------
@@ -314,7 +342,7 @@ memberRoutes.get('/api/member/me', async (c) => {
     success: true,
     login_enabled: Boolean(c.env.GOOGLE_CLIENT_ID),
     member: m ? memberPublic(m) : null,
-    progress: await missionProgress(c.env.DB, m ? Number(m.id) : null),
+    progress: await memberBeanState(c.env.DB, m ? Number(m.id) : null),
   })
 })
 
@@ -365,7 +393,7 @@ memberRoutes.post('/api/member/unlock', requireMember, async (c) => {
     success: true,
     already: r.already,
     bean: { id: r.bean_id, name_ko: card?.name_ko ?? '' },
-    progress: await missionProgress(c.env.DB, Number(m.id)),
+    progress: await memberBeanState(c.env.DB, Number(m.id)),
   })
 })
 
@@ -376,6 +404,44 @@ memberRoutes.put('/api/member/me', requireMember, async (c) => {
   const nickname = String(data.nickname ?? '').trim().slice(0, 20) || null
   await c.env.DB.prepare('UPDATE members SET nickname=? WHERE id=?').bind(nickname, m.id).run()
   return c.json({ success: true, member: { ...memberPublic(m), nickname } })
+})
+
+// ---------- 원두 감상 (본인만 열람) ----------
+
+const RATINGS = new Set(['좋아요', '중간', '싫어요'])
+const NOTE_MAX = 2000
+
+/** 내가 맛본 원두에만 감상을 남길 수 있다. 빈 값으로 보내면 지운다. */
+memberRoutes.put('/api/member/notes/:beanId', requireMember, async (c) => {
+  const m = c.get('member')
+  const beanId = c.req.param('beanId')
+  if (!beanById(beanId)) return c.json({ success: false, error: 'unknown bean' }, 404)
+
+  // QR 을 찍어 실제로 맛본 원두여야 한다 (본인의 원두 카드에만 쓴다)
+  const tasted = await c.env.DB
+    .prepare('SELECT unlocked_at FROM bean_unlocks WHERE member_id=? AND bean_id=?')
+    .bind(m.id, beanId)
+    .first<Row>()
+  if (!tasted) return c.json({ success: false, error: 'not tasted' }, 403)
+
+  const data = (await c.req.json().catch(() => ({}))) as Row
+  const rating = RATINGS.has(String(data.rating)) ? String(data.rating) : null
+  const body = String(data.body ?? '').trim().slice(0, NOTE_MAX) || null
+  const now = utcNowISO()
+
+  if (!rating && !body) {
+    await c.env.DB.prepare('DELETE FROM bean_notes WHERE member_id=? AND bean_id=?').bind(m.id, beanId).run()
+    return c.json({ success: true, note: null })
+  }
+
+  await c.env.DB
+    .prepare(
+      'INSERT INTO bean_notes (member_id, bean_id, rating, body, created_at, updated_at) VALUES (?,?,?,?,?,?) ' +
+        'ON CONFLICT(member_id, bean_id) DO UPDATE SET rating=excluded.rating, body=excluded.body, updated_at=excluded.updated_at',
+    )
+    .bind(m.id, beanId, rating, body, now, now)
+    .run()
+  return c.json({ success: true, note: { rating, body, updated_at: now, tasted_at: tasted.unlocked_at } })
 })
 
 // ---------- 관리자 API ----------
@@ -566,4 +632,22 @@ memberRoutes.put('/api/member/admin/members/:id', async (c) => {
   const row = await c.env.DB.prepare(`SELECT ${PUBLIC_FIELDS} FROM members WHERE id=?`).bind(id).first<Row>()
   if (!row) return c.json({ success: false, error: 'not found' }, 404)
   return c.json({ success: true, member: row })
+})
+
+
+/** 손님들이 남긴 감상 모아보기 — 관리자만 본다 (손님에게는 서로 안 보인다) */
+memberRoutes.get('/api/member/admin/notes', async (c) => {
+  const { results } = await c.env.DB
+    .prepare(
+      'SELECT n.bean_id AS bean_id, n.rating AS rating, n.body AS body, n.updated_at AS updated_at, ' +
+        'u.unlocked_at AS tasted_at, m.id AS member_id, m.nickname AS nickname, m.name AS name, m.email AS email ' +
+        'FROM bean_notes n JOIN members m ON m.id = n.member_id ' +
+        'LEFT JOIN bean_unlocks u ON u.member_id = n.member_id AND u.bean_id = n.bean_id ' +
+        'ORDER BY n.updated_at DESC LIMIT 300',
+    )
+    .all<Row>()
+  return c.json({
+    success: true,
+    items: results.map((r) => ({ ...r, bean_name: beanById(String(r.bean_id))?.name_ko ?? String(r.bean_id) })),
+  })
 })

@@ -139,6 +139,40 @@
         }
         .foot-nav a:hover { background: var(--canvas-stone); color: var(--ink); }
 
+        /* 내 기록 — 맛본 날짜 + 좋아요/중간/싫어요 + 감상평. 본인에게만 보인다. */
+        .mine {
+            max-width: 820px; margin: 0 auto 34px; padding: 24px 26px;
+            border: 1px solid var(--caramel); border-radius: 16px; background: var(--canvas);
+        }
+        .mine-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+        .mine-head h2 { font-family: var(--font-display); font-size: 1.3rem; font-weight: 600; margin: 0; }
+        .mine-date { font-family: var(--font-mono); font-size: 0.78rem; color: var(--ink-soft); }
+        .rate-row { display: flex; gap: 8px; margin: 18px 0 14px; flex-wrap: wrap; }
+        .rate-btn {
+            flex: 1 1 0; min-width: 92px; padding: 13px 10px; border-radius: 12px; cursor: pointer;
+            border: 1px solid var(--line); background: var(--canvas-warm); color: var(--ink-mute);
+            font-family: inherit; font-size: 0.9rem; font-weight: 600;
+            display: flex; flex-direction: column; align-items: center; gap: 5px;
+            transition: border-color 0.15s, background 0.15s, color 0.15s;
+        }
+        .rate-btn .em { font-size: 1.4rem; }
+        .rate-btn:hover { border-color: var(--caramel); }
+        .rate-btn.on { background: #F6EFE2; border-color: var(--copper); color: var(--ink); }
+        .mine textarea {
+            width: 100%; min-height: 104px; resize: vertical; padding: 13px 14px;
+            border: 1px solid var(--line); border-radius: 12px; background: var(--canvas-warm);
+            font-family: inherit; font-size: 0.94rem; line-height: 1.6; color: var(--ink);
+        }
+        .mine textarea:focus { outline: none; border-color: var(--caramel); background: var(--canvas); }
+        .mine-foot { display: flex; align-items: center; gap: 12px; margin-top: 14px; flex-wrap: wrap; }
+        .mine-save {
+            padding: 11px 22px; border-radius: 10px; border: 1px solid var(--espresso);
+            background: var(--espresso); color: #fff; font-family: inherit; font-size: 0.9rem;
+            font-weight: 600; cursor: pointer;
+        }
+        .mine-save:disabled { opacity: 0.5; cursor: not-allowed; }
+        .mine-msg { font-size: 0.84rem; color: var(--ink-soft); }
+        .mine-private { font-size: 0.78rem; color: var(--ink-soft); line-height: 1.6; margin-top: 12px; }
         .state-sub { display: inline-block; margin-top: 8px; font-size: 0.88rem; color: var(--ink-soft); }
         .unlock-banner {
             max-width: 820px; margin: 0 auto 26px; padding: 15px 20px; border-radius: 12px;
@@ -198,6 +232,79 @@
         return '<dt>' + esc(label) + '</dt><dd>' + esc(value) + '</dd>';
     }
 
+    var RATINGS = [
+        { key: '좋아요', em: '👍' },
+        { key: '중간',   em: '😐' },
+        { key: '싫어요', em: '👎' }
+    ];
+
+    function tastedDate(iso) {
+        if (!iso) return '';
+        var d = new Date(iso);
+        if (isNaN(d)) return String(iso).slice(0, 10).replace(/-/g, '.');
+        return d.getFullYear() + '.' + String(d.getMonth() + 1).padStart(2, '0') + '.' +
+               String(d.getDate()).padStart(2, '0');
+    }
+
+    // QR 을 찍어 맛본 사람에게만 보이는 개인 기록. 남에게는 렌더 자체가 안 된다.
+    function mineBlock(b) {
+        if (!b.tasted) return '';
+        var buttons = RATINGS.map(function (r) {
+            return '<button type="button" class="rate-btn' + (b.my_rating === r.key ? ' on' : '') + '"' +
+                   ' data-rating="' + r.key + '">' +
+                       '<span class="em">' + r.em + '</span>' + r.key +
+                   '</button>';
+        }).join('');
+        return '' +
+            '<div class="mine">' +
+                '<div class="mine-head">' +
+                    '<h2>☕ 내 기록</h2>' +
+                    '<span class="mine-date">' + esc(tastedDate(b.tasted_at)) + ' 맛봄</span>' +
+                '</div>' +
+                '<div class="rate-row">' + buttons + '</div>' +
+                '<textarea id="mine-body" maxlength="2000" placeholder="이 원두는 어땠나요? 향, 맛, 그날의 기분 무엇이든 좋습니다."></textarea>' +
+                '<div class="mine-foot">' +
+                    '<button type="button" class="mine-save" id="mine-save">저장</button>' +
+                    '<span class="mine-msg" id="mine-msg"></span>' +
+                '</div>' +
+                '<p class="mine-private">🔒 이 기록은 <b>나만</b> 볼 수 있습니다. 다른 손님에게는 보이지 않습니다.</p>' +
+            '</div>';
+    }
+
+    function bindMine(b) {
+        var picked = b.my_rating || null;
+        var msg = document.getElementById('mine-msg');
+        document.getElementById('mine-body').value = b.my_note || '';
+
+        Array.prototype.forEach.call(document.querySelectorAll('.rate-btn'), function (btn) {
+            btn.addEventListener('click', function () {
+                // 같은 걸 다시 누르면 해제
+                picked = (picked === btn.dataset.rating) ? null : btn.dataset.rating;
+                Array.prototype.forEach.call(document.querySelectorAll('.rate-btn'), function (x) {
+                    x.classList.toggle('on', x.dataset.rating === picked);
+                });
+            });
+        });
+
+        document.getElementById('mine-save').addEventListener('click', function () {
+            var btn = this;
+            btn.disabled = true;
+            msg.textContent = '저장하는 중…';
+            fetch('/api/member/notes/' + encodeURIComponent(b.id), {
+                method: 'PUT',
+                credentials: 'same-origin',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ rating: picked, body: document.getElementById('mine-body').value })
+            })
+                .then(function (r) { return r.json(); })
+                .then(function (d) {
+                    btn.disabled = false;
+                    msg.textContent = (d && d.success) ? '저장했습니다.' : '저장하지 못했습니다.';
+                })
+                .catch(function () { btn.disabled = false; msg.textContent = '저장하지 못했습니다.'; });
+        });
+    }
+
     function render(b) {
         var notes = Array.isArray(b.cup_notes) ? b.cup_notes : (b.cup_notes ? [b.cup_notes] : []);
         var sections = (b.sections || []).map(function (s) {
@@ -227,8 +334,11 @@
                     notes.map(function (n) { return '<span class="note-chip">' + esc(n) + '</span>'; }).join('') +
                 '</div></div>' : '') +
             '</div>' +
+            mineBlock(b) +
             (sections ? '<div class="body">' + sections + '</div>' : '') +
             '<div class="foot-nav"><a href="/beans">← 다른 원두 보기</a></div>';
+
+        if (b.tasted) bindMine(b);
 
         document.title = b.name_ko + ' — 원두 · 92°C ROASTERY';
         var desc = document.querySelector('meta[name="description"]');

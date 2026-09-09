@@ -153,6 +153,16 @@
         .bean-card.is-sold-out .cupnotes { opacity: 0.5; }
         .bean-card.is-sold-out:hover { border-color: var(--line); box-shadow: none; }
 
+        /* 내가 맛본 원두 — 뱃지와 날짜, 남긴 평가 */
+        .mine-badge {
+            display: inline-flex; align-items: center; gap: 6px;
+            margin-top: 12px; padding: 6px 12px; border-radius: 999px;
+            background: #F1EADD; border: 1px solid #E2D5BF;
+            font-size: 0.76rem; color: #6A4B1E; font-weight: 600;
+        }
+        .mine-badge .dt { font-family: var(--font-mono); font-weight: 400; opacity: 0.8; }
+        .bean-card.is-mine { border-color: var(--caramel); }
+
         /* 아직 안 연 미션 원두 — 자리는 보이되 내용은 가려둔다 */
         .bean-card.is-locked {
             display: flex; flex-direction: column; align-items: center; justify-content: center;
@@ -263,11 +273,29 @@
         return '<dt>' + esc(label) + '</dt><dd>' + esc(value) + '</dd>';
     }
 
+    var RATING_MARK = { '좋아요': '👍', '중간': '😐', '싫어요': '👎' };
+
+    function tastedDate(iso) {
+        if (!iso) return '';
+        var d = new Date(iso);
+        if (isNaN(d)) return String(iso).slice(0, 10).replace(/-/g, '.');
+        return d.getFullYear() + '.' + String(d.getMonth() + 1).padStart(2, '0') + '.' +
+               String(d.getDate()).padStart(2, '0');
+    }
+
+    // 내가 QR 을 찍어 맛본 원두에만 붙는다. 남이 보는 화면에는 안 나온다.
+    function mineBadge(b) {
+        if (!b.tasted) return '';
+        var mark = b.my_rating ? (RATING_MARK[b.my_rating] || '') + ' ' : '';
+        return '<div class="mine-badge">' + mark + '☕ 맛봤어요' +
+               '<span class="dt">' + esc(tastedDate(b.tasted_at)) + '</span></div>';
+    }
+
     function cardHtml(b) {
         var notes = Array.isArray(b.cup_notes) ? b.cup_notes.join(', ') : (b.cup_notes || '');
         var sold = b.sold_out ? '<span class="sold-badge">품절</span>' : '';
         return '' +
-            '<a class="bean-card' + (b.sold_out ? ' is-sold-out' : '') + '"' +
+            '<a class="bean-card' + (b.sold_out ? ' is-sold-out' : '') + (b.tasted ? ' is-mine' : '') + '"' +
                ' href="/beans/' + encodeURIComponent(b.id) + '">' +
                 '<h2>' + esc(b.name_ko) + sold + '</h2>' +
                 (b.name_en ? '<div class="bean-en">' + esc(b.name_en) + '</div>' : '') +
@@ -281,6 +309,7 @@
                 '</dl>' +
                 (notes ? '<div class="cupnotes"><div class="label">컵노트</div>' +
                          '<div class="notes">' + esc(notes) + '</div></div>' : '') +
+                mineBadge(b) +
                 '<div class="card-more">자세히 보기 →</div>' +
             '</a>';
     }
@@ -297,7 +326,17 @@
 
     function missionBar(d) {
         var bar = document.getElementById('mission-bar');
-        if (!d.mission || !d.mission.total) return;
+        var tasted = (d.items || []).filter(function (b) { return b.tasted; }).length;
+
+        // 미션이 없어도 내가 맛본 게 있으면 그것만 알려준다
+        if (!d.mission || !d.mission.total) {
+            if (d.logged_in && tasted) {
+                bar.innerHTML = '지금까지 <b>' + tasted + '종</b>을 맛보셨습니다. ' +
+                                '<a href="/me">내 기록 보기 →</a>';
+                bar.style.display = '';
+            }
+            return;
+        }
         var pips = '';
         for (var i = 0; i < d.mission.total; i++) {
             pips += '<span class="mission-pip' + (i < d.mission.unlocked ? ' on' : '') + '"></span>';

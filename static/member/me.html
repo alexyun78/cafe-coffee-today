@@ -55,6 +55,17 @@
         .slot.shut .q {
             font-family: var(--font-display); font-size: 1.5rem; letter-spacing: 0.12em; opacity: 0.55;
         }
+        .slot .meta { font-family: var(--font-mono); font-size: 0.68rem; color: var(--ink-soft); }
+        .tasted-list { margin-top: 18px; border-top: 1px solid var(--line-soft); }
+        .tasted-row {
+            display: flex; align-items: center; gap: 12px; padding: 13px 2px;
+            border-bottom: 1px solid var(--line-soft);
+        }
+        .tasted-row .em { font-size: 1.15rem; width: 24px; text-align: center; flex: none; }
+        .tasted-row .nm { flex: 1; font-weight: 600; font-size: 0.94rem; }
+        .tasted-row .nm small { display: block; font-weight: 400; color: var(--ink-soft); font-size: 0.76rem; }
+        .tasted-row .dt { font-family: var(--font-mono); font-size: 0.76rem; color: var(--ink-soft); }
+        .tasted-row .go { font-size: 0.8rem; color: var(--copper); }
         .mission-note { margin-top: 16px; font-size: 0.84rem; color: var(--ink-soft); line-height: 1.7; }
         .badge-done {
             margin-top: 18px; padding: 16px 18px; border-radius: 12px; text-align: center;
@@ -104,6 +115,15 @@
             </div>
             <p class="muted" id="nick-msg" style="margin-top: 8px;"></p>
         </div>
+    </div>
+
+    <div class="panel" id="tasted-panel" hidden>
+        <div class="mission-head">
+            <h2 style="margin:0">맛본 원두</h2>
+            <span class="mission-count" id="tasted-count"></span>
+        </div>
+        <div class="tasted-list" id="tasted-list"></div>
+        <p class="mission-note">원두를 눌러 들어가면 좋아요, 중간, 싫어요와 감상평을 남길 수 있습니다. 나만 볼 수 있습니다.</p>
     </div>
 
     <div class="panel" id="mission-panel">
@@ -163,6 +183,34 @@
         });
     }
 
+    var RATING_MARK = { '좋아요': '👍', '중간': '😐', '싫어요': '👎' };
+
+    function shortDate(iso) {
+        if (!iso) return '';
+        var d = new Date(iso);
+        if (isNaN(d)) return String(iso).slice(0, 10).replace(/-/g, '.');
+        return d.getFullYear() + '.' + String(d.getMonth() + 1).padStart(2, '0') + '.' +
+               String(d.getDate()).padStart(2, '0');
+    }
+
+    function renderTasted(p) {
+        var panel = document.getElementById('tasted-panel');
+        var list = (p && p.tasted) || [];
+        if (!list.length) { panel.hidden = true; return; }
+        panel.hidden = false;
+        document.getElementById('tasted-count').textContent = list.length + '종';
+        document.getElementById('tasted-list').innerHTML = list.map(function (t) {
+            return '<a class="tasted-row" href="/beans/' + encodeURIComponent(t.id) + '">' +
+                       '<span class="em">' + (RATING_MARK[t.rating] || '🫘') + '</span>' +
+                       '<span class="nm">' + esc(t.name_ko) +
+                           (t.has_note ? '<small>감상을 남겼습니다</small>' : '<small>감상을 남겨보세요</small>') +
+                       '</span>' +
+                       '<span class="dt">' + shortDate(t.tasted_at) + '</span>' +
+                       '<span class="go">→</span>' +
+                   '</a>';
+        }).join('');
+    }
+
     function renderMissions(p) {
         var panel = document.getElementById('mission-panel');
         if (!p || !p.total) { panel.hidden = true; return; }
@@ -174,8 +222,9 @@
                 return '<div class="slot shut"><div class="mark">🔒</div><div class="q">???</div></div>';
             }
             return '<a class="slot open" href="/beans/' + encodeURIComponent(s.id) + '">' +
-                       '<div class="mark">🫘</div>' +
+                       '<div class="mark">' + (RATING_MARK[s.rating] || '🫘') + '</div>' +
                        '<div class="nm">' + esc(s.name_ko) + '</div>' +
+                       '<div class="meta">' + shortDate(s.tasted_at) + '</div>' +
                    '</a>';
         }).join('');
 
@@ -205,6 +254,7 @@
             if (!d || !d.member) { location.replace('/login?next=/me'); return; }
             render(d.member);
             renderMissions(d.progress);
+            renderTasted(d.progress);
 
             var q = new URLSearchParams(location.search);
             if (q.get('welcome')) document.getElementById('welcome').hidden = false;

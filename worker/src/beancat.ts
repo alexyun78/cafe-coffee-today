@@ -32,7 +32,7 @@ export async function activeMissionIds(db: D1Database): Promise<string[]> {
   return results.map((r) => String(r.bean_id)).filter((id) => BY_ID.has(id))
 }
 
-/** 회원이 연 원두 id 집합 */
+/** 회원이 연(= QR 을 찍어 맛본) 원두 id 집합 */
 export async function unlockedIds(db: D1Database, memberId: number | null): Promise<Set<string>> {
   if (!memberId) return new Set()
   const { results } = await db
@@ -40,6 +40,34 @@ export async function unlockedIds(db: D1Database, memberId: number | null): Prom
     .bind(memberId)
     .all<Row>()
   return new Set(results.map((r) => String(r.bean_id)))
+}
+
+export type MyBean = { tasted_at: string; rating: string | null; body: string | null }
+
+/** 회원의 원두별 개인 기록 — 맛본 날짜 + 감상. 비로그인이면 빈 맵. */
+export async function myBeanRecords(
+  db: D1Database,
+  memberId: number | null,
+): Promise<Map<string, MyBean>> {
+  const out = new Map<string, MyBean>()
+  if (!memberId) return out
+  const { results } = await db
+    .prepare(
+      'SELECT u.bean_id AS bean_id, u.unlocked_at AS tasted_at, n.rating AS rating, n.body AS body ' +
+        'FROM bean_unlocks u LEFT JOIN bean_notes n ' +
+        'ON n.member_id = u.member_id AND n.bean_id = u.bean_id ' +
+        'WHERE u.member_id=?',
+    )
+    .bind(memberId)
+    .all<Row>()
+  for (const r of results) {
+    out.set(String(r.bean_id), {
+      tasted_at: String(r.tasted_at || ''),
+      rating: r.rating ? String(r.rating) : null,
+      body: r.body ? String(r.body) : null,
+    })
+  }
+  return out
 }
 
 /** 품절·블랜드 (기존 /api/beans/status 와 같은 기준) */

@@ -4,7 +4,7 @@ import { Hono } from 'hono'
 import { Env, Row, kstTodayISO, utcNowISO, monthsAgoISO } from './util'
 import { requirePin } from './auth'
 import { createCoffee, findActiveByName } from './coffee'
-import { BEAN_CARDS, beanById, activeMissionIds, unlockedIds, beanStatus } from './beancat'
+import { BEAN_CARDS, beanById, activeMissionIds, myBeanRecords, beanStatus } from './beancat'
 import { currentMember } from './members'
 
 export const beanRoutes = new Hono<{ Bindings: Env }>()
@@ -912,12 +912,13 @@ beanRoutes.get('/api/beans/status', async (c) => {
 beanRoutes.get('/api/beans/cards', async (c) => {
   const m = await currentMember(c.env, c.req.raw)
   const memberId = m ? Number(m.id) : null
-  const [missions, unlocked, status] = await Promise.all([
+  const [missions, mine, status] = await Promise.all([
     activeMissionIds(c.env.DB),
-    unlockedIds(c.env.DB, memberId),
+    myBeanRecords(c.env.DB, memberId),
     beanStatus(c.env),
   ])
   const missionSet = new Set(missions)
+  const unlocked = new Set(mine.keys())
 
   const items: Row[] = []
   let locked = 0
@@ -929,7 +930,17 @@ beanRoutes.get('/api/beans/cards', async (c) => {
       locked++
       continue
     }
-    items.push({ ...b, sold_out: status.soldOut.has(gid), mission: missionSet.has(id) })
+    // 맛본 원두에는 뱃지와 날짜, 그리고 본인이 쓴 감상을 함께 실어 보낸다 (본인에게만)
+    const rec = mine.get(id)
+    items.push({
+      ...b,
+      sold_out: status.soldOut.has(gid),
+      mission: missionSet.has(id),
+      tasted: Boolean(rec),
+      tasted_at: rec?.tasted_at ?? null,
+      my_rating: rec?.rating ?? null,
+      my_note: rec?.body ?? null,
+    })
   }
 
   return c.json({
@@ -952,14 +963,23 @@ beanRoutes.get('/api/beans/cards/:id', async (c) => {
   const status = await beanStatus(c.env)
   if (status.blend.has(Number(card.green_bean_id))) return gone()
 
+  const m = await currentMember(c.env, c.req.raw)
+  const mine = await myBeanRecords(c.env.DB, m ? Number(m.id) : null)
   const missions = new Set(await activeMissionIds(c.env.DB))
-  if (missions.has(id)) {
-    const m = await currentMember(c.env, c.req.raw)
-    const unlocked = await unlockedIds(c.env.DB, m ? Number(m.id) : null)
-    if (!unlocked.has(id)) return gone()
-  }
+  if (missions.has(id) && !mine.has(id)) return gone()
+
+  const rec = mine.get(id)
   return c.json({
     success: true,
-    item: { ...card, sold_out: status.soldOut.has(Number(card.green_bean_id)), mission: missions.has(id) },
+    logged_in: Boolean(m),
+    item: {
+      ...card,
+      sold_out: status.soldOut.has(Number(card.green_bean_id)),
+      mission: missions.has(id),
+      tasted: Boolean(rec),
+      tasted_at: rec?.tasted_at ?? null,
+      my_rating: rec?.rating ?? null,
+      my_note: rec?.body ?? null,
+    },
   })
 })

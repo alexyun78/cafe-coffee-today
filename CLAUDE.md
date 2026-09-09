@@ -742,6 +742,20 @@ Worker 가 `beancat.ts` 에서 **번들로 import** 해 `/api/beans/cards`, `/ap
   고친 뒤 배포가 돼야 반영된다(푸시하면 자동). `scripts/build_bean_print.py` 는 로컬 파일을 읽어 영향 없다.
 - 원두 카드 페이지에서 `/static/beans/index.json` 을 다시 fetch 하도록 되돌리면 잠금이 통째로 무너진다.
 
+### 맛본 기록과 감상 (본인만 열람)
+
+QR 을 찍으면 `bean_unlocks` 에 원두와 **찍은 시각**이 남는다. 그게 곧 "맛봤다"는 기록이다.
+
+- `/beans` 목록과 상세에서 내가 맛본 원두에는 **☕ 맛봤어요 + 날짜 뱃지**가 붙는다. 남에게는 안 보인다.
+- 상세의 "☕ 내 기록" 블록에서 **좋아요 / 중간 / 싫어요** 와 감상평(2000자)을 남긴다. `bean_notes` 테이블.
+- **QR 을 찍어 맛본 원두에만 쓸 수 있다** (`PUT /api/member/notes/<beanId>` 가 `bean_unlocks` 를 확인, 없으면 403).
+- 평가와 글을 둘 다 비우고 저장하면 삭제된다.
+- 손님끼리는 서로의 감상을 볼 수 없다 — API 가 `member_id` 로만 조회한다.
+  **관리자만** `GET /api/member/admin/notes` 로 전부 본다 (회원 탭의 `💬 손님 감상`).
+- 마이페이지에 "맛본 원두" 목록(최근순, 평가 이모지와 날짜)이 있다.
+- 잠금(미션)과 뱃지는 **별개 축**이다. 미션 0종이면 원두는 전부 공개인 채로 맛본 것만 뱃지가 붙는다.
+- 마이그레이션: [scripts/members_notes_migration.sql](scripts/members_notes_migration.sql) (1회).
+
 ### 기억할 규칙
 
 - 세션은 관리자와 같은 HMAC 서명 쿠키(`util.signToken`)를 salt 만 바꿔 쓴다(`member-token-v1`, 쿠키 `mem`, 90일).
@@ -890,6 +904,7 @@ SCA Evolved Q Grader(CVA 기반) 대비 6개월 학습플랜 + 훈련 일지. **
 | [static/member/](static/member/) | 회원 페이지 (`join`, `login`, `me`, `privacy`, `cards` + 공용 `member.css`) |
 | [scripts/members_schema.sql](scripts/members_schema.sql) | 회원 D1 스키마 (`members`, `invite_codes`, 1회) |
 | [scripts/members_mission_migration.sql](scripts/members_mission_migration.sql) | 미션·해금 스키마 (`bean_missions`, `bean_unlocks`, 1회) |
+| [scripts/members_notes_migration.sql](scripts/members_notes_migration.sql) | 원두 감상 스키마 (`bean_notes`, 1회) |
 | [scripts/qgrader_sync.py](scripts/qgrader_sync.py) | 학습플랜 md → D1 seed SQL 생성 |
 | [scripts/release_insight.py](scripts/release_insight.py) | **인사이트 백로그 릴리스 (토큰 0, 현재 채택)** — 큐에서 1편 발행 |
 | [scripts/release.sh](scripts/release.sh) | 서버 릴리스 래퍼: git pull → release_insight.py → commit/push |
