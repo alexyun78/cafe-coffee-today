@@ -29,16 +29,43 @@
         .nick-row .field { flex: 1; }
         .nick-row .btn { width: auto; padding: 12px 20px; }
 
-        /* 아직 안 열린 구역 — 정복 기록이 붙을 자리 */
-        .locked { position: relative; overflow: hidden; }
-        .locked-grid {
-            display: grid; grid-template-columns: repeat(auto-fill, minmax(74px, 1fr));
-            gap: 10px; margin-top: 18px; filter: blur(1.5px); opacity: 0.45;
+        /* 시크릿 원두 수집 현황 */
+        .mission-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+        .mission-count { font-family: var(--font-mono); font-size: 0.85rem; color: var(--copper); }
+        .mission-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 12px; margin-top: 18px;
         }
-        .locked-cell {
-            aspect-ratio: 1; border-radius: 12px; background: var(--canvas-stone);
-            display: grid; place-items: center; font-size: 1.35rem;
+        .slot {
+            border: 1px solid var(--line); border-radius: 14px; padding: 16px 14px;
+            min-height: 128px; display: flex; flex-direction: column; justify-content: center;
+            text-align: center; gap: 7px;
         }
+        .slot.open { background: var(--canvas); }
+        .slot.open .nm {
+            font-family: var(--font-display); font-size: 1.08rem; font-weight: 600; line-height: 1.25;
+        }
+        .slot.open .ln { font-size: 0.76rem; color: var(--ink-soft); line-height: 1.5; }
+        .slot.shut {
+            border-style: dashed; color: var(--ink-soft);
+            background: repeating-linear-gradient(
+                135deg, var(--canvas-stone), var(--canvas-stone) 9px, #EDE5D9 9px, #EDE5D9 18px);
+        }
+        .slot .mark { font-size: 1.5rem; opacity: 0.55; }
+        .slot.shut .q {
+            font-family: var(--font-display); font-size: 1.5rem; letter-spacing: 0.12em; opacity: 0.55;
+        }
+        .mission-note { margin-top: 16px; font-size: 0.84rem; color: var(--ink-soft); line-height: 1.7; }
+        .badge-done {
+            margin-top: 18px; padding: 16px 18px; border-radius: 12px; text-align: center;
+            background: #F6EFE2; border: 1px solid #E8D9BC; color: #6A4B1E;
+        }
+        .badge-done .t { font-family: var(--font-display); font-size: 1.3rem; font-weight: 600; }
+        .just-opened {
+            margin-top: 14px; padding: 13px 16px; border-radius: 11px; font-size: 0.9rem;
+            background: var(--canvas-stone); color: var(--ink-mute);
+        }
+        .just-opened a { color: var(--copper); text-decoration: underline; text-underline-offset: 3px; }
         [hidden] { display: none !important; }
     </style>
 </head>
@@ -79,16 +106,16 @@
         </div>
     </div>
 
-    <div class="panel locked">
-        <h2>정복한 콩</h2>
-        <p class="muted">
-            원두마다 놓인 QR을 찍으면 그 콩이 여기 채워지고, 마신 느낌을 기록으로 남길 수 있게 됩니다.
-            이 구역은 곧 열립니다.
-        </p>
-        <div class="locked-grid">
-            <div class="locked-cell">🫘</div><div class="locked-cell">?</div><div class="locked-cell">?</div>
-            <div class="locked-cell">?</div><div class="locked-cell">?</div><div class="locked-cell">?</div>
-            <div class="locked-cell">?</div><div class="locked-cell">?</div>
+    <div class="panel" id="mission-panel">
+        <div class="mission-head">
+            <h2 style="margin:0">시크릿 원두</h2>
+            <span class="mission-count" id="mission-count"></span>
+        </div>
+        <div class="mission-grid" id="mission-grid"></div>
+        <p class="mission-note" id="mission-note"></p>
+        <div class="badge-done" id="badge-done" hidden>
+            <div class="t">🏅 완주</div>
+            시크릿 원두를 모두 열었습니다. 매장에서 이 화면을 보여주세요.
         </div>
     </div>
 
@@ -130,15 +157,60 @@
         app.hidden = false;
     }
 
+    function esc(t) {
+        return String(t == null ? '' : t).replace(/[&<>"]/g, function (ch) {
+            return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[ch];
+        });
+    }
+
+    function renderMissions(p) {
+        var panel = document.getElementById('mission-panel');
+        if (!p || !p.total) { panel.hidden = true; return; }
+        panel.hidden = false;
+
+        document.getElementById('mission-count').textContent = p.unlocked + ' / ' + p.total;
+        document.getElementById('mission-grid').innerHTML = p.slots.map(function (s) {
+            if (s.locked) {
+                return '<div class="slot shut"><div class="mark">🔒</div><div class="q">???</div></div>';
+            }
+            return '<a class="slot open" href="/beans/' + encodeURIComponent(s.id) + '">' +
+                       '<div class="mark">🫘</div>' +
+                       '<div class="nm">' + esc(s.name_ko) + '</div>' +
+                   '</a>';
+        }).join('');
+
+        var left = p.total - p.unlocked;
+        document.getElementById('mission-note').textContent = left
+            ? left + '종이 남았습니다. 매장에서 그 커피를 만나면 원두 카드의 QR로 열립니다.'
+            : '';
+        document.getElementById('badge-done').hidden = !p.complete;
+    }
+
+    function justOpened(beanId, progress) {
+        var name = '';
+        (progress && progress.slots || []).forEach(function (s) {
+            if (!s.locked && s.id === beanId) name = s.name_ko;
+        });
+        var box = document.createElement('div');
+        box.className = 'just-opened';
+        box.innerHTML = '🔓 <b>' + esc(name || '원두') + '</b> 카드가 열렸습니다. ' +
+                        '<a href="/beans/' + encodeURIComponent(beanId) + '">보러 가기 →</a>';
+        var w = document.getElementById('welcome');
+        w.parentNode.insertBefore(box, w.nextSibling);
+    }
+
     fetch('/api/member/me', { credentials: 'same-origin' })
         .then(function (r) { return r.json(); })
         .then(function (d) {
             if (!d || !d.member) { location.replace('/login?next=/me'); return; }
             render(d.member);
-            if (new URLSearchParams(location.search).get('welcome')) {
-                document.getElementById('welcome').hidden = false;
-                history.replaceState(null, '', '/me');
-            }
+            renderMissions(d.progress);
+
+            var q = new URLSearchParams(location.search);
+            if (q.get('welcome')) document.getElementById('welcome').hidden = false;
+            var opened = q.get('unlocked');
+            if (opened) justOpened(opened, d.progress);
+            if (q.get('welcome') || opened) history.replaceState(null, '', '/me');
         })
         .catch(function () { location.replace('/login?next=/me'); });
 

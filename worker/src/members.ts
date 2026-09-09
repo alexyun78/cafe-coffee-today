@@ -1,15 +1,17 @@
-// 92도씨 회원 — 시크릿 QR 초대 가입 + 구글 로그인 (docs/MEMBERS.md)
+// 92도씨 회원 — 시크릿 QR 카드로 가입하고 원두를 하나씩 여는 수집 게임 (docs/MEMBERS.md)
 //
-// 규칙 하나: **가입은 초대 코드가 있어야만 된다.** 매장에서 필터 커피를 낼 때 건네는
-// QR 카드가 유일한 문이고, 한 번 쓴 코드는 소진된다. 로그인은 그 다음부터 코드 없이
-// 구글 버튼만으로 된다.
+// QR 한 장 = 초대장이자 **그 원두의 열쇠**다. 매장에서 필터 커피를 내면서 원두 카드를
+// 건네고, 손님이 그 카드의 QR 을 찍으면
+//   - 처음이면 → 구글 계정으로 가입 + 그 원두가 열린다 (첫 번째 열쇠)
+//   - 이미 회원이면 → 그 원두만 열린다
+// 미션으로 지정한 원두(`bean_missions`)는 열기 전까지 /beans 목록에서 자물쇠로 가려진다.
 //
-// 세션은 관리자와 같은 HMAC 서명 쿠키(util.signToken)를 salt 만 바꿔 쓴다 — D1 에
-// 세션 테이블을 두지 않는다. 스키마: scripts/members_schema.sql
+// 세션은 관리자와 같은 HMAC 서명 쿠키(util.signToken)를 salt 만 바꿔 쓴다.
+// 스키마: scripts/members_schema.sql + scripts/members_mission_migration.sql
 import { Hono } from 'hono'
-import type { Context } from 'hono'
 import { Env, Row, utcNowISO, signToken, verifyToken, getCookie, b64urlDecode, b64urlEncode } from './util'
 import { requirePin } from './auth'
+import { BEAN_CARDS, beanBrief, beanById, activeMissionIds, unlockedIds } from './beancat'
 
 export type MemberEnv = { Bindings: Env; Variables: { member: Row } }
 export const memberRoutes = new Hono<MemberEnv>()
@@ -25,8 +27,6 @@ const STATE_TTL_SEC = 600 // OAuth 왕복은 10분이면 충분
 const GOOGLE_AUTH_URL = 'https://accounts.google.com/o/oauth2/v2/auth'
 const GOOGLE_TOKEN_URL = 'https://oauth2.googleapis.com/token'
 const GOOGLE_ISS = new Set(['https://accounts.google.com', 'accounts.google.com'])
-
-type C = Context<MemberEnv>
 
 // ---------- 초대 코드 ----------
 
@@ -70,21 +70,22 @@ function cookieHeader(name: string, value: string, maxAge: number): string {
 const PUBLIC_FIELDS =
   'id, google_sub, email, name, picture, nickname, invite_code, status, joined_at, last_login_at'
 
-/** 로그인한 회원 행. 비로그인이거나 정지된 계정이면 null */
-export async function currentMember(c: C): Promise<Row | null> {
-  const tok = getCookie(c.req.raw, MEMBER_COOKIE)
+/** 로그인한 회원 행. 비로그인이거나 정지된 계정이면 null.
+ *  라우터 종류를 가리지 않도록 env 와 Request 만 받는다 (beans.ts 에서도 쓴다). */
+export async function currentMember(env: Env, req: Request): Promise<Row | null> {
+  const tok = getCookie(req, MEMBER_COOKIE)
   if (!tok) return null
-  const payload = await verifyToken(c.env.SESSION_SECRET, MEMBER_SALT, tok, MEMBER_TTL_SEC)
+  const payload = await verifyToken(env.SESSION_SECRET, MEMBER_SALT, tok, MEMBER_TTL_SEC)
   const id = Number(payload?.mid)
   if (!id) return null
-  const row = await c.env.DB.prepare(`SELECT ${PUBLIC_FIELDS} FROM members WHERE id=?`).bind(id).first<Row>()
+  const row = await env.DB.prepare(`SELECT ${PUBLIC_FIELDS} FROM members WHERE id=?`).bind(id).first<Row>()
   if (!row || row.status !== '활성') return null
   return row
 }
 
-/** 회원 전용 라우트 가드 — 2단계(정복 기록, 노트)에서 쓴다 */
-export async function requireMember(c: C, next: () => Promise<void>) {
-  const m = await currentMember(c)
+/** 회원 전용 라우트 가드 */
+export async function requireMember(c: any, next: () => Promise<void>) {
+  const m = await currentMember(c.env, c.req.raw)
   if (!m) return c.json({ success: false, error: 'login required' }, 401)
   c.set('member', m)
   await next()
@@ -99,10 +100,63 @@ const memberPublic = (m: Row) => ({
   joined_at: m.joined_at,
 })
 
+// ---------- 해금 ----------
+
+type UnlockResult =
+  | { ok: true; already: boolean; bean_id: string }
+  | { ok: false; reason: 'no_bean' | 'invite_used' | 'invite_expired' | 'invite_not_found' }
+
+/** 코드 한 장으로 원두 하나를 연다.
+ *  - 이미 연 원두면 **코드를 소진하지 않는다** — 손님이 그 카드를 다른 사람에게 넘길 수 있게.
+ *  - 코드 소진은 조건부 UPDATE 라 같은 카드를 동시에 써도 한 명만 성공한다. */
+async function redeemForBean(db: D1Database, memberId: number, code: string): Promise<UnlockResult> {
+  const { state, row } = await checkInvite(db, code)
+  if (state !== 'ok') return { ok: false, reason: `invite_${state}` as any }
+
+  const beanId = row?.bean_id ? String(row.bean_id) : ''
+  if (!beanId || !beanById(beanId)) return { ok: false, reason: 'no_bean' }
+
+  const mine = await db
+    .prepare('SELECT id FROM bean_unlocks WHERE member_id=? AND bean_id=?')
+    .bind(memberId, beanId)
+    .first<Row>()
+  if (mine) return { ok: true, already: true, bean_id: beanId }
+
+  const now = utcNowISO()
+  const claim = await db
+    .prepare('UPDATE invite_codes SET redeemed_by=?, redeemed_at=? WHERE code=? AND redeemed_by IS NULL')
+    .bind(memberId, now, code)
+    .run()
+  if (!claim.meta.changes) return { ok: false, reason: 'invite_used' }
+
+  await db
+    .prepare(
+      'INSERT INTO bean_unlocks (member_id, bean_id, invite_code, unlocked_at) VALUES (?,?,?,?) ' +
+        'ON CONFLICT(member_id, bean_id) DO NOTHING',
+    )
+    .bind(memberId, beanId, code, now)
+    .run()
+  return { ok: true, already: false, bean_id: beanId }
+}
+
+/** 마이페이지·네비가 쓰는 진행 상황 */
+async function missionProgress(db: D1Database, memberId: number | null) {
+  const [missions, unlocked] = await Promise.all([activeMissionIds(db), unlockedIds(db, memberId)])
+  const slots = missions.map((id) => {
+    const opened = unlocked.has(id)
+    const card = beanById(id)
+    return opened
+      ? { locked: false, id, name_ko: card?.name_ko ?? '', one_liner: card?.one_liner ?? '' }
+      : { locked: true }
+  })
+  const opened = slots.filter((s) => !s.locked).length
+  return { total: missions.length, unlocked: opened, complete: missions.length > 0 && opened === missions.length, slots }
+}
+
 // ---------- 구글 OAuth ----------
 
 /** 리디렉션 URI 는 요청 오리진에서 만든다 — 구글 콘솔에 프로덕션과 로컬 둘 다 등록해야 한다 */
-const redirectUri = (c: C) => new URL('/auth/google/callback', c.req.url).toString()
+const redirectUri = (c: any) => new URL('/auth/google/callback', c.req.url).toString()
 
 /** 로그인 후 돌아갈 경로. 외부 사이트로 튕기지 않도록 내부 절대경로만 허용한다 */
 function safeNext(v: any): string {
@@ -195,14 +249,13 @@ memberRoutes.get('/auth/google/callback', async (c) => {
   const sub = String(idPayload.sub)
   const now = utcNowISO()
   const invite = normCode(st.invite)
-  const next = safeNext(st.next) || '/me'
+  const next = safeNext(st.next)
 
-  // 3) 기존 회원이면 그대로 로그인 (초대 코드는 소진하지 않는다)
   let member = await db.prepare('SELECT * FROM members WHERE google_sub=?').bind(sub).first<Row>()
   let created = false
 
   if (!member) {
-    // 4) 신규는 초대 코드가 반드시 있어야 한다
+    // 3) 신규는 카드(초대 코드)가 반드시 있어야 한다
     if (!invite) return fail('invite_required')
     const { state } = await checkInvite(db, invite)
     if (state !== 'ok') return fail(`invite_${state}`)
@@ -217,42 +270,51 @@ memberRoutes.get('/auth/google/callback', async (c) => {
     member = await db.prepare('SELECT * FROM members WHERE google_sub=?').bind(sub).first<Row>()
     if (!member) return fail('server')
     created = true
-
-    // 5) 코드 소진 — 조건부 UPDATE 라 같은 코드를 동시에 써도 한 명만 성공한다
-    const claim = await db
-      .prepare('UPDATE invite_codes SET redeemed_by=?, redeemed_at=? WHERE code=? AND redeemed_by IS NULL')
-      .bind(member.id, now, invite)
-      .run()
-    if (!claim.meta.changes) {
-      const taken = await db.prepare('SELECT redeemed_by FROM invite_codes WHERE code=?').bind(invite).first<Row>()
-      if (Number(taken?.redeemed_by) !== Number(member.id)) {
-        await db.prepare('DELETE FROM members WHERE id=?').bind(member.id).run()
-        return fail('invite_used')
-      }
-    }
   } else {
     if (member.status !== '활성') return fail('suspended')
-    // 구글 쪽 프로필이 바뀌었을 수 있으니 로그인할 때마다 갱신한다
+    // 구글 쪽 프로필이 바뀌었을 수 있으니 로그인할 때마다 갱신한다 (호칭은 건드리지 않는다)
     await db
       .prepare('UPDATE members SET email=?, name=?, picture=?, last_login_at=? WHERE id=?')
       .bind(idPayload.email ?? null, idPayload.name ?? null, idPayload.picture ?? null, now, member.id)
       .run()
   }
 
+  // 4) 카드에 묶인 원두를 연다. 원두가 안 묶인 순수 초대장이면 코드만 소진한다.
+  let unlockedBean = ''
+  if (invite) {
+    const r = await redeemForBean(db, Number(member.id), invite)
+    if (r.ok) {
+      unlockedBean = r.bean_id
+    } else if (r.reason === 'no_bean') {
+      await db
+        .prepare('UPDATE invite_codes SET redeemed_by=?, redeemed_at=? WHERE code=? AND redeemed_by IS NULL')
+        .bind(member.id, now, invite)
+        .run()
+    } else if (created) {
+      // 가입 직전 확인까지 통과했는데 코드가 사라졌다 — 만든 계정을 되돌린다
+      await db.prepare('DELETE FROM members WHERE id=?').bind(member.id).run()
+      return fail(r.reason)
+    }
+  }
+
   const token = await signToken(c.env.SESSION_SECRET, MEMBER_SALT, { mid: member.id })
   c.header('Set-Cookie', cookieHeader(STATE_COOKIE, '', 0))
   c.header('Set-Cookie', cookieHeader(MEMBER_COOKIE, token, MEMBER_TTL_SEC), { append: true })
-  return c.redirect(created ? '/me?welcome=1' : next, 302)
+
+  if (created) return c.redirect(`/me?welcome=1${unlockedBean ? `&unlocked=${unlockedBean}` : ''}`, 302)
+  if (unlockedBean) return c.redirect(`/beans/${unlockedBean}?unlocked=1`, 302)
+  return c.redirect(next || '/me', 302)
 })
 
 // ---------- 공개 API ----------
 
 memberRoutes.get('/api/member/me', async (c) => {
-  const m = await currentMember(c)
+  const m = await currentMember(c.env, c.req.raw)
   return c.json({
     success: true,
     login_enabled: Boolean(c.env.GOOGLE_CLIENT_ID),
     member: m ? memberPublic(m) : null,
+    progress: await missionProgress(c.env.DB, m ? Number(m.id) : null),
   })
 })
 
@@ -261,16 +323,49 @@ memberRoutes.post('/api/member/logout', (c) => {
   return c.json({ success: true })
 })
 
-/** 가입 랜딩(/join/<code>)에서 코드가 살아 있는지 확인 */
+/** 가입·해금 랜딩(/join/<code>)이 카드 상태를 확인한다.
+ *  코드에 묶인 원두 이름은 알려준다 — 손님은 그 커피를 이미 마셨으니 비밀이 아니다. */
 memberRoutes.get('/api/member/invite/:code', async (c) => {
   const code = normCode(c.req.param('code'))
-  const { state } = await checkInvite(c.env.DB, code)
+  const { state, row } = await checkInvite(c.env.DB, code)
+  const m = await currentMember(c.env, c.req.raw)
+  const beanId = row?.bean_id ? String(row.bean_id) : ''
+  const card = beanId ? beanById(beanId) : null
+
+  let already = false
+  if (m && beanId) {
+    const hit = await c.env.DB
+      .prepare('SELECT 1 AS x FROM bean_unlocks WHERE member_id=? AND bean_id=?')
+      .bind(m.id, beanId)
+      .first<Row>()
+    already = Boolean(hit)
+  }
+
   return c.json({
     success: true,
     valid: state === 'ok',
     state,
     code_pretty: CODE_RE.test(code) ? prettyCode(code) : '',
     login_enabled: Boolean(c.env.GOOGLE_CLIENT_ID),
+    logged_in: Boolean(m),
+    already_unlocked: already,
+    bean: card ? { id: card.id, name_ko: card.name_ko ?? '', country: card.country ?? '' } : null,
+  })
+})
+
+/** 이미 로그인한 회원이 새 카드를 찍었을 때 — 가입 없이 원두만 연다 */
+memberRoutes.post('/api/member/unlock', requireMember, async (c) => {
+  const m = c.get('member')
+  const data = (await c.req.json().catch(() => ({}))) as Row
+  const code = normCode(data.code)
+  const r = await redeemForBean(c.env.DB, Number(m.id), code)
+  if (!r.ok) return c.json({ success: false, error: r.reason }, 400)
+  const card = beanById(r.bean_id)
+  return c.json({
+    success: true,
+    already: r.already,
+    bean: { id: r.bean_id, name_ko: card?.name_ko ?? '' },
+    progress: await missionProgress(c.env.DB, Number(m.id)),
   })
 })
 
@@ -289,30 +384,88 @@ for (const p of ['/api/member/admin', '/api/member/admin/*']) memberRoutes.use(p
 
 memberRoutes.get('/api/member/admin/overview', async (c) => {
   const db = c.env.DB
-  const [members, invites, batches] = await db.batch([
+  const [members, invites, batches, unlocks] = await db.batch([
     db.prepare(`SELECT ${PUBLIC_FIELDS} FROM members ORDER BY joined_at DESC LIMIT 500`),
     db.prepare(
       'SELECT COUNT(*) AS total, SUM(CASE WHEN redeemed_by IS NULL THEN 1 ELSE 0 END) AS unused FROM invite_codes',
     ),
     db.prepare(
-      "SELECT COALESCE(batch,'(묶음 없음)') AS batch, COUNT(*) AS total, " +
+      "SELECT COALESCE(bean_id,'(원두 없음)') AS bean_id, COALESCE(batch,'(묶음 없음)') AS batch, COUNT(*) AS total, " +
         'SUM(CASE WHEN redeemed_by IS NULL THEN 1 ELSE 0 END) AS unused, MIN(created_at) AS created_at ' +
-        'FROM invite_codes GROUP BY batch ORDER BY created_at DESC',
+        'FROM invite_codes GROUP BY bean_id, batch ORDER BY created_at DESC',
     ),
+    db.prepare('SELECT member_id, COUNT(*) AS c FROM bean_unlocks GROUP BY member_id'),
   ])
   const inv = (invites.results[0] as Row) || {}
+  const unlockMap: Record<number, number> = {}
+  for (const r of unlocks.results as Row[]) unlockMap[Number(r.member_id)] = Number(r.c)
+
+  const missions = await activeMissionIds(db)
   return c.json({
     success: true,
-    members: members.results,
+    members: (members.results as Row[]).map((m) => ({ ...m, unlocked: unlockMap[Number(m.id)] ?? 0 })),
     invite_total: inv.total ?? 0,
     invite_unused: inv.unused ?? 0,
-    batches: batches.results,
+    batches: (batches.results as Row[]).map((b) => ({
+      ...b,
+      bean_name: beanById(String(b.bean_id))?.name_ko ?? String(b.bean_id),
+    })),
+    mission_total: missions.length,
   })
+})
+
+/** 원두 카드 전체 + 미션 지정 여부 (관리자 화면의 미션 고르기) */
+memberRoutes.get('/api/member/admin/beans', async (c) => {
+  const { results } = await c.env.DB
+    .prepare('SELECT bean_id, sort_order, active FROM bean_missions')
+    .all<Row>()
+  const mission = new Map(results.map((r) => [String(r.bean_id), r]))
+  const counts = await c.env.DB
+    .prepare('SELECT bean_id, COUNT(*) AS c FROM bean_unlocks GROUP BY bean_id')
+    .all<Row>()
+  const openedBy: Record<string, number> = {}
+  for (const r of counts.results as Row[]) openedBy[String(r.bean_id)] = Number(r.c)
+
+  return c.json({
+    success: true,
+    items: BEAN_CARDS.map((b) => {
+      const m = mission.get(String(b.id))
+      return {
+        ...beanBrief(b),
+        mission: Boolean(m && m.active),
+        sort_order: m ? Number(m.sort_order) : 0,
+        opened_by: openedBy[String(b.id)] ?? 0,
+      }
+    }),
+  })
+})
+
+/** 미션 원두 지정 — 보낸 목록이 곧 미션 세트가 된다 (순서 = 배열 순서) */
+memberRoutes.put('/api/member/admin/missions', async (c) => {
+  const data = (await c.req.json().catch(() => ({}))) as Row
+  const ids: string[] = Array.isArray(data.bean_ids)
+    ? data.bean_ids.map((x: any) => String(x)).filter((id: string) => Boolean(beanById(id)))
+    : []
+  const now = utcNowISO()
+  const stmts = [c.env.DB.prepare('UPDATE bean_missions SET active=0')]
+  ids.forEach((id, i) => {
+    stmts.push(
+      c.env.DB
+        .prepare(
+          'INSERT INTO bean_missions (bean_id, sort_order, active, created_at) VALUES (?,?,1,?) ' +
+            'ON CONFLICT(bean_id) DO UPDATE SET sort_order=excluded.sort_order, active=1',
+        )
+        .bind(id, i, now),
+    )
+  })
+  await c.env.DB.batch(stmts)
+  return c.json({ success: true, bean_ids: ids })
 })
 
 /** 초대 코드 조회 — 인쇄 시트(/member-cards)가 읽는다 */
 memberRoutes.get('/api/member/admin/invites', async (c) => {
   const batch = c.req.query('batch') || ''
+  const beanId = c.req.query('bean') || ''
   const onlyUnused = c.req.query('unused') !== '0'
   const where: string[] = []
   const binds: any[] = []
@@ -320,21 +473,42 @@ memberRoutes.get('/api/member/admin/invites', async (c) => {
     where.push('batch=?')
     binds.push(batch)
   }
+  if (beanId) {
+    where.push('bean_id=?')
+    binds.push(beanId)
+  }
   if (onlyUnused) where.push('redeemed_by IS NULL')
   const sql =
-    'SELECT code, batch, note, created_at, expires_at, redeemed_by, redeemed_at FROM invite_codes' +
+    'SELECT code, batch, bean_id, note, created_at, expires_at, redeemed_by, redeemed_at FROM invite_codes' +
     (where.length ? ` WHERE ${where.join(' AND ')}` : '') +
     ' ORDER BY created_at DESC, code LIMIT 500'
   const { results } = await c.env.DB.prepare(sql).bind(...binds).all<Row>()
-  return c.json({ success: true, items: results.map((r) => ({ ...r, pretty: prettyCode(String(r.code)) })) })
+  return c.json({
+    success: true,
+    items: results.map((r) => {
+      const card = r.bean_id ? beanById(String(r.bean_id)) : null
+      return {
+        ...r,
+        pretty: prettyCode(String(r.code)),
+        bean_name: card?.name_ko ?? '',
+        bean_name_en: card?.name_en ?? '',
+        bean_country: card?.country ?? '',
+        bean_process: card?.process ?? '',
+        bean_one_liner: card?.one_liner ?? '',
+        bean_cup_notes: card?.cup_notes ?? [],
+      }
+    }),
+  })
 })
 
-/** 코드 발급 — 인쇄할 카드 수만큼 미리 찍어둔다 */
+/** 카드 발급 — 원두 하나에 대해 인쇄할 장수만큼 고유 코드를 찍는다 */
 memberRoutes.post('/api/member/admin/invites', async (c) => {
   const data = (await c.req.json().catch(() => ({}))) as Row
   const count = Math.min(200, Math.max(1, Math.floor(Number(data.count) || 0)))
   const batch = String(data.batch ?? '').trim().slice(0, 40) || null
   const note = String(data.note ?? '').trim().slice(0, 200) || null
+  const beanId = String(data.bean_id ?? '').trim()
+  if (beanId && !beanById(beanId)) return c.json({ success: false, error: 'unknown bean' }, 400)
   const expires = /^\d{4}-\d{2}-\d{2}$/.test(String(data.expires_at ?? '')) ? `${data.expires_at}T23:59:59Z` : null
   const now = utcNowISO()
 
@@ -350,21 +524,22 @@ memberRoutes.post('/api/member/admin/invites', async (c) => {
     codes.map((code) =>
       c.env.DB
         .prepare(
-          'INSERT INTO invite_codes (code, batch, note, created_at, expires_at) VALUES (?,?,?,?,?) ' +
+          'INSERT INTO invite_codes (code, batch, bean_id, note, created_at, expires_at) VALUES (?,?,?,?,?,?) ' +
             'ON CONFLICT(code) DO NOTHING',
         )
-        .bind(code, batch, note, now, expires),
+        .bind(code, batch, beanId || null, note, now, expires),
     ),
   )
   return c.json({
     success: true,
     batch,
+    bean_id: beanId || null,
     count: codes.length,
     codes: codes.map((code) => ({ code, pretty: prettyCode(code) })),
   })
 })
 
-/** 아직 안 쓴 코드만 폐기할 수 있다 (이미 가입한 회원의 흔적은 남긴다) */
+/** 아직 안 쓴 코드만 폐기할 수 있다 (이미 가입·해금에 쓰인 코드는 기록으로 남긴다) */
 memberRoutes.delete('/api/member/admin/invites/:code', async (c) => {
   const code = normCode(c.req.param('code'))
   const res = await c.env.DB.prepare('DELETE FROM invite_codes WHERE code=? AND redeemed_by IS NULL').bind(code).run()

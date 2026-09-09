@@ -33,3 +33,6 @@
 /static/downloads
 # 92스토리 저작용 템플릿 — 서빙 불필요
 /static/story/_template.html
+# 원두 카드 데이터 — 미션 원두가 잠겨 있어야 해서 웹으로 직접 못 받게 뺀다.
+# Worker 가 번들(worker/src/beancat.ts)로 들고 /api/beans/cards 로만 걸러서 내려준다.
+/static/beans/index.json

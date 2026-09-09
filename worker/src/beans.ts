@@ -4,6 +4,8 @@ import { Hono } from 'hono'
 import { Env, Row, kstTodayISO, utcNowISO, monthsAgoISO } from './util'
 import { requirePin } from './auth'
 import { createCoffee, findActiveByName } from './coffee'
+import { BEAN_CARDS, beanById, activeMissionIds, unlockedIds, beanStatus } from './beancat'
+import { currentMember } from './members'
 
 export const beanRoutes = new Hono<{ Bindings: Env }>()
 // 관리자 전용 가드 — 이 라우터의 경로에만 정확히 적용
@@ -898,5 +900,65 @@ beanRoutes.get('/api/beans/status', async (c) => {
     success: true,
     sold_out: results.filter((r) => r.sold_out).map((r) => r.id),
     blend: results.filter((r) => r.bean_type === '블랜드').map((r) => r.id),
+  })
+})
+
+
+// ---------- 원두 카드 (/beans) — 미션 원두는 잠긴 채로 내려간다 ----------
+// static/beans/index.json 은 .assetsignore 로 웹 서빙에서 빠져 있다. 브라우저가 그 파일을
+// 직접 받아갈 수 있으면 잠금이 의미가 없기 때문. 카드 데이터는 이 두 엔드포인트로만 나간다.
+
+/** 목록. 잠긴 미션 원두는 내용을 아예 싣지 않고 개수만 알려준다(실루엣 슬롯). */
+beanRoutes.get('/api/beans/cards', async (c) => {
+  const m = await currentMember(c.env, c.req.raw)
+  const memberId = m ? Number(m.id) : null
+  const [missions, unlocked, status] = await Promise.all([
+    activeMissionIds(c.env.DB),
+    unlockedIds(c.env.DB, memberId),
+    beanStatus(c.env),
+  ])
+  const missionSet = new Set(missions)
+
+  const items: Row[] = []
+  let locked = 0
+  for (const b of BEAN_CARDS) {
+    const gid = Number(b.green_bean_id)
+    if (status.blend.has(gid)) continue // 블랜드는 산지 소개가 아니라 우리 배합 — 카드에서 뺀다
+    const id = String(b.id)
+    if (missionSet.has(id) && !unlocked.has(id)) {
+      locked++
+      continue
+    }
+    items.push({ ...b, sold_out: status.soldOut.has(gid), mission: missionSet.has(id) })
+  }
+
+  return c.json({
+    success: true,
+    items,
+    locked,
+    logged_in: Boolean(m),
+    mission: { total: missions.length, unlocked: missions.filter((id) => unlocked.has(id)).length },
+  })
+})
+
+/** 상세. 잠긴 원두는 존재 자체를 알리지 않도록 404 로 떨어뜨린다. */
+beanRoutes.get('/api/beans/cards/:id', async (c) => {
+  const id = c.req.param('id')
+  const card = beanById(id)
+  const gone = () => c.json({ success: false, error: 'not found' }, 404)
+  if (!card) return gone()
+
+  const status = await beanStatus(c.env)
+  if (status.blend.has(Number(card.green_bean_id))) return gone()
+
+  const missions = new Set(await activeMissionIds(c.env.DB))
+  if (missions.has(id)) {
+    const m = await currentMember(c.env, c.req.raw)
+    const unlocked = await unlockedIds(c.env.DB, m ? Number(m.id) : null)
+    if (!unlocked.has(id)) return gone()
+  }
+  return c.json({
+    success: true,
+    item: { ...card, sold_out: status.soldOut.has(Number(card.green_bean_id)), mission: missions.has(id) },
   })
 })

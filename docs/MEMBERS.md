@@ -1,23 +1,29 @@
-# 회원 — 시크릿 QR 초대 가입 + 구글 로그인
+# 회원 — 시크릿 원두 카드로 여는 수집 게임
 
-매장에서 필터 커피를 낼 때 건네는 **시크릿 QR 카드**가 유일한 가입 경로다.
-카드를 찍은 사람만 구글 계정으로 가입할 수 있고, 그 뒤로는 코드 없이 로그인한다.
+**QR 한 장 = 초대장이자 그 원두의 열쇠다.** 매장에서 필터 커피를 내면서 원두 카드를
+건네고, 손님이 그 카드의 QR 을 찍으면
 
-목표는 "미스터리한 콩을 정복하고 피드백을 남기는" 경험이다. 이 문서는 그 1단계
-(로그인 뼈대)를 다룬다. 정복 기록과 원두 노트는 2단계에서 붙인다.
+- 처음이면 → 구글 계정으로 가입하면서 **그 원두가 열린다** (첫 번째 열쇠)
+- 이미 회원이면 → **그 원두만 열린다**
+
+미션으로 지정한 원두는 열기 전까지 `/beans` 목록에서 자물쇠로 가려진다. 미션이 7종이면
+첫 카드를 연 순간 6종이 남는다. 다 열면 마이페이지에 완주 배지가 뜬다.
+
+원두 노트(본인만 보는 감상)는 아직 없다 — 다음 단계다.
 
 ---
 
-## 지금 되는 것 (1단계)
+## 지금 되는 것
 
 | 경로 | 내용 |
 |---|---|
-| `/join/<코드>` | QR 이 열어주는 초대 랜딩. 코드가 살아 있으면 구글 가입 버튼 |
+| `/join/<코드>` | 카드 QR 이 오는 곳. 비회원이면 가입 버튼, 회원이면 "이 카드 열기" 버튼 |
 | `/login` | 이미 가입한 사람의 로그인. **여기서 가입은 안 된다** |
-| `/me` | 마이페이지 — 프로필, 호칭 설정, 로그아웃 |
+| `/me` | 마이페이지 — 시크릿 원두 수집 현황, 프로필, 호칭 설정 |
+| `/beans` | 원두 목록. 잠긴 미션 원두는 자물쇠 슬롯으로만 보인다 |
 | `/privacy` | 개인정보 처리방침 (구글 OAuth 동의 화면 등록에 필요) |
-| `/member-cards` | 초대 카드 A4 인쇄 시트 (관리자 PIN) |
-| 관리자 `👤 회원` 탭 | 코드 발급, 회원 목록, 정지·복구 |
+| `/member-cards` | 시크릿 원두 카드 A4 인쇄 시트 (관리자 PIN) |
+| 관리자 `👤 회원` 탭 | **시크릿 원두 고르기**, 원두별 카드 발급, 회원 목록, 정지와 복구 |
 
 홈 네비의 "내 기록" 링크는 **로그인한 사람에게만** 보인다. 비회원에게 로그인 링크를
 노출하면 시크릿 카드의 의미가 옅어져서다. 모두에게 보이게 하려면
@@ -27,13 +33,30 @@
 
 ## 구조
 
-- **스키마**: [scripts/members_schema.sql](../scripts/members_schema.sql) — `members`, `invite_codes` 두 개.
-  멱등이라 여러 번 돌려도 안전하다.
+- **스키마**: [scripts/members_schema.sql](../scripts/members_schema.sql) (`members`, `invite_codes`) +
+  [scripts/members_mission_migration.sql](../scripts/members_mission_migration.sql)
+  (`bean_missions`, `bean_unlocks`, `invite_codes.bean_id`). 둘 다 멱등이다 —
+  마이그레이션의 `ALTER TABLE` 만 두 번째 실행에서 "duplicate column" 을 내는데 그건 무시하면 된다.
 - **워커**: [worker/src/members.ts](../worker/src/members.ts) — OAuth, 세션, 초대 코드, 관리자 API.
 - **세션**: 관리자와 같은 HMAC 서명 쿠키(`util.signToken`)를 salt 만 바꿔 쓴다(`member-token-v1`).
   D1 에 세션 테이블을 두지 않는다. 쿠키 이름 `mem`, 유효기간 90일.
 - **초대 코드**: 32자 알파벳(혼동되는 `I O 0 1` 제외) 10자리 = 약 50비트. 추측으로 맞힐 수 없다.
   표기는 `ABCDE-FGHJK`, 저장은 하이픈 없이. 입력은 소문자와 하이픈도 받아 정규화한다.
+  코드마다 `bean_id` 가 붙어 있고, 그게 그 카드가 여는 원두다.
+
+### ⚠️ 잠금이 진짜이려면 — index.json 은 웹에 없다
+
+`/beans` 는 원래 브라우저가 `/static/beans/index.json` 을 직접 받아 그렸다. 그러면 주소창에
+그 파일을 치는 것만으로 잠긴 원두가 다 보인다. 그래서
+
+- `.assetsignore` 에 `/static/beans/index.json` 을 넣어 **웹 서빙에서 뺐다**
+- Worker 가 [worker/src/beancat.ts](../worker/src/beancat.ts) 에서 그 JSON 을 **번들로 import** 한다
+- 카드 데이터는 `/api/beans/cards` 와 `/api/beans/cards/<id>` 로만 나간다.
+  잠긴 원두는 목록에 개수(`locked`)로만 실리고, 상세는 **404** 로 떨어진다(존재 자체를 알리지 않는다)
+
+**원두를 추가·수정하는 방법은 그대로 `static/beans/index.json` 편집이다.** 다만 그 파일이 이제
+Worker 번들에 들어가므로, 고친 뒤에는 Worker 가 다시 배포돼야 반영된다(푸시하면 자동).
+`scripts/build_bean_print.py` 는 로컬 파일을 읽으므로 영향 없다.
 
 ### API
 
@@ -42,26 +65,42 @@
 | GET | `/api/member/me` | 공개 (비로그인이면 `member: null`) |
 | PUT | `/api/member/me` | 회원 (호칭 변경) |
 | POST | `/api/member/logout` | 공개 |
-| GET | `/api/member/invite/<코드>` | 공개 (코드 상태만 알려줌) |
+| GET | `/api/member/invite/<코드>` | 공개 (코드 상태 + 묶인 원두 이름) |
+| POST | `/api/member/unlock` | 회원 (로그인 상태에서 카드로 원두 열기) |
+| GET | `/api/beans/cards` | 공개 (잠금 반영된 목록) |
+| GET | `/api/beans/cards/<id>` | 공개 (잠기면 404) |
 | GET | `/auth/google/start` | 공개 → 구글로 리디렉션 |
 | GET | `/auth/google/callback` | 구글이 호출 |
 | GET | `/api/member/admin/overview` | PIN |
-| GET/POST | `/api/member/admin/invites` | PIN (조회 / 발급) |
+| GET | `/api/member/admin/beans` | PIN (원두 목록 + 미션 여부 + 연 사람 수) |
+| PUT | `/api/member/admin/missions` | PIN (시크릿 원두 지정 — 보낸 목록이 곧 미션 세트) |
+| GET/POST | `/api/member/admin/invites` | PIN (조회 / 원두별 카드 발급) |
 | DELETE | `/api/member/admin/invites/<코드>` | PIN (안 쓴 코드만) |
 | PUT | `/api/member/admin/members/<id>` | PIN (정지·복구, 호칭) |
 
-### 가입 흐름
+### 흐름
 
-1. 손님이 카드의 QR 을 찍는다 → `/join/<코드>`
-2. 페이지가 `/api/member/invite/<코드>` 로 코드가 살아 있는지 확인한다
-3. "구글 계정으로 시작하기" → `/auth/google/start?invite=<코드>`
-   서명한 state 쿠키(nonce + 초대코드 + 돌아갈 경로)를 굽고 구글로 보낸다
-4. 구글 콜백 → state 대조 → 인가 코드를 토큰으로 교환 → `id_token` 의 `aud`, `iss`, `exp` 확인
-5. `members` INSERT → `invite_codes` 를 **조건부 UPDATE 로 소진**
-   (`WHERE redeemed_by IS NULL` 이라 같은 코드를 동시에 써도 한 명만 성공한다)
-6. 세션 쿠키 발급 → `/me?welcome=1`
+**비회원이 카드를 찍었을 때**
 
-이미 가입한 계정이 다시 코드를 들고 와도 **코드는 소진되지 않는다** — 그냥 로그인된다.
+1. `/join/<코드>` → `/api/member/invite/<코드>` 로 코드와 원두를 확인
+2. "구글 계정으로 열기" → `/auth/google/start?invite=<코드>`
+   서명한 state 쿠키(nonce + 코드 + 돌아갈 경로)를 굽고 구글로 보낸다
+3. 콜백 → state 대조 → 인가 코드를 토큰으로 교환 → `id_token` 의 `aud`, `iss`, `exp` 확인
+4. `members` INSERT → 코드 소진 → `bean_unlocks` INSERT
+5. `/me?welcome=1&unlocked=<원두>` — 마이페이지에서 방금 연 카드를 보여준다
+
+**이미 회원이 카드를 찍었을 때**
+
+1. `/join/<코드>` 가 로그인을 감지 → "🔓 이 카드 열기" 버튼
+2. `POST /api/member/unlock {code}` → 코드 소진 + 해금
+3. `/beans/<원두>?unlocked=1` — 열린 카드로 바로 보낸다
+
+**규칙 두 개**
+
+- 코드 소진은 조건부 UPDATE(`WHERE redeemed_by IS NULL`) 한 곳이라, 같은 카드를 동시에 써도
+  한 명만 성공한다.
+- **이미 연 원두의 카드는 소진되지 않는다.** 손님이 그 카드를 다른 사람에게 넘길 수 있게
+  일부러 그렇게 했다. 화면도 "이 카드는 아직 쓰이지 않았으니 다른 분께 넘기셔도 됩니다"로 안내한다.
 
 ---
 
@@ -113,15 +152,26 @@ node_modules/.bin/wrangler secret put GOOGLE_CLIENT_SECRET
 
 ---
 
-## 카드 만들기
+## 운영
 
-1. 관리자 → `👤 회원` 탭 → **🎟️ 코드 발급** (개수, 묶음 이름, 유효기간)
-2. **🖨️ 카드 인쇄** → `/member-cards` 가 열린다
-3. 묶음을 고르고 인쇄 — A4 한 장에 12칸, 점선대로 자르면 카드가 된다
+### 1. 시크릿으로 만들 원두 고르기
+
+관리자 → `👤 회원` 탭 → **🔒 시크릿 원두 (미션)** → "고르기" → 체크 → 저장.
+체크한 원두가 그 즉시 `/beans` 에서 자물쇠로 바뀐다. 체크를 풀면 다시 공개된다.
+**이미 연 회원의 기록은 그대로 남는다.**
+
+### 2. 카드 만들기
+
+1. 같은 탭의 **🎟️ 코드 발급** — 원두를 고르고, 인쇄할 장수(카드 한 장 = 코드 하나), 묶음 이름
+2. **🖨️ 카드 인쇄** → `/member-cards`. 원두나 묶음으로 걸러 인쇄한다
+3. A4 한 장에 12칸. 카드마다 원두 이름, 컵노트 3개, 고유 QR 이 들어간다
 4. 인쇄 설정: 용지 A4 세로, 배율 100%, 여백 없음, **배경 그래픽 켜기**
 
-코드는 발급만 해두고 인쇄는 나중에 해도 된다. 안 쓴 코드는 언제든 폐기할 수 있고,
-이미 가입에 쓰인 코드는 기록으로 남아 폐기되지 않는다.
+안 쓴 코드는 언제든 폐기할 수 있고, 이미 쓰인 코드는 기록으로 남아 폐기되지 않는다.
+
+> `scripts/build_bean_print.py` 가 만드는 `/beans/print.html` 은 **미션 여부를 모른다.**
+> 매장 진열용 시트라 시크릿 원두도 그대로 인쇄된다. 손님에게 주는 시크릿 카드는
+> `/member-cards` 쪽이다. 진열 시트에서도 빼고 싶으면 그때 스크립트를 손보면 된다.
 
 ---
 
@@ -138,14 +188,13 @@ node_modules/.bin/wrangler secret put GOOGLE_CLIENT_SECRET
 
 ---
 
-## 다음 단계 (2단계 — 아직 안 만듦)
+## 다음 단계 (아직 안 만듦)
 
-원두별 고정 QR 로 "정복" 스탬프를 찍고, 그 원두에 **본인만 보는** 노트를 남기는 부분.
+**원두 노트** — 연 원두에 손님이 **본인만 보는** 감상을 남기는 부분.
 
-- 테이블: `bean_stamps`(회원 × 생두, 처음 찍은 날, 횟수), `bean_notes`(회원 × 생두, 평점, 본문)
-- 스탬프 QR: `/beans/<id>?stamp=1` 같은 형태. 서버가 **같은 원두 하루 1회**로 제한한다.
-  사진을 공유하면 안 마시고도 찍히지만, 성격상 부정행위 방지를 과하게 걸지 않기로 했다.
-  나중에 매일 바뀌는 회전 코드로 강화할 수 있다.
-- `/me` 의 "정복한 콩" 자리에 40종 그리드. 미정복은 실루엣으로 가려 미스터리를 남긴다.
-- 원두 카드(`static/beans/index.json`)의 `green_bean_id` 가 D1 생두와 잇는 키다.
-  **카드에 `green_bean_id` 가 빠지면 스탬프도 연결되지 않는다.**
+- 테이블: `bean_notes`(회원 × 원두, 평점, 본문, 수정일)
+- 자리: `/beans/<id>` 상세의 "내 노트" 블록(로그인 + 해금된 사람에게만), `/me` 에서 모아보기
+- 공개 여부는 본인만으로 정했다. 나중에 관리자가 골라 공개하는 식으로 넓힐 수 있다.
+
+**완주 보상 운영** — 지금은 마이페이지 배지까지다. 손님이 실제로 모으기 시작한 뒤에
+쿠폰 코드 같은 걸 붙이면 된다.

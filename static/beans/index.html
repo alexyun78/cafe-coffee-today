@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <!--
   92도씨 원두 카드 — /beans
-  데이터는 /static/beans/index.json 한 곳. 원두를 추가하려면 그 파일의 items 에
+  원두를 추가하려면 static/beans/index.json 의 items 에 항목을 넣기만 하면 되고
+  이 파일은 수정할 필요 없다. 다만 그 JSON 은 웹에 직접 노출되지 않는다(.assetsignore) —
+  미션 원두가 잠겨 있어야 해서, 데이터는 Worker 의 /api/beans/cards 로만 받는다.
   항목을 넣기만 하면 되고 이 파일은 수정할 필요 없다.
 -->
 <html lang="ko">
@@ -151,6 +153,35 @@
         .bean-card.is-sold-out .cupnotes { opacity: 0.5; }
         .bean-card.is-sold-out:hover { border-color: var(--line); box-shadow: none; }
 
+        /* 아직 안 연 미션 원두 — 자리는 보이되 내용은 가려둔다 */
+        .bean-card.is-locked {
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            gap: 10px; text-align: center; cursor: default; min-height: 240px;
+            background: repeating-linear-gradient(
+                135deg, var(--canvas-stone), var(--canvas-stone) 9px,
+                #EDE5D9 9px, #EDE5D9 18px);
+            border-style: dashed;
+        }
+        .bean-card.is-locked:hover { transform: none; box-shadow: none; }
+        .lock-mark { font-size: 1.9rem; opacity: 0.5; }
+        .lock-q {
+            font-family: var(--font-display); font-size: 2rem; font-weight: 600;
+            letter-spacing: 0.14em; color: var(--ink-soft); opacity: 0.55;
+        }
+        .lock-cap { font-size: 0.78rem; color: var(--ink-soft); line-height: 1.6; max-width: 200px; }
+        .mission-bar {
+            max-width: 560px; margin: 0 auto 34px; padding: 16px 20px;
+            border: 1px solid var(--line); border-radius: 14px; background: var(--canvas);
+            font-size: 0.9rem; color: var(--ink-mute); text-align: center;
+        }
+        .mission-bar b { color: var(--ink); }
+        .mission-bar a { color: var(--copper); text-decoration: underline; text-underline-offset: 3px; }
+        .mission-track {
+            display: flex; gap: 5px; justify-content: center; margin-top: 12px;
+        }
+        .mission-pip { width: 26px; height: 5px; border-radius: 99px; background: var(--line); }
+        .mission-pip.on { background: var(--copper); }
+
         .grid-divider {
             grid-column: 1 / -1;
             margin: 26px 0 2px;
@@ -205,6 +236,8 @@
         <div class="count" id="count"></div>
     </div>
 
+    <div class="mission-bar" id="mission-bar" style="display:none"></div>
+
     <div class="bean-grid" id="grid">
         <div class="empty">불러오는 중…</div>
     </div>
@@ -252,58 +285,63 @@
             '</a>';
     }
 
-    // 품절과 블랜드는 관리자에서 정한 값을 그대로 가져온다.
-    // 실패해도 카드는 그대로 보여야 하므로 빈 목록으로 넘어간다.
-    function fetchStatus() {
-        return fetch('/api/beans/status', { cache: 'no-cache' })
-            .then(function (r) { return r.ok ? r.json() : null; })
-            .then(function (d) { return d || {}; })
-            .catch(function () { return {}; });
+    // 잠긴 미션 원두 자리. 내용은 서버가 아예 안 내려주므로 개수만 안다.
+    function lockHtml() {
+        return '' +
+            '<div class="bean-card is-locked">' +
+                '<div class="lock-mark">🔒</div>' +
+                '<div class="lock-q">???</div>' +
+                '<div class="lock-cap">시크릿 원두입니다.<br>매장에서 이 커피를 만나면 열립니다.</div>' +
+            '</div>';
     }
 
-    function idSet(list) {
-        var set = {};
-        for (var i = 0; i < (list || []).length; i++) set[list[i]] = true;
-        return set;
+    function missionBar(d) {
+        var bar = document.getElementById('mission-bar');
+        if (!d.mission || !d.mission.total) return;
+        var pips = '';
+        for (var i = 0; i < d.mission.total; i++) {
+            pips += '<span class="mission-pip' + (i < d.mission.unlocked ? ' on' : '') + '"></span>';
+        }
+        var msg;
+        if (!d.logged_in) {
+            msg = '시크릿 원두 <b>' + d.mission.total + '종</b>이 잠겨 있습니다. ' +
+                  '매장에서 그 커피를 마시면 받는 원두 카드의 QR로 하나씩 열립니다.';
+        } else if (d.mission.unlocked >= d.mission.total) {
+            msg = '시크릿 원두 <b>' + d.mission.total + '종</b>을 모두 열었습니다. ' +
+                  '<a href="/me">내 기록 보기 →</a>';
+        } else {
+            msg = '시크릿 원두 <b>' + d.mission.unlocked + ' / ' + d.mission.total + '</b> 열었습니다. ' +
+                  '<a href="/me">내 기록 보기 →</a>';
+        }
+        bar.innerHTML = msg + '<div class="mission-track">' + pips + '</div>';
+        bar.style.display = '';
     }
 
-    Promise.all([
-        fetch('/static/beans/index.json', { cache: 'no-cache' })
-            .then(function (r) { if (!r.ok) throw new Error('http ' + r.status); return r.json(); }),
-        fetchStatus(),
-    ])
-        .then(function (res) {
-            var items = (res[0] && res[0].items) || [];
-            var status = res[1] || {};
-            if (!items.length) {
-                grid.innerHTML = '<div class="empty">준비 중입니다.</div>';
-                return;
-            }
+    fetch('/api/beans/cards', { cache: 'no-cache', credentials: 'same-origin' })
+        .then(function (r) { if (!r.ok) throw new Error('http ' + r.status); return r.json(); })
+        .then(function (d) {
+            var items = (d && d.items) || [];
+            var locked = (d && d.locked) || 0;
+            missionBar(d || {});
 
-            var soldSet = idSet(status.sold_out);
-            var blendSet = idSet(status.blend);
-
-            // 블랜드는 산지 소개가 아니라 우리 배합이라 목록에서 아예 뺀다.
-            items = items.filter(function (b) { return !blendSet[b.green_bean_id]; });
-            if (!items.length) {
+            if (!items.length && !locked) {
                 grid.innerHTML = '<div class="empty">준비 중입니다.</div>';
                 return;
             }
 
             var onSale = [];
             var soldOut = [];
-            items.forEach(function (b) {
-                b.sold_out = !!soldSet[b.green_bean_id];
-                (b.sold_out ? soldOut : onSale).push(b);   // 원래 순서 유지하며 품절만 뒤로
-            });
+            items.forEach(function (b) { (b.sold_out ? soldOut : onSale).push(b); });
 
             var html = onSale.map(cardHtml).join('');
+            for (var i = 0; i < locked; i++) html += lockHtml();   // 잠긴 자리는 판매 중 카드 뒤에
             if (soldOut.length) {
                 html += '<div class="grid-divider">품절 ' + soldOut.length + '종</div>';
                 html += soldOut.map(cardHtml).join('');
             }
             grid.innerHTML = html;
             countEl.textContent = onSale.length + ' BEANS' +
+                (locked ? ' · ' + locked + ' LOCKED' : '') +
                 (soldOut.length ? ' · ' + soldOut.length + ' SOLD OUT' : '');
         })
         .catch(function () {

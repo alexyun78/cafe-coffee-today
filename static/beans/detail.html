@@ -2,7 +2,8 @@
 <!--
   92도씨 원두 상세 — /beans/<id>
   Worker 가 /beans/<id> 요청에 이 파일을 서빙하고, 여기서 경로의 <id> 로
-  /static/beans/index.json 의 항목을 찾아 렌더한다. 원두를 추가해도 이 파일은
+  Worker 의 /api/beans/cards/<id> 로 항목을 받아 렌더한다. 잠긴 미션 원두는 서버가
+  404 로 떨어뜨리므로 주소를 직접 쳐도 안 열린다. 원두를 추가해도 이 파일은
   수정할 필요 없다.
 -->
 <html lang="ko">
@@ -138,6 +139,14 @@
         }
         .foot-nav a:hover { background: var(--canvas-stone); color: var(--ink); }
 
+        .state-sub { display: inline-block; margin-top: 8px; font-size: 0.88rem; color: var(--ink-soft); }
+        .unlock-banner {
+            max-width: 820px; margin: 0 auto 26px; padding: 15px 20px; border-radius: 12px;
+            background: #F3EFE6; border: 1px solid var(--line); color: var(--ink-mute);
+            font-size: 0.92rem; text-align: center;
+        }
+        .unlock-banner b { color: var(--ink); }
+        .unlock-banner a { color: var(--copper); text-decoration: underline; text-underline-offset: 3px; }
         .state { padding: 90px 0; text-align: center; color: var(--ink-soft); font-size: 0.92rem; }
         .state a { color: var(--copper); border-bottom: 1px solid var(--caramel); }
 
@@ -227,33 +236,33 @@
     }
 
     function notFound() {
-        main.innerHTML = '<div class="state">찾는 원두가 없습니다. <a href="/beans">원두 목록으로</a></div>';
+        main.innerHTML = '<div class="state">찾는 원두가 없습니다.<br><span class="state-sub">시크릿 원두라면 매장에서 받은 카드의 QR로 열 수 있습니다.</span><br><a href="/beans">원두 목록으로</a></div>';
     }
 
     var id = currentId();
     if (!id) { notFound(); return; }
 
-    Promise.all([
-        fetch('/static/beans/index.json', { cache: 'no-cache' })
-            .then(function (r) { if (!r.ok) throw new Error('http ' + r.status); return r.json(); }),
-        fetch('/api/beans/status', { cache: 'no-cache' })
-            .then(function (r) { return r.ok ? r.json() : null; })
-            .then(function (d) { return d || {}; })
-            .catch(function () { return {}; }),
-    ])
-        .then(function (res) {
-            var items = (res[0] && res[0].items) || [];
-            var status = res[1] || {};
-            var bean = null;
-            for (var i = 0; i < items.length; i++) {
-                if (items[i].id === id) { bean = items[i]; break; }
+    // 해금 직후에 이 페이지로 오면(콜백 리디렉션) 축하 배너를 띄운다.
+    function unlockBanner() {
+        if (!/[?&]unlocked=1/.test(location.search)) return '';
+        return '<div class="unlock-banner">🔓 <b>원두를 열었습니다.</b> ' +
+               '이제 이 카드는 언제든 볼 수 있습니다. <a href="/me">내 기록 →</a></div>';
+    }
+
+    fetch('/api/beans/cards/' + encodeURIComponent(id), { cache: 'no-cache', credentials: 'same-origin' })
+        .then(function (r) {
+            if (r.status === 404) return null;
+            if (!r.ok) throw new Error('http ' + r.status);
+            return r.json();
+        })
+        .then(function (d) {
+            if (!d || !d.item) { notFound(); return; }
+            render(d.item);
+            var banner = unlockBanner();
+            if (banner) {
+                main.insertAdjacentHTML('afterbegin', banner);
+                history.replaceState(null, '', '/beans/' + encodeURIComponent(id));
             }
-            // 블랜드는 목록에서 빠지므로 주소를 직접 쳐도 열리지 않게 한다.
-            if (bean && (status.blend || []).indexOf(bean.green_bean_id) !== -1) bean = null;
-            if (bean) {
-                bean.sold_out = (status.sold_out || []).indexOf(bean.green_bean_id) !== -1;
-                render(bean);
-            } else notFound();
         })
         .catch(function () {
             main.innerHTML = '<div class="state">원두 정보를 불러오지 못했습니다. <a href="/beans">원두 목록으로</a></div>';

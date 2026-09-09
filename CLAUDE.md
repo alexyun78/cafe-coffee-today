@@ -719,25 +719,41 @@ journalctl -u cafe-coffee-nearby.service -n 50 --no-pager
 
 ---
 
-## 회원 — 시크릿 QR 초대 가입 (2026-09-09 추가)
+## 회원 — 시크릿 원두 카드 수집 (2026-09-09 추가)
 
-매장에서 필터 커피와 함께 건네는 **시크릿 QR 카드**가 유일한 가입 경로다. 카드를 찍은 사람만
-구글 계정으로 가입하고, 그 뒤로는 코드 없이 로그인한다. 상세는 [docs/MEMBERS.md](docs/MEMBERS.md).
+**QR 한 장 = 초대장이자 그 원두의 열쇠.** 매장에서 필터 커피를 내면서 원두 카드를 건네고,
+손님이 QR 을 찍으면 처음이면 가입하면서 그 원두가 열리고, 이미 회원이면 그 원두만 열린다.
+미션으로 지정한 원두는 열기 전까지 `/beans` 에서 자물쇠로 가려진다. 상세는 [docs/MEMBERS.md](docs/MEMBERS.md).
 
-- **현재 1단계(로그인 뼈대)까지만 만들었다.** 정복 스탬프와 원두 노트는 2단계.
-- 페이지: `/join/<코드>`(초대 랜딩) · `/login` · `/me`(마이페이지) · `/privacy` · `/member-cards`(카드 인쇄, PIN)
-- 관리자 `👤 회원` 탭에서 코드 발급, 회원 목록, 정지·복구.
-- 구현: [worker/src/members.ts](worker/src/members.ts) · 스키마 [scripts/members_schema.sql](scripts/members_schema.sql)
-  (`members`, `invite_codes`).
+- 페이지: `/join/<코드>`(카드 QR 착지점) · `/login` · `/me`(수집 현황) · `/privacy` · `/member-cards`(카드 인쇄, PIN)
+- 관리자 `👤 회원` 탭: **시크릿 원두 고르기**, 원두별 카드 발급, 회원 목록, 정지와 복구.
+- 구현: [worker/src/members.ts](worker/src/members.ts) · [worker/src/beancat.ts](worker/src/beancat.ts) ·
+  `/api/beans/cards` 는 [worker/src/beans.ts](worker/src/beans.ts) 끝.
+- 스키마: [scripts/members_schema.sql](scripts/members_schema.sql)(`members`, `invite_codes`) +
+  [scripts/members_mission_migration.sql](scripts/members_mission_migration.sql)(`bean_missions`, `bean_unlocks`, `invite_codes.bean_id`).
+
+### ⚠️ static/beans/index.json 은 이제 웹에 없다
+
+잠금이 진짜이려면 브라우저가 원본 JSON 을 받아가면 안 된다. 그래서 `.assetsignore` 로 **웹 서빙에서 빼고**,
+Worker 가 `beancat.ts` 에서 **번들로 import** 해 `/api/beans/cards`, `/api/beans/cards/<id>` 로만 내려준다.
+잠긴 원두는 목록에 개수로만 실리고 상세는 **404**(존재를 알리지 않는다).
+
+- **원두 추가·수정 방법은 그대로 `static/beans/index.json` 편집이다.** 다만 Worker 번들에 들어가므로
+  고친 뒤 배포가 돼야 반영된다(푸시하면 자동). `scripts/build_bean_print.py` 는 로컬 파일을 읽어 영향 없다.
+- 원두 카드 페이지에서 `/static/beans/index.json` 을 다시 fetch 하도록 되돌리면 잠금이 통째로 무너진다.
+
+### 기억할 규칙
+
 - 세션은 관리자와 같은 HMAC 서명 쿠키(`util.signToken`)를 salt 만 바꿔 쓴다(`member-token-v1`, 쿠키 `mem`, 90일).
-  D1 에 세션 테이블을 두지 않는다.
-- 코드 소진은 조건부 UPDATE(`WHERE redeemed_by IS NULL`) 한 곳이라 같은 코드를 동시에 써도 한 명만 성공한다.
-  이미 가입한 계정이 코드를 다시 들고 와도 코드는 소진되지 않고 그냥 로그인된다.
+- 코드 소진은 조건부 UPDATE(`WHERE redeemed_by IS NULL`) 한 곳 — 같은 카드를 동시에 써도 한 명만 성공한다.
+- **이미 연 원두의 카드는 소진되지 않는다.** 손님이 그 카드를 다른 사람에게 넘길 수 있게 일부러 그렇게 했다.
+- 미션 지정을 풀면 그 원두는 다시 공개되지만 **이미 연 회원의 기록(`bean_unlocks`)은 남는다.**
 - **비밀값**: `wrangler secret put GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET`.
-  없으면 로그인 기능 전체가 조용히 꺼진다(`login_enabled: false`).
+  없으면 로그인 기능 전체가 조용히 꺼진다(`login_enabled: false`). 잠금은 로그인과 무관하게 동작한다.
 - ⚠️ **APK(Capacitor WebView)에서는 구글 로그인이 막힌다** — 구글이 임베디드 WebView OAuth 를 차단(`disallowed_useragent`).
   앱에서 쓰려면 로그인만 외부 브라우저/Custom Tabs 로 띄워야 하는데 **아직 안 했다.**
 - 홈 네비 "내 기록"은 **로그인한 사람에게만** 보인다. 비회원에게 로그인 링크를 노출하면 시크릿 카드의 의미가 옅어져서다.
+- `/beans/print.html`(진열용 시트)은 미션 여부를 모른다 — 시크릿 원두도 그대로 인쇄된다.
 
 ---
 
@@ -747,8 +763,8 @@ journalctl -u cafe-coffee-nearby.service -n 50 --no-pager
 
 - **URL**: `/beans` 목록(3열 카드 그리드, 태블릿 2열·모바일 1열) · `/beans/<id>` 상세.
   라우트는 [worker/src/index.ts](worker/src/index.ts) + `wrangler.jsonc` `run_worker_first`.
-- **단일 소스 = [static/beans/index.json](static/beans/index.json)** 하나뿐. 목록 페이지와 상세 페이지
-  모두 이 JSON 을 클라이언트에서 읽어 렌더한다. **원두를 추가하려면 `items` 에 항목 하나만 넣으면 되고
+- **단일 소스 = [static/beans/index.json](static/beans/index.json)** 하나뿐. ⚠️ 2026-09-09 부터 이 파일은
+  웹에 서빙되지 않고 Worker 번들로만 읽힌다(위 "회원" 절 참고). 페이지는 `/api/beans/cards` 로 렌더한다. **원두를 추가하려면 `items` 에 항목 하나만 넣으면 되고
   HTML 은 건드리지 않는다.**
 - 항목 스키마: `id`(ASCII slug, URL 이 됨) · `name_ko` · `name_en` · `country` · `farm`(농장명) ·
   `farmer`(농장주) · `altitude`(재배고도) · `variety`(품종) · `process`(가공방식) · `region`(지역) ·
@@ -867,9 +883,11 @@ SCA Evolved Q Grader(CVA 기반) 대비 6개월 학습플랜 + 훈련 일지. **
 | [static/admin.html](static/admin.html) | 관리 폼 — 7탭 (오늘의커피 / 생두관리 / 재고 / 주변리뷰 / 로스팅스터디 / Q-Grader / 회원) |
 | [static/qgrader/index.html](static/qgrader/index.html) | Q-Grader 훈련 관리 페이지 (`/qgrader`, PIN) |
 | [worker/src/qgrader.ts](worker/src/qgrader.ts) | Q-Grader API (`/api/qgrader/*`) |
-| [worker/src/members.ts](worker/src/members.ts) | 회원 — 초대 코드, 구글 OAuth, 세션 (`/api/member/*`, `/auth/google/*`) |
+| [worker/src/members.ts](worker/src/members.ts) | 회원 — 카드 코드, 구글 OAuth, 세션, 원두 해금 (`/api/member/*`, `/auth/google/*`) |
+| [worker/src/beancat.ts](worker/src/beancat.ts) | 원두 카드 목록을 번들로 들고 미션·해금 상태를 계산 (index.json 은 웹에 안 나감) |
 | [static/member/](static/member/) | 회원 페이지 (`join`, `login`, `me`, `privacy`, `cards` + 공용 `member.css`) |
 | [scripts/members_schema.sql](scripts/members_schema.sql) | 회원 D1 스키마 (`members`, `invite_codes`, 1회) |
+| [scripts/members_mission_migration.sql](scripts/members_mission_migration.sql) | 미션·해금 스키마 (`bean_missions`, `bean_unlocks`, 1회) |
 | [scripts/qgrader_sync.py](scripts/qgrader_sync.py) | 학습플랜 md → D1 seed SQL 생성 |
 | [scripts/release_insight.py](scripts/release_insight.py) | **인사이트 백로그 릴리스 (토큰 0, 현재 채택)** — 큐에서 1편 발행 |
 | [scripts/release.sh](scripts/release.sh) | 서버 릴리스 래퍼: git pull → release_insight.py → commit/push |

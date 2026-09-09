@@ -51,7 +51,12 @@
             display: flex; flex-direction: column; align-items: center; justify-content: space-between;
             text-align: center; break-inside: avoid;
         }
-        .card-top { display: flex; flex-direction: column; align-items: center; gap: 1.5mm; }
+        .card-top { display: flex; flex-direction: column; align-items: center; gap: 1.2mm; }
+        .card-bean {
+            font-family: var(--font-display); font-size: 10.5pt; font-weight: 700;
+            line-height: 1.2; margin-top: 0.8mm;
+        }
+        .card-notes { font-size: 5.6pt; color: var(--ink-soft); line-height: 1.4; }
         .card-brand {
             font-family: var(--font-display); font-size: 11pt; font-weight: 700; letter-spacing: 0.06em;
         }
@@ -81,7 +86,10 @@
 </head>
 <body>
 <div class="bar">
-    <h1>🎟️ 초대 카드 인쇄</h1>
+    <h1>🎟️ 시크릿 원두 카드 인쇄</h1>
+    <label>원두
+        <select id="bean"><option value="">(전체)</option></select>
+    </label>
     <label>묶음
         <select id="batch"><option value="">(전체)</option></select>
     </label>
@@ -105,14 +113,17 @@
     }
 
     function cardHTML(item) {
+        var notes = Array.isArray(item.bean_cup_notes) ? item.bean_cup_notes.slice(0, 3).join(', ') : '';
         return '<div class="card">' +
             '<div class="card-top">' +
                 '<div class="card-brand">92<span class="t">°C</span> ROASTERY</div>' +
-                '<div class="card-eyebrow">Secret Invitation</div>' +
+                '<div class="card-eyebrow">Secret Card</div>' +
+                (item.bean_name ? '<div class="card-bean">' + esc(item.bean_name) + '</div>' : '') +
+                (notes ? '<div class="card-notes">' + esc(notes) + '</div>' : '') +
             '</div>' +
             '<div class="card-qr" data-code="' + esc(item.code) + '"></div>' +
             '<div class="card-code">' + esc(item.pretty) + '</div>' +
-            '<div class="card-help"><strong>QR을 찍고 구글 계정으로 가입하세요.</strong><br>' +
+            '<div class="card-help"><strong>QR을 찍으면 이 원두가 열립니다.</strong><br>' +
                 '카드 한 장은 한 번만 쓸 수 있습니다.</div>' +
         '</div>';
     }
@@ -120,7 +131,7 @@
     function render(items) {
         var host = document.getElementById('pages');
         if (!items.length) {
-            host.innerHTML = '<div class="empty">인쇄할 코드가 없습니다. 관리자 화면의 회원 탭에서 먼저 발급하세요.</div>';
+            host.innerHTML = '<div class="empty">인쇄할 카드가 없습니다. 관리자 회원 탭에서 원두를 골라 먼저 발급하세요.</div>';
             return;
         }
         var html = '';
@@ -143,9 +154,12 @@
 
     function load() {
         var batch = document.getElementById('batch').value;
+        var bean = document.getElementById('bean').value;
         var unused = document.getElementById('unused').checked ? '1' : '0';
         msg.textContent = '불러오는 중…';
-        fetch('/api/member/admin/invites?unused=' + unused + (batch ? '&batch=' + encodeURIComponent(batch) : ''),
+        fetch('/api/member/admin/invites?unused=' + unused +
+              (batch ? '&batch=' + encodeURIComponent(batch) : '') +
+              (bean ? '&bean=' + encodeURIComponent(bean) : ''),
               { credentials: 'same-origin' })
             .then(function (r) {
                 if (r.status === 401) throw new Error('unauthorized');
@@ -165,21 +179,43 @@
             });
     }
 
-    // 묶음 목록 채우기
+    // 묶음 목록 채우기 (중복 이름은 한 번만)
     fetch('/api/member/admin/overview', { credentials: 'same-origin' })
         .then(function (r) { return r.json(); })
         .then(function (d) {
             var sel = document.getElementById('batch');
+            var seen = {};
             (d.batches || []).forEach(function (b) {
+                if (b.batch === '(묶음 없음)' || seen[b.batch]) return;
+                seen[b.batch] = true;
                 var o = document.createElement('option');
-                o.value = b.batch === '(묶음 없음)' ? '' : b.batch;
-                o.textContent = b.batch + ' (남은 ' + b.unused + '/' + b.total + ')';
+                o.value = b.batch;
+                o.textContent = b.batch;
+                sel.appendChild(o);
+            });
+        })
+        .catch(function () {});
+
+    // 원두 목록 — 미션 원두를 위로
+    fetch('/api/member/admin/beans', { credentials: 'same-origin' })
+        .then(function (r) { return r.json(); })
+        .then(function (d) {
+            var sel = document.getElementById('bean');
+            var items = (d.items || []).slice().sort(function (a, b) {
+                return (b.mission ? 1 : 0) - (a.mission ? 1 : 0);
+            });
+            items.forEach(function (b) {
+                var o = document.createElement('option');
+                o.value = b.id;
+                o.textContent = (b.mission ? '🔒 ' : '') + b.name_ko;
                 sel.appendChild(o);
             });
         })
         .catch(function () {});
 
     document.getElementById('reload').addEventListener('click', load);
+    document.getElementById('bean').addEventListener('change', load);
+    document.getElementById('batch').addEventListener('change', load);
     document.getElementById('print').addEventListener('click', function () { window.print(); });
     load();
 })();

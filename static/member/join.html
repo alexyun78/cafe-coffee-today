@@ -1,21 +1,22 @@
 <!DOCTYPE html>
 <!--
-  92도씨 시크릿 초대 — /join/<초대코드>
-  매장에서 필터 커피와 함께 건네는 QR 카드가 이 주소로 온다. 코드 검증은
-  /api/member/invite/<code>, 실제 가입은 /auth/google/start (worker/src/members.ts).
+  92도씨 시크릿 카드 — /join/<초대코드>
+  원두 카드에 인쇄된 QR 이 이 주소로 온다. 코드 한 장 = 초대장이자 그 원두의 열쇠.
+  처음이면 가입하면서 열리고, 이미 회원이면 그 원두만 열린다.
+  검증 /api/member/invite/<code> · 가입 /auth/google/start · 해금 POST /api/member/unlock
 -->
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>초대 — 92°C ROASTERY</title>
+    <title>시크릿 카드 — 92°C ROASTERY</title>
     <meta name="robots" content="noindex">
-    <meta name="description" content="92도씨 필터 커피와 함께 받은 시크릿 카드로 들어오는 문.">
+    <meta name="description" content="92도씨에서 받은 원두 카드의 QR로 여는 문.">
     <link rel="icon" type="image/png" href="/static/img/logo-92black.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/static/member/member.css">
     <style>
         /* 초대 페이지만 어둡게 — 사이트의 다른 곳과 확실히 다른 "문"으로 보이게 한다 */
@@ -40,18 +41,33 @@
             box-shadow: 0 0 0 8px rgba(201, 152, 106, 0.06);
         }
         .door .eyebrow { color: var(--caramel); margin-bottom: 18px; }
-        .door h1 { color: #F7F0E7; font-size: clamp(2rem, 7vw, 2.6rem); }
+        .door h1 { color: #F7F0E7; font-size: clamp(1.9rem, 6.5vw, 2.5rem); }
         .door .sub { color: rgba(243, 234, 224, 0.62); }
 
-        .code-line {
-            margin: 30px 0 6px; font-family: var(--font-mono); font-size: 1.15rem;
-            letter-spacing: 0.22em; color: var(--caramel);
+        .bean-plate {
+            margin: 28px 0 4px; padding: 18px 20px; border-radius: 14px;
+            background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(201, 152, 106, 0.28);
         }
-        .code-cap { font-size: 0.7rem; letter-spacing: 0.2em; color: rgba(243, 234, 224, 0.4); text-transform: uppercase; }
+        .bean-plate .cap {
+            font-family: var(--font-mono); font-size: 0.64rem; letter-spacing: 0.22em;
+            text-transform: uppercase; color: var(--caramel);
+        }
+        .bean-plate .nm {
+            font-family: var(--font-display); font-size: 1.5rem; font-weight: 600;
+            color: #F7F0E7; margin-top: 7px; line-height: 1.3;
+        }
+        .code-line {
+            margin-top: 14px; font-family: var(--font-mono); font-size: 0.82rem;
+            letter-spacing: 0.18em; color: rgba(243, 234, 224, 0.45);
+        }
 
-        .actions { margin-top: 36px; }
+        .actions { margin-top: 32px; }
         .btn-google { background: #F7F0E7; border-color: #F7F0E7; color: #17110C; }
         .btn-google:hover { background: #fff; }
+        .btn-open {
+            background: var(--caramel); border-color: var(--caramel); color: #17110C; font-size: 1.05rem;
+        }
+        .btn-open:hover { background: #D9AC7E; }
 
         .state-msg {
             margin-top: 30px; border-radius: 12px; padding: 16px 18px; font-size: 0.92rem;
@@ -59,11 +75,9 @@
             color: rgba(243, 234, 224, 0.8);
         }
         .state-msg strong { color: #F7F0E7; display: block; margin-bottom: 6px; font-size: 1rem; }
+        .state-msg a { color: #F7F0E7; text-decoration: underline; text-underline-offset: 3px; }
 
-        .fineprint {
-            margin-top: 34px; font-size: 0.76rem; line-height: 1.7;
-            color: rgba(243, 234, 224, 0.42);
-        }
+        .fineprint { margin-top: 30px; font-size: 0.76rem; line-height: 1.7; color: rgba(243, 234, 224, 0.42); }
         .fineprint a { color: rgba(243, 234, 224, 0.72); text-decoration: underline; text-underline-offset: 3px; }
         .home-link {
             display: inline-block; margin-top: 26px; font-size: 0.82rem; letter-spacing: 0.08em;
@@ -75,32 +89,49 @@
 <body>
 <main class="door">
     <div class="seal">🫘</div>
-    <p class="eyebrow">92°C Secret Invitation</p>
+    <p class="eyebrow">92°C Secret Card</p>
 
     <div id="loading">
         <h1>카드를 확인하는 중</h1>
     </div>
 
-    <div id="valid" hidden>
-        <h1>당신의 콩이<br>기다리고 있습니다</h1>
+    <!-- 비회원: 가입하면서 첫 원두가 열린다 -->
+    <div id="join" hidden>
+        <h1>첫 번째 열쇠를<br>손에 쥐셨습니다</h1>
         <p class="sub">
-            오늘 마신 필터 커피가 어떤 콩이었는지, 그 콩이 어느 산에서 왔는지 —
-            여기서부터는 기록으로 남습니다.
+            구글 계정으로 가입하면 이 원두 카드가 열립니다.
+            앞으로 매장에서 만나는 시크릿 원두를 하나씩 모아가게 됩니다.
         </p>
-        <p class="code-line" id="code-text">·····</p>
-        <p class="code-cap">Invitation Code</p>
-
+        <div class="bean-plate">
+            <div class="cap">This card opens</div>
+            <div class="nm" id="join-bean">—</div>
+            <div class="code-line" id="join-code"></div>
+        </div>
         <div class="actions">
             <a class="btn btn-google" id="go">
                 <svg viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24s.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
-                구글 계정으로 시작하기
+                구글 계정으로 열기
             </a>
         </div>
-
         <p class="fineprint">
             가입하면 구글 계정의 이름, 이메일, 프로필 사진을 받아 회원 정보로 저장합니다.
             <a href="/privacy">개인정보 처리방침</a>
         </p>
+    </div>
+
+    <!-- 회원: 원두만 열면 된다 -->
+    <div id="unlock" hidden>
+        <h1>새 원두를<br>열 수 있습니다</h1>
+        <p class="sub" id="unlock-sub">이 카드에 담긴 원두를 기록에 더합니다.</p>
+        <div class="bean-plate">
+            <div class="cap">This card opens</div>
+            <div class="nm" id="unlock-bean">—</div>
+            <div class="code-line" id="unlock-code"></div>
+        </div>
+        <div class="actions">
+            <button class="btn btn-open" id="btn-open">🔓 이 카드 열기</button>
+        </div>
+        <p class="fineprint" id="unlock-msg"></p>
     </div>
 
     <div id="invalid" hidden>
@@ -113,16 +144,16 @@
 <script>
 (function () {
     var code = decodeURIComponent(location.pathname.replace(/^\/join\/?/, '').replace(/\/+$/, ''));
-    var show = function (id) {
-        ['loading', 'valid', 'invalid'].forEach(function (k) {
-            document.getElementById(k).hidden = (k !== id);
-        });
-    };
-    var bad = function (title, html) {
+    var PANELS = ['loading', 'join', 'unlock', 'invalid'];
+
+    function show(id) {
+        PANELS.forEach(function (k) { document.getElementById(k).hidden = (k !== id); });
+    }
+    function bad(title, html) {
         document.getElementById('bad-title').textContent = title;
         document.getElementById('bad-msg').innerHTML = html;
         show('invalid');
-    };
+    }
 
     if (!code) {
         bad('주소가 완전하지 않습니다', '<strong>카드의 QR을 다시 찍어주세요</strong>초대 코드가 주소에 담겨 있어야 합니다.');
@@ -133,31 +164,84 @@
         .then(function (r) { return r.json(); })
         .then(function (d) {
             if (!d || !d.success) throw new Error('bad response');
+
             if (!d.login_enabled) {
                 bad('아직 문이 열리지 않았습니다', '<strong>준비 중입니다</strong>구글 로그인이 아직 설정되지 않았습니다. 매장에 알려주세요.');
                 return;
             }
-            if (d.valid) {
-                document.getElementById('code-text').textContent = d.code_pretty || code;
-                document.getElementById('go').href = '/auth/google/start?invite=' + encodeURIComponent(code);
-                show('valid');
+
+            var beanName = (d.bean && d.bean.name_ko) || '';
+
+            // 이미 연 원두 — 코드는 소진되지 않으니 다른 분께 넘기셔도 된다
+            if (d.logged_in && d.already_unlocked) {
+                bad('이미 열어둔 원두입니다',
+                    '<strong>' + (beanName || '이 원두') + '</strong>기록에 이미 있습니다. ' +
+                    '이 카드는 아직 쓰이지 않았으니 다른 분께 넘기셔도 됩니다.<br><br>' +
+                    '<a href="' + (d.bean ? '/beans/' + encodeURIComponent(d.bean.id) : '/beans') + '">원두 카드 보기</a> · ' +
+                    '<a href="/me">내 기록</a>');
                 return;
             }
-            if (d.state === 'used') {
-                bad('이미 쓰인 카드입니다',
-                    '<strong>누군가 먼저 이 문을 지났습니다</strong>카드 한 장은 한 번만 쓸 수 있습니다. ' +
-                    '본인이 쓰신 거라면 <a href="/login" style="color:#F7F0E7;text-decoration:underline">로그인</a>하시면 됩니다.');
-            } else if (d.state === 'expired') {
-                bad('기한이 지난 카드입니다',
-                    '<strong>유효기간이 끝났습니다</strong>매장에 말씀해 주시면 새 카드를 드립니다.');
-            } else {
-                bad('없는 카드입니다',
-                    '<strong>코드를 찾을 수 없습니다</strong>QR을 다시 찍어보시고, 그래도 안 되면 매장에 알려주세요.');
+
+            if (!d.valid) {
+                if (d.state === 'used') {
+                    bad('이미 쓰인 카드입니다',
+                        '<strong>누군가 먼저 이 문을 지났습니다</strong>카드 한 장은 한 번만 쓸 수 있습니다. ' +
+                        '회원이시라면 <a href="/login">로그인</a>해 주세요.');
+                } else if (d.state === 'expired') {
+                    bad('기한이 지난 카드입니다', '<strong>유효기간이 끝났습니다</strong>매장에 말씀해 주시면 새 카드를 드립니다.');
+                } else {
+                    bad('없는 카드입니다', '<strong>코드를 찾을 수 없습니다</strong>QR을 다시 찍어보시고, 그래도 안 되면 매장에 알려주세요.');
+                }
+                return;
             }
+
+            if (d.logged_in) {
+                document.getElementById('unlock-bean').textContent = beanName || '원두 카드';
+                document.getElementById('unlock-code').textContent = d.code_pretty || '';
+                if (!d.bean) {
+                    document.getElementById('unlock-sub').textContent = '이 카드에는 원두가 묶여 있지 않습니다.';
+                    document.getElementById('btn-open').disabled = true;
+                }
+                show('unlock');
+                return;
+            }
+
+            document.getElementById('join-bean').textContent = beanName || '원두 카드';
+            document.getElementById('join-code').textContent = d.code_pretty || '';
+            document.getElementById('go').href = '/auth/google/start?invite=' + encodeURIComponent(code);
+            show('join');
         })
         .catch(function () {
             bad('확인하지 못했습니다', '<strong>잠시 후 다시 시도해 주세요</strong>연결에 문제가 있었습니다.');
         });
+
+    document.getElementById('btn-open').addEventListener('click', function () {
+        var btn = this;
+        var msg = document.getElementById('unlock-msg');
+        btn.disabled = true;
+        msg.textContent = '여는 중…';
+        fetch('/api/member/unlock', {
+            method: 'POST',
+            credentials: 'same-origin',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ code: code })
+        })
+            .then(function (r) { return r.json(); })
+            .then(function (d) {
+                if (d && d.success && d.bean) {
+                    location.href = '/beans/' + encodeURIComponent(d.bean.id) + '?unlocked=1';
+                    return;
+                }
+                btn.disabled = false;
+                msg.textContent = d && d.error === 'invite_used'
+                    ? '이 카드는 이미 쓰였습니다.'
+                    : '열지 못했습니다. 잠시 후 다시 시도해 주세요.';
+            })
+            .catch(function () {
+                btn.disabled = false;
+                msg.textContent = '열지 못했습니다. 잠시 후 다시 시도해 주세요.';
+            });
+    });
 })();
 </script>
 </body>

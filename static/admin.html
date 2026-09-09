@@ -917,6 +917,19 @@
   .member-table td.num { color: #8a7c6e; font-variant-numeric: tabular-nums; }
   .member-suspended { opacity: 0.5; }
   .member-batches { margin-top: 18px; font-size: 0.82rem; color: #8a7c6e; }
+  .member-mission { margin: 18px 0; padding: 16px; border: 1px solid #ece2d5; border-radius: 12px; background: #fffdfa; }
+  .mission-list {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 6px 14px;
+    max-height: 340px; overflow-y: auto; padding: 6px 2px;
+  }
+  .mission-list label {
+    display: flex; align-items: center; gap: 8px; font-size: 0.86rem; padding: 5px 0; cursor: pointer;
+  }
+  .mission-list label span.cnt { margin-left: auto; font-size: 0.75rem; color: #8a7c6e; }
+  .mission-chip {
+    display: inline-block; margin: 3px 5px 0 0; padding: 3px 9px; border-radius: 6px;
+    background: #f2ece3; font-size: 0.8rem;
+  }
 
   /* ===== 로스팅 스터디 ===== */
   .roasting-study-frame-wrap {
@@ -2185,8 +2198,30 @@
 
       <div id="member-summary" class="member-summary"></div>
 
+      <div class="member-mission">
+        <div class="list-header" style="margin-bottom:8px;">
+          <h3 style="margin:0;font-size:0.95rem;">🔒 시크릿 원두 (미션)</h3>
+          <div class="header-actions">
+            <button class="btn-text" type="button" id="btn-mission-toggle">고르기</button>
+          </div>
+        </div>
+        <div class="member-batches" id="mission-summary">불러오는 중…</div>
+        <div id="mission-picker" style="display:none;">
+          <p class="member-batches" style="margin:10px 0;">
+            체크한 원두는 <b>/beans 목록에서 자물쇠로 가려지고</b>, 그 원두 카드의 QR로만 열립니다.
+            체크를 풀면 다시 누구에게나 공개됩니다. 이미 연 회원의 기록은 그대로 남습니다.
+          </p>
+          <div id="mission-list" class="mission-list"></div>
+          <div class="member-invite-actions">
+            <button class="btn-primary" type="button" id="btn-mission-save">저장</button>
+            <button class="btn-text" type="button" id="btn-mission-cancel">취소</button>
+          </div>
+        </div>
+      </div>
+
       <div id="invite-form" class="member-invite-form" style="display:none;">
         <div class="member-invite-row">
+          <label>원두 (카드에 인쇄됨)<select id="invite-bean"><option value="">(원두 없음 — 가입만)</option></select></label>
           <label>발급 수<input type="number" id="invite-count" min="1" max="200" value="12"></label>
           <label>묶음 이름<input type="text" id="invite-batch" placeholder="2026-09 1차" maxlength="40"></label>
           <label>유효기간(선택)<input type="date" id="invite-expires"></label>
@@ -3898,7 +3933,7 @@ init();
         const frame = document.getElementById("roasting-study-frame");
         if (frame && !frame.src) frame.src = "/static/roasting-study/index.html";
       }
-      if (btn.dataset.tab === "members") loadMembers();
+      if (btn.dataset.tab === "members") { loadMembers(); refreshMissionViews(true); }
       if (btn.dataset.tab === "qgrader") {
         const frame = document.getElementById("qgrader-frame");
         if (frame && !frame.src) frame.src = "/qgrader";
@@ -6527,16 +6562,17 @@ async function loadMembers() {
 
   summary.innerHTML = `
     <div class="member-stat"><b>${data.members.length}</b>가입 회원</div>
-    <div class="member-stat"><b>${data.invite_unused}</b>안 쓴 코드</div>
-    <div class="member-stat"><b>${data.invite_total}</b>발급한 코드</div>`;
+    <div class="member-stat"><b>${data.mission_total}</b>시크릿 원두</div>
+    <div class="member-stat"><b>${data.invite_unused}</b>안 쓴 카드</div>
+    <div class="member-stat"><b>${data.invite_total}</b>발급한 카드</div>`;
 
   const batches = (data.batches || [])
-    .map(b => `${escapeHtml(b.batch)} ${b.unused}/${b.total}`)
-    .join(" · ");
+    .map(b => `${escapeHtml(b.bean_name || b.bean_id)} · ${escapeHtml(b.batch)} ${b.unused}/${b.total}`)
+    .join("<br>");
 
   if (!data.members.length) {
     body.innerHTML = `<div class="empty">아직 가입한 회원이 없습니다.</div>` +
-      (batches ? `<div class="member-batches">코드 묶음: ${batches}</div>` : "");
+      (batches ? `<div class="member-batches">남은 카드<br>${batches}</div>` : "");
     return;
   }
 
@@ -6546,16 +6582,16 @@ async function loadMembers() {
       <td class="num">${escapeHtml(m.email || "")}</td>
       <td class="num">${memberDate(m.joined_at)}</td>
       <td class="num">${memberDate(m.last_login_at)}</td>
-      <td class="num">${escapeHtml(m.invite_code || "")}</td>
+      <td class="num">${m.unlocked || 0}종</td>
       <td><button class="btn-text" type="button" data-member="${m.id}" data-next="${m.status === "정지" ? "활성" : "정지"}">${m.status === "정지" ? "🟢 복구" : "⛔ 정지"}</button></td>
     </tr>`).join("");
 
   body.innerHTML = `
     <table class="member-table">
-      <thead><tr><th>회원</th><th>이메일</th><th>가입</th><th>최근 로그인</th><th>초대 코드</th><th></th></tr></thead>
+      <thead><tr><th>회원</th><th>이메일</th><th>가입</th><th>최근 로그인</th><th>연 원두</th><th></th></tr></thead>
       <tbody>${rows}</tbody>
     </table>` +
-    (batches ? `<div class="member-batches">코드 묶음: ${batches}</div>` : "");
+    (batches ? `<div class="member-batches">남은 카드<br>${batches}</div>` : "");
 
   body.querySelectorAll("button[data-member]").forEach(btn => {
     btn.addEventListener("click", async () => {
@@ -6572,10 +6608,74 @@ async function loadMembers() {
   });
 }
 
+let _adminBeansCache = null;
+
+async function loadAdminBeans(force) {
+  if (_adminBeansCache && !force) return _adminBeansCache;
+  const d = await api("GET", "/api/member/admin/beans");
+  _adminBeansCache = d.items || [];
+  return _adminBeansCache;
+}
+
+/** 미션 요약 + 발급 폼의 원두 드롭다운을 함께 채운다 */
+async function refreshMissionViews(force) {
+  let beans;
+  try {
+    beans = await loadAdminBeans(force);
+  } catch (e) {
+    if (e.message !== "unauthorized") document.getElementById("mission-summary").textContent = "불러오지 못했습니다.";
+    return;
+  }
+
+  const chosen = beans.filter(b => b.mission);
+  document.getElementById("mission-summary").innerHTML = chosen.length
+    ? chosen.map(b => `<span class="mission-chip">🔒 ${escapeHtml(b.name_ko)} <b>${b.opened_by}</b>명</span>`).join("")
+    : "아직 없습니다. “고르기”에서 시크릿으로 만들 원두를 선택하세요. (지금은 모든 원두가 공개입니다)";
+
+  document.getElementById("mission-list").innerHTML = beans.map(b => `
+    <label>
+      <input type="checkbox" value="${escapeAttr(b.id)}"${b.mission ? " checked" : ""}>
+      <span>${escapeHtml(b.name_ko)}</span>
+      <span class="cnt">${b.opened_by ? b.opened_by + "명 열림" : ""}</span>
+    </label>`).join("");
+
+  const sel = document.getElementById("invite-bean");
+  const keep = sel.value;
+  sel.innerHTML = `<option value="">(원두 없음 — 가입만)</option>` +
+    beans.slice().sort((a, b) => (b.mission ? 1 : 0) - (a.mission ? 1 : 0))
+      .map(b => `<option value="${escapeAttr(b.id)}">${b.mission ? "🔒 " : ""}${escapeHtml(b.name_ko)}</option>`).join("");
+  sel.value = keep;
+}
+
 (function initMemberTab() {
   const form = document.getElementById("invite-form");
   if (!form) return;
   const result = document.getElementById("invite-result");
+  const picker = document.getElementById("mission-picker");
+
+  document.getElementById("btn-mission-toggle").addEventListener("click", () => {
+    picker.style.display = picker.style.display === "none" ? "block" : "none";
+  });
+  document.getElementById("btn-mission-cancel").addEventListener("click", () => {
+    picker.style.display = "none";
+    refreshMissionViews(true);
+  });
+  document.getElementById("btn-mission-save").addEventListener("click", async () => {
+    const btn = document.getElementById("btn-mission-save");
+    const ids = Array.from(document.querySelectorAll("#mission-list input:checked")).map(i => i.value);
+    btn.disabled = true;
+    try {
+      await api("PUT", "/api/member/admin/missions", { bean_ids: ids });
+      showToast(ids.length ? `시크릿 원두 ${ids.length}종 저장` : "시크릿 원두 없음 (전부 공개)");
+      picker.style.display = "none";
+      await refreshMissionViews(true);
+      loadMembers();
+    } catch (e) {
+      if (e.message !== "unauthorized") showToast("저장하지 못했습니다");
+    } finally {
+      btn.disabled = false;
+    }
+  });
 
   document.getElementById("btn-invite-new").addEventListener("click", () => {
     form.style.display = form.style.display === "none" ? "block" : "none";
@@ -6591,6 +6691,7 @@ async function loadMembers() {
     const payload = {
       count: Number(document.getElementById("invite-count").value) || 0,
       batch: document.getElementById("invite-batch").value.trim(),
+      bean_id: document.getElementById("invite-bean").value,
       expires_at: document.getElementById("invite-expires").value || ""
     };
     if (payload.count < 1 || payload.count > 200) { showToast("발급 수는 1~200 사이"); return; }
@@ -6599,8 +6700,9 @@ async function loadMembers() {
       const d = await api("POST", "/api/member/admin/invites", payload);
       result.innerHTML = `<b>${d.count}개 발급했습니다.</b> 인쇄는 “🖨️ 카드 인쇄”에서.<br>` +
         d.codes.map(c => `<code>${escapeHtml(c.pretty)}</code>`).join("");
-      showToast(`${d.count}개 발급`);
+      showToast(`${d.count}장 발급`);
       loadMembers();
+      refreshMissionViews(true);
     } catch (e) {
       if (e.message !== "unauthorized") showToast("발급하지 못했습니다");
     } finally {
