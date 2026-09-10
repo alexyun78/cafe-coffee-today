@@ -1,7 +1,24 @@
 {
   "version": 1,
-  "updated_at": "2026-09-09T15:16:06Z",
+  "updated_at": "2026-09-10T15:08:19Z",
   "items": [
+    {
+      "id": "2026-09-11-aeropress",
+      "type": "trivia",
+      "date": "2026-09-11",
+      "title_ko": "주사기처럼 생긴 커피 도구, 에어로프레스의 정체는? 💉",
+      "one_liner": "원반 던지기 장난감을 만들던 발명가가 설계했고, 지금은 이 도구만으로 겨루는 세계대회까지 있다!",
+      "categories_primary": [
+        "커피 상식"
+      ],
+      "categories_secondary": [
+        "한 잔의 기술"
+      ],
+      "hero_image": "/static/img/insights/trivia/bestcup.svg",
+      "journal": null,
+      "pub_date": null,
+      "source_basis": null
+    },
     {
       "id": "2026-09-10-coffee-varieties-family",
       "type": "trivia",
