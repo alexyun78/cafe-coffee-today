@@ -1,7 +1,24 @@
 {
   "version": 1,
-  "updated_at": "2026-09-10T15:08:19Z",
+  "updated_at": "2026-09-11T15:11:19Z",
   "items": [
+    {
+      "id": "2026-09-12-spent-grounds-upcycling",
+      "type": "trivia",
+      "date": "2026-09-12",
+      "title_ko": "커피 한 잔을 만들면 99.8퍼센트는 버려진다고? ♻️",
+      "one_liner": "생두 1킬로에서 잔에 녹아드는 건 아주 일부. 나머지 커피 찌꺼기가 지금 어디로 가고 있는지 살펴보자!",
+      "categories_primary": [
+        "커피 상식"
+      ],
+      "categories_secondary": [
+        "트렌드"
+      ],
+      "hero_image": "/static/img/insights/trivia/trend.svg",
+      "journal": null,
+      "pub_date": null,
+      "source_basis": null
+    },
     {
       "id": "2026-09-11-aeropress",
       "type": "trivia",
