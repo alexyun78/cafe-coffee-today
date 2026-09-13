@@ -642,6 +642,32 @@
             font-weight: 500;
             letter-spacing: 0.04em;
         }
+        /* 원두 카드(/beans/<id>)가 있는 커피는 카드 전체가 링크 */
+        .now-card.is-linked {
+            cursor: pointer;
+            transition: border-color 0.25s ease, box-shadow 0.25s ease;
+        }
+        .now-card.is-linked:hover {
+            border-color: var(--caramel);
+            box-shadow: 0 12px 32px rgba(60, 40, 20, 0.08);
+        }
+        .now-bean-link,
+        .modal-bean-link {
+            display: inline-flex; align-items: center; gap: 8px;
+            margin-top: 24px;
+            padding-bottom: 3px;
+            font-family: var(--font-mono);
+            font-size: 0.78rem;
+            letter-spacing: 0.14em;
+            color: var(--copper);
+            text-decoration: none;
+            border-bottom: 1px solid currentColor;
+            position: relative;
+        }
+        .now-bean-link .arr,
+        .modal-bean-link .arr { transition: transform 0.25s ease; }
+        .now-card.is-linked:hover .now-bean-link .arr,
+        .modal-bean-link:hover .arr { transform: translateX(4px); }
         .now-empty {
             position: relative;
             text-align: center;
@@ -2418,8 +2444,10 @@
         var fbBtn = (c.id != null)
             ? '<button class="feedback-btn feedback-btn--dark" type="button" onclick="openFeedbackModalById(' + c.id + ')">💬 피드백</button>'
             : '';
+        var beanHref = beanCardHref(c);
         el.innerHTML = '' +
-            '<article class="now-card">' +
+            '<article class="now-card' + (beanHref ? ' is-linked' : '') + '"' +
+                (beanHref ? ' data-href="' + escapeHtml(beanHref) + '"' : '') + '>' +
                 fbBtn +
                 '<div class="now-main">' +
                     '<div class="now-card-meta">' +
@@ -2429,6 +2457,7 @@
                     (c['로스터리'] ? '<div class="now-roastery">' + escapeHtml(c['로스터리']) + '</div>' : '') +
                     '<h3 class="now-title">' + escapeHtml(c['커피'] || '') + '</h3>' +
                     (c['감상'] ? '<p class="now-comment">' + escapeHtml(c['감상']) + '</p>' : '') +
+                    (beanHref ? '<a class="now-bean-link" href="' + escapeHtml(beanHref) + '">원두 이야기 보기 <span class="arr">→</span></a>' : '') +
                 '</div>' +
                 '<div class="now-side">' +
                     (notes.length ? '' +
@@ -2509,7 +2538,8 @@
                 '<div class="modal-block">' +
                     '<span class="modal-label">— SERVE DATE</span>' +
                     '<div class="modal-date">' + escapeHtml(serve) + '</div>' +
-                '</div>' : '');
+                '</div>' : '') +
+            (beanCardHref(c) ? '<a class="modal-bean-link" href="' + escapeHtml(beanCardHref(c)) + '">원두 이야기 보기 <span class="arr">→</span></a>' : '');
         modal.classList.add('is-open');
         modal.setAttribute('aria-hidden', 'false');
         document.body.style.overflow = 'hidden';
@@ -2520,6 +2550,20 @@
         modal.setAttribute('aria-hidden', 'true');
         document.body.style.overflow = '';
     }
+
+    // 원두 카드 id (서버가 green_bean_id 로 찾아 붙여 줌). 없거나 시크릿 원두면 null.
+    function beanCardHref(c) {
+        var id = c && c['원두카드'];
+        return (typeof id === 'string' && /^[a-z0-9-]+$/.test(id)) ? '/beans/' + id : '';
+    }
+
+    // NOW SERVING 카드 어디를 눌러도 원두 소개로. 피드백 버튼과 링크 자체는 제 동작 그대로.
+    document.getElementById('now-content').addEventListener('click', function (e) {
+        var card = e.target.closest('.now-card.is-linked');
+        if (!card || e.target.closest('button, a')) return;
+        if (window.getSelection && String(window.getSelection())) return; // 글자를 드래그해 복사하는 중
+        location.href = card.dataset.href;
+    });
 
     document.getElementById('upcoming-rail').addEventListener('click', function (e) {
         var card = e.target.closest('.upcoming-card');

@@ -6,6 +6,7 @@ import {
   clientIp, sha256Hex, utcNowISO,
 } from './util'
 import { requirePin, isAdminAuthed } from './auth'
+import { BEAN_CARDS, activeMissionIds, beanStatus } from './beancat'
 
 /** 컵노트 단일 소스 SQL (db.py _EFF_CUP_NOTES_SQL) */
 export const EFF_CUP_NOTES_SQL = `COALESCE(
@@ -166,16 +167,47 @@ export const coffeeRoutes = new Hono<{ Bindings: Env }>()
 
 // ---------- 공개 조회 ----------
 
+/** green_bean_id → 원두 카드 id. 같은 생두에 카드가 여럿이면 index.json 앞쪽 것. */
+const CARD_BY_GREEN_BEAN = new Map<number, string>()
+for (const b of BEAN_CARDS) {
+  const gid = Number(b.green_bean_id)
+  if (gid && !CARD_BY_GREEN_BEAN.has(gid)) CARD_BY_GREEN_BEAN.set(gid, String(b.id))
+}
+
+/** 오늘의 커피 → /beans/<id> 로 이을 카드 id.
+ *  상세가 열리지 않는 카드(시크릿 미션 원두, 블랜드)는 링크를 주지 않는다 — 누르면 "없는 원두"로 떨어지니까. */
+async function beanCardResolver(env: Env): Promise<(gid: any) => string | null> {
+  let hidden = new Set<string>()
+  try {
+    const [missions, status] = await Promise.all([activeMissionIds(env.DB), beanStatus(env)])
+    hidden = new Set(missions)
+    for (const b of BEAN_CARDS) if (status.blend.has(Number(b.green_bean_id))) hidden.add(String(b.id))
+  } catch { /* 미션 테이블이 없는 환경 — 가릴 카드 없음 */ }
+  return (gid) => {
+    const id = CARD_BY_GREEN_BEAN.get(Number(gid))
+    return id && !hidden.has(id) ? id : null
+  }
+}
+
 coffeeRoutes.get('/api/coffee', async (c) => {
   try {
-    const { results } = await c.env.DB.prepare(`SELECT c.*, ${EFF_CUP_NOTES_SQL} FROM coffees c`).all<Row>()
+    // 오래된 커피는 green_bean_id 가 비어 있어 이름이 같은 생두로 보충한다 (컵노트 단일 소스와 같은 규칙)
+    const { results } = await c.env.DB
+      .prepare(
+        `SELECT c.*, ${EFF_CUP_NOTES_SQL}, COALESCE(c.green_bean_id, ` +
+          '(SELECT gb.id FROM green_beans gb WHERE gb.name = c.name ORDER BY gb.id LIMIT 1)) AS eff_green_bean_id ' +
+          'FROM coffees c',
+      )
+      .all<Row>()
+    const cardFor = await beanCardResolver(c.env)
     const cutoff = monthsAgoISO(3)
     const todayISO = kstTodayISO()
     const today: any[] = []
     const history: any[] = []
     for (const row of results) {
-      const item = rowToApi(row)
+      const item: any = rowToApi(row)
       if (!item['커피']) continue
+      item['원두카드'] = cardFor(row.eff_green_bean_id)
       const status = item['상태']
       if (status === '진행 중') { today.push(item); history.push(item) }
       else if (status === '예정') history.push(item)
