@@ -1,0 +1,316 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>원두 카드 9장 — 파나마 잰슨 하시엔다 게이샤 #217</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@600;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+<!-- QR 생성기는 저장소에 넣어 쓴다 (MIT). CDN 으로 바꾸지 말 것 — CLAUDE.md 회원 절 참고 -->
+<script src="../member/vendor/qrcode-generator.js"></script>
+<style>
+/* A4 세로, 여백 8mm, 간격 3mm → 카드 62.7 x 91.7mm, 3열 3행 = 9장 */
+@page { size: A4 portrait; margin: 8mm; }
+
+* { box-sizing: border-box; }
+
+:root {
+    --ink: #2a211b;
+    --sub: #6f6358;
+    --mute: #a79c90;
+    --line: #e6dfd5;
+    --cream: #f7f1e8;
+    --brown: #9c5a26;
+    --gold: #c08a4a;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    background: #ece7df;
+    color: var(--ink);
+    font-family: 'Noto Sans KR', 'Pretendard', 'Malgun Gothic', '맑은 고딕', 'Apple SD Gothic Neo', sans-serif;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+}
+
+.sheet {
+    display: grid;
+    grid-template-columns: repeat(3, 62.7mm);
+    grid-auto-rows: 91.7mm;
+    gap: 3mm;
+    justify-content: center;
+    align-content: start;
+}
+
+.card {
+    position: relative;
+    height: 91.7mm;
+    padding: 4mm 4.2mm 3mm;
+    background: #fff;
+    border: 0.2mm dashed #bdb3a6;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    break-inside: avoid;
+    page-break-inside: avoid;
+}
+/* 위쪽 금색 띠 */
+.card::before {
+    content: '';
+    position: absolute;
+    left: 4.2mm;
+    right: 4.2mm;
+    top: 0;
+    height: 1.1mm;
+    background: linear-gradient(90deg, var(--brown), var(--gold));
+    border-radius: 0 0 0.6mm 0.6mm;
+}
+
+/* ── 머리 ── */
+.eyebrow {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    font-size: 5.2pt;
+    letter-spacing: 0.16em;
+    font-weight: 700;
+    color: var(--brown);
+}
+.eyebrow .lot {
+    letter-spacing: 0.04em;
+    color: var(--mute);
+    font-weight: 500;
+}
+
+.name {
+    margin: 1.2mm 0 0;
+    font-family: 'Noto Serif KR', 'Batang', serif;
+    font-size: 10.6pt;
+    font-weight: 700;
+    line-height: 1.28;
+    letter-spacing: -0.02em;
+}
+.en {
+    margin-top: 0.8mm;
+    font-size: 5.5pt;
+    line-height: 1.3;
+    color: var(--mute);
+    letter-spacing: 0.01em;
+}
+
+.line {
+    margin: 1.8mm 0 0;
+    padding: 1.2mm 0 1.2mm 2.2mm;
+    border-left: 0.5mm solid var(--gold);
+    background: var(--cream);
+    font-size: 6.1pt;
+    line-height: 1.5;
+    color: var(--sub);
+    word-break: keep-all;
+}
+
+/* ── 스펙 ── */
+.specs {
+    margin: 1.9mm 0 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: 9.4mm 1fr;
+    row-gap: 0.45mm;
+    column-gap: 1.2mm;
+    font-size: 6.3pt;
+    line-height: 1.35;
+}
+.specs dt {
+    color: var(--mute);
+    letter-spacing: 0.02em;
+}
+.specs dd {
+    margin: 0;
+    color: var(--ink);
+    word-break: keep-all;
+}
+.specs dd small {
+    font-size: 5.3pt;
+    color: var(--mute);
+}
+
+/* ── 컵노트 ── */
+.notes {
+    margin-top: auto;
+    padding-top: 1.6mm;
+}
+.notes-k {
+    display: flex;
+    align-items: center;
+    gap: 1.2mm;
+    font-size: 5.2pt;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    color: var(--brown);
+}
+.notes-k::after {
+    content: '';
+    flex: 1;
+    border-top: 0.18mm solid var(--line);
+}
+.chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.9mm;
+    margin-top: 1mm;
+}
+.chip {
+    padding: 0.55mm 1.7mm;
+    border-radius: 3mm;
+    background: var(--cream);
+    border: 0.18mm solid #eadcc8;
+    font-size: 6.3pt;
+    font-weight: 500;
+    color: #4a3a2c;
+    white-space: nowrap;
+}
+
+/* ── 발 ── */
+.foot {
+    margin-top: 1.9mm;
+    padding-top: 1.8mm;
+    border-top: 0.18mm solid var(--line);
+    display: flex;
+    align-items: center;
+    gap: 2.2mm;
+}
+.qr {
+    flex: none;
+    width: 14.5mm;
+    height: 14.5mm;
+    padding: 0.8mm;
+    background: #fff;
+    border: 0.18mm solid var(--line);
+    border-radius: 0.8mm;
+}
+.qr svg { display: block; width: 100%; height: 100%; }
+.foot-t {
+    flex: 1;
+    min-width: 0;
+    font-size: 5.8pt;
+    line-height: 1.45;
+    color: var(--sub);
+    word-break: keep-all;
+}
+.foot-t b { color: var(--ink); font-weight: 700; }
+.brand {
+    margin-top: 1mm;
+    font-size: 5pt;
+    letter-spacing: 0.16em;
+    color: var(--mute);
+}
+.brand span { color: var(--brown); font-weight: 700; }
+
+/* ── 화면 미리보기 ── */
+.hint {
+    max-width: 210mm;
+    margin: 0 auto 6mm;
+    padding: 0 16px;
+    font-size: 13px;
+    line-height: 1.6;
+    color: #5b5047;
+}
+@media screen {
+    body { padding: 10mm 0; }
+    .sheet {
+        width: 210mm;
+        min-height: 297mm;
+        margin: 0 auto;
+        padding: 8mm;
+        background: #fff;
+        box-shadow: 0 2px 14px rgba(0, 0, 0, 0.14);
+    }
+}
+@media print {
+    body { background: #fff; padding: 0; }
+    .hint { display: none; }
+}
+</style>
+</head>
+<body>
+
+<p class="hint">
+    인쇄: <b>Ctrl+P</b> → 용지 A4 세로, 배율 100%, 여백 <b>없음</b>, <b>배경 그래픽 켜기</b>.
+    점선을 따라 자르면 62.7 x 91.7mm 카드 9장이 나옵니다.
+    QR 은 원두 상세 페이지로 연결됩니다.
+</p>
+
+<section class="sheet" id="sheet"></section>
+
+<script>
+// 카드 내용 — 다른 원두로 바꿔 쓸 때는 이 객체만 고치면 된다.
+// 원문: static/beans/index.json 의 panama-janson-hacienda-geisha-217, 노션 "원두 소개" 페이지
+var BEAN = {
+    url: 'https://92cafe.co.kr/beans/panama-janson-hacienda-geisha-217',
+    eyebrow: 'PANAMA',
+    lot: 'LOT #217',
+    name_ko: '파나마 잰슨 하시엔다<br>게이샤 내추럴 #217',
+    name_en: 'Panama Janson Hacienda Geisha Natural #217',
+    one_liner: '스웨덴 청년의 목장에서 시작해 3대째 이어지는, 세계 챔피언들이 고르는 볼칸의 게이샤.',
+    specs: [
+        ['농장', '잰슨 커피 팜'],
+        ['구역', '하시엔다 라스 라구나스 <small>랏 #217</small>'],
+        ['농장주', '잰슨 가족 <small>Janson Family</small>'],
+        ['고도', '약 1,350 - 1,400m'],
+        ['품종', '게이샤 <small>Geisha</small>'],
+        ['가공', '내추럴 <small>48시간 건식 발효</small>'],
+        ['지역', '치리키 주 볼칸 <small>Volcán</small>']
+    ],
+    cup_notes: ['블루베리', '포도', '와인', '건포도', '쥬시'],
+    foot: '<b>QR을 찍어 보세요.</b><br>농장과 가족 이야기가<br>이어집니다.'
+};
+var COUNT = 9;
+
+function qrSvg(url) {
+    if (typeof qrcode !== 'function') return '';
+    var qr = qrcode(0, 'M');
+    qr.addData(url);
+    qr.make();
+    return qr.createSvgTag({ cellSize: 4, margin: 0, scalable: true });
+}
+
+function cardHtml(b, qr) {
+    var specs = b.specs.map(function (s) {
+        return '<dt>' + s[0] + '</dt><dd>' + s[1] + '</dd>';
+    }).join('');
+    var chips = b.cup_notes.map(function (n) {
+        return '<span class="chip">' + n + '</span>';
+    }).join('');
+    return '' +
+        '<article class="card">' +
+            '<div class="eyebrow"><span>' + b.eyebrow + '</span><span class="lot">' + b.lot + '</span></div>' +
+            '<h2 class="name">' + b.name_ko + '</h2>' +
+            '<div class="en">' + b.name_en + '</div>' +
+            '<p class="line">' + b.one_liner + '</p>' +
+            '<dl class="specs">' + specs + '</dl>' +
+            '<div class="notes"><div class="notes-k">CUP NOTES</div><div class="chips">' + chips + '</div></div>' +
+            '<div class="foot">' +
+                '<div class="qr">' + qr + '</div>' +
+                '<div class="foot-t">' + b.foot +
+                    '<div class="brand"><span>92°C</span> ROASTERY</div>' +
+                '</div>' +
+            '</div>' +
+        '</article>';
+}
+
+(function () {
+    var qr = qrSvg(BEAN.url);
+    if (!qr) {
+        // QR 없이 조용히 인쇄되는 사고를 막는다
+        document.querySelector('.hint').insertAdjacentHTML('beforeend',
+            '<br><b style="color:#b3261e">QR 생성기를 불러오지 못했습니다. 인쇄하지 마세요.</b>');
+    }
+    var html = '';
+    for (var i = 0; i < COUNT; i++) html += cardHtml(BEAN, qr);
+    document.getElementById('sheet').innerHTML = html;
+})();
+</script>
+</body>
+</html>
